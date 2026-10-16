@@ -1,5 +1,6 @@
 extends CharacterBody3D
-## Deliberately stylized, original low-poly stand-ins, not final character art.
+## Tailored 3D figures with an ink contour. Movement/physics retain v1 behavior.
+const Tailor=preload("res://scripts/tailor.gd")
 var is_player = false
 var blocked = false
 var camera: Camera3D
@@ -34,50 +35,7 @@ func setup(kit, player: bool, coat: String = "green", hat: bool = false):
 	add_child(cs)
 	visual = Node3D.new()
 	add_child(visual)
-	# Anatomical pivots and clothing silhouette, total height 1.75m.
-	kit.cyl("CoatHem",Vector3(0,0.79,0),0.28,0.36,coat,visual,0.23).scale.z=0.68
-	kit.cyl("Jacket",Vector3(0,1.15,0),0.225,0.46,coat,visual,0.27).scale.z=0.65
-	kit.ellipsoid("Shoulders",Vector3(0,1.31,0),Vector3(0.29,0.15,0.16),coat,visual)
-	kit.box("Belt",Vector3(0,0.92,-0.007),Vector3(0.5,0.075,0.32),"boot",false,visual)
-	kit.box("Buckle",Vector3(0,0.93,-0.175),Vector3(0.075,0.06,0.025),"brass",false,visual)
-	kit.box("Shirt",Vector3(0,1.30,-0.16),Vector3(0.12,0.18,0.03),"dark",false,visual)
-	kit.box("Scarf",Vector3(0,1.40,0),Vector3(0.32,0.12,0.33),"cream" if player else "cloth",false,visual)
-	for x in [-0.15,0.15]:
-		kit.box("ChestPocket",Vector3(x,1.14,-0.16),Vector3(0.11,0.14,0.035),"cloth",false,visual)
-		kit.box("PocketFlap",Vector3(x,1.19,-0.18),Vector3(0.13,0.035,0.02),coat,false,visual)
-		kit.cyl("Button",Vector3(0,1.07+x,-0.185),0.018,0.018,"brass",visual).rotation.x=PI/2
-	kit.cyl("Neck",Vector3(0,1.46,0),0.095,0.14,"skin",visual)
-	kit.ellipsoid("Head",Vector3(0,1.585,-0.012),Vector3(0.145,0.165,0.14),"skin",visual)
-	kit.ellipsoid("Hair",Vector3(0,1.70,0.02),Vector3(0.151,0.05,0.145),"wood",visual)
-	kit.ellipsoid("HairBack",Vector3(0,1.65,0.10),Vector3(0.14,0.09,0.06),"wood",visual)
-	kit.ellipsoid("Nose",Vector3(0,1.60,-0.151),Vector3(0.027,0.04,0.043),"skin",visual)
-	for x in [-0.065,0.065]:kit.box("Eyes",Vector3(x,1.65,-0.14),Vector3(0.035,0.018,0.012),"dark",false,visual)
-	if hat:
-		kit.cyl("Ushanka",Vector3(0,1.76,0),0.17,0.12,"boot",visual)
-		for x in [-0.15,0.15]:kit.box("EarFlap",Vector3(x,1.65,0.02),Vector3(0.055,0.18,0.25),"boot",false,visual)
-		kit.box("CapStar",Vector3(0,1.77,-0.16),Vector3(0.055,0.045,0.012),"red",false,visual)
-	for side in [-1,1]:
-		var leg = Node3D.new()
-		visual.add_child(leg)
-		leg.position=Vector3(side*0.13,0.73,0)
-		kit.cyl("Trousers",Vector3(0,-0.22,0),0.10,0.44,"cloth",leg,0.115)
-		kit.box("Boot",Vector3(0,-0.55,-0.04),Vector3(0.20,0.34,0.29),"boot",false,leg)
-		kit.box("Sole",Vector3(0,-0.70,-0.04),Vector3(0.22,0.055,0.31),"dark",false,leg)
-		var arm=Node3D.new()
-		visual.add_child(arm)
-		arm.position=Vector3(side*0.31,1.32,0)
-		kit.cyl("Sleeve",Vector3(0,-0.22,0),0.085,0.46,coat,arm,0.105)
-		kit.ellipsoid("Glove",Vector3(0,-0.49,-0.015),Vector3(0.075,0.085,0.085),"boot",arm)
-		if side<0:
-			left_leg=leg
-			left_arm=arm
-		else:
-			right_leg=leg
-			right_arm=arm
-	if player:
-		kit.box("Backpack",Vector3(0,1.14,0.24),Vector3(0.38,0.43,0.23),"cloth",false,visual)
-		kit.box("Bedroll",Vector3(0,1.38,0.28),Vector3(0.48,0.14,0.18),"wood",false,visual)
-		for x in [-0.18,0.18]:kit.box("Strap",Vector3(x,1.21,-0.18),Vector3(0.035,0.34,0.035),"boot",false,visual)
+	Tailor.dress(self,kit,player,coat,hat)
 	anchor=position
 
 func _physics_process(delta):

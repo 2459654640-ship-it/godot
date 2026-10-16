@@ -46,6 +46,7 @@ func _ready():
 	kit=Kit.new(self)
 	build_environment()
 	build_structure()
+	kit.finish_walls()
 	build_residence()
 	build_workshop()
 	build_mess()
@@ -56,11 +57,13 @@ func _ready():
 	kit.batch_static()
 	build_people()
 	build_targets()
+	kit.prepare_highlights()
 	camera=Camera3D.new()
 	add_child(camera)
 	camera.projection=Camera3D.PROJECTION_ORTHOGONAL
 	camera.size=camera_size
-	camera.far=150
+	camera.near=0.4
+	camera.far=90
 	camera.current=true
 	player.camera=camera
 	var c=CanvasLayer.new()
@@ -73,7 +76,7 @@ func _ready():
 	add_child(ambience)
 	ambience.stream=load("res://assets/audio/ventilation.wav")
 	ambience.volume_db=-30
-	ambience.play()
+	if DisplayServer.get_name()!="headless":ambience.play()
 	step_audio=AudioStreamPlayer.new()
 	add_child(step_audio)
 	step_audio.stream=load("res://assets/audio/step.wav")
@@ -99,18 +102,18 @@ func build_environment():
 	var we=WorldEnvironment.new()
 	var e=Environment.new()
 	e.background_mode=Environment.BG_COLOR
-	e.background_color=Color("080e10")
+	e.background_color=Color("090b0b")
 	e.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR
-	e.ambient_light_color=Color("a5b6b4")
-	e.ambient_light_energy=0.44
+	e.ambient_light_color=Color("9bada6")
+	e.ambient_light_energy=0.29
 	e.tonemap_mode=Environment.TONE_MAPPER_FILMIC
 	we.environment=e
 	add_child(we)
 	var light=DirectionalLight3D.new()
 	add_child(light)
 	light.rotation_degrees=Vector3(-65,-28,0)
-	light.light_color=Color("9bb9c5")
-	light.light_energy=0.48
+	light.light_color=Color("9caaa5")
+	light.light_energy=0.32
 	light.shadow_enabled=true
 	light.directional_shadow_max_distance=65
 	light.shadow_bias=0.04
@@ -118,12 +121,12 @@ func build_environment():
 
 func build_structure():
 	kit.box("Foundation",Vector3(0,-0.30,0.5),Vector3(30.5,0.5,19.5),"concrete")
-	kit.box("FloorCollision",Vector3(0,-0.10,0.5),Vector3(30,0.20,19),"tile",true)
+	kit.box("FloorCollision",Vector3(0,-0.10,0.5),Vector3(30,0.20,19),"tile",true).visible=false
 	for zone in zones:
 		var r:Rect2=zone.rect
 		var m=kit.box("Floor_"+zone.code,Vector3(r.get_center().x,0.006,r.get_center().y),Vector3(r.size.x-0.04,0.012,r.size.y-0.04),"tile" if zone.code not in ["02","07","08"] else "concrete")
 		m.material_override=m.material_override.duplicate()
-		m.material_override.uv1_scale=Vector3(0.24,0.24,0.24)
+		m.material_override.uv1_scale=Vector3.ONE/2.4
 		if zone.code=="01":m.material_override.albedo_color=Color("b7a88a")
 		if zone.code=="08":m.material_override.albedo_color=Color("677b7b")
 	kit.wall("North",Vector2(-15,-9),Vector2(15,-9))
@@ -132,6 +135,12 @@ func build_structure():
 	kit.wall("EastCut",Vector2(15,-9),Vector2(15,10),true)
 	# North rooms: independent spaces linked by a 3.2m main circulation spine.
 	for x in [-8,1,10]:kit.wall("NorthPartition",Vector2(x,-9),Vector2(x,0),true)
+	# Two homes, one unchanged common foyer. Existing NPC/target coordinates stay
+	# in place. This is the only new collision partition (explicitly requested).
+	kit.wall("SemyonRoomRear",Vector2(-11.95,-9),Vector2(-11.95,-7.7))
+	kit.wall("SemyonRoomDivider",Vector2(-11.95,-7.7),Vector2(-11.95,-4.76),true)
+	kit.wall("SemyonRoomJamb",Vector2(-11.95,-3.04),Vector2(-11.95,-2.80),true)
+	kit.doorway(-11.95,-3.90,true)
 	var door_x=[-10.5,-3.5,5.2,12.3]
 	var start=-15.0
 	for x in door_x:
@@ -163,22 +172,34 @@ func build_structure():
 	for x in [-13,-6,1,8,14]:kit.lamp(Vector3(x,2.4,-0.14),x<0,1.45,5.0)
 
 func build_residence():
-	kit.bed(Vector3(-13.1,0,-6.2))
+	kit.bed(Vector3(-13.1,0,-6.2),"cloth")
 	kit.bed(Vector3(-9.2,0,-6.2))
-	kit.box("WovenRug",Vector3(-11.2,0.024,-4.6),Vector3(2.2,0.025,2.8),"red")
-	for z in [-5.8,-5.5,-3.7,-3.4]:kit.box("RugWeave",Vector3(-11.2,0.04,z),Vector3(2,0.01,0.04),"cream")
+	kit.box("WovenRug",Vector3(-10.2,0.024,-4.6),Vector3(2.2,0.025,2.8),"red")
+	for z in [-5.8,-5.5,-3.7,-3.4]:kit.box("RugWeave",Vector3(-10.2,0.04,z),Vector3(2,0.01,0.025),"cloth")
 	kit.box("BedsideCabinet",Vector3(-11.2,0.4,-7.7),Vector3(1,0.8,0.55),"wood",true)
 	kit.box("Radio",Vector3(-11.2,0.98,-7.65),Vector3(0.68,0.38,0.32),"wood")
 	kit.box("RadioDial",Vector3(-11.1,1.02,-7.47),Vector3(0.32,0.11,0.02),"cream")
 	for x in [-11.4,-10.95]:kit.cyl("RadioKnob",Vector3(x,0.91,-7.46),0.035,0.035,"brass").rotation.x=PI/2
 	for x in [-11.45,-11.38,-11.31]:kit.box("RadioSpeaker",Vector3(x,1.06,-7.47),Vector3(0.025,0.16,0.02),"dark")
 	kit.pipe(Vector3(-11.4,1.1,-7.7),Vector3(-11.5,1.9,-7.7),0.01,"dark")
+	kit.cyl("ReadingLampBase",Vector3(-10.82,0.85,-7.9),0.10,0.04,"brass")
+	kit.pipe(Vector3(-10.82,0.87,-7.9),Vector3(-10.82,1.19,-7.9),0.018,"brass")
+	kit.cyl("ReadingLampShade",Vector3(-10.82,1.23,-7.9),0.18,0.18,"green",null,0.075)
+	var reading_light=OmniLight3D.new()
+	add_child(reading_light)
+	reading_light.position=Vector3(-10.82,1.16,-7.9)
+	reading_light.light_color=Color("ffbc74")
+	reading_light.light_energy=0.8
+	reading_light.omni_range=2.5
 	kit.crate(Vector3(-12.2,0,-4.8),Vector3(0.65,0.35,0.45))
 	kit.locker(Vector3(-14.2,0,-2.0))
 	kit.locker(Vector3(-14.2,0,-2.65))
 	kit.bench(Vector3(-11.8,0,-1.4),1.1)
 	kit.poster(Vector3(-12.5,1.65,-8.87),"МОСКВА · 1962",false)
 	kit.signboard("01 / ЖИЛОЙ ОТСЕК",Vector3(-10.4,2.1,-8.83),3.0)
+	kit.signboard("СЕМЁНОВ",Vector3(-13.45,2.22,-8.82),2.1)
+	kit.label("谢苗诺夫",Vector3(-13.45,1.85,-8.78),22,Color("bcb28f"))
+	kit.label("ИВАН / 伊万",Vector3(-9.6,1.72,-8.78),24,Color("bcb28f"))
 	kit.lamp(Vector3(-13.4,2.2,-8.7),true,2.2,7)
 	kit.box("CoatOnWall",Vector3(-14.83,1.3,-4.0),Vector3(0.12,0.7,0.4),"cloth")
 	# Heating pipes hug the wall above walking headroom or stay in fixture footprints.
@@ -343,18 +364,14 @@ func build_people():
 	person("queue",Vector3(13.6,0,-3.2),"wood")
 
 func target(id: String,p: Vector3,label: String,kind: String="inspect"):
-	var ring=MeshInstance3D.new()
-	var torus=TorusMesh.new()
-	torus.inner_radius=0.14
-	torus.outer_radius=0.19
-	torus.rings=16
-	torus.ring_segments=8
-	ring.mesh=torus
-	ring.material_override=kit.mats["brass"]
+	# Keep target data and interaction coordinates stable; no ground ring or
+	# floating geometry is needed for the new screen-space proximity cue.
+	var ring=Node3D.new()
 	add_child(ring)
-	ring.position=p+Vector3(0,0.08,0)
-	var marker=kit.box("InteractDiamond",p+Vector3(0,1.95,0),Vector3(0.085,0.085,0.085),"brass")
-	marker.rotation.z=PI/4
+	ring.visible=false
+	var marker=Node3D.new()
+	add_child(marker)
+	marker.visible=false
 	targets[id]={"pos":p,"label":label,"kind":kind,"ring":ring,"marker":marker}
 
 func build_targets():
@@ -380,7 +397,7 @@ func _physics_process(delta):
 		if step_clock>0.38:
 			step_clock=0
 			step_audio.pitch_scale=0.97+fmod(phase,0.07)
-			step_audio.play()
+			if DisplayServer.get_name()!="headless":step_audio.play()
 	else:step_clock=0.3
 	if waiting_shift:
 		if phase>=8.0:
@@ -418,6 +435,7 @@ func _physics_process(delta):
 	for zone in zones:
 		if zone.rect.has_point(Vector2(player.position.x,player.position.z)):
 			room_name=zone.name
+			if zone.code=="01" and player.position.x < -11.95 and player.position.z < -2.8:room_name="谢苗诺夫的卧室"
 			break
 	hud.tick(delta)
 	set_camera(delta)
@@ -437,10 +455,10 @@ func find_nearest():
 		if d<best and reachable:
 			best=d
 			nearest=id
-		t.ring.visible=d<4.5
-		t.marker.visible=d<5.0
-		t.marker.position=t.pos+Vector3(0,1.95+sin(phase*2)*0.035,0)
-		t.ring.position=t.pos+Vector3(0,0.04,0)
+	var cue=nearest if not hud.modal_visible() else ""
+	if cue=="gate" and story.f("gate"):cue=""
+	if cue=="side" and (story.f("side_crossed") or story.f("side_pass")):cue=""
+	kit.highlight(cue,npcs)
 	if not waiting_shift:hud.set_prompt(nearest)
 
 func set_camera(delta: float, instant: bool = false):
@@ -531,6 +549,16 @@ func load_game():
 
 func restart():
 	get_tree().reload_current_scene()
+
+func _exit_tree():
+	# Release looping audio before node teardown (also avoids Dummy-driver leaks
+	# in headless visual/regression runs). No save or quest data is touched.
+	if is_instance_valid(ambience):
+		ambience.stop()
+		ambience.stream=null
+	if is_instance_valid(step_audio):
+		step_audio.stop()
+		step_audio.stream=null
 
 func capture_later():
 	overview=true

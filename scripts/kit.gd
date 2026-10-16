@@ -4,6 +4,11 @@ var root: Node3D
 var mats: Dictionary = {}
 var solids: Array[Dictionary] = []
 var occluders: Array[Dictionary] = []
+var wall_sections: Array[Dictionary] = []
+var wall_meshes: Array[MeshInstance3D] = []
+var highlight_material: ShaderMaterial
+var highlight_proxies:Dictionary={}
+var previous_highlight=""
 var font = preload("res://assets/fonts/MetroSans.otf")
 
 func _init(parent: Node3D):
@@ -22,12 +27,34 @@ func _init(parent: Node3D):
 		m.albedo_color = Color(pair[1])
 		m.roughness = 0.85
 		mats[pair[0]] = m
+	# Original layered maps: a single painted surface, not stacked coplanar boxes.
+	for pair in [["plaster","wall"],["concrete","cement"],["tile","floor"],["metal","steel"],["rust","oxide"],["wood","timber"],["cloth","weave"],["red","weave"],["green","weave"],["blue","weave"]]:
+		var m:StandardMaterial3D=mats[pair[0]]
+		m.albedo_texture=load("res://assets/visual/"+pair[1]+".png")
+		m.normal_enabled=true
+		m.normal_texture=load("res://assets/visual/"+pair[1]+"_normal.png")
+		m.normal_scale=0.55
+		m.roughness_texture=load("res://assets/visual/"+pair[1]+"_rough.png")
+		m.roughness=0.94
+		m.texture_filter=BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		m.uv1_scale=Vector3.ONE/2.4
+		if pair[0]=="red":m.albedo_color=Color("794232")
+		elif pair[0] in ["green","blue"]:m.albedo_color=m.albedo_color.lightened(0.15)
+	mats.plaster.uv1_triplanar=false
+	mats.plaster.uv1_world_triplanar=false
+	mats.plaster.uv1_scale=Vector3.ONE
+	var hair=StandardMaterial3D.new()
+	hair.albedo_color=Color("403a2f")
+	hair.roughness=1.0
+	mats.hair=hair
+	highlight_material=ShaderMaterial.new()
+	highlight_material.shader=load("res://assets/visual/edge_highlight.gdshader")
 	for pair in [["warm_light", Color(1.0, 0.65, 0.27)], ["cold_light", Color(0.43, 0.78, 0.80)], ["red_light", Color(0.85, 0.24, 0.10)]]:
 		var m = StandardMaterial3D.new()
 		m.albedo_color = pair[1]
 		m.emission_enabled = true
 		m.emission = pair[1]
-		m.emission_energy_multiplier = 1.8
+		m.emission_energy_multiplier = 1.5
 		mats[pair[0]] = m
 
 func box(id: String, p: Vector3, size: Vector3, material: String, solid: bool = false, parent: Node3D = null) -> MeshInstance3D:
@@ -39,6 +66,8 @@ func box(id: String, p: Vector3, size: Vector3, material: String, solid: bool = 
 	mesh.material_override = mats[material]
 	(parent if parent else root).add_child(mesh)
 	mesh.position = p
+	if id.begins_with("Floor") or id in ["Foundation","UndergroundVoid"]:
+		mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	if solid:
 		var body = StaticBody3D.new()
 		body.name = id + "_collision"
@@ -114,11 +143,15 @@ func lamp(p: Vector3, warm: bool = true, power: float = 1.8, radius: float = 6.0
 	var l = OmniLight3D.new()
 	root.add_child(l)
 	l.position = p+Vector3(0,-0.25,0.4)
-	l.light_color = Color("ffc276") if warm else Color("85cbd7")
-	l.light_energy = power*0.46
-	l.omni_range = radius
-	l.omni_attenuation = 1.4
-	l.shadow_enabled = false
+	l.light_color = Color("ffbb71") if warm else Color("83b7bb")
+	l.light_energy = power*0.85
+	l.omni_range = radius*0.86
+	l.omni_attenuation = 1.8
+	l.shadow_enabled = warm and power>=2.2
+	l.shadow_bias=0.055
+	l.shadow_normal_bias=0.8
+	# Battered diffuser cover and protective cage, kept clear of the light face.
+	for x in [-0.26,0.0,0.26]:box("LampCage",p+Vector3(x,-0.03,0.17),Vector3(0.018,0.18,0.025),"dark")
 
 func wall(id: String, a: Vector2, b: Vector2, cut: bool = false):
 	var p = Vector3((a.x+b.x)/2,1.4,(a.y+b.y)/2)
@@ -134,12 +167,72 @@ func wall(id: String, a: Vector2, b: Vector2, cut: bool = false):
 	c.shape = shape
 	body.add_child(c)
 	solids.append({"name": id, "rect": Rect2(p.x-size.x/2,p.z-size.z/2,size.x,size.z), "bottom":0.0,"top":2.8})
-	var h = 0.55 if cut else 2.65
-	box(id,Vector3(p.x,h/2,p.z),Vector3(size.x,h,size.z),"plaster")
-	box(id+"Dado",Vector3(p.x,0.30,p.z),Vector3(size.x+0.025,0.6,size.z+0.025),"metal")
-	box(id+"Coping",Vector3(p.x,h+0.025,p.z),Vector3(size.x+0.06,0.05,size.z+0.06),"dark")
-	if not cut:
-		box(id+"Trim",Vector3(p.x,0.85,p.z),Vector3(size.x+0.035,0.05,size.z+0.035),"dark")
+	# Preserve existing collision envelopes and door clearances. Visible masonry is
+	# 25cm thick; neighbouring modules are union-meshed in finish_walls().
+	wall_sections.append({"id":id,"rect":Rect2(p.x-maxf(abs(a.x-b.x),0.25)/2,p.z-maxf(abs(a.y-b.y),0.25)/2,maxf(abs(a.x-b.x),0.25),maxf(abs(a.y-b.y),0.25)),"height":0.82 if cut else 2.70})
+
+func finish_walls():
+	# Union a rectilinear footprint before extrusion. Adjacent cells share edges,
+	# never top faces. At T-junctions/corners the taller solid owns the volume.
+	var xs:Array[float]=[]
+	var zs:Array[float]=[]
+	for section in wall_sections:
+		var r:Rect2=section.rect
+		for x in [r.position.x,r.end.x]:
+			if x not in xs:xs.append(x)
+		for z in [r.position.y,r.end.y]:
+			if z not in zs:zs.append(z)
+	xs.sort()
+	zs.sort()
+	var heights:Dictionary={}
+	for ix in xs.size()-1:
+		for iz in zs.size()-1:
+			var center=Vector2((xs[ix]+xs[ix+1])*0.5,(zs[iz]+zs[iz+1])*0.5)
+			for section in wall_sections:
+				if section.rect.has_point(center):heights[Vector2i(ix,iz)]=maxf(heights.get(Vector2i(ix,iz),0),section.height)
+	var groups:Dictionary={}
+	for cell in heights:
+		var x0=xs[cell.x]
+		var x1=xs[cell.x+1]
+		var z0=zs[cell.y]
+		var z1=zs[cell.y+1]
+		var h:float=heights[cell]
+		var group_key=Vector2i(floori((x0+x1)/12),floori((z0+z1)/12))
+		if not groups.has(group_key):
+			groups[group_key]=[SurfaceTool.new(),SurfaceTool.new()]
+			for tool in groups[group_key]:tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+		var tools=groups[group_key]
+		wall_quad(tools[1],[Vector3(x0,h,z0),Vector3(x1,h,z0),Vector3(x1,h,z1),Vector3(x0,h,z1)],Vector3.UP,true)
+		var neighbour:float=heights.get(cell+Vector2i(0,-1),0.0)
+		if neighbour<h:wall_quad(tools[0],[Vector3(x0,neighbour,z0),Vector3(x1,neighbour,z0),Vector3(x1,h,z0),Vector3(x0,h,z0)],Vector3.FORWARD)
+		neighbour=heights.get(cell+Vector2i(0,1),0.0)
+		if neighbour<h:wall_quad(tools[0],[Vector3(x1,neighbour,z1),Vector3(x0,neighbour,z1),Vector3(x0,h,z1),Vector3(x1,h,z1)],Vector3.BACK)
+		neighbour=heights.get(cell+Vector2i(-1,0),0.0)
+		if neighbour<h:wall_quad(tools[0],[Vector3(x0,neighbour,z1),Vector3(x0,neighbour,z0),Vector3(x0,h,z0),Vector3(x0,h,z1)],Vector3.LEFT)
+		neighbour=heights.get(cell+Vector2i(1,0),0.0)
+		if neighbour<h:wall_quad(tools[0],[Vector3(x1,neighbour,z0),Vector3(x1,neighbour,z1),Vector3(x1,h,z1),Vector3(x1,h,z0)],Vector3.RIGHT)
+	for group_key in groups:
+		var mesh=ArrayMesh.new()
+		for i in range(2):
+			var tool:SurfaceTool=groups[group_key][i]
+			tool.generate_tangents()
+			tool.set_material(mats.plaster if i==0 else mats.concrete)
+			tool.commit(mesh)
+		var instance=MeshInstance3D.new()
+		instance.name="SolidMasonry_"+str(group_key)
+		instance.mesh=mesh
+		instance.set_meta("fixed_cutaway",true)
+		root.add_child(instance)
+		wall_meshes.append(instance)
+
+func wall_quad(tool:SurfaceTool,points:Array,normal:Vector3,cap:bool=false):
+	# Godot front faces use clockwise vertex order. Normals are explicit and
+	# unrelated to material transparency or the camera's moving position.
+	for index in [0,1,2,0,2,3]:
+		var p:Vector3=points[index]
+		tool.set_normal(normal)
+		tool.set_uv(Vector2(p.x,p.z)*0.55 if cap else Vector2((p.x if absf(normal.z)>0.5 else p.z)/3.0,1.0-p.y/2.7))
+		tool.add_vertex(p)
 
 func doorway(x: float, z: float, along_z: bool = false):
 	var n = Node3D.new()
@@ -150,6 +243,9 @@ func doorway(x: float, z: float, along_z: bool = false):
 		box("DoorJamb",Vector3(side*0.79,1.06,0),Vector3(0.13,2.12,0.30),"dark",false,n)
 		box("DoorEdge",Vector3(side*0.79,1.08,0.17),Vector3(0.025,2.0,0.02),"brass",false,n)
 	box("DoorLintel",Vector3(0,2.15,0),Vector3(1.72,0.18,0.32),"metal",false,n)
+	box("ConcreteDoorBeam",Vector3(0,2.49,0),Vector3(2.12,0.42,0.35),"concrete",false,n)
+	for side in [-1,1]:
+		box("DoorPier",Vector3(side*0.96,1.14,0),Vector3(0.16,2.28,0.28),"concrete",false,n)
 	box("Threshold",Vector3(0,0.012,0),Vector3(1.5,0.024,0.35),"metal",false,n)
 	# Opening height 2.06m, clear width 1.45m; no tiny threshold colliders.
 
@@ -184,12 +280,14 @@ func crate(p: Vector3, size: Vector3 = Vector3(0.65,0.55,0.6)):
 	for z in [-size.z/2-0.01,size.z/2+0.01]:
 		for x in [-size.x*0.35,size.x*0.35]:box("CrateStrap",p+Vector3(x,size.y/2,z),Vector3(0.055,size.y,0.025),"metal")
 
-func bed(p: Vector3):
+func bed(p: Vector3,blanket:String="red"):
 	box("BedFrame",p+Vector3(0,0.35,0),Vector3(1.0,0.15,2.0),"dark",true)
-	box("BedMattress",p+Vector3(0,0.48,0),Vector3(0.91,0.16,1.95),"cloth")
+	ellipsoid("BedMattress",p+Vector3(0,0.48,0),Vector3(0.455,0.09,0.975),"cloth")
 	box("BedFootprint",p+Vector3(0,0.2,0),Vector3(1.02,0.4,2.02),"dark",true).visible=false
-	box("Pillow",p+Vector3(0,0.60,-0.70),Vector3(0.65,0.16,0.40),"paper")
-	box("Blanket",p+Vector3(0,0.58,0.37),Vector3(0.92,0.08,1.0),"red")
+	ellipsoid("Pillow",p+Vector3(0,0.60,-0.70),Vector3(0.325,0.08,0.20),"paper")
+	box("Blanket",p+Vector3(0,0.58,0.37),Vector3(0.92,0.08,1.0),blanket)
+	for x in [-0.30,-0.10,0.10,0.30]:
+		box("QuiltStitch",p+Vector3(x,0.625,0.37),Vector3(0.006,0.006,0.94),"cloth")
 	for z in [-0.96,0.96]:
 		for x in [-0.48,0.48]:cyl("BedPost",p+Vector3(x,0.4,z),0.035,0.8,"metal")
 
@@ -200,9 +298,19 @@ func locker(p: Vector3, height: float = 1.85):
 	for y in [height-0.25,height-0.32,height-0.39]:box("LockerVent",p+Vector3(0,y,0.31),Vector3(0.4,0.018,0.02),"dark")
 
 func poster(p: Vector3, text: String, red: bool = true):
-	box("Poster",p,Vector3(0.88,1.2,0.018),"red" if red else "paper")
-	label("★" if red else "06",p+Vector3(0,0.24,0.025),65,Color("c5ac77") if red else Color("3b4846"))
-	label(text,p+Vector3(0,-0.28,0.025),22,Color("d6c6a1") if red else Color("3b4846"))
+	var m=MeshInstance3D.new()
+	var q=QuadMesh.new()
+	q.size=Vector2(0.88,1.2)
+	m.mesh=q
+	var mat=StandardMaterial3D.new()
+	mat.albedo_texture=load("res://assets/visual/poster_"+str(posmod(text.hash(),3))+".png")
+	mat.roughness=1.0
+	mat.texture_filter=BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	m.material_override=mat
+	root.add_child(m)
+	m.position=p+Vector3(0,0,0.012)
+	# Opaque poster face is in front of masonry, never a transparent overlay.
+	label(text,p+Vector3(0,-0.71,0.025),18,Color("bfb494"))
 
 func batch_static():
 	# Render repeated modules in material batches; their physics bodies remain independent.
@@ -214,7 +322,7 @@ func batch_static():
 		if not material:continue
 		var transform:Transform3D=child.global_transform
 		var primitive:Mesh
-		var key=str(material.get_instance_id())+"_cell_"+str(floori(child.global_position.x/7.0))+"_"+str(floori(child.global_position.z/7.0))
+		var key=str(material.get_instance_id())+"_shadow_"+str(child.cast_shadow)+"_cell_"+str(floori(child.global_position.x/7.0))+"_"+str(floori(child.global_position.z/7.0))
 		if source is BoxMesh:
 			key+="_box"
 			primitive=BoxMesh.new()
@@ -230,8 +338,9 @@ func batch_static():
 			primitive.radial_segments=12
 			transform=transform.scaled_local(Vector3(source.bottom_radius,source.height,source.bottom_radius))
 		else:continue
-		if not groups.has(key):groups[key]={"mesh":primitive,"material":material,"transforms":[]}
+		if not groups.has(key):groups[key]={"mesh":primitive,"material":material,"transforms":[],"shadow":child.cast_shadow}
 		groups[key].transforms.append(transform)
+		child.set_meta("batched_visual",true)
 		child.visible=false
 	for key in groups:
 		var group=groups[key]
@@ -243,4 +352,46 @@ func batch_static():
 		for i in group.transforms.size():mm.set_instance_transform(i,group.transforms[i])
 		instance.multimesh=mm
 		instance.material_override=group.material
+		instance.cast_shadow=group.shadow
 		root.add_child(instance)
+
+func prepare_highlights():
+	var specs={
+		"box":[Vector3(-12.2,0,-4.8),["Crate"],0.7],
+		"radio":[Vector3(-11.2,1,-7.65),["Radio"],0.8],
+		"notice":[Vector3(11,1.5,-0.2),["NoticeBoard","CallUpNotice"],1.0],
+		"valve":[Vector3(8.8,1.25,-6.5),["ValveWheel","CatchBucket"],0.8],
+		"cabinet":[Vector3(-9,1.1,8.9),["FuseCabinet","FuseHazard"],1.0],
+		"relay":[Vector3(7.7,1,3.8),["Relay"],1.0],
+		"hatch":[Vector3(7.8,0,8.9),["Hatch"],1.0],
+		"lift":[Vector3(-3.3,1,9.4),["Airlock"],1.5],
+		"gate":[Vector3(9,1,6.7),["LockedMainGate"],1.0],
+		"side":[Vector3(9,1,4.5),["LockedSideDoor"],1.0]}
+	var originals=root.find_children("*","MeshInstance3D",true,false)
+	for id in specs:
+		highlight_proxies[id]=[]
+		for original in originals:
+			if not original.get_meta("batched_visual",false) and not original.visible:continue
+			var match_name=false
+			for prefix in specs[id][1]:
+				if original.name.begins_with(prefix):match_name=true
+			if not match_name or original.global_position.distance_to(specs[id][0])>specs[id][2]:continue
+			var proxy=MeshInstance3D.new()
+			proxy.name="InteractionContour_"+id
+			proxy.mesh=original.mesh
+			proxy.material_override=highlight_material
+			proxy.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			root.add_child(proxy)
+			proxy.global_transform=original.global_transform
+			proxy.visible=false
+			highlight_proxies[id].append(proxy)
+
+func highlight(id:String,npcs:Dictionary):
+	if id==previous_highlight:return
+	for key in highlight_proxies:
+		for proxy in highlight_proxies[key]:
+			proxy.visible=key==id
+	for key in npcs:
+		for mesh in npcs[key].visual.find_children("*","MeshInstance3D",true,false):
+			mesh.material_overlay=highlight_material if key==id else null
+	previous_highlight=id

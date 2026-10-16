@@ -16,6 +16,8 @@ var scrim: ColorRect
 var map_small
 var map_large
 var inventory_count: Label
+var quick_items:HBoxContainer
+var quick_signature=""
 var route_label: Label
 var status_label: Label
 var amber=Color("d7b477")
@@ -34,32 +36,33 @@ func setup(w):
 	theme.default_font_size=20
 	self.theme=theme
 	# Top masthead and separated location plaque.
-	var mast=panel(Vector2(32,28),Vector2(286,103))
-	var b=margin_box(mast,18,14)
+	var mast=panel(Vector2(32,28),Vector2(246,86))
+	var b=margin_box(mast,18,10)
+	b.add_theme_constant_override("separation",4)
 	var line=HBoxContainer.new()
 	b.add_child(line)
-	var brand=label("МЕТРО",19,muted)
+	var brand=label("МЕТРО",14,muted)
 	brand.add_theme_font_override("font",mono)
 	line.add_child(brand)
 	line.add_spacer(false)
-	line.add_child(label("D–6",22,amber))
-	var title=label("地铁 1982",33,text_color)
+	line.add_child(label("D–6",17,amber))
+	var title=label("地铁 1982",27,text_color)
 	title.add_theme_font_override("font",serif)
 	b.add_child(title)
-	var top=panel(Vector2(338,28),Vector2(536,64))
+	var top=panel(Vector2(298,28),Vector2(516,56))
 	var topbox=margin_box(top,17,11)
-	location_label=label("居住层 / 伊万的卧室",22,text_color)
+	location_label=label("居住层 / 伊万的卧室",19,text_color)
 	topbox.add_child(location_label)
-	var tag=panel(Vector2(1220,28),Vector2(348,64))
+	var tag=panel(Vector2(1240,28),Vector2(328,56))
 	var tb=margin_box(tag,17,11)
-	status_label=label("16 XI 1982   /   07:42",19,muted)
+	status_label=label("16 XI 1982   /   07:42",17,muted)
 	status_label.add_theme_font_override("font",mono)
 	tb.add_child(status_label)
 	# Current goal is short; the detailed quest network belongs in the journal.
-	var goal=panel(Vector2(32,151),Vector2(286,144))
+	var goal=panel(Vector2(32,134),Vector2(246,144))
 	var gb=margin_box(goal,18,15)
 	gb.add_child(label("当前目标  /  OBJECTIVE",14,amber))
-	objective=label("",20,text_color)
+	objective=label("",18,text_color)
 	objective.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	gb.add_child(objective)
 	var journal_btn=button("J   查看手记与路线",func():show_journal(),true,true)
@@ -70,13 +73,13 @@ func setup(w):
 	kb.add_child(label("W A S D    移动       E   互动",16,text_color))
 	kb.add_child(label("Tab  总览   /   滚轮  缩放",15,muted))
 	# Minimap has geometry, not a screenshot of the reference.
-	var mp=panel(Vector2(1318,666),Vector2(250,196))
+	var mp=panel(Vector2(1302,106),Vector2(266,214))
 	var mb=margin_box(mp,6,5)
 	var mt=label("D–6  /  居住层",14,muted)
 	mt.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	mb.add_child(mt)
 	map_small=MapView.new()
-	map_small.custom_minimum_size=Vector2(236,150)
+	map_small.custom_minimum_size=Vector2(252,168)
 	map_small.world=world
 	mb.add_child(map_small)
 	# Bottom command bar with a warmer identity block and a small route indicator.
@@ -98,6 +101,9 @@ func setup(w):
 	row.add_child(rule)
 	inventory_count=label("",18,text_color)
 	row.add_child(inventory_count)
+	quick_items=HBoxContainer.new()
+	quick_items.add_theme_constant_override("separation",4)
+	row.add_child(quick_items)
 	row.add_child(button("I  背包",func():show_inventory(),true,true))
 	row.add_child(button("J  手记",func():show_journal(),true,true))
 	row.add_child(button("M  地图",func():show_map(),true,true))
@@ -142,13 +148,15 @@ func style(bg: Color,border: Color,width: int=1,rad: int=0) -> StyleBoxFlat:
 	s.border_color=border
 	s.set_border_width_all(width)
 	s.set_corner_radius_all(rad)
+	s.shadow_color=Color(0,0,0,0.28)
+	s.shadow_size=5
 	return s
 func panel(pos:Vector2,sz:Vector2) -> PanelContainer:
 	var p=PanelContainer.new()
 	add_child(p)
 	p.position=pos
 	p.size=sz
-	p.add_theme_stylebox_override("panel",style(Color(0.035,0.065,0.070,0.95),Color("4e594e")))
+	p.add_theme_stylebox_override("panel",style(Color(0.035,0.045,0.043,0.94),Color("655e49")))
 	p.mouse_filter=Control.MOUSE_FILTER_PASS
 	return p
 func margin_box(parent:Control,h:int=24,v:int=20) -> VBoxContainer:
@@ -206,6 +214,26 @@ func body(text:String,sz:int=21,c:Color=Color("c8cebd")):
 	l.add_theme_constant_override("line_spacing",7)
 	modal_box.add_child(l)
 
+func prose(text:String,sz:int=21):
+	var rich=RichTextLabel.new()
+	rich.bbcode_enabled=true
+	rich.fit_content=true
+	rich.scroll_active=false
+	rich.add_theme_font_size_override("normal_font_size",sz)
+	rich.add_theme_color_override("default_color",Color("a7b0a5"))
+	rich.add_theme_constant_override("normal_line_spacing",8)
+	var expression=RegEx.new()
+	expression.compile("「[^」]*」")
+	var cursor=0
+	var markup=""
+	for quote in expression.search_all(text):
+		markup+=text.substr(cursor,quote.get_start()-cursor).replace("[","[lb]")
+		markup+="[color=#d6bd90]"+quote.get_string().replace("[","[lb]")+"[/color]"
+		cursor=quote.get_end()
+	markup+=text.substr(cursor).replace("[","[lb]")
+	rich.text=markup
+	modal_box.add_child(rich)
+
 func start_modal(title:String,subtitle:String,wide:bool=false):
 	for child in modal.get_children():
 		modal.remove_child(child)
@@ -244,7 +272,7 @@ func show_dialogue(id:String):
 	dialogue_id=id
 	var v=world.story.view(id)
 	start_modal(v.name,v.role+"   /   D–6 居住层")
-	body(v.body)
+	prose(v.body)
 	rule()
 	if v.options.is_empty():body("这里暂时没有可执行的操作。",17,muted)
 	for option in v.options:
@@ -258,7 +286,7 @@ func show_dialogue(id:String):
 func show_reply(id:String,text:String):
 	var v=world.story.view(id)
 	start_modal(v.name,"交互结果   /   状态已更新")
-	body(text,22)
+	prose(text,22)
 	rule()
 	modal_box.add_child(button("继续交谈 / 调查",func():show_dialogue(id)))
 	modal_box.add_child(button("返回探索",func():close()))
@@ -287,6 +315,20 @@ func refresh_status():
 	objective.text=world.story.objective()
 	inventory_count.text="%02d 件随身物品" % world.story.items.size()
 	route_label.text=world.story.ROUTES.get(world.story.route,"尚未选择离站方式")
+	var signature=",".join(world.story.items)
+	if quick_items and signature!=quick_signature:
+		for child in quick_items.get_children():
+			quick_items.remove_child(child)
+			child.queue_free()
+		for id in world.story.items.slice(0,3):
+			var icon=TextureRect.new()
+			icon.texture=load("res://assets/visual/item_"+id+".png")
+			icon.custom_minimum_size=Vector2(44,44)
+			icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+			icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			icon.tooltip_text=world.story.ITEMS[id][0]
+			quick_items.add_child(icon)
+		quick_signature=signature
 func tick(delta:float):
 	location_label.text="D–6 居住层  /  "+world.room_name
 	status_label.text="16 XI 1982   /   "+("换班 · 黄灯" if world.phase>=8 else "07:42 · 早班")
@@ -306,8 +348,22 @@ func show_inventory():
 	if world.story.items.is_empty():body("背包里还没有物品。卧室床下的木箱值得看看。")
 	for id in world.story.items:
 		var item=world.story.ITEMS[id]
-		body(item[0]+"   /   "+item[2],22,amber)
-		body(item[1],18,text_color)
+		var row=HBoxContainer.new()
+		row.add_theme_constant_override("separation",18)
+		modal_box.add_child(row)
+		var icon=TextureRect.new()
+		icon.texture=load("res://assets/visual/item_"+id+".png")
+		icon.custom_minimum_size=Vector2(92,92)
+		icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		row.add_child(icon)
+		var description=VBoxContainer.new()
+		description.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		row.add_child(description)
+		description.add_child(label(item[0]+"   /   "+item[2],22,amber))
+		var detail=label(item[1],18,text_color)
+		detail.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+		description.add_child(detail)
 		rule()
 
 func show_journal():
