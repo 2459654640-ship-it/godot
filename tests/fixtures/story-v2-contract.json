@@ -1,0 +1,5607 @@
+{
+	"paths": {
+		"bribe": {
+			"actions": [
+				"search_box",
+				"open_cache",
+				"use_vodka",
+				"open_cache",
+				"search_box"
+			],
+			"states": [
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": true,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"searched": true
+						},
+						"intel_count": 0,
+						"items": [
+							"knife",
+							"cigarettes",
+							"photo"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": true
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"cache": true,
+							"searched": true
+						},
+						"intel_count": 0,
+						"items": [
+							"knife",
+							"cigarettes",
+							"photo",
+							"vodka"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": true
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"cache": true,
+							"gate": true,
+							"gate_route": "bribe",
+							"searched": true
+						},
+						"intel_count": 0,
+						"items": [
+							"knife",
+							"cigarettes",
+							"photo",
+							"mask",
+							"filter"
+						],
+						"route": "bribe",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": true
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"cache": true,
+							"gate": true,
+							"gate_route": "bribe",
+							"searched": true
+						},
+						"intel_count": 0,
+						"items": [
+							"knife",
+							"cigarettes",
+							"photo",
+							"mask",
+							"filter"
+						],
+						"route": "bribe",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": true
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"cache": true,
+							"gate": true,
+							"gate_route": "bribe",
+							"searched": true
+						},
+						"intel_count": 0,
+						"items": [
+							"knife",
+							"cigarettes",
+							"photo",
+							"mask",
+							"filter"
+						],
+						"route": "bribe",
+						"version": 1.0
+					}
+				}
+			]
+		},
+		"early_invalid": {
+			"actions": [
+				"claim_permit",
+				"fix_relay",
+				"get_kit",
+				"use_vodka",
+				"use_shift",
+				"get_fuse",
+				"claim_soup",
+				"leave_east"
+			],
+			"states": [
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				}
+			]
+		},
+		"knife": {
+			"actions": [
+				"search_box",
+				"hatch_knife",
+				"hatch_knife",
+				"hatch_wrench"
+			],
+			"states": [
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": true,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"searched": true
+						},
+						"intel_count": 0,
+						"items": [
+							"knife",
+							"cigarettes",
+							"photo"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": true
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"hatch": true,
+							"searched": true
+						},
+						"intel_count": 0,
+						"items": [
+							"cigarettes",
+							"photo"
+						],
+						"route": "hatch",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": true
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"hatch": true,
+							"searched": true
+						},
+						"intel_count": 0,
+						"items": [
+							"cigarettes",
+							"photo"
+						],
+						"route": "hatch",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": true
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"hatch": true,
+							"searched": true
+						},
+						"intel_count": 0,
+						"items": [
+							"cigarettes",
+							"photo"
+						],
+						"route": "hatch",
+						"version": 1.0
+					}
+				}
+			]
+		},
+		"memory": {
+			"actions": [
+				"tune",
+				"chalk",
+				"search_box",
+				"father",
+				"vitamins",
+				"give_vitamins",
+				"father"
+			],
+			"states": [
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": false
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": true
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 1,
+						"items": [
+							"frequency"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": false
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": false
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": true
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"chalk": true
+						},
+						"intel_count": 2,
+						"items": [
+							"frequency"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": true,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": false
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": false
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": true
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"chalk": true,
+							"searched": true
+						},
+						"intel_count": 2,
+						"items": [
+							"frequency",
+							"knife",
+							"cigarettes",
+							"photo"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": true,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": false
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": false
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": true
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"chalk": true,
+							"father": true,
+							"searched": true
+						},
+						"intel_count": 3,
+						"items": [
+							"frequency",
+							"knife",
+							"cigarettes",
+							"photo"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": true,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": false
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": true,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": false
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": true
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": false
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"chalk": true,
+							"father": true,
+							"searched": true,
+							"vitamins_taken": true
+						},
+						"intel_count": 3,
+						"items": [
+							"frequency",
+							"knife",
+							"cigarettes",
+							"photo",
+							"vitamins"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": true,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": false
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": false
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": true
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": false
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"chalk": true,
+							"father": true,
+							"searched": true,
+							"vitamins_given": true,
+							"vitamins_taken": true
+						},
+						"intel_count": 4,
+						"items": [
+							"frequency",
+							"knife",
+							"cigarettes",
+							"photo"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": true,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": false
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": false
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": true
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": false
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"chalk": true,
+							"father": true,
+							"searched": true,
+							"vitamins_given": true,
+							"vitamins_taken": true
+						},
+						"intel_count": 4,
+						"items": [
+							"frequency",
+							"knife",
+							"cigarettes",
+							"photo"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				}
+			]
+		},
+		"official": {
+			"actions": [
+				"read_notice",
+				"briefing",
+				"accept",
+				"get_kit",
+				"leave_official",
+				"get_kit",
+				"accept"
+			],
+			"states": [
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": false
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"notice": true
+						},
+						"intel_count": 1,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": false
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"notice": true
+						},
+						"intel_count": 1,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": false,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": false
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": true,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"accepted": true,
+							"notice": true
+						},
+						"intel_count": 1,
+						"items": [
+							"order"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": false,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": true
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": false
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"accepted": true,
+							"kit": true,
+							"notice": true
+						},
+						"intel_count": 1,
+						"items": [
+							"order",
+							"mask",
+							"filter"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": false,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": true
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": false
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"accepted": true,
+							"kit": true,
+							"notice": true
+						},
+						"intel_count": 1,
+						"items": [
+							"order",
+							"mask",
+							"filter"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": false,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": true
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": false
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"accepted": true,
+							"kit": true,
+							"notice": true
+						},
+						"intel_count": 1,
+						"items": [
+							"order",
+							"mask",
+							"filter"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": false,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": true
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": false
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"accepted": true,
+							"kit": true,
+							"notice": true
+						},
+						"intel_count": 1,
+						"items": [
+							"order",
+							"mask",
+							"filter"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				}
+			]
+		},
+		"permit": {
+			"actions": [
+				"borrow_wrench",
+				"nina_job",
+				"get_fuse",
+				"fix_relay",
+				"claim_permit",
+				"use_permit",
+				"use_vodka"
+			],
+			"states": [
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": true
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": false
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": true
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"nina_job": true
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": false
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": true
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": true
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"fuse_taken": true,
+							"nina_job": true
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench",
+							"fuse"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": true,
+							"nina_job": false
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": true
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"fuse_taken": true,
+							"nina_job": true,
+							"relay": true
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": true,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": false
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": true
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"fuse_taken": true,
+							"nina_job": true,
+							"relay": true
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench",
+							"permit",
+							"mask",
+							"filter"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": true
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": false
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": true
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"fuse_taken": true,
+							"gate": true,
+							"gate_route": "permit",
+							"nina_job": true,
+							"relay": true
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench",
+							"permit",
+							"mask",
+							"filter"
+						],
+						"route": "permit",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": true
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": false
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": true
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"fuse_taken": true,
+							"gate": true,
+							"gate_route": "permit",
+							"nina_job": true,
+							"relay": true
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench",
+							"permit",
+							"mask",
+							"filter"
+						],
+						"route": "permit",
+						"version": 1.0
+					}
+				}
+			]
+		},
+		"shift": {
+			"actions": [
+				"search_box",
+				"map",
+				"trade_smoke",
+				"use_shift",
+				"trade_smoke"
+			],
+			"states": [
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": true,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"searched": true
+						},
+						"intel_count": 0,
+						"items": [
+							"knife",
+							"cigarettes",
+							"photo"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": true,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": false,
+							"trade_smoke": true
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"searched": true
+						},
+						"intel_count": 1,
+						"items": [
+							"knife",
+							"cigarettes",
+							"photo",
+							"map"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": true,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": false,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": true
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"searched": true,
+							"shift": true
+						},
+						"intel_count": 2,
+						"items": [
+							"knife",
+							"photo",
+							"map"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": true,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": false,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"searched": true,
+							"shift": true,
+							"side": true
+						},
+						"intel_count": 2,
+						"items": [
+							"knife",
+							"photo",
+							"map"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": true,
+							"search_box": false
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": true,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": false,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": true,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"searched": true,
+							"shift": true,
+							"side": true
+						},
+						"intel_count": 2,
+						"items": [
+							"knife",
+							"photo",
+							"map"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				}
+			]
+		},
+		"soup": {
+			"actions": [
+				"borrow_wrench",
+				"cook_job",
+				"fix_valve",
+				"claim_soup",
+				"give_soup",
+				"use_shift",
+				"claim_soup"
+			],
+			"states": [
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": true
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": false
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": true
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"cook_job": true
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": true,
+							"cook_job": false
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"cook_job": true,
+							"valve": true
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": false
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": true,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"cook_job": true,
+							"soup_claimed": true,
+							"valve": true
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench",
+							"soup"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": false
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": false,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": true
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"cook_job": true,
+							"shift": true,
+							"soup_claimed": true,
+							"valve": true
+						},
+						"intel_count": 1,
+						"items": [
+							"wrench",
+							"map"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": false
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": false,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"cook_job": true,
+							"shift": true,
+							"side": true,
+							"soup_claimed": true,
+							"valve": true
+						},
+						"intel_count": 1,
+						"items": [
+							"wrench",
+							"map"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": false
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": false,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"cook_job": true,
+							"shift": true,
+							"side": true,
+							"soup_claimed": true,
+							"valve": true
+						},
+						"intel_count": 1,
+						"items": [
+							"wrench",
+							"map"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				}
+			]
+		},
+		"wrench": {
+			"actions": [
+				"borrow_wrench",
+				"hatch_wrench",
+				"hatch_knife"
+			],
+			"states": [
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": false
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": false
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": true,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": false
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": false
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": true
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench"
+						],
+						"route": "",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": true
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": true
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"hatch": true
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench"
+						],
+						"route": "hatch",
+						"version": 1.0
+					}
+				},
+				{
+					"options": {
+						"box": {
+							"open_cache": false,
+							"search_box": true
+						},
+						"cabinet": {
+							"get_fuse": true
+						},
+						"chalk": {
+							"chalk": true
+						},
+						"commander": {
+							"accept": true,
+							"briefing": true
+						},
+						"cook": {
+							"claim_soup": false,
+							"cook_job": true
+						},
+						"exit": {
+							"leave_east": true
+						},
+						"gate": {
+
+						},
+						"hatch": {
+							"hatch_knife": false,
+							"hatch_wrench": true
+						},
+						"igor": {
+							"igor_talk": true,
+							"use_permit": false,
+							"use_vodka": false
+						},
+						"lift": {
+							"leave_official": false
+						},
+						"mikhail": {
+							"give_soup": false,
+							"give_vitamins": false,
+							"map": true,
+							"trade_smoke": false
+						},
+						"nina": {
+							"borrow_wrench": false,
+							"claim_permit": false,
+							"nina_job": true
+						},
+						"notice": {
+							"read_notice": true
+						},
+						"radio": {
+							"tune": true
+						},
+						"relay": {
+							"fix_relay": false
+						},
+						"semyon": {
+							"father": false,
+							"semyon_advice": true,
+							"semyon_radio": false
+						},
+						"side": {
+							"use_shift": false
+						},
+						"supply": {
+							"get_kit": false,
+							"vitamins": true
+						},
+						"valve": {
+							"fix_valve": true
+						}
+					},
+					"state": {
+						"ending": false,
+						"flags": {
+							"hatch": true
+						},
+						"intel_count": 0,
+						"items": [
+							"wrench"
+						],
+						"route": "hatch",
+						"version": 1.0
+					}
+				}
+			]
+		}
+	},
+	"source_commit": "c0441b48c57813b5a625e2ba14efb4ed63258241"
+}

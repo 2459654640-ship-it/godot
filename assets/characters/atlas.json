@@ -1,0 +1,134 @@
+{
+  "ivan": {
+    "file": "ivan.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 3,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  },
+  "semyon": {
+    "file": "semyon.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  },
+  "nina": {
+    "file": "nina.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  },
+  "mikhail": {
+    "file": "mikhail.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  },
+  "cook": {
+    "file": "cook.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  },
+  "supply": {
+    "file": "supply.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  },
+  "commander": {
+    "file": "commander.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  },
+  "igor": {
+    "file": "igor.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  },
+  "resident": {
+    "file": "resident.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  },
+  "diner": {
+    "file": "diner.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  },
+  "queue": {
+    "file": "queue.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  }
+}

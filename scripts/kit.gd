@@ -6,6 +6,7 @@ var solids: Array[Dictionary] = []
 var occluders: Array[Dictionary] = []
 var wall_sections: Array[Dictionary] = []
 var wall_meshes: Array[MeshInstance3D] = []
+var veil_materials:Dictionary={}
 var highlight_material: ShaderMaterial
 var highlight_proxies:Dictionary={}
 var previous_highlight=""
@@ -113,11 +114,15 @@ func ellipsoid(id: String, p: Vector3, radii: Vector3, material: String, parent:
 	return m
 
 func pipe(a: Vector3, b: Vector3, radius: float = 0.055, material: String = "rust"):
-	var m = cyl("Pipe", (a+b)/2, radius, a.distance_to(b), material)
-	m.quaternion = Quaternion(Vector3.UP, (b-a).normalized())
+	var count=maxi(1,ceili(a.distance_to(b)/2.0))
+	for i in count:
+		var start=a.lerp(b,float(i)/count)
+		var end=a.lerp(b,float(i+1)/count)
+		var m=cyl("Pipe",(start+end)/2,radius,start.distance_to(end),material)
+		m.quaternion=Quaternion(Vector3.UP,(b-a).normalized())
 	for v in [a.lerp(b,0.12), a.lerp(b,0.55), a.lerp(b,0.9)]:
 		var collar = cyl("PipeCollar", v, radius*1.35, 0.06, "dark")
-		collar.quaternion = m.quaternion
+		collar.quaternion = Quaternion(Vector3.UP,(b-a).normalized())
 
 func label(text: String, p: Vector3, size: int = 42, color: Color = Color("d1c5a4"), parent: Node3D = null) -> Label3D:
 	var l = Label3D.new()
@@ -169,7 +174,7 @@ func wall(id: String, a: Vector2, b: Vector2, cut: bool = false):
 	solids.append({"name": id, "rect": Rect2(p.x-size.x/2,p.z-size.z/2,size.x,size.z), "bottom":0.0,"top":2.8})
 	# Preserve existing collision envelopes and door clearances. Visible masonry is
 	# 25cm thick; neighbouring modules are union-meshed in finish_walls().
-	wall_sections.append({"id":id,"rect":Rect2(p.x-maxf(abs(a.x-b.x),0.25)/2,p.z-maxf(abs(a.y-b.y),0.25)/2,maxf(abs(a.x-b.x),0.25),maxf(abs(a.y-b.y),0.25)),"height":0.82 if cut else 2.70})
+	wall_sections.append({"id":id,"rect":Rect2(p.x-maxf(abs(a.x-b.x),0.25)/2,p.z-maxf(abs(a.y-b.y),0.25)/2,maxf(abs(a.x-b.x),0.25),maxf(abs(a.y-b.y),0.25)),"height":2.70,"foreground":cut})
 
 func finish_walls():
 	# Union a rectilinear footprint before extrusion. Adjacent cells share edges,
@@ -182,22 +187,32 @@ func finish_walls():
 			if x not in xs:xs.append(x)
 		for z in [r.position.y,r.end.y]:
 			if z not in zs:zs.append(z)
+	# Short connected runs permit local fading, without overlapping wall boxes.
+	for x in range(-14,16,2):
+		if float(x) not in xs:xs.append(float(x))
+	for z in range(-8,11,2):
+		if float(z) not in zs:zs.append(float(z))
 	xs.sort()
 	zs.sort()
 	var heights:Dictionary={}
+	var foreground:Dictionary={}
 	for ix in xs.size()-1:
 		for iz in zs.size()-1:
 			var center=Vector2((xs[ix]+xs[ix+1])*0.5,(zs[iz]+zs[iz+1])*0.5)
 			for section in wall_sections:
-				if section.rect.has_point(center):heights[Vector2i(ix,iz)]=maxf(heights.get(Vector2i(ix,iz),0),section.height)
+				if section.rect.has_point(center):
+					heights[Vector2i(ix,iz)]=maxf(heights.get(Vector2i(ix,iz),0),section.height)
+					if section.foreground:foreground[Vector2i(ix,iz)]=true
 	var groups:Dictionary={}
+	var group_foreground:Dictionary={}
 	for cell in heights:
 		var x0=xs[cell.x]
 		var x1=xs[cell.x+1]
 		var z0=zs[cell.y]
 		var z1=zs[cell.y+1]
 		var h:float=heights[cell]
-		var group_key=Vector2i(floori((x0+x1)/12),floori((z0+z1)/12))
+		var group_key=Vector2i(floori((x0+x1)/4),floori((z0+z1)/4))
+		if foreground.has(cell):group_foreground[group_key]=true
 		if not groups.has(group_key):
 			groups[group_key]=[SurfaceTool.new(),SurfaceTool.new()]
 			for tool in groups[group_key]:tool.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -216,14 +231,29 @@ func finish_walls():
 		for i in range(2):
 			var tool:SurfaceTool=groups[group_key][i]
 			tool.generate_tangents()
-			tool.set_material(mats.plaster if i==0 else mats.concrete)
+			var material=ShaderMaterial.new()
+			material.shader=load("res://assets/visual/masonry_veil.gdshader")
+			material.set_shader_parameter("albedo_map",load("res://assets/visual/wall.png" if i==0 else "res://assets/visual/cement.png"))
+			material.set_shader_parameter("normal_map",load("res://assets/visual/wall_normal.png" if i==0 else "res://assets/visual/cement_normal.png"))
+			material.set_shader_parameter("normal_strength",0.45 if i==0 else 0.30)
+			tool.set_material(material)
 			tool.commit(mesh)
 		var instance=MeshInstance3D.new()
 		instance.name="SolidMasonry_"+str(group_key)
 		instance.mesh=mesh
-		instance.set_meta("fixed_cutaway",true)
+		instance.set_meta("complete_masonry",true)
+		instance.set_meta("foreground",group_foreground.has(group_key))
+		instance.set_meta("veil_opacity",1.0)
 		root.add_child(instance)
 		wall_meshes.append(instance)
+		veil_materials[instance.get_instance_id()]=[]
+		var shadow=MeshInstance3D.new()
+		shadow.name="MasonryShadow"
+		shadow.mesh=mesh
+		shadow.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+		shadow.material_override=mats.concrete
+		root.add_child(shadow)
+		instance.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 func wall_quad(tool:SurfaceTool,points:Array,normal:Vector3,cap:bool=false):
 	# Godot front faces use clockwise vertex order. Normals are explicit and
@@ -320,6 +350,19 @@ func batch_static():
 		var source=child.mesh
 		var material=child.material_override
 		if not material:continue
+		var veil=-1
+		var architectural=false
+		for prefix in ["Door","ConcreteDoor","Pipe","Cable","Lamp","Sign"]:
+			if child.name.begins_with(prefix):architectural=true
+		if architectural:
+			var distance=2.5
+			for index in wall_meshes.size():
+				var bounds=wall_meshes[index].get_aabb().grow(0.62)
+				var p=child.global_position
+				if bounds.has_point(Vector3(p.x,1,p.z)):
+					var d=Vector2(bounds.get_center().x-p.x,bounds.get_center().z-p.z).length()
+					if d<distance:distance=d;veil=index
+		if veil>=0:material=veil_prop_material(material,wall_meshes[veil])
 		var transform:Transform3D=child.global_transform
 		var primitive:Mesh
 		var key=str(material.get_instance_id())+"_shadow_"+str(child.cast_shadow)+"_cell_"+str(floori(child.global_position.x/7.0))+"_"+str(floori(child.global_position.z/7.0))
@@ -354,6 +397,22 @@ func batch_static():
 		instance.material_override=group.material
 		instance.cast_shadow=group.shadow
 		root.add_child(instance)
+
+func veil_prop_material(base:StandardMaterial3D,wall_mesh:MeshInstance3D) -> ShaderMaterial:
+	var list:Array=veil_materials[wall_mesh.get_instance_id()]
+	for entry in list:
+		if entry.base==base:return entry.material
+	var material=ShaderMaterial.new()
+	material.shader=load("res://assets/visual/masonry_veil.gdshader")
+	material.set_shader_parameter("normal_strength",0.0)
+	material.set_shader_parameter("base_color",base.albedo_color)
+	material.set_shader_parameter("has_texture",base.albedo_texture!=null)
+	if base.albedo_texture:material.set_shader_parameter("albedo_map",base.albedo_texture)
+	material.set_shader_parameter("triplanar",base.uv1_triplanar)
+	material.set_shader_parameter("map_scale",base.uv1_scale)
+	if base.emission_enabled:material.set_shader_parameter("emission_color",base.emission*base.emission_energy_multiplier)
+	list.append({"base":base,"material":material})
+	return material
 
 func prepare_highlights():
 	var specs={
@@ -392,6 +451,8 @@ func highlight(id:String,npcs:Dictionary):
 		for proxy in highlight_proxies[key]:
 			proxy.visible=key==id
 	for key in npcs:
+		var painter=npcs[key].visual.get_node_or_null("Painter")
+		if painter:painter.focused=key==id
 		for mesh in npcs[key].visual.find_children("*","MeshInstance3D",true,false):
-			mesh.material_overlay=highlight_material if key==id else null
+			if mesh.name!="PaintedFigure":mesh.material_overlay=highlight_material if key==id else null
 	previous_highlight=id

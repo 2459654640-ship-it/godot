@@ -1,0 +1,45 @@
+extends SceneTree
+const Story=preload("res://scripts/story.gd")
+const Narrative=preload("res://scripts/narrative.gd")
+var checks=0
+var failures:Array[String]=[]
+func check(ok:bool,message:String):
+	checks+=1
+	if not ok:failures.append(message);push_error(message)
+func _initialize():
+	var fixture=JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/story-v2-contract.json"))
+	for path in fixture.paths:
+		var s=Story.new()
+		var sequence=fixture.paths[path]
+		for index in sequence.states.size():
+			if index>0:
+				var key=sequence.actions[index-1]
+				var reply=s.act(key)
+				if not key in ["leave_official","leave_east"]:check(not reply.is_empty(),"actual interaction result has authored text: "+key)
+			var expected=sequence.states[index]
+			var actual=JSON.parse_string(JSON.stringify(s.serialize()))
+			actual.erase("intel")
+			actual.intel_count=float(s.intel.size())
+			check(actual==expected.state,"quest state/reward/cost unchanged: %s step %d" % [path,index])
+			for id in expected.options:
+				var options={}
+				for o in s.view(id).options:
+					if not Narrative.CHAT.has(o.key):options[o.key]=o.enabled
+				check(options==expected.options[id],"all original action gates unchanged: %s/%d/%s" % [path,index,id])
+		# Conversations should never grant items, persist flags or change routes.
+		var before=s.serialize().duplicate(true)
+		for key in Narrative.CHAT:
+			var reply=s.act(key)
+			check(reply==Narrative.CHAT[key][2] and s.serialize()==before,"small talk is state-neutral: "+key)
+	for id in Narrative.BODIES:
+		var s=Story.new()
+		for stage in range(2):
+			if stage==1:s.restore({"version":1,"flags":{"searched":true,"cache":true,"relay":true,"valve":true,"soup_claimed":true,"accepted":true,"kit":true,"gate":true,"hatch":true,"fuse_taken":true,"shift":true,"side_crossed":true},"items":["permit","frequency"],"intel":[],"route":"permit","ending":false})
+			var body=s.view(id).body
+			check(not body.is_empty(),"authored body present: "+id)
+			for banned in ["原型","测试","本次新增","不赠送","作为补偿","开发"]:check(not banned in body,"no development instructions in scene prose: "+id)
+	var characters={"semyon":0,"nina":0,"mikhail":0,"cook":0,"supply":0,"commander":0,"igor":0}
+	for key in Narrative.CHAT:characters[Narrative.CHAT[key][0]]+=1
+	for id in characters:check(characters[id]>=3,"at least three personal conversations: "+id)
+	print("NARRATIVE_CONTRACT_RESULT checks=",checks," failures=",failures.size())
+	quit(0 if failures.is_empty() else 1)

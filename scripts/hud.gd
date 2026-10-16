@@ -140,7 +140,7 @@ func setup(w):
 	modal.add_theme_stylebox_override("panel",style(Color("101c1e"),Color("766747"),1,0))
 	modal.visible=false
 	refresh_status()
-	toast("离站前，先看看床下木箱，与老爹说句话。",7)
+	toast("老爹已经起来了。去隔壁看看，离站前还有些话要说。",7)
 
 func style(bg: Color,border: Color,width: int=1,rad: int=0) -> StyleBoxFlat:
 	var s=StyleBoxFlat.new()
@@ -214,7 +214,7 @@ func body(text:String,sz:int=21,c:Color=Color("c8cebd")):
 	l.add_theme_constant_override("line_spacing",7)
 	modal_box.add_child(l)
 
-func prose(text:String,sz:int=21):
+func prose(text:String,sz:int=21,parent:Control=null):
 	var rich=RichTextLabel.new()
 	rich.bbcode_enabled=true
 	rich.fit_content=true
@@ -232,7 +232,25 @@ func prose(text:String,sz:int=21):
 		cursor=quote.get_end()
 	markup+=text.substr(cursor).replace("[","[lb]")
 	rich.text=markup
-	modal_box.add_child(rich)
+	(parent if parent else modal_box).add_child(rich)
+	return rich
+
+func character_prose(id:String,text:String):
+	var portrait_path="res://assets/portraits/"+id+".png"
+	if not ResourceLoader.exists(portrait_path):
+		prose(text)
+		return
+	var row=HBoxContainer.new()
+	row.add_theme_constant_override("separation",18)
+	modal_box.add_child(row)
+	var portrait=TextureRect.new()
+	portrait.texture=load(portrait_path)
+	portrait.custom_minimum_size=Vector2(132,158)
+	portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+	portrait.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	row.add_child(portrait)
+	var words=prose(text,20,row)
+	words.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 
 func start_modal(title:String,subtitle:String,wide:bool=false):
 	for child in modal.get_children():
@@ -272,11 +290,16 @@ func show_dialogue(id:String):
 	dialogue_id=id
 	var v=world.story.view(id)
 	start_modal(v.name,v.role+"   /   D–6 居住层")
-	prose(v.body)
+	character_prose(id,v.body)
 	rule()
 	if v.options.is_empty():body("这里暂时没有可执行的操作。",17,muted)
+	var chatting=false
 	for option in v.options:
 		var o:Dictionary=option
+		if world.story.Narrative.CHAT.has(o.key) and not chatting:
+			chatting=true
+			rule()
+			body("随口聊聊",16,muted)
 		var b=button(o.text,func():world.perform(o.key,id),o.enabled)
 		b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 		modal_box.add_child(b)
@@ -285,8 +308,8 @@ func show_dialogue(id:String):
 
 func show_reply(id:String,text:String):
 	var v=world.story.view(id)
-	start_modal(v.name,"交互结果   /   状态已更新")
-	prose(text,22)
+	start_modal(v.name,v.role+"   /   D–6 居住层")
+	character_prose(id,text)
 	rule()
 	modal_box.add_child(button("继续交谈 / 调查",func():show_dialogue(id)))
 	modal_box.add_child(button("返回探索",func():close()))
@@ -345,7 +368,7 @@ func toast(text:String,duration:float=4.0):
 
 func show_inventory():
 	start_modal("随身物品","INVENTORY   /   道具通过对话与场景互动使用",true)
-	if world.story.items.is_empty():body("背包里还没有物品。卧室床下的木箱值得看看。")
+	if world.story.items.is_empty():body("背包还是空的。老爹房里的木箱收着你的旧物。")
 	for id in world.story.items:
 		var item=world.story.ITEMS[id]
 		var row=HBoxContainer.new()
@@ -367,25 +390,28 @@ func show_inventory():
 		rule()
 
 func show_journal():
-	start_modal("离站前的手记","JOURNAL   /   原版剧情基线 · D–6 局部扩展",true)
+	start_modal("离站前的手记","16 XI 1982   /   伊万",true)
 	body(world.story.objective(),24,amber)
 	rule()
 	body("净水危机",21,amber)
-	body("储水只够两周。是否随队寻找净水滤芯，或走另一条路，由你在离站前决定。登记征召不会立即结束探索。",18)
-	body("可尝试的离站办法",21,amber)
-	for pair in [
-	 ["征召小队",world.story.f("kit"),"科瓦廖夫登记 → 供应点领取防护 → 集合气闸"],
-	 ["维修许可",world.story.has("permit"),"向妮娜借工具 → 洗漱区取保险芯 → 修监测箱 → 妮娜签字 → 伊戈尔"],
-	 ["战前旧物",world.story.f("cache"),"卧室木箱 → 匕首撬暗格 → 伏特加与伊戈尔交涉"],
-	 ["换班侧门",world.story.f("shift"),"用香烟交换情报，或帮厨房止漏换热汤送给米哈伊尔 → 侧门等黄灯"],
-	 ["检修管线",world.story.has("knife") or world.story.has("wrench"),"带工具调查盖板 → 绕过岗哨；硬撬会折损匕首，不补发装备"]]:
+	body("净水设施停了。小队明晨去东郊找滤芯，名单上有我。先找中尉问清楚，再把今天该办的事办完。",18)
+	body("记着要办的事",21,amber)
+	var s=world.story
+	var notes=[["征召安排",s.f("kit"),"找科瓦廖夫登记，拿签字去供应点领装备。收拾妥当再到气闸报到。"]]
+	if s.f("nina_job") or s.has("permit"):
+		notes.append(["妮娜的维修单",s.has("permit"),"洗漱间断电柜有备用保险芯。修好东侧监测箱，再回去找她签字。"])
+	if s.f("cook_job") or s.f("valve"):
+		notes.append(["食堂漏水",s.f("valve"),"灶台边的回水接头需要拧紧。妮娜那里有扳手；修好后叫加琳娜看看。"])
+	if s.f("cache"):notes.append(["那瓶旧酒",s.f("gate") and s.route=="bribe","老爹一直没开过的战前酒。伊戈尔也许认得，交出去就收不回了。"])
+	if s.f("shift"):notes.append(["压力表边的侧门",s.f("side_crossed"),"米哈伊尔说，等黄灯亮起，伊戈尔去查表时再走。先记好门的位置。"])
+	if s.has("map"):notes.append(["旧检修管线",s.f("hatch"),"草图上有一条绕过岗哨的管线。盖板得用工具打开，匕首硬撬可能会断。"])
+	for pair in notes:
 		body(("◆ " if pair[1] else "◇ ")+pair[0],20,amber if pair[1] else text_color)
 		body(pair[2],16,muted)
 	rule()
 	body("已获得的情报",21,amber)
 	if world.story.intel.is_empty():body("尚无记录。调查征召令、收音机和走廊记号。",18,muted)
 	for info in world.story.intel:body("— "+info,18)
-	body("范围边界：水厂、父亲去向、东方-7与后续阵营关系均未在此原型定稿。",16,muted)
 
 func show_map():
 	start_modal("D–6 居住层","LEVEL PLAN   /   金色：出入口 · 蓝色：居民",true)
@@ -406,7 +432,7 @@ func show_pause():
 	modal_box.add_child(button("声音："+("关" if AudioServer.is_bus_mute(0) else "开"),func():AudioServer.set_bus_mute(0,not AudioServer.is_bus_mute(0));show_pause()))
 	rule()
 	body("WASD / 方向键：8 方向移动\nE：交谈 / 调查\nI：背包　J：手记　M：地图\nTab：总览　滚轮：缩放\nEsc：关闭界面 / 菜单",20)
-	body("角色与器物为统一尺度的原创低模原型资产，不代表最终美术。固定镜头使用切墙视图，保留完整墙体碰撞。",16,muted)
+	body("画面：3D 场景与多方向绘制人物。靠近时显示互动轮廓；挡住人物的墙面会自动渐隐。",16,muted)
 func show_restart_confirm():
 	start_modal("重新开始？","当前未保存的进度将丢失",true)
 	modal_box.add_child(button("确认重新开始",func():world.restart()))
@@ -419,12 +445,12 @@ func show_departure(confirmed:bool):
 	is_departure=true
 	body("你选择了："+s.ROUTES.get(departure_route,""),26,amber)
 	if not confirmed:
-		body("确认后展示本次离站记录，原型到此为止。你仍可返回继续探索，或更换离站路线。",20)
+		body("该带的都带了吗？确认后会记录这次离站。你也可以先回去，把没办完的事办完。",20)
 		if not s.has("mask") or not s.has("filter"):body("防护不全：没有完整的面具与滤毒罐。这条路不会自动补给；是否仍然离开？",20,Color("d29270"))
 		modal_box.add_child(button("确认离站 · 查看本次记录",func():s.route=world.pending_route;s.ending=true;s.changed.emit();show_departure(true)))
 		modal_box.add_child(button("还没准备好，返回探索",func():close()))
 	else:
-		body("居住层的灯光在你身后合拢。前面是未写完的路。",22)
+		body("你在气闸候车区等过了这一夜。天快亮时，小队开始点名。轨道车上的人往里挪了挪，给你空出一个位置。" if s.route=="official" else "你沿着轨道继续往前。脚步声在隧道里传得很远，走了好一阵，才听不见身后居住层的机器声。",22)
 		body("携带物品：%d 件　／　情报：%d 条" % [s.items.size(),s.intel.size()],20)
 		body("防护装备："+("齐备" if s.has("mask") and s.has("filter") else "不齐备 · 风险已确认"),20)
 		if s.f("father") or s.has("frequency"):body("带走的疑问：父亲的去向与东方-7。没有证实，也没有遗忘。",20)
@@ -432,7 +458,7 @@ func show_departure(confirmed:bool):
 		if s.route=="shift":body("代价：用物资或劳动换到时间窗；没有额外装备。",18,amber)
 		if s.route=="hatch":body("代价：绕行旧管线；工具是否保留取决于拆卸方式。",18,amber)
 		rule()
-		body("D–6 视觉与关卡原型结束。水厂、地表、东方-7和父亲线将在后续逐块扩展。",18,muted)
+		body("D–6 · 本章结束",18,muted)
 		modal_box.add_child(button("返回 D–6，继续比较其他办法",func():s.ending=false;s.changed.emit();close()))
 		modal_box.add_child(button("保存这次离站记录",func():world.save_game()))
 		modal_box.add_child(button("重新开始",func():show_restart_confirm()))

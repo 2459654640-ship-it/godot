@@ -1,0 +1,47 @@
+[
+	{
+		"draw_calls": 2073.0,
+		"fps_software_renderer": 1.0,
+		"image": "overview"
+	},
+	{
+		"draw_calls": 904.0,
+		"fps_software_renderer": 1.0,
+		"image": "bedroom-close"
+	},
+	{
+		"draw_calls": 484.0,
+		"fps_software_renderer": 1.0,
+		"image": "ivan-and-semyon"
+	},
+	{
+		"draw_calls": 826.0,
+		"fps_software_renderer": 1.0,
+		"image": "walls-complete"
+	},
+	{
+		"draw_calls": 1288.0,
+		"fps_software_renderer": 1.0,
+		"image": "dialogue"
+	},
+	{
+		"draw_calls": 962.0,
+		"fps_software_renderer": 1.0,
+		"image": "everyday-conversation"
+	},
+	{
+		"draw_calls": 1021.0,
+		"fps_software_renderer": 1.0,
+		"image": "inventory"
+	},
+	{
+		"draw_calls": 1057.0,
+		"fps_software_renderer": 1.0,
+		"image": "map"
+	},
+	{
+		"draw_calls": 896.0,
+		"fps_software_renderer": 1.0,
+		"image": "cast-art-review"
+	}
+]

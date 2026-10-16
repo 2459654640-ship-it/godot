@@ -1,6 +1,6 @@
 # 验证记录
 
-本文保留 v1 初版的验证记录。v2 墙体与视觉更新的实机画面、兼容性和回归结果见 [VISUAL-V2.md](VISUAL-V2.md)。
+本文保留 v1 初版的验证记录。当前版本见 [VISUAL-V3.md](VISUAL-V3.md)；v2 历史记录见 [VISUAL-V2.md](VISUAL-V2.md)。
 
 验证引擎：Godot **4.6.3.stable.official.7d41c59c4**，Linux x86_64，Compatibility 渲染器。
 

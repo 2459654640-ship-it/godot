@@ -1,4 +1,7 @@
-"""Original layered material maps and inventory illustrations, seed 1982.
+"""Historical v2 material and icon generator, seed 1982.
+
+WARNING: running this overwrites v3 painted maps/icons with the v2 placeholders.
+For the current art, use pack_painted_assets.py and pack_painted_materials.py.
 
 Only run to regenerate art assets. Pillow/numpy are not game dependencies.
 No reference image, downloaded material or story data is embedded here.

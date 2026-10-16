@@ -1,6 +1,5 @@
 extends CharacterBody3D
-## Tailored 3D figures with an ink contour. Movement/physics retain v1 behavior.
-const Tailor=preload("res://scripts/tailor.gd")
+## Depth-tested painterly figures. Movement/physics retain v1 behavior.
 var is_player = false
 var blocked = false
 var camera: Camera3D
@@ -35,7 +34,17 @@ func setup(kit, player: bool, coat: String = "green", hat: bool = false):
 	add_child(cs)
 	visual = Node3D.new()
 	add_child(visual)
-	Tailor.dress(self,kit,player,coat,hat)
+	# Preserve the original controller's limb pivots and animation contract;
+	# the authored visual is independent of these invisible helper nodes.
+	left_leg=Node3D.new()
+	right_leg=Node3D.new()
+	left_arm=Node3D.new()
+	right_arm=Node3D.new()
+	for pivot in [left_leg,right_leg,left_arm,right_arm]:visual.add_child(pivot)
+	var painting=preload("res://scripts/painted_actor.gd").new()
+	painting.name="Painter"
+	visual.add_child(painting)
+	painting.setup(self)
 	anchor=position
 
 func _physics_process(delta):

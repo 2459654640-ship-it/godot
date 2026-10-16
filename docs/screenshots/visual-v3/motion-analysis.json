@@ -1,0 +1,9 @@
+{
+  "record_count": 96,
+  "wall_segment_count": 137,
+  "player_travel_m": 4.356658935546909,
+  "physics_steps_between_first_last": 103,
+  "max_direction_reversals_per_wall": 1,
+  "reversals_meaning": "One fade-out then recovery is an expected direction change, not rapid flashing. Zero-value held periods are removed before counting.",
+  "pixel_patch_limit": "Patch RGB changes include intentional opacity transitions and character/light occlusion; these values alone are not a flicker metric. Retained as raw observations."
+}

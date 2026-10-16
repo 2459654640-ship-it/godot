@@ -1,10 +1,10 @@
 # 地铁1982 · D-6 居住层
 
-可运行的 Godot 4 **3D 视觉与关卡原型**。范围到伊万离开 D-6 为止，后续章节没有定稿。模块化地下居住空间、原创低模角色、固定斜俯视正交相机、低分辨率材质和冷暖灯光；没有使用参考图做场景背景或直接贴图。
+可运行的 Godot 4 **2.5D 视觉与关卡原型**。范围到伊万离开 D-6 为止，后续章节没有定稿。模块化真实 3D 地下空间、多方向绘制人物、固定斜俯视正交相机、绘画感材质和冷暖灯光；没有使用参考图做场景背景或直接贴图。
 
-当前包含 **v2 墙体与视觉重构**：连接后的实体墙、固定剖切、分层旧漆与材质法线、局部阴影、新人物衣型、邻近轮廓提示、道具插图与等距导览图。谢苗诺夫与伊万已分成相邻卧室。剧情、任务条件和 v1 存档格式保持兼容。
+当前为 **v3 绘画人物、完整墙体与对白更新**：11 名独立设计的八方向角色、伊万双步幅行走、匹配头像、14 种任务物品插画、完整 2.7m 实体墙及稳定动态半透明、磨损材质和旧地毯。19 处交互文案重写，7 名主对话 NPC 各增加 3 个日常话题。任务条件、物品得失、导航碰撞和 v1 存档格式保持兼容。谢苗诺夫与伊万住在相邻的独立卧室。
 
-[v2 全景](docs/screenshots/visual-v2/overview.png) · [卧室近景](docs/screenshots/visual-v2/bedroom-close.png) · [人物沿墙移动](docs/screenshots/visual-v2/wall-walk-47.png) · [闪烁原因与验证说明](docs/VISUAL-V2.md)
+[v3 全景](docs/screenshots/visual-v3/overview.png) · [卧室近景](docs/screenshots/visual-v3/bedroom-close.png) · [人物近景](docs/screenshots/visual-v3/ivan-and-semyon.png) · [人物沿墙移动](docs/screenshots/visual-v3/wall-walk-48.png) · [对白与头像](docs/screenshots/visual-v3/dialogue.png) · [角色素材览图](docs/screenshots/visual-v3/cast-art-review.png) · [实现和验证](docs/VISUAL-V3.md)
 
 ## 打开与运行
 
@@ -23,10 +23,11 @@ cd /workspace/godot
 ./tools/run.sh --test
 ```
 
-v2 额外检查（不修改玩家存档）：
+视觉和文案兼容检查（不修改玩家存档）：
 
 ```bash
 ./tools/run.sh --headless --fixed-fps 60 --script res://tests/visual_contract.gd
+./tools/run.sh --headless --script res://tests/narrative_contract.gd
 ```
 
 ## 操作
@@ -44,7 +45,7 @@ v2 额外检查（不修改玩家存档）：
 
 ## 试走一条路线
 
-出生后调查床下木箱，带走匕首、烟和照片。先与谢苗诺夫谈话，再出门探索。**J** 中列出了所有路线的当前条件。登记征召不会马上结束探索，真正离站有二次确认和总结。
+出生后可以去老爹房里的木箱收拾旧物，带走匕首、烟和照片。与谢苗诺夫谈话，再出门探索。**J** 会根据已获得的信息补充办事记录，不再提前列出所有解法。登记征召不会马上结束探索，真正离站有二次确认和总结。
 
 - **正式征召**：集合厅科瓦廖夫登记 → 第 7 供应点领取面具与滤毒罐 → 集合气闸。
 - **劳动换许可**：妮娜借扳手 → 洗漱区断电柜取备用保险芯 → 东侧压力监测箱复位 → 回妮娜处领许可和防护 → 向伊戈尔出示 → 走正门到延伸线。
@@ -56,19 +57,22 @@ v2 额外检查（不修改玩家存档）：
 
 ## 内容与实现
 
-7 位可对话人物、12 处调查 / 出入口、14 种可获取物品、5 类离站方式（其中情报和拆盖各有两种解法）。9 个空间区域含主通道。角色为原创、统一风格的低模占位资产，仍需后续正式人物美术替换；没有混用不匹配的外部素材。
+7 位主对话人物、3 位环境居民、12 处调查 / 出入口、14 种可获取物品、5 类离站方式（其中情报和拆盖各有两种解法）。9 个空间区域含主通道。人物使用本轮生成并整理的统一风格绘制资源，放入真实 3D 深度场景；并非实时完整骨骼人物模型。AI 原始素材与整理脚本一并保留在 `art-source/`，没有混用不匹配的素材或整图场景。
 
 | 文件 | 作用 |
 |---|---|
 | `scripts/world.gd` | 关卡布局、灯光、交互距离与视线、门、换班、相机、存档 |
 | `scripts/kit.gd` | 米制模块、家具、管线、材质和静态 MultiMesh 批次 |
 | `scripts/actor.gd` | 玩家 / NPC 外形、运动、实体碰撞与侧向让路 |
-| `scripts/tailor.gd` | v2 人物截面建模、衣型、脸部和轻描边，独立于移动逻辑 |
-| `scripts/story.gd` | 对话、条件、物品、情报、序列化；不依赖场景布局 |
+| `scripts/painted_actor.gd` | 八方向绘制人物、步行帧、深度、邻近轮廓与接触阴影 |
+| `scripts/wall_veil.gd` | 正交遮挡检测、渐隐、迟滞与透明面固定排序 |
+| `scripts/story.gd` | 条件、物品、情报、序列化；不依赖场景布局 |
+| `scripts/narrative.gd` | 场景文字、状态对应台词、选项措辞及 21 个无任务副作用的闲聊 |
 | `scripts/hud.gd` | 中文界面、背包、日志、地图、离站确认与记录 |
 | `tests/run.gd` | 实际物理移动、任务路线、UI、存档回归 |
 | `tools/make_textures.py` / `make_audio.py` | 原创纹理与声音生成器；运行游戏不需要 Python |
-| `tools/make_visual_materials.py` | v2 原创分层材质、法线 / 粗糙度图、海报和 14 种道具插图 |
+| `tools/pack_painted_assets.py` / `pack_painted_materials.py` | 整理绘制素材、锚点、头像、图标与材质通道；运行游戏不需要 Python |
+| `tests/narrative_contract.gd` | 对照上一版实际行为，检查全部原有动作条件、奖励、消耗及闲聊无副作用 |
 | `docs/DESIGN.md` | 基线取舍、比例、空间与扩展接口 |
 | `docs/VALIDATION.md` | 验证方法、结果与已知限制 |
 
@@ -76,8 +80,8 @@ v2 额外检查（不修改玩家存档）：
 
 存档位于 Godot `user://d6_save.json`。Linux 启动脚本默认置于 `/workspace/.metro1982/data/godot/app_userdata/地铁1982 · D-6/`；通过编辑器运行时遵循操作系统用户数据目录。测试使用独立测试存档并在完成后删除，不覆盖玩家存档。
 
-## 初版实机截图（v1）
+## 当前实机截图（v3）
 
-![D-6 全层总览](docs/screenshots/overview.png)
+![D-6 卧室与人物](docs/screenshots/visual-v3/bedroom-close.png)
 
-[居室与工坊](docs/screenshots/residence.png) · [公共食堂](docs/screenshots/mess.png) · [对话界面](docs/screenshots/dialogue.png)
+[全景](docs/screenshots/visual-v3/overview.png) · [背包图标](docs/screenshots/visual-v3/inventory.png) · [地图](docs/screenshots/visual-v3/map.png) · [v1/v2 历史验证记录](docs/VALIDATION.md)

@@ -23,12 +23,13 @@ var waiting_shift = false
 var pending_route=""
 var previous_position=Vector3.ZERO
 var overview = false
-var camera_size = 20.0
+var camera_size = 17.0
 var initialized = false
 var save_path="user://d6_save.json"
 var debug_camera_target=Vector3.ZERO
 var capture_mode=false
 var room_name="伊万的卧室"
+var wall_veil
 var zones=[
  {"name":"伊万的卧室","rect":Rect2(-15,-9,7,9),"code":"01"},
  {"name":"维修工坊","rect":Rect2(-8,-9,9,9),"code":"02"},
@@ -84,6 +85,9 @@ func _ready():
 	on_story_changed()
 	set_camera(0,true)
 	initialized=true
+	wall_veil=preload("res://scripts/wall_veil.gd").new()
+	add_child(wall_veil)
+	wall_veil.setup(self)
 	previous_position=player.position
 	if "--capture" in OS.get_cmdline_user_args():
 		capture_mode=true
@@ -175,6 +179,19 @@ func build_residence():
 	kit.bed(Vector3(-13.1,0,-6.2),"cloth")
 	kit.bed(Vector3(-9.2,0,-6.2))
 	kit.box("WovenRug",Vector3(-10.2,0.024,-4.6),Vector3(2.2,0.025,2.8),"red")
+	var rug=MeshInstance3D.new()
+	rug.name="WornMedallionCarpet"
+	var rug_plane=PlaneMesh.new()
+	rug_plane.size=Vector2(2.2,2.8)
+	rug.mesh=rug_plane
+	var rug_material=StandardMaterial3D.new()
+	rug_material.albedo_texture=load("res://assets/visual/rug.png")
+	rug_material.roughness=0.98
+	rug_material.texture_filter=BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	rug.material_override=rug_material
+	rug.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(rug)
+	rug.position=Vector3(-10.2,0.041,-4.6)
 	for z in [-5.8,-5.5,-3.7,-3.4]:kit.box("RugWeave",Vector3(-10.2,0.04,z),Vector3(2,0.01,0.025),"cloth")
 	kit.box("BedsideCabinet",Vector3(-11.2,0.4,-7.7),Vector3(1,0.8,0.55),"wood",true)
 	kit.box("Radio",Vector3(-11.2,0.98,-7.65),Vector3(0.68,0.38,0.32),"wood")
@@ -232,7 +249,10 @@ func build_mess():
 		kit.bench(p+Vector3(0,0,0.95),2.1,false)
 		kit.bench(p+Vector3(0,0,-1.0),2.1,true)
 	kit.box("KitchenCounter",Vector3(5.1,0.48,-7.9),Vector3(6.4,0.96,1.05),"metal",true)
-	kit.box("CounterTop",Vector3(5.1,1.0,-7.9),Vector3(6.5,0.08,1.12),"cream")
+	var counter=kit.box("CounterTop",Vector3(5.1,1.0,-7.9),Vector3(6.5,0.08,1.12),"metal")
+	counter.material_override=counter.material_override.duplicate()
+	counter.material_override.albedo_color=Color("b4b9ac")
+	counter.material_override.roughness=0.72
 	for x in [3.5,4.5]:
 		kit.cyl("SoupPot",Vector3(x,1.25,-7.9),0.30,0.46,"metal")
 		kit.cyl("PotLid",Vector3(x,1.49,-7.9),0.32,0.04,"dark")
@@ -334,7 +354,7 @@ func build_corridor():
 	kit.box("CallUpNotice",Vector3(11,1.5,-0.13),Vector3(0.86,1.0,0.025),"paper")
 	kit.label("ПРИКАЗ\nD–6\n16 / XI / 82",Vector3(11,1.53,-0.10),24,Color("333a31"))
 	kit.label("★ — ◯",Vector3(-7.6,1.0,-0.13),35,Color("d1cdb4"))
-	kit.signboard("D–6  /  ЖИЛОЙ УРОВЕНЬ",Vector3(0,3.15,-0.15),5.1)
+	kit.signboard("D–6  /  ЖИЛОЙ УРОВЕНЬ",Vector3(0,2.35,-0.15),5.1)
 
 func person(id: String,p: Vector3,coat: String="green",hat: bool=false):
 	var a=Actor.new()
@@ -342,7 +362,7 @@ func person(id: String,p: Vector3,coat: String="green",hat: bool=false):
 	add_child(a)
 	a.position=p
 	a.setup(kit,false,coat,hat)
-	a.visual.rotation.y=0.45
+	a.visual.rotation.y={"igor":-1.9,"cook":2.7,"nina":-2.4,"supply":-2.7,"mikhail":-2.1,"commander":-2.5}.get(id,PI)
 	npcs[id]=a
 
 func build_people():
@@ -352,6 +372,7 @@ func build_people():
 	player.position=Vector3(-10.5,0.04,-3.4)
 	player.add_to_group("player")
 	player.setup(kit,true,"green")
+	player.visual.rotation.y=-2.4
 	person("semyon",Vector3(-12.1,0,-2.2),"wood",true)
 	person("nina",Vector3(-3.8,0,-6.1),"blue")
 	person("mikhail",Vector3(2.0,0,-3.9),"wood",true)
@@ -376,7 +397,7 @@ func target(id: String,p: Vector3,label: String,kind: String="inspect"):
 
 func build_targets():
 	for pair in [["semyon","谢苗诺夫"],["nina","妮娜"],["mikhail","米哈伊尔"],["cook","加琳娜"],["supply","柳德米拉"],["commander","科瓦廖夫"],["igor","老伊戈尔"]]:target(pair[0],npcs[pair[0]].position,pair[1],"talk")
-	target("box",Vector3(-12.1,0,-4.5),"床下木箱")
+	target("box",Vector3(-12.1,0,-4.5),"老爹的木箱")
 	target("radio",Vector3(-11.2,0,-6.9),"旧收音机")
 	target("notice",Vector3(11,0,0.65),"征召令")
 	target("chalk",Vector3(-7.5,0,0.7),"粉笔记号")
@@ -491,8 +512,8 @@ func _unhandled_input(event):
 	if event.is_action_pressed("save"):save_game()
 	if event.is_action_pressed("load"):load_game()
 	if event is InputEventMouseButton and event.pressed:
-		if event.button_index==MOUSE_BUTTON_WHEEL_UP:camera_size=clampf(camera_size-1,15,28)
-		if event.button_index==MOUSE_BUTTON_WHEEL_DOWN:camera_size=clampf(camera_size+1,15,28)
+		if event.button_index==MOUSE_BUTTON_WHEEL_UP:camera_size=clampf(camera_size-1,10,28)
+		if event.button_index==MOUSE_BUTTON_WHEEL_DOWN:camera_size=clampf(camera_size+1,10,28)
 
 func interact(id: String):
 	if id=="side" and story.f("side") and not story.f("side_crossed"):

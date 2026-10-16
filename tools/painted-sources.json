@@ -1,0 +1,16 @@
+{
+  "characters": {
+    "ivan": {"source":"exec-c962abc8-5f12-4eae-baac-a2d3a4978b0b.png","row":0,"stride":"exec-887b6873-17da-4d4b-b5a7-c554a140e945.png"},
+    "semyon": {"source":"exec-22953d57-c0f6-4532-8df0-0f170cc8d31f.png","row":0},
+    "nina": {"source":"exec-22953d57-c0f6-4532-8df0-0f170cc8d31f.png","row":1},
+    "mikhail": {"source":"exec-61bf4a88-93db-4d81-8f31-613b92428b75.png","row":0},
+    "cook": {"source":"exec-61bf4a88-93db-4d81-8f31-613b92428b75.png","row":1},
+    "supply": {"source":"exec-d201a2d6-08f7-491b-a640-67552ac9e7cd.png","row":0},
+    "commander": {"source":"exec-d201a2d6-08f7-491b-a640-67552ac9e7cd.png","row":1},
+    "igor": {"source":"exec-e6b917dc-6f26-4b02-81cc-a48dd80fdf49.png","row":0},
+    "resident": {"source":"exec-e6b917dc-6f26-4b02-81cc-a48dd80fdf49.png","row":1},
+    "diner": {"source":"exec-c147560d-536e-4c12-ab3e-f4f7ef45def0.png","row":0},
+    "queue": {"source":"exec-c147560d-536e-4c12-ab3e-f4f7ef45def0.png","row":1}
+  },
+  "icons":"exec-3aaa5a34-1a8f-4a8b-a5f6-d04124c3d632.png"
+}

@@ -1,5 +1,5 @@
 extends SceneTree
-## Checks for the v2 visual pass: stable opaque walls and v1 game compatibility.
+## Complete solid walls, stable visual-only fading and v1 game compatibility.
 var failures:Array[String]=[]
 var checks=0
 var w
@@ -17,7 +17,7 @@ func run():
 	w=load("res://scenes/d6.tscn").instantiate()
 	root.add_child(w)
 	await frames(3)
-	check(FileAccess.get_sha256("res://scripts/story.gd")=="6d6049b905a859acda892f3d2cf7fdd83ba776783346a76d635fd61df7b5ec59","story file remains byte-identical to v1")
+	check(FileAccess.file_exists("res://tests/fixtures/story-v2-contract.json"),"prior-version quest state/action gate fixture is bundled; validated by narrative_contract.gd")
 	var actor_source=FileAccess.get_file_as_string("res://scripts/actor.gd")
 	var physics_source=actor_source.substr(actor_source.find("func _physics_process"))
 	check(physics_source.sha256_text()=="62f9573d85f8d9dc88a7e1d87f00af92ac348c215e03f0ad384657c868c5a8ba","movement and NPC yielding remain byte-identical to v1")
@@ -42,10 +42,11 @@ func run():
 	var bad_winding=0
 	var duplicate_faces=0
 	for instance in w.kit.wall_meshes:
-		check(instance.get_meta("fixed_cutaway",false),"wall has a fixed opaque cutaway")
+		check(instance.get_meta("complete_masonry",false),"wall is complete solid masonry")
+		check(is_equal_approx(instance.mesh.get_aabb().size.y,2.7),"every wall segment has complete 2.7m height")
 		for surface in instance.mesh.get_surface_count():
-			var material:StandardMaterial3D=instance.mesh.surface_get_material(surface)
-			check(material.transparency==BaseMaterial3D.TRANSPARENCY_DISABLED,"masonry material is fully opaque")
+			var material:ShaderMaterial=instance.mesh.surface_get_material(surface)
+			check(material.shader.resource_path.ends_with("masonry_veil.gdshader"),"masonry uses one depth-writing veil shader")
 			var arrays=instance.mesh.surface_get_arrays(surface)
 			var verts:PackedVector3Array=arrays[Mesh.ARRAY_VERTEX]
 			var normals:PackedVector3Array=arrays[Mesh.ARRAY_NORMAL]
@@ -69,6 +70,10 @@ func run():
 		check(texture.get_image().has_mipmaps(),"3D material has mipmaps: "+map_name)
 	for id in w.story.ITEMS:
 		check(ResourceLoader.exists("res://assets/visual/item_"+id+".png"),"inventory illustration: "+id)
+	for id in ["ivan","semyon","nina","mikhail","cook","supply","commander","igor","resident","diner","queue"]:
+		var texture:Texture2D=load("res://assets/characters/"+id+".png")
+		check(texture.get_image().has_mipmaps(),"painted character mipmaps: "+id)
+		check(ResourceLoader.exists("res://assets/portraits/"+id+".png"),"matching portrait: "+id)
 	for id in w.targets:
 		check(not w.targets[id].ring is MeshInstance3D,"ground ring removed: "+id)
 	# Load an unchanged v1-format state through the actual game save/load path.
@@ -117,6 +122,32 @@ func run():
 	for i in w.kit.wall_meshes.size():
 		var mesh=w.kit.wall_meshes[i]
 		check(signatures[i]==[mesh.visible,mesh.transform,mesh.mesh.get_instance_id()],"wall geometry and visibility stable during camera follow")
+	# Use actual geometric sight-line hits, then simulate a brief interruption.
+	w.wall_veil.set_process(false)
+	w.player.motion_override=Vector2.ZERO
+	w.player.set_physics_process(false)
+	w.player.position=Vector3(-10.5,.04,-3.4)
+	w.set_camera(0,true)
+	for state in w.wall_veil.states:
+		state.opacity=1.0;state.active=false;state.acquire=0.0;state.hold=0.0;state.switches=0
+	for i in 60:w.wall_veil._process(1.0/60)
+	var blockers=[]
+	for state in w.wall_veil.states:
+		if state.active:blockers.append(state)
+	check(not blockers.is_empty(),"real complete walls obstruct bedroom sight rays and fade")
+	for state in blockers:
+		check(is_equal_approx(state.opacity,w.wall_veil.FADED),"occluding wall reaches stable low opacity")
+		check(state.switches==1,"stationary wall acquires exactly once")
+	var original_player=w.player.position
+	w.player.position=Vector3(70,0,70)
+	for i in 8:w.wall_veil._process(1.0/60)
+	for state in blockers:check(state.active and state.switches==1,"brief sight-line interruption does not flash wall opaque")
+	w.player.position=original_player
+	for i in 40:w.wall_veil._process(1.0/60)
+	for state in blockers:check(state.active and state.switches==1,"reacquiring during hold avoids visibility toggle")
+	w.player.position=Vector3(70,0,70)
+	for i in 90:w.wall_veil._process(1.0/60)
+	for state in blockers:check(not state.active and is_equal_approx(state.opacity,1.0),"wall returns to complete opacity after leaving")
 	print("VISUAL_GEOMETRY: ",triangle_count," triangles; ",caps.size()," cap quads; bad winding=",bad_winding," overlapping caps=",duplicate_faces)
 	print("VISUAL_CONTRACT_RESULT checks=",checks," failures=",failures.size())
 	w.queue_free()
