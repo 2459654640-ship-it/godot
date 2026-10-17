@@ -18,7 +18,7 @@ func _draw():
 	if not world:return
 	var floor=display_floor if display_floor!="" else world.floor_id
 	var same=floor==world.floor_id
-	var zones=world.LIFE_ZONES+world.Wing.ZONES if floor=="life" else world.Labor.ZONES
+	var zones=world.facility_zones(floor)
 	var bounds=Rect2()
 	var first=true
 	for zone in zones:
@@ -39,7 +39,12 @@ func _draw():
 		if zone.code=="01" and floor=="life":draw_line(project(Vector2(-11.95,-9)),project(Vector2(-11.95,-2.8)),gold,1.2,true)
 		if zone.code not in ["00","09","10"]:
 			draw_string(world.kit.font,project(r.get_center())+Vector2(-6,4),zone.code,HORIZONTAL_ALIGNMENT_LEFT,-1,14 if expanded else 10,Color("c5bea2"))
-	for p in ([Vector2(-10.5,0),Vector2(-3.5,0),Vector2(5.2,0),Vector2(12.3,0),Vector2(-11,3.2),Vector2(-3.4,3.2),Vector2(5.6,3.2)]+world.Wing.DOORS if floor=="life" else world.Labor.DOORS):
+	if floor=="labor":
+		var stair=Rect2(-13.8,4.1,3.2,5.3)
+		draw_colored_polygon(polygon(stair.grow(-.1)),Color("555444"))
+		for i in 10:draw_line(project(Vector2(-10.95-i*.25,6.65)),project(Vector2(-10.95-i*.25,8.95)),gold,1,true)
+		if expanded:draw_string(world.kit.font,project(stair.get_center())+Vector2(-6,-10),"LS",HORIZONTAL_ALIGNMENT_LEFT,-1,14,gold)
+	for p in world.facility_doors(floor):
 		var center=project(p)
 		draw_line(center-Vector2(3,1.5),center+Vector2(3,1.5),gold,2,true)
 	for id in ["lift","gate","side","hatch","main_gate","stairs_up","coal_door"]:
@@ -60,7 +65,7 @@ func _draw():
 		draw_colored_polygon(PackedVector2Array([p+direction*6,p-direction*4+right*3.5,p-direction*4-right*3.5]),Color("e0c48b"))
 		draw_arc(p,9,0,TAU,28,Color(0.88,0.77,0.54,0.30),1,true)
 	if expanded:
-		draw_string(world.kit.font,Vector2(12,24),"Д–6 / "+("生活层" if floor=="life" else "作业层"),HORIZONTAL_ALIGNMENT_LEFT,-1,16,gold)
+		draw_string(world.kit.font,Vector2(12,24),{"life":"D–6 / 生活层","labor":"D–6 / 作业层"}.get(floor,world.story.Campaign.NAMES.get(floor,"设施")),HORIZONTAL_ALIGNMENT_LEFT,-1,16,gold)
 		var n=Vector2(size.x-30,35)
 		draw_line(n,n+Vector2(0,28),ink,1.2,true)
 		draw_colored_polygon(PackedVector2Array([n,n+Vector2(-4,12),n+Vector2(4,12)]),gold)

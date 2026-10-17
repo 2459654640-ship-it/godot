@@ -34,3 +34,7 @@ The final generated cinematic originals live in assets/cinematics (including
 masked and unmasked travel variants); these are illustrations for cutscenes,
 never substitutes for the 3D levels. Sergey and the veteran have separate
 identities from Semyon. Runtime does not call an image service.
+
+## v6 补充
+
+`assets/visual/corrugated.png` 为本轮生成的旧波纹铁皮材质，采用灰绿旧漆与暗锈色，启用 mipmap 后用于下层隔断与后续设施。未替换原有木材、混凝土和人物图集。新增设施和旅程优先复用现有美术；新人物的专用外观尚未单独制作。音效与稀疏旋律由 `tools/make_campaign_audio.py` 离线合成，不含第三方采样。

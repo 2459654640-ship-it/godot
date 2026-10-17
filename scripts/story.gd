@@ -4,6 +4,7 @@ const Comic=preload("res://scripts/comic.gd")
 const Chapter=preload("res://scripts/d6_chapter.gd")
 const Economy=preload("res://scripts/economy.gd")
 const Conversation=preload("res://scripts/conversation.gd")
+const Campaign=preload("res://scripts/campaign.gd")
 const Life=preload("res://scripts/resident_dialogue.gd")
 ## State and authored dialogue live outside level geometry; no future chapters are fixed.
 signal changed
@@ -41,6 +42,11 @@ func resolve_check(key:String,chance:int) -> bool:
 	last_outcome={"kind":"success" if success else "failure","chance":chance,"key":key}
 	return success
 const ITEMS = {
+ "water_core":["封存净水滤芯","核对过型号的两箱净水替换件，已经绑在小队的运输架上。","任务"],
+ "relay_part":["控制回路保险件","水厂修配台取出的备用件，供仓门控制回路维修。","维修"],
+ "anna_note":["安娜的寻亲纸条","姓名、班组编号和左手旧伤。核对身份，不能只靠同名。","任务"],
+ "transit_pass":["公社探访函","煤运探访的正式联络文件，见到本人前仍须核实记录。","通行"],
+ "archive":["转移名册抄页","星城档案中的姓名和护送记录，不足以替当事人回答二十年的事。","记忆"],
  "knife":["旧匕首","谢苗诺夫留下的工具。可以撬开卧室暗格与检修口；硬撬会损坏刃口。","工具"],
  "cigarettes":["半包香烟","受潮但仍可交换。米哈伊尔知道岗哨换班的空隙。","交换"],
  "photo":["母亲的照片","父母年轻时的合影，边角已经卷曲。给谢苗诺夫看看，也许他还记得当时的事。","记忆"],
@@ -135,18 +141,22 @@ func view(id: String) -> Dictionary:
 		"exit":
 			v.name="东侧维修坡道"
 			v.options=[opt("leave_east","整理背包，准备离开 D-6",route!="", "先通过维修门、侧门或检修管线")]
-	return Chapter.decorate(Life.decorate(Narrative.decorate(v,self),self),self)
+	return Campaign.decorate(Chapter.decorate(Life.decorate(Narrative.decorate(v,self),self),self),self)
 
 func act(key: String) -> String:
 	# Revalidate the same conditions used by the UI before mutating state.
 	var valid=false
 	last_action_valid=false
 	last_outcome={}
-	for id in ["box","radio","notice","chalk","semyon","mikhail","cook","valve","nina","cabinet","relay","supply","commander","igor","side","hatch","lift","exit"]+Life.IDS+Chapter.IDS:
+	for id in ["box","radio","notice","chalk","semyon","mikhail","cook","valve","nina","cabinet","relay","supply","commander","igor","side","hatch","lift","exit"]+Life.IDS+Chapter.IDS+Campaign.data().interactions.keys():
 		for o in view(id).options:
 			if o.key==key and o.enabled:valid=true
 	if not valid:return "条件尚未满足，或这件事已经做过了。"
 	last_action_valid=true
+	if key.begins_with("c_"):
+		last_reply=Campaign.act(self,key.substr(2))
+		changed.emit()
+		return last_reply
 	if Chapter.handles(key):
 		last_reply=Chapter.act(key,self)
 		changed.emit()
@@ -247,6 +257,8 @@ func act(key: String) -> String:
 	return last_reply
 
 func objective() -> String:
+	var chapter_objective=Campaign.objective(self)
+	if chapter_objective!="":return chapter_objective
 	if ending:return "打开日志，回看已经经历的旅程"
 	if f("intro_done") and not f("vitamins_taken"):return "去第七供应点领取今日维生素 D"
 	if f("guard_task") and not f("hatch"):return "伊戈尔在查表 · 用工具拆下旧盖板" if guard_clear() else "等伊戈尔离开岗哨，再检查旧盖板"

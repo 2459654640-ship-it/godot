@@ -1,10 +1,12 @@
 # 地铁1982 · D-6
 
-Godot 4 的等距 2.5D 叙事箱庭。沿用原工程，当前为 **v5：生活层＋作业层、聊天记录、子弹经济与两条图文序章**。
+Godot 4 的等距 2.5D 叙事探索游戏。当前为 **v6：两层 D-6、五张后续设施地图、全屏图文旅程与九个可达终章**。保留原有探索、对话、背包、子弹经济及美术风格。
 
-新游戏从伊万醒来开始：老爹说明缺水与征召，第一项任务是去第七供应点领维生素 D，再下楼找中尉。随队路线接轨道车与第一次地表行程，到水处理厂外围；自行离站路线接废弃隧道，到初遇谢尔盖。本轮范围已与用户确认，不把早期文字版当成最终完整剧本。
+新游戏从伊万醒来开始，缺水与征召把他带向水厂；也能自行离站，经谢尔盖、公社或谢契前往星城，追查父亲与东方-7。设施内部自由探索，设施间的地表、隧道和列车行程用图文对话与选择呈现。
 
-[开场](docs/screenshots/visual-v5/opening.png) · [聊天记录](docs/screenshots/visual-v5/chat-history.png) · [商店](docs/screenshots/visual-v5/shop.png) · [作业层](docs/screenshots/visual-v5/labor-overview.png) · [正门](docs/screenshots/visual-v5/main-gate.png) · [水厂外围过场](docs/screenshots/visual-v5/surface.png)
+[全屏序幕](docs/screenshots/visual-v6/fullscreen-opening.png) · [下层楼梯间](docs/screenshots/visual-v6/stairwell.png) · [水厂](docs/screenshots/visual-v6/waterworks-overview.png) · [公社](docs/screenshots/visual-v6/commune-overview.png) · [星城](docs/screenshots/visual-v6/starcity-detail.png)
+
+章节说明：[CHAPTER-V6](docs/CHAPTER-V6.md)。测试与实机检查：[VALIDATION-V6](docs/VALIDATION-V6.md)。旧 v5 终点存档可以继续进入后续章节。
 
 ## 运行
 
@@ -43,7 +45,7 @@ cd /workspace/godot
 
 制式弹既是货币也是将来的弹药，土制弹单独保存、不能抵账。初始 18 发制式弹、12 发土制弹。第七供应点不卖武器：黑面包 4、绷带 5、急救包 12、抗辐射药 10、干电池 7、绳与布胶带 3 发；存货有限。战前伏特加可卖 18 发，出售前确认，唯一物品不能重复出售或再拿去交换。每日维生素仍是免费配给。
 
-物资按数量保存，可在背包使用；图文暂停界面也能打开背包。伤药、食物与抗辐射药分别改变体力、饱食与已受辐射。电池和绳带保留给后续场景使用。当前不含射击战斗，弹药消耗与伤害倍率数据已独立，后续可接入。
+物资按数量保存，可在背包使用；图文暂停界面也能打开背包。伤药、食物与抗辐射药分别改变体力、饱食与已受辐射。电池和绳带保留给后续场景使用。当前保持探索与选择的玩法。干电池可用于谢契电台供电，绳带可用于水厂物资加固；主线仍有不消耗这些物资的办法。
 
 ## 验证
 
@@ -58,4 +60,4 @@ cd /workspace/godot
 
 更新字体时先完成子集生成，再单独运行一次资源导入，随后运行测试。不要同时让多个编辑器导入同一缓存，或覆盖正在导入的字体。实机截图需可用 X11 显示；云端使用临时 Xorg dummy 与实际 OpenGL，不把无界面测试冒充游戏画面。
 
-实现与确认范围：[V5](docs/CHAPTER-V5.md)。历史版本说明与截图保留在 docs 中。运行工程包可省略原始美术图和历史截图；GitHub 源码保留这些制作资料。
+当前实现范围：[V6](docs/CHAPTER-V6.md)。历史版本说明与截图保留在 docs 中。运行工程包可省略原始美术图和历史截图；GitHub 源码保留这些制作资料。

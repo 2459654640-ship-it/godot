@@ -1,5 +1,6 @@
 extends RefCounted
 ## Approved scope: departure to waterworks exterior, or first meeting with Sergey.
+const Campaign=preload("res://scripts/campaign.gd")
 const PANELS={
 "intro_wake":{"art":"wake","title":"醒来 / 16 XI 1982","body":"通风机的低鸣先于闹铃把你叫醒。墙里流过一阵水声，很快又停了。\n二十年前，战争把莫斯科的人赶进地下。你在这里长大，直到现在，晨光对你仍只是一个词。\n你叫伊万，是 D-6 武装小队的一员。老爹谢苗诺夫在门边敲了两下。","next":"intro_semyon"},
 "intro_semyon":{"art":"wake","title":"门边的老爹","body":"「醒了就把衣服穿好。管理处昨晚把征召名单送下来了，有你。」\n老爹把声音放低。\n「净水设施停了，存水最多撑两周。明早派人去东郊水处理厂，找战前封存的零件。你先去找科瓦廖夫报到，路线和装备都问清楚。」","choices":[{"text":"「我知道了。还有什么要带的？」","next":"intro_errand"},{"text":"「两周……一点办法也没有了？」","next":"intro_water","flag":"asked_water"}]},
@@ -16,15 +17,17 @@ const PANELS={
 "solo_honest":{"art":"sergey","title":"先换一段路","body":"「D-6……那你认得这边的地铁。」\n谢尔盖把火堆拨小了一点，往旁边挪出些位置。\n「我在找一条通旧军列的路。你熟悉地下，我熟悉上面。先坐一会儿，想清楚愿不愿意同行。」\n你仍没放下背包，但在火光外停住了脚。","end":"sergey_meeting"},
 "solo_reserved":{"art":"sergey","title":"各留一点余地","body":"「行。不想说的先留着。」\n谢尔盖没有继续追问，朝火边的空地方偏了偏头。\n「隧道里别只顾着看前头，头顶也听着点。我找旧军列，你要找路，也许能互相省点事。」\n你站在离火几步远的地方。下一段路，还没有决定。","end":"sergey_meeting"}}
 static func start(s,sequence:String):
-	s.flags.story_day=17 if sequence=="official" else 16
+	s.ending=false
+	s.flags.story_day=17 if sequence=="official" else (16 if sequence in ["solo","intro"] else int(s.flags.get("story_day",17))+1)
 	s.flags.story_time="05:40" if sequence=="official" else ("08:10" if sequence=="solo" else "07:42")
 	if sequence=="solo" and (not s.has("mask") or not s.has("filter")) and not s.f("unprotected_departure"):
 		s.flags.unprotected_departure=true
 		s.economy.health=maxi(1,s.economy.health-8)
 		s.economy.radiation=mini(100,s.economy.radiation+12)
-	s.flags.comic={"active":true,"sequence":sequence,"node":{"intro":"intro_wake","official":"official_gate","solo":"solo_descent"}[sequence],"visited":[]}
+	s.flags.comic={"active":true,"sequence":sequence,"node":{"intro":"intro_wake","official":"official_gate","solo":"solo_descent"}.get(sequence,sequence),"visited":[]}
 static func panel(s)->Dictionary:
-	var p:Dictionary=PANELS.get(s.flags.get("comic",{}).get("node",""),{}).duplicate(true)
+	var node=s.flags.get("comic",{}).get("node","")
+	var p:Dictionary=PANELS.get(node,Campaign.data().panels.get(node,{})).duplicate(true)
 	if not p.is_empty() and s.flags.get("comic",{}).get("sequence","")=="solo" and (not s.has("mask") or not s.has("filter")):
 		if p.art in ["descent","sergey"]:p.art+="_unmasked"
 		if s.flags.comic.node=="solo_descent":p.body+="\n你没有完整防护。灰尘呛进喉咙，你用围巾捂住口鼻，咳得胸口发疼。必须尽快离开这段积尘的通道。"
@@ -42,6 +45,10 @@ static func choose(s,index:int=-1):
 	if p.has("end"):
 		state.active=false
 		if p.end=="intro":s.flags.intro_done=true
+		elif p.end.begins_with("map:"):
+			s.flags.next_facility=p.end.substr(4)
+			s.ending=false
+		elif p.end.begins_with("ending:"):Campaign.finish(s,p.end.substr(7))
 		else:s.flags.chapter_endpoint=p.end;s.ending=true
 	elif p.has("choices"):
 		if index<0 or index>=p.choices.size():return

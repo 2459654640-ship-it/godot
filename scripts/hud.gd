@@ -71,7 +71,7 @@ func setup(w):
 	brand.add_theme_font_override("font",mono)
 	line.add_child(brand)
 	line.add_spacer(false)
-	line.add_child(label("D–6",17,amber))
+	line.add_child(label({"life":"D–6","labor":"D–6","waterworks":"水厂","commune":"公社","sech":"谢契","coal":"D–6","starcity":"星城"}.get(world.floor_id,""),17,amber))
 	var title=label("地铁 1982",27,text_color)
 	title.add_theme_font_override("font",serif)
 	b.add_child(title)
@@ -101,7 +101,7 @@ func setup(w):
 	# Minimap has geometry, not a screenshot of the reference.
 	var mp=panel(Vector2(1302,106),Vector2(266,214))
 	var mb=margin_box(mp,6,5)
-	var mt=label("D–6  /  "+world.floor_name(),14,muted)
+	var mt=label(("D–6  /  " if world.floor_id in ["life","labor"] else "")+world.floor_name(),14,muted)
 	mt.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	mb.add_child(mt)
 	map_small=MapView.new()
@@ -227,7 +227,7 @@ func button(text:String,cb:Callable,enabled:bool=true,compact:bool=false) -> But
 	b.add_theme_color_override("font_hover_color",Color("f3d39a"))
 	b.add_theme_color_override("font_disabled_color",Color("68766f"))
 	b.disabled=not enabled
-	b.pressed.connect(cb)
+	b.pressed.connect(func():world.get_node("/root/Session").sound("ui");cb.call())
 	return b
 func rule():
 	var h=HSeparator.new()
@@ -291,6 +291,9 @@ func start_modal(title:String,subtitle:String,wide:bool=false):
 	for child in modal.get_children():
 		modal.remove_child(child)
 		child.queue_free()
+	modal.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	modal.add_theme_stylebox_override("panel",style(Color("101c1e"),Color("766747"),1,0))
+	scrim.color=Color(0.02,0.05,0.055,0.58)
 	modal.position=Vector2(388,150) if wide else Vector2(864,145)
 	modal.size=Vector2(824,710) if wide else Vector2(704,715)
 	var outer=MarginContainer.new()
@@ -367,7 +370,7 @@ func refresh_status():
 			child.queue_free()
 		for id in world.story.items.slice(0,3):
 			var icon=TextureRect.new()
-			icon.texture=load("res://assets/visual/item_"+id+".png")
+			icon.texture=load(item_icon(id))
 			icon.custom_minimum_size=Vector2(44,44)
 			icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
 			icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -375,8 +378,8 @@ func refresh_status():
 			quick_items.add_child(icon)
 		quick_signature=signature
 func tick(delta:float):
-	location_label.text="D–6 "+world.floor_name()+"  /  "+world.room_name
-	status_label.text=str(world.story.flags.get("story_day",16))+" XI 1982  /  "+str(world.story.flags.get("story_time","07:42"))+" · "+("旅程" if comic_active or world.story.ending else ("换班" if world.phase>=8 else "早班"))
+	location_label.text=("D–6 " if world.floor_id in ["life","labor"] else "")+world.floor_name()+"  /  "+world.room_name
+	status_label.text=str(world.story.flags.get("story_day",16))+" XI 1982  /  "+str(world.story.flags.get("story_time","07:42"))+" · "+("旅程" if comic_active or world.story.ending else (("换班" if world.phase>=8 else "早班") if world.floor_id in ["life","labor"] else "探索"))
 	map_small.queue_redraw()
 	if is_instance_valid(map_large):map_large.queue_redraw()
 	if toast_time>0:
@@ -401,7 +404,7 @@ func show_inventory():
 		row.add_theme_constant_override("separation",18)
 		modal_box.add_child(row)
 		var icon=TextureRect.new()
-		icon.texture=load("res://assets/visual/item_"+id+".png")
+		icon.texture=load(item_icon(id))
 		icon.custom_minimum_size=Vector2(92,92)
 		icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -449,18 +452,21 @@ func show_journal(tab:String="tasks",shown_floor:String=""):
 			body(entry[0],22,amber);body(entry[1],18);rule()
 	else:
 		var requested=world.floor_id if shown_floor=="" else shown_floor
-		var floors=HBoxContainer.new();modal_box.add_child(floors)
-		for pair in [["life","生活层"],["labor","作业层"]]:floors.add_child(button(pair[1],func():show_journal("map",pair[0]),true,true))
-		body("当前楼层："+world.floor_name()+" · 楼梯连接上下层",18,amber)
+		var floors=GridContainer.new();floors.columns=3;floors.add_theme_constant_override("h_separation",10);modal_box.add_child(floors)
+		for pair in [["life","生活层"],["labor","作业层"]]+world.story.Campaign.NAMES.keys().filter(func(id):return world.story.f("visited_"+id) or world.floor_id==id).map(func(id):return [id,world.story.Campaign.NAMES[id]]):floors.add_child(button(pair[1],func():show_journal("map",pair[0]),true,true))
+		body("当前位置："+world.floor_name()+" · 旅程中的设施通过图文路线相连",18,amber)
 		map_large=MapView.new();map_large.custom_minimum_size=Vector2(720,320)
 		map_large.world=world;map_large.expanded=true;map_large.display_floor=requested;modal_box.add_child(map_large)
 		var legend=GridContainer.new();legend.columns=3;legend.add_theme_constant_override("h_separation",18);modal_box.add_child(legend)
-		for zone in (world.LIFE_ZONES+world.Wing.ZONES if requested=="life" else world.Labor.ZONES):
+		for zone in world.facility_zones(requested):
 			if zone.code in ["00","09","10","L0"]:continue
-			legend.add_child(label(zone.code+"  "+("伊万 / 老爹" if zone.code=="01" else zone.name),15,text_color))
+			legend.add_child(label(zone.code+"  "+("伊万 / 老爹" if requested=="life" and zone.code=="01" else zone.name),15,text_color))
 		body("金色：通路与门口 · 蓝色：附近的人。地图只显示本层可探索的区域；门后还有其它生活或作业区。",16,muted)
 
 func show_map():show_journal("map")
+
+func item_icon(id:String)->String:
+	return "res://assets/visual/item_"+world.story.Campaign.ITEM_ART.get(id,id)+".png"
 
 func icon_rect(path:String,size:float=68)->TextureRect:
 	var icon=TextureRect.new();icon.texture=load(path)
@@ -499,7 +505,7 @@ func show_pause():
 	modal_box.add_child(button("保存手记  [F5]",func():world.save_game()))
 	modal_box.add_child(button("读取手记  [F9]",func():world.load_game()))
 	modal_box.add_child(button("重新开始（保留已有存档）",func():show_restart_confirm()))
-	modal_box.add_child(button("声音："+("关" if AudioServer.is_bus_mute(0) else "开"),func():AudioServer.set_bus_mute(0,not AudioServer.is_bus_mute(0));show_pause()))
+	audio_controls()
 	rule()
 	body("WASD / 方向键：8 方向移动\nE：交谈 / 调查\nI：背包　J：手记　M：地图\nTab：总览　滚轮：缩放\nEsc：关闭界面 / 菜单",20)
 	body("靠近人物或物件时会出现互动提示。图文旅程可在暂停页保存，也能打开背包使用物资。",16,muted)
@@ -531,6 +537,7 @@ func show_comic(sequence:String=""):
 
 func comic_choose(index:int=-1):
 	finish_typing()
+	world.get_node("/root/Session").sound("page")
 	var s=world.story
 	var old_panel=s.Comic.panel(s)
 	if s.flags.comic.sequence=="intro":s.Conversation.append(s,"semyon",old_panel.body,"semyon")
@@ -538,7 +545,9 @@ func comic_choose(index:int=-1):
 	if s.flags.comic.active:show_comic()
 	else:
 		comic_active=false
-		if s.f("intro_done") and not s.ending:close();refresh_status();toast("第一件事：到第七供应点领取今日维生素 D",7)
+		if s.flags.has("next_facility"):
+			world.travel_campaign(s.flags.next_facility)
+		elif s.f("intro_done") and not s.ending:close();refresh_status();toast("第一件事：到第七供应点领取今日维生素 D",7)
 		else:show_chapter_end()
 
 func show_comic_pause():
@@ -548,17 +557,68 @@ func show_comic_pause():
 	modal_box.add_child(button("保存当前进度",func():world.save_game()))
 	modal_box.add_child(button("读取存档",func():world.load_game()))
 	modal_box.add_child(button("重新开始",func():show_restart_confirm()))
+	audio_controls()
 
 func show_chapter_end():
 	comic_active=false
-	start_modal("水厂外围" if world.story.flags.get("chapter_endpoint","")=="waterworks_exterior" else "初遇谢尔盖","本段旅程已记录",true)
+	var s=world.story
+	var ending_id:String=s.flags.get("campaign_ending","")
+	if ending_id!="":
+		var outcome:Dictionary=s.Campaign.data().endings[ending_id]
+		start_modal(outcome.title,"МЕТРО 1982   /   旅程终章",true)
+		make_cinematic()
+		var row=HBoxContainer.new();row.add_theme_constant_override("separation",38);modal_box.add_child(row)
+		var art=TextureRect.new()
+		art.texture=load("res://assets/cinematics/"+{"home":"wake","tea":"wake","anna":"sergey","commune":"descent","sech":"sergey","starcity":"trolley","bridge":"wake","signal":"trolley","ocean":"surface"}.get(ending_id,"wake")+".png")
+		art.custom_minimum_size=Vector2(680,360);art.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;art.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;row.add_child(art)
+		var text_box=VBoxContainer.new();text_box.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(text_box)
+		var epilogue:String=outcome.body
+		if s.f("father_angry") and ending_id in ["starcity","bridge"]:epilogue+="\n你没有收回那句恨。以后怎么相处，要等以后再说。"
+		prose(epilogue,25,text_box)
+		rule()
+		body("你的选择",19,amber)
+		for pair in [["water_secured","给 D-6 找到了两箱净水滤芯"],["greenhouse_fixed","修好了公社温室的回水"],["anna_reunited","核实了安娜哥哥的身份与探视安排"],["radio_fixed","恢复了谢契的短波电台"],["books_saved","替谢尔盖救下受潮的书"],["father_semyon","问清了父亲与老爹当年的往事"],["cautious_signal","没有把所有人的坐标交给陌生呼叫"]]:
+			if s.f(pair[0]):body("· "+pair[1],20,muted)
+		modal_box.add_child(button("保存这段旅程",func():world.save_game()))
+		modal_box.add_child(button("查看手记与已读旅程",func():show_journal()))
+		if not s.departure_checkpoint.is_empty():modal_box.add_child(button("回到离站前，尝试另一条路",func():world.return_checkpoint()))
+		modal_box.add_child(button("重新开始",func():show_restart_confirm()))
+		return
+	var plant=s.flags.get("chapter_endpoint","")=="waterworks_exterior"
+	start_modal("水厂外围" if plant else "火光边的陌生人","下一章 / 继续旅程",true)
+	make_cinematic()
 	is_departure=true
-	body("你已抵达水处理厂外围。队伍停下来确认入口，下一步还需要仔细观察。" if world.story.flags.get("chapter_endpoint","")=="waterworks_exterior" else "你与谢尔盖第一次交谈过。是否同行、如何面对地表，留在接下来的旅程中决定。",23)
-	body("随身物资、制式弹和这一路的选择都已保留。",18,muted)
-	modal_box.add_child(button("保存旅程",func():world.save_game()))
-	modal_box.add_child(button("查看日志",func():show_journal()))
-	if not world.story.departure_checkpoint.is_empty():modal_box.add_child(button("回溯到离站前，比较其它选择",func():world.return_checkpoint()))
-	modal_box.add_child(button("重新开始",func():show_restart_confirm()))
+	body("队伍在水厂气闸前停下。接下来的设施里，可以自由探索、交谈和检查设备。" if plant else "谢尔盖还在等你的回答。可以跟他走，也可以问清公社的路。",25)
+	modal_box.add_child(button("进入水处理厂" if plant else "与谢尔盖继续交谈",func():world.travel_campaign("waterworks") if plant else show_comic("companions")))
+	modal_box.add_child(button("保存进度",func():world.save_game()))
+	if not s.departure_checkpoint.is_empty():modal_box.add_child(button("回到离站前",func():world.return_checkpoint()))
+
+func make_cinematic():
+	modal.position=Vector2.ZERO
+	modal.size=get_viewport_rect().size
+	modal.add_theme_stylebox_override("panel",style(Color("0b1314"),Color("0b1314"),0))
+	scrim.color=Color("0b1314")
+	var outer=modal.get_child(0)
+	for side in ["left","right"]:outer.add_theme_constant_override("margin_"+side,48)
+	for side in ["top","bottom"]:outer.add_theme_constant_override("margin_"+side,32)
+	var main=outer.get_child(0)
+	var head=main.get_child(1)
+	var close_button=head.get_child(head.get_child_count()-1)
+	close_button.text="暂停" if comic_active else "手记"
+	if not comic_active:
+		for connection in close_button.pressed.get_connections():close_button.pressed.disconnect(connection.callable)
+		close_button.pressed.connect(func():show_journal())
+
+func audio_controls():
+	rule();body("声音",20,amber)
+	var session=world.get_node("/root/Session")
+	for pair in [["Master","总音量"],["Music","背景旋律"],["Effects","脚步与交互音效"]]:
+		var row=HBoxContainer.new();modal_box.add_child(row)
+		var name_label=label(pair[1],17,muted);name_label.custom_minimum_size.x=190;row.add_child(name_label)
+		var slider=HSlider.new();slider.min_value=0;slider.max_value=1;slider.step=.05;slider.value=session.volume(pair[0]);slider.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(slider)
+		var readout=label(str(roundi(slider.value*100))+"%",16,amber);readout.custom_minimum_size.x=55;row.add_child(readout)
+		var bus_name:String=pair[0]
+		slider.value_changed.connect(func(value):session.set_volume(bus_name,value);readout.text=str(roundi(value*100))+"%")
 
 func dialogue_actor()->String:return {"armory":"armorer","main_gate":"main_guard"}.get(dialogue_id,dialogue_id)
 

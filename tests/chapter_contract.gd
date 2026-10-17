@@ -75,10 +75,11 @@ func run():
 			w.story.flags.comic.node="intro_semyon";w.hud.show_comic();await frames(3)
 			var reply_count=0
 			for control in w.hud.modal.find_children("*","Button",true,false):
-				if control.text=="×":continue
+				if control.text in ["×","暂停"]:continue
 				reply_count+=1
 				check(control.get_global_rect().end.y<w.hud.modal.get_global_rect().end.y-30,"comic replies stay above footer and do not require scrolling")
 			check(reply_count==2,"both comic choices visible together")
+			check(w.hud.modal.position==Vector2.ZERO and w.hud.modal.size==w.hud.get_viewport_rect().size,"comic covers the entire viewport")
 			var node=w.story.flags.comic.node
 			w.hud.show_comic_pause();w.hud.show_inventory();w.hud.close()
 			check(w.hud.comic_active and w.story.flags.comic.node==node,"inventory from comic pause preserves current panel")

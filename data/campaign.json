@@ -1,0 +1,1290 @@
+{
+  "interactions": {
+    "plant_guide": {
+      "facility": "waterworks",
+      "name": "科瓦廖夫 / 水厂入口",
+      "role": "征召小队",
+      "body": "中尉把灯压低。\n「先查值班图，再动设备。主仓库的门靠水压顶着，硬撬只会把门框拉歪。」\n老兵望着漆黑的泵房，没有插话。",
+      "options": [
+        "plant_brief",
+        "plant_people"
+      ]
+    },
+    "plant_diagram": {
+      "facility": "waterworks",
+      "name": "值班图与铅笔批注",
+      "role": "调查",
+      "body": "值班图上画着三个回路：旁通、主泵、仓库。纸边添了一行字：\n「先卸压，再恢复泵电。仓门表回到绿色，才可开锁。备用件在修配台。」",
+      "options": [
+        "plant_read"
+      ]
+    },
+    "plant_bypass": {
+      "facility": "waterworks",
+      "name": "旁通阀 / 西泵房",
+      "role": "调查",
+      "body": "铜牌上的箭头指向回流管。阀杆上有一圈白色水垢，压力表仍在红区。",
+      "options": [
+        "plant_bleed"
+      ],
+      "after": [
+        [
+          "plant_bled",
+          "旁通已经打开，排水声平稳。压力表停在安全范围。"
+        ]
+      ]
+    },
+    "plant_bench": {
+      "facility": "waterworks",
+      "name": "修配台 / 封存保险件",
+      "role": "调查",
+      "body": "油纸包放在带盖的铁盒里。盒盖压着一张旧领用单，最后一个签名停在 1962 年。",
+      "options": [
+        "plant_fuse"
+      ]
+    },
+    "plant_power": {
+      "facility": "waterworks",
+      "name": "主泵送电柜",
+      "role": "调查",
+      "body": "开关下挂着防水标签：\n「确认旁通开启后送电。回路过载时立即停机。」",
+      "options": [
+        "plant_early",
+        "plant_power"
+      ]
+    },
+    "plant_store": {
+      "facility": "waterworks",
+      "name": "仓库检修门",
+      "role": "调查",
+      "body": "锈蚀的门扇后，是贴着蜡封的木箱。门侧有一只机械压力锁。",
+      "options": [
+        "plant_open",
+        "plant_pack"
+      ],
+      "after": [
+        [
+          "water_secured",
+          "两箱滤芯已经绑在手推架上。中尉在箱面写下 D-6；老兵替最底下那只箱子又加了一道绑带。"
+        ]
+      ]
+    },
+    "plant_log": {
+      "facility": "waterworks",
+      "name": "值班员的最后一页",
+      "role": "调查",
+      "body": "一只搪瓷杯压着交接本。末页写着：\n「夜班的孩子没来，替他留了口水。钥匙放回原处，后来的人还得用。」",
+      "options": [
+        "plant_log"
+      ]
+    },
+    "plant_exit": {
+      "facility": "waterworks",
+      "name": "返回地表的气闸",
+      "role": "调查",
+      "body": "门外是回程的灰白天光。离开前，还能检查没看完的房间。",
+      "options": [
+        "plant_leave"
+      ]
+    },
+    "sech_elder": {
+      "facility": "sech",
+      "name": "长老 / 调度台",
+      "role": "谢契 / 营地",
+      "body": "老人把空杯倒扣在桌上。\n「这里没有配给证。谁能干什么，晚饭前说清。修电台、找水、照顾病人，都算数。自由不是一个人活。」",
+      "options": [
+        "sech_join",
+        "sech_stay"
+      ]
+    },
+    "sech_manual": {
+      "facility": "sech",
+      "name": "调度台 / 旧接线图",
+      "role": "调查",
+      "body": "铅笔圈出两行：\n「先接地，再接电源。天线独立，不跨接市电。」\n纸背还有一条通往北侧军列的路线。",
+      "options": [
+        "radio_manual"
+      ]
+    },
+    "sech_radio": {
+      "facility": "sech",
+      "name": "短波电台",
+      "role": "调查",
+      "body": "电台旋钮磨得发亮，指针停在纸条标出的刻度附近。",
+      "options": [
+        "radio_power",
+        "radio_battery",
+        "radio_tune"
+      ],
+      "after": [
+        [
+          "radio_fixed",
+          "短波电台已经恢复。东方-7 每隔一段时间重复一次联络窗口，偶尔还有来自北方的英语呼叫。"
+        ]
+      ]
+    },
+    "sech_sergey": {
+      "facility": "sech",
+      "name": "谢尔盖 / 旧车厢",
+      "role": "谢契 / 灰鹰",
+      "body": "谢尔盖把湿书挪离炉子。\n「原来我以为，有枪、有路，就是自由。后来才知道，一场发烧也能把人困住。」",
+      "options": [
+        "sech_books",
+        "sech_father"
+      ]
+    },
+    "sech_water": {
+      "facility": "sech",
+      "name": "储水棚 / 渗漏的水箱",
+      "role": "调查",
+      "body": "水箱下面垫着一只接漏盆。管口外侧的旧布已经发黑，旁边还有备用卡箍。",
+      "options": [
+        "sech_water"
+      ]
+    },
+    "sech_leave": {
+      "facility": "sech",
+      "name": "北线检修列车",
+      "role": "调查",
+      "body": "旧军列的车灯映在库门上。地图和联络窗口已经准备好，是否出发由你决定。",
+      "options": [
+        "sech_star",
+        "sech_commune"
+      ]
+    },
+    "commune_leader": {
+      "facility": "commune",
+      "name": "叶莲娜 / 公社委员会",
+      "role": "公社 / 委员会",
+      "body": "老人把两份配给表并排摊开。\n「水井不是免费的，灯也不是。我们说大家一样，就得让每个人看到账。」\n她没有递来宣誓书，只问你住几晚。",
+      "options": [
+        "commune_join",
+        "commune_stay",
+        "commune_route"
+      ]
+    },
+    "commune_anna": {
+      "facility": "commune",
+      "name": "安娜 / 医务室",
+      "role": "公社 / 医务",
+      "body": "安娜把消毒布搭在盆沿。\n「你是从 D-6 来的？我哥哥当年在二号线工地。三年前，广播里念过一个同名的工人，后来再没有消息。」\n她拿出一张折得很小的纸。\n「能帮我核实吗？先知道他在哪，别为了我冲进岗哨。」",
+      "options": [
+        "anna_accept",
+        "anna_talk",
+        "anna_result",
+        "anna_home"
+      ]
+    },
+    "commune_greenhouse": {
+      "facility": "commune",
+      "name": "温室 / 回水装置",
+      "role": "调查",
+      "body": "地下菜床上长着蘑菇和细弱的叶菜。回水泵还在转，透明管里却全是气泡。过滤篮下有一层纤维。",
+      "options": [
+        "greenhouse_inspect",
+        "greenhouse_restart"
+      ]
+    },
+    "commune_records": {
+      "facility": "commune",
+      "name": "联络室 / 值班记录",
+      "role": "调查",
+      "body": "桌面按日期排着联络纸。D-6 煤运登记、公社药品交换、北线电台窗口，各自夹在不同的簿子里。",
+      "options": [
+        "anna_records",
+        "commune_frequency"
+      ]
+    },
+    "commune_well": {
+      "facility": "commune",
+      "name": "水井 / 公开账簿",
+      "role": "调查",
+      "body": "取水的人把自己的份额划掉，再把铅笔递给下一位。有人替卧床的邻居多领了一罐，名字写在旁边。",
+      "options": [
+        "commune_ledger"
+      ]
+    },
+    "commune_leave": {
+      "facility": "commune",
+      "name": "联络气闸 / 出发登记",
+      "role": "调查",
+      "body": "门边挂着三条路线的标牌。出站前可以继续留在设施里准备。",
+      "options": [
+        "commune_coal",
+        "commune_star",
+        "commune_sech"
+      ]
+    },
+    "coal_clerk": {
+      "facility": "coal",
+      "name": "煤运登记员",
+      "role": "D-6 / 登记",
+      "body": "登记员把探访函压在玻璃下面。\n「同名的有两个。先核工牌，再看医务记录。病人今天清醒些，不要催他。」",
+      "options": [
+        "coal_register"
+      ]
+    },
+    "coal_archive": {
+      "facility": "coal",
+      "name": "班组档案柜",
+      "role": "调查",
+      "body": "柜子里有换班单和旧工伤登记。纸张有些粘连，翻页要很慢。",
+      "options": [
+        "coal_archive"
+      ]
+    },
+    "coal_medic": {
+      "facility": "coal",
+      "name": "值班医护",
+      "role": "D-6 / 医护",
+      "body": "「旧伤和长期暴露让他记不清很多事。家属来见他时，不要围着问『还记不记得』。」\n医护递来一张空白的探视安排。",
+      "options": [
+        "coal_medic"
+      ]
+    },
+    "coal_brother": {
+      "facility": "coal",
+      "name": "休养间 / 安娜的哥哥",
+      "role": "D-6 / 休养",
+      "body": "男人坐在床边，拿拇指反复摩挲一只旧纽扣。他看你一眼，又去看门外的灯。",
+      "options": [
+        "coal_brother"
+      ]
+    },
+    "coal_exit": {
+      "facility": "coal",
+      "name": "探视出口",
+      "role": "调查",
+      "body": "联络员在值班表上记下公社来接人的时间。回去时不需要再闯一次岗哨。",
+      "options": [
+        "coal_return"
+      ]
+    },
+    "star_guard": {
+      "facility": "starcity",
+      "name": "哨兵 / 蓝门值班室",
+      "role": "星城-2 / 守备",
+      "body": "哨兵的制服袖口缝过好几次。\n「不是不让你见人。内门的隔离回路在检修，先看指示，别碰裸线。那边有纸质规程。」",
+      "options": [
+        "star_name"
+      ]
+    },
+    "star_manual": {
+      "facility": "starcity",
+      "name": "检修规程 / 配电图",
+      "role": "调查",
+      "body": "规程画出一道清晰的顺序：\n「断开外线 → 通过机械表确认无压 → 合上内门旁路。」\n空白处写着：别拿经验代替确认。",
+      "options": [
+        "star_manual"
+      ]
+    },
+    "star_isolator": {
+      "facility": "starcity",
+      "name": "配电室 / 外线隔离",
+      "role": "调查",
+      "body": "一只带锁扣的开关，下面是机械电压表。",
+      "options": [
+        "star_isolate",
+        "star_meter"
+      ]
+    },
+    "star_bypass": {
+      "facility": "starcity",
+      "name": "内门值班台 / 旁路",
+      "role": "调查",
+      "body": "绿色指示灯旁，是一只老式旁路开关。",
+      "options": [
+        "star_early",
+        "star_bypass"
+      ]
+    },
+    "star_archive": {
+      "facility": "starcity",
+      "name": "档案室 / 1962 年转移名册",
+      "role": "调查",
+      "body": "档案盒按转移批次存放。一个熟悉的姓氏在纸上，旁边是工程兵护送的记录。",
+      "options": [
+        "star_archive",
+        "star_memorial"
+      ]
+    },
+    "star_father": {
+      "facility": "starcity",
+      "name": "父亲 / 测控室",
+      "role": "星城-2 / 测控",
+      "body": "老人扶着控制台站起来，手背上的胶布已经发黄。\n「伊万……」\n他从抽屉里取出另一张合影。二十年的空白，没法用一句话补上。",
+      "options": [
+        "father_meet",
+        "father_semyon",
+        "father_truth",
+        "father_anger",
+        "father_quiet"
+      ]
+    },
+    "star_radio": {
+      "facility": "starcity",
+      "name": "远程通信台",
+      "role": "调查",
+      "body": "联络表上有来自北方的英语呼叫。守台员先把接收耳机递给你，没有打开坐标发送。",
+      "options": [
+        "star_listen",
+        "star_reply",
+        "star_coordinates"
+      ]
+    },
+    "star_exit": {
+      "facility": "starcity",
+      "name": "离开还是留下 / 联络值班台",
+      "role": "调查",
+      "body": "父亲在等你的回答。轨道测控仍需要人，地下的水和药也仍需要人。",
+      "options": [
+        "ending_starcity",
+        "ending_bridge",
+        "ending_signal",
+        "ending_ocean"
+      ]
+    }
+  },
+  "actions": {
+    "plant_brief": {
+      "text": "「怎么把东西带回去？」",
+      "reply": "「找到封存件，核对型号，装在原来的缓冲箱里。两箱，先救水，再说别的。」",
+      "once": true,
+      "flags": {
+        "plant_briefed": true
+      }
+    },
+    "plant_people": {
+      "text": "「大家为什么肯来？」",
+      "reply": "中尉看了一眼名单。\n「我母亲也在领配给水。别把名单上的人当成没家的人。」",
+      "once": false
+    },
+    "plant_read": {
+      "text": "抄下卸压与送电的顺序",
+      "reply": "你把箭头画进手记。旁通阀在西侧，送电柜在东侧；不需要同时拉两个开关。",
+      "once": true,
+      "flags": {
+        "plant_diagram": true
+      }
+    },
+    "plant_bleed": {
+      "text": "按值班图缓慢打开旁通",
+      "reply": "你用两只手一点点转动轮缘。回水声从管壁里传来，指针终于离开红区。",
+      "once": true,
+      "req": {
+        "all": [
+          "plant_diagram"
+        ]
+      },
+      "flags": {
+        "plant_bled": true
+      }
+    },
+    "plant_fuse": {
+      "text": "取出匹配的备用保险件",
+      "reply": "你检查了规格和断口。保险件还完好，足够让仓库门的控制回路工作一次。",
+      "once": true,
+      "flags": {
+        "plant_fuse": true
+      },
+      "give": [
+        "relay_part"
+      ]
+    },
+    "plant_early": {
+      "text": "试着推上开关",
+      "reply": "过载指示灯亮了。你立刻松手，开关弹回原处。得先卸压，回路也缺一枚保险件。",
+      "once": false,
+      "req": {
+        "not": [
+          "plant_bled"
+        ]
+      }
+    },
+    "plant_power": {
+      "text": "装入保险件，恢复控制回路",
+      "reply": "继电器轻响，电机缓慢转起来。仓库门旁的表针回到绿色。你把用过的包装收进铁盒。",
+      "once": true,
+      "req": {
+        "all": [
+          "plant_bled",
+          "plant_fuse"
+        ],
+        "items": [
+          "relay_part"
+        ]
+      },
+      "flags": {
+        "plant_power": true
+      },
+      "take": [
+        "relay_part"
+      ]
+    },
+    "plant_open": {
+      "text": "确认绿区，打开仓门并核对滤芯",
+      "reply": "木箱里是净水设施的替换滤芯，不是面具滤毒罐。\n你按型号表检查两箱封存件，老兵帮你重新绑好缓冲垫。D-6 的水有着落了。",
+      "once": true,
+      "req": {
+        "all": [
+          "plant_power"
+        ]
+      },
+      "flags": {
+        "water_secured": true
+      },
+      "give": [
+        "water_core"
+      ]
+    },
+    "plant_log": {
+      "text": "收好交接页，把杯子放回桌角",
+      "reply": "你没有翻走整本账。只抄下封存日期和维修备注，留给下一批需要这里的人。",
+      "once": true,
+      "flags": {
+        "plant_memory": true
+      },
+      "goods": {
+        "bandage": 1
+      }
+    },
+    "plant_leave": {
+      "text": "带上两箱滤芯，和小队返回",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "water_secured"
+        ]
+      },
+      "travel": "return_crossing",
+      "take": [
+        "water_core"
+      ]
+    },
+    "sech_join": {
+      "text": "「我先把电台看看。」",
+      "reply": "「接线图在调度台。手摇发电机还能用，别把最后一只继电器烧了。」",
+      "once": true,
+      "flags": {
+        "sech_joined": true
+      }
+    },
+    "sech_stay": {
+      "text": "「我想留下来。先把这里的日子过好。」",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "radio_fixed"
+        ]
+      },
+      "ending": "sech"
+    },
+    "radio_manual": {
+      "text": "抄下线路，检查接地端",
+      "reply": "你擦净接地端的锈层，把电源线和天线分开摆好。",
+      "once": true,
+      "flags": {
+        "radio_manual": true
+      }
+    },
+    "radio_power": {
+      "text": "接好地线，再用手摇发电机供电",
+      "reply": "灯丝一点点亮起来，指针缓慢抬起。你停下来检查温度，外壳没有异常发热。",
+      "once": true,
+      "req": {
+        "all": [
+          "radio_manual"
+        ],
+        "not": [
+          "radio_power"
+        ]
+      },
+      "flags": {
+        "radio_power": true
+      }
+    },
+    "radio_tune": {
+      "text": "按纸上的刻度，辨认呼号",
+      "reply": "杂音间，一个老人缓慢重复：\n「东方-7。北线来人请先报姓名。我们还在。」\n谢尔盖抬起头。\n「星城。那扇蓝门后面的人。」",
+      "once": true,
+      "req": {
+        "all": [
+          "radio_power"
+        ]
+      },
+      "flags": {
+        "radio_fixed": true,
+        "star_known": true
+      },
+      "give": [
+        "frequency"
+      ]
+    },
+    "sech_books": {
+      "text": "帮他把受潮的旧书分类晾干",
+      "reply": "有诗集，有时刻表，也有一册没有封面的修理手册。\n「不是每本书都能救命。」他把纸页压平。\n「可人也不能只剩下活命。」",
+      "once": true,
+      "flags": {
+        "books_saved": true
+      },
+      "goods": {
+        "cord": 1
+      }
+    },
+    "sech_father": {
+      "text": "「星城会知道我父亲的事吗？」",
+      "reply": "「我不知道。你带上姓名和照片，总比听别人猜强。别把电台里的每句话都当许诺。」",
+      "once": false,
+      "req": {
+        "all": [
+          "star_known"
+        ]
+      }
+    },
+    "sech_water": {
+      "text": "清理接头，换上备用卡箍",
+      "reply": "你没动箱里的水。先关下游阀，再换卡箍；重新放水后，盆底没有再添新水珠。\n值夜的人把一包面包递给你。",
+      "once": true,
+      "flags": {
+        "sech_water_fixed": true
+      },
+      "goods": {
+        "bread": 2
+      }
+    },
+    "sech_star": {
+      "text": "乘检修列车去星城-2",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "star_known"
+        ]
+      },
+      "travel": "star_road"
+    },
+    "sech_commune": {
+      "text": "沿联络通路去公社",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "sech_joined"
+        ]
+      },
+      "travel": "solo_commune"
+    },
+    "commune_join": {
+      "text": "「先住下来，有什么活能搭把手？」",
+      "reply": "「温室的循环水卡住了。安娜在北边医务室，工具问她拿。愿意走的时候，记得把借的还上。」",
+      "once": true,
+      "flags": {
+        "commune_joined": true
+      }
+    },
+    "commune_stay": {
+      "text": "「我暂时不再走了。把我记进轮班表。」",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "commune_joined"
+        ]
+      },
+      "ending": "commune"
+    },
+    "commune_route": {
+      "text": "「听说过东方-7吗？」",
+      "reply": "她指向联络室。\n「我们和北线交换维修消息。先看值班记录。别拿猜测替代一个人的名字。」",
+      "once": true,
+      "flags": {
+        "commune_radio_known": true
+      }
+    },
+    "anna_accept": {
+      "text": "「把名字和当年的班组写给我，我去问。」",
+      "reply": "她写下名字，又添上左手旧伤和班组编号。\n「同名的人会有。认不出来，也别替我编一个好消息。」",
+      "once": true,
+      "flags": {
+        "anna_request": true
+      },
+      "give": [
+        "anna_note"
+      ]
+    },
+    "anna_talk": {
+      "text": "「你为什么留在这里？」",
+      "reply": "「因为这里还需要人换药。」她把盆里的布拧干。\n「也因为每天回家，都有人记得替我留一盏灯。」",
+      "once": false
+    },
+    "anna_result": {
+      "text": "把核实过的记录与探视安排交给她",
+      "reply": "安娜把三张记录一张张对上。她没有问哥哥还能不能认出她。\n「他还在，就先见面。别的慢慢来。」\n她把第一张探视回执折好，放进衣袋。",
+      "once": true,
+      "req": {
+        "all": [
+          "brother_found"
+        ]
+      },
+      "flags": {
+        "anna_reunited": true
+      }
+    },
+    "anna_home": {
+      "text": "陪安娜等下一班探视车，留在公社",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "anna_reunited"
+        ]
+      },
+      "ending": "anna"
+    },
+    "greenhouse_inspect": {
+      "text": "先停泵，清理过滤篮",
+      "reply": "你把落叶和旧纱线挑出来。管道没有破，只是进水处堵住了。",
+      "once": true,
+      "flags": {
+        "greenhouse_clean": true
+      }
+    },
+    "greenhouse_restart": {
+      "text": "灌满回水段，再重新开泵",
+      "reply": "气泡从最高处一点点排尽，水开始平稳回流。值班员把今天多留的一份面包放在你的工具旁。",
+      "once": true,
+      "req": {
+        "all": [
+          "greenhouse_clean"
+        ]
+      },
+      "flags": {
+        "greenhouse_fixed": true
+      },
+      "goods": {
+        "bread": 1,
+        "bandage": 1
+      }
+    },
+    "anna_records": {
+      "text": "按安娜给的班组编号核对交换记录",
+      "reply": "煤运换班单上确实有同一个名字，但工作地点已经改为「井下检修休养」。\n联络员愿意开一张探访函，不能保证本人能交谈。",
+      "once": true,
+      "req": {
+        "all": [
+          "anna_request"
+        ]
+      },
+      "flags": {
+        "anna_records": true
+      },
+      "give": [
+        "transit_pass"
+      ]
+    },
+    "commune_frequency": {
+      "text": "查北线电台的联络窗口",
+      "reply": "「东方-7，星城-2。」记录员指着签名。\n「他们问过 D-6 旧工程兵的消息。信里没有说清找谁，你可以亲自去问。」",
+      "once": true,
+      "req": {
+        "all": [
+          "commune_radio_known"
+        ]
+      },
+      "flags": {
+        "star_known": true
+      },
+      "give": [
+        "frequency"
+      ]
+    },
+    "commune_ledger": {
+      "text": "帮值班员核对一页漏记的送水账",
+      "reply": "漏掉的是病房的半桶水。你和送水人一起补上签名。\n值班员松了口气。\n「数字不对，不一定是有人偷。」",
+      "once": true,
+      "flags": {
+        "commune_ledger": true
+      },
+      "goods": {
+        "antirad": 1
+      }
+    },
+    "commune_coal": {
+      "text": "带探访函返回 D-6 煤运区",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "anna_records"
+        ],
+        "not": [
+          "brother_found"
+        ]
+      },
+      "travel": "coal_road"
+    },
+    "commune_star": {
+      "text": "按联络窗口去星城-2",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "star_known"
+        ]
+      },
+      "travel": "star_road"
+    },
+    "commune_sech": {
+      "text": "去旧军列调度站找谢尔盖",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "commune_joined"
+        ]
+      },
+      "travel": "sech_arrival"
+    },
+    "coal_register": {
+      "text": "提交探访函，核对班组与旧工伤",
+      "reply": "左手旧伤、班组编号、入井日期，都能和安娜的纸条对上。\n登记员在探视栏盖了章。",
+      "once": true,
+      "req": {
+        "all": [
+          "anna_records"
+        ]
+      },
+      "flags": {
+        "coal_registered": true
+      }
+    },
+    "coal_archive": {
+      "text": "把班组记录与医疗转移单对照",
+      "reply": "名字没有消失，只是从采煤班转入了休养名单。最后一页还压着一张没寄出的家书。",
+      "once": true,
+      "req": {
+        "all": [
+          "coal_registered"
+        ]
+      },
+      "flags": {
+        "brother_identity": true
+      }
+    },
+    "coal_medic": {
+      "text": "询问探视、照护和安全转移的办法",
+      "reply": "「先让家属见面，再由双方医务员交接。不让病人跟着陌生人穿隧道。」\n你和她把每一段接送都写清楚。",
+      "once": true,
+      "req": {
+        "all": [
+          "brother_identity"
+        ]
+      },
+      "flags": {
+        "brother_care": true
+      }
+    },
+    "coal_brother": {
+      "text": "坐在旁边，把安娜写的名字慢慢念给他听",
+      "reply": "他说不出完整的句子，却把那张纸攥住了。\n你没有替他回答愿不愿意见安娜。医护问了两次，他才轻轻点头。\n你把探视回执收好。",
+      "once": true,
+      "req": {
+        "all": [
+          "brother_identity",
+          "brother_care"
+        ]
+      },
+      "flags": {
+        "brother_found": true
+      }
+    },
+    "coal_return": {
+      "text": "带着核实结果返回公社",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "brother_found"
+        ]
+      },
+      "travel": "anna_return"
+    },
+    "star_name": {
+      "text": "报上自己的姓名和谢苗诺夫的名字",
+      "reply": "哨兵转身按下内线。等了很久，他才说：\n「人还在。先把隔离回路确认好，我带你去控制室。」",
+      "once": true,
+      "flags": {
+        "star_registered": true
+      }
+    },
+    "star_manual": {
+      "text": "记下隔离顺序",
+      "reply": "你把三个步骤分开记下。机械表在配电室，旁路控制在蓝门内侧的值班台。",
+      "once": true,
+      "flags": {
+        "star_manual": true
+      }
+    },
+    "star_isolate": {
+      "text": "按规程断开外线",
+      "reply": "开关停在断开位。你没有立刻碰别的部件，先看机械表。",
+      "once": true,
+      "req": {
+        "all": [
+          "star_manual"
+        ]
+      },
+      "flags": {
+        "star_isolated": true
+      }
+    },
+    "star_meter": {
+      "text": "等待并确认机械表归零",
+      "reply": "指针缓慢落到底，你和哨兵各确认了一次。检修牌挂在开关上，没人再合闸。",
+      "once": true,
+      "req": {
+        "all": [
+          "star_isolated"
+        ]
+      },
+      "flags": {
+        "star_zero": true
+      }
+    },
+    "star_early": {
+      "text": "看看旁路的联锁状态",
+      "reply": "联锁还在。规程要求先确认外线断开和机械表归零。你把手收回，没去硬推开关。",
+      "once": false,
+      "req": {
+        "not": [
+          "star_zero"
+        ]
+      }
+    },
+    "star_bypass": {
+      "text": "确认检修牌，合上内门旁路",
+      "reply": "蓝门内侧响起门锁退开的声音。哨兵让出通道，指向北面的控制室。",
+      "once": true,
+      "req": {
+        "all": [
+          "star_zero",
+          "star_registered"
+        ]
+      },
+      "flags": {
+        "star_access": true
+      }
+    },
+    "star_archive": {
+      "text": "对照父亲姓名，读完当年的转移记录",
+      "reply": "记录没有写他为什么不回来。只写了封闭管理、人员转移和长期测控任务。\n在护送栏里，你看见谢苗诺夫的名字。你把这一页夹回原处。",
+      "once": true,
+      "req": {
+        "all": [
+          "star_access"
+        ]
+      },
+      "flags": {
+        "father_archive": true
+      },
+      "give": [
+        "archive"
+      ]
+    },
+    "star_memorial": {
+      "text": "读墙上那些没有再回家的名字",
+      "reply": "有人名旁边有日期，有人只有一道刻痕。桌上放着一本维修日志，末页仍有人接着写。\n这些年没有停下来的人，不只你父亲一个。",
+      "once": true,
+      "req": {
+        "all": [
+          "star_access"
+        ]
+      },
+      "flags": {
+        "star_memorial": true
+      }
+    },
+    "father_meet": {
+      "text": "「你为什么一直没有回来？」",
+      "reply": "「最初是不能走。后来，是不敢承认自己已经能走。」\n他望着控制台。\n「我们留下来维持轨道方舟，想把知识送上去。但每一年，都有人在别的地方等我们。」\n他没有把这当成请求原谅的理由。",
+      "once": true,
+      "req": {
+        "all": [
+          "star_access"
+        ]
+      },
+      "flags": {
+        "father_met": true
+      }
+    },
+    "father_semyon": {
+      "text": "「老爹知道你在这里吗？」",
+      "reply": "「他护送过我。他只知道当年的入口，不知道后来还有没有活人。」\n老人把照片放平。\n「他留在下面照顾你。你叫他老爹，是应该的。」",
+      "once": true,
+      "req": {
+        "all": [
+          "father_met"
+        ]
+      },
+      "flags": {
+        "father_semyon": true
+      }
+    },
+    "father_truth": {
+      "text": "「我活下来了。可这不等于那些年没关系。」",
+      "reply": "父亲低下头，过了一会儿才点头。\n「你不用今天就原谅我。愿意的话，先把你的事讲给我听。」",
+      "once": true,
+      "req": {
+        "all": [
+          "father_met"
+        ],
+        "not": [
+          "father_answered"
+        ]
+      },
+      "flags": {
+        "father_answered": true
+      }
+    },
+    "star_listen": {
+      "text": "只接收，听清对方的身份",
+      "reply": "「United States Navy……自由号……」\n巴伦支海上的潜艇说，自己也在寻找幸存者。对方提出交换坐标；没有任何人能替这份承诺担保。",
+      "once": true,
+      "req": {
+        "all": [
+          "father_met"
+        ]
+      },
+      "flags": {
+        "sub_signal": true
+      }
+    },
+    "star_reply": {
+      "text": "先交换气象和呼号，不发送基地坐标",
+      "reply": "你把发报内容逐字念给守台员听。他确认没有位置数据，才按下发送。\n几分钟后，对方传回一段新的天气记录。信任可以慢一点建立。",
+      "once": true,
+      "req": {
+        "all": [
+          "sub_signal"
+        ]
+      },
+      "flags": {
+        "cautious_signal": true
+      }
+    },
+    "star_coordinates": {
+      "text": "打开坐标发送，接受与自由号交换位置的风险",
+      "reply": "你读了一遍坐标，又读了一遍。守台员提醒你，发出去便收不回来。\n你还是按下了发送。\n很久以后，北方传回一段新的报码。对方没有许诺日期，只说已经记下这扇蓝门。",
+      "once": true,
+      "req": {
+        "all": [
+          "sub_signal"
+        ]
+      },
+      "flags": {
+        "coordinates_proposed": true
+      }
+    },
+    "ending_starcity": {
+      "text": "留下来，接过一班测控值守",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "father_met",
+          "father_answered"
+        ]
+      },
+      "ending": "starcity"
+    },
+    "ending_bridge": {
+      "text": "把净水维修资料和回信带回 D-6",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "father_met",
+          "father_answered"
+        ]
+      },
+      "ending": "bridge"
+    },
+    "ending_signal": {
+      "text": "以谨慎的远程联络继续联系外面的幸存者",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "cautious_signal"
+        ]
+      },
+      "ending": "signal"
+    },
+    "ending_ocean": {
+      "text": "继续等待北方的回信，承担发出坐标后的结果",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "coordinates_proposed"
+        ]
+      },
+      "ending": "ocean"
+    },
+    "father_anger": {
+      "text": "「我恨你。老爹替你过了二十年。」",
+      "reply": "父亲伸出的手停在桌边。\n「是。他没有把你交给谁，再说自己有更重要的事。」\n他把椅子往后挪了挪，给你留下离开的空隙。",
+      "flags": {
+        "father_answered": true,
+        "father_angry": true
+      },
+      "req": {
+        "all": [
+          "father_met"
+        ],
+        "not": [
+          "father_answered"
+        ]
+      },
+      "once": true
+    },
+    "father_quiet": {
+      "text": "先不回答，把母亲的照片放在桌上。",
+      "reply": "你没能说出准备过的话。父亲看着照片，慢慢坐下来。\n过了很久，他问你想不想喝点水。你点了点头。今天先到这里。",
+      "flags": {
+        "father_answered": true,
+        "father_quiet": true
+      },
+      "req": {
+        "all": [
+          "father_met"
+        ],
+        "not": [
+          "father_answered"
+        ]
+      },
+      "once": true
+    },
+    "plant_pack": {
+      "text": "用一份细绳与布胶带加固运输架",
+      "reply": "你把滤芯箱的松动处垫紧，绳结留在好解的一侧。老兵用手试了试，点点头。",
+      "req": {
+        "all": [
+          "water_secured"
+        ],
+        "goods": {
+          "cord": 1
+        }
+      },
+      "goods": {
+        "cord": -1
+      },
+      "flags": {
+        "cargo_padded": true
+      },
+      "once": true
+    },
+    "radio_battery": {
+      "text": "消耗一份干电池，给接收机供电",
+      "reply": "你检查了电池极性，先接入低功率接收回路。灯丝亮起，手摇机可以留给营地照明。",
+      "req": {
+        "all": [
+          "radio_manual"
+        ],
+        "not": [
+          "radio_power"
+        ],
+        "goods": {
+          "battery": 1
+        }
+      },
+      "goods": {
+        "battery": -1
+      },
+      "flags": {
+        "radio_power": true
+      },
+      "once": true
+    }
+  },
+  "panels": {
+    "return_crossing": {
+      "art": "surface",
+      "title": "回程 / 风停了一会儿",
+      "body": "两箱滤芯压得肩带生疼。\n路边传来犬吠，队伍停下。老兵抬手指向倒塌的管桥。\n「绕过去。东西找到了，别为一条近路把人留在这儿。」",
+      "choices": [
+        {
+          "text": "帮队伍分担箱子，从管桥背面绕行。",
+          "next": "return_veteran",
+          "flag": "shared_load"
+        },
+        {
+          "text": "先确认旧入口，再带大家绕过犬群。",
+          "next": "return_veteran",
+          "flag": "safe_return"
+        }
+      ]
+    },
+    "return_veteran": {
+      "art": "surface",
+      "title": "谁能喝到干净的水",
+      "body": "休息时，老兵递过水壶。\n「全苏中央的水一直是干净的。我们的坏了，就得自己出来找。」\n他把声音压低。\n「我认识公社的人。他们在串联各处的维修工和配给员。你愿意去看看，就跟我走；但这两箱东西，必须有人带回家。」",
+      "choices": [
+        {
+          "text": "「水必须回 D-6。其它事，到岔路再说。」",
+          "next": "return_standoff",
+          "flag": "water_first"
+        },
+        {
+          "text": "「我想去公社看看，但别让小队替这件事付账。」",
+          "next": "return_standoff",
+          "flag": "trusted_veteran"
+        }
+      ]
+    },
+    "home_water": {
+      "art": "wake",
+      "title": "回到 D-6",
+      "body": "妮娜守着新装的滤芯，看了很久才肯拧开出水阀。\n加琳娜端着空锅站在后面。第一股清水流出来时，谁都没有欢呼。\n老爹摸了摸你的后背。\n「回来了。先坐下，汤还热。」",
+      "end": "ending:home"
+    },
+    "commune_road": {
+      "art": "surface",
+      "title": "去公社的路",
+      "body": "中尉清点物资，也清点了留下的人。\n「水送回去。我会告诉老谢，你还活着。」\n老兵陪你走下另一段阶梯。身后那条路通向 D-6，前面亮着温室的灯。",
+      "end": "map:commune"
+    },
+    "companions": {
+      "art": "sergey",
+      "title": "火光边 / 下一段路",
+      "body": "谢尔盖把水壶放在火边。\n「旧军列调度站有个营地，叫谢契。人少，工具也缺。你会修东西，到了不至于白吃饭。」\n他没有催你。隧道里还有另一条挂着公社路标的通路。",
+      "choices": [
+        {
+          "text": "跟谢尔盖去谢契，路上互相照应。",
+          "next": "dogs_watch",
+          "flag": "with_sergey"
+        },
+        {
+          "text": "问清公社的路，自己去温室那边。",
+          "next": "solo_commune",
+          "flag": "solo_commune"
+        }
+      ]
+    },
+    "dogs_watch": {
+      "art": "descent",
+      "title": "熄火",
+      "body": "第二晚，谢尔盖突然用沙盖住火堆。几个人影沿轨道走近，鞋底敲着碎石。\n「灰狗。别出声。」\n你看见身后有一扇能关上的维修门。",
+      "choices": [
+        {
+          "text": "把松动的背包带按住，等脚步过去。",
+          "next": "sech_arrival",
+          "flag": "quiet_crossing"
+        },
+        {
+          "text": "和谢尔盖退进维修间，扣住门闩。",
+          "next": "sech_arrival",
+          "flag": "sheltered_crossing"
+        }
+      ]
+    },
+    "sech_arrival": {
+      "art": "descent",
+      "title": "旧军列调度站",
+      "body": "清晨，谢尔盖敲了三下铁门。里面的人先问名字，才把门打开。\n旧车厢停在封闭的检修库里。有人修炉子，有人把湿书摊在灯下。\n「谢契。别把门口的自由二字当成不用干活。」",
+      "end": "map:sech"
+    },
+    "solo_commune": {
+      "art": "descent",
+      "title": "沿着路标",
+      "body": "谢尔盖在纸背面画了两个岔口。\n「第二个路口向下。听到水声，再敲门。别顺着亮光追，隧道会骗人。」\n你照着标记走了很久。门后有人问，你要找谁。",
+      "end": "map:commune"
+    },
+    "coal_road": {
+      "art": "descent",
+      "title": "回到熟悉的地下",
+      "body": "你把探访函放在外衣口袋。一路上没有开灯追车，也没有绕岗哨。\n煤运口的值守看了很久编号，才让你在登记台旁等。\n「人能见。别把这里当成谁都能来回跑的过道。」",
+      "end": "map:coal"
+    },
+    "anna_return": {
+      "art": "descent",
+      "title": "带回一个确切的名字",
+      "body": "你回程时走得很慢，怕那几页纸被汗浸湿。\n以前你以为，找到一个人就是把他带回去。现在你知道，还要有人接得住他的伤、他的沉默和以后的日子。",
+      "end": "map:commune"
+    },
+    "star_road": {
+      "art": "trolley",
+      "title": "北线 / 东方-7",
+      "body": "列车穿过三个废弃站。车灯照到蓝色金属门时，你终于听清那个呼号。\n「东方-7。来访者报姓名，停在隔离线外。」\n你把名字重复两遍。门后的人让你先到外侧值班室，等他们确认。",
+      "end": "map:starcity"
+    },
+    "return_standoff": {
+      "art": "surface",
+      "title": "岔路口 / 两个人的枪",
+      "body": "老兵突然停住，枪口对着中尉的背。\n「把物资带回去。我走另一条路，别报我的名字。」\n中尉没有拔枪。他先看那两箱滤芯，又看你。\n「名单少一个人，不是我说一句没看见就能过去。」\n老兵的手很稳。雪落在三个人之间。",
+      "choices": [
+        {
+          "text": "站到中尉一边，逼老兵放下枪，随队回 D-6。",
+          "next": "tea_return",
+          "flag": "arrested_veteran"
+        },
+        {
+          "text": "支持老兵离队，让中尉带水回去，自己前往公社。",
+          "next": "commune_road",
+          "flag": "sided_veteran"
+        },
+        {
+          "text": "「先把枪放下。我们不能带着滤芯，把人丢在这儿。」",
+          "next": "home_water",
+          "flag": "kept_peace"
+        }
+      ]
+    },
+    "tea_return": {
+      "art": "wake",
+      "title": "回到名单里",
+      "body": "老兵把枪放在雪上。中尉用绑箱子的备用绳系住他的手。\n回到 D-6 后，水重新流出来了。老兵被带进下层问话，你的名字旁边添了一条嘉奖。\n隔天，有人请你去上面喝茶。杯子里没有铁锈味。\n你想起轨道车上，那句关于父亲还没说完的话。",
+      "end": "ending:tea"
+    }
+  },
+  "endings": {
+    "home": {
+      "title": "水重新流动",
+      "body": "你留在 D-6，把水厂的维修步骤教给下一班人。净水设施恢复了，配给却没有因此变得宽裕。\n有人邀请你继续追查公社，也有人问起东方-7。你先把空锅递给加琳娜。\n今天，你选择把人带回家。"
+    },
+    "commune": {
+      "title": "轮班表上的名字",
+      "body": "你的名字写进了公社的轮班表。温室、医务室和水井，不会因为一句口号自己运转。\n安娜的请求仍有人继续追查。你没有替自己编一段英雄故事，只记下还欠谁一把工具。\n到了晚上，有人替你留了一盏灯。"
+    },
+    "anna": {
+      "title": "归家之日",
+      "body": "第一次探视时，安娜的哥哥没能叫出她的名字。她没有催。\n她坐在床边，从小时候讲起。医护把下一次探视也记上了。\n你和她一起把窗边的椅子擦干净。团圆没有把旧伤抹掉，却让以后不必只靠一个人熬。"
+    },
+    "sech": {
+      "title": "自由的分量",
+      "body": "你留在谢契。电台有了固定值守，水箱旁添了新的检修表。\n谢尔盖又带回来几本湿书。这次有人先替他烧好了炉子。\n门口仍写着自由。你知道，它也包括不丢下生病的人。"
+    },
+    "starcity": {
+      "title": "另一班守夜人",
+      "body": "你接过父亲手里的值班表。没有人保证轨道方舟一定能成功。\n下班后，你们坐在同一张桌边。他问起老爹，问起食堂的汤，也终于听你说那些他不在的年份。\n你留下来，没有替他原谅过去。"
+    },
+    "bridge": {
+      "title": "把面包分给活人",
+      "body": "你带走了净水设备图纸、药品交换表和父亲写给谢苗诺夫的信。\n回程很长。公社和谢契的电台替你留了联络窗口。\n老爹拆信时没有说话，只把另一只杯子往你面前推了推。\n星城没有因此放弃天空。地下的人，也不必再各自等待。"
+    },
+    "signal": {
+      "title": "远方有人回答",
+      "body": "你们没有发送基地坐标。天气、药品清单、遇难者姓名，成了最先交换的消息。\n有的呼叫等了几天才收到回答，有的始终没有。\n一次值夜结束前，北方的声音说：明天还在这个频率。\n你把时间记在纸上。"
+    },
+    "ocean": {
+      "title": "海那边的回声",
+      "body": "第一个月，北方只传来天气和冰况。第二个月，对方开始询问电力、仓储和基地还能容纳多少人。\n有人把这叫援助，也有人说，这只是另一张配给表。\n父亲没有替你判断。他把每天的来电记录摆在桌上，和你一起读。\n没有人知道，海那边会带来什么。但那扇蓝门的位置，已经不只属于这里的人。"
+    },
+    "tea": {
+      "title": "一杯热茶",
+      "body": "你被调去做更体面的值守。每天能领到干净的水，也能在灯亮着的地方读完一页纸。\n你问过老兵的去向。记录上只写了转移。后来，你渐渐不再问。\n一次换班，你在玻璃里看见自己的制服。那天雪地里的枪口，早已不在别人手里。"
+    }
+  }
+}

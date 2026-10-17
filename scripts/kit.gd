@@ -42,6 +42,11 @@ func _init(parent: Node3D):
 		m.uv1_scale=Vector3.ONE/2.4
 		if pair[0]=="red":m.albedo_color=Color("794232")
 		elif pair[0] in ["green","blue"]:m.albedo_color=m.albedo_color.lightened(0.15)
+	var corrugated:StandardMaterial3D=mats.metal.duplicate()
+	corrugated.albedo_texture=load("res://assets/visual/corrugated.png")
+	corrugated.normal_enabled=false
+	corrugated.roughness_texture=null
+	mats["corrugated"]=corrugated
 	mats.plaster.uv1_triplanar=false
 	mats.plaster.uv1_world_triplanar=false
 	mats.plaster.uv1_scale=Vector3.ONE

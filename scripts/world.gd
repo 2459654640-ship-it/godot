@@ -3,6 +3,9 @@ const Kit = preload("res://scripts/kit.gd")
 const Actor = preload("res://scripts/actor.gd")
 const Story = preload("res://scripts/story.gd")
 const HUD = preload("res://scripts/hud.gd")
+const CampaignMaps=preload("res://scripts/campaign_maps.gd")
+var campaign_gate:MeshInstance3D
+var campaign_gate_flag="star_access"
 const Labor=preload("res://scripts/labor_floor.gd")
 @export var floor_id="life"
 const Wing=preload("res://scripts/residential_wing.gd")
@@ -72,9 +75,12 @@ func _ready():
 		build_dressing()
 		Wing.furnish(self)
 		build_implied_life()
-	else:
+	elif floor_id=="labor":
 		zones=Labor.ZONES.duplicate(true)
 		Labor.build(self)
+	else:
+		zones=CampaignMaps.rooms(floor_id)
+		CampaignMaps.build(self)
 	kit.batch_static()
 	build_people() if floor_id=="life" else build_labor_people()
 	navigation=preload("res://scripts/route_grid.gd").new()
@@ -85,7 +91,8 @@ func _ready():
 		Wing.targets(self)
 		target("pipe_exit",Vector3(10.8,0,8.6),"检修管线出口")
 		target("other_life",Vector3(14,0,-5.5),"其它生活区")
-	else:Labor.targets(self)
+	elif floor_id=="labor":Labor.targets(self)
+	else:CampaignMaps.targets(self)
 	if arrival.is_finite():player.position=arrival
 	story.context.floor=floor_id
 	kit.prepare_highlights()
@@ -105,13 +112,15 @@ func _ready():
 	story.changed.connect(on_story_changed)
 	ambience=AudioStreamPlayer.new()
 	add_child(ambience)
-	ambience.stream=load("res://assets/audio/ventilation.wav")
-	ambience.volume_db=-30
+	ambience.stream=load("res://assets/audio/shelter_theme.wav")
+	ambience.bus="Music"
+	ambience.volume_db=-8
 	if DisplayServer.get_name()!="headless":ambience.play()
 	step_audio=AudioStreamPlayer.new()
 	add_child(step_audio)
 	step_audio.stream=load("res://assets/audio/step.wav")
-	step_audio.volume_db=-22
+	step_audio.volume_db=-5
+	step_audio.bus="Effects"
 	on_story_changed()
 	set_camera(0,true)
 	initialized=true
@@ -427,6 +436,7 @@ func build_people():
 	person("queue",Vector3(13.6,0,-3.2),"wood")
 
 func setup_daily_routines():
+	if floor_id not in ["life","labor"]:CampaignMaps.routines(self);return
 	if floor_id=="labor":Labor.routines(self);return
 	var stops={"semyon":Vector3(-13.3,0,-2.0),"nina":Vector3(-1.9,0,-6),"mikhail":Vector3(1.65,0,-2.0),"cook":Vector3(7.2,0,-6.4),"supply":Vector3(13.3,0,-6.5),"commander":Vector3(-1.5,0,5.4),"resident":Vector3(-24.1,0,-7.8),"diner":Vector3(-24.2,0,.3),"queue":Vector3(12.2,0,-2.3)}
 	for id in npcs:
@@ -508,6 +518,7 @@ func _physics_process(delta):
 			room_name=zone.name
 			if zone.code=="01" and player.position.x < -11.95 and player.position.z < -2.8:room_name="谢苗诺夫的卧室"
 			break
+	if floor_id=="labor" and Rect2(-13.8,4.1,3.2,5.3).has_point(Vector2(player.position.x,player.position.z)):room_name="生活层楼梯间"
 	hud.tick(delta)
 	set_camera(delta)
 
@@ -618,6 +629,16 @@ func perform(key: String, id: String):
 	if not story.last_action_valid:
 		hud.show_reply(id,reply)
 		return
+	if key.begins_with("c_"):
+		get_node("/root/Session").sound("interact")
+		if story.flags.has("next_sequence"):
+			var sequence:String=story.flags.next_sequence
+			story.flags.erase("next_sequence")
+			hud.show_comic(sequence)
+		elif story.ending:hud.show_chapter_end()
+		else:hud.show_reply(id,reply)
+		return
+	get_node("/root/Session").sound("interact")
 	if key in ["travel_down","travel_up"]:
 		travel_floor("labor" if key=="travel_down" else "life")
 		return
@@ -643,6 +664,9 @@ func perform(key: String, id: String):
 	hud.show_reply(id,reply)
 
 func on_story_changed():
+	if campaign_gate:
+		campaign_gate.visible=not story.f(campaign_gate_flag)
+		campaign_gate.get_child(0).get_child(0).set_deferred("disabled",story.f(campaign_gate_flag))
 	if gate_body:
 		gate_body.set_deferred("disabled",story.f("gate"))
 		gate_mesh.visible=not story.f("gate")
@@ -658,6 +682,7 @@ func save_game():
 	var file=FileAccess.open(save_path,FileAccess.WRITE)
 	if file:
 		file.store_string(JSON.stringify(data,"\t"))
+		get_node("/root/Session").sound("save")
 		hud.toast("手记已保存 · F9 读取")
 	else:hud.toast("保存失败：用户目录不可写")
 
@@ -769,9 +794,29 @@ func build_labor_people():
 	player.name="Ivan";add_child(player)
 	player.position=Vector3(-10,.04,1.8)
 	player.add_to_group("player");player.setup(kit,true,"green")
-	Labor.people(self)
+	if floor_id=="labor":Labor.people(self)
+	else:
+		player.position=CampaignMaps.LAYOUTS[floor_id].spawn
+		CampaignMaps.people(self)
 
-func floor_name()->String:return "生活层" if floor_id=="life" else "作业层"
+func floor_name()->String:return {"life":"生活层","labor":"作业层"}.get(floor_id,story.Campaign.NAMES.get(floor_id,"设施"))
+
+func facility_zones(id:String)->Array:
+	if id=="life":return LIFE_ZONES+Wing.ZONES
+	if id=="labor":return Labor.ZONES
+	return CampaignMaps.rooms(id)
+
+func facility_doors(id:String)->Array:
+	if id=="life":return [Vector2(-10.5,0),Vector2(-3.5,0),Vector2(5.2,0),Vector2(12.3,0),Vector2(-11,3.2),Vector2(-3.4,3.2),Vector2(5.6,3.2)]+Wing.DOORS
+	if id=="labor":return Labor.DOORS
+	return CampaignMaps.doors(id)
+
+func travel_campaign(destination:String):
+	story.ending=false
+	story.flags.erase("next_facility")
+	story.flags.campaign_location=destination
+	story.flags["visited_"+destination]=true
+	get_node("/root/Session").enter(story.serialize(),destination,CampaignMaps.LAYOUTS[destination].spawn)
 
 func travel_floor(destination:String):
 	var positions:Dictionary=story.flags.get("floor_positions",{}).duplicate(true)

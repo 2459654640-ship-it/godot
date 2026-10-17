@@ -11,7 +11,7 @@ const ZONES=[
 {"name":"征召集合区","code":"L7","rect":Rect2(-14,4,11,10)},
 {"name":"煤运检票口","code":"L8","rect":Rect2(-3,4,12,10)},
 {"name":"装卸与储运区","code":"L9","rect":Rect2(9,4,17,10)}]
-const DOORS=[Vector2(-19,-1),Vector2(-9.5,-1),Vector2(0,-1),Vector2(10,-1),Vector2(20,-1),Vector2(-19,4),Vector2(-8.5,4),Vector2(3,4),Vector2(17,4)]
+const DOORS=[Vector2(-19,-1),Vector2(-9.5,-1),Vector2(0,-1),Vector2(10,-1),Vector2(20,-1),Vector2(-19,4),Vector2(-12.2,4),Vector2(-8.5,4),Vector2(3,4),Vector2(17,4)]
 static func barrier(k,id:String,a:Vector2,b:Vector2,wood:bool=false):
 	var length=a.distance_to(b)
 	var size=Vector3(maxf(absf(a.x-b.x),.18),2.45,maxf(absf(a.y-b.y),.18))
@@ -19,7 +19,7 @@ static func barrier(k,id:String,a:Vector2,b:Vector2,wood:bool=false):
 	var mesh=k.box(id,center,size,"wood" if wood else "rust",true)
 	var material=ShaderMaterial.new()
 	material.shader=load("res://assets/visual/masonry_veil.gdshader")
-	material.set_shader_parameter("albedo_map",load("res://assets/visual/timber.png" if wood else "res://assets/visual/oxide.png"))
+	material.set_shader_parameter("albedo_map",load("res://assets/visual/timber.png" if wood else "res://assets/visual/corrugated.png"))
 	material.set_shader_parameter("triplanar",true)
 	material.set_shader_parameter("map_scale",Vector3.ONE*.65)
 	material.set_shader_parameter("normal_strength",0.0)
@@ -44,8 +44,11 @@ static func build(w):
 	k.box("FloorCollision",Vector3(1,-.1,.5),Vector3(50,.2,27),"tile",true).visible=false
 	for zone in ZONES:
 		var r:Rect2=zone.rect
-		var material="concrete" if zone.code in ["L0","L3","L4","L5"] else "wood"
-		k.box("Floor_"+zone.code,Vector3(r.get_center().x,.007,r.get_center().y),Vector3(r.size.x-.04,.014,r.size.y-.04),material)
+		var material="concrete" if zone.code in ["L0","L3","L4","L5"] else ("metal" if zone.code in ["L2","L9"] else "wood")
+		var floor_mesh=k.box("Floor_"+zone.code,Vector3(r.get_center().x,.007,r.get_center().y),Vector3(r.size.x-.04,.014,r.size.y-.04),material)
+		floor_mesh.material_override=floor_mesh.material_override.duplicate()
+		floor_mesh.material_override.albedo_color=Color({"L0":"8a8b7c","L1":"a3977b","L2":"707c7a","L3":"b0b8a5","L4":"838e83","L5":"959f98","L6":"b0a17e","L7":"8c806b","L8":"706c62","L9":"7a8077"}[zone.code])
+		floor_mesh.material_override.uv1_scale=Vector3.ONE/(1.7 if zone.code in ["L2","L5","L9"] else 2.4)
 	barrier(k,"NorthSheet",Vector2(-24,-13),Vector2(15,-13))
 	# Actual sealed blast door: rails pass through a real aperture behind it.
 	barrier(k,"GateRearLeft",Vector2(15,-13),Vector2(18,-13))
@@ -64,7 +67,7 @@ static func build(w):
 	for x in [-14,-3,9]:barrier(k,"TimberPartition",Vector2(x,4),Vector2(x,14),true)
 	for z in [-1,4]:
 		var start=-24.0
-		var doors=[-19,-9.5,0,10,20] if z==-1 else [-19,-8.5,3,17]
+		var doors=[-19,-9.5,0,10,20] if z==-1 else [-19,-12.2,-8.5,3,17]
 		for x in doors:
 			barrier(k,"CorridorSheet",Vector2(start,z),Vector2(x-.86,z),z==4)
 			k.doorway(x,z)
@@ -100,7 +103,7 @@ static func build(w):
 	for x in [-21,-17]:k.bench(Vector3(x,0,8.8),1.8)
 	k.table(Vector3(-8.5,0,11.4),3.2)
 	k.box("Roster",Vector3(-8.5,.83,11.4),Vector3(1.2,.025,.8),"paper")
-	for x in [-12,-5]:k.bench(Vector3(x,0,8.0),2)
+	for x in [-5]:k.bench(Vector3(x,0,8.0),2)
 	# Mine gate is closed and reveals no future character identity.
 	k.box("CoalGate",Vector3(3,1.2,13.75),Vector3(3,2.4,.25),"rust",true)
 	k.label("УГОЛЬ / ПО ПРОПУСКАМ",Vector3(3,2.6,13.5),28).rotation.y=PI
@@ -113,11 +116,27 @@ static func build(w):
 	k.signboard("МЕДПУНКТ",Vector3(0,2.3,-1.16),2.5)
 	k.signboard("СНАРЯЖЕНИЕ",Vector3(10,2.3,-1.16),3)
 	k.signboard("D–6 / ГЛАВНЫЙ ВХОД",Vector3(20,2.3,-1.16),3.8)
-	k.signboard("ЖИЛОЙ ЯРУС / ↑",Vector3(-10,2.3,3.8),3.2)
-	k.box("StairUpFrame",Vector3(-10,1.3,3.86),Vector3(2,2.6,.2),"dark")
-	k.label("↑ 生活层",Vector3(-10,2.2,3.68),30).rotation.y=PI
+	# Dedicated staircase with a clear lower landing, concrete enclosure and handrails.
+	barrier(k,"StairwellLeft",Vector2(-13.8,4.1),Vector2(-13.8,9.4))
+	barrier(k,"StairwellRight",Vector2(-10.6,4.1),Vector2(-10.6,9.4))
+	barrier(k,"StairwellRear",Vector2(-13.8,9.4),Vector2(-10.6,9.4))
+	for i in 10:
+		var height=.18*(i+1)
+		var x=-10.95-i*.25
+		k.box("StairTread",Vector3(x,height/2,7.8),Vector3(.25,height,2.3),"concrete")
+		k.box("StairNosing",Vector3(x+.12,height+.012,7.8),Vector3(.05,.025,2.25),"brass")
+	for z in [6.5,9.05]:
+		k.pipe(Vector3(-10.8,.9,z),Vector3(-13.3,2.7,z),.035,"metal")
+		for i in [0,4,9]:k.pipe(Vector3(-10.95-i*.25,.18*(i+1),z),Vector3(-10.95-i*.25,.9+.18*i,z),.028,"metal")
+	k.box("StairRiseStop",Vector3(-12.2,1,6.1),Vector3(2.8,2,.18),"dark",true).visible=false
+	k.signboard("ЖИЛОЙ ЯРУС / ↑",Vector3(-12.2,2.35,4.05),2.8)
+	k.label("↑ 生活层",Vector3(-12.2,2.0,5.9),30)
+	k.lamp(Vector3(-12.2,2.55,8.9),true,1.7,5)
 	k.box("LaborNotice",Vector3(-7,1.5,3.8),Vector3(1.4,1,.1),"wood")
 
+	for x in [-4.75,5.25,15.25]:
+		k.box("ExposedConcretePatch",Vector3(x,1.8,-10.5),Vector3(.04,.8,1.5),"dark")
+		for z in [-11,-10.65,-10.3,-10]:k.pipe(Vector3(x+.03,1.45,z),Vector3(x+.03,2.15,z),.018,"rust")
 	preload("res://scripts/labor_dressing.gd").build(w)
 
 static func people(w):
@@ -140,4 +159,4 @@ static func targets(w):
 	w.target("medical",Vector3(0,0,-5.3),"医务间")
 	w.target("coal_door",Vector3(3,0,12),"煤运检票口")
 	w.target("labor_notice",Vector3(-7,0,2.8),"作业层值班板")
-	w.target("stairs_up",Vector3(-10,0,2.8),"楼梯 / 生活层")
+	w.target("stairs_up",Vector3(-12.2,0,5.0),"楼梯 / 生活层")

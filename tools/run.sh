@@ -14,7 +14,10 @@ godot_bin="${GODOT_BIN:-godot}"
 if [[ "${1:-}" == "--test" ]]; then
   shift
   "$godot_bin" --headless --path "$repo_dir" --editor --import --quit
-  exec "$godot_bin" --headless --path "$repo_dir" --fixed-fps 60 --script res://tests/run.gd "$@"
+  for suite in run visual_contract narrative_contract resident_contract chapter_contract floor_contract campaign_contract campaign_ui; do
+    "$godot_bin" --headless --path "$repo_dir" --fixed-fps 60 --script "res://tests/$suite.gd" "$@"
+  done
+  exit 0
 fi
 "$godot_bin" --headless --path "$repo_dir" --editor --import --quit
 exec "$godot_bin" --path "$repo_dir" "$@"

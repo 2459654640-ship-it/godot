@@ -68,11 +68,11 @@ func run():
 	check(duplicate_faces==0,"no overlapping masonry cap faces, including corners and T-junctions")
 	for pier in w.find_children("DoorPier*","MeshInstance3D",true,false):
 		check(is_equal_approx(pier.position.y+pier.mesh.size.y/2,2.28),"door piers stop beneath the beam, no coplanar beam/pier top")
-	for map_name in ["wall","floor","cement","steel","oxide","timber","weave"]:
+	for map_name in ["wall","floor","cement","steel","oxide","timber","weave","corrugated"]:
 		var texture:Texture2D=load("res://assets/visual/"+map_name+".png")
 		check(texture.get_image().has_mipmaps(),"3D material has mipmaps: "+map_name)
 	for id in w.story.ITEMS:
-		check(ResourceLoader.exists("res://assets/visual/item_"+id+".png"),"inventory illustration: "+id)
+		check(ResourceLoader.exists(w.hud.item_icon(id)),"inventory illustration: "+id)
 	for id in ["ivan","semyon","nina","mikhail","cook","supply","commander","igor","resident","diner","queue"]:
 		var texture:Texture2D=load("res://assets/characters/"+id+".png")
 		check(texture.get_image().has_mipmaps(),"painted character mipmaps: "+id)

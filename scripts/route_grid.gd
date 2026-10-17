@@ -15,6 +15,7 @@ func setup(world):
 		bounds=bounds.merge(zone.rect)
 	var obstacles:Array=[]
 	for solid in world.kit.solids:
+		if solid.name=="CampaignInnerGate" and world.story.f(world.campaign_gate_flag):continue
 		if solid.top>0.18 and solid.bottom<1.75:obstacles.append(solid.rect.grow(CLEARANCE))
 	var index=0
 	for x in range(floori(bounds.position.x/STEP),ceili(bounds.end.x/STEP)+1):

@@ -9,6 +9,7 @@ static func tasks(s)->Array:
 	if s.f("heat_job"):rows.append({"name":"西翼暖气","done":s.f("heating_fixed"),"background":"西翼家属房的暖气上凉下热，管里积了气，夜班住户睡不好。","step":"借扳手，去洗衣间拿公用干布，小心排气；修好找帕维尔。"})
 	if s.f("shift"):rows.append({"name":"换班时的侧门","done":s.f("side_crossed"),"background":"米哈伊尔告诉你，黄灯亮起时岗哨会去查压力表。","step":"对照已拿到的草图，实地确认侧门和黄灯。"})
 	if s.has("photo") or s.f("father"):rows.append({"name":"旧照片","done":s.f("father"),"background":"旧木箱里的合影拍下了你不记得的日子。老爹和父亲曾是战友。","step":"找个合适的时候，把照片给老爹看看。"})
+	rows.append_array(s.Campaign.tasks(s))
 	return rows
 static func encyclopedia(s)->Array:
 	var rows=[
