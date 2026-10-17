@@ -1,0 +1,36 @@
+{
+  "gameplay": {
+    "checks": 1827,
+    "failures": 0
+  },
+  "visual": {
+    "checks": 1107,
+    "failures": 0
+  },
+  "narrative": {
+    "checks": 1753,
+    "failures": 0
+  },
+  "residents": {
+    "checks": 113,
+    "failures": 0
+  },
+  "chapter": {
+    "checks": 100,
+    "failures": 0
+  },
+  "floors": {
+    "checks": 33,
+    "failures": 0
+  },
+  "graphical_startup": {
+    "checks": 9,
+    "failures": 0
+  },
+  "total_checks": 4942,
+  "engine": "Godot 4.6.3",
+  "rendering": "X11 / OpenGL Compatibility / Mesa llvmpipe",
+  "life_corners": 378,
+  "life_fixture_faces": 311,
+  "labor_connected_cells": 4211
+}

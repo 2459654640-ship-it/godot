@@ -1,0 +1,210 @@
+{
+  "ivan": {
+    "file": "ivan.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 3,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "walk_left",
+      "walk_right"
+    ]
+  },
+  "semyon": {
+    "file": "semyon.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 4,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "walk_left",
+      "walk_right",
+      "talk"
+    ]
+  },
+  "nina": {
+    "file": "nina.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 4,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "walk_left",
+      "walk_right",
+      "talk"
+    ]
+  },
+  "mikhail": {
+    "file": "mikhail.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 4,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "walk_left",
+      "walk_right",
+      "talk"
+    ]
+  },
+  "cook": {
+    "file": "cook.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 4,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "walk_left",
+      "walk_right",
+      "talk"
+    ]
+  },
+  "supply": {
+    "file": "supply.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 4,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "walk_left",
+      "walk_right",
+      "talk"
+    ]
+  },
+  "commander": {
+    "file": "commander.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 4,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "walk_left",
+      "walk_right",
+      "talk"
+    ]
+  },
+  "igor": {
+    "file": "igor.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 4,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "walk_left",
+      "walk_right",
+      "talk"
+    ]
+  },
+  "resident": {
+    "file": "resident.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 4,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "walk_left",
+      "walk_right",
+      "talk"
+    ]
+  },
+  "diner": {
+    "file": "diner.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 4,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "walk_left",
+      "walk_right",
+      "talk"
+    ]
+  },
+  "queue": {
+    "file": "queue.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 4,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "walk_left",
+      "walk_right",
+      "talk"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+; Metro 1982 — D-6 residential slice
+config_version=5
+
+[application]
+config/name="地铁1982 · D-6"
+run/main_scene="res://scenes/d6.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+config/description="D-6 生活层 · 3D 叙事箱庭原型"
+
+[autoload]
+Session="*res://scripts/session.gd"
+
+[display]
+window/size/viewport_width=1600
+window/size/viewport_height=1000
+window/size/window_width_override=1440
+window/size/window_height_override=900
+window/stretch/mode="canvas_items"
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+anti_aliasing/quality/msaa_3d=2
+environment/defaults/default_clear_color=Color(0.025,0.035,0.04,1)
+
+[audio]
+driver/enable_input=false
