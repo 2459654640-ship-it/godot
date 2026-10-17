@@ -13,10 +13,10 @@ const PLANS={
 	"doors":[[-11,-6,"x"],[-11,3,"x"],[12,-2,"x"],[12,2,"x"],[12,7,"x"],[-3,11,"z"],[0,-4,"z"]],
 	"objects":[["commune_greenhouse",-17,-4,"garden"],["commune_well",3,3,"well"],["commune_records",17,-6,"desk"],["commune_leader",-5,-6,"npc"],["commune_anna",-4,15,"npc"],["commune_leave",25,2,"exit"],["commune_printer",20,-3,"npc"],["commune_grower",-13,7,"npc"],["commune_proof",20,-7,"press"],["commune_mushroom",-20,-6.5,"marker"]]},
 "sech":{
-	"spawn":Vector3(10,.04,11),"palette":"8a7a64","ambient":"8b96a0","energy":.18,"warm":true,
-	"rooms":[["01","旧军列调度",Rect2(-11,-14,8,7)],["02","电台维修室",Rect2(-11,-7,8,8)],["03","书籍与车厢",Rect2(3,-10,9,15)],["04","储水检修棚",Rect2(-12,1,9,4)],["05","营地议事桌",Rect2(-12,5,9,10)],["06","北线候车库",Rect2(3,7,12,8)],["00","旧列车站台",Rect2(-3,-17,6,32)]],
-	"doors":[[-3,-11,"x"],[-3,-3,"x"],[-7,-7,"z"],[3,-2,"x"],[-3,3,"x"],[-7,5,"z"],[-3,10,"x"],[3,11,"x"]],
-	"objects":[["sech_manual",-7,-10,"desk"],["sech_radio",-7,-3,"radio"],["sech_sergey",8,-3,"npc"],["sech_water",-8,3,"tank"],["sech_elder",-8,10,"npc"],["sech_leave",10,11,"exit"],["sech_quartermaster",-5,9,"npc"],["sech_signal",0,-14.5,"signal"],["sech_bookshelf",7,-5,"marker"]]},
+ "spawn":Vector3(1,.04,16),"palette":"8a7a64","ambient":"929caf","energy":.22,"warm":true,
+ "rooms":[["01","调度车厢",Rect2(-8,-19,4,11)],["02","电台车厢",Rect2(-8,-6,4,7)],["04","水箱检修隔间",Rect2(-8,1,4,4)],["05","议事车厢",Rect2(-8,7,4,11)],["03","书架车厢",Rect2(4,-19,4,18)],["06","北线接送车厢",Rect2(4,2,4,16)],["00","检修库站台",Rect2(-4,-22,8,42)]],
+ "doors":[[-4,-13,"x"],[-4,-2,"x"],[-6,1,"z"],[-4,12,"x"],[4,-9,"x"],[4,10,"x"]],
+ "objects":[["sech_manual",-6,-16,"desk"],["sech_radio",-6,-2,"radio"],["sech_sergey",6,-3,"npc"],["sech_water",-6,3,"tank"],["sech_elder",-6,11,"npc"],["sech_leave",6,10,"exit"],["sech_quartermaster",-6,14.5,"npc"],["sech_brake",6,15,"car_brake"],["sech_signal",0,-19.5,"signal"],["sech_bookshelf",6,-13,"marker"]]},
 "coal":{
 	"spawn":Vector3(-13,.04,10),"palette":"817e72","ambient":"99a3a7","energy":.18,"warm":false,
 	"rooms":[["01","班组档案",Rect2(-16,-11,14,9)],["02","医护值班",Rect2(-2,-18,11,5)],["03","井下休养间",Rect2(2,-11,14,9)],["04","探访登记",Rect2(-18,7,10,7)],["05","接送准备间",Rect2(-8,7,10,7)],["06","探视出口",Rect2(8,2,8,9)],["00","煤运旧巷",Rect2(-18,2,20,5)],["00","照护联络廊",Rect2(-2,-13,4,15)],["00","休养间前廊",Rect2(2,-2,14,4)]],

@@ -23,11 +23,11 @@ func run():
 	check(Journal.tasks(s).is_empty(),"unaccepted tasks never populate the journal")
 	check(not Journal.leads(s).is_empty() and not JSON.stringify(Journal.leads(s)).contains("谢尔盖"),"leads suggest local people without future spoilers")
 	s.flags.intro_done=true
-	check(Journal.active(s).id=="vitamins","accepted opening errand is the default focus")
+	check(Journal.active(s).id=="journey","opening main route is the default focus")
 	s.flags.nina_job=true;s.flags.cook_job=true
 	Journal.track(s,"kitchen")
 	check(Journal.active(s).id=="kitchen","player can choose one active quest while others stay pending")
-	check(Journal.tasks(s).filter(func(t):return not t.done and t.id!="kitchen").size()==3,"accepted backlog stays separate from focused work")
+	check(Journal.tasks(s).filter(func(t):return not t.done and t.id!="kitchen").size()==4,"accepted backlog stays separate from focused work")
 	s.flags.valve=true
 	check(not Journal.tasks(s).filter(func(t):return t.id=="kitchen")[0].done,"repair is not complete until reward hand-in")
 	s.flags.soup_claimed=true

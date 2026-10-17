@@ -18,12 +18,14 @@ static func render(h,sequence:String=""):
 	words.add_child(h.label("──  "+p.title+"  ──",17,h.amber))
 	var lines:Array=p.get("lines",s.Conversation.split_text(p.body,"旁白"))
 	for entry in lines:
+		var group=VBoxContainer.new();words.add_child(group)
 		var narration=entry.speaker in ["narrator","旁白"]
-		if not narration:words.add_child(h.label(entry.speaker,16,h.amber))
-		var rich=h.prose(entry.text if narration else "「"+entry.text+"」",23,words)
+		if not narration:group.add_child(h.label(entry.speaker,16,h.amber))
+		var rich=h.prose(entry.text if narration else "「"+entry.text+"」",23,group)
 		rich.add_theme_color_override("default_color",Color("e4d1a8") if not narration else Color("bac3b7"))
 		var total=rich.get_total_character_count();rich.visible_characters=0
-		h.typing.append({"label":rich,"total":total,"elapsed":0.0,"rate":maxf(180,float(total)/1.2)})
+		group.visible=false
+		h.typing.append({"label":rich,"total":total,"elapsed":0.0,"rate":48.0,"root":group})
 	var main=h.modal_box.get_parent().get_parent()
 	var options=VBoxContainer.new();options.add_theme_constant_override("separation",10)
 	main.add_child(options);main.move_child(options,main.get_child_count()-2)

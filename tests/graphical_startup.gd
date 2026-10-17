@@ -16,8 +16,9 @@ func press(text:String):
 func run():
 	w=load("res://scenes/d6.tscn").instantiate();root.add_child(w);current_scene=w
 	await frames(4)
-	check(w.hud.comic_active and w.story.flags.comic.node=="intro_wake","normal graphical launch automatically starts waking scene")
-	press("继续");await frames()
+	check(w.hud.comic_active and w.story.flags.comic.node=="history_war","normal graphical launch starts historical prologue")
+	for node in ["history_family","history_years","intro_wake","intro_semyon"]:
+		press("继续");await frames();check(w.story.flags.comic.node==node,"chronological prologue "+node)
 	check(w.story.flags.comic.node=="intro_semyon","continue opens Semyon's conscription conversation")
 	press(w.story.Comic.panel(w.story).choices[0].text);await frames()
 	check(w.story.flags.comic.node=="intro_errand","Semyon gives vitamin errand before reporting")

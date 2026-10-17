@@ -16,6 +16,11 @@ static func build(w):
 	k.mats.blue=k.mats.metal.duplicate();k.mats.blue.albedo_color=Color("66858c")
 	k.mats.plaster.albedo_color=Color({"waterworks":"a3b4ad","commune":"c1b38f","sech":"8f9992","coal":"8a8c84","starcity":"a1b5bb"}[id])
 	Shell.build(w,plan,rooms(id))
+	for room in rooms(id):
+		if room.code=="00":continue
+		var r:Rect2=room.rect
+		k.box("RoomSkirting",Vector3(r.get_center().x,.25,r.position.y+.16),Vector3(r.size.x-.4,.4,.07),"corrugated" if id=="waterworks" else ("tile" if id=="coal" else "wood"))
+		if room.rect.size.x>7:k.box("ThresholdPatch",Vector3(r.get_center().x,.026,r.end.y-1),Vector3(2,.026,1.4),"metal" if id in ["waterworks","starcity"] else "tile")
 	for entry in plan.objects:furnish(k,entry,id)
 	for room in rooms(id):
 		if room.code=="00":continue
@@ -132,40 +137,64 @@ static func commune(w):
 	k.signboard("公用水井 / 食堂",Vector3(5,2.1,-3.8),3.5)
 static func sech(w):
 	var k=w.kit
-	# Carriage bays flank a long platform, with rails and mechanical service pits.
-	for x in [-13.5,-12.1,13.2,14.6]:k.box("IndoorRail",Vector3(x,-.02,-1),Vector3(.09,.08,37),"metal")
-	for z in range(-17,18,2):
-		for x in [-12.8,13.9]:k.box("RailSleeper",Vector3(x,-.08,z),Vector3(2,.12,.22),"wood")
-	for z in [-13,-7,-1,5,11]:
-		for x in [-2.65,2.65]:
-			var opening=false
-			for d in LAYOUTS.sech.doors:
-				if d[2]=="x" and absf(x-d[0])<.6 and absf(z-d[1])<1.4:opening=true
-			if not opening:k.box("DepotPillar",Vector3(x,1.7,z),Vector3(.18,3.4,.18),"metal",true)
-		k.pipe(Vector3(-2.65,3.4,z),Vector3(2.65,3.4,z),.08,"metal")
-	for z in [-12,-8,-4,0]:
-		k.box("CarriageWindow",Vector3(-10.9,1.55,z),Vector3(.04,.65,1.5),"dark")
-	for x in [5,9]:w.Wing.bunk(k,Vector3(x,0,2))
-	for i in 9:k.box("DryingBook",Vector3(4+i*.8,1.05,-7.8),Vector3(.5,.13,.7),"paper")
-	k.pipe(Vector3(4,1,-7.8),Vector3(11.5,1,-7.8),.02,"metal")
-	k.cyl("CastIronStove",Vector3(-10,0.7,12.5),.42,1.4,"dark")
-	k.box("StoveCollision",Vector3(-10,.7,12.5),Vector3(.85,1.4,.85),"dark",true).visible=false
-	k.pipe(Vector3(-10,1.4,12.5),Vector3(-10,3.5,12.5),.12,"rust")
-	k.lamp(Vector3(-9.7,1.2,12.5),true,1.9,5)
-	k.table(Vector3(-8,0,13.5),3)
-	k.bench(Vector3(-8,0,12.3),2.5,true,PI)
-	for z in [-13,-9]:rack(k,Vector3(-10.3,0,z),.9,"wood")
-	for z in [-7,0]:rack(k,Vector3(11.3,0,z),.9,"wood")
-	k.table(Vector3(7,0,-8.2),4)
-	for x in [-10.5,-5]:k.locker(Vector3(x,0,6))
-	k.box("CommunityIcon",Vector3(-10.8,1.8,8),Vector3(.07,.8,.55),"wood")
-	k.box("IconGilt",Vector3(-10.75,1.8,8),Vector3(.02,.45,.3),"brass")
-	for x in [-8,-7.5,-7]:
-		k.box("SabreRack",Vector3(x,1.7,14.5),Vector3(.07,1.5,.06),"metal").rotation.z=.2
-		k.box("SabreGuard",Vector3(x,2.1,14.5),Vector3(.3,.07,.1),"brass")
-	for z in [9,13]:k.crate(Vector3(13,0,z),Vector3(1.1,.7,1))
-	k.signboard("议事 / 轮值 / 自愿入伙",Vector3(-8,2.2,14.7),4.4)
-	k.signboard("КНИГИ / 书架车厢",Vector3(7,2.3,-9.8),3.7)
+	k.box("DepotTrackBed",Vector3(0,-.9,-1),Vector3(24,.15,52),"concrete")
+	# Each pair of rails supports the matching car bodies; no rail cuts across a room.
+	for center in [-6,6]:
+		for dx in [-.76,.76]:k.box("DepotRail",Vector3(center+dx,-.70,-1),Vector3(.08,.13,49),"metal")
+		for z in range(-24,24):k.box("TrackSleeper",Vector3(center,-.80,z),Vector3(2.45,.1,.2),"wood")
+	for spec in [[-6,-19,11],[-6,-6,11],[-6,7,11],[6,-19,18],[6,2,16]]:
+		var x:float=spec[0];var start:float=spec[1];var length:float=spec[2]
+		k.box("CarriageChassis",Vector3(x,-.19,start+length/2),Vector3(3.95,.28,length),"metal")
+		for end in [start,start+length]:
+			k.box("Coupler",Vector3(x,-.22,end+(-.55 if end==start else .55)),Vector3(.22,.22,1.1),"metal")
+			for dx in [-1.25,1.25]:k.cyl("Buffer",Vector3(x+dx,-.12,end),.14,.35,"dark").rotation.x=PI/2
+		for z in [start+1.6,start+length-1.6]:
+			for dz in [-.35,.35]:
+				k.pipe(Vector3(x-.9,-.335,z+dz),Vector3(x+.9,-.335,z+dz),.08,"metal")
+				for dx in [-.76,.76]:k.cyl("BogieWheel",Vector3(x+dx,-.335,z+dz),.3,.12,"dark").rotation.z=PI/2
+		for z in range(int(start+2),int(start+length-1),3):
+			# Exterior window assemblies and repeated ribs make the narrow volumes legible as cars.
+			var outer=x+(-2.08 if x<0 else 2.08)
+			k.box("CarriageWindowFrame",Vector3(outer,1.7,z),Vector3(.12,.9,1.5),"metal")
+			k.box("CarriageWindowGlass",Vector3(outer+(-.07 if x<0 else .07),1.7,z),Vector3(.03,.68,1.25),"dark")
+			for edge in [-1.9,1.9]:k.box("CarriageBodyRib",Vector3(x+edge,1.3,z+.95),Vector3(.06,2.6,.07),"metal")
+			k.pipe(Vector3(x-1.9,2.7,z+.95),Vector3(x+1.9,2.7,z+.95),.045,"metal")
+		k.box("WeatheredCarriageStripe",Vector3(x+(-2.09 if x<0 else 2.09),.65,start+length/2),Vector3(.03,.18,length-.3),"red")
+	for z in [-20,-14,-8,-2,4,10,16]:
+		k.lamp(Vector3(0,3.1,z),true,.65,5)
+		k.pipe(Vector3(-4,3.25,z),Vector3(4,3.25,z),.045,"metal")
+		k.pipe(Vector3(0,3.25,z),Vector3(0,3.1,z),.025,"metal")
+		for x in [-3.65,3.65]:k.box("PlatformEdge",Vector3(x,.03,z),Vector3(.06,.05,2.8),"cream")
+	for z in [-16,-12,-7]:bookcase(k,Vector3(4.35,0,z),2.5)
+	k.lamp(Vector3(6,2.4,-11),true,1.1,7)
+	k.table(Vector3(6,0,-14.5),2.1)
+	for i in 5:k.box("DryingBook",Vector3(5.2+i*.35,.86,-14.5),Vector3(.25,.06,.45),"paper")
+	k.bench(Vector3(6,0,-5.8),2.3,true,PI)
+	k.table(Vector3(-6,0,17),2.3)
+	k.cyl("DepotStove",Vector3(-7.3,.6,8.5),.32,1.2,"dark")
+	k.box("StoveHull",Vector3(-7.3,.6,8.5),Vector3(.65,1.2,.65),"dark",true).visible=false
+	k.pipe(Vector3(-7.3,1.2,8.5),Vector3(-7.3,3.2,8.5),.09,"metal")
+	k.lamp(Vector3(-7,1.4,8.5),true,.8,4)
+	for z in [4.5,7]:k.bench(Vector3(6,0,z),2.2,true,PI)
+	for x in [-7.3,-4.7]:k.locker(Vector3(x,0,-18.1))
+	k.signboard("КНИГИ / 书架车厢",Vector3(6,2.4,-18.8),3.5)
+	k.signboard("КРУГ / 议事 · 轮值",Vector3(-6,2.4,17.8),3.2)
+	k.box("CossackIconFrame",Vector3(-7.5,1.9,17.78),Vector3(.5,.65,.05),"wood")
+	k.box("IconCenter",Vector3(-7.5,1.9,17.73),Vector3(.25,.4,.02),"brass")
+	k.box("SabreBlade",Vector3(-4.4,1.6,17.75),Vector3(.05,1.25,.05),"metal").rotation.z=.22
+	k.box("SabreGuard",Vector3(-4.48,1.95,17.75),Vector3(.3,.06,.08),"brass")
+static func bookcase(k,p:Vector3,length:float):
+	var front=1.0 if p.x<6 else -1.0
+	k.box("BookcaseHull",p+Vector3(0,1,0),Vector3(.45,2,length),"wood",true).visible=false
+	k.box("BookcaseBack",p+Vector3(-front*.18,1,0),Vector3(.08,2,length),"wood")
+	for end in [-length/2,length/2]:k.box("BookcaseSide",p+Vector3(0,1,end),Vector3(.5,2,.09),"wood")
+	for y in [.15,.7,1.25,1.8]:
+		k.box("BookcaseShelf",p+Vector3(0,y,0),Vector3(.52,.08,length),"wood")
+		for index in range(int(length/.13)-1):
+			var mat=["red","blue","green","paper","wood"][posmod(index+int(y*10),5)]
+			var height=.28+posmod(index,4)*.045
+			k.box("BookSpine",p+Vector3(front*.05,y+height/2+.04,-length/2+.16+index*.13),Vector3(.36,height,.105),mat)
+			k.box("BookSpineWear",p+Vector3(front*.238,y+height*.6,-length/2+.16+index*.13),Vector3(.008,.015,.075),"paper")
 static func coal(w):
 	var k=w.kit
 	for x in [-16,-12,-8,-4]:
@@ -223,9 +252,19 @@ static func starcity(w):
 	for x in [10,13,16,19]:
 		k.box("TapeRecorder",Vector3(x,.8,-3.5),Vector3(1.5,1.6,.65),"blue",true)
 		for dx in [-.35,.35]:k.cyl("TapeReel",Vector3(x+dx,1.2,-3.1),.23,.05,"metal").rotation.x=PI/2
+	k.cyl("ObservationClock",Vector3(19,2.1,-4.8),.3,.08,"metal").rotation.x=PI/2
+	k.cyl("ClockFace",Vector3(19,2.1,-4.74),.26,.025,"paper").rotation.x=PI/2
+	k.box("ClockMinuteHand",Vector3(19,2.2,-4.72),Vector3(.015,.2,.01),"dark")
+	k.box("ClockHourHand",Vector3(19.07,2.1,-4.71),Vector3(.15,.015,.01),"dark")
 	k.signboard("外线隔离 / 禁止误送电",Vector3(-16,2.1,-10.8),4)
 static func furnish(k,e:Array,id:String):
 	var p=Vector3(e[1],0,e[2]);var kind:String=e[3]
+	if kind=="tank" and id=="sech":
+		k.cyl("CarriageWaterTank",p+Vector3(-1,.8,.2),.6,1.6,"rust")
+		k.box("TankCollision",p+Vector3(-1,.8,.2),Vector3(1.2,1.6,1.2),"metal",true).visible=false
+		k.pipe(p+Vector3(-.4,1,.2),p+Vector3(0,1,0),.07,"metal")
+		k.cyl("TankHandwheel",p+Vector3(0,1,0),.2,.04,"red").rotation.x=PI/2
+		return
 	match kind:
 		"panel","radio":
 			k.box("ServicePanel_"+e[0],p+Vector3(0,.8,-1),Vector3(1.4,1.6,.5),"blue" if id=="starcity" else "metal",true)
@@ -259,6 +298,12 @@ static func furnish(k,e:Array,id:String):
 			k.cyl("InkDrum",p+Vector3(0,1.45,-1.4),.23,.9,"dark").rotation.z=PI/2
 			k.pipe(p+Vector3(.6,1.4,-1.4),p+Vector3(.6,1.65,-1.1),.04,"metal")
 			k.box("ProofPaper",p+Vector3(-.8,.84,-1.3),Vector3(.6,.025,.6),"paper")
+		"car_brake":
+			k.box("HandbrakePost",p+Vector3(0,.8,1.1),Vector3(.18,1.6,.18),"metal",true)
+			k.cyl("HandbrakeWheel",p+Vector3(0,1.25,.93),.28,.07,"red").rotation.x=PI/2
+			k.box("InspectionHatch",p+Vector3(-.9,.04,1),Vector3(.8,.05,.65),"metal")
+			k.box("ChockShelf",p+Vector3(1.25,.65,1.2),Vector3(.7,.12,.45),"wood",true)
+			for dx in [-.15,.15]:k.box("PublicWheelChock",p+Vector3(1.25+dx,.77,1.2),Vector3(.23,.12,.3),"wood").rotation.z=.12
 		"signal":
 			k.box("SignalPost",p+Vector3(0,1,-1.2),Vector3(.16,2,.16),"metal",true)
 			k.box("RouteArrow",p+Vector3(.2,1.8,-1.2),Vector3(1,.2,.08),"cream")
@@ -288,5 +333,8 @@ static func targets(w):
 	if w.floor_id=="waterworks":
 		w.target("plant_guide",w.npcs.plant_guide.position,"科瓦廖夫","talk")
 		w.target("plant_veteran",w.npcs.plant_veteran.position,"老兵","talk")
+static func residents(w):
+	var layouts={"commune":[["ambient_woman",-6,8],["ambient_child",5,7],["ambient_elder",15,12]],"sech":[["ambient_worker",0,5],["ambient_child",5,-11],["ambient_elder",-5,16]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4]],"starcity":[["ambient_worker",4,-11],["ambient_woman",-18,8]]}
+	for entry in layouts.get(w.floor_id,[]):w.person("resident_"+entry[0],Vector3(entry[1],0,entry[2]),"cloth",false,entry[0])
 static func routines(w):
 	for id in w.npcs:w.npcs[id].navigation=w.navigation

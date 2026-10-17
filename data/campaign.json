@@ -35,7 +35,8 @@
       "role": "调查",
       "body": "铜牌上的箭头指向回流管。阀杆上有一圈白色水垢，压力表仍在红区。",
       "options": [
-        "plant_bleed"
+        "plant_bleed",
+        "pressure_copy_inspect"
       ],
       "after": [
         [
@@ -91,7 +92,8 @@
       "body": "交接本里夹着最后一班的便笺：「更衣柜编号看工牌，不看班次。夜班 4 号柜，白班 2 号柜。夜班邮袋还没寄，后来的人若能回来，请捎给家里。」杯子压住的领用页注明：急救绷带，留给检修者。",
       "options": [
         "plant_log",
-        "mail_clue"
+        "mail_clue",
+        "pressure_copy_compare"
       ],
       "spoken": false
     },
@@ -113,7 +115,8 @@
       "options": [
         "sech_join",
         "sech_stay",
-        "sech_custom"
+        "sech_custom",
+        "north_accept"
       ],
       "spoken": true
     },
@@ -124,7 +127,8 @@
       "body": "铅笔圈出两行：\n「先接地，再接电源。天线独立，不跨接市电。」\n纸背还有一条通往北侧军列的路线。",
       "options": [
         "radio_manual",
-        "watch_map"
+        "watch_map",
+        "north_record"
       ],
       "spoken": false
     },
@@ -154,7 +158,8 @@
       "options": [
         "sech_books",
         "sech_father",
-        "books_return"
+        "books_return",
+        "sech_visitors"
       ],
       "after": [
         [
@@ -181,7 +186,9 @@
       "body": "旧军列的车灯映在库门上。地图和联络窗口已经准备好，是否出发由你决定。",
       "options": [
         "sech_star",
-        "sech_commune"
+        "sech_commune",
+        "ending_train",
+        "ending_caravan"
       ],
       "spoken": false
     },
@@ -194,7 +201,9 @@
         "commune_join",
         "commune_stay",
         "commune_route",
-        "commune_politics"
+        "commune_politics",
+        "workers_accept",
+        "ending_workers"
       ],
       "spoken": true
     },
@@ -207,7 +216,9 @@
         "anna_accept",
         "anna_talk",
         "anna_result",
-        "anna_home"
+        "anna_home",
+        "medicine_seal_accept",
+        "medicine_seal_return"
       ],
       "spoken": true
     },
@@ -229,7 +240,9 @@
       "body": "北线维修回执和公社内部联络名单分柜锁放，公开柜只留工牌编号。另一摞纸是公社与 D-6 煤运区的伤病探访交换单：双方医护担保、限区通行，不是普通通行证。",
       "options": [
         "anna_records",
-        "commune_frequency"
+        "commune_frequency",
+        "workers_draft",
+        "medicine_seal_inspect"
       ],
       "spoken": false
     },
@@ -240,7 +253,8 @@
       "body": "取水的人把自己的份额划掉，再把铅笔递给下一位。有人替卧床的邻居多领了一罐，名字写在旁边。",
       "options": [
         "commune_ledger",
-        "press_ledger"
+        "press_ledger",
+        "medicine_seal_compare"
       ],
       "spoken": false
     },
@@ -252,7 +266,8 @@
       "options": [
         "commune_coal",
         "commune_star",
-        "commune_sech"
+        "commune_sech",
+        "workers_coal"
       ],
       "spoken": false
     },
@@ -264,7 +279,8 @@
       "options": [
         "coal_register",
         "names_accept",
-        "names_return"
+        "names_return",
+        "workers_sign"
       ],
       "after": [
         [
@@ -281,7 +297,8 @@
       "body": "柜子里有换班单和旧工伤登记。纸张有些粘连，翻页要很慢。",
       "options": [
         "coal_archive",
-        "names_archive"
+        "names_archive",
+        "mine_air_inspect"
       ],
       "spoken": false
     },
@@ -293,7 +310,9 @@
       "options": [
         "coal_medic",
         "linen_accept",
-        "linen_return"
+        "linen_return",
+        "mine_air_accept",
+        "mine_air_return"
       ],
       "after": [
         [
@@ -319,7 +338,8 @@
       "role": "调查",
       "body": "出口只通向这次伤病交换的联络通路，另一道门仍锁着。值班员在你的限区函上核销入区时间；回公社后，接送还要双方医护另行约定。",
       "options": [
-        "coal_return"
+        "coal_return",
+        "workers_return"
       ],
       "spoken": false
     },
@@ -373,7 +393,8 @@
       "options": [
         "star_archive",
         "star_memorial",
-        "letter_read"
+        "letter_read",
+        "archive_labels_inspect"
       ],
       "spoken": false
     },
@@ -409,7 +430,8 @@
       "options": [
         "star_listen",
         "star_reply",
-        "star_coordinates"
+        "star_coordinates",
+        "weather_test"
       ],
       "spoken": false
     },
@@ -422,7 +444,9 @@
         "ending_starcity",
         "ending_bridge",
         "ending_signal",
-        "ending_ocean"
+        "ending_ocean",
+        "ending_weather",
+        "ending_records"
       ],
       "spoken": false
     },
@@ -435,7 +459,9 @@
         "veteran_road",
         "veteran_watch",
         "mail_accept",
-        "mail_return"
+        "mail_return",
+        "pressure_copy_accept",
+        "pressure_copy_return"
       ],
       "after": [
         [
@@ -475,7 +501,8 @@
       "options": [
         "press_accept",
         "press_deliver",
-        "printer_politics"
+        "printer_politics",
+        "workers_deliver"
       ],
       "after": [
         [
@@ -547,7 +574,8 @@
       "options": [
         "watch_accept",
         "watch_return",
-        "watch_custom"
+        "watch_custom",
+        "north_verify"
       ],
       "after": [
         [
@@ -588,7 +616,8 @@
       "body": "工牌后挂着洗消流程。白、绿、红三色木片混在钉上，旧字迹仍可辨。",
       "options": [
         "linen_tags",
-        "names_tags"
+        "names_tags",
+        "mine_air_compare"
       ],
       "spoken": false
     },
@@ -607,11 +636,15 @@
       "name": "列夫 / 星城测控技术员",
       "role": "居民 / 交谈",
       "facility": "starcity",
-      "body": "列夫将一盘褪色磁带从接收机上卸下来。\n「这里在地下四十米。外面的天线还能听，里面的档案快听不清了。你父亲管接收线路，我管这些录下来的旧声音。」",
+      "body": "列夫将一盘褪色磁带从接收机上卸下来。\n「这里在地下四十米。外面的天线还能听，里面的档案快听不清了。我管录音和转录，接收线路归测控技术班。」",
       "options": [
         "tape_accept",
         "tape_return",
-        "tech_scale"
+        "tech_scale",
+        "weather_accept",
+        "weather_return",
+        "archive_labels_accept",
+        "archive_labels_return"
       ],
       "after": [
         [
@@ -627,7 +660,9 @@
       "facility": "starcity",
       "body": "两种速度刻度并列印在卡上，当前设备栏只圈出其中一组。原带装在防尘盒里。",
       "options": [
-        "tape_read"
+        "tape_read",
+        "weather_clock",
+        "archive_labels_compare"
       ],
       "spoken": false
     },
@@ -639,9 +674,21 @@
       "options": [
         "tape_wrong",
         "tape_calibrate",
-        "tape_copy"
+        "tape_copy",
+        "weather_power"
       ],
       "spoken": false
+    },
+    "sech_brake": {
+      "name": "接送车厢 / 手闸与检修孔",
+      "role": "现场 / 列车检修",
+      "facility": "sech",
+      "spoken": false,
+      "body": "车厢南端留着手闸和地板检修孔，公用止轮楔放在旁边的壁架上。静态检查须先固定车轮，再核轴箱与手闸状态。",
+      "options": [
+        "north_chock",
+        "north_axle"
+      ]
     }
   },
   "actions": {
@@ -835,12 +882,13 @@
       "goods": {}
     },
     "sech_father": {
-      "text": "「星城会知道我父亲的事吗？」",
-      "reply": "「星城的技术员常借北线运仪器。我见过他们的星徽，没有见过你父亲。」\n谢尔盖指向电台。\n「东方-7 已经确认蓝门还在值守。带上姓名和照片去问，比我在这里替他们编答案好。」",
+      "text": "「我在找父亲，星城会有他的记录吗？」",
+      "reply": "「你还没说姓名，我也没见过他们的进站名册，答不上来。」\n谢尔盖指向北线。\n「我接触过星城的货运员，能告诉你去哪扇门登记。带上姓名和照片，请值守核查，比我们在这里猜有用。」",
       "once": true,
       "req": {
         "all": [
-          "star_known"
+          "star_known",
+          "father"
         ]
       }
     },
@@ -898,7 +946,7 @@
     },
     "commune_route": {
       "text": "「你听说过东方-7吗？」",
-      "reply": "「东方-7 是星城-2 的短波呼号，一个独立的大型地下科研设施，不是我们的支部，也不归 D-6 管。」\n叶莲娜把北线联络簿指给你看。\n「我们交换过零件和气象消息。最新的联络时段在东北档案室。我不知道你父亲是不是在那里，不能拿这个呼号向你保证。」",
+      "reply": "「北线有谢契的军列，也有星城-2 的测控站。星城用东方-7 作短波呼号，是一座独立的大型地下科研设施。」\n叶莲娜指向东北联络室。\n「我们交换零件和气象记录。亲属的下落，要报姓名让他们查，光凭呼号查不出来。」",
       "once": true,
       "flags": {
         "commune_radio_known": true
@@ -1015,13 +1063,10 @@
     "commune_coal": {
       "text": "带探访函返回 D-6 煤运区",
       "reply": "",
-      "once": true,
+      "once": false,
       "req": {
         "all": [
           "anna_records"
-        ],
-        "not": [
-          "brother_found"
         ]
       },
       "travel": "coal_road"
@@ -1104,10 +1149,11 @@
     "coal_return": {
       "text": "带着核实结果返回公社",
       "reply": "",
-      "once": true,
+      "once": false,
       "req": {
-        "all": [
-          "brother_found"
+        "any": [
+          "anna_records",
+          "workers_draft"
         ]
       },
       "travel": "anna_return"
@@ -1209,7 +1255,7 @@
     },
     "father_meet": {
       "text": "「你为什么一直没有回来？」",
-      "reply": "「我是这里的测控技术员。六二年奉调进地下设施，最初封闭，后来通路断了。写过的信没送到。」\n父亲按住桌沿。\n「再后来，北线能通人了。我还在用设备离不开人作理由。怕见你，也怕知道自己错过了什么。不是这项工作替我做了决定，是我自己没有走。」",
+      "reply": "「我是这里的测控技术员。六二年奉调进地下设施，最初封闭，后来通路断了。写过的信没送到。」\n父亲按住桌沿。\n「再后来，北线能通人了。我还在用设备离不开人作理由。怕见你，也怕知道自己错过了什么。我有过离开的机会，是我一直拖着没有走。」",
       "once": true,
       "req": {
         "all": [
@@ -1554,7 +1600,7 @@
     },
     "seal_pick": {
       "text": "取 40 毫米双孔封装垫片",
-      "reply": "你隔着油纸核对孔距，将三组完整封装放入空袋。不是所有旧物都该拆下来带走。",
+      "reply": "你隔着油纸核对孔距，将三组完整封装放入空袋。其余材料仍留在原架上，下一批检修者也需要它们。",
       "once": true,
       "flags": {
         "seal_ready": true
@@ -1586,7 +1632,7 @@
     },
     "printer_politics": {
       "text": "「一张公报能改变什么？」",
-      "reply": "「它打不穿钢门，但能让门里面的人知道：少掉的水未必是邻居偷的。我们想让 D-6 的工人组织起来，不是让他们替哪位新官换个画像。」",
+      "reply": "「它打不穿钢门，但能让门里面的人知道：少掉的水未必是邻居偷的。我们想让 D-6 的工人能自己推举代表，也能让代表下台。」",
       "once": true,
       "flags": {},
       "req": {}
@@ -1721,7 +1767,7 @@
     },
     "grow_return": {
       "text": "请卓娅复查遮光与记录",
-      "reply": "「这次调对了，出菇还得等，不是灯一关就能吃。」\n她把一份面包和一卷洁净布包给你。\n「今天的工，今天记。明天谁接班，也看得懂。」",
+      "reply": "「这次调对了。出菇还得几天，明天记得再看温度。」\n她把一份面包和一卷洁净布包给你。\n「今天的工，今天记。明天谁接班，也看得懂。」",
       "once": true,
       "flags": {
         "grow_done": true
@@ -1738,7 +1784,7 @@
     },
     "watch_custom": {
       "text": "「你们还保留着哥萨克的军衔？」",
-      "reply": "「习惯叫法留下了，粮食和轮值得重新商量。我管这些牌，不是因为祖父姓什么，是因为这班人愿意让我记账。记错，明天换人。」",
+      "reply": "「习惯叫法留下了，粮食和轮值得重新商量。这班人愿意让我记账，我就管这些牌。记错，明天换人。」",
       "once": true,
       "flags": {},
       "req": {}
@@ -1754,7 +1800,7 @@
     },
     "watch_map": {
       "text": "对照塌方日期与现行道岔图",
-      "reply": "旧图的东股道已划叉，西股道连接水箱检修棚，仍可通行。勘查签名是昨晚的，不是二十年前的印刷底图。",
+      "reply": "旧图的东股道已划叉，西股道连接水箱检修棚，仍可通行。昨晚的勘查签名覆盖了印刷底图上的旧箭头。",
       "once": true,
       "flags": {
         "watch_route": true
@@ -1891,7 +1937,7 @@
     },
     "linen_tags": {
       "text": "读工牌板旁的洗消色标",
-      "reply": "红色：待洗；绿色：已领回、未消毒；白色：煮洗完成待封包。颜色是流程，不是布本身干不干净。",
+      "reply": "红色：待洗；绿色：已领回、未消毒；白色：煮洗完成待封包。颜色标出处理到了哪一步，还要看封包签名。",
       "once": true,
       "flags": {
         "linen_code": true
@@ -2005,7 +2051,7 @@
     },
     "tape_accept": {
       "text": "「我帮你校准这盘带子。」",
-      "reply": "「先读通信室东墙的基准卡，再调同室校准台。磁带最后是战前家属留言，不是发射密码，别为了好听改掉原速。」",
+      "reply": "「先读通信室东墙的基准卡，再调同室校准台。磁带最后有一段战前家属留言，声音有些变调。先核原速，别凭耳朵猜。」",
       "once": true,
       "flags": {
         "tape_job": true
@@ -2067,7 +2113,7 @@
     },
     "tape_return": {
       "text": "把原带、副本与校准记录交给列夫",
-      "reply": "列夫先锁好原带，再听完副本。\n「资料不是只有有用的才配保存。」\n他按维护班的工时签出四发制式弹，原带仍归档案库。",
+      "reply": "列夫先锁好原带，再听完副本。\n「这个孩子等过的人，也该有人记得。」\n他按维护班的工时签出四发制式弹，原带仍归档案库。",
       "once": true,
       "flags": {
         "tape_done": true
@@ -2083,7 +2129,7 @@
     },
     "letter_accept": {
       "text": "「你说写过信，信在哪里？」",
-      "reply": "「北边转移档案里有退回邮袋，寄给你母亲的那封也在。你愿意就拿来看。」\n父亲把抽屉推回去。\n「不是证据能替我免责。你看完，再决定要不要带给老谢。」",
+      "reply": "「北边转移档案里有退回邮袋，寄给你母亲的那封也在。你愿意就拿来看。」\n父亲把抽屉推回去。\n「我欠你们的，还得由我自己回答。你看完，再决定要不要带给老谢。」",
       "once": true,
       "flags": {
         "letter_job": true
@@ -2147,6 +2193,492 @@
       "goods": {
         "battery": 1
       }
+    },
+    "sech_visitors": {
+      "text": "「你知道星城接不接受外人来访吗？」",
+      "reply": "「技术换班和送货的人能去外侧登记。报姓名、说明来意，门内的人核对以后才放行。我没进过深层。」",
+      "flags": {},
+      "once": true,
+      "req": {
+        "all": [
+          "star_known"
+        ],
+        "not": [
+          "father"
+        ]
+      }
+    },
+    "workers_accept": {
+      "text": "「我想帮 D-6 的工人把话传出来。」",
+      "reply": "叶莲娜收起印稿。\n「先把要传的话弄准。去联络室校一份共同诉求稿，再持医护交换担保到煤运登记处，请工人自己决定是否署名。回来交给娜佳。你不用拿安娜的家事作借口。」",
+      "flags": {
+        "workers_job": true
+      },
+      "once": true,
+      "req": {}
+    },
+    "workers_draft": {
+      "text": "核对共同诉求与有限探访担保",
+      "reply": "稿上要求公开配给、保障休养者口粮、让班组推举代表。你逐句核对，没有替尚未见面的工人签名。联络组取得煤运医护担保，准许你到限区登记窗口。",
+      "flags": {
+        "workers_draft": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "workers_job"
+        ]
+      },
+      "give": [
+        "transit_pass"
+      ]
+    },
+    "workers_coal": {
+      "text": "持限区担保，到煤运窗口征询意见",
+      "reply": "",
+      "flags": {
+        "workers_transit": true
+      },
+      "once": false,
+      "req": {
+        "all": [
+          "workers_draft"
+        ]
+      },
+      "travel": "coal_road"
+    },
+    "workers_sign": {
+      "text": "「这些诉求，你们愿意让谁带回公社？」",
+      "reply": "登记员示意你先把稿子收好。休息时，他只让愿意看的班组成员凑近读。有人签名，有人只留工牌编号，也有人拒绝。你把拒绝的空白留下。\n「别把我们写成整齐的一排。」有人低声说。你答应了。",
+      "flags": {
+        "workers_signed": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "workers_draft"
+        ]
+      }
+    },
+    "workers_return": {
+      "text": "带征询稿返回公社",
+      "reply": "",
+      "flags": {},
+      "once": false,
+      "req": {
+        "all": [
+          "workers_signed"
+        ]
+      },
+      "travel": "anna_return"
+    },
+    "workers_deliver": {
+      "text": "把署名、编号与拒绝意见原样交给娜佳",
+      "reply": "娜佳没有补齐那些空白。\n「先从他们愿意说的话开始。下一封，要能让他们知道信有没有送到。」",
+      "flags": {
+        "workers_done": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "workers_signed"
+        ]
+      }
+    },
+    "ending_workers": {
+      "text": "留下来，建立与 D-6 工人的回信窗口",
+      "reply": "",
+      "flags": {},
+      "once": true,
+      "req": {
+        "all": [
+          "workers_done"
+        ]
+      },
+      "ending": "workers"
+    },
+    "north_accept": {
+      "text": "「北线停着的列车，能再运人吗？」",
+      "reply": "长老把旧军列钥匙放在图上。\n「车架还行，制动没验过。去调度台查最近的检修单，再检查候车库的手闸和轴箱。彼得复核过，才准上人。」",
+      "flags": {
+        "north_job": true
+      },
+      "once": true,
+      "req": {}
+    },
+    "north_record": {
+      "text": "查列车制动与轴箱检修单",
+      "reply": "记录要求先上止轮楔、保持手闸，再核对轴箱封盖。试车只检查静态联锁；拖动满载车厢留给专门的轮班。",
+      "flags": {
+        "north_record": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "north_job"
+        ]
+      }
+    },
+    "north_chock": {
+      "text": "按检修单放好止轮楔，保持手闸",
+      "reply": "木楔取自车边公用架。你固定两侧轮缘，复查手闸指示。没有消耗自己的物资。",
+      "flags": {
+        "north_chocked": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "north_record"
+        ]
+      }
+    },
+    "north_axle": {
+      "text": "核对轴箱盖和制动回执",
+      "reply": "封盖与螺栓齐全，手闸指示与检修单一致。你签出静态检查回执，留着机械师最后一栏。",
+      "flags": {
+        "north_ready": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "north_chocked"
+        ]
+      }
+    },
+    "north_verify": {
+      "text": "请彼得复核列车，安排下一班",
+      "reply": "彼得沿车底看完，补上最后一栏。\n「能运人，也能运药。第一班去哪儿，得先讲清楚。」",
+      "flags": {
+        "north_done": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "north_ready"
+        ]
+      }
+    },
+    "ending_train": {
+      "text": "和巡轨队一起维持北线通行",
+      "reply": "",
+      "flags": {},
+      "once": true,
+      "req": {
+        "all": [
+          "north_done"
+        ]
+      },
+      "ending": "rail"
+    },
+    "ending_caravan": {
+      "text": "组织以医药与居民接送为主的联络车队",
+      "reply": "",
+      "flags": {},
+      "once": true,
+      "req": {
+        "all": [
+          "north_done",
+          "radio_fixed"
+        ]
+      },
+      "ending": "caravan"
+    },
+    "weather_accept": {
+      "text": "「能不能把各站的天气连起来？」",
+      "reply": "列夫铺开观测表。\n「能先连现有的台。先校通信室的钟，再用手摇机给中继接收回路供电，和北线对一次时。别急着许诺覆盖整个地表。」",
+      "flags": {
+        "weather_job": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "star_registered"
+        ]
+      }
+    },
+    "weather_clock": {
+      "text": "按整点校时码调整观测钟",
+      "reply": "你把钟与接收的整点码对齐，标明误差。旧观测数据保留原时刻，不能为排得整齐而改写。",
+      "flags": {
+        "weather_clock": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "weather_job"
+        ]
+      }
+    },
+    "weather_power": {
+      "text": "用通信台手摇机恢复中继接收",
+      "reply": "你接好地线，用台边的手摇机缓慢供电。中继灯亮起，不需要花子弹买电池。",
+      "flags": {
+        "weather_power": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "weather_clock"
+        ]
+      }
+    },
+    "weather_test": {
+      "text": "与北线复读观测时刻，测试中继",
+      "reply": "谢契值守回读时刻，公社联络台补上气压。你重复每个报数，将不清楚的一段留空，等待下次核实。",
+      "flags": {
+        "weather_ready": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "weather_power"
+        ]
+      }
+    },
+    "weather_return": {
+      "text": "向列夫交回校时与联络回执",
+      "reply": "列夫留下两个空栏：未接通的站点，尚无数据的路段。\n「先承认这些地方听不见，再想办法把灯接过去。」",
+      "flags": {
+        "weather_done": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "weather_ready"
+        ]
+      }
+    },
+    "ending_weather": {
+      "text": "留下维护不交换基地坐标的观测网络",
+      "reply": "",
+      "flags": {},
+      "once": true,
+      "req": {
+        "all": [
+          "weather_done",
+          "father_met"
+        ]
+      },
+      "ending": "weather"
+    },
+    "pressure_copy_accept": {
+      "text": "「要给 D-6 留一份水压记录吗？我来抄。」",
+      "reply": "老兵想把维修经验带回 D-6，问你能否记下泵组正常的压力范围。",
+      "flags": {
+        "pressure_job": true
+      },
+      "once": true,
+      "req": {}
+    },
+    "pressure_copy_inspect": {
+      "text": "核对泵房铭牌的绿区刻度",
+      "reply": "你逐项读出原始记录，将能核实的数字和日期分开抄写。缺少依据的一项仍留空。",
+      "flags": {
+        "pressure_seen": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "pressure_job"
+        ]
+      }
+    },
+    "pressure_copy_compare": {
+      "text": "在交接本抄页上画出压力范围",
+      "reply": "两处记录终于对应起来。你在有误的栏边标注原始依据，未擅自补写缺失内容。",
+      "flags": {
+        "pressure_written": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "pressure_seen"
+        ]
+      }
+    },
+    "pressure_copy_return": {
+      "text": "把抄好的正常范围交给老兵",
+      "reply": "对方检查了抄页，将签名留在末尾，交给你一份路上用的物资。",
+      "flags": {
+        "pressure_done": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "pressure_written"
+        ]
+      },
+      "goods": {
+        "bandage": 1
+      }
+    },
+    "medicine_seal_accept": {
+      "text": "「这批敷料送走前，需要再核一遍吗？」",
+      "reply": "安娜要给交换窗口送一批敷料，需要另一个人核数并复核封签。",
+      "flags": {
+        "parcel_job": true
+      },
+      "once": true,
+      "req": {}
+    },
+    "medicine_seal_inspect": {
+      "text": "按医护交换清单核对包数",
+      "reply": "你逐项读出原始记录，将能核实的数字和日期分开抄写。缺少依据的一项仍留空。",
+      "flags": {
+        "parcel_manifest": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "parcel_job"
+        ]
+      }
+    },
+    "medicine_seal_compare": {
+      "text": "请水井值班员见证封袋数量",
+      "reply": "两处记录终于对应起来。你在有误的栏边标注原始依据，未擅自补写缺失内容。",
+      "flags": {
+        "parcel_checked": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "parcel_manifest"
+        ]
+      }
+    },
+    "medicine_seal_return": {
+      "text": "将双人复核的封袋交回安娜",
+      "reply": "对方检查了抄页，将签名留在末尾，交给你一份路上用的物资。",
+      "flags": {
+        "parcel_done": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "parcel_checked"
+        ]
+      },
+      "goods": {
+        "bandage": 1
+      }
+    },
+    "mine_air_accept": {
+      "text": "「通风巡检的时间也要核对？我能帮忙。」",
+      "reply": "医护担心通风检查的两班记录对不上，请你核对原始时间。",
+      "flags": {
+        "air_job": true
+      },
+      "once": true,
+      "req": {}
+    },
+    "mine_air_inspect": {
+      "text": "查最近两班通风巡检原始时间",
+      "reply": "你逐项读出原始记录，将能核实的数字和日期分开抄写。缺少依据的一项仍留空。",
+      "flags": {
+        "air_record": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "air_job"
+        ]
+      }
+    },
+    "mine_air_compare": {
+      "text": "对照工牌班次，标出误抄的一栏",
+      "reply": "两处记录终于对应起来。你在有误的栏边标注原始依据，未擅自补写缺失内容。",
+      "flags": {
+        "air_compared": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "air_record"
+        ]
+      }
+    },
+    "mine_air_return": {
+      "text": "把带原始时刻的更正单交回医护",
+      "reply": "对方检查了抄页，将签名留在末尾，交给你一份路上用的物资。",
+      "flags": {
+        "air_done": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "air_compared"
+        ]
+      },
+      "goods": {
+        "bread": 1
+      }
+    },
+    "archive_labels_accept": {
+      "text": "「那些没标签的带盒，需要查移交单吗？」",
+      "reply": "列夫在整理无标签带盒，想请你从移交单找出内容归属。",
+      "flags": {
+        "labels_job": true
+      },
+      "once": true,
+      "req": {}
+    },
+    "archive_labels_inspect": {
+      "text": "从移交单核对带盒编号与日期",
+      "reply": "你逐项读出原始记录，将能核实的数字和日期分开抄写。缺少依据的一项仍留空。",
+      "flags": {
+        "labels_record": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "labels_job"
+        ]
+      }
+    },
+    "archive_labels_compare": {
+      "text": "对照带盘标签，保留无法确认的空格",
+      "reply": "两处记录终于对应起来。你在有误的栏边标注原始依据，未擅自补写缺失内容。",
+      "flags": {
+        "labels_checked": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "labels_record"
+        ]
+      }
+    },
+    "archive_labels_return": {
+      "text": "把有依据的标签和未确认列表交给列夫",
+      "reply": "对方检查了抄页，将签名留在末尾，交给你一份路上用的物资。",
+      "flags": {
+        "labels_done": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "labels_checked"
+        ]
+      },
+      "goods": {
+        "battery": 1
+      }
+    },
+    "ending_records": {
+      "text": "带着核实的维修、人员与录音记录回到地下各站",
+      "reply": "",
+      "flags": {},
+      "once": true,
+      "req": {
+        "all": [
+          "pressure_done",
+          "names_done",
+          "labels_done",
+          "father_met"
+        ]
+      },
+      "ending": "records"
     }
   },
   "panels": {
@@ -2293,6 +2825,12 @@
       "title": "二十年之后",
       "body": "父亲把那张合影放在台面上。\n他的手停在照片边缘。他看起来比你想象中瘦，头发也全白了。\n「老谢把你带大了。你过得怎么样？」\n控制台的灯还在缓慢闪动。你准备过许多句话，此刻却没有哪一句能轻易说出口。",
       "end": "resume:star_father"
+    },
+    "coal_back": {
+      "title": "留待下一个窗口",
+      "art": "coal_threshold",
+      "body": "你把尚未核完的记录夹回函里。返回公社的交换车已经到站，下次仍可按医护担保登记来访。\n有些事要多跑几趟，才会有确切的答案。",
+      "end": "map:commune"
     }
   },
   "endings": {
@@ -2331,6 +2869,31 @@
     "tea": {
       "title": "一杯热茶",
       "body": "你被调去做更体面的值守。每天能领到干净的水，也能在灯亮着的地方读完一页纸。\n你问过老兵的去向。记录上只写了转移。后来，你渐渐不再问。\n一次换班，你在玻璃里看见自己的制服。那天雪地里的枪口，早已不在别人手里。"
+    },
+    "workers": {
+      "title": "回信窗口",
+      "body": "第一封回信送到 D-6 时，公社还没有推开中央的大门。有人在工牌背面写下配给数，有人只问上封信里那个人是否还活着。你保留了拒绝署名的空白，也开始记谁收到了回复。地下的组织，从这一次次确切的送达里长出来。",
+      "art": "commune_threshold"
+    },
+    "rail": {
+      "title": "北线守望",
+      "body": "旧车轮缓慢转过站台。巡轨队在每次出发前核对道岔，回程后补上新塌方的位置。谢契的议事桌上多了一册损坏得很快的线路簿。你学会把路交给下一班人，而不把一次平安当成永远安全。",
+      "art": "sech_threshold"
+    },
+    "caravan": {
+      "title": "第三趟车",
+      "body": "第一趟送药，第二趟接人。第三趟，车上终于有个孩子带着书，问什么时候能到。谢契留住了自己的旗帜，公社的医护也没有换掉袖章。你们为这一段共同的路，商量出一张谁都能核对的时刻表。",
+      "art": "trolley"
+    },
+    "weather": {
+      "title": "地面与天空",
+      "body": "各站的观测表开始使用同一个时刻。有人因此避开一场风雪，有人仍在没有接通的区段失联。你与列夫继续修接收机，父亲守着另一班线路。天空依旧遥远，地面上的人先学会了互相报平安。",
+      "art": "star_threshold"
+    },
+    "records": {
+      "title": "把名字带回去",
+      "body": "你带走的纸里有泵组刻度、休养者的工牌、更正过的死亡记录，还有一盘保留着静默的录音。它们都不够壮观。每到一站，你却总能找到一个愿意接过去的人。谎报少了一处，交班便多了一点凭据。",
+      "art": "coal_threshold"
     }
   },
   "quests": [
@@ -2366,6 +2929,13 @@
             ]
           }
         }
+      ],
+      "actions": [
+        "mail_accept",
+        "mail_clue",
+        "mail_return",
+        "mail_take",
+        "mail_wrong"
       ]
     },
     {
@@ -2400,6 +2970,13 @@
             ]
           }
         }
+      ],
+      "actions": [
+        "seal_accept",
+        "seal_measure",
+        "seal_pick",
+        "seal_return",
+        "seal_wrong"
       ]
     },
     {
@@ -2434,6 +3011,13 @@
             ]
           }
         }
+      ],
+      "actions": [
+        "press_accept",
+        "press_deliver",
+        "press_ledger",
+        "press_private",
+        "press_public"
       ]
     },
     {
@@ -2468,6 +3052,13 @@
             ]
           }
         }
+      ],
+      "actions": [
+        "grow_accept",
+        "grow_read",
+        "grow_return",
+        "grow_shade",
+        "grow_wrong"
       ]
     },
     {
@@ -2502,6 +3093,14 @@
             ]
           }
         }
+      ],
+      "actions": [
+        "watch_accept",
+        "watch_map",
+        "watch_return",
+        "watch_set",
+        "watch_stop",
+        "watch_wrong"
       ]
     },
     {
@@ -2536,6 +3135,13 @@
             ]
           }
         }
+      ],
+      "actions": [
+        "books_dry",
+        "books_fire",
+        "books_read",
+        "books_return",
+        "sech_books"
       ]
     },
     {
@@ -2570,6 +3176,13 @@
             ]
           }
         }
+      ],
+      "actions": [
+        "linen_accept",
+        "linen_return",
+        "linen_sort",
+        "linen_tags",
+        "linen_wrong"
       ]
     },
     {
@@ -2604,6 +3217,13 @@
             ]
           }
         }
+      ],
+      "actions": [
+        "ending_records",
+        "names_accept",
+        "names_archive",
+        "names_return",
+        "names_tags"
       ]
     },
     {
@@ -2638,6 +3258,14 @@
             ]
           }
         }
+      ],
+      "actions": [
+        "tape_accept",
+        "tape_calibrate",
+        "tape_copy",
+        "tape_read",
+        "tape_return",
+        "tape_wrong"
       ]
     },
     {
@@ -2663,6 +3291,356 @@
             ]
           }
         }
+      ],
+      "actions": [
+        "letter_accept",
+        "letter_note",
+        "letter_plain",
+        "letter_read"
+      ]
+    },
+    {
+      "id": "workers_network",
+      "name": "把选择留在纸上",
+      "facility": "commune",
+      "accepted": "workers_job",
+      "done": "workers_done",
+      "background": "叶莲娜想恢复与 D-6 劳工班组的地下联络；署名必须出于本人意愿。",
+      "lead": "叶莲娜想恢复与 D-6 劳工班组的地下联络；署名必须出于本人意愿。",
+      "kind": "主线",
+      "stages": [
+        {
+          "target": "commune_records",
+          "step": "去东北联络室核对诉求和限区担保。",
+          "when": {
+            "all": []
+          }
+        },
+        {
+          "target": "commune_leave",
+          "step": "到东侧联络气闸，安排煤运窗口探访。",
+          "when": {
+            "all": [
+              "workers_draft"
+            ]
+          }
+        },
+        {
+          "target": "coal_clerk",
+          "step": "向煤运登记处征询本人意愿。",
+          "when": {
+            "all": [
+              "workers_transit"
+            ]
+          },
+          "place": "coal"
+        },
+        {
+          "target": "coal_exit",
+          "step": "带着原稿离开限区，返回公社。",
+          "when": {
+            "all": [
+              "workers_signed"
+            ]
+          },
+          "place": "coal"
+        },
+        {
+          "target": "commune_printer",
+          "step": "回到公社，向娜佳交付原样记录。",
+          "when": {
+            "all": [
+              "workers_signed"
+            ],
+            "floor": [
+              "commune"
+            ]
+          },
+          "place": "commune"
+        }
+      ],
+      "actions": [
+        "ending_workers",
+        "workers_accept",
+        "workers_coal",
+        "workers_deliver",
+        "workers_draft",
+        "workers_return",
+        "workers_sign"
+      ]
+    },
+    {
+      "id": "north_train",
+      "name": "让车轮再转起来",
+      "facility": "sech",
+      "accepted": "north_job",
+      "done": "north_done",
+      "background": "选择把旧军列恢复为巡轨线或民用联络线。",
+      "lead": "选择把旧军列恢复为巡轨线或民用联络线。",
+      "kind": "主线",
+      "stages": [
+        {
+          "target": "sech_manual",
+          "step": "去西北调度台读最近的检修单。",
+          "when": {
+            "all": []
+          }
+        },
+        {
+          "target": "sech_brake",
+          "step": "到东侧接送车厢南端的手闸和检修孔，先固定车轮，再查轴箱。",
+          "when": {
+            "all": [
+              "north_record"
+            ]
+          }
+        },
+        {
+          "target": "sech_quartermaster",
+          "step": "带回执请彼得复核，随后在候车库决定第一班用途。",
+          "when": {
+            "all": [
+              "north_ready"
+            ]
+          }
+        }
+      ],
+      "actions": [
+        "ending_caravan",
+        "ending_train",
+        "north_accept",
+        "north_axle",
+        "north_chock",
+        "north_record",
+        "north_verify"
+      ]
+    },
+    {
+      "id": "weather_link",
+      "name": "每一站的天气",
+      "facility": "starcity",
+      "accepted": "weather_job",
+      "done": "weather_done",
+      "background": "把维护工作延伸成一条可验证的地下观测联络网。",
+      "lead": "把维护工作延伸成一条可验证的地下观测联络网。",
+      "kind": "主线",
+      "stages": [
+        {
+          "target": "star_tape",
+          "step": "去东侧通信室按校时码校钟。",
+          "when": {
+            "all": []
+          }
+        },
+        {
+          "target": "star_calibrator",
+          "step": "在校准台用手摇机恢复中继回路。",
+          "when": {
+            "all": [
+              "weather_clock"
+            ]
+          }
+        },
+        {
+          "target": "star_radio",
+          "step": "到远程台做北线整点复读测试。",
+          "when": {
+            "all": [
+              "weather_power"
+            ]
+          }
+        },
+        {
+          "target": "star_technician",
+          "step": "请列夫核对时刻和空缺数据。",
+          "when": {
+            "all": [
+              "weather_ready"
+            ]
+          }
+        }
+      ],
+      "actions": [
+        "ending_weather",
+        "weather_accept",
+        "weather_clock",
+        "weather_power",
+        "weather_return",
+        "weather_test"
+      ]
+    },
+    {
+      "id": "pressure_copy",
+      "name": "水压留下的刻度",
+      "facility": "waterworks",
+      "accepted": "pressure_job",
+      "done": "pressure_done",
+      "background": "老兵想把维修经验带回 D-6，问你能否记下泵组正常的压力范围。",
+      "lead": "老兵想把维修经验带回 D-6，问你能否记下泵组正常的压力范围。",
+      "kind": "支线",
+      "stages": [
+        {
+          "target": "plant_bypass",
+          "step": "核对泵房铭牌的绿区刻度",
+          "when": {
+            "all": []
+          }
+        },
+        {
+          "target": "plant_log",
+          "step": "在交接本抄页上画出压力范围",
+          "when": {
+            "all": [
+              "pressure_seen"
+            ]
+          }
+        },
+        {
+          "target": "plant_veteran",
+          "step": "把抄好的正常范围交给老兵",
+          "when": {
+            "all": [
+              "pressure_written"
+            ]
+          }
+        }
+      ],
+      "actions": [
+        "ending_records",
+        "pressure_copy_accept",
+        "pressure_copy_compare",
+        "pressure_copy_inspect",
+        "pressure_copy_return"
+      ]
+    },
+    {
+      "id": "medicine_seal",
+      "name": "封袋上的两道签名",
+      "facility": "commune",
+      "accepted": "parcel_job",
+      "done": "parcel_done",
+      "background": "安娜要给交换窗口送一批敷料，需要另一个人核数并复核封签。",
+      "lead": "安娜要给交换窗口送一批敷料，需要另一个人核数并复核封签。",
+      "kind": "支线",
+      "stages": [
+        {
+          "target": "commune_records",
+          "step": "按医护交换清单核对包数",
+          "when": {
+            "all": []
+          }
+        },
+        {
+          "target": "commune_well",
+          "step": "请水井值班员见证封袋数量",
+          "when": {
+            "all": [
+              "parcel_manifest"
+            ]
+          }
+        },
+        {
+          "target": "commune_anna",
+          "step": "将双人复核的封袋交回安娜",
+          "when": {
+            "all": [
+              "parcel_checked"
+            ]
+          }
+        }
+      ],
+      "actions": [
+        "medicine_seal_accept",
+        "medicine_seal_compare",
+        "medicine_seal_inspect",
+        "medicine_seal_return"
+      ]
+    },
+    {
+      "id": "mine_air",
+      "name": "交班前的一口气",
+      "facility": "coal",
+      "accepted": "air_job",
+      "done": "air_done",
+      "background": "医护担心通风检查的两班记录对不上，请你核对原始时间。",
+      "lead": "医护担心通风检查的两班记录对不上，请你核对原始时间。",
+      "kind": "支线",
+      "stages": [
+        {
+          "target": "coal_archive",
+          "step": "查最近两班通风巡检原始时间",
+          "when": {
+            "all": []
+          }
+        },
+        {
+          "target": "coal_tagboard",
+          "step": "对照工牌班次，标出误抄的一栏",
+          "when": {
+            "all": [
+              "air_record"
+            ]
+          }
+        },
+        {
+          "target": "coal_medic",
+          "step": "把带原始时刻的更正单交回医护",
+          "when": {
+            "all": [
+              "air_compared"
+            ]
+          }
+        }
+      ],
+      "actions": [
+        "mine_air_accept",
+        "mine_air_compare",
+        "mine_air_inspect",
+        "mine_air_return"
+      ]
+    },
+    {
+      "id": "archive_labels",
+      "name": "无名的盒子",
+      "facility": "starcity",
+      "accepted": "labels_job",
+      "done": "labels_done",
+      "background": "列夫在整理无标签带盒，想请你从移交单找出内容归属。",
+      "lead": "列夫在整理无标签带盒，想请你从移交单找出内容归属。",
+      "kind": "支线",
+      "stages": [
+        {
+          "target": "star_archive",
+          "step": "从移交单核对带盒编号与日期",
+          "when": {
+            "all": []
+          }
+        },
+        {
+          "target": "star_tape",
+          "step": "对照带盘标签，保留无法确认的空格",
+          "when": {
+            "all": [
+              "labels_record"
+            ]
+          }
+        },
+        {
+          "target": "star_technician",
+          "step": "把有依据的标签和未确认列表交给列夫",
+          "when": {
+            "all": [
+              "labels_checked"
+            ]
+          }
+        }
+      ],
+      "actions": [
+        "archive_labels_accept",
+        "archive_labels_compare",
+        "archive_labels_inspect",
+        "archive_labels_return",
+        "ending_records"
       ]
     }
   ]

@@ -5,6 +5,7 @@ const Chapter=preload("res://scripts/d6_chapter.gd")
 const Economy=preload("res://scripts/economy.gd")
 const Conversation=preload("res://scripts/conversation.gd")
 const Campaign=preload("res://scripts/campaign.gd")
+const Progression=preload("res://scripts/progression.gd")
 const Life=preload("res://scripts/resident_dialogue.gd")
 ## State and authored dialogue live outside level geometry; no future chapters are fixed.
 signal changed
@@ -141,8 +142,8 @@ func view(id: String) -> Dictionary:
 			v.options=[opt("leave_official","检查装备，准备随队离站",f("accepted") and f("kit"),"需要登记征召并在作业层装备库领取装备")]
 		"exit":
 			v.name="东侧维修坡道"
-			v.options=[opt("leave_east","整理背包，准备离开 D-6",route!="", "先通过维修门、侧门或检修管线")]
-	v=Economy.decorate(Campaign.decorate(Chapter.decorate(Life.decorate(Narrative.decorate(v,self),self),self),self),self)
+			v.options=[opt("leave_east","整理背包，准备离开 D-6",route!="" and has("mask") and has("filter"), "先通过维修门、侧门或检修管线")]
+	v=Progression.decorate(Economy.decorate(Campaign.decorate(Chapter.decorate(Life.decorate(Narrative.decorate(v,self),self),self),self),self),self)
 	for option in v.options:
 		if once_topic(option.key) and option.key in read_topics:option.enabled=false;option.reason="已聊过，记在聊天记录里"
 	return v
@@ -152,12 +153,14 @@ func act(key: String) -> String:
 	var valid=false
 	last_action_valid=false
 	last_outcome={}
-	for id in ["box","radio","notice","chalk","semyon","mikhail","cook","valve","nina","cabinet","relay","supply","commander","igor","side","hatch","lift","exit"]+Life.IDS+Chapter.IDS+Campaign.data().interactions.keys():
+	for id in ["box","radio","notice","chalk","semyon","mikhail","cook","valve","nina","cabinet","relay","supply","commander","igor","side","hatch","lift","exit"]+Life.IDS+Chapter.IDS+Progression.IDS+Campaign.data().interactions.keys():
 		for o in view(id).options:
 			if o.key==key and o.enabled:valid=true
 	if not valid:return "条件尚未满足，或这件事已经做过了。"
 	last_action_valid=true
 	if once_topic(key):read_topics.append(key)
+	if Progression.handles(key):
+		last_reply=Progression.act(self,key);changed.emit();return last_reply
 	if key.begins_with("meal_"):
 		last_reply=Economy.meal(self,key.substr(5))
 		return last_reply
@@ -281,7 +284,7 @@ static func once_topic(key:String)->bool:
 	return Narrative.CHAT.has(key) or key in ["father","vera_heat","semyon_advice","semyon_radio","briefing","igor_talk","armory_check","gate_daily","coal_ask","resident_shift","resident_igor","vera_day","vera_nina","knock_rooms","nina_reckless"]
 
 func serialize() -> Dictionary:
-	return {"version":1,"content_revision":8,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
+	return {"version":1,"content_revision":9,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
 func restore(data: Dictionary):
 	flags=data.get("flags",{}).duplicate(true)
 	read_topics.assign(data.get("read_topics",[]))
@@ -316,6 +319,8 @@ func restore(data: Dictionary):
 			var note="联络记录复核：东方-7 是星城的短波呼号，尚不能确认父亲下落。可再向叶莲娜核实。"
 			know(note)
 			if conversations.has("commune_leader"):conversations.commune_leader.append({"speaker":"narrator","text":note})
+	if int(data.get("content_revision",0))<9:
+		for key in ["sech_father","commune_route","father_work"]:flags.erase("c_done_"+key)
 	# A v4 completion meant only "left D-6", not the unseen new chapter.
 	if ending and not flags.has("chapter_endpoint") and not flags.get("comic",{}).get("active",false) and route!="":
 		ending=false

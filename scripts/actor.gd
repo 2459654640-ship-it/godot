@@ -41,6 +41,7 @@ func setup(kit, player: bool, coat: String = "green", hat: bool = false):
 	cap.height = 1.72
 	cs.shape = cap
 	cs.position.y = 0.86
+	if art_id=="ambient_child":cap.radius=.2;cap.height=1.18;cs.position.y=.59
 	add_child(cs)
 	visual = Node3D.new()
 	add_child(visual)

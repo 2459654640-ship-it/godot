@@ -464,5 +464,69 @@
     "clips": [
       "idle"
     ]
+  },
+  "ambient_worker": {
+    "file": "ambient_worker.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "ambient_woman": {
+    "file": "ambient_woman.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "ambient_child": {
+    "file": "ambient_child.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "ambient_elder": {
+    "file": "ambient_elder.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
   }
 }

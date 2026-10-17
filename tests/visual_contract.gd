@@ -28,12 +28,16 @@ func run():
 			if id=="commander":continue
 			var p=baseline.npc[id]
 			if id not in ["mikhail","resident","diner"]:check(w.npcs[id].anchor.is_equal_approx(Vector3(p[0],p[1],p[2])),"retained story NPC anchor: "+id)
-		check(w.targets.size()==baseline.targets.size()+7,"seven residential/return interactions added; old IDs retained")
+		check(w.targets.size()==baseline.targets.size()+8,"residential, return and inside safety-latch interactions retain original IDs")
 		for id in baseline.targets:
 			if w.npcs.has(id) or id=="commander":continue
 			var p=baseline.targets[id]
 			check(w.targets[id].pos.is_equal_approx(Vector3(p[0],p[1],p[2])),"original target coordinate: "+id)
 		for old in baseline.solids:
+			if old.name=="SinkBase":
+				var pedestal=w.kit.solids.filter(func(solid):return solid.name=="SinkBase")[0]
+				check(pedestal.top<.725 and pedestal.rect.size.y<2.7,"washbasin pedestal is inset below the lip, with no coplanar overlapping ends")
+				continue
 			if old.name in ["West","SouthCut","EastCut"]:continue # Authorized new west-wing entrance.
 			if old.name=="Crate" and old.rect.begins_with("[P: (12.95, 8.675)"):continue # Open ramp replaces this crate.
 			var retained=false

@@ -62,7 +62,7 @@ func _ready():
 	if transfer and not transfer.pending.is_empty():
 		story.restore(transfer.pending.story)
 		arrival=transfer.pending.position
-		if floor_id not in ["life","labor"] and transfer.pending.story.get("layout_revision",0)<8:arrival=CampaignMaps.LAYOUTS[floor_id].spawn
+		if ((floor_id=="sech" and transfer.pending.story.get("layout_revision",0)<9) or (floor_id not in ["life","labor","sech"] and transfer.pending.story.get("layout_revision",0)<8)):arrival=CampaignMaps.LAYOUTS[floor_id].spawn
 		transfer.pending={}
 	kit=Kit.new(self)
 	build_environment()
@@ -95,11 +95,13 @@ func _ready():
 		build_targets()
 		Wing.targets(self)
 		target("pipe_exit",Vector3(10.8,0,8.6),"检修管线出口")
-		target("other_life",Vector3(14,0,-5.5),"其它生活区")
+		target("other_life",Vector3(17.04,0,1.6),"其它生活区")
 	elif floor_id=="labor":Labor.targets(self)
 	else:CampaignMaps.targets(self)
+	if floor_id not in ["life","labor"]:CampaignMaps.residents(self)
 	if arrival.is_finite():player.position=arrival
 	story.context.floor=floor_id
+	if floor_id=="waterworks" and story.route=="official":story.flags.plant_briefed=true
 	kit.prepare_highlights()
 	camera=Camera3D.new()
 	add_child(camera)
@@ -177,7 +179,7 @@ func build_environment():
 	light.shadow_enabled=true
 	light.directional_shadow_max_distance=65
 	light.shadow_bias=0.04
-	kit.box("UndergroundVoid",Vector3(0,-0.65,0),Vector3(200,0.5,200),"black")
+	kit.box("UndergroundVoid",Vector3(0,-1.4 if floor_id=="sech" else -.65,0),Vector3(200,0.5,200),"black")
 
 func build_structure():
 	kit.box("Foundation",Vector3(0,-0.30,0.5),Vector3(30.5,0.5,19.5),"concrete")
@@ -194,7 +196,8 @@ func build_structure():
 	kit.wall("WestSouth",Vector2(-15,2.46),Vector2(-15,10))
 	kit.wall("SouthCut",Vector2(-15,10),Vector2(9,10),true)
 	kit.box("RampSouthRail",Vector3(12,.5,9.9),Vector3(6,.9,.18),"wood",true)
-	kit.wall("EastCut",Vector2(15,-9),Vector2(15,3.2),true)
+	kit.wall("EastCut",Vector2(15,-9),Vector2(15,0),true)
+	zones.append({"name":"其他生活区门前","rect":Rect2(15,0,2.2,3.2),"code":"00"})
 	kit.box("RampEdgeStop",Vector3(14.9,1.3,6.6),Vector3(.22,2.6,6.8),"dark",true).visible=false
 	# North rooms: independent spaces linked by a 3.2m main circulation spine.
 	for x in [-8,1,10]:kit.wall("NorthPartition",Vector2(x,-9),Vector2(x,0),true)
@@ -227,6 +230,7 @@ func build_structure():
 	gate_body=gate_mesh.get_child(0).get_child(0)
 	side_mesh=kit.box("LockedSideDoor",Vector3(9,1.02,4.5),Vector3(0.12,2.04,1.45),"rust",true)
 	side_body=side_mesh.get_child(0).get_child(0)
+	kit.box("InnerLatch",Vector3(9.25,1,5.27),Vector3(.15,.4,.12),"brass")
 	for x in [-14,-7,0,7,14]:
 		kit.box("PillarFoot",Vector3(x,0.1,-8.65),Vector3(0.4,0.2,0.5),"dark")
 		kit.box("Pillar",Vector3(x,1.4,-8.72),Vector3(0.24,2.8,0.34),"concrete")
@@ -354,9 +358,9 @@ func build_supply():
 func build_south():
 	# Washroom: sinks and heater are wall fixtures with unified collision hulls.
 	kit.box("SinkBank",Vector3(-13.8,0.85,6.5),Vector3(0.9,0.25,2.7),"cream",true)
-	kit.box("SinkBase",Vector3(-13.8,0.4,6.5),Vector3(0.85,0.8,2.7),"metal",true)
+	kit.box("SinkBase",Vector3(-13.8,0.34,6.5),Vector3(0.85,0.68,2.5),"metal",true)
 	for z in [5.6,6.5,7.4]:
-		kit.box("SinkBasin",Vector3(-13.6,0.99,z),Vector3(0.55,0.02,0.55),"dark")
+		kit.box("SinkBasin",Vector3(-13.6,.986,z),Vector3(0.55,.012,0.55),"dark")
 		kit.pipe(Vector3(-14,0.9,z),Vector3(-14,1.28,z),0.025,"metal")
 		kit.pipe(Vector3(-14,1.28,z),Vector3(-13.8,1.28,z),0.025,"metal")
 	kit.box("FuseCabinet",Vector3(-9.0,1.1,8.9),Vector3(0.8,1.5,0.35),"metal",true)
@@ -383,6 +387,8 @@ func build_south():
 	kit.cyl("GuardCup",Vector3(4.8,0.92,7.7),0.09,0.17,"cream")
 	kit.bench(Vector3(3.1,0,9.1),1.1,true,PI)
 	kit.box("RelayBox",Vector3(7.7,1.0,3.8),Vector3(0.9,1.3,0.45),"metal",true)
+	kit.box("GuardLampCloth",Vector3(7.1,.93,3.9),Vector3(.2,.04,.16),"cloth")
+	kit.lamp(Vector3(7,1.9,3.85),true,.65,3)
 	kit.box("RelayScreen",Vector3(7.7,1.25,4.04),Vector3(0.55,0.28,0.02),"cold_light")
 	kit.cyl("PressureGauge",Vector3(8.6,1.4,5.5),0.18,0.09,"cream").rotation.x=PI/2
 	kit.pipe(Vector3(8.6,0.1,5.5),Vector3(8.6,1.3,5.5),0.04)
@@ -482,6 +488,7 @@ func build_targets():
 	target("relay",Vector3(7.7,0,4.5),"压力监测箱")
 	target("gate",Vector3(8.2,0,6.7),"维修门")
 	target("side",Vector3(8.2,0,4.5),"检修侧门")
+	target("inner_latch",Vector3(9.8,0,4.5),"内侧安全闩")
 	target("hatch",Vector3(7.7,0,8.7),"检修盖板")
 	target("lift",Vector3(-3.3,0,8.3),"楼梯 / 作业层")
 	target("exit",Vector3(13.4,0,6.6),"维修坡道出口")
@@ -504,26 +511,14 @@ func _physics_process(delta):
 	else:step_clock=0
 	if floor_id=="life":
 		if waiting_shift:
-			if phase>=8.0:
+			if phase>=8.0 and story.guard_clear():
 				waiting_shift=false
 				story.route="shift"
 				story.flags.side_pass=true
-				side_body.set_deferred("disabled",true)
-				side_mesh.visible=false
 				hud.toast("黄灯已亮 · 侧门开启，穿过侧门进入东段")
 				story.changed.emit()
-			else:hud.prompt.text="等候换班 · 还有 %d 秒  /  Esc 可取消" % ceili(8.0-phase)
-		# After the timed opening, never close on a player in the doorway. Keep it open once passed.
+			else:hud.prompt.text="确认伊戈尔已离开 · 等候黄灯 / Esc 取消"
 		if story.f("side_pass") and player.position.x>9.45:story.flags.side_crossed=true
-		if story.f("side_pass") and not story.f("side_crossed") and phase<8 and not waiting_shift:
-			if absf(player.position.x-9)>0.6:
-				side_body.set_deferred("disabled",false)
-				side_mesh.visible=true
-				story.flags.side_pass=false
-				story.route=""
-		if story.f("side_crossed"):
-			side_body.set_deferred("disabled",true)
-			side_mesh.visible=false
 		update_guard(delta)
 		if player.position.x>9.4 and previous_position.x<=9.4:
 			if absf(player.position.z-6.7)<0.9 and story.f("gate"):
@@ -573,6 +568,7 @@ func update_guard(delta:float):
 	if not npcs.has("igor"):return
 	var guard=npcs.igor
 	var inspection=Vector3(2.8,0,1.4)
+	if story.f("side_inside_release") and player.position.x<8.2:story.flags.side_inside_release=false
 	if story.f("guard_task"):
 		guard.anchor=inspection
 		if Vector2(guard.position.x-inspection.x,guard.position.z-inspection.z).length()<.65:
@@ -584,7 +580,11 @@ func update_guard(delta:float):
 				hud.toast("伊戈尔查完总表，正往岗哨走。维修记录仍可用。")
 	else:
 		guard_away_time=0.0
-		guard.anchor=Vector3(7.3,0,5.5) if phase>=8 else Vector3(6.3,0,6.6)
+		guard.anchor=Vector3(6.3,0,6.6)
+		if story.f("side_pass") and not story.f("side_inside_release") and guard.position.distance_to(guard.anchor)<1.2 and absf(player.position.x-9)>.8:
+			story.flags.side_pass=false;story.flags.igor_suspicious=true
+			hud.toast("伊戈尔发现侧门开着，正在把门关上。",6)
+			story.changed.emit()
 	refresh_guard_context()
 
 func refresh_guard_context():
@@ -643,7 +643,10 @@ func _unhandled_input(event):
 
 func interact(id: String):
 	refresh_guard_context()
-	if id=="side" and story.f("side") and not story.f("side_crossed"):
+	if id=="igor" and story.f("igor_suspicious") and not story.f("igor_debt_known"):
+		story.flags.igor_debt_known=true;story.changed.emit()
+	if id=="side" and story.f("side") and not story.f("side_pass"):
+		if not story.guard_clear():hud.toast("伊戈尔仍看得到门口，先设法让他去走廊查表。",5);return
 		waiting_shift=true
 		hud.toast("已开始等候黄灯 · Esc 取消")
 		return
@@ -704,19 +707,28 @@ func on_story_changed():
 				gate_tween=create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 				gate_tween.tween_property(campaign_gate,"position",destination,1.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 				get_node("/root/Session").sound("interact")
-	if gate_body:
-		gate_body.set_deferred("disabled",story.f("gate"))
-		gate_mesh.visible=not story.f("gate")
-	if side_body and not story.f("side_crossed"):
-		side_body.set_deferred("disabled",true if story.f("side_pass") else false)
-		side_mesh.visible=not story.f("side_pass")
+	if gate_mesh:animate_d6_door(gate_mesh,story.f("gate"))
+	if side_mesh:animate_d6_door(side_mesh,story.f("side_pass"))
 	if hud:hud.refresh_status()
+
+func animate_d6_door(mesh:MeshInstance3D,opened:bool):
+	var state=1 if opened else 0
+	if mesh.get_meta("state",-1)==state:return
+	mesh.set_meta("state",state)
+	if not mesh.has_meta("closed"):mesh.set_meta("closed",mesh.position)
+	var destination:Vector3=mesh.get_meta("closed")+Vector3(0,2.3*state,0)
+	var previous=mesh.get_meta("motion") if mesh.has_meta("motion") else null
+	if previous is Tween and previous.is_valid():previous.kill()
+	if not initialized:mesh.position=destination;return
+	var motion=create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
+	mesh.set_meta("motion",motion)
+	motion.tween_property(mesh,"position",destination,.9).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func save_game():
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z]
 	data.floor=floor_id
-	data.layout_revision=8
+	data.layout_revision=9
 	var file=FileAccess.open(save_path,FileAccess.WRITE)
 	if file:
 		file.store_string(JSON.stringify(data,"\t"))
@@ -736,9 +748,10 @@ func load_game():
 	if data.get("floor","life")!=floor_id:
 		get_node("/root/Session").enter(data,data.get("floor","life"),Vector3(p[0],maxf(p[1],.04),p[2]))
 		return
+	hud.observing=false
 	story.restore(data)
 	player.position=Vector3(p[0],maxf(p[1],0.04),p[2])
-	if floor_id not in ["life","labor"] and data.get("layout_revision",0)<8:player.position=CampaignMaps.LAYOUTS[floor_id].spawn
+	if ((floor_id=="sech" and data.get("layout_revision",0)<9) or (floor_id not in ["life","labor","sech"] and data.get("layout_revision",0)<8)):player.position=CampaignMaps.LAYOUTS[floor_id].spawn
 	player.velocity=Vector3.ZERO
 	waiting_shift=false
 	guard_away_time=0.0
@@ -880,14 +893,12 @@ func build_implied_life():
 	for x in [-19.8,-15.2]:kit.box("DistantLifeSide",Vector3(x,1.3,-1.7),Vector3(.18,2.6,3.6),"rust")
 	kit.box("DistantLifeBlack",Vector3(-17.5,1.2,-3.6),Vector3(4.7,2.4,.2),"black")
 	kit.lamp(Vector3(-17.5,2.2,-3.4),true,.9,4)
-	kit.box("DistantEastFloor",Vector3(16.4,-.02,-5.5),Vector3(2.8,.1,3),"concrete")
-	for z in [-7,-4]:kit.box("DistantEastWall",Vector3(16.4,1.25,z),Vector3(2.8,2.5,.18),"corrugated")
-	kit.box("ServiceWingFascia",Vector3(16.4,-.34,-5.5),Vector3(3,.6,3.2),"concrete")
-	for x in [15.15,17.65]:
-		kit.box("ServiceWingRib",Vector3(x,1.3,-6.85),Vector3(.16,2.6,.25),"metal")
-	kit.box("DistantEastBlack",Vector3(17.8,1.25,-5.5),Vector3(.2,2.5,3),"black")
-	kit.box("ClosedEastDoor",Vector3(14.83,1,-5.5),Vector3(.12,2,1.4),"metal")
-	kit.lamp(Vector3(16.8,2.2,-6.8),false,.9,4)
+	kit.box("EastCorridorExtension",Vector3(16.1,-.1,1.6),Vector3(2.2,.2,3.2),"tile",true)
+	kit.box("EastCorridorSurface",Vector3(16.1,.006,1.6),Vector3(2.2,.012,3.16),"tile")
+	for z in [0,3.2]:kit.box("EastExtensionWall",Vector3(16.1,1.3,z),Vector3(2.2,2.6,.16),"plaster",true)
+	kit.box("OtherLifeDoor",Vector3(17.12,1.1,1.6),Vector3(.16,2.2,2.6),"metal",true)
+	kit.label("其他生活区 / 暂闭",Vector3(17,2.4,1.6),22).rotation.y=-PI/2
+	kit.lamp(Vector3(16,2.3,.25),true,.8,4)
 
 func return_checkpoint():
 	var data=story.departure_checkpoint.duplicate(true)

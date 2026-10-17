@@ -6,7 +6,12 @@ static func build(w,plan:Dictionary,zones:Array):
 	for index in zones.size():
 		var r:Rect2=zones[index].rect
 		var material="wood" if w.floor_id in ["commune","sech"] else "concrete"
-		k.box("Foundation",Vector3(r.get_center().x,-.3,r.get_center().y),Vector3(r.size.x,.5,r.size.y),"concrete")
+		if w.floor_id=="sech" and zones[index].code=="00":material="concrete"
+		if w.floor_id=="commune" and zones[index].code in ["01","05"]:material="tile"
+		if w.floor_id=="waterworks" and zones[index].code in ["05","06"]:material="tile"
+		if w.floor_id=="coal" and zones[index].code in ["02","03"]:material="tile"
+		if w.floor_id=="starcity" and zones[index].code=="03":material="tile"
+		if w.floor_id!="sech" or zones[index].code=="00":k.box("Foundation",Vector3(r.get_center().x,-.3,r.get_center().y),Vector3(r.size.x,.5,r.size.y),"concrete")
 		k.box("FloorCollision",Vector3(r.get_center().x,-.1,r.get_center().y),Vector3(r.size.x,.2,r.size.y),material,true).visible=false
 		var floor=k.box("Floor_"+str(index),Vector3(r.get_center().x,.009,r.get_center().y),Vector3(r.size.x-.02,.018,r.size.y-.02),material)
 		floor.material_override=floor.material_override.duplicate();floor.material_override.albedo_color=Color(plan.palette)

@@ -33,6 +33,7 @@ func _initialize():
 				var expected_options=expected.options[id].duplicate()
 				if id=="supply":expected_options.erase("get_kit")
 				if id=="lift":expected_options.erase("leave_official")
+				if id=="exit" and expected_options.has("leave_east"):expected_options.leave_east=s.route!="" and s.has("mask") and s.has("filter")
 				if id=="hatch" and s.f("hatch"):
 					for key in expected_options:expected_options[key]=false
 				for key in expected_options:

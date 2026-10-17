@@ -7,6 +7,8 @@ static func data()->Dictionary:
 	if _data.is_empty():_data=JSON.parse_string(FileAccess.get_file_as_string("res://data/campaign.json"))
 	return _data
 static func permits(s,req:Dictionary)->bool:
+	if req.has("any") and not req.any.any(func(flag):return s.f(flag)):return false
+	if req.has("floor") and s.context.get("floor","") not in req.floor:return false
 	for flag in req.get("all",[]):
 		if not s.f(flag):return false
 	for flag in req.get("not",[]):
@@ -19,6 +21,7 @@ static func permits(s,req:Dictionary)->bool:
 static func available(s,key:String)->bool:
 	if not data().actions.has(key):return false
 	var a:Dictionary=data().actions[key]
+	if s.Progression.failed_action(s,key):return false
 	return not (a.get("once",true) and s.f("c_done_"+key)) and permits(s,a.get("req",{}))
 static func decorate(v:Dictionary,s)->Dictionary:
 	if not data().interactions.has(v.id):return v
@@ -28,6 +31,7 @@ static func decorate(v:Dictionary,s)->Dictionary:
 		if permits(s,variant[0]) if variant[0] is Dictionary else s.f(variant[0]):v.body=variant[1]
 	for key in d.options:
 		var words:String=data().actions[key].text
+		if key=="coal_return" and not s.f("brother_found"):words="沿原探访通路返回公社，稍后再来"
 		if key=="commune_route" and not s.has("frequency"):words="「北线能联系到什么地方？」"
 		v.options.append(s.opt("c_"+key,words,s.context.get("floor","")==d.facility and available(s,key)))
 	return v
@@ -47,7 +51,8 @@ static func act(s,key:String)->String:
 		if count>0:
 			s.economy[kind]+=count
 			s.economy.ledger.append({"kind":"quest","id":key,"ammo":kind,"rounds":count})
-	if a.has("travel"):s.flags.next_sequence=a.travel
+	if key=="plant_leave":s.Progression.fail(s,["waterworks"],"小队已带物资离开水厂，无法再返回处理。")
+	if a.has("travel"):s.flags.next_sequence="coal_back" if key=="coal_return" and not s.f("brother_found") else a.travel
 	if a.has("ending"):finish(s,a.ending)
 	if a.get("reply","")!="":s.know(data().actions[key].text+"："+a.reply)
 	var reply:String=a.get("reply","")
@@ -67,9 +72,10 @@ static func side_tasks(s)->Array:
 		for stage in q.stages:
 			if permits(s,stage.when):current=stage
 		var target:String=current.target
-		rows.append({"id":q.id,"name":q.name,"done":s.f(q.done),"place":q.facility,"background":q.background,"step":"已交付，报酬与经过记入手记。" if s.f(q.done) else current.step,"target":target,"area":data().interactions[target].name})
+		rows.append({"kind":q.get("kind","支线"),"id":q.id,"name":q.name,"done":s.f(q.done),"place":current.get("place",q.facility),"background":q.background,"step":"已交付，报酬与经过记入手记。" if s.f(q.done) else current.step,"target":target,"area":data().interactions[target].name})
 	return rows
 static func finish(s,id:String):
+	s.Progression.fail(s,[],"旅程已经收束，这项委托未能完成。")
 	s.flags.campaign_ending=id
 	s.flags.chapter_endpoint="ending:"+id
 	s.ending=true

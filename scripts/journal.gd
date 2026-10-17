@@ -5,6 +5,7 @@ static func row(id:String,name:String,done:bool,place:String,background:String,s
 static func tasks(s)->Array:
 	var out=[]
 	if s.f("intro_done") or s.f("vitamins_taken"):
+		out.append(row("journey","D-6 之外",s.f("departure_committed"),"life","净水故障让你必须考虑出路。征召与独自离站都能继续故事。","先下层了解征召；独自走可询问妮娜或米哈伊尔。离站必须备齐面具与滤毒罐。","commander","D-6 两层"))
 		out.append(row("vitamins","今天的维生素 D",s.f("vitamins_taken"),"life","老爹嘱咐先领今日配给，再去报到。","生活层东端，第七供应点的柳德米拉留着今天的一份。","supply","第 7 供应点"))
 		out.append(row("report","征召报到",s.f("accepted"),"labor","你的名字在明晨出发的小队名单上。","从值班休息区的楼梯下去，在作业层集合区找科瓦廖夫。","commander","征召集合区"))
 	if s.f("accepted"):out.append(row("kit","出发准备",s.f("kit"),"labor","中尉签了登记单，面具和滤毒罐由装备库发放。","作业层北侧的装备库；领齐后到东边正门候车区。","armory","装备库"))
@@ -16,7 +17,7 @@ static func tasks(s)->Array:
 		out.append(row("pressure","东段压力监测",s.has("permit"),"life","妮娜的监测箱烧坏了保险芯，检修回路已断电。",step,target,area))
 	if s.f("cook_job") or s.f("valve"):out.append(row("kitchen","厨房漏水",s.f("soup_claimed"),"life","加琳娜接了一夜漏水，答应给帮忙的人留热汤。","漏已止住，回厨房找加琳娜。" if s.f("valve") else "先向维修工坊的妮娜借扳手，再看食堂灶台旁的回水阀。","cook" if s.f("valve") else ("valve" if s.has("wrench") else "nina"),"公共食堂" if s.has("wrench") or s.f("valve") else "维修工坊"))
 	if s.f("heat_job") or s.f("heating_fixed"):out.append(row("heating","西翼暖气",s.has("report"),"life","帕维尔请你看看西翼家属房的暖气。","修好后找帕维尔复核。" if s.f("heating_fixed") else "借扳手，到西翼晾晒架取公用干布；再看家属房的排气阀。","resident" if s.f("heating_fixed") else ("heating" if s.has("rag") else "laundry"),"西翼家属房"))
-	if s.f("shift"):out.append(row("shift","换班时的侧门",s.f("side_crossed"),"life","米哈伊尔说黄灯亮起时，岗哨会去查表。","维修岗压力表边的窄门；先观察黄灯，不必冒进。","side","东侧维修岗"))
+	if s.f("shift"):out.append(row("shift","换班时的侧门",s.f("side_crossed"),"life","米哈伊尔说黄灯亮起时，岗哨会去查表。","先请伊戈尔去走廊查表，等他实际离开视线，再到压力表旁侧门等黄灯。","side","东侧维修岗"))
 	if s.f("quest_photo") or s.f("father"):out.append(row("photo","旧照片",s.f("father"),"life","你决定找老爹问一问照片上的往事。","回相邻卧室，把照片递给谢苗诺夫。","semyon","谢苗诺夫的卧室"))
 	if s.f("plant_briefed") or s.f("plant_diagram") or s.f("water_secured"):
 		var step="入口气闸的值班桌上压着一张图；就在进门左手、科瓦廖夫附近。";var target="plant_diagram";var area="入口气闸"
@@ -47,9 +48,13 @@ static func tasks(s)->Array:
 		if s.f("star_access"):step="蓝门已经打开，北侧中央的测控室有人在等你。";target="star_father";area="测控室"
 		out.append(row("father","蓝门后的人",s.f("father_met"),"starcity","哨兵接通了内线，让你先确认检修回路。",step,target,area))
 	out.append_array(preload("res://scripts/campaign.gd").side_tasks(s))
-	return out
+	if s.f("igor_debt_known") or s.f("igor_chore") or s.f("igor_settled"):out.append(row("igor_debt","岗哨的一笔旧账",s.f("igor_settled"),"life","伊戈尔替你隐瞒了侧门的事，要求财物补偿或清理岗灯。","清理压力监测箱旁岗灯后找伊戈尔验看；也可用三发制式弹或非任务物资结清。","igor" if s.f("igor_lamp_clean") else "relay","东侧维修岗"))
+	if s.f("workers_done"):out.append(row("workers_choice","回信的下一班",s.ending,"commune","工人的征询稿已交付，回信窗口需要有人长期维护。","回议事处找叶莲娜，决定留下联络或继续旅程。","commune_leader","公社议事处"))
+	if s.f("north_done"):out.append(row("train_choice","第一班列车",s.ending,"sech","彼得已复核静态检修。","到东南接送车厢决定巡轨或联络；修复电台后可组织车队。","sech_leave","北线接送车厢"))
+	if s.f("weather_done"):out.append(row("weather_choice","观测网的值守",s.ending,"starcity","北线中继测试完成。","与父亲见面后，到联络值班台决定是否留下维护观测网。","star_exit","联络值班台"))
+	return preload("res://scripts/progression.gd").annotate(s,out)
 static func active(s)->Dictionary:
-	var pending=tasks(s).filter(func(t):return not t.done)
+	var pending=tasks(s).filter(func(t):return not t.done and not t.failed)
 	for t in pending:
 		if t.id==s.flags.get("tracked_quest","") and (t.place==s.context.get("floor","life") or (t.place in ["life","labor"] and s.context.get("floor","life") in ["life","labor"])):return t
 	for t in pending:
@@ -60,7 +65,7 @@ static func active(s)->Dictionary:
 	return {}
 static func track(s,id:String):
 	for t in tasks(s):
-		if t.id==id and not t.done:s.flags.tracked_quest=id;s.changed.emit();return
+		if t.id==id and not t.done and not t.failed:s.flags.tracked_quest=id;s.changed.emit();return
 static func objective(s)->String:
 	var current=active(s)
 	return current.name+" · "+current.step if not current.is_empty() else "留意周围的人和留下的纸条"

@@ -1,12 +1,12 @@
 # 地铁1982 · D-6
 
-Godot 4 的等距 2.5D 叙事探索游戏。当前为 **v8：主菜单、带说话人的图文叙事、五张重新设计的设施地图、明确阵营与十条探索支线**。包含两层 D-6、五张后续设施地图、全屏图文旅程与九个可达终章，保留探索、对话、背包、子弹经济及原有美术方向。
+Godot 4 的等距 2.5D 叙事探索游戏。当前为 **v9：历史序章、主支线与失败反馈、十四个终章，以及按轨道重做的谢契车厢**。包含两层 D-6、五张后续设施地图、全屏图文旅程与十四个可达终章，保留探索、对话、背包、子弹经济及原有美术方向。
 
-新游戏从伊万醒来开始，缺水与征召把他带向水厂；也能自行离站，经谢尔盖、公社或谢契前往星城，追查父亲与东方-7。设施内部自由探索，设施间的地表、隧道和列车行程用图文对话与选择呈现。
+新游戏先交代战争与伊万的童年，再从地下生活的早晨开始，缺水与征召把他带向水厂；也能自行离站，经谢尔盖、公社或谢契前往星城，追查父亲与东方-7。设施内部自由探索，设施间的地表、隧道和列车行程用图文对话与选择呈现。
 
-[主菜单](docs/screenshots/visual-v8/main-menu.png) · [首次地表](docs/screenshots/visual-v8/first-sky.png) · [水厂](docs/screenshots/visual-v8/waterworks-overview.png) · [公社](docs/screenshots/visual-v8/commune-overview.png) · [谢契](docs/screenshots/visual-v8/sech-overview.png) · [星城](docs/screenshots/visual-v8/starcity-control.png)
+[主菜单](docs/screenshots/visual-v8/main-menu.png) · [历史序章](docs/screenshots/visual-v9/prologue-family.png) · [水厂](docs/screenshots/visual-v8/waterworks-overview.png) · [公社](docs/screenshots/visual-v8/commune-overview.png) · [谢契车厢](docs/screenshots/visual-v9/sech-overview.png) · [星城](docs/screenshots/visual-v8/starcity-control.png)
 
-本轮改动：[PRESENTATION-V8](docs/PRESENTATION-V8.md)。设定与支线：[WORLD-AND-QUESTS-V8](docs/WORLD-AND-QUESTS-V8.md)。测试与实机检查：[VALIDATION-V8](docs/VALIDATION-V8.md)。基础章节说明保留在 [CHAPTER-V6](docs/CHAPTER-V6.md)。旧存档可继续使用，旧地图坐标安全迁移到新入口。
+本轮改动：[PROGRESSION-V9](docs/PROGRESSION-V9.md)。设定与支线：[WORLD-AND-QUESTS-V8](docs/WORLD-AND-QUESTS-V8.md)。测试与实机检查：[VALIDATION-V9](docs/VALIDATION-V9.md)。基础章节说明保留在 [CHAPTER-V6](docs/CHAPTER-V6.md)。旧存档可继续使用，旧地图坐标安全迁移到新入口。
 
 ## 运行
 
@@ -33,7 +33,7 @@ cd /workspace/godot
 | J | 手记：正在跟进、已接待办、地图、百科、线索与已读记录 |
 | M | 同一手记直接翻到地图；可切换查看上下层 |
 | Tab / 滚轮 | 当前楼层总览 / 缩放 |
-| 空格 / 点击正文 | 立即补全文字；选择无需等待 |
+| 空格 / 点击正文 | 立即补全文字，随后选择回答 |
 | Esc | 返回界面；图文旅程中打开暂停、背包与保存 |
 | F5 / F9 | 场景内保存 / 读取 |
 
@@ -64,4 +64,4 @@ HUD 只有一个手记入口，旁边的「留意的事」提供含蓄的当地�
 
 更新字体时先完成子集生成，再单独运行一次资源导入，随后运行测试。不要同时让多个编辑器导入同一缓存，或覆盖正在导入的字体。实机截图需可用 X11 显示；云端使用临时 Xorg dummy 与实际 OpenGL，不把无界面测试冒充游戏画面。
 
-当前打磨说明：[V8](docs/PRESENTATION-V8.md)。本轮包含呈现、地图、人物与十条探索支线，战斗系统尚未加入；即时射击与老兵同行的后续讨论稿见 [COMBAT-PROPOSAL](docs/COMBAT-PROPOSAL.md)，尚未加入敌人或调整商店价格、饱食与生命回复。历史版本说明与截图保留在 docs 中。
+当前打磨说明：[V9](docs/PROGRESSION-V9.md)。本轮包含历史序章、三条新增主线路径、新增五条支线内容和十四个终章，战斗系统尚未加入；即时射击与老兵同行的后续讨论稿见 [COMBAT-PROPOSAL](docs/COMBAT-PROPOSAL.md)，尚未加入敌人；既有商品价格、饱食与生命回复参数保持原值，新增防护套装售价八发制式弹。历史版本说明与截图保留在 docs 中。

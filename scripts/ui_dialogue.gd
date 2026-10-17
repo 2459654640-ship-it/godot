@@ -16,15 +16,16 @@ static func render(h,id:String,first_new:int):
 	var entries:Array=s.conversations.get(id,[])
 	for i in entries.size():
 		var entry:Dictionary=entries[i]
+		var block:Control
 		var narrator=entry.speaker=="narrator"
 		var mine=entry.speaker=="ivan"
 		var old_id=h.dialogue_id
-		if i<first_new:h.dialogue_id=""
+		if i<first_new or mine:h.dialogue_id=""
 		if narrator:
-			var words=h.prose(entry.text,18,history)
+			var words=h.prose(entry.text,18,history);block=words
 			words.add_theme_color_override("default_color",Color("94a39b"))
 		else:
-			var row=HBoxContainer.new();row.add_theme_constant_override("separation",12);history.add_child(row)
+			var row=HBoxContainer.new();block=row;row.add_theme_constant_override("separation",12);history.add_child(row)
 			if mine:row.add_spacer(false)
 			var path=portrait(h,entry.speaker)
 			if ResourceLoader.exists(path) and not mine:
@@ -40,6 +41,8 @@ static func render(h,id:String,first_new:int):
 			elif ResourceLoader.exists(path):
 				var face=TextureRect.new();face.texture=load(path);face.custom_minimum_size=Vector2(66,78)
 				face.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;face.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;row.add_child(face)
+		if i>=first_new and not mine and not h.typing.is_empty():
+			h.typing[-1].root=block;block.visible=false
 		h.dialogue_id=old_id
 	var options=ScrollContainer.new()
 	options.custom_minimum_size.y=180
@@ -53,10 +56,11 @@ static func render(h,id:String,first_new:int):
 		available+=1
 		var row=HBoxContainer.new();choices.add_child(row)
 		var b=h.button(o.text,func():h.last_choice=o.text;h.world.perform(o.key,id))
+		h.speech_buttons.append(b);b.disabled=not h.typing.is_empty()
 		b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;b.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(b)
 		if o.has("check"):
 			var chance=h.label(o.check.tier+" · "+str(o.check.chance)+"%",16,h.amber)
 			chance.custom_minimum_size.x=84;chance.vertical_alignment=VERTICAL_ALIGNMENT_CENTER;row.add_child(chance)
 	if available==0:choices.add_child(h.label("暂时没有新的话题或操作。",16,h.muted))
 	choices.add_child(h.button("结束交谈" if h.world.npcs.has(id) or id in ["armory","main_gate"] else "收起调查",func():h.close(),true,true))
-	if not entries.is_empty():scroll.call_deferred("ensure_control_visible",history.get_child(history.get_child_count()-1))
+	if h.typing.is_empty() and not entries.is_empty():scroll.call_deferred("ensure_control_visible",history.get_child(history.get_child_count()-1))

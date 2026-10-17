@@ -9,6 +9,14 @@ var font:Font
 var serif:Font
 var mono:Font
 var objective: Label
+var objective_title:Label
+var objective_kind:Label
+var speech_buttons:Array=[]
+var receipt_box:VBoxContainer
+var receipt_timers:Array=[]
+var observed_inventory:Dictionary={}
+var observed_tasks:Dictionary={}
+var observing=false
 var location_label: Label
 var prompt: Label
 var target_label: Label
@@ -43,16 +51,31 @@ func _process(delta:float):
 	advance_typing(delta)
 
 func advance_typing(delta:float):
-	for entry in typing:
-		if not is_instance_valid(entry.label):continue
+	while not typing.is_empty() and not is_instance_valid(typing[0].label):typing.pop_front()
+	if not typing.is_empty():
+		var entry:Dictionary=typing[0]
+		if entry.has("root") and is_instance_valid(entry.root) and not entry.root.visible:
+			entry.root.visible=true
+			var ancestor=entry.root.get_parent()
+			while ancestor and not ancestor is ScrollContainer:ancestor=ancestor.get_parent()
+			if ancestor:ancestor.call_deferred("ensure_control_visible",entry.root)
 		entry.elapsed+=delta
 		entry.label.visible_characters=mini(entry.total,floori(entry.elapsed*entry.rate))
-	typing=typing.filter(func(entry):return is_instance_valid(entry.label) and entry.label.visible_characters<entry.total)
+		if entry.label.visible_characters>=entry.total:typing.pop_front()
+	for b in speech_buttons:
+		if is_instance_valid(b):b.disabled=not typing.is_empty()
+	for entry in receipt_timers:entry.time-=delta
+	for entry in receipt_timers:
+		if entry.time<=0 and is_instance_valid(entry.node):entry.node.queue_free()
+	receipt_timers=receipt_timers.filter(func(entry):return entry.time>0)
 
 func finish_typing():
 	for entry in typing:
 		if is_instance_valid(entry.label):entry.label.visible_characters=-1
+		if entry.has("root") and is_instance_valid(entry.root):entry.root.visible=true
 	typing.clear()
+	for b in speech_buttons:
+		if is_instance_valid(b):b.disabled=false
 
 func _input(event):
 	if modal_visible() and not typing.is_empty() and event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_SPACE,KEY_ENTER,KEY_KP_ENTER]:
@@ -94,8 +117,9 @@ func setup(w):
 	# Current goal is short; the detailed quest network belongs in the journal.
 	var goal=panel(Vector2(32,134),Vector2(264,220))
 	var gb=margin_box(goal,18,15)
-	gb.add_child(label("正在跟进",14,amber))
-	objective=label("",18,text_color)
+	objective_kind=label("正在跟进",13,muted);gb.add_child(objective_kind)
+	objective_title=label("",23,amber);objective_title.add_theme_font_override("font",serif);objective_title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;gb.add_child(objective_title)
+	objective=label("",17,Color("bac7c0"))
 	objective.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	gb.add_child(objective)
 	gb.add_child(label("线索与待办收在手记里",14,muted))
@@ -266,12 +290,12 @@ func prose(text:String,sz:int=21,parent:Control=null):
 		markup+="[color=#d6bd90]"+quote.get_string().replace("[","[lb]")+"[/color]"
 		cursor=quote.get_end()
 	markup+=text.substr(cursor).replace("[","[lb]")
-	rich.text=markup
+	rich.text=highlight_items(markup)
 	(parent if parent else modal_box).add_child(rich)
 	if dialogue_id!="":
 		var total=rich.get_total_character_count()
 		rich.visible_characters=0
-		typing.append({"label":rich,"total":total,"elapsed":0.0,"rate":maxf(180.0,float(total)/1.2)})
+		typing.append({"label":rich,"total":total,"elapsed":0.0,"rate":48.0})
 		rich.mouse_filter=Control.MOUSE_FILTER_STOP
 		rich.gui_input.connect(func(event):
 			if event is InputEventMouseButton and event.pressed and event.button_index==MOUSE_BUTTON_LEFT:finish_typing();rich.accept_event())
@@ -295,7 +319,7 @@ func character_prose(id:String,text:String):
 	words.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 
 func start_modal(title:String,subtitle:String,wide:bool=false):
-	typing.clear()
+	typing.clear();speech_buttons.clear()
 	if wide:dialogue_id=""
 	for child in modal.get_children():
 		modal.remove_child(child)
@@ -372,7 +396,10 @@ func set_prompt(id:String):
 func refresh_status():
 	if not objective:return
 	var focus=Journal.active(world.story)
-	objective.text=(focus.name+"\n"+focus.step) if not focus.is_empty() else "暂时没有跟进的事。\n看看手记旁的线索，或找周围的人聊聊。"
+	objective_title.text=focus.name if not focus.is_empty() else "留意身边的人"
+	objective_kind.text=(focus.kind+" / 正在跟进") if not focus.is_empty() else "自由探索"
+	objective.text=focus.step if not focus.is_empty() else "看看手记旁的线索，或找周围的人聊聊。"
+	observe_progress()
 	if health_bar:
 		health_bar.value=world.story.economy.health;food_bar.value=world.story.economy.food
 		vitals_label.text="生命 %d   /   饱食 %d"%[world.story.economy.health,world.story.economy.food]
@@ -451,7 +478,7 @@ func show_journal(tab:String="tasks",shown_floor:String=""):
 	start_modal("伊万的手记","随身卷宗   /   任务、地图与见闻",true)
 	modal.position=Vector2(230,84);modal.size=Vector2(1140,832)
 	var tabs=HBoxContainer.new();tabs.add_theme_constant_override("separation",8);modal_box.add_child(tabs)
-	for pair in [["tasks","01  事要办"],["map","02  地图"],["lore","03  百科"],["leads","04  留意的事"],["history","05  已读记录"],["closed","06  已办妥"]]:
+	for pair in [["tasks","01  事要办"],["map","02  地图"],["lore","03  百科"],["leads","04  留意的事"],["history","05  已读记录"],["closed","06  完成与失败"]]:
 		var b=button(pair[1],func():show_journal(pair[0]),true,true)
 		if tab==pair[0]:b.add_theme_color_override("font_color",amber)
 		tabs.add_child(b)
@@ -465,13 +492,13 @@ func show_journal(tab:String="tasks",shown_floor:String=""):
 		rule();body("已接取 · 暂未跟进",16,amber)
 		var count=0
 		for task in Journal.tasks(s):
-			if task.done or task.id==current.get("id",""):continue
+			if task.done or task.failed or task.id==current.get("id",""):continue
 			quest_card(task,false);count+=1
 		if count==0:body("没有其它待办。",18,muted)
 	elif tab=="closed":
 		var count=0
 		for task in Journal.tasks(s):
-			if task.done:quest_card(task,false);count+=1
+			if task.done or task.failed:quest_card(task,false);count+=1
 		if count==0:body("办妥的事会留在这里。",20,muted)
 	elif tab=="leads":
 		body("路过时想到的事",25,amber)
@@ -507,15 +534,63 @@ func quest_card(task:Dictionary,tracked:bool):
 	var card=PanelContainer.new();card.add_theme_stylebox_override("panel",style(Color("26322e") if tracked else Color("172321"),Color("a38a5d") if tracked else Color("445148"),1,4));modal_box.add_child(card);UiSurface.attach(card)
 	var box=margin_box(card,22,18)
 	var place={"life":"D-6 生活层","labor":"D-6 作业层"}.get(task.place,world.story.Campaign.NAMES.get(task.place,""))
-	box.add_child(label(("已办妥  /  " if task.done else "")+place+" · "+task.area,14,muted))
+	box.add_child(label(task.kind+" / "+task.status+" / "+place+" · "+task.area,14,muted))
 	var title=label(task.name,25,amber);title.add_theme_font_override("font",serif);box.add_child(title)
 	var context=label(task.background,18,text_color);context.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;box.add_child(context)
-	if not task.done:
+	if task.failed:box.add_child(label(task.step,17,Color("d4947d")))
+	if not task.done and not task.failed:
 		var step=label(task.step,19,Color("c7cdb7"));step.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;box.add_child(step)
 		var local=task.place==world.floor_id or (task.place in ["life","labor"] and world.floor_id in ["life","labor"])
 		if not local:box.add_child(label("到达对应设施后可继续跟进。",16,muted))
 		elif not tracked:box.add_child(button("接下来跟进这件事",func():Journal.track(world.story,task.id);show_journal(),true,true))
 		else:box.add_child(button("在地图上看看这一带",func():show_journal("map",task.place),true,true))
+
+func inventory_snapshot()->Dictionary:
+	var out={}
+	for id in world.story.items:out[id]=1
+	for id in world.story.economy.goods:out[id]=int(world.story.economy.goods[id])
+	out["military"]=int(world.story.economy.military);out["handmade"]=int(world.story.economy.handmade)
+	return out
+func observe_progress():
+	var now=inventory_snapshot();var quests={}
+	for t in Journal.tasks(world.story):quests[t.id]=t.status
+	if not observing:observed_inventory=now;observed_tasks=quests;observing=true;return
+	var events={}
+	for t in Journal.tasks(world.story):
+		var event=""
+		if not observed_tasks.has(t.id):event="接取"+t.kind
+		elif observed_tasks[t.id]!=t.status:event="任务失败" if t.failed else ("任务完成" if t.done else "任务更新")
+		if event!="":
+			if not events.has(event):events[event]=[]
+			events[event].append(t.name)
+	for event in events:receipt(event+" · "+"、".join(events[event]))
+	var gained=[]
+	for id in now:
+		var amount=int(now[id])-int(observed_inventory.get(id,0))
+		if amount<=0:continue
+		var title=world.story.ITEMS[id][0] if world.story.ITEMS.has(id) else (world.story.Economy.GOODS[id].name if world.story.Economy.GOODS.has(id) else ("制式子弹" if id=="military" else "土制子弹"))
+		gained.append(title+" ×"+str(amount))
+	if not gained.is_empty():receipt("获得物品 · "+"、".join(gained))
+	observed_inventory=now;observed_tasks=quests
+func receipt(text:String):
+	if not is_instance_valid(receipt_box):
+		receipt_box=VBoxContainer.new();receipt_box.position=Vector2(360,105);receipt_box.custom_minimum_size.x=650;receipt_box.mouse_filter=Control.MOUSE_FILTER_IGNORE;add_child(receipt_box)
+	move_child(receipt_box,get_child_count()-1)
+	var card=PanelContainer.new();card.mouse_filter=Control.MOUSE_FILTER_IGNORE;card.add_theme_stylebox_override("panel",style(Color("182a25"),amber,1,5));receipt_box.add_child(card)
+	var content=margin_box(card,16,10);var words=RichTextLabel.new();words.bbcode_enabled=true;words.fit_content=true;words.scroll_active=false;words.custom_minimum_size.x=620;words.text=highlight_items(text);content.add_child(words)
+	receipt_timers.append({"node":card,"time":7.0})
+func highlight_items(text:String)->String:
+	var names=[]
+	for id in world.story.ITEMS:names.append(world.story.ITEMS[id][0])
+	for id in world.story.Economy.GOODS:names.append(world.story.Economy.GOODS[id].name)
+	names.append_array(["扳手","保险芯","制式子弹","土制子弹","滤毒罐","匕首","香烟","照片","伏特加","面具","滤芯","干布"])
+	names.sort_custom(func(a,b):return a.length()>b.length())
+	var patterns=[]
+	for name in names:patterns.append(name)
+	var regex=RegEx.new();regex.compile("|".join(patterns))
+	var cursor=0;var result=""
+	for found in regex.search_all(text):result+=text.substr(cursor,found.get_start()-cursor)+"[color=#e2c47e]"+found.get_string()+"[/color]";cursor=found.get_end()
+	return result+text.substr(cursor)
 
 func show_map():show_journal("map")
 
@@ -583,11 +658,14 @@ func show_departure(confirmed:bool):
 	start_modal("离开 D-6？","出发确认 / "+s.ROUTES.get(world.pending_route,""),true)
 	is_departure=true
 	body("离开后将进入图文旅程。确认前可以返回上下两层，办完还没办的事。",21)
-	if not s.has("mask") or not s.has("filter"):body("你没有完整防护，单独离站会暴露在辐射尘与污浊空气中。仍要出发吗？",20,Color("d09c7a"))
+	if not s.has("mask") or not s.has("filter"):body("防护尚未齐全。请去下层领取，或向供应点购买面具与配套滤毒罐。",20,Color("d09c7a"))
 	modal_box.add_child(button("确认出发",func():
+		if not s.has("mask") or not s.has("filter"):toast("先取得面具与滤毒罐；可去下层领取或向供应点购买。",6);return
 		var snapshot=s.serialize().duplicate(true);snapshot.erase("checkpoint")
 		snapshot.floor=world.floor_id;snapshot.position=[world.player.position.x,.04,world.player.position.z]
 		s.departure_checkpoint=snapshot
+		s.flags.departure_committed=true
+		s.Progression.fail(s,["life","labor"],"已离开 D-6，本次旅程无法返回完成这项委托。")
 		s.route=world.pending_route;s.ending=false
 		show_comic("official" if s.route=="official" else "solo")))
 	modal_box.add_child(button("再准备一下",func():close()))

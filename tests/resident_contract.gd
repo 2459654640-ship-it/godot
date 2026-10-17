@@ -101,13 +101,13 @@ func live_checks():
 	await steps(8)
 	check(not w.story.f("guard_task") and not w.story.guard_clear(),"guard window expires and restores supervision")
 	check(enabled(w.story,"igor","guard_report"),"record can request another inspection")
-	# Fast typewriter must reveal complete BBCode prose without delaying choices.
+	# Speech is ordered; skip remains available for players who read faster.
 	w.hud.show_dialogue("igor")
 	check(not w.hud.typing.is_empty(),"conversation starts typewriter")
 	var entry=w.hud.typing[0]
 	check(entry.label.visible_characters<entry.total,"initial text is partial")
 	w.hud.advance_typing(1.21)
-	check(w.hud.typing.is_empty() and entry.label.visible_characters==entry.total,"long prose finishes within 1.2 seconds")
+	check(entry.label.visible_characters>0 and entry.label.visible_characters<=entry.total,"first speech block advances at the readable sequential rate")
 	w.hud.show_reply("igor","「没事，慢慢说。」\n伊戈尔放下铅笔。")
 	w.hud.finish_typing()
 	check(w.hud.typing.is_empty(),"skip immediately reveals prose")

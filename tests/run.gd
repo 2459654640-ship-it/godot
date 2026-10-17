@@ -82,7 +82,7 @@ func connectivity(open_exit:bool=false):
 	var query=PhysicsShapeQueryParameters3D.new()
 	query.shape=cap
 	query.collision_mask=1
-	for x in range(88):
+	for x in range(94):
 		for z in range(48):
 			var point=Vector3(-28.5+x*0.5,0.92,-13.5+z*0.5)
 			query.transform=Transform3D(Basis.IDENTITY,point)
@@ -114,7 +114,7 @@ func connectivity(open_exit:bool=false):
 			if hit.is_empty() or hit.position.distance_to(end)<0.48:
 				accessible=true
 				break
-		if id in ["exit","pipe_exit"] and not open_exit:check(not accessible,"extension exit inaccessible before opening a route")
+		if id in ["exit","pipe_exit","inner_latch"] and not open_exit:check(not accessible,"extension exit inaccessible before opening a route")
 		else:check(accessible,"target reachable with capsule clearance and line of sight: "+id)
 	print("CONNECTIVITY: ",reached.size()," reachable half-metre cells; east exit open=",open_exit)
 
@@ -153,22 +153,25 @@ func physics_tests():
 	check(w.player.position.z<3,"extension cannot be entered from main corridor")
 	w.story.flags.gate=true
 	w.on_story_changed()
-	await step(3)
+	await step(65)
 	connectivity(true)
 	await travel(Vector3(7.9,0,6.7),Vector3(10.4,0,6.7),"unlocked main gate")
 	await travel(Vector3(10.4,0,6.7),Vector3(7.9,0,6.7),"unlocked main gate return")
 	w.story.flags.side=true
+	w.story.flags.guard_task=true
+	w.npcs.igor.position=Vector3(2.8,0,1.4)
+	w.refresh_guard_context()
 	w.phase=1
 	w.interact("side")
 	check(w.waiting_shift,"waiting action begins instead of granting immediate transit")
 	w.phase=8
-	await step(4)
-	check(w.story.route=="shift" and w.side_body.disabled,"yellow phase opens timed side door")
+	await step(65)
+	check(w.story.route=="shift" and not w.side_body.disabled and w.side_mesh.position.y>3.2,"yellow phase opens timed side door")
 	await travel(Vector3(8.0,0,4.5),Vector3(10.4,0,4.5),"timed side door")
 	check(w.story.f("side_crossed"),"timed crossing latches safety state")
 	w.phase=0
 	await step(3)
-	check(w.side_body.disabled,"side door never shuts on returning player after crossing")
+	check(w.side_mesh.position.y>3.2,"side door remains raised while guard is away")
 	# Try to walk through every exposed face of fixtures and every wall section.
 	var probes=0
 	var fixtures=0

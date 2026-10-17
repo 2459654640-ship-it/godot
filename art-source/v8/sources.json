@@ -67,5 +67,15 @@
       "star_technician"
     ],
     "rows": 2
+  },
+  {
+    "file": "civilian_crowd.png",
+    "ids": [
+      "ambient_worker",
+      "ambient_woman",
+      "ambient_child",
+      "ambient_elder"
+    ],
+    "rows": 4
   }
 ]
