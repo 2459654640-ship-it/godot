@@ -21,7 +21,8 @@ func _initialize():
 			var expected=sequence.states[index]
 			var actual=JSON.parse_string(JSON.stringify(s.serialize()))
 			actual.erase("intel")
-			for added in ["economy","conversations","last_greetings","checkpoint","read_topics"]:actual.erase(added)
+			# Compare the original gameplay contract, excluding later save-envelope metadata.
+			for added in ["economy","conversations","last_greetings","checkpoint","read_topics","content_revision"]:actual.erase(added)
 			for added in ["social_seed","nina_safety","briefed","intro_done"]:actual.flags.erase(added)
 			actual.intel_count=float(s.intel.size())
 			check(actual==expected.state,"quest state/reward/cost unchanged: %s step %d" % [path,index])

@@ -91,11 +91,12 @@ func run():
 		w=load("res://scenes/"+id+".tscn").instantiate();root.add_child(w);await frames(6)
 		check(w.initialized and w.floor_id==id,"facility starts: "+id)
 		if id=="starcity":
-			w.player.camera=null;w.player.use_override=true;w.player.position=Vector3(13.5,.04,-.8);w.player.motion_override=Vector2.UP
+			var gate_position=w.campaign_gate.position
+			w.player.camera=null;w.player.use_override=true;w.player.position=Vector3(gate_position.x,.04,gate_position.z+1.2);w.player.motion_override=Vector2.UP
 			await frames(60);w.player.motion_override=Vector2.ZERO
-			check(w.player.position.z>-1.7,"blue inner door physically blocks entry before isolation")
+			check(w.player.position.z>gate_position.z+.25,"blue inner door physically blocks entry before isolation")
 			w.player.use_override=false
-		w.story.flags.intro_done=true;w.story.flags.star_access=true;w.story.flags.plant_power=true;w.on_story_changed();await frames()
+		w.story.flags.intro_done=true;w.story.flags.star_access=true;w.story.flags.plant_power=true;w.on_story_changed();await frames(80)
 		w.navigation=preload("res://scripts/route_grid.gd").new();w.navigation.setup(w)
 		var seen=reachable();check(seen.size()>1000,"substantial connected floor: "+id)
 		for target_id in w.targets:
@@ -108,12 +109,14 @@ func run():
 			check(visible,"reachable interaction with capsule and sight line: "+id+"/"+target_id)
 		for a in w.npcs.values():a.set_physics_process(false);a.collision_layer=0
 		w.player.camera=null;w.player.use_override=true
-		for door in w.facility_doors(id):
+		for spec in w.CampaignMaps.door_specs(id):
+			var door:Vector2=spec.position
+			var normal=Vector2.RIGHT if spec.axis=="x" else Vector2.DOWN
 			for sign in [-1,1]:
-				w.player.position=Vector3(door.x,.04,door.y+sign*1.2);w.player.velocity=Vector3.ZERO
-				w.player.motion_override=Vector2(0,-sign);await frames(65)
+				w.player.position=Vector3(door.x+normal.x*sign*1.2,.04,door.y+normal.y*sign*1.2);w.player.velocity=Vector3.ZERO
+				w.player.motion_override=-normal*sign;await frames(65)
 				w.player.motion_override=Vector2.ZERO;await frames(5)
-				check((w.player.position.z-door.y)*sign<-.4,"physical doorway both directions: "+id+str(door)+str(sign))
+				check((Vector2(w.player.position.x,w.player.position.z)-door).dot(normal)*sign<-.4,"physical doorway both directions: "+id+str(door)+str(sign))
 		w.player.use_override=false;w.hud.show_map();await frames();check(w.hud.modal_visible(),"facility map renders: "+id)
 		w.hud.close()
 		# Save on each new floor and read it through the real loader.

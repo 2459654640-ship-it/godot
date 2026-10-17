@@ -1,0 +1,79 @@
+{
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "headless": {
+    "D6_TEST_RESULT": {
+      "checks": 1827,
+      "failures": 0
+    },
+    "VISUAL_CONTRACT_RESULT": {
+      "checks": 1113,
+      "failures": 0
+    },
+    "NARRATIVE_CONTRACT_RESULT": {
+      "checks": 1942,
+      "failures": 0
+    },
+    "RESIDENT_CONTRACT_RESULT": {
+      "checks": 113,
+      "failures": 0
+    },
+    "CHAPTER_CONTRACT_RESULT": {
+      "checks": 111,
+      "failures": 0
+    },
+    "FLOOR_CONTRACT_RESULT": {
+      "checks": 35,
+      "failures": 0
+    },
+    "CAMPAIGN_CONTRACT_RESULT": {
+      "checks": 282,
+      "failures": 0
+    },
+    "CAMPAIGN_UI_RESULT": {
+      "checks": 16,
+      "failures": 0
+    },
+    "REFINEMENT_RESULT": {
+      "checks": 43,
+      "failures": 0
+    },
+    "PRESENTATION_RESULT": {
+      "checks": 30,
+      "failures": 0
+    },
+    "EXPLORATION_RESULT": {
+      "checks": 223,
+      "failures": 0
+    }
+  },
+  "checks": 5735,
+  "failures": 0,
+  "graphic": {
+    "presentation": {
+      "checks": 31,
+      "failures": 0
+    },
+    "exploration": {
+      "checks": 223,
+      "failures": 0
+    },
+    "driver": "OpenGL Compatibility / Mesa llvmpipe",
+    "resolution": [
+      1600,
+      1000
+    ]
+  },
+  "runtime_han_characters": 1443,
+  "fonts": {
+    "MetroSans.otf": {
+      "missing_han": []
+    },
+    "MetroSerif.otf": {
+      "missing_han": []
+    }
+  },
+  "screenshots": 25,
+  "optional_quests": 10,
+  "exported_platform_builds_tested": false,
+  "audio_listening_tested": false
+}

@@ -3,7 +3,7 @@ config_version=5
 
 [application]
 config/name="地铁1982 · D-6"
-run/main_scene="res://scenes/d6.tscn"
+run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/description="地铁1982 · 等距叙事探索、设施地图与图文旅程"
 

@@ -2,6 +2,7 @@ extends RefCounted
 ## A persistent transcript above a separate, pinned reply list.
 static func portrait(h,id:String)->String:
 	var art={"armory":"queue","main_gate":"commander"}.get(id,id)
+	if id=="ivan" and h.world.player.art_id!="":art=h.world.player.art_id
 	if h.world.npcs.has(id) and h.world.npcs[id].art_id!="":art=h.world.npcs[id].art_id
 	return "res://assets/portraits/"+art+".png"
 static func render(h,id:String,first_new:int):
@@ -32,8 +33,8 @@ static func render(h,id:String,first_new:int):
 			var panel=PanelContainer.new();panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 			panel.add_theme_stylebox_override("panel",h.style(Color("243229") if mine else Color("1d2a2c"),Color("596247") if mine else Color("3e5350"),1,8));row.add_child(panel)
 			var box=h.margin_box(panel,14,10)
-			box.add_child(h.label("伊万" if mine else view.name,13,h.amber if mine else Color("95b6b4")))
-			var words=h.prose(entry.text,19,box)
+			box.add_child(h.label("伊万" if mine else entry.get("name",view.name),13,h.amber if mine else Color("95b6b4")))
+			var words=h.prose("「"+entry.text+"」",19,box)
 			words.add_theme_color_override("default_color",Color("e0d0ad") if mine else Color("d7d9c9"))
 			if not mine:row.add_spacer(false)
 			elif ResourceLoader.exists(path):

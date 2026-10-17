@@ -9,16 +9,19 @@ static func render(h,sequence:String=""):
 	if p.is_empty():return
 	h.comic_active=true
 	h.dialogue_id=""
-	h.start_modal(p.title,"МЕТРО 1982   /   "+("序幕" if s.flags.comic.sequence=="intro" else "旅程"),true)
+	h.start_modal(p.title,"МЕТРО 1982   /   "+p.get("location","序幕" if s.flags.comic.sequence=="intro" else "旅程"),true)
 	h.make_cinematic()
 	var row=HBoxContainer.new();row.add_theme_constant_override("separation",40);h.modal_box.add_child(row)
 	var art=TextureRect.new();art.texture=load("res://assets/cinematics/"+p.art+".png")
 	art.custom_minimum_size=Vector2(860,500);art.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;art.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;row.add_child(art)
 	var words=VBoxContainer.new();words.custom_minimum_size.x=560;words.size_flags_horizontal=Control.SIZE_EXPAND_FILL;words.add_theme_constant_override("separation",16);row.add_child(words)
 	words.add_child(h.label("──  "+p.title+"  ──",17,h.amber))
-	for entry in s.Conversation.split_text(p.body,"speaker"):
-		var rich=h.prose(entry.text,24,words)
-		rich.add_theme_color_override("default_color",Color("dec89c") if entry.speaker!="narrator" else Color("bac3b7"))
+	var lines:Array=p.get("lines",s.Conversation.split_text(p.body,"旁白"))
+	for entry in lines:
+		var narration=entry.speaker in ["narrator","旁白"]
+		if not narration:words.add_child(h.label(entry.speaker,16,h.amber))
+		var rich=h.prose(entry.text if narration else "「"+entry.text+"」",23,words)
+		rich.add_theme_color_override("default_color",Color("e4d1a8") if not narration else Color("bac3b7"))
 		var total=rich.get_total_character_count();rich.visible_characters=0
 		h.typing.append({"label":rich,"total":total,"elapsed":0.0,"rate":maxf(180,float(total)/1.2)})
 	var main=h.modal_box.get_parent().get_parent()

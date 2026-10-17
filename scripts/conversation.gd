@@ -7,8 +7,16 @@ static func split_text(text:String,speaker:String)->Array:
 	var offset=0
 	for quote in regex.search_all(text):
 		var narration=text.substr(offset,quote.get_start()-offset).strip_edges()
+		var named=RegEx.new();named.compile("(?:^|\\n)([^\\n：:]{1,18})[：:]$")
+		var attribution=named.search(narration)
+		var voice=speaker;var label=""
+		if attribution:
+			label=attribution.get_string(1);voice="voice_"+label
+			narration=narration.substr(0,attribution.get_start()).strip_edges()
 		if narration!="":parts.append({"speaker":"narrator","text":narration})
-		parts.append({"speaker":speaker,"text":quote.get_string().trim_prefix("「").trim_suffix("」")})
+		var part={"speaker":voice,"text":quote.get_string().trim_prefix("「").trim_suffix("」")}
+		if label!="":part.name=label
+		parts.append(part)
 		offset=quote.get_end()
 	var rest=text.substr(offset).strip_edges()
 	if rest!="":parts.append({"speaker":"narrator","text":rest})
@@ -16,6 +24,8 @@ static func split_text(text:String,speaker:String)->Array:
 static func append(s,id:String,text:String,speaker:String)->int:
 	if not s.conversations.has(id):s.conversations[id]=[]
 	var first=s.conversations[id].size()
+	var campaign:Dictionary=s.Campaign.data().interactions
+	if campaign.has(id) and not campaign[id].get("spoken",false):speaker="narrator"
 	for part in split_text(text,speaker):s.conversations[id].append(part)
 	return first
 static func visit(s,id:String,body:String)->int:

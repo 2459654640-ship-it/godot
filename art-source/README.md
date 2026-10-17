@@ -46,3 +46,11 @@ identities from Semyon. Runtime does not call an image service.
 `v7-cast.png` 保留安娜与父亲的透明原始五视角图。`tools/pack_v7_cast.gd` 将其规范到原有的 240×352 单元、324 像素身体和 342 像素脚底基线，同时裁切一致的头像。两人是固定位置 NPC，当前各有一组五视角静立姿态，通过镜像支持八方向；没有宣称新增行走动作。原有人物图集保持原样。
 
 脚步声改为 Kenney 的 CC0 walking 素材，原文件保存在 `audio/kenney_walking.ogg`，来源、提交与许可证见 [footsteps.md](../assets/audio/licenses/footsteps.md)。四个短采样经截取、滤波和淡入淡出，播放音量降低并进入独立 Footsteps 总线。UI 音效和音乐仍由原离线脚本生成；该脚本不再覆盖脚步素材。
+
+## v8 补充
+
+`v8/sources.json` 对应七份透明人物原图：八名独立后续角色、伊万常规及面具步态、中尉面具版本。使用 `./tools/run.sh --headless --script res://tools/pack_v8_cast.gd` 重新整理；工具按透明度分辨完整人物行和五个视角，规范尺寸与脚底，输出图集和同源头像。普通与面具伊万各三个姿态，其余新图集为静立姿态。
+
+新插画原图直接保存在 `assets/cinematics/`，新雪地材质在 `assets/visual/ash_snow.png`，均由会话图像生成工具制作。主菜单与叙事面板实际引用这些图，未把生成图冒充三维关卡截图。后续设施用不同的现有木材、金属、旧灰泥与水泥贴图组合，配合独立布局和光照；D-6 原有材质保留。
+
+追加两张双人五向原稿：公社印刷员娜佳、温室工卓娅、谢契轮值员彼得、星城技术员列夫。见 `v8/sources.json`，按相同基线打包；固定岗位使用静立视角，未提供协战动作。

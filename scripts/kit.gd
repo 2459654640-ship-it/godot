@@ -11,10 +11,14 @@ var veil_materials:Dictionary={}
 var highlight_material: ShaderMaterial
 var highlight_proxies:Dictionary={}
 var previous_highlight=""
-var font = preload("res://assets/fonts/MetroSans.otf")
+var wall_surface="wall"
+var wall_normal="wall_normal"
+var wall_color=Color.WHITE
+var font:Font
 
 func _init(parent: Node3D):
 	root = parent
+	font=load("res://assets/fonts/MetroSans.otf")
 	for id in ["plaster", "concrete", "metal", "rust", "wood", "cloth", "tile", "red"]:
 		var m = StandardMaterial3D.new()
 		m.albedo_texture = load("res://assets/textures/" + id + ".png")
@@ -239,8 +243,9 @@ func finish_walls():
 			tool.generate_tangents()
 			var material=ShaderMaterial.new()
 			material.shader=load("res://assets/visual/masonry_veil.gdshader")
-			material.set_shader_parameter("albedo_map",load("res://assets/visual/wall.png" if i==0 else "res://assets/visual/cement.png"))
-			material.set_shader_parameter("normal_map",load("res://assets/visual/wall_normal.png" if i==0 else "res://assets/visual/cement_normal.png"))
+			material.set_shader_parameter("albedo_map",load("res://assets/visual/"+wall_surface+".png" if i==0 else "res://assets/visual/cement.png"))
+			material.set_shader_parameter("normal_map",load("res://assets/visual/"+wall_normal+".png" if i==0 else "res://assets/visual/cement_normal.png"))
+			material.set_shader_parameter("base_color",wall_color)
 			material.set_shader_parameter("normal_strength",0.45 if i==0 else 0.30)
 			tool.set_material(material)
 			tool.commit(mesh)
@@ -363,7 +368,7 @@ func batch_static():
 	# Render repeated modules in material batches; their physics bodies remain independent.
 	var groups:Dictionary={}
 	for child in root.find_children("*","MeshInstance3D",true,false):
-		if not child.visible or child.name in ["LockedMainGate","LockedSideDoor"]:continue
+		if not child.visible or child.name in ["LockedMainGate","LockedSideDoor","CampaignInnerGate"] or child.has_meta("dynamic"):continue
 		var source=child.mesh
 		var material=child.material_override
 		if not material:continue

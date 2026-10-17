@@ -25,9 +25,11 @@ static func decorate(v:Dictionary,s)->Dictionary:
 	var d:Dictionary=data().interactions[v.id]
 	v.name=d.name;v.role=d.role;v.body=d.body;v.options=[]
 	for variant in d.get("after",[]):
-		if s.f(variant[0]):v.body=variant[1]
+		if permits(s,variant[0]) if variant[0] is Dictionary else s.f(variant[0]):v.body=variant[1]
 	for key in d.options:
-		v.options.append(s.opt("c_"+key,data().actions[key].text,s.context.get("floor","")==d.facility and available(s,key)))
+		var words:String=data().actions[key].text
+		if key=="commune_route" and not s.has("frequency"):words="「北线能联系到什么地方？」"
+		v.options.append(s.opt("c_"+key,words,s.context.get("floor","")==d.facility and available(s,key)))
 	return v
 static func act(s,key:String)->String:
 	var a:Dictionary=data().actions[key]
@@ -39,10 +41,34 @@ static func act(s,key:String)->String:
 	for good in a.get("goods",{}):
 		s.economy.goods[good]=int(s.economy.goods.get(good,0))+int(a.goods[good])
 		if s.economy.goods[good]<=0:s.economy.goods.erase(good)
+	var reward:Dictionary=a.get("reward",{})
+	for kind in ["military","handmade"]:
+		var count=maxi(0,int(reward.get(kind,0)))
+		if count>0:
+			s.economy[kind]+=count
+			s.economy.ledger.append({"kind":"quest","id":key,"ammo":kind,"rounds":count})
 	if a.has("travel"):s.flags.next_sequence=a.travel
 	if a.has("ending"):finish(s,a.ending)
 	if a.get("reply","")!="":s.know(data().actions[key].text+"："+a.reply)
-	return a.get("reply","")
+	var reply:String=a.get("reply","")
+	var receipts=[]
+	for kind in reward:
+		if int(reward[kind])>0:receipts.append(("制式子弹" if kind=="military" else "土制子弹")+" ×"+str(reward[kind]))
+	for good in a.get("goods",{}):
+		if int(a.goods[good])>0:receipts.append(s.Economy.GOODS[good].name+" ×"+str(a.goods[good]))
+	if not receipts.is_empty():reply+="\n入袋："+"、".join(receipts)+"。"
+	return reply
+
+static func side_tasks(s)->Array:
+	var rows=[]
+	for q in data().get("quests",[]):
+		if not s.f(q.accepted):continue
+		var current:Dictionary=q.stages[0]
+		for stage in q.stages:
+			if permits(s,stage.when):current=stage
+		var target:String=current.target
+		rows.append({"id":q.id,"name":q.name,"done":s.f(q.done),"place":q.facility,"background":q.background,"step":"已交付，报酬与经过记入手记。" if s.f(q.done) else current.step,"target":target,"area":data().interactions[target].name})
+	return rows
 static func finish(s,id:String):
 	s.flags.campaign_ending=id
 	s.flags.chapter_endpoint="ending:"+id

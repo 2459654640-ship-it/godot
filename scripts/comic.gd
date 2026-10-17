@@ -1,6 +1,10 @@
 extends RefCounted
 ## Approved scope: departure to waterworks exterior, or first meeting with Sergey.
 const Campaign=preload("res://scripts/campaign.gd")
+static var _authored:Dictionary={}
+static func authored()->Dictionary:
+	if _authored.is_empty():_authored=JSON.parse_string(FileAccess.get_file_as_string("res://data/story_panels.json"))
+	return _authored
 const PANELS={
 "intro_wake":{"art":"wake","title":"醒来 / 16 XI 1982","body":"通风机的低鸣先于闹铃把你叫醒。墙里流过一阵水声，很快又停了。\n二十年前，战争把莫斯科的人赶进地下。你在这里长大，直到现在，晨光对你仍只是一个词。\n你叫伊万，是 D-6 武装小队的一员。老爹谢苗诺夫在门边敲了两下。","next":"intro_semyon"},
 "intro_semyon":{"art":"wake","title":"门边的老爹","body":"「醒了就把衣服穿好。管理处昨晚把征召名单送下来了，有你。」\n老爹把声音放低。\n「净水设施停了，存水最多撑两周。明早派人去东郊水处理厂，找战前封存的零件。你先去找科瓦廖夫报到，路线和装备都问清楚。」","choices":[{"text":"「我知道了。还有什么要带的？」","next":"intro_errand"},{"text":"「两周……一点办法也没有了？」","next":"intro_water","flag":"asked_water"}]},
@@ -19,7 +23,7 @@ const PANELS={
 static func start(s,sequence:String):
 	s.ending=false
 	# An illustrated conversation remains in the same moment and facility.
-	if not Campaign.data().panels.get(sequence,{}).get("end","").begins_with("resume:"):
+	if not authored().get(sequence,{}).get("same_moment",false) and not Campaign.data().panels.get(sequence,{}).get("end","").begins_with("resume:"):
 		s.flags.story_day=17 if sequence=="official" else (16 if sequence in ["solo","intro"] else int(s.flags.get("story_day",17))+1)
 		s.flags.story_time="05:40" if sequence=="official" else ("08:10" if sequence=="solo" else "07:42")
 	if sequence=="solo" and (not s.has("mask") or not s.has("filter")) and not s.f("unprotected_departure"):
@@ -30,6 +34,11 @@ static func start(s,sequence:String):
 static func panel(s)->Dictionary:
 	var node=s.flags.get("comic",{}).get("node","")
 	var p:Dictionary=PANELS.get(node,Campaign.data().panels.get(node,{})).duplicate(true)
+	p.merge(authored().get(node,{}),true)
+	if p.has("lines"):
+		var paragraphs:Array[String]=[]
+		for line in p.lines:paragraphs.append(line.text if line.speaker=="旁白" else line.speaker+"：「"+line.text+"」")
+		p.body="\n".join(paragraphs)
 	if not p.is_empty() and s.flags.get("comic",{}).get("sequence","")=="solo" and (not s.has("mask") or not s.has("filter")):
 		if p.art in ["descent","sergey"]:p.art+="_unmasked"
 		if s.flags.comic.node=="solo_descent":p.body+="\n你没有完整防护。灰尘呛进喉咙，你用围巾捂住口鼻，咳得胸口发疼。必须尽快离开这段积尘的通道。"

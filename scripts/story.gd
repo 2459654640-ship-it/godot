@@ -108,7 +108,7 @@ func view(id: String) -> Dictionary:
 			v.options=[opt("fix_valve","用扳手拧紧接头",has("wrench") and not f("valve"),"需要扳手" if not f("valve") else "漏水已止住")]
 		"nina":
 			v.name="妮娜"
-			v.role="东段维修工 / 本次新增人物"
+			v.role="东段维修工"
 			v.options=[opt("borrow_wrench","借用扳手",not has("wrench"),"工具在背包里"),opt("nina_job","接下压力监测维修",not f("nina_job"),"已记下"),opt("claim_permit","领取检修许可与防护装备",f("relay") and not has("permit"),"先更换东侧监测箱保险芯")]
 		"cabinet":
 			v.name="洗漱区 · 旧配电柜"
@@ -281,7 +281,7 @@ static func once_topic(key:String)->bool:
 	return Narrative.CHAT.has(key) or key in ["father","vera_heat","semyon_advice","semyon_radio","briefing","igor_talk","armory_check","gate_daily","coal_ask","resident_shift","resident_igor","vera_day","vera_nina","knock_rooms","nina_reckless"]
 
 func serialize() -> Dictionary:
-	return {"version":1,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
+	return {"version":1,"content_revision":8,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
 func restore(data: Dictionary):
 	flags=data.get("flags",{}).duplicate(true)
 	read_topics.assign(data.get("read_topics",[]))
@@ -308,6 +308,14 @@ func restore(data: Dictionary):
 				for line in conversations[id]:
 					if line.speaker==("ivan" if spoken else "narrator") and line.text==choice:
 						if option.key not in read_topics:read_topics.append(option.key)
+	if int(data.get("content_revision",0))<8:
+		# Reopen only corrected informational answers. Keep quests, rewards and witnessed history.
+		var corrected=flags.get("c_done_commune_route",false)
+		for key in ["commune_route","sech_father","father_semyon","anna_talk"]:flags.erase("c_done_"+key)
+		if corrected:
+			var note="联络记录复核：东方-7 是星城的短波呼号，尚不能确认父亲下落。可再向叶莲娜核实。"
+			know(note)
+			if conversations.has("commune_leader"):conversations.commune_leader.append({"speaker":"narrator","text":note})
 	# A v4 completion meant only "left D-6", not the unseen new chapter.
 	if ending and not flags.has("chapter_endpoint") and not flags.get("comic",{}).get("active",false) and route!="":
 		ending=false

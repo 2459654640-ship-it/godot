@@ -8,6 +8,7 @@ const STEP=0.5
 const CLEARANCE=0.32
 
 func setup(world):
+	graph.clear();cells.clear();points.clear()
 	var regions:Array=[]
 	var bounds:Rect2=world.zones[0].rect
 	for zone in world.zones:

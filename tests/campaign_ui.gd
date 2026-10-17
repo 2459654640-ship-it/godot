@@ -27,6 +27,8 @@ func run():
 	w.story.flags.intro_done=true;w.story.flags.comic={"active":false};w.story.flags.chapter_endpoint="waterworks_exterior";w.story.ending=true
 	w.hud.comic_active=false;w.hud.show_chapter_end();await frames()
 	await press_text("进入水处理厂");w=current_scene
+	check(w.hud.comic_active and w.story.flags.comic.node=="arrive_waterworks","first facility entry introduces the location")
+	await press_text("进入设施");w=current_scene
 	check(w.floor_id=="waterworks" and not w.story.ending,"v5 endpoint migrates to waterworks map")
 	await press_action("plant_diagram","c_plant_read")
 	await press_action("plant_bypass","c_plant_bleed")
@@ -40,6 +42,7 @@ func run():
 	var original=w.story.flags.comic.node;w.hud.comic_choose(0);w.load_game();await frames()
 	check(w.story.flags.comic.node==original and w.hud.comic_active,"saving mid-journey resumes at the unread node")
 	w.hud.comic_choose(0);await frames();w.hud.comic_choose(0);await frames();w.hud.comic_choose(1);await frames();w.hud.comic_choose();await frames(10);w=current_scene
+	await press_text("进入设施");w=current_scene
 	check(w.floor_id=="commune" and w.story.f("water_secured"),"novel choice enters commune retaining waterworks state")
 	# Cross-facility load restores the original floor and active full-screen comic.
 	w.save_path=save;w.load_game();await frames(10);w=current_scene

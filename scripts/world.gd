@@ -6,6 +6,8 @@ const HUD = preload("res://scripts/hud.gd")
 const CampaignMaps=preload("res://scripts/campaign_maps.gd")
 var campaign_gate:MeshInstance3D
 var campaign_gate_flag="star_access"
+var campaign_gate_state=-1
+var gate_tween:Tween
 const Labor=preload("res://scripts/labor_floor.gd")
 @export var floor_id="life"
 const Wing=preload("res://scripts/residential_wing.gd")
@@ -60,6 +62,7 @@ func _ready():
 	if transfer and not transfer.pending.is_empty():
 		story.restore(transfer.pending.story)
 		arrival=transfer.pending.position
+		if floor_id not in ["life","labor"] and transfer.pending.story.get("layout_revision",0)<8:arrival=CampaignMaps.LAYOUTS[floor_id].spawn
 		transfer.pending={}
 	kit=Kit.new(self)
 	build_environment()
@@ -156,6 +159,10 @@ func build_environment():
 	e.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR
 	e.ambient_light_color=Color("9bada6")
 	e.ambient_light_energy=0.29
+	if floor_id not in ["life","labor"]:
+		var atmosphere:Dictionary=CampaignMaps.LAYOUTS[floor_id]
+		e.ambient_light_color=Color(atmosphere.ambient)
+		e.ambient_light_energy=atmosphere.energy
 	e.tonemap_mode=Environment.TONE_MAPPER_FILMIC
 	we.environment=e
 	add_child(we)
@@ -164,6 +171,9 @@ func build_environment():
 	light.rotation_degrees=Vector3(-65,-28,0)
 	light.light_color=Color("9caaa5")
 	light.light_energy=0.32
+	if floor_id not in ["life","labor"]:
+		light.light_color=Color("b9ccd2") if floor_id=="waterworks" else Color("8d9fa8")
+		light.light_energy=.48 if floor_id=="waterworks" else .12
 	light.shadow_enabled=true
 	light.directional_shadow_max_distance=65
 	light.shadow_bias=0.04
@@ -382,6 +392,9 @@ func build_south():
 	kit.lamp(Vector3(4.5,2.3,3.7),true,2.0,6)
 	kit.lamp(Vector3(8.6,2.3,8.8),false,1.3,5)
 	# Open maintenance ramp, visually descending beyond a safe interaction edge.
+	for z in [5.5,7.7]:
+		var beam=kit.box("RampStringer",Vector3(16.8,-.58,z),Vector3(4.2,.22,.18),"metal")
+		beam.rotation.z=-atan(.16/.45)
 	kit.box("RampVoid",Vector3(18,-1.0,6.6),Vector3(7,.4,5),"black")
 	for i in 9:
 		kit.box("RampStep",Vector3(15.0+i*.45,-.05-i*.16,6.6),Vector3(.5,.12,2.6),"wood")
@@ -520,6 +533,7 @@ func _physics_process(delta):
 				story.route="shift"
 				story.changed.emit()
 	previous_position=player.position
+	set_camera(delta)
 	find_nearest()
 	player.blocked=hud.modal_visible() or waiting_shift
 	for zone in zones:
@@ -529,14 +543,17 @@ func _physics_process(delta):
 			break
 	if floor_id=="labor" and Rect2(-13.8,4.1,3.2,5.3).has_point(Vector2(player.position.x,player.position.z)):room_name="生活层楼梯间"
 	hud.tick(delta)
-	set_camera(delta)
+
+func target_actor(id:String):
+	return npcs.get({"armory":"armorer","main_gate":"main_guard"}.get(id,id))
 
 func find_nearest():
 	nearest=""
 	var best=1.7
 	for id in targets:
 		var t=targets[id]
-		if npcs.has(id):t.pos=npcs[id].position
+		var actor=target_actor(id)
+		if actor:t.pos=actor.global_position
 		var d=Vector2(player.position.x-t.pos.x,player.position.z-t.pos.z).length()
 		var reachable=true
 		if d<1.75:
@@ -676,8 +693,17 @@ func perform(key: String, id: String):
 func on_story_changed():
 	story.context.floor=floor_id
 	if campaign_gate:
-		campaign_gate.visible=not story.f(campaign_gate_flag)
-		campaign_gate.get_child(0).get_child(0).set_deferred("disabled",story.f(campaign_gate_flag))
+		var state=1 if story.f(campaign_gate_flag) else 0
+		if state!=campaign_gate_state:
+			campaign_gate_state=state
+			var closed:Vector3=campaign_gate.get_meta("closed_position",campaign_gate.position)
+			var destination=closed+Vector3(2.35*state,0,0)
+			if is_instance_valid(gate_tween):gate_tween.kill()
+			if not initialized:campaign_gate.position=destination
+			else:
+				gate_tween=create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
+				gate_tween.tween_property(campaign_gate,"position",destination,1.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+				get_node("/root/Session").sound("interact")
 	if gate_body:
 		gate_body.set_deferred("disabled",story.f("gate"))
 		gate_mesh.visible=not story.f("gate")
@@ -690,6 +716,7 @@ func save_game():
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z]
 	data.floor=floor_id
+	data.layout_revision=8
 	var file=FileAccess.open(save_path,FileAccess.WRITE)
 	if file:
 		file.store_string(JSON.stringify(data,"\t"))
@@ -711,6 +738,7 @@ func load_game():
 		return
 	story.restore(data)
 	player.position=Vector3(p[0],maxf(p[1],0.04),p[2])
+	if floor_id not in ["life","labor"] and data.get("layout_revision",0)<8:player.position=CampaignMaps.LAYOUTS[floor_id].spawn
 	player.velocity=Vector3.ZERO
 	waiting_shift=false
 	guard_away_time=0.0
@@ -723,6 +751,10 @@ func load_game():
 func restart():
 	get_node("/root/Session").clear()
 	get_tree().change_scene_to_file("res://scenes/d6.tscn")
+
+func return_menu():
+	get_node("/root/Session").clear()
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _exit_tree():
 	# Release looping audio before node teardown (also avoids Dummy-driver leaks
@@ -804,6 +836,7 @@ func build_labor_people():
 	player=Actor.new()
 	player.name="Ivan";add_child(player)
 	player.position=Vector3(-10,.04,1.8)
+	if floor_id=="waterworks":player.art_id="ivan_masked"
 	player.add_to_group("player");player.setup(kit,true,"green")
 	if floor_id=="labor":Labor.people(self)
 	else:
@@ -823,6 +856,10 @@ func facility_doors(id:String)->Array:
 	return CampaignMaps.doors(id)
 
 func travel_campaign(destination:String):
+	if not story.f("arrival_v8_"+destination):
+		story.flags["arrival_v8_"+destination]=true
+		hud.show_comic("arrive_"+destination)
+		return
 	story.ending=false
 	story.flags.erase("next_facility")
 	story.flags.campaign_location=destination
@@ -843,11 +880,14 @@ func build_implied_life():
 	for x in [-19.8,-15.2]:kit.box("DistantLifeSide",Vector3(x,1.3,-1.7),Vector3(.18,2.6,3.6),"rust")
 	kit.box("DistantLifeBlack",Vector3(-17.5,1.2,-3.6),Vector3(4.7,2.4,.2),"black")
 	kit.lamp(Vector3(-17.5,2.2,-3.4),true,.9,4)
-	kit.box("DistantEastFloor",Vector3(18,-.02,-5.5),Vector3(6,.1,3),"concrete")
-	for z in [-7,-4]:kit.box("DistantEastWall",Vector3(18,1.25,z),Vector3(6,2.5,.18),"rust")
-	kit.box("DistantEastBlack",Vector3(21,1.25,-5.5),Vector3(.2,2.5,3),"black")
+	kit.box("DistantEastFloor",Vector3(16.4,-.02,-5.5),Vector3(2.8,.1,3),"concrete")
+	for z in [-7,-4]:kit.box("DistantEastWall",Vector3(16.4,1.25,z),Vector3(2.8,2.5,.18),"corrugated")
+	kit.box("ServiceWingFascia",Vector3(16.4,-.34,-5.5),Vector3(3,.6,3.2),"concrete")
+	for x in [15.15,17.65]:
+		kit.box("ServiceWingRib",Vector3(x,1.3,-6.85),Vector3(.16,2.6,.25),"metal")
+	kit.box("DistantEastBlack",Vector3(17.8,1.25,-5.5),Vector3(.2,2.5,3),"black")
 	kit.box("ClosedEastDoor",Vector3(14.83,1,-5.5),Vector3(.12,2,1.4),"metal")
-	kit.lamp(Vector3(19,2.2,-6.8),false,.9,4)
+	kit.lamp(Vector3(16.8,2.2,-6.8),false,.9,4)
 
 func return_checkpoint():
 	var data=story.departure_checkpoint.duplicate(true)

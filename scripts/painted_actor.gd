@@ -13,11 +13,11 @@ var actor_id="ivan"
 var reaction=""
 var reaction_time=0.0
 var current_pose=0
-const HEIGHTS={"anna":1.68,"father":1.73,"ivan":1.75,"semyon":1.70,"nina":1.68,"mikhail":1.72,"cook":1.66,"supply":1.70,"commander":1.78,"igor":1.84,"resident":1.72,"diner":1.68,"queue":1.78}
+const HEIGHTS={"commune_printer":1.69,"commune_grower":1.64,"sech_quartermaster":1.78,"star_technician":1.76,"commune_leader":1.65,"sech_elder":1.70,"sergey":1.79,"coal_clerk":1.71,"coal_medic":1.64,"coal_brother":1.72,"star_guard":1.74,"veteran_masked":1.77,"commander_masked":1.78,"ivan_masked":1.75,"anna":1.68,"father":1.73,"ivan":1.75,"semyon":1.70,"nina":1.68,"mikhail":1.72,"cook":1.66,"supply":1.70,"commander":1.78,"igor":1.84,"resident":1.72,"diner":1.68,"queue":1.78}
 
 func setup(body):
 	actor=body
-	actor_id="ivan" if body.is_player else (body.art_id if body.art_id!="" else String(body.name))
+	actor_id=body.art_id if body.art_id!="" else ("ivan" if body.is_player else String(body.name))
 	var manifest=JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/atlas.json"))
 	pose_count=int(manifest[actor_id].poses)
 	sprite=MeshInstance3D.new()
@@ -105,4 +105,8 @@ func _process(delta):
 	material.set_shader_parameter("motion",0.0)
 	# Painted key/fill remains readable, with a restrained room-color tint.
 	var warm=clampf((1.8-actor.global_position.z)*0.04,-.04,.05)
+	var floor=actor.get_parent().get("floor_id")
+	if floor=="waterworks":warm=-.05
+	elif floor=="commune":warm=.07
+	elif floor in ["starcity","coal"]:warm=-.04
 	material.set_shader_parameter("light_tint",Vector3(.94+warm,.91,.84-warm))

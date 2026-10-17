@@ -39,13 +39,14 @@ static func tasks(s)->Array:
 		elif s.f("brother_found"):target="commune_anna";area="医务与探访";step="回公社南侧医务室，把核实结果交给安娜。"
 		out.append(row("anna","一个确切的名字",s.f("anna_reunited"),place,"安娜请你核实哥哥的下落，纸条上有班组编号和旧伤。",step,target,area))
 	if s.f("sech_joined") or s.f("radio_manual"):
-		out.append(row("radio","东方-7",s.f("radio_fixed"),"sech","谢契的电台坏了；修好也许能听清那个呼号。","西北调度台有接线图；确认接地后，再去北侧中间的电台。" if not s.f("radio_power") else "接收机已通电，按纸上刻度慢慢调谐。","sech_manual" if not s.f("radio_manual") else "sech_radio","旧军列调度" if not s.f("radio_manual") else "电台维修室"))
+		out.append(row("radio","东方-7",s.f("radio_fixed"),"sech","谢契的电台坏了；修好也许能听清那个呼号。","西北调度台有接线图；确认接地后，再去左侧调度车厢南段的电台。" if not s.f("radio_power") else "接收机已通电，按纸上刻度慢慢调谐。","sech_manual" if not s.f("radio_manual") else "sech_radio","旧军列调度" if not s.f("radio_manual") else "电台维修室"))
 	if s.f("star_registered"):
 		var step="蓝门值班室的纸质规程在入口左边的桌上。";var target="star_manual";var area="蓝门值班室"
 		if s.f("star_manual"):step="去西北侧配电隔离室，断外线后看机械表。";target="star_isolator";area="配电隔离室"
 		if s.f("star_zero"):step="无压已经确认，回南侧中间的内门联锁台合旁路。";target="star_bypass";area="内门联锁台"
-		if s.f("star_access"):step="蓝门已经打开，东北侧测控室有人在等你。";target="star_father";area="测控室"
+		if s.f("star_access"):step="蓝门已经打开，北侧中央的测控室有人在等你。";target="star_father";area="测控室"
 		out.append(row("father","蓝门后的人",s.f("father_met"),"starcity","哨兵接通了内线，让你先确认检修回路。",step,target,area))
+	out.append_array(preload("res://scripts/campaign.gd").side_tasks(s))
 	return out
 static func active(s)->Dictionary:
 	var pending=tasks(s).filter(func(t):return not t.done)
@@ -76,9 +77,18 @@ static func leads(s)->Array:
 		if not s.f("commune_joined"):out.append("委员会的老人正在排轮班表，也许知道这里缺什么人手。")
 	elif floor=="sech" and not s.f("sech_joined"):out.append("长老还在调度台附近，那台没亮灯的电台似乎让他很挂心。")
 	elif floor=="starcity" and not s.f("star_registered"):out.append("蓝门值班室的哨兵一直望着入口。先报个姓名，也许比四处摸索更有用。")
+	for q in preload("res://scripts/campaign.gd").data().get("quests",[]):
+		if q.facility==floor and not s.f(q.accepted):
+			if q.id=="father_letters" and not s.f("father_met"):continue
+			out.append(q.lead)
 	return out
 static func encyclopedia(s)->Array:
-	var rows=[["D-6 与地下生活","1962 年战争后，幸存者进入地下。二十年里，生活、维修、作业和守备各有区域。"],["配给与维生素 D","居民按名单领取每日维生素。地下难见阳光，配给很重要。"],["身体与食物","活动会缓慢消耗饱食；停下阅读、交谈和暂停时不消耗。饥饿不会直接扣生命，先找落脚处吃点东西。食物充足时，活动中的轻伤会逐渐恢复。"],["两种子弹","制式弹既是弹药也是货币；土制弹不能抵账。"]]
+	var rows=[["D-6 与地下生活","D-6 受中央苏维埃管辖，居民仍按身份和岗位领取物资。生活、维修、作业与守备各有区域；净水故障使征召小队必须上地表寻找零件。"],["配给与维生素 D","居民按名单领取每日维生素。地下难见阳光，配给很重要。"],["身体与食物","活动会缓慢消耗饱食；停下阅读、交谈和暂停时不消耗。饥饿不会直接扣生命，先找落脚处吃点东西。食物充足时，活动中的轻伤会逐渐恢复。"],["两种子弹","制式弹既是弹药也是货币；土制弹不能抵账。"]]
 	if s.f("labor_read"):rows.append(["作业层","医务间和装备库在北侧，正门接轨道。生活层楼梯间在集合区西边。"])
 	if s.has("frequency"):rows.append(["东方-7","收音机里听到的呼号。知道更多之前，先留着频率。"])
+	var floor:String=s.context.get("floor","")
+	if floor=="commune" or s.f("commune_joined"):rows.append(["莫斯科公社","反对中央苏维埃特权的革命组织，依靠工人委员会、地下联络和武装守备维持独立。伤病交换窗口只允许有限的人道探访，并未结束敌对。"])
+	if floor=="sech" or s.f("sech_joined"):rows.append(["废土谢契","带有哥萨克传统的独立共同体，以旧军列检修库为落脚处；议事、阿塔曼与轮值并存，不服从中央，也未加入公社。"])
+	if floor=="starcity" or s.f("star_known"):rows.append(["星城-2","大型地下科研设施，具有测控、材料、低温、供电与生活分区。当前可进入外侧维护与测控区域。不能凭一个呼号确认失联者的身份。"])
+	if s.f("father_met"):rows.append(["父亲的工作","父亲在星城的测控技术班维护与校准设备，研究计划由各组共同维持。他的工作不能替二十年的缺席作答。 "])
 	return rows

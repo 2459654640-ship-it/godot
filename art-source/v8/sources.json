@@ -1,0 +1,71 @@
+[
+  {
+    "file": "cast_commune_sech.png",
+    "ids": [
+      "commune_leader",
+      "sech_elder"
+    ],
+    "rows": 2
+  },
+  {
+    "file": "cast_sergey_clerk.png",
+    "ids": [
+      "sergey",
+      "coal_clerk"
+    ],
+    "rows": 2
+  },
+  {
+    "file": "cast_nurse_miner.png",
+    "ids": [
+      "coal_medic",
+      "coal_brother"
+    ],
+    "rows": 2
+  },
+  {
+    "file": "cast_guard_veteran.png",
+    "ids": [
+      "star_guard",
+      "veteran_masked"
+    ],
+    "rows": 2
+  },
+  {
+    "file": "ivan_final.png",
+    "ids": [
+      "ivan"
+    ],
+    "rows": 3
+  },
+  {
+    "file": "ivan_masked.png",
+    "ids": [
+      "ivan_masked"
+    ],
+    "rows": 3
+  },
+  {
+    "file": "commander_masked.png",
+    "ids": [
+      "commander_masked"
+    ],
+    "rows": 1
+  },
+  {
+    "file": "cast_printer_grower.png",
+    "ids": [
+      "commune_printer",
+      "commune_grower"
+    ],
+    "rows": 2
+  },
+  {
+    "file": "cast_quartermaster_technician.png",
+    "ids": [
+      "sech_quartermaster",
+      "star_technician"
+    ],
+    "rows": 2
+  }
+]

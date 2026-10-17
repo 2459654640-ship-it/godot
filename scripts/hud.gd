@@ -5,9 +5,9 @@ const Dialogue=preload("res://scripts/ui_dialogue.gd")
 const Journal=preload("res://scripts/journal.gd")
 const MapView=preload("res://scripts/minimap.gd")
 var world
-var font=preload("res://assets/fonts/MetroSans.otf")
-var serif=preload("res://assets/fonts/MetroSerif.otf")
-var mono=preload("res://assets/fonts/MetroMono.ttf")
+var font:Font
+var serif:Font
+var mono:Font
 var objective: Label
 var location_label: Label
 var prompt: Label
@@ -61,6 +61,7 @@ func _input(event):
 
 func setup(w):
 	world=w
+	font=load("res://assets/fonts/MetroSans.otf");serif=load("res://assets/fonts/MetroSerif.otf");mono=load("res://assets/fonts/MetroMono.ttf")
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter=Control.MOUSE_FILTER_IGNORE
 	var theme=Theme.new()
@@ -361,10 +362,12 @@ func set_prompt(id:String):
 		target_label.text=""
 		return
 	var t=world.targets[id]
+	var actor=world.target_actor(id)
+	var live_position:Vector3=actor.global_position if actor else t.pos
 	prompt.text="[ E ]   "+("交谈 · " if t.kind=="talk" else "调查 · ")+t.label
 	target_label.text=("◇  " if t.kind=="talk" else "⌕  ")+t.label
 	target_label.visible=not modal_visible()
-	var p:Vector2=world.camera.unproject_position(t.pos+Vector3(0,2.2,0))
+	var p:Vector2=world.camera.unproject_position(live_position+Vector3(0,2.2,0))
 	target_label.position=p-Vector2(target_label.get_minimum_size().x/2,20)
 func refresh_status():
 	if not objective:return
@@ -392,6 +395,7 @@ func refresh_status():
 		quick_signature=signature
 func tick(delta:float):
 	prompt.visible=not modal_visible()
+	if not modal_visible() and world.nearest!="" and not world.waiting_shift:set_prompt(world.nearest)
 	location_label.text=("D–6 " if world.floor_id in ["life","labor"] else "")+world.floor_name()+"  /  "+world.room_name
 	status_label.text=str(world.story.flags.get("story_day",16))+" XI 1982  /  "+str(world.story.flags.get("story_time","07:42"))+" · "+("旅程" if comic_active or world.story.ending else (("换班" if world.phase>=8 else "早班") if world.floor_id in ["life","labor"] else "探索"))
 	var guidance=JSON.stringify([Journal.active(world.story),world.story.economy.health,world.story.economy.food,Journal.leads(world.story).size()])
@@ -508,7 +512,9 @@ func quest_card(task:Dictionary,tracked:bool):
 	var context=label(task.background,18,text_color);context.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;box.add_child(context)
 	if not task.done:
 		var step=label(task.step,19,Color("c7cdb7"));step.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;box.add_child(step)
-		if not tracked:box.add_child(button("接下来跟进这件事",func():Journal.track(world.story,task.id);show_journal(),true,true))
+		var local=task.place==world.floor_id or (task.place in ["life","labor"] and world.floor_id in ["life","labor"])
+		if not local:box.add_child(label("到达对应设施后可继续跟进。",16,muted))
+		elif not tracked:box.add_child(button("接下来跟进这件事",func():Journal.track(world.story,task.id);show_journal(),true,true))
 		else:box.add_child(button("在地图上看看这一带",func():show_journal("map",task.place),true,true))
 
 func show_map():show_journal("map")
@@ -553,6 +559,7 @@ func show_pause():
 	modal_box.add_child(button("保存手记  [F5]",func():world.save_game()))
 	modal_box.add_child(button("读取手记  [F9]",func():world.load_game()))
 	modal_box.add_child(button("重新开始（保留已有存档）",func():show_restart_confirm()))
+	modal_box.add_child(button("返回主界面…",func():show_menu_confirm()))
 	audio_controls()
 	rule()
 	body("WASD / 方向键：8 方向移动\nE：交谈 / 调查\nI：背包　J：手记　M：地图\nTab：总览　滚轮：缩放\nEsc：关闭界面 / 菜单",20)
@@ -561,6 +568,12 @@ func show_restart_confirm():
 	start_modal("重新开始？","当前未保存的进度将丢失",true)
 	modal_box.add_child(button("确认重新开始",func():world.restart()))
 	modal_box.add_child(button("返回",func():show_pause()))
+
+func show_menu_confirm():
+	start_modal("收起这段旅程？","先保存手记，下次就能从主界面继续",true)
+	modal_box.add_child(button("保存并返回主界面",func():world.save_game();world.return_menu()))
+	modal_box.add_child(button("直接返回（放弃未保存进度）",func():world.return_menu()))
+	modal_box.add_child(button("继续旅程",func():show_comic_pause() if comic_active else show_pause()))
 
 func show_departure(confirmed:bool):
 	var s=world.story
@@ -607,6 +620,7 @@ func show_comic_pause():
 	modal_box.add_child(button("保存当前进度",func():world.save_game()))
 	modal_box.add_child(button("读取存档",func():world.load_game()))
 	modal_box.add_child(button("重新开始",func():show_restart_confirm()))
+	modal_box.add_child(button("返回主界面…",func():show_menu_confirm()))
 	audio_controls()
 
 func show_chapter_end():

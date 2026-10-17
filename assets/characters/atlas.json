@@ -13,21 +13,21 @@
     "rear_diagonal_normalized": true,
     "clips": [
       "idle",
-      "walk_left",
-      "walk_right"
+      "left_stride",
+      "right_stride"
     ]
   },
   "semyon": {
     "file": "semyon.png",
-    "directions": 8,
-    "source_angles": 5,
-    "poses": 4,
+    "directions": 8.0,
+    "source_angles": 5.0,
+    "poses": 4.0,
     "cell": [
-      240,
-      352
+      240.0,
+      352.0
     ],
-    "baseline": 342,
-    "body_pixels": 324,
+    "baseline": 342.0,
+    "body_pixels": 324.0,
     "rear_diagonal_normalized": true,
     "clips": [
       "idle",
@@ -38,15 +38,15 @@
   },
   "nina": {
     "file": "nina.png",
-    "directions": 8,
-    "source_angles": 5,
-    "poses": 4,
+    "directions": 8.0,
+    "source_angles": 5.0,
+    "poses": 4.0,
     "cell": [
-      240,
-      352
+      240.0,
+      352.0
     ],
-    "baseline": 342,
-    "body_pixels": 324,
+    "baseline": 342.0,
+    "body_pixels": 324.0,
     "rear_diagonal_normalized": true,
     "clips": [
       "idle",
@@ -57,15 +57,15 @@
   },
   "mikhail": {
     "file": "mikhail.png",
-    "directions": 8,
-    "source_angles": 5,
-    "poses": 4,
+    "directions": 8.0,
+    "source_angles": 5.0,
+    "poses": 4.0,
     "cell": [
-      240,
-      352
+      240.0,
+      352.0
     ],
-    "baseline": 342,
-    "body_pixels": 324,
+    "baseline": 342.0,
+    "body_pixels": 324.0,
     "rear_diagonal_normalized": true,
     "clips": [
       "idle",
@@ -76,15 +76,15 @@
   },
   "cook": {
     "file": "cook.png",
-    "directions": 8,
-    "source_angles": 5,
-    "poses": 4,
+    "directions": 8.0,
+    "source_angles": 5.0,
+    "poses": 4.0,
     "cell": [
-      240,
-      352
+      240.0,
+      352.0
     ],
-    "baseline": 342,
-    "body_pixels": 324,
+    "baseline": 342.0,
+    "body_pixels": 324.0,
     "rear_diagonal_normalized": true,
     "clips": [
       "idle",
@@ -95,15 +95,15 @@
   },
   "supply": {
     "file": "supply.png",
-    "directions": 8,
-    "source_angles": 5,
-    "poses": 4,
+    "directions": 8.0,
+    "source_angles": 5.0,
+    "poses": 4.0,
     "cell": [
-      240,
-      352
+      240.0,
+      352.0
     ],
-    "baseline": 342,
-    "body_pixels": 324,
+    "baseline": 342.0,
+    "body_pixels": 324.0,
     "rear_diagonal_normalized": true,
     "clips": [
       "idle",
@@ -114,15 +114,15 @@
   },
   "commander": {
     "file": "commander.png",
-    "directions": 8,
-    "source_angles": 5,
-    "poses": 4,
+    "directions": 8.0,
+    "source_angles": 5.0,
+    "poses": 4.0,
     "cell": [
-      240,
-      352
+      240.0,
+      352.0
     ],
-    "baseline": 342,
-    "body_pixels": 324,
+    "baseline": 342.0,
+    "body_pixels": 324.0,
     "rear_diagonal_normalized": true,
     "clips": [
       "idle",
@@ -133,15 +133,15 @@
   },
   "igor": {
     "file": "igor.png",
-    "directions": 8,
-    "source_angles": 5,
-    "poses": 4,
+    "directions": 8.0,
+    "source_angles": 5.0,
+    "poses": 4.0,
     "cell": [
-      240,
-      352
+      240.0,
+      352.0
     ],
-    "baseline": 342,
-    "body_pixels": 324,
+    "baseline": 342.0,
+    "body_pixels": 324.0,
     "rear_diagonal_normalized": true,
     "clips": [
       "idle",
@@ -152,15 +152,15 @@
   },
   "resident": {
     "file": "resident.png",
-    "directions": 8,
-    "source_angles": 5,
-    "poses": 4,
+    "directions": 8.0,
+    "source_angles": 5.0,
+    "poses": 4.0,
     "cell": [
-      240,
-      352
+      240.0,
+      352.0
     ],
-    "baseline": 342,
-    "body_pixels": 324,
+    "baseline": 342.0,
+    "body_pixels": 324.0,
     "rear_diagonal_normalized": true,
     "clips": [
       "idle",
@@ -171,15 +171,15 @@
   },
   "diner": {
     "file": "diner.png",
-    "directions": 8,
-    "source_angles": 5,
-    "poses": 4,
+    "directions": 8.0,
+    "source_angles": 5.0,
+    "poses": 4.0,
     "cell": [
-      240,
-      352
+      240.0,
+      352.0
     ],
-    "baseline": 342,
-    "body_pixels": 324,
+    "baseline": 342.0,
+    "body_pixels": 324.0,
     "rear_diagonal_normalized": true,
     "clips": [
       "idle",
@@ -190,15 +190,15 @@
   },
   "queue": {
     "file": "queue.png",
-    "directions": 8,
-    "source_angles": 5,
-    "poses": 4,
+    "directions": 8.0,
+    "source_angles": 5.0,
+    "poses": 4.0,
     "cell": [
-      240,
-      352
+      240.0,
+      352.0
     ],
-    "baseline": 342,
-    "body_pixels": 324,
+    "baseline": 342.0,
+    "body_pixels": 324.0,
     "rear_diagonal_normalized": true,
     "clips": [
       "idle",
@@ -208,35 +208,261 @@
     ]
   },
   "anna": {
-    "baseline": 342,
-    "body_pixels": 324,
+    "baseline": 342.0,
+    "body_pixels": 324.0,
     "cell": [
-      240,
-      352
+      240.0,
+      352.0
     ],
     "clips": [
       "idle"
     ],
-    "directions": 8,
+    "directions": 8.0,
     "file": "anna.png",
-    "poses": 1,
+    "poses": 1.0,
     "rear_diagonal_normalized": true,
-    "source_angles": 5
+    "source_angles": 5.0
   },
   "father": {
-    "baseline": 342,
-    "body_pixels": 324,
+    "baseline": 342.0,
+    "body_pixels": 324.0,
     "cell": [
-      240,
-      352
+      240.0,
+      352.0
     ],
     "clips": [
       "idle"
     ],
-    "directions": 8,
+    "directions": 8.0,
     "file": "father.png",
-    "poses": 1,
+    "poses": 1.0,
     "rear_diagonal_normalized": true,
-    "source_angles": 5
+    "source_angles": 5.0
+  },
+  "commune_leader": {
+    "file": "commune_leader.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "sech_elder": {
+    "file": "sech_elder.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "sergey": {
+    "file": "sergey.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "coal_clerk": {
+    "file": "coal_clerk.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "coal_medic": {
+    "file": "coal_medic.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "coal_brother": {
+    "file": "coal_brother.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "star_guard": {
+    "file": "star_guard.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "veteran_masked": {
+    "file": "veteran_masked.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "ivan_masked": {
+    "file": "ivan_masked.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 3,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "left_stride",
+      "right_stride"
+    ]
+  },
+  "commander_masked": {
+    "file": "commander_masked.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "commune_printer": {
+    "file": "commune_printer.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "commune_grower": {
+    "file": "commune_grower.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "sech_quartermaster": {
+    "file": "sech_quartermaster.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "star_technician": {
+    "file": "star_technician.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
   }
 }
