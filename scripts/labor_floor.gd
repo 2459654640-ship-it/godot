@@ -100,7 +100,7 @@ static func build(w):
 	for x in [19.15,20.85]:
 		for z in [-8,-6]:k.cyl("TrolleyWheel",Vector3(x,.23,z),.23,.12,"dark").rotation.z=PI/2
 	for z in [7,10.5]:k.table(Vector3(-19,0,z),3)
-	for x in [-21,-17]:k.bench(Vector3(x,0,8.8),1.8)
+	for x in [-21,-17]:k.bench(Vector3(x,0,8.8),1.8,true,PI/2 if x< -19 else -PI/2)
 	k.table(Vector3(-8.5,0,11.4),3.2)
 	k.box("Roster",Vector3(-8.5,.83,11.4),Vector3(1.2,.025,.8),"paper")
 	for x in [-5]:k.bench(Vector3(x,0,8.0),2)
@@ -120,14 +120,22 @@ static func build(w):
 	barrier(k,"StairwellLeft",Vector2(-13.8,4.1),Vector2(-13.8,9.4))
 	barrier(k,"StairwellRight",Vector2(-10.6,4.1),Vector2(-10.6,9.4))
 	barrier(k,"StairwellRear",Vector2(-13.8,9.4),Vector2(-10.6,9.4))
-	for i in 10:
-		var height=.18*(i+1)
-		var x=-10.95-i*.25
-		k.box("StairTread",Vector3(x,height/2,7.8),Vector3(.25,height,2.3),"concrete")
-		k.box("StairNosing",Vector3(x+.12,height+.012,7.8),Vector3(.05,.025,2.25),"brass")
-	for z in [6.5,9.05]:
-		k.pipe(Vector3(-10.8,.9,z),Vector3(-13.3,2.7,z),.035,"metal")
-		for i in [0,4,9]:k.pipe(Vector3(-10.95-i*.25,.18*(i+1),z),Vector3(-10.95-i*.25,.9+.18*i,z),.028,"metal")
+	# Two flights join the lower doorway to an upper return landing; both ends have headroom.
+	for i in 7:
+		var first_height=.2*(i+1);var z=6+i*.36
+		k.box("StairTreadLower",Vector3(-12.95,first_height/2,z),Vector3(1.2,first_height,.36),"concrete")
+		k.box("StairNosingLower",Vector3(-12.95,first_height+.012,z-.17),Vector3(1.17,.025,.055),"brass")
+		var return_height=1.4+.2*(i+1);var rz=8.16-i*.36
+		k.box("StairTreadUpper",Vector3(-11.5,return_height-.1,rz),Vector3(1.2,.2,.36),"concrete")
+		k.box("StairNosingUpper",Vector3(-11.5,return_height+.012,rz+.17),Vector3(1.17,.025,.055),"brass")
+	k.box("StairHalfLanding",Vector3(-12.2,1.3,8.85),Vector3(2.8,.2,1.02),"concrete")
+	k.box("StairUpperLanding",Vector3(-11.5,2.7,5.18),Vector3(1.3,.2,1.22),"concrete")
+	for spec in [[-13.58,Vector2(.9,5.65),Vector2(2.3,8.65)],[-12.25,Vector2(.9,5.65),Vector2(2.3,8.65)],[-10.85,Vector2(2.3,8.65),Vector2(3.7,5.65)]]:
+		k.pipe(Vector3(spec[0],spec[1].x,spec[1].y),Vector3(spec[0],spec[2].x,spec[2].y),.035,"metal")
+	for x in [-13.55,-12.25,-10.85]:
+		for z in [6,7.1,8.2]:
+			var level=(z-5.7)*.55 if x< -11 else 1.4+(8.5-z)*.55
+			k.pipe(Vector3(x,level,z),Vector3(x,level+.9,z),.025,"metal")
 	k.box("StairRiseStop",Vector3(-12.2,1,6.1),Vector3(2.8,2,.18),"dark",true).visible=false
 	k.signboard("ЖИЛОЙ ЯРУС / ↑",Vector3(-12.2,2.35,4.05),2.8)
 	k.label("↑ 生活层",Vector3(-12.2,2.0,5.9),30)

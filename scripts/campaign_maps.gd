@@ -75,6 +75,7 @@ static func build(w):
 		# Per-room wear patches use a single material surface, no overlapping floor planes.
 		k.locker(Vector3(r.end.x-1,0,r.position.y+1.2),1.7)
 	for entry in OBJECTS[id]:furnish(k,entry,id)
+	if id=="waterworks":k.signboard("值班图 / 入口登记",Vector3(8,1.8,4.7),2.7)
 	dress_facility(w)
 	if id=="waterworks":
 		w.campaign_gate_flag="plant_power"
@@ -138,7 +139,7 @@ static func furnish(k,e:Array,id:String):
 			k.box("AirlockMarker",p+Vector3(0,.02,1.4),Vector3(1.8,.025,.15),"brass")
 			k.label("⇄",p+Vector3(0,1.8,1.5),45)
 static func people(w):
-	var arts={"plant_guide":"commander","commune_leader":"cook","commune_anna":"nina","sech_elder":"semyon","sech_sergey":"igor","coal_clerk":"queue","coal_medic":"supply","coal_brother":"resident","star_guard":"commander","star_father":"semyon"}
+	var arts={"plant_guide":"commander","commune_leader":"cook","commune_anna":"anna","sech_elder":"semyon","sech_sergey":"igor","coal_clerk":"queue","coal_medic":"supply","coal_brother":"resident","star_guard":"commander","star_father":"father"}
 	for e in OBJECTS[w.floor_id]:
 		if e[3]=="npc":w.person(e[0],Vector3(e[1],0,e[2]),"green",true,arts[e[0]])
 	if w.floor_id=="waterworks":w.person("plant_guide",Vector3(10,0,4),"green",true,"commander")
@@ -159,7 +160,7 @@ static func dress_facility(w):
 		var center:float=r.get_center().x
 		# Perimeter furnishings preserve a wide approach to every door and target.
 		if id in ["commune","sech","coal"]:
-			k.bench(Vector3(center,0,back),3.6)
+			k.bench(Vector3(center,0,back),3.6,true,0 if r.position.y<0 else PI)
 			for dx in [-1.1,0,1.1]:
 				k.box("FoldedBlanket",Vector3(center+dx,.6,back),Vector3(.65,.18,.5),"cloth")
 		else:
@@ -199,7 +200,7 @@ static func dress_facility(w):
 			k.table(Vector3(-13,0,8.5),5)
 			for x in [-14.5,-13,-11.5]:
 				k.cyl("SoupBowl",Vector3(x,.84,8.5),.14,.1,"cream")
-			k.bench(Vector3(-13,0,7.4),3.8)
+			k.bench(Vector3(-13,0,7.4),3.8,true,PI)
 			k.poster(Vector3(-14,1.7,10.7),"ВМЕСТЕ",true)
 			for x in [-3,5]:
 				k.box("ClinicScreenPost",Vector3(x,1.1,8.5),Vector3(.06,2.2,2.4),"metal")
@@ -210,7 +211,7 @@ static func dress_facility(w):
 			k.box("RailCarSide",Vector3(15.6,1.1,-6.5),Vector3(.15,2.2,5),"corrugated")
 			for z in [-8,-6,-4]:k.box("CarWindow",Vector3(15.5,1.45,z),Vector3(.04,.65,.8),"dark")
 			k.table(Vector3(0,0,9),4)
-			k.bench(Vector3(0,0,7.8),3)
+			k.bench(Vector3(0,0,7.8),3,true,PI)
 			for x in [-2,2]:k.cyl("StoveChimney",Vector3(x,1.5,9),.11,3,"rust")
 			for i in 8:k.box("DryingBook",Vector3(7+i*.65,.7,-8),Vector3(.45,.07,.6),"paper")
 		"coal":

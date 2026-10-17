@@ -23,6 +23,8 @@ var gate_body: CollisionShape3D
 var side_body: CollisionShape3D
 var phase = 0.0
 var step_clock=0.0
+var step_variant=0
+var step_samples:Array[AudioStream]=[]
 var step_audio:AudioStreamPlayer
 var ambience:AudioStreamPlayer
 var waiting_shift = false
@@ -119,8 +121,9 @@ func _ready():
 	step_audio=AudioStreamPlayer.new()
 	add_child(step_audio)
 	step_audio.stream=load("res://assets/audio/step.wav")
-	step_audio.volume_db=-5
-	step_audio.bus="Effects"
+	step_audio.volume_db=-12
+	step_audio.bus="Footsteps"
+	for file in ["step","step_b","step_c","step_d"]:step_samples.append(load("res://assets/audio/"+file+".wav"))
 	on_story_changed()
 	set_camera(0,true)
 	initialized=true
@@ -257,7 +260,7 @@ func build_residence():
 	kit.crate(Vector3(-12.2,0,-4.8),Vector3(0.65,0.35,0.45))
 	kit.locker(Vector3(-14.2,0,-2.0))
 	kit.locker(Vector3(-14.2,0,-2.65))
-	kit.bench(Vector3(-11.8,0,-1.4),1.1)
+	kit.bench(Vector3(-11.8,0,-1.4),1.1,true,PI)
 	kit.poster(Vector3(-12.5,1.65,-8.87),"МОСКВА · 1962",false)
 	kit.signboard("01 / ЖИЛОЙ ОТСЕК",Vector3(-10.4,2.1,-8.83),3.0)
 	kit.signboard("СЕМЁНОВ",Vector3(-13.45,2.22,-8.82),2.1)
@@ -283,7 +286,7 @@ func build_workshop():
 	kit.locker(Vector3(-0.3,0,-7.15))
 	kit.box("SparePipeRack",Vector3(-7.5,0.5,-6.4),Vector3(0.55,1,2.4),"dark",true)
 	for y in [0.4,0.7,1.0]:kit.pipe(Vector3(-7.4,y,-7.5),Vector3(-7.4,y,-5.3),0.09,"rust")
-	kit.bench(Vector3(-1.2,0,-2.0),1.8)
+	kit.bench(Vector3(-1.2,0,-2.0),1.8,true,PI)
 	kit.signboard("02 / МАСТЕРСКАЯ",Vector3(-3.6,2.45,-8.83),3.6)
 	kit.lamp(Vector3(-4.5,2.3,-8.7),true,2.5,7)
 	kit.lamp(Vector3(-0.8,2.3,-4.1),false,1.4,4)
@@ -349,11 +352,11 @@ func build_south():
 	kit.box("FuseCabinet",Vector3(-9.0,1.1,8.9),Vector3(0.8,1.5,0.35),"metal",true)
 	kit.box("FuseHazard",Vector3(-9,1.3,8.70),Vector3(0.25,0.28,0.025),"cream")
 	kit.label("⚡",Vector3(-9,1.3,8.67),30,Color("27332d")).rotation.y=PI
-	kit.bench(Vector3(-11.3,0,8.8),2)
+	kit.bench(Vector3(-11.3,0,8.8),2,true,PI)
 	kit.lamp(Vector3(-12,2.4,4.0),false,2.3,6)
 	# Assembly bay is a pause space, not a second combat level.
 	kit.bench(Vector3(-6.4,0,4.3),2.1)
-	kit.bench(Vector3(-6.4,0,8.7),2.1)
+	kit.bench(Vector3(-6.4,0,8.7),2.1,true,PI)
 	kit.box("BriefingDesk",Vector3(-0.2,0.75,6.5),Vector3(1.45,0.12,0.9),"wood",true)
 	kit.box("BriefingDeskBase",Vector3(-0.2,0.35,6.5),Vector3(1.3,0.7,0.75),"dark",true)
 	kit.box("FoldedMap",Vector3(-0.3,0.83,6.5),Vector3(0.9,0.02,0.6),"paper")
@@ -368,7 +371,7 @@ func build_south():
 	kit.box("GuardDeskBase",Vector3(4.4,0.35,7.8),Vector3(1.9,0.7,0.8),"metal",true)
 	kit.box("GuardBook",Vector3(4.2,0.84,7.7),Vector3(0.43,0.035,0.31),"paper")
 	kit.cyl("GuardCup",Vector3(4.8,0.92,7.7),0.09,0.17,"cream")
-	kit.bench(Vector3(3.1,0,9.1),1.1)
+	kit.bench(Vector3(3.1,0,9.1),1.1,true,PI)
 	kit.box("RelayBox",Vector3(7.7,1.0,3.8),Vector3(0.9,1.3,0.45),"metal",true)
 	kit.box("RelayScreen",Vector3(7.7,1.25,4.04),Vector3(0.55,0.28,0.02),"cold_light")
 	kit.cyl("PressureGauge",Vector3(8.6,1.4,5.5),0.18,0.09,"cream").rotation.x=PI/2
@@ -473,13 +476,19 @@ func build_targets():
 func _physics_process(delta):
 	if not initialized:return
 	phase=fmod(phase+delta,12.0)
-	if Vector2(player.velocity.x,player.velocity.z).length()>0.5 and not player.blocked:
-		step_clock+=delta
-		if step_clock>0.38:
-			step_clock=0
-			step_audio.pitch_scale=0.97+fmod(phase,0.07)
+	var moved=Vector2(player.position.x-previous_position.x,player.position.z-previous_position.z).length()
+	var active=not hud.modal_visible() and not waiting_shift and not story.flags.get("comic",{}).get("active",false)
+	var walking=active and moved>.001 and moved<1.5
+	story.Economy.advance(story,delta,walking)
+	if walking:
+		step_clock+=moved
+		if step_clock>=1.05:
+			step_clock=fmod(step_clock,1.05)
+			step_variant=(step_variant+1)%step_samples.size()
+			step_audio.stream=step_samples[step_variant]
+			step_audio.pitch_scale=[.98,1.02,1.0,.97][step_variant]
 			if DisplayServer.get_name()!="headless":step_audio.play()
-	else:step_clock=0.3
+	else:step_clock=0
 	if floor_id=="life":
 		if waiting_shift:
 			if phase>=8.0:
@@ -633,6 +642,7 @@ func perform(key: String, id: String):
 		get_node("/root/Session").sound("interact")
 		if story.flags.has("next_sequence"):
 			var sequence:String=story.flags.next_sequence
+			if reply!="":story.Conversation.reply(story,id,hud.last_choice,reply);hud.last_choice=""
 			story.flags.erase("next_sequence")
 			hud.show_comic(sequence)
 		elif story.ending:hud.show_chapter_end()
@@ -664,6 +674,7 @@ func perform(key: String, id: String):
 	hud.show_reply(id,reply)
 
 func on_story_changed():
+	story.context.floor=floor_id
 	if campaign_gate:
 		campaign_gate.visible=not story.f(campaign_gate_flag)
 		campaign_gate.get_child(0).get_child(0).set_deferred("disabled",story.f(campaign_gate_flag))

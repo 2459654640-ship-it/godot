@@ -1,11 +1,11 @@
-; Metro 1982 — D-6 residential slice
+; Metro 1982 — narrative exploration
 config_version=5
 
 [application]
 config/name="地铁1982 · D-6"
 run/main_scene="res://scenes/d6.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
-config/description="D-6 生活层 · 3D 叙事箱庭原型"
+config/description="地铁1982 · 等距叙事探索、设施地图与图文旅程"
 
 [autoload]
 Session="*res://scripts/session.gd"

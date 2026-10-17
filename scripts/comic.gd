@@ -18,8 +18,10 @@ const PANELS={
 "solo_reserved":{"art":"sergey","title":"各留一点余地","body":"「行。不想说的先留着。」\n谢尔盖没有继续追问，朝火边的空地方偏了偏头。\n「隧道里别只顾着看前头，头顶也听着点。我找旧军列，你要找路，也许能互相省点事。」\n你站在离火几步远的地方。下一段路，还没有决定。","end":"sergey_meeting"}}
 static func start(s,sequence:String):
 	s.ending=false
-	s.flags.story_day=17 if sequence=="official" else (16 if sequence in ["solo","intro"] else int(s.flags.get("story_day",17))+1)
-	s.flags.story_time="05:40" if sequence=="official" else ("08:10" if sequence=="solo" else "07:42")
+	# An illustrated conversation remains in the same moment and facility.
+	if not Campaign.data().panels.get(sequence,{}).get("end","").begins_with("resume:"):
+		s.flags.story_day=17 if sequence=="official" else (16 if sequence in ["solo","intro"] else int(s.flags.get("story_day",17))+1)
+		s.flags.story_time="05:40" if sequence=="official" else ("08:10" if sequence=="solo" else "07:42")
 	if sequence=="solo" and (not s.has("mask") or not s.has("filter")) and not s.f("unprotected_departure"):
 		s.flags.unprotected_departure=true
 		s.economy.health=maxi(1,s.economy.health-8)
@@ -44,7 +46,13 @@ static func choose(s,index:int=-1):
 		s.flags.comic_records=records
 	if p.has("end"):
 		state.active=false
-		if p.end=="intro":s.flags.intro_done=true
+		if p.end=="intro":
+			s.flags.intro_done=true
+			if not s.f("rations_issued"):
+				s.flags.rations_issued=true
+				s.economy.goods.bread=int(s.economy.goods.get("bread",0))+2
+		elif p.end.begins_with("resume:"):
+			s.flags.resume_dialogue=p.end.substr(7)
 		elif p.end.begins_with("map:"):
 			s.flags.next_facility=p.end.substr(4)
 			s.ending=false

@@ -14,10 +14,10 @@ var effect_players:Array[AudioStreamPlayer]=[]
 var settings=ConfigFile.new()
 func _ready():
 	settings.load("user://metro_settings.cfg")
-	for bus_name in ["Music","Effects"]:
+	for bus_name in ["Music","Effects","Footsteps"]:
 		if AudioServer.get_bus_index(bus_name)<0:
 			AudioServer.add_bus();AudioServer.set_bus_name(AudioServer.bus_count-1,bus_name)
-	for pair in [["Master",.8],["Music",.35],["Effects",.85]]:
+	for pair in [["Master",.8],["Music",.35],["Effects",.85],["Footsteps",.65]]:
 		set_volume(pair[0],float(settings.get_value("audio",pair[0],pair[1])),false)
 	for i in 4:
 		var p=AudioStreamPlayer.new();p.bus="Effects";add_child(p);effect_players.append(p)

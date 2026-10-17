@@ -1,4 +1,5 @@
 extends Control
+const UiSurface=preload("res://scripts/ui_surface.gd")
 const ComicUI=preload("res://scripts/ui_comic.gd")
 const Dialogue=preload("res://scripts/ui_dialogue.gd")
 const Journal=preload("res://scripts/journal.gd")
@@ -32,6 +33,11 @@ var is_departure=false
 var comic_active=false
 var typing:Array=[]
 var last_choice=""
+var health_bar:ProgressBar
+var food_bar:ProgressBar
+var vitals_label:Label
+var leads_button:Button
+var last_guidance=""
 
 func _process(delta:float):
 	advance_typing(delta)
@@ -85,15 +91,13 @@ func setup(w):
 	status_label.add_theme_font_override("font",mono)
 	tb.add_child(status_label)
 	# Current goal is short; the detailed quest network belongs in the journal.
-	var goal=panel(Vector2(32,134),Vector2(246,144))
+	var goal=panel(Vector2(32,134),Vector2(264,220))
 	var gb=margin_box(goal,18,15)
-	gb.add_child(label("当前目标  /  OBJECTIVE",14,amber))
+	gb.add_child(label("正在跟进",14,amber))
 	objective=label("",18,text_color)
 	objective.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	gb.add_child(objective)
-	var journal_btn=button("J   查看手记与路线",func():show_journal(),true,true)
-	journal_btn.add_theme_font_size_override("font_size",16)
-	gb.add_child(journal_btn)
+	gb.add_child(label("线索与待办收在手记里",14,muted))
 	var key_panel=panel(Vector2(32,769),Vector2(250,93))
 	var kb=margin_box(key_panel,16,12)
 	kb.add_child(label("W A S D    移动       E   互动",16,text_color))
@@ -109,34 +113,27 @@ func setup(w):
 	map_small.world=world
 	mb.add_child(map_small)
 	# Bottom command bar with a warmer identity block and a small route indicator.
-	var bar=panel(Vector2(32,890),Vector2(1536,78))
-	var row=HBoxContainer.new()
-	row.add_theme_constant_override("separation",26)
+	var bar=panel(Vector2(32,890),Vector2(1536,86))
+	var row=HBoxContainer.new();row.add_theme_constant_override("separation",20)
 	var mar=MarginContainer.new()
-	mar.add_theme_constant_override("margin_left",22)
-	mar.add_theme_constant_override("margin_right",22)
-	mar.add_theme_constant_override("margin_top",14)
-	bar.add_child(mar)
-	mar.add_child(row)
-	var identity=VBoxContainer.new()
-	identity.custom_minimum_size.x=160
-	row.add_child(identity)
+	for side in ["left","right"]:mar.add_theme_constant_override("margin_"+side,22)
+	for side in ["top","bottom"]:mar.add_theme_constant_override("margin_"+side,12)
+	bar.add_child(mar);mar.add_child(row)
+	var identity=VBoxContainer.new();identity.custom_minimum_size.x=145;row.add_child(identity)
 	identity.add_child(label("ИВАН / 伊万",21,amber))
-	identity.add_child(label("D-6 武装小队 · 23 岁",13,muted))
-	var rule=VSeparator.new()
-	row.add_child(rule)
-	inventory_count=label("",18,text_color)
-	row.add_child(inventory_count)
-	quick_items=HBoxContainer.new()
-	quick_items.add_theme_constant_override("separation",4)
-	row.add_child(quick_items)
+	identity.add_child(label("随身记录 · 1982",13,muted))
+	var vitals=VBoxContainer.new();vitals.custom_minimum_size.x=240;vitals.add_theme_constant_override("separation",5);row.add_child(vitals)
+	vitals_label=label("",14,text_color);vitals.add_child(vitals_label)
+	health_bar=vital_bar(vitals,Color("9aa98d"));health_bar.tooltip_text="生命 · 伤药用于恢复伤势"
+	food_bar=vital_bar(vitals,Color("c3a36a"));food_bar.tooltip_text="饱食 · 活动中缓慢消耗；饥饿不会直接扣生命"
+	inventory_count=label("",16,text_color);row.add_child(inventory_count)
+	quick_items=HBoxContainer.new();quick_items.visible=false;row.add_child(quick_items)
+	row.add_spacer(false)
 	row.add_child(button("I  背包",func():show_inventory(),true,true))
 	row.add_child(button("J  手记",func():show_journal(),true,true))
-	row.add_child(button("M  地图",func():show_map(),true,true))
-	row.add_spacer(false)
-	route_label=label("尚未选择离站方式",15,muted)
-	row.add_child(route_label)
-	row.add_child(button("Esc  菜单",func():show_pause(),true,true))
+	leads_button=button("留意的事",func():show_journal("leads"),true,true);row.add_child(leads_button)
+	route_label=label("",13,muted);route_label.visible=false;row.add_child(route_label)
+	row.add_child(button("Esc  暂停",func():show_pause(),true,true))
 	prompt=label("",22,amber)
 	add_child(prompt)
 	prompt.position=Vector2(470,817)
@@ -165,16 +162,25 @@ func setup(w):
 	add_child(modal)
 	modal.add_theme_stylebox_override("panel",style(Color("101c1e"),Color("766747"),1,0))
 	modal.visible=false
+	UiSurface.attach(modal)
 	refresh_status()
+
+func vital_bar(parent:Control,color:Color)->ProgressBar:
+	var bar=ProgressBar.new();bar.show_percentage=false;bar.custom_minimum_size=Vector2(240,7);bar.mouse_filter=Control.MOUSE_FILTER_PASS
+	bar.add_theme_stylebox_override("background",style(Color("1a2423"),Color("38433c")))
+	bar.add_theme_stylebox_override("fill",style(color,color,0))
+	parent.add_child(bar)
+	return bar
 
 func style(bg: Color,border: Color,width: int=1,rad: int=0) -> StyleBoxFlat:
 	var s=StyleBoxFlat.new()
 	s.bg_color=bg
 	s.border_color=border
 	s.set_border_width_all(width)
-	s.set_corner_radius_all(rad)
+	s.set_corner_radius_all(rad if rad>0 else 3)
 	s.shadow_color=Color(0,0,0,0.28)
-	s.shadow_size=5
+	s.shadow_size=8
+	s.shadow_offset=Vector2(0,3)
 	return s
 func panel(pos:Vector2,sz:Vector2) -> PanelContainer:
 	var p=PanelContainer.new()
@@ -183,6 +189,7 @@ func panel(pos:Vector2,sz:Vector2) -> PanelContainer:
 	p.size=sz
 	p.add_theme_stylebox_override("panel",style(Color(0.035,0.045,0.043,0.94),Color("655e49")))
 	p.mouse_filter=Control.MOUSE_FILTER_PASS
+	UiSurface.attach(p)
 	return p
 func margin_box(parent:Control,h:int=24,v:int=20) -> VBoxContainer:
 	var m=MarginContainer.new()
@@ -227,6 +234,7 @@ func button(text:String,cb:Callable,enabled:bool=true,compact:bool=false) -> But
 	b.add_theme_color_override("font_hover_color",Color("f3d39a"))
 	b.add_theme_color_override("font_disabled_color",Color("68766f"))
 	b.disabled=not enabled
+	UiSurface.attach(b,"button")
 	b.pressed.connect(func():world.get_node("/root/Session").sound("ui");cb.call())
 	return b
 func rule():
@@ -360,7 +368,12 @@ func set_prompt(id:String):
 	target_label.position=p-Vector2(target_label.get_minimum_size().x/2,20)
 func refresh_status():
 	if not objective:return
-	objective.text=world.story.objective()
+	var focus=Journal.active(world.story)
+	objective.text=(focus.name+"\n"+focus.step) if not focus.is_empty() else "暂时没有跟进的事。\n看看手记旁的线索，或找周围的人聊聊。"
+	if health_bar:
+		health_bar.value=world.story.economy.health;food_bar.value=world.story.economy.food
+		vitals_label.text="生命 %d   /   饱食 %d"%[world.story.economy.health,world.story.economy.food]
+		leads_button.text="留意的事 · "+str(Journal.leads(world.story).size())
 	inventory_count.text="%d 制式弹 · %d 土制弹" % [world.story.economy.military,world.story.economy.handmade]
 	route_label.text=world.story.ROUTES.get(world.story.route,"尚未选择离站方式")
 	var signature=",".join(world.story.items)
@@ -378,8 +391,11 @@ func refresh_status():
 			quick_items.add_child(icon)
 		quick_signature=signature
 func tick(delta:float):
+	prompt.visible=not modal_visible()
 	location_label.text=("D–6 " if world.floor_id in ["life","labor"] else "")+world.floor_name()+"  /  "+world.room_name
 	status_label.text=str(world.story.flags.get("story_day",16))+" XI 1982  /  "+str(world.story.flags.get("story_time","07:42"))+" · "+("旅程" if comic_active or world.story.ending else (("换班" if world.phase>=8 else "早班") if world.floor_id in ["life","labor"] else "探索"))
+	var guidance=JSON.stringify([Journal.active(world.story),world.story.economy.health,world.story.economy.food,Journal.leads(world.story).size()])
+	if guidance!=last_guidance:last_guidance=guidance;refresh_status()
 	map_small.queue_redraw()
 	if is_instance_valid(map_large):map_large.queue_redraw()
 	if toast_time>0:
@@ -418,7 +434,7 @@ func show_inventory():
 		description.add_child(detail)
 		rule()
 	var s=world.story
-	rule();body("体力 %d · 饱食 %d · 辐射 %d"%[s.economy.health,s.economy.food,s.economy.radiation],18,amber)
+	rule();body("生命 %d · 饱食 %d · 辐射 %d"%[s.economy.health,s.economy.food,s.economy.radiation],18,amber)
 	for id in s.economy.goods:
 		var good:Dictionary=s.Economy.GOODS[id]
 		var row=HBoxContainer.new();modal_box.add_child(row)
@@ -428,32 +444,52 @@ func show_inventory():
 		if good.effect!="":row.add_child(button("使用",func():toast(s.Economy.consume(s,id));show_inventory(),true,true))
 
 func show_journal(tab:String="tasks",shown_floor:String=""):
-	start_modal("伊万的日志","任务 · 百科 · 地图",true)
-	var tabs=HBoxContainer.new();modal_box.add_child(tabs)
-	for pair in [["tasks","任务"],["lore","百科"],["map","地图"]]:
-		tabs.add_child(button(pair[1],func():show_journal(pair[0]),true,true))
+	start_modal("伊万的手记","随身卷宗   /   任务、地图与见闻",true)
+	modal.position=Vector2(230,84);modal.size=Vector2(1140,832)
+	var tabs=HBoxContainer.new();tabs.add_theme_constant_override("separation",8);modal_box.add_child(tabs)
+	for pair in [["tasks","01  事要办"],["map","02  地图"],["lore","03  百科"],["leads","04  留意的事"],["history","05  已读记录"],["closed","06  已办妥"]]:
+		var b=button(pair[1],func():show_journal(pair[0]),true,true)
+		if tab==pair[0]:b.add_theme_color_override("font_color",amber)
+		tabs.add_child(b)
 	rule()
+	var s=world.story
 	if tab=="tasks":
-		body(world.story.objective(),23,amber)
-		for task in Journal.tasks(world.story):
-			body(("◆ " if task.done else "◇ ")+task.name,21,amber if task.done else text_color)
-			body(task.background,17,muted)
-			if not task.done:body(task.step,18,text_color)
-		if not world.story.intel.is_empty():
-			rule();body("已经听说的事",21,amber)
-			for entry in world.story.intel:body(entry,17)
-		if not world.story.flags.get("comic_records",[]).is_empty():
-			rule();body("旅程记录",22,amber)
-			for record in world.story.flags.comic_records:
-				body(record.title,20,amber);body(record.body,17)
-				if record.choice!="":body("伊万："+record.choice,17,muted)
+		var current=Journal.active(s)
+		body("正在跟进",16,amber)
+		if current.is_empty():body("还没决定下一件事。留意身边的人，或翻翻旁边的线索。",21)
+		else:quest_card(current,true)
+		rule();body("已接取 · 暂未跟进",16,amber)
+		var count=0
+		for task in Journal.tasks(s):
+			if task.done or task.id==current.get("id",""):continue
+			quest_card(task,false);count+=1
+		if count==0:body("没有其它待办。",18,muted)
+	elif tab=="closed":
+		var count=0
+		for task in Journal.tasks(s):
+			if task.done:quest_card(task,false);count+=1
+		if count==0:body("办妥的事会留在这里。",20,muted)
+	elif tab=="leads":
+		body("路过时想到的事",25,amber)
+		body("这些还不是答应过的差事。找个人问问，也许会有新的路。",17,muted)
+		for lead in Journal.leads(s):body("· "+lead,21)
+		if Journal.leads(s).is_empty():body("暂时没有新的念头。按自己的步子走。",20)
+		if s.has("photo") and not s.f("quest_photo") and not s.f("father"):
+			modal_box.add_child(button("把问照片的事记进待办",func():s.flags.quest_photo=true;show_journal()))
+	elif tab=="history":
+		body("已经听说的事",23,amber)
+		for entry in s.intel:body(entry,18)
+		for record in s.flags.get("comic_records",[]):
+			rule();body(record.title,21,amber);prose(record.body,19)
+			if record.choice!="":body("伊万："+record.choice,18,muted)
 	elif tab=="lore":
-		for entry in Journal.encyclopedia(world.story):
-			body(entry[0],22,amber);body(entry[1],18);rule()
-	else:
+		for entry in Journal.encyclopedia(s):body(entry[0],24,amber);body(entry[1],19);rule()
+	elif tab=="map":
 		var requested=world.floor_id if shown_floor=="" else shown_floor
 		var floors=GridContainer.new();floors.columns=3;floors.add_theme_constant_override("h_separation",10);modal_box.add_child(floors)
 		for pair in [["life","生活层"],["labor","作业层"]]+world.story.Campaign.NAMES.keys().filter(func(id):return world.story.f("visited_"+id) or world.floor_id==id).map(func(id):return [id,world.story.Campaign.NAMES[id]]):floors.add_child(button(pair[1],func():show_journal("map",pair[0]),true,true))
+		var focus=Journal.active(s)
+		if not focus.is_empty() and focus.place==requested:body("手记里圈过的一带："+focus.area,19,amber)
 		body("当前位置："+world.floor_name()+" · 旅程中的设施通过图文路线相连",18,amber)
 		map_large=MapView.new();map_large.custom_minimum_size=Vector2(720,320)
 		map_large.world=world;map_large.expanded=true;map_large.display_floor=requested;modal_box.add_child(map_large)
@@ -462,6 +498,18 @@ func show_journal(tab:String="tasks",shown_floor:String=""):
 			if zone.code in ["00","09","10","L0"]:continue
 			legend.add_child(label(zone.code+"  "+("伊万 / 老爹" if requested=="life" and zone.code=="01" else zone.name),15,text_color))
 		body("金色：通路与门口 · 蓝色：附近的人。地图只显示本层可探索的区域；门后还有其它生活或作业区。",16,muted)
+
+func quest_card(task:Dictionary,tracked:bool):
+	var card=PanelContainer.new();card.add_theme_stylebox_override("panel",style(Color("26322e") if tracked else Color("172321"),Color("a38a5d") if tracked else Color("445148"),1,4));modal_box.add_child(card);UiSurface.attach(card)
+	var box=margin_box(card,22,18)
+	var place={"life":"D-6 生活层","labor":"D-6 作业层"}.get(task.place,world.story.Campaign.NAMES.get(task.place,""))
+	box.add_child(label(("已办妥  /  " if task.done else "")+place+" · "+task.area,14,muted))
+	var title=label(task.name,25,amber);title.add_theme_font_override("font",serif);box.add_child(title)
+	var context=label(task.background,18,text_color);context.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;box.add_child(context)
+	if not task.done:
+		var step=label(task.step,19,Color("c7cdb7"));step.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;box.add_child(step)
+		if not tracked:box.add_child(button("接下来跟进这件事",func():Journal.track(world.story,task.id);show_journal(),true,true))
+		else:box.add_child(button("在地图上看看这一带",func():show_journal("map",task.place),true,true))
 
 func show_map():show_journal("map")
 
@@ -545,7 +593,9 @@ func comic_choose(index:int=-1):
 	if s.flags.comic.active:show_comic()
 	else:
 		comic_active=false
-		if s.flags.has("next_facility"):
+		if s.flags.has("resume_dialogue"):
+			var id:String=s.flags.resume_dialogue;s.flags.erase("resume_dialogue");show_dialogue(id)
+		elif s.flags.has("next_facility"):
 			world.travel_campaign(s.flags.next_facility)
 		elif s.f("intro_done") and not s.ending:close();refresh_status();toast("第一件事：到第七供应点领取今日维生素 D",7)
 		else:show_chapter_end()
@@ -569,7 +619,7 @@ func show_chapter_end():
 		make_cinematic()
 		var row=HBoxContainer.new();row.add_theme_constant_override("separation",38);modal_box.add_child(row)
 		var art=TextureRect.new()
-		art.texture=load("res://assets/cinematics/"+{"home":"wake","tea":"wake","anna":"sergey","commune":"descent","sech":"sergey","starcity":"trolley","bridge":"wake","signal":"trolley","ocean":"surface"}.get(ending_id,"wake")+".png")
+		art.texture=load("res://assets/cinematics/"+{"home":"wake","tea":"wake","anna":"commune","commune":"commune","sech":"sergey","starcity":"starcity","bridge":"wake","signal":"starcity","ocean":"starcity"}.get(ending_id,"wake")+".png")
 		art.custom_minimum_size=Vector2(680,360);art.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;art.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;row.add_child(art)
 		var text_box=VBoxContainer.new();text_box.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(text_box)
 		var epilogue:String=outcome.body
@@ -612,7 +662,7 @@ func make_cinematic():
 func audio_controls():
 	rule();body("声音",20,amber)
 	var session=world.get_node("/root/Session")
-	for pair in [["Master","总音量"],["Music","背景旋律"],["Effects","脚步与交互音效"]]:
+	for pair in [["Master","总音量"],["Music","背景旋律"],["Effects","交互音效"],["Footsteps","脚步声"]]:
 		var row=HBoxContainer.new();modal_box.add_child(row)
 		var name_label=label(pair[1],17,muted);name_label.custom_minimum_size.x=190;row.add_child(name_label)
 		var slider=HSlider.new();slider.min_value=0;slider.max_value=1;slider.step=.05;slider.value=session.volume(pair[0]);slider.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(slider)

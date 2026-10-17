@@ -21,7 +21,7 @@ func _initialize():
 			var expected=sequence.states[index]
 			var actual=JSON.parse_string(JSON.stringify(s.serialize()))
 			actual.erase("intel")
-			for added in ["economy","conversations","last_greetings","checkpoint"]:actual.erase(added)
+			for added in ["economy","conversations","last_greetings","checkpoint","read_topics"]:actual.erase(added)
 			for added in ["social_seed","nina_safety","briefed","intro_done"]:actual.flags.erase(added)
 			actual.intel_count=float(s.intel.size())
 			check(actual==expected.state,"quest state/reward/cost unchanged: %s step %d" % [path,index])
@@ -34,12 +34,17 @@ func _initialize():
 				if id=="lift":expected_options.erase("leave_official")
 				if id=="hatch" and s.f("hatch"):
 					for key in expected_options:expected_options[key]=false
+				for key in expected_options:
+					if s.once_topic(key) and key in s.read_topics:expected_options[key]=false
 				check(options==expected_options,"all original action gates unchanged: %s/%d/%s" % [path,index,id])
 		# Conversations should never grant items, persist flags or change routes.
 		var before=s.serialize().duplicate(true)
 		for key in Narrative.CHAT:
 			var reply=s.act(key)
-			check(reply==Narrative.CHAT[key][2] and s.serialize()==before,"small talk is state-neutral: "+key)
+			var after=s.serialize().duplicate(true);after.erase("read_topics")
+			var original=before.duplicate(true);original.erase("read_topics")
+			check(reply==Narrative.CHAT[key][2] and after==original,"small talk preserves quests and rewards: "+key)
+			s.act(key);check(not s.last_action_valid,"read topic cannot be clicked again: "+key)
 	for id in Narrative.BODIES:
 		var s=Story.new()
 		for stage in range(2):

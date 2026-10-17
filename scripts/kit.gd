@@ -307,12 +307,20 @@ func table(p: Vector3, length: float = 2.2):
 		cyl("Cup",p+Vector3(x+0.22,0.88,0.18),0.07,0.16,"metal")
 	box("Bread",p+Vector3(0.7,0.85,-0.1),Vector3(0.25,0.13,0.14),"wood")
 
-func bench(p: Vector3, length: float = 2.1, back: bool = true):
-	box("BenchSeat",p+Vector3(0,0.45,0),Vector3(length,0.12,0.40),"wood",true)
-	# Consolidate seat+legs into a single collision box down to floor.
-	box("BenchBase",p+Vector3(0,0.22,0),Vector3(length,0.44,0.4),"dark",true).visible=false
-	for x in [-length/2+0.2,length/2-0.2]:box("BenchLeg",p+Vector3(x,0.22,0),Vector3(0.08,0.44,0.36),"dark")
-	if back:box("BenchBack",p+Vector3(0,0.85,-0.17),Vector3(length,0.45,0.07),"wood")
+func bench(p:Vector3,length:float=2.1,back:bool=true,heading:float=0.0):
+	var basis=Basis(Vector3.UP,heading)
+	var across=absf(sin(heading))>.7
+	var specs=[
+		["BenchSeat",Vector3(0,.45,0),Vector3(length,.12,.4),"wood",true],
+		["BenchBase",Vector3(0,.22,0),Vector3(length,.44,.4),"dark",true]]
+	for x in [-length/2+.2,length/2-.2]:specs.append(["BenchLeg",Vector3(x,.22,0),Vector3(.08,.44,.36),"dark",false])
+	if back:specs.append(["BenchBack",Vector3(0,.85,-.17),Vector3(length,.45,.07),"wood",false])
+	for spec in specs:
+		var extent:Vector3=spec[2]
+		if across:extent=Vector3(extent.z,extent.y,extent.x)
+		var m=box(spec[0],p+basis*spec[1],extent,spec[3],spec[4])
+		if spec[0]=="BenchBase":m.visible=false
+		m.set_meta("seat_forward",basis*Vector3.BACK)
 
 func crate(p: Vector3, size: Vector3 = Vector3(0.65,0.55,0.6)):
 	box("Crate",p+Vector3(0,size.y/2,0),size,"wood",true)

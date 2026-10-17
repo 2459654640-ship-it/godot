@@ -4,7 +4,7 @@
       "facility": "waterworks",
       "name": "科瓦廖夫 / 水厂入口",
       "role": "征召小队",
-      "body": "中尉把灯压低。\n「先查值班图，再动设备。主仓库的门靠水压顶着，硬撬只会把门框拉歪。」\n老兵望着漆黑的泵房，没有插话。",
+      "body": "中尉把灯压低。\n「先查值班图，再动设备。主仓库的门靠水压顶着，硬撬只会把门框拉歪。」\n老兵望着漆黑的泵房，没有插话。\n他指了指入口左侧的值班桌。\n「图就在那儿。看清房间标牌，西边是泵房，别先去推仓门。」",
       "options": [
         "plant_brief",
         "plant_people"
@@ -14,7 +14,7 @@
       "facility": "waterworks",
       "name": "值班图与铅笔批注",
       "role": "调查",
-      "body": "值班图上画着三个回路：旁通、主泵、仓库。纸边添了一行字：\n「先卸压，再恢复泵电。仓门表回到绿色，才可开锁。备用件在修配台。」",
+      "body": "入口气闸的值班桌上，一张用搪瓷杯压着的图已经卷了边。\n图上画着旁通、主泵和仓库三个回路，旁边写着：先卸压，再恢复泵电。备用件在北侧中间的工具修配台。",
       "options": [
         "plant_read"
       ]
@@ -357,7 +357,7 @@
     "plant_people": {
       "text": "「大家为什么肯来？」",
       "reply": "中尉看了一眼名单。\n「我母亲也在领配给水。别把名单上的人当成没家的人。」",
-      "once": false
+      "once": true
     },
     "plant_read": {
       "text": "抄下卸压与送电的顺序",
@@ -394,7 +394,7 @@
     "plant_early": {
       "text": "试着推上开关",
       "reply": "过载指示灯亮了。你立刻松手，开关弹回原处。得先卸压，回路也缺一枚保险件。",
-      "once": false,
+      "once": true,
       "req": {
         "not": [
           "plant_bled"
@@ -536,7 +536,7 @@
     "sech_father": {
       "text": "「星城会知道我父亲的事吗？」",
       "reply": "「我不知道。你带上姓名和照片，总比听别人猜强。别把电台里的每句话都当许诺。」",
-      "once": false,
+      "once": true,
       "req": {
         "all": [
           "star_known"
@@ -557,7 +557,7 @@
     "sech_star": {
       "text": "乘检修列车去星城-2",
       "reply": "",
-      "once": true,
+      "once": false,
       "req": {
         "all": [
           "star_known"
@@ -568,7 +568,7 @@
     "sech_commune": {
       "text": "沿联络通路去公社",
       "reply": "",
-      "once": true,
+      "once": false,
       "req": {
         "all": [
           "sech_joined"
@@ -617,7 +617,7 @@
     "anna_talk": {
       "text": "「你为什么留在这里？」",
       "reply": "「因为这里还需要人换药。」她把盆里的布拧干。\n「也因为每天回家，都有人记得替我留一盏灯。」",
-      "once": false
+      "once": true
     },
     "anna_result": {
       "text": "把核实过的记录与探视安排交给她",
@@ -728,7 +728,7 @@
     "commune_star": {
       "text": "按联络窗口去星城-2",
       "reply": "",
-      "once": true,
+      "once": false,
       "req": {
         "all": [
           "star_known"
@@ -739,7 +739,7 @@
     "commune_sech": {
       "text": "去旧军列调度站找谢尔盖",
       "reply": "",
-      "once": true,
+      "once": false,
       "req": {
         "all": [
           "commune_joined"
@@ -856,7 +856,7 @@
     "star_early": {
       "text": "看看旁路的联锁状态",
       "reply": "联锁还在。规程要求先确认外线断开和机械表归零。你把手收回，没去硬推开关。",
-      "once": false,
+      "once": true,
       "req": {
         "not": [
           "star_zero"
@@ -917,7 +917,8 @@
       },
       "flags": {
         "father_met": true
-      }
+      },
+      "travel": "father_reunion"
     },
     "father_semyon": {
       "text": "「老爹知道你在这里吗？」",
@@ -1111,7 +1112,7 @@
   },
   "panels": {
     "return_crossing": {
-      "art": "surface",
+      "art": "waterworks",
       "title": "回程 / 风停了一会儿",
       "body": "两箱滤芯压得肩带生疼。\n路边传来犬吠，队伍停下。老兵抬手指向倒塌的管桥。\n「绕过去。东西找到了，别为一条近路把人留在这儿。」",
       "choices": [
@@ -1151,7 +1152,7 @@
       "end": "ending:home"
     },
     "commune_road": {
-      "art": "surface",
+      "art": "commune",
       "title": "去公社的路",
       "body": "中尉清点物资，也清点了留下的人。\n「水送回去。我会告诉老谢，你还活着。」\n老兵陪你走下另一段阶梯。身后那条路通向 D-6，前面亮着温室的灯。",
       "end": "map:commune"
@@ -1197,7 +1198,7 @@
       "end": "map:sech"
     },
     "solo_commune": {
-      "art": "descent",
+      "art": "commune",
       "title": "沿着路标",
       "body": "谢尔盖在纸背面画了两个岔口。\n「第二个路口向下。听到水声，再敲门。别顺着亮光追，隧道会骗人。」\n你照着标记走了很久。门后有人问，你要找谁。",
       "end": "map:commune"
@@ -1209,7 +1210,7 @@
       "end": "map:coal"
     },
     "anna_return": {
-      "art": "descent",
+      "art": "commune",
       "title": "带回一个确切的名字",
       "body": "你回程时走得很慢，怕那几页纸被汗浸湿。\n以前你以为，找到一个人就是把他带回去。现在你知道，还要有人接得住他的伤、他的沉默和以后的日子。",
       "end": "map:commune"
@@ -1247,6 +1248,12 @@
       "title": "回到名单里",
       "body": "老兵把枪放在雪上。中尉用绑箱子的备用绳系住他的手。\n回到 D-6 后，水重新流出来了。老兵被带进下层问话，你的名字旁边添了一条嘉奖。\n隔天，有人请你去上面喝茶。杯子里没有铁锈味。\n你想起轨道车上，那句关于父亲还没说完的话。",
       "end": "ending:tea"
+    },
+    "father_reunion": {
+      "art": "starcity",
+      "title": "二十年之后",
+      "body": "父亲把那张合影放在台面上。\n他的手停在照片边缘。他看起来比你想象中瘦，头发也全白了。\n「老谢把你带大了。你过得怎么样？」\n控制台的灯还在缓慢闪动。你准备过许多句话，此刻却没有哪一句能轻易说出口。",
+      "end": "resume:star_father"
     }
   },
   "endings": {

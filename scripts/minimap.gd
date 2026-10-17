@@ -28,6 +28,7 @@ func _draw():
 			else:bounds=bounds.expand(flat)
 	drawing_scale=minf((size.x-32)/bounds.size.x,(size.y-(80 if expanded else 24))/bounds.size.y)
 	origin=Vector2(size.x*.5,size.y*.5)-bounds.get_center()*drawing_scale
+	var focused=world.hud.Journal.active(world.story)
 	for zone in zones:
 		var r:Rect2=zone.rect
 		var points=polygon(r.grow(-0.14))
@@ -36,6 +37,10 @@ func _draw():
 		draw_colored_polygon(shadow,Color("060c0c"))
 		draw_colored_polygon(points,Color("364239") if zone.code=="00" else Color("26302b"))
 		draw_polyline(PackedVector2Array([points[0],points[1],points[2],points[3],points[0]]),Color("65705e"),1.2,true)
+		if not focused.is_empty() and focused.place==floor and focused.area==zone.name:
+			draw_colored_polygon(points,Color(.72,.56,.29,.19))
+			draw_polyline(PackedVector2Array([points[0],points[1],points[2],points[3],points[0]]),gold,2,true)
+			if expanded:draw_string(world.kit.font,project(r.get_center())+Vector2(-22,-15),"这一带",HORIZONTAL_ALIGNMENT_LEFT,-1,13,gold)
 		if zone.code=="01" and floor=="life":draw_line(project(Vector2(-11.95,-9)),project(Vector2(-11.95,-2.8)),gold,1.2,true)
 		if zone.code not in ["00","09","10"]:
 			draw_string(world.kit.font,project(r.get_center())+Vector2(-6,4),zone.code,HORIZONTAL_ALIGNMENT_LEFT,-1,14 if expanded else 10,Color("c5bea2"))

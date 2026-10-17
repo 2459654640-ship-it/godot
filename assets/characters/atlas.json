@@ -206,5 +206,37 @@
       "walk_right",
       "talk"
     ]
+  },
+  "anna": {
+    "baseline": 342,
+    "body_pixels": 324,
+    "cell": [
+      240,
+      352
+    ],
+    "clips": [
+      "idle"
+    ],
+    "directions": 8,
+    "file": "anna.png",
+    "poses": 1,
+    "rear_diagonal_normalized": true,
+    "source_angles": 5
+  },
+  "father": {
+    "baseline": 342,
+    "body_pixels": 324,
+    "cell": [
+      240,
+      352
+    ],
+    "clips": [
+      "idle"
+    ],
+    "directions": 8,
+    "file": "father.png",
+    "poses": 1,
+    "rear_diagonal_normalized": true,
+    "source_angles": 5
   }
 }

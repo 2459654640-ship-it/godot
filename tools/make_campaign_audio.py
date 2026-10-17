@@ -1,4 +1,4 @@
-"""Original offline sound design: soft boot, latch, paper, UI, and sparse tuned notes.
+"""Original offline sound design: latch, paper, UI, and sparse tuned notes.
 No steady noise bed or mains-frequency hum. Re-run with Python standard library only.
 """
 from pathlib import Path
@@ -16,7 +16,6 @@ def write(name,seconds,fn):
     with wave.open(str(DEST/(name+'.wav')),'wb') as w:
         w.setnchannels(1); w.setsampwidth(2);w.setframerate(RATE);w.writeframes(pcm)
 def tone(t,f,d):return math.sin(TAU*f*t)*math.exp(-t*d)*min(1,t*350)
-write('step',.24,lambda t:(.46*math.sin(TAU*(105*t-55*t*t))+.08*rng.uniform(-1,1))*math.exp(-t*24)*min(1,t*800))
 write('ui',.09,lambda t:.14*tone(t,660,48))
 write('interact',.28,lambda t:.26*tone(t,165,18)+.08*tone(t,490,25))
 write('page',.26,lambda t:.07*rng.uniform(-1,1)*math.sin(math.pi*t/.26)**2)

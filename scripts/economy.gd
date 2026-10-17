@@ -2,8 +2,8 @@ extends RefCounted
 ## Standard ammunition is money; handmade ammunition is a separate reserve.
 const GOODS={
 "bread":{"name":"黑面包","price":4,"stock":8,"icon":"bread","detail":"一份当天的黑面包。恢复 30 点饱食。","effect":"food","amount":30},
-"bandage":{"name":"洁净绷带","price":5,"stock":5,"icon":"bandage","detail":"洗净煮过的布与包扎材料。恢复 15 点体力。","effect":"health","amount":15},
-"medkit":{"name":"急救包","price":12,"stock":2,"icon":"medkit","detail":"密封药品和敷料。恢复 40 点体力。","effect":"health","amount":40},
+"bandage":{"name":"洁净绷带","price":5,"stock":5,"icon":"bandage","detail":"洗净煮过的布与包扎材料。恢复 15 点生命。","effect":"health","amount":15},
+"medkit":{"name":"急救包","price":12,"stock":2,"icon":"medkit","detail":"密封药品和敷料。恢复 40 点生命。","effect":"health","amount":40},
 "antirad":{"name":"抗辐射药","price":10,"stock":2,"icon":"antirad","detail":"减少 20 点已受辐射，不能代替防毒面具。","effect":"radiation","amount":20},
 "battery":{"name":"干电池","price":7,"stock":3,"icon":"battery","detail":"防潮包内的电池，留给照明和小型设备使用。","effect":"","amount":0},
 "cord":{"name":"细绳与布胶带","price":3,"stock":4,"icon":"cord","detail":"捆扎行李、固定松动物件的常用耗材。","effect":"","amount":0}}
@@ -12,7 +12,7 @@ const VODKA_PRICE=18
 static func fresh()->Dictionary:
 	var stock={}
 	for id in GOODS:stock[id]=GOODS[id].stock
-	return {"military":18,"handmade":12,"goods":{},"stock":stock,"health":100,"food":60,"radiation":0,"ledger":[]}
+	return {"military":18,"handmade":12,"goods":{},"stock":stock,"health":100,"food":60,"radiation":0,"ledger":[],"activity_clock":0.0,"recovery_clock":0.0}
 static func restored(saved:Dictionary)->Dictionary:
 	var data=fresh()
 	for key in data:
@@ -55,3 +55,29 @@ static func spend_ammo(s,kind:String,count:int)->bool:
 	s.economy[kind]-=count
 	s.changed.emit()
 	return true
+
+const MEALS={"cook":"life","commune_leader":"commune","sech_elder":"sech","coal_medic":"coal"}
+static func meal_key(s,id:String)->String:return "meal_%s_%d"%[id,int(s.flags.get("story_day",16))]
+static func decorate(v:Dictionary,s)->Dictionary:
+	if MEALS.get(v.id,"")==s.context.get("floor","?") and not s.f(meal_key(s,v.id)) and s.economy.food<75:
+		v.options.append(s.opt("meal_"+v.id,"「还有居民的热饭吗？我想坐下吃一点。」"))
+	return v
+static func meal(s,id:String)->String:
+	if MEALS.get(id,"")!=s.context.get("floor","?") or s.f(meal_key(s,id)):return "今天这份饭已经吃过了。"
+	s.flags[meal_key(s,id)]=true
+	s.economy.food=maxi(int(s.economy.food),75)
+	s.economy.health=mini(100,int(s.economy.health)+5)
+	s.changed.emit()
+	return "你坐下来吃完一份热饭，慢慢暖了过来。\n「今天这份算居民伙食。路上别只顾着走，包里的面包也记得吃。」"
+static func advance(s,delta:float,moving:bool):
+	if not moving or s.ending:return
+	var clock:float=float(s.economy.get("activity_clock",0))+maxf(delta,0)
+	var ticks=floori(clock/120.0)
+	s.economy.activity_clock=fmod(clock,120.0)
+	if ticks>0:s.economy.food=maxi(0,int(s.economy.food)-ticks)
+	# Hunger affects comfort, never causes passive damage or a death spiral.
+	if s.economy.food>=40 and s.economy.health<100:
+		var recovery:float=float(s.economy.get("recovery_clock",0))+maxf(delta,0)
+		var recovered=floori(recovery/90.0)
+		s.economy.recovery_clock=fmod(recovery,90.0)
+		if recovered>0:s.economy.health=mini(100,int(s.economy.health)+recovered)

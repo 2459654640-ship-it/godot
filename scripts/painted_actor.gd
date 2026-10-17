@@ -13,7 +13,7 @@ var actor_id="ivan"
 var reaction=""
 var reaction_time=0.0
 var current_pose=0
-const HEIGHTS={"ivan":1.75,"semyon":1.70,"nina":1.68,"mikhail":1.72,"cook":1.66,"supply":1.70,"commander":1.78,"igor":1.84,"resident":1.72,"diner":1.68,"queue":1.78}
+const HEIGHTS={"anna":1.68,"father":1.73,"ivan":1.75,"semyon":1.70,"nina":1.68,"mikhail":1.72,"cook":1.66,"supply":1.70,"commander":1.78,"igor":1.84,"resident":1.72,"diner":1.68,"queue":1.78}
 
 func setup(body):
 	actor=body

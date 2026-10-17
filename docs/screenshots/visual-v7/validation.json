@@ -1,0 +1,239 @@
+{
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "date": "2026-10-17",
+  "initial_full_suite": [
+    {
+      "suite": "D6_TEST_RESULT",
+      "checks": 1827,
+      "failures": 0
+    },
+    {
+      "suite": "VISUAL_CONTRACT_RESULT",
+      "checks": 1113,
+      "failures": 0
+    },
+    {
+      "suite": "NARRATIVE_CONTRACT_RESULT",
+      "checks": 1942,
+      "failures": 0
+    },
+    {
+      "suite": "RESIDENT_CONTRACT_RESULT",
+      "checks": 113,
+      "failures": 0
+    },
+    {
+      "suite": "CHAPTER_CONTRACT_RESULT",
+      "checks": 101,
+      "failures": 0
+    },
+    {
+      "suite": "FLOOR_CONTRACT_RESULT",
+      "checks": 35,
+      "failures": 0,
+      "connected_cells": 4135
+    },
+    {
+      "suite": "CAMPAIGN_CONTRACT_RESULT",
+      "checks": 253,
+      "failures": 0
+    },
+    {
+      "suite": "CAMPAIGN_UI_RESULT",
+      "checks": 15,
+      "failures": 0
+    },
+    {
+      "suite": "REFINEMENT_RESULT",
+      "checks": 32,
+      "failures": 0
+    }
+  ],
+  "latest_suite_results": [
+    {
+      "suite": "D6_TEST_RESULT",
+      "checks": 1827,
+      "failures": 0
+    },
+    {
+      "suite": "VISUAL_CONTRACT_RESULT",
+      "checks": 1113,
+      "failures": 0
+    },
+    {
+      "suite": "NARRATIVE_CONTRACT_RESULT",
+      "checks": 1942,
+      "failures": 0
+    },
+    {
+      "suite": "RESIDENT_CONTRACT_RESULT",
+      "checks": 113,
+      "failures": 0
+    },
+    {
+      "suite": "CHAPTER_CONTRACT_RESULT",
+      "checks": 101,
+      "failures": 0
+    },
+    {
+      "suite": "FLOOR_CONTRACT_RESULT",
+      "checks": 35,
+      "failures": 0,
+      "connected_cells": 4135
+    },
+    {
+      "suite": "CAMPAIGN_CONTRACT_RESULT",
+      "checks": 253,
+      "failures": 0
+    },
+    {
+      "suite": "CAMPAIGN_UI_RESULT",
+      "checks": 15,
+      "failures": 0
+    },
+    {
+      "suite": "REFINEMENT_RESULT",
+      "checks": 43,
+      "failures": 0
+    }
+  ],
+  "affected_suites_rerun": [
+    {
+      "suite": "NARRATIVE_CONTRACT_RESULT",
+      "checks": 1942,
+      "failures": 0
+    },
+    {
+      "suite": "CHAPTER_CONTRACT_RESULT",
+      "checks": 101,
+      "failures": 0
+    },
+    {
+      "suite": "CAMPAIGN_CONTRACT_RESULT",
+      "checks": 253,
+      "failures": 0
+    },
+    {
+      "suite": "CAMPAIGN_UI_RESULT",
+      "checks": 15,
+      "failures": 0
+    },
+    {
+      "suite": "REFINEMENT_RESULT",
+      "checks": 43,
+      "failures": 0
+    }
+  ],
+  "total_latest_checks": 5442,
+  "failures": 0,
+  "graphical_ui": [
+    {
+      "suite": "REFINEMENT_RESULT",
+      "checks": 43,
+      "failures": 0
+    },
+    {
+      "suite": "CAMPAIGN_UI_RESULT",
+      "checks": 15,
+      "failures": 0
+    }
+  ],
+  "renderer": "Xorg dummy / Mesa llvmpipe / OpenGL Compatibility",
+  "glyphs": {
+    "authored_cjk_characters": 1252,
+    "missing": {
+      "MetroSerif.otf": "",
+      "MetroSans.otf": ""
+    }
+  },
+  "audio": [
+    {
+      "file": "interact.wav",
+      "rate": 22050,
+      "channels": 1,
+      "seconds": 0.28,
+      "peak": 7527,
+      "clipped": 0
+    },
+    {
+      "file": "page.wav",
+      "rate": 22050,
+      "channels": 1,
+      "seconds": 0.26,
+      "peak": 2279,
+      "clipped": 0
+    },
+    {
+      "file": "save.wav",
+      "rate": 22050,
+      "channels": 1,
+      "seconds": 0.4,
+      "peak": 6254,
+      "clipped": 0
+    },
+    {
+      "file": "shelter_theme.wav",
+      "rate": 22050,
+      "channels": 1,
+      "seconds": 32.0,
+      "peak": 2562,
+      "clipped": 0
+    },
+    {
+      "file": "step.wav",
+      "rate": 22050,
+      "channels": 1,
+      "seconds": 0.18,
+      "peak": 3210,
+      "clipped": 0
+    },
+    {
+      "file": "step_b.wav",
+      "rate": 22050,
+      "channels": 1,
+      "seconds": 0.18,
+      "peak": 3583,
+      "clipped": 0
+    },
+    {
+      "file": "step_c.wav",
+      "rate": 22050,
+      "channels": 1,
+      "seconds": 0.18,
+      "peak": 3406,
+      "clipped": 0
+    },
+    {
+      "file": "step_d.wav",
+      "rate": 22050,
+      "channels": 1,
+      "seconds": 0.18,
+      "peak": 3684,
+      "clipped": 0
+    },
+    {
+      "file": "ui.wav",
+      "rate": 22050,
+      "channels": 1,
+      "seconds": 0.09,
+      "peak": 3894,
+      "clipped": 0
+    },
+    {
+      "file": "ventilation.wav",
+      "rate": 22050,
+      "channels": 1,
+      "seconds": 4.0,
+      "peak": 9056,
+      "clipped": 0
+    }
+  ],
+  "audio_clipped_samples": 0,
+  "screenshots_are": "actual engine viewport captures with controlled test states, frozen actors and selected cameras",
+  "limitations": [
+    "Dummy audio does not validate listening on player hardware.",
+    "Software rendering does not validate player hardware performance.",
+    "Godot project, not a tested platform executable.",
+    "Anna and father have five-view idle artwork, with no new stride animation."
+  ]
+}

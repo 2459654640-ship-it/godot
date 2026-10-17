@@ -21,6 +21,7 @@ var last_greetings:Dictionary={}
 var context:Dictionary={}
 var last_outcome:Dictionary={}
 var last_action_valid=false
+var read_topics:Array[String]=[]
 # Tests can inject the roll without changing saves or the displayed chance.
 var roll_override=-1.0
 
@@ -141,7 +142,10 @@ func view(id: String) -> Dictionary:
 		"exit":
 			v.name="东侧维修坡道"
 			v.options=[opt("leave_east","整理背包，准备离开 D-6",route!="", "先通过维修门、侧门或检修管线")]
-	return Campaign.decorate(Chapter.decorate(Life.decorate(Narrative.decorate(v,self),self),self),self)
+	v=Economy.decorate(Campaign.decorate(Chapter.decorate(Life.decorate(Narrative.decorate(v,self),self),self),self),self)
+	for option in v.options:
+		if once_topic(option.key) and option.key in read_topics:option.enabled=false;option.reason="已聊过，记在聊天记录里"
+	return v
 
 func act(key: String) -> String:
 	# Revalidate the same conditions used by the UI before mutating state.
@@ -153,6 +157,10 @@ func act(key: String) -> String:
 			if o.key==key and o.enabled:valid=true
 	if not valid:return "条件尚未满足，或这件事已经做过了。"
 	last_action_valid=true
+	if once_topic(key):read_topics.append(key)
+	if key.begins_with("meal_"):
+		last_reply=Economy.meal(self,key.substr(5))
+		return last_reply
 	if key.begins_with("c_"):
 		last_reply=Campaign.act(self,key.substr(2))
 		changed.emit()
@@ -269,10 +277,14 @@ func objective() -> String:
 	if f("nina_job"):return "找备用保险芯，修复东侧压力监测箱"
 	return "到作业层找科瓦廖夫中尉报到" if f("vitamins_taken") else "去第七供应点领取今日维生素 D"
 
+static func once_topic(key:String)->bool:
+	return Narrative.CHAT.has(key) or key in ["father","vera_heat","semyon_advice","semyon_radio","briefing","igor_talk","armory_check","gate_daily","coal_ask","resident_shift","resident_igor","vera_day","vera_nina","knock_rooms","nina_reckless"]
+
 func serialize() -> Dictionary:
-	return {"version":1,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint}
+	return {"version":1,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
 func restore(data: Dictionary):
 	flags=data.get("flags",{}).duplicate(true)
+	read_topics.assign(data.get("read_topics",[]))
 	departure_checkpoint=data.get("checkpoint",{}).duplicate(true)
 	if not flags.has("intro_done") and not flags.has("comic"):flags.intro_done=true
 	economy=Economy.restored(data.get("economy",{}))
@@ -286,6 +298,16 @@ func restore(data: Dictionary):
 	intel.assign(data.get("intel",[]))
 	route=data.get("route","")
 	ending=data.get("ending",false)
+	if not data.has("read_topics"):
+		# Old saves already kept the actual choices; infer only witnessed topics.
+		for id in conversations:
+			for option in view(id).options:
+				if not once_topic(option.key):continue
+				var spoken=option.text.begins_with("「")
+				var choice=option.text.trim_prefix("「").trim_suffix("」") if spoken else "你"+option.text
+				for line in conversations[id]:
+					if line.speaker==("ivan" if spoken else "narrator") and line.text==choice:
+						if option.key not in read_topics:read_topics.append(option.key)
 	# A v4 completion meant only "left D-6", not the unseen new chapter.
 	if ending and not flags.has("chapter_endpoint") and not flags.get("comic",{}).get("active",false) and route!="":
 		ending=false
