@@ -28,6 +28,7 @@ func _ready():
 	status=words(box,save_summary(),16,Color("9da99e"));status.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	choice(box,"新的旅程",new_game)
 	choice(box,"设置",show_settings)
+	choice(box,"伊万角色样片",func():get_tree().change_scene_to_file("res://scenes/ivan_pilot.tscn"))
 	choice(box,"操作与制作信息",show_about)
 	choice(box,"退出游戏",func():get_tree().quit())
 	var footer=words(self,"一九八二年十一月  ·  莫斯科地下",16,Color("a3ac9e"));footer.position=Vector2(100,930)
@@ -61,7 +62,7 @@ func new_game():
 	if save_data.is_empty():start_new();return
 	var box=open_dialog("开始新的旅程")
 	words(box,"现有手记会保留，直到你在新旅程中主动保存。",21,Color("d6d5c0"))
-	choice(box,"从伊万醒来开始",start_new);choice(box,"返回",close_dialog)
+	choice(box,"从战争序章开始",start_new);choice(box,"返回",close_dialog)
 func start_new():
 	get_node("/root/Session").clear();get_tree().change_scene_to_file("res://scenes/d6.tscn")
 func open_dialog(title:String)->VBoxContainer:

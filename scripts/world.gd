@@ -8,6 +8,8 @@ var campaign_gate:MeshInstance3D
 var campaign_gate_flag="star_access"
 var campaign_gate_state=-1
 var gate_tween:Tween
+var factory_exit_leaves:Array[Node3D]=[]
+var departure_animating=false
 const Labor=preload("res://scripts/labor_floor.gd")
 @export var floor_id="life"
 const Wing=preload("res://scripts/residential_wing.gd")
@@ -99,7 +101,7 @@ func _ready():
 	elif floor_id=="labor":Labor.targets(self)
 	else:CampaignMaps.targets(self)
 	if floor_id not in ["life","labor"]:CampaignMaps.residents(self)
-	if arrival.is_finite():player.position=arrival
+	if arrival.is_finite():player.position=clear_arrival(arrival)
 	story.context.floor=floor_id
 	if floor_id=="waterworks" and story.route=="official":story.flags.plant_briefed=true
 	kit.prepare_highlights()
@@ -497,7 +499,7 @@ func _physics_process(delta):
 	if not initialized:return
 	phase=fmod(phase+delta,12.0)
 	var moved=Vector2(player.position.x-previous_position.x,player.position.z-previous_position.z).length()
-	var active=not hud.modal_visible() and not waiting_shift and not story.flags.get("comic",{}).get("active",false)
+	var active=not departure_animating and not hud.modal_visible() and not waiting_shift and not story.flags.get("comic",{}).get("active",false)
 	var walking=active and moved>.001 and moved<1.5
 	story.Economy.advance(story,delta,walking)
 	if walking:
@@ -530,7 +532,7 @@ func _physics_process(delta):
 	previous_position=player.position
 	set_camera(delta)
 	find_nearest()
-	player.blocked=hud.modal_visible() or waiting_shift
+	player.blocked=hud.modal_visible() or waiting_shift or departure_animating
 	for zone in zones:
 		if zone.rect.has_point(Vector2(player.position.x,player.position.z)):
 			room_name=zone.name
@@ -615,7 +617,7 @@ func set_camera(delta: float, instant: bool = false):
 	camera.size=lerpf(camera.size,desired_size,1-exp(-delta*5)) if not instant else desired_size
 
 func _unhandled_input(event):
-	if not initialized:return
+	if not initialized or departure_animating:return
 	if event.is_action_pressed("ui_cancel"):
 		if hud.comic_active:
 			hud.show_comic_pause()
@@ -653,6 +655,7 @@ func interact(id: String):
 	hud.show_dialogue(id)
 
 func perform(key: String, id: String):
+	if departure_animating:return
 	refresh_guard_context()
 	var reply=story.act(key)
 	if not story.last_action_valid:
@@ -664,6 +667,14 @@ func perform(key: String, id: String):
 			var sequence:String=story.flags.next_sequence
 			if reply!="":story.Conversation.reply(story,id,hud.last_choice,reply);hud.last_choice=""
 			story.flags.erase("next_sequence")
+			if key=="c_plant_leave" and not factory_exit_leaves.is_empty():
+				departure_animating=true
+				hud.close();player.blocked=true
+				hud.toast("厂区铁门缓缓打开",1.5)
+				var opening=create_tween().set_parallel(true)
+				for leaf in factory_exit_leaves:opening.tween_property(leaf,"rotation:y",leaf.get_meta("opening_angle"),.9).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+				await opening.finished
+				departure_animating=false
 			hud.show_comic(sequence)
 		elif story.ending:hud.show_chapter_end()
 		else:hud.show_reply(id,reply)
@@ -695,6 +706,9 @@ func perform(key: String, id: String):
 
 func on_story_changed():
 	story.context.floor=floor_id
+	if floor_id=="commune":
+		var shade=get_node_or_null("FungusShade")
+		if shade:shade.position.y=1.45 if story.f("grow_fixed") else 2.25
 	if campaign_gate:
 		var state=1 if story.f(campaign_gate_flag) else 0
 		if state!=campaign_gate_state:
@@ -724,11 +738,23 @@ func animate_d6_door(mesh:MeshInstance3D,opened:bool):
 	mesh.set_meta("motion",motion)
 	motion.tween_property(mesh,"position",destination,.9).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
+func clear_arrival(p:Vector3)->Vector3:
+	# New decorative fixtures must not imprison an earlier saved position.
+	if floor_id not in ["commune","waterworks"]:return p
+	for solid in kit.solids:
+		if solid.name=="CampaignInnerGate" and story.f(campaign_gate_flag):continue
+		if solid.top>.18 and solid.bottom<1.75 and solid.rect.grow(.28).has_point(Vector2(p.x,p.z)):
+			var nearest_cell=navigation.graph.get_closest_point(Vector2(p.x,p.z))
+			if nearest_cell>=0:
+				var clear:Vector2=navigation.graph.get_point_position(nearest_cell)
+				return Vector3(clear.x,.04,clear.y)
+	return p
+
 func save_game():
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z]
 	data.floor=floor_id
-	data.layout_revision=9
+	data.layout_revision=10
 	var file=FileAccess.open(save_path,FileAccess.WRITE)
 	if file:
 		file.store_string(JSON.stringify(data,"\t"))
@@ -750,7 +776,7 @@ func load_game():
 		return
 	hud.observing=false
 	story.restore(data)
-	player.position=Vector3(p[0],maxf(p[1],0.04),p[2])
+	player.position=clear_arrival(Vector3(p[0],maxf(p[1],0.04),p[2]))
 	if ((floor_id=="sech" and data.get("layout_revision",0)<9) or (floor_id not in ["life","labor","sech"] and data.get("layout_revision",0)<8)):player.position=CampaignMaps.LAYOUTS[floor_id].spawn
 	player.velocity=Vector3.ZERO
 	waiting_shift=false

@@ -63,4 +63,4 @@ static func render(h,id:String,first_new:int):
 			chance.custom_minimum_size.x=84;chance.vertical_alignment=VERTICAL_ALIGNMENT_CENTER;row.add_child(chance)
 	if available==0:choices.add_child(h.label("暂时没有新的话题或操作。",16,h.muted))
 	choices.add_child(h.button("结束交谈" if h.world.npcs.has(id) or id in ["armory","main_gate"] else "收起调查",func():h.close(),true,true))
-	if h.typing.is_empty() and not entries.is_empty():scroll.call_deferred("ensure_control_visible",history.get_child(history.get_child_count()-1))
+	if h.typing.is_empty() and not entries.is_empty():h.scroll_dialogue_to(scroll,history.get_child(history.get_child_count()-1))

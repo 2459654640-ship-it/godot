@@ -58,3 +58,11 @@ identities from Semyon. Runtime does not call an image service.
 ## v9 生活人物与背景
 
 `v8/civilian_crowd.png` 新增普通工人、披肩女居民、儿童与老妇，各五视角；儿童缩放为独立身高与碰撞。战争与母子进入地下的两幅新图用于历史序章。由图像工具生成，沿用现有笔触、比例与色彩方向；角色打包入口仍为 `tools/pack_v8_cast.gd`，保留原始透明底原稿。
+
+## v10 伊万样片与设施素材
+
+`v10/ivan/ivan.blend` 保留原生模型、骨架、动作与打包纹理。人体网格、青年男性形变和权重来自 MakeHuman/MPFB 的 CC0 资产；固定版本和许可证见 `v10/ivan/base/source.json`、`LICENSE-CC0.md`。本项目添加服装、装备、头发并将既有伊万原图投影到同一休止网格，所有帧都由 Blender 离线渲染，未分别生成人物帧。动作与法线重建入口为 `tools/build_ivan_pilot.py` 和 `tools/pack_ivan_pilot.py`。运行时只读预渲染 PNG，正式角色图集与头像未覆盖。完整说明见 `docs/CHARACTER-PILOT-V10.md`。
+
+`v10/facility_materials.png` 和 `v10/commune_posters.png` 为本轮 AI 生成原稿。六类表面分别用于石质地面、旧瓷砖、厂房混凝土、土壤、菜叶与掉漆铁皮；宣传画用于公社的实际平面网格。法线与粗糙度由同一表面图保守推导。原稿与授权的插画编辑均由本会话图像工具完成，未下载来历不明的美术素材。
+
+新增 `assets/cinematics/plant_interior.png`、`filter_return.png`，修订 `commune_threshold.png` 的伊万外观。其余场景人物与构图尽量保留。新增插画只用于图文剧情，没有替代三维地图。

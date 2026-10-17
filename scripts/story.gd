@@ -59,7 +59,7 @@ const ITEMS = {
  "soup":["一份热汤","帮厨房止住漏水换来的。送给米哈伊尔可获得换班情报。","人情"],
  "permit":["临时检修许可","妮娜签字，伊戈尔可以据此放行。仅覆盖东段维修通道。","通行"],
  "order":["征召登记单","科瓦廖夫签字。去作业层装备库领取出发装备，再到集合气闸报到。","通行"],
- "mask":["防毒面具","空气防护装备，与净水设施的滤芯不是一回事。","装备"],
+ "mask":["防毒面具","贴合脸部的橡胶面罩，连接滤毒罐后用于过滤吸入的空气。","装备"],
  "filter":["备用滤毒罐","配合防毒面具使用。出发前检查接口密封，别让罐口受潮。","装备"],
  "vitamins":["维生素 D","供应员留给居民的配给。米哈伊尔的手一直在抖。","人情"],
  "frequency":["手抄频率","收音机里断续出现的「东方-7」。尚未证实与父亲有关。","线索"],
@@ -284,7 +284,7 @@ static func once_topic(key:String)->bool:
 	return Narrative.CHAT.has(key) or key in ["father","vera_heat","semyon_advice","semyon_radio","briefing","igor_talk","armory_check","gate_daily","coal_ask","resident_shift","resident_igor","vera_day","vera_nina","knock_rooms","nina_reckless"]
 
 func serialize() -> Dictionary:
-	return {"version":1,"content_revision":9,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
+	return {"version":1,"content_revision":10,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
 func restore(data: Dictionary):
 	flags=data.get("flags",{}).duplicate(true)
 	read_topics.assign(data.get("read_topics",[]))
@@ -321,6 +321,9 @@ func restore(data: Dictionary):
 			if conversations.has("commune_leader"):conversations.commune_leader.append({"speaker":"narrator","text":note})
 	if int(data.get("content_revision",0))<9:
 		for key in ["sech_father","commune_route","father_work"]:flags.erase("c_done_"+key)
+	if int(data.get("content_revision",0))<10:
+		for key in ["grow_talk","veteran_road","plant_brief","plant_people"]:flags.erase("c_done_"+key)
+		read_topics.erase("igor_semyon")
 	# A v4 completion meant only "left D-6", not the unseen new chapter.
 	if ending and not flags.has("chapter_endpoint") and not flags.get("comic",{}).get("active",false) and route!="":
 		ending=false

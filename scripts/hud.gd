@@ -58,7 +58,7 @@ func advance_typing(delta:float):
 			entry.root.visible=true
 			var ancestor=entry.root.get_parent()
 			while ancestor and not ancestor is ScrollContainer:ancestor=ancestor.get_parent()
-			if ancestor:ancestor.call_deferred("ensure_control_visible",entry.root)
+			if ancestor:scroll_dialogue_to(ancestor,entry.root)
 		entry.elapsed+=delta
 		entry.label.visible_characters=mini(entry.total,floori(entry.elapsed*entry.rate))
 		if entry.label.visible_characters>=entry.total:typing.pop_front()
@@ -70,12 +70,27 @@ func advance_typing(delta:float):
 	receipt_timers=receipt_timers.filter(func(entry):return entry.time>0)
 
 func finish_typing():
+	var current:Control=null
+	if not typing.is_empty():current=typing[0].get("root",typing[0].label)
 	for entry in typing:
 		if is_instance_valid(entry.label):entry.label.visible_characters=-1
 		if entry.has("root") and is_instance_valid(entry.root):entry.root.visible=true
 	typing.clear()
 	for b in speech_buttons:
 		if is_instance_valid(b):b.disabled=false
+	if is_instance_valid(current):
+		var ancestor=current.get_parent()
+		while ancestor and not ancestor is ScrollContainer:ancestor=ancestor.get_parent()
+		if ancestor:scroll_dialogue_to(ancestor,current)
+
+func scroll_dialogue_to(scroll:ScrollContainer,control:Control):
+	# Container geometry settles after the text/portrait rows become visible.
+	# Align the new exchange rather than leaving the old greeting on screen.
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if is_instance_valid(scroll) and is_instance_valid(control) and control.is_visible_in_tree() and scroll.get_child_count()>0:
+		var content:Control=scroll.get_child(0)
+		scroll.scroll_vertical=roundi(control.global_position.y-content.global_position.y)
 
 func _input(event):
 	if modal_visible() and not typing.is_empty() and event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_SPACE,KEY_ENTER,KEY_KP_ENTER]:

@@ -25,7 +25,7 @@ static func tasks(s)->Array:
 		if s.f("plant_bled") and not s.f("plant_fuse"):step="旁通已经开启；去北侧中间的工具修配台取匹配的备用件。";target="plant_bench";area="工具修配"
 		if s.f("plant_bled") and s.f("plant_fuse"):step="回南侧中间的送电控制室，把保险件装入柜内。";target="plant_power";area="送电控制室"
 		if s.f("plant_power"):step="仓门联锁已松开，去东北侧的封存仓库核对型号。";target="plant_store";area="封存仓库"
-		if s.f("water_secured"):step="两箱滤芯已经备妥，回东南侧的入口气闸集合。";target="plant_exit";area="入口气闸"
+		if s.f("water_secured"):step="两箱净水滤芯已装稳，到东南角厂区铁门集合，沿原路运回 D-6。";target="plant_exit";area="厂区铁门"
 		out.append(row("water","给 D-6 的水",s.f("c_done_plant_leave"),"waterworks","科瓦廖夫要求先确认设施图，再动泵房的设备。",step,target,area))
 	if s.f("commune_joined") or s.f("greenhouse_clean"):out.append(row("garden","温室的回水",s.f("greenhouse_fixed"),"commune","委员会提到温室的循环水不畅。","公社西北侧温室。检查过滤篮，停泵清理后再灌水启动。","commune_greenhouse","地下温室"))
 	if s.f("anna_request"):

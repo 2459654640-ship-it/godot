@@ -51,7 +51,7 @@ func run():
 	s.context.floor="sech";s.act("c_tape_read");check(not s.last_action_valid,"remote facility action rejected")
 	s=Story.new();s.context.floor="commune";s.give("frequency")
 	var answer=s.act("c_commune_route")
-	check(answer.contains("星城-2") and answer.contains("短波呼号") and answer.contains("光凭呼号"),"Elena answers the exact call-sign question and admits her knowledge limit")
+	check(answer.contains("星城-2") and answer.contains("呼号") and answer.contains("没见过星城的人员名册") and answer.contains("报姓名"),"Elena answers the exact call-sign question and admits her knowledge limit")
 	check(Campaign.data().interactions.commune_leader.body.contains("推翻") and Campaign.data().interactions.commune_leader.body.contains("中央苏维埃"),"commune opposition is explicit in the encounter")
 	check(Campaign.data().interactions.coal_clerk.body.contains("中央苏维埃") and Campaign.data().interactions.sech_elder.body.contains("顿河"),"D-6 jurisdiction and Cossack identity are stated")
 	var parts=s.Conversation.split_text("电台亮了。\n谢尔盖：「星城还在。」\n东方-7 值班员：「请报姓名。」","sech_radio")

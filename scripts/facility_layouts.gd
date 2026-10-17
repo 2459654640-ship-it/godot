@@ -4,14 +4,14 @@ const PLANS={
 "waterworks":{
 	"spawn":Vector3(15,.04,9),"palette":"78877f","ambient":"82949e","energy":.19,"warm":false,
 	"rooms":[["01","西侧泵房",Rect2(-19,-14,13,14)],["02","工具修配",Rect2(-6,-10,11,10)],["03","封存仓库",Rect2(5,-14,14,14)],["04","交接档案室",Rect2(-23,4,13,8)],["05","送电控制室",Rect2(-10,4,14,9)],["06","入口气闸",Rect2(4,4,15,8)],["00","设备联络廊",Rect2(-23,0,42,4)]],
-	"doors":[[-12,0,"z"],[-1,0,"z"],[12,0,"z"],[-17,4,"z"],[-3,4,"z"],[12,4,"z"],[-6,-6,"x"]],
-	"objects":[["plant_bypass",-12,-6,"valve"],["plant_bench",-1,-6,"bench"],["plant_store",11,-6,"store"],["plant_log",-17,7,"desk"],["plant_power",0,7,"panel"],["plant_diagram",8,6,"paper"],["plant_exit",15,9,"exit"],["plant_lockers",3,-4,"lockers"],["plant_seals",-8,-2,"shelf"]],
+	"doors":[[-12,0,"z"],[-1,0,"z"],[12,0,"z"],[-17,4,"z"],[-3,4,"z"],[12,4,"z"],[-6,-6,"x"],[15,12,"z",1.6]],
+	"objects":[["plant_bypass",-12,-6,"valve"],["plant_bench",-1,-6,"bench"],["plant_store",11,-6,"store"],["plant_log",-17,7,"desk"],["plant_power",0,7,"panel"],["plant_diagram",8,6,"paper"],["plant_exit",15,10.8,"factory_exit"],["plant_lockers",3,-4,"lockers"],["plant_seals",-8,-2,"shelf"]],
 	"gate":Vector3(12,1.1,0),"gate_flag":"plant_power"},
 "commune":{
 	"spawn":Vector3(25,.04,2),"palette":"b2a181","ambient":"b0a68b","energy":.23,"warm":true,
 	"rooms":[["01","地下温室",Rect2(-23,-13,12,24)],["02","公用水井",Rect2(-11,-4,23,15)],["03","联络档案室",Rect2(12,-13,11,13)],["04","公社议事处",Rect2(-11,-8,23,4)],["05","医务与探访",Rect2(-11,11,14,9)],["06","联络气闸",Rect2(12,0,18,4)],["07","站台家属铺位",Rect2(12,4,11,13)]],
 	"doors":[[-11,-6,"x"],[-11,3,"x"],[12,-2,"x"],[12,2,"x"],[12,7,"x"],[-3,11,"z"],[0,-4,"z"]],
-	"objects":[["commune_greenhouse",-17,-4,"garden"],["commune_well",3,3,"well"],["commune_records",17,-6,"desk"],["commune_leader",-5,-6,"npc"],["commune_anna",-4,15,"npc"],["commune_leave",25,2,"exit"],["commune_printer",20,-3,"npc"],["commune_grower",-13,7,"npc"],["commune_proof",20,-7,"press"],["commune_mushroom",-20,-6.5,"marker"]]},
+	"objects":[["commune_greenhouse",-12.8,-2,"garden"],["commune_well",3,3,"well"],["commune_records",17,-6,"desk"],["commune_leader",-5,-6,"npc"],["commune_anna",-4,15,"npc"],["commune_leave",25,2,"exit"],["commune_printer",20,-3,"npc"],["commune_grower",-13,7,"npc"],["commune_proof",20,-7,"press"],["commune_mushroom",-20,-6.5,"marker"]]},
 "sech":{
  "spawn":Vector3(1,.04,16),"palette":"8a7a64","ambient":"929caf","energy":.22,"warm":true,
  "rooms":[["01","调度车厢",Rect2(-8,-19,4,11)],["02","电台车厢",Rect2(-8,-6,4,7)],["04","水箱检修隔间",Rect2(-8,1,4,4)],["05","议事车厢",Rect2(-8,7,4,11)],["03","书架车厢",Rect2(4,-19,4,18)],["06","北线接送车厢",Rect2(4,2,4,16)],["00","检修库站台",Rect2(-4,-22,8,42)]],
@@ -34,5 +34,5 @@ static func rooms(id:String)->Array:
 	return out
 static func door_specs(id:String)->Array:
 	var out=[]
-	for entry in PLANS[id].doors:out.append({"position":Vector2(entry[0],entry[1]),"axis":entry[2]})
+	for entry in PLANS[id].doors:out.append({"position":Vector2(entry[0],entry[1]),"axis":entry[2],"exterior":entry.size()>3})
 	return out

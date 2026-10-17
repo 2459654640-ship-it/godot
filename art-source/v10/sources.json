@@ -1,0 +1,11 @@
+{
+  "generator": "session image generation tool; exact model name not exposed",
+  "materials": "exec-201ec9bc-0835-4688-8f25-3ea9d8cd3ab0.png",
+  "posters": "exec-c3f3ee8f-61ea-40ad-8496-8bcd921c1485.png",
+  "cinematics": {
+    "commune_threshold": {"source":"exec-28fd377f-7bc9-4dcd-acca-c7c4541b5187.png","edit":"preserve commune hall; correct foreground Ivan to short-haired male"},
+    "plant_interior": {"source":"exec-121f28a9-8ef4-4621-bd51-28625a1d328f.png"},
+    "filter_return": {"source":"exec-1ea15a37-7c4e-492b-aa07-98bae98e78a0.png"}
+  },
+  "character": {"method":"Blender geometry + skeletal animation + existing Ivan texture projection", "source":"ivan/ivan.blend", "foundation":"ivan/base/source.json"}
+}

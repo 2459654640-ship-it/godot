@@ -86,7 +86,7 @@ static func objective(s)->String:
 	if s.ending:return data().endings.get(s.flags.get("campaign_ending",""),{}).get("title","这段旅程已记入手记")
 	match s.context.get("floor",""):
 		"waterworks":
-			if s.f("water_secured"):return "两箱滤芯已备妥 · 回入口气闸出发"
+			if s.f("water_secured"):return "两箱净水滤芯已装稳 · 到东南厂区铁门集合"
 			if s.f("plant_power"):return "压力恢复 · 打开封存仓库"
 			if s.f("plant_bled") and s.f("plant_fuse"):return "把备用件装入送电柜，恢复仓门回路"
 			if s.f("plant_diagram"):return "按值班图卸压，并到修配台取备用件"

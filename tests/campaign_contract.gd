@@ -110,6 +110,7 @@ func run():
 		for a in w.npcs.values():a.set_physics_process(false);a.collision_layer=0
 		w.player.camera=null;w.player.use_override=true
 		for spec in w.CampaignMaps.door_specs(id):
+			if spec.get("exterior",false):continue # Closed factory exit is verified with its animated leaves in v10_contract.
 			var door:Vector2=spec.position
 			var normal=Vector2.RIGHT if spec.axis=="x" else Vector2.DOWN
 			for sign in [-1,1]:

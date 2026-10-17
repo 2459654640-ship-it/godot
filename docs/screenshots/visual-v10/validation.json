@@ -1,0 +1,116 @@
+{
+  "version": 10,
+  "headless": {
+    "suites": {
+      "d6": 1855,
+      "visual": 1114,
+      "narrative": 1942,
+      "resident": 113,
+      "chapter": 123,
+      "floor": 35,
+      "campaign": 279,
+      "campaign_ui": 16,
+      "refinement": 43,
+      "presentation": 30,
+      "exploration": 223,
+      "v9": 138,
+      "v10": 96
+    },
+    "checks": 6007,
+    "failures": 0
+  },
+  "graphical": {
+    "startup": 13,
+    "v10": 96,
+    "lighting_and_depth": 8,
+    "failures": 0,
+    "renderer": "OpenGL / Mesa llvmpipe",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "checks": 117
+  },
+  "lighting_samples": {
+    "checks": 8,
+    "cold": [
+      0.146298512816429,
+      0.112925201654434,
+      0.0718687549233437
+    ],
+    "dark": [
+      0.0273709557950497,
+      0.0114445779472589,
+      0.00136054423637688
+    ],
+    "failures": 0,
+    "occluded": [
+      0.122208885848522,
+      0.0872349143028259,
+      0.0498599633574486
+    ],
+    "original_dark": [
+      0.347018778324127,
+      0.208323374390602,
+      0.127010822296143
+    ],
+    "original_warm": [
+      0.347018778324127,
+      0.208323374390602,
+      0.127010822296143
+    ],
+    "toe_pixels": 273,
+    "visible_toes": 237,
+    "warm": [
+      0.186314508318901,
+      0.1220488473773,
+      0.0625850409269333
+    ]
+  },
+  "fonts": {
+    "MetroSans.otf": {
+      "han_missing": 0,
+      "cyrillic_missing": 0
+    },
+    "MetroSerif.otf": {
+      "han_missing": 0,
+      "cyrillic_missing": 0
+    }
+  },
+  "character_bake": {
+    "frames": 192,
+    "directions": 8,
+    "walk_frames": 16,
+    "minimum_frame_gutter_pixels": 17,
+    "fixed_scale": true,
+    "normal_and_depth_atlas": true
+  },
+  "screenshots": [
+    "commune-greenhouse.png",
+    "commune-hall.png",
+    "commune-male-ivan.png",
+    "commune-overview.png",
+    "factory-exit-closed.png",
+    "factory-exit-opening.png",
+    "filter-choice.png",
+    "filter-return-story.png",
+    "ivan-cold.png",
+    "ivan-dark.png",
+    "ivan-stride.png",
+    "ivan-warm.png",
+    "lieutenant-cargo.png",
+    "main-menu-sample-entry.png",
+    "plant-interior-story.png",
+    "veteran-cargo.png",
+    "waterworks-overview.png",
+    "waterworks-pumps.png",
+    "zoya-after.png",
+    "zoya-before.png"
+  ],
+  "motion_preview": "ivan-walk.webp",
+  "notes": [
+    "Screenshots use prepared states and frozen cameras.",
+    "Toe-pixel samples allow rasterization and antialias edge tolerance.",
+    "No platform export, hardware performance benchmark or audio listening test."
+  ]
+}

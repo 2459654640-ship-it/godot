@@ -36,6 +36,7 @@ func run():
 	await press_action("plant_power","c_plant_power")
 	await press_action("plant_store","c_plant_open")
 	await press_action("plant_exit","c_plant_leave")
+	for i in 65:await physics_frame # Wait for the visible steel gate to finish opening.
 	check(w.hud.comic_active and w.story.flags.comic.node=="return_crossing","real exit callback starts full-screen journey")
 	check(w.hud.modal.position==Vector2.ZERO and w.hud.modal.size==w.hud.get_viewport_rect().size,"journey covers entire viewport")
 	var save="user://campaign_ui_transit.json";w.save_path=save;w.save_game()

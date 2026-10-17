@@ -1,16 +1,18 @@
 # 地铁1982 · D-6
 
-Godot 4 的等距 2.5D 叙事探索游戏。当前为 **v9：历史序章、主支线与失败反馈、十四个终章，以及按轨道重做的谢契车厢**。包含两层 D-6、五张后续设施地图、全屏图文旅程与十四个可达终章，保留探索、对话、背包、子弹经济及原有美术方向。
+Godot 4 的等距 2.5D 叙事探索游戏。当前为 **v10：伊万角色样片、对话校对、公社与水厂场景细化**。包含两层 D-6、五张后续设施地图、全屏图文旅程与十四个可达终章，保留探索、对话、背包、子弹经济及原有美术方向。
 
 新游戏先交代战争与伊万的童年，再从地下生活的早晨开始，缺水与征召把他带向水厂；也能自行离站，经谢尔盖、公社或谢契前往星城，追查父亲与东方-7。设施内部自由探索，设施间的地表、隧道和列车行程用图文对话与选择呈现。
 
 [主菜单](docs/screenshots/visual-v8/main-menu.png) · [历史序章](docs/screenshots/visual-v9/prologue-family.png) · [水厂](docs/screenshots/visual-v8/waterworks-overview.png) · [公社](docs/screenshots/visual-v8/commune-overview.png) · [谢契车厢](docs/screenshots/visual-v9/sech-overview.png) · [星城](docs/screenshots/visual-v8/starcity-control.png)
 
-本轮改动：[PROGRESSION-V9](docs/PROGRESSION-V9.md)。设定与支线：[WORLD-AND-QUESTS-V8](docs/WORLD-AND-QUESTS-V8.md)。测试与实机检查：[VALIDATION-V9](docs/VALIDATION-V9.md)。基础章节说明保留在 [CHAPTER-V6](docs/CHAPTER-V6.md)。旧存档可继续使用，旧地图坐标安全迁移到新入口。
+[伊万行走对比动图](docs/screenshots/visual-v10/ivan-walk.webp) · [公社](docs/screenshots/visual-v10/commune-hall.png) · [水厂铁门](docs/screenshots/visual-v10/factory-exit-closed.png)
+
+本轮改动：[对话与设施](docs/NARRATIVE-AND-FACILITIES-V10.md) · [伊万角色样片](docs/CHARACTER-PILOT-V10.md)。上一轮：[PROGRESSION-V9](docs/PROGRESSION-V9.md)。设定与支线：[WORLD-AND-QUESTS-V8](docs/WORLD-AND-QUESTS-V8.md)。测试与实机检查：[VALIDATION-V10](docs/VALIDATION-V10.md)。基础章节说明保留在 [CHAPTER-V6](docs/CHAPTER-V6.md)。旧存档可继续使用，旧地图坐标安全迁移到新入口。
 
 ## 运行
 
-使用 **Godot 4.6.3 标准版**打开 `project.godot`，按 F6/F5 运行。无需 C#、插件、在线依赖或联网素材。首次打开等待字体和资源导入。
+使用 **Godot 4.6.3 标准版**打开 `project.godot`，按 F6/F5 运行。无需 C#、插件、在线依赖或联网素材。首次打开等待字体和资源导入。主菜单新增「伊万角色样片」，可对比原角色与模型预渲染动画，切换暖光、冷光和暗处；独立入口不读写游戏存档，正式旅程尚未替换角色。
 
 F5 从主菜单启动，可继续手记、新开旅程或调节声音；暂停与图文暂停页可以保存后返回主界面。直接 F6 运行单个设施场景仍可用于开发检查。
 
@@ -64,4 +66,4 @@ HUD 只有一个手记入口，旁边的「留意的事」提供含蓄的当地�
 
 更新字体时先完成子集生成，再单独运行一次资源导入，随后运行测试。不要同时让多个编辑器导入同一缓存，或覆盖正在导入的字体。实机截图需可用 X11 显示；云端使用临时 Xorg dummy 与实际 OpenGL，不把无界面测试冒充游戏画面。
 
-当前打磨说明：[V9](docs/PROGRESSION-V9.md)。本轮包含历史序章、三条新增主线路径、新增五条支线内容和十四个终章，战斗系统尚未加入；即时射击与老兵同行的后续讨论稿见 [COMBAT-PROPOSAL](docs/COMBAT-PROPOSAL.md)，尚未加入敌人；既有商品价格、饱食与生命回复参数保持原值，新增防护套装售价八发制式弹。历史版本说明与截图保留在 docs 中。
+当前打磨说明：[V10](docs/NARRATIVE-AND-FACILITIES-V10.md)。当前版本保留历史序章、v9 的三条扩展主线路径与五条支线内容，以及十四个终章，战斗系统尚未加入；即时射击与老兵同行的后续讨论稿见 [COMBAT-PROPOSAL](docs/COMBAT-PROPOSAL.md)，尚未加入敌人；既有商品价格、饱食与生命回复参数保持原值，新增防护套装售价八发制式弹。历史版本说明与截图保留在 docs 中。
