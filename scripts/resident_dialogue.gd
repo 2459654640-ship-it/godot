@@ -60,7 +60,7 @@ static func decorate(v:Dictionary,s) -> Dictionary:
 		"pipe_exit":
 			v.name="检修管线 · 另一端"
 			v.body="盖板挪在一边。沿着这段窄管道，能回到岗哨后面的入口。"
-			v.options=[s.opt("return_pipe","沿管线返回居住层",s.f("hatch"),"先从另一端打开盖板")]
+			v.options=[s.opt("return_pipe","沿管线返回生活层",s.f("hatch"),"先从另一端打开盖板")]
 		"nina":
 			v.options.push_front(s.opt("nina_safety","「先确认一下：哪条回路已经断电？」",not s.f("nina_safety"),"断电范围已经确认"))
 			v.options.append(s.opt("nina_reckless","「换个保险芯，带电也能干吧？」",not s.f("nina_safety"),"她已经说明安全步骤"))
@@ -121,5 +121,5 @@ static func act(key:String,s) -> String:
 				s.flags.guard_wary=true
 				return "「真是中尉的安排，让他写个条子。」\n伊戈尔没有动。" if key=="guard_bluff" else "「活动归活动，岗还得有人站。不能听你一句话就走。」\n他摇摇头。\n「有维修记录，我去复核；没手续，别让我为难。」"
 		"hatch_pass":return "你侧过身，沿着已经拆开的管线钻到岗哨后方。工具和背包都带着。"
-		"return_pipe":return "你沿着管线爬回居住层，推开盖板旁的空隙，重新站到熟悉的灯下。"
+		"return_pipe":return "你沿着管线爬回生活层，推开盖板旁的空隙，重新站到熟悉的灯下。"
 	return REPLIES.get(key,"")

@@ -17,7 +17,7 @@ const HEIGHTS={"ivan":1.75,"semyon":1.70,"nina":1.68,"mikhail":1.72,"cook":1.66,
 
 func setup(body):
 	actor=body
-	actor_id="ivan" if body.is_player else String(body.name)
+	actor_id="ivan" if body.is_player else (body.art_id if body.art_id!="" else String(body.name))
 	var manifest=JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/atlas.json"))
 	pose_count=int(manifest[actor_id].poses)
 	sprite=MeshInstance3D.new()

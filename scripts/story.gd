@@ -1,5 +1,9 @@
 extends RefCounted
 const Narrative=preload("res://scripts/narrative.gd")
+const Comic=preload("res://scripts/comic.gd")
+const Chapter=preload("res://scripts/d6_chapter.gd")
+const Economy=preload("res://scripts/economy.gd")
+const Conversation=preload("res://scripts/conversation.gd")
 const Life=preload("res://scripts/resident_dialogue.gd")
 ## State and authored dialogue live outside level geometry; no future chapters are fixed.
 signal changed
@@ -9,6 +13,10 @@ var intel: Array[String] = []
 var route = ""
 var ending = false
 var last_reply = ""
+var departure_checkpoint:Dictionary={}
+var economy:Dictionary=Economy.fresh()
+var conversations:Dictionary={}
+var last_greetings:Dictionary={}
 var context:Dictionary={}
 var last_outcome:Dictionary={}
 var last_action_valid=false
@@ -17,6 +25,7 @@ var roll_override=-1.0
 
 func _init():
 	flags.social_seed=int(randi())
+	flags.intro_done=false
 
 func guard_clear() -> bool:return context.get("hatch_clear",false)
 
@@ -41,7 +50,7 @@ const ITEMS = {
  "fuse":["陶瓷保险芯","公共洗漱区旧配电柜里的备用件。可恢复东段的压力监测。","维修"],
  "soup":["一份热汤","帮厨房止住漏水换来的。送给米哈伊尔可获得换班情报。","人情"],
  "permit":["临时检修许可","妮娜签字，伊戈尔可以据此放行。仅覆盖东段维修通道。","通行"],
- "order":["征召登记单","科瓦廖夫签字。去供应点领取出发装备，再到集合气闸报到。","通行"],
+ "order":["征召登记单","科瓦廖夫签字。去作业层装备库领取出发装备，再到集合气闸报到。","通行"],
  "mask":["防毒面具","空气防护装备，与净水设施的滤芯不是一回事。","装备"],
  "filter":["备用滤毒罐","配合防毒面具使用。出发前检查接口密封，别让罐口受潮。","装备"],
  "vitamins":["维生素 D","供应员留给居民的配给。米哈伊尔的手一直在抖。","人情"],
@@ -113,7 +122,7 @@ func view(id: String) -> Dictionary:
 			v.role="东侧岗哨 / 卫兵"
 			v.options=[opt("igor_talk","问问为什么把守旧通道"),opt("use_permit","出示妮娜签字的检修许可",has("permit") and not f("gate"),"需要临时检修许可"),opt("use_vodka","交出战前伏特加，换通行",has("vodka") and not f("gate"),"需要战前伏特加；仅此一瓶")]
 		"gate":
-			v.name="东侧维修正门"
+			v.name="东侧维修门"
 		"side":
 			v.name="压力表后的检修侧门"
 			v.options=[opt("use_shift","按情报等候换班，从侧门通过",f("shift") and has("map") and not f("side"),"需要维修草图与换班情报")]
@@ -122,22 +131,26 @@ func view(id: String) -> Dictionary:
 			v.options=[opt("hatch_wrench","用扳手拆盖板，绕行检修管线",has("wrench"),"需要扳手"),opt("hatch_knife","硬撬盖板，折损匕首后绕行",has("knife"),"需要旧匕首")]
 		"lift":
 			v.name="集合气闸 · 征召小队"
-			v.options=[opt("leave_official","检查装备，准备随队离站",f("accepted") and f("kit"),"需要登记征召并在供应点领取装备")]
+			v.options=[opt("leave_official","检查装备，准备随队离站",f("accepted") and f("kit"),"需要登记征召并在作业层装备库领取装备")]
 		"exit":
-			v.name="东段尽头 · 未完工延伸线"
-			v.options=[opt("leave_east","整理背包，准备离开 D-6",route!="", "先通过正门、侧门或检修管线")]
-	return Life.decorate(Narrative.decorate(v,self),self)
+			v.name="东侧维修坡道"
+			v.options=[opt("leave_east","整理背包，准备离开 D-6",route!="", "先通过维修门、侧门或检修管线")]
+	return Chapter.decorate(Life.decorate(Narrative.decorate(v,self),self),self)
 
 func act(key: String) -> String:
 	# Revalidate the same conditions used by the UI before mutating state.
 	var valid=false
 	last_action_valid=false
 	last_outcome={}
-	for id in ["box","radio","notice","chalk","semyon","mikhail","cook","valve","nina","cabinet","relay","supply","commander","igor","side","hatch","lift","exit"]+Life.IDS:
+	for id in ["box","radio","notice","chalk","semyon","mikhail","cook","valve","nina","cabinet","relay","supply","commander","igor","side","hatch","lift","exit"]+Life.IDS+Chapter.IDS:
 		for o in view(id).options:
 			if o.key==key and o.enabled:valid=true
 	if not valid:return "条件尚未满足，或这件事已经做过了。"
 	last_action_valid=true
+	if Chapter.handles(key):
+		last_reply=Chapter.act(key,self)
+		changed.emit()
+		return last_reply
 	if Life.handles(key):
 		last_reply=Life.act(key,self)
 		changed.emit()
@@ -170,7 +183,7 @@ func act(key: String) -> String:
 		"semyon_radio":pass
 		"map":
 			give("map")
-			know("东段有正门、检修侧门和旧管线。地图不提供通行权限。")
+			know("东段有维修门、检修侧门和旧管线。地图不提供通行权限。")
 		"trade_smoke","give_soup":
 			take("cigarettes" if key=="trade_smoke" else "soup")
 			flags.shift=true
@@ -234,19 +247,25 @@ func act(key: String) -> String:
 	return last_reply
 
 func objective() -> String:
-	if ending:return "离站记录已收好"
+	if ending:return "打开日志，回看已经经历的旅程"
+	if f("intro_done") and not f("vitamins_taken"):return "去第七供应点领取今日维生素 D"
 	if f("guard_task") and not f("hatch"):return "伊戈尔在查表 · 用工具拆下旧盖板" if guard_clear() else "等伊戈尔离开岗哨，再检查旧盖板"
-	if f("gate") or route=="hatch" or route=="shift":return "穿过东侧通道，在延伸线尽头确认离站"
-	if f("kit"):return "准备好后，到集合气闸随征召小队离站"
-	if f("accepted"):return "携登记单到第 7 供应点领取防护装备"
+	if f("gate") or route=="hatch" or route=="shift":return "穿过东侧维修通道，从坡道离站"
+	if f("kit"):return "到作业层正门随征召小队离站"
+	if f("accepted"):return "到作业层装备库领取防护装备"
 	if f("relay") and not has("permit"):return "监测已恢复 · 回维修区请妮娜签字"
 	if f("nina_job"):return "找备用保险芯，修复东侧压力监测箱"
-	return "了解净水危机，决定如何离开 D-6"
+	return "到作业层找科瓦廖夫中尉报到" if f("vitamins_taken") else "去第七供应点领取今日维生素 D"
 
 func serialize() -> Dictionary:
-	return {"version":1,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending}
+	return {"version":1,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint}
 func restore(data: Dictionary):
-	flags=data.get("flags",{}).duplicate()
+	flags=data.get("flags",{}).duplicate(true)
+	departure_checkpoint=data.get("checkpoint",{}).duplicate(true)
+	if not flags.has("intro_done") and not flags.has("comic"):flags.intro_done=true
+	economy=Economy.restored(data.get("economy",{}))
+	conversations=data.get("conversations",{}).duplicate(true)
+	last_greetings=data.get("last_greetings",{}).duplicate(true)
 	if not flags.has("social_seed"):
 		flags.social_seed=JSON.stringify(data).sha256_text().substr(0,8).hex_to_int()
 	context={}
@@ -255,4 +274,9 @@ func restore(data: Dictionary):
 	intel.assign(data.get("intel",[]))
 	route=data.get("route","")
 	ending=data.get("ending",false)
+	# A v4 completion meant only "left D-6", not the unseen new chapter.
+	if ending and not flags.has("chapter_endpoint") and not flags.get("comic",{}).get("active",false) and route!="":
+		ending=false
+		flags.v4_departure_carried=true
+		Comic.start(self,"official" if route=="official" else "solo")
 	changed.emit()

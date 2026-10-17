@@ -1,5 +1,6 @@
 extends CharacterBody3D
 ## Depth-tested painterly figures. Movement/physics retain v1 behavior.
+var art_id=""
 var is_player = false
 var blocked = false
 var camera: Camera3D
@@ -66,7 +67,7 @@ func npc_motion(delta:float) -> Vector3:
 	var world=get_parent()
 	var player=get_tree().get_first_node_in_group("player")
 	if not player:return Vector3.ZERO
-	var talking=is_instance_valid(world.hud) and world.hud.modal_visible() and world.hud.dialogue_id==String(name)
+	var talking=is_instance_valid(world.hud) and world.hud.modal_visible() and world.hud.dialogue_actor()==String(name)
 	look_target=player if talking else null
 	if talking:
 		animation_state="talk"

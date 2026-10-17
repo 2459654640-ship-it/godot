@@ -5,7 +5,10 @@ config_version=5
 config/name="地铁1982 · D-6"
 run/main_scene="res://scenes/d6.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
-config/description="D-6 居住层 · 3D 叙事箱庭原型"
+config/description="D-6 生活层 · 3D 叙事箱庭原型"
+
+[autoload]
+Session="*res://scripts/session.gd"
 
 [display]
 window/size/viewport_width=1600

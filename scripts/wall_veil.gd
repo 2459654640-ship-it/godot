@@ -9,11 +9,11 @@ const FADED=0.12
 
 func setup(owner_world):
 	world=owner_world
-	for mesh in world.kit.wall_meshes:
-		states.append({"mesh":mesh,"bounds":mesh.get_aabb(),"opacity":1.0,"acquire":0.0,"hold":0.0,"active":false,"switches":0})
+	for mesh in world.kit.wall_meshes+world.kit.scrap_meshes:
+		states.append({"mesh":mesh,"bounds":mesh.global_transform*mesh.get_aabb(),"opacity":1.0,"acquire":0.0,"hold":0.0,"active":false,"switches":0})
 		# Fixed parallel view: establish a painter's order once. Camera follow
 		# cannot swap it, unlike distance-sorted large transparent thin sheets.
-		var centre=mesh.get_aabb().get_center()
+		var centre=(mesh.global_transform*mesh.get_aabb()).get_center()
 		var priority=clampi(roundi((centre.x*.65+centre.z*.76)*3),-120,120)
 		for i in mesh.mesh.get_surface_count():mesh.mesh.surface_get_material(i).render_priority=priority
 		for entry in world.kit.veil_materials.get(mesh.get_instance_id(),[]):entry.material.render_priority=priority

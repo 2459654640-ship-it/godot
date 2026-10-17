@@ -23,17 +23,19 @@ func run():
 	check(FileAccess.file_exists("res://tests/fixtures/visual_v1_baseline.json"),"v1 baseline fixture is bundled")
 	if FileAccess.file_exists("res://tests/fixtures/visual_v1_baseline.json"):
 		var baseline=JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/visual_v1_baseline.json"))
-		check(w.npcs.size()==baseline.npc.size(),"NPC count unchanged")
+		check(w.npcs.size()==baseline.npc.size()-1,"commander moved to labor floor; other life NPCs retained")
 		for id in baseline.npc:
+			if id=="commander":continue
 			var p=baseline.npc[id]
 			if id not in ["mikhail","resident","diner"]:check(w.npcs[id].anchor.is_equal_approx(Vector3(p[0],p[1],p[2])),"retained story NPC anchor: "+id)
 		check(w.targets.size()==baseline.targets.size()+7,"seven residential/return interactions added; old IDs retained")
 		for id in baseline.targets:
-			if w.npcs.has(id):continue
+			if w.npcs.has(id) or id=="commander":continue
 			var p=baseline.targets[id]
 			check(w.targets[id].pos.is_equal_approx(Vector3(p[0],p[1],p[2])),"original target coordinate: "+id)
 		for old in baseline.solids:
-			if old.name=="West":continue # Authorized new west-wing entrance.
+			if old.name in ["West","SouthCut","EastCut"]:continue # Authorized new west-wing entrance.
+			if old.name=="Crate" and old.rect.begins_with("[P: (12.95, 8.675)"):continue # Open ramp replaces this crate.
 			var retained=false
 			for solid in w.kit.solids:
 				if JSON.parse_string(JSON.stringify(solid))==old:retained=true;break

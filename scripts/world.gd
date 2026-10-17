@@ -3,6 +3,8 @@ const Kit = preload("res://scripts/kit.gd")
 const Actor = preload("res://scripts/actor.gd")
 const Story = preload("res://scripts/story.gd")
 const HUD = preload("res://scripts/hud.gd")
+const Labor=preload("res://scripts/labor_floor.gd")
+@export var floor_id="life"
 const Wing=preload("res://scripts/residential_wing.gd")
 var kit
 var story
@@ -33,42 +35,59 @@ var room_name="伊万的卧室"
 var wall_veil
 var navigation
 var guard_away_time=0.0
-var zones=[
+const LIFE_ZONES=[
  {"name":"伊万的卧室","rect":Rect2(-15,-9,7,9),"code":"01"},
  {"name":"维修工坊","rect":Rect2(-8,-9,9,9),"code":"02"},
  {"name":"公共食堂","rect":Rect2(1,-9,9,9),"code":"03"},
  {"name":"第 7 供应点","rect":Rect2(10,-9,5,9),"code":"04"},
  {"name":"洗漱 / 储物区","rect":Rect2(-15,3.2,7,6.8),"code":"05"},
- {"name":"征召集合厅","rect":Rect2(-8,3.2,10,6.8),"code":"06"},
+ {"name":"值班休息区","rect":Rect2(-8,3.2,10,6.8),"code":"06"},
  {"name":"东侧维修岗","rect":Rect2(2,3.2,7,6.8),"code":"07"},
- {"name":"未完工延伸线","rect":Rect2(9,3.2,6,6.8),"code":"08"},
- {"name":"居住层主通道","rect":Rect2(-15,0,30,3.2),"code":"00"}]
+ {"name":"东侧维修坡道","rect":Rect2(9,3.2,6,6.8),"code":"08"},
+ {"name":"生活层主通道","rect":Rect2(-15,0,30,3.2),"code":"00"}]
+var zones=LIFE_ZONES.duplicate(true)
 
 func _ready():
 	inputs()
 	story=Story.new()
-	zones.append_array(Wing.ZONES)
+	var transfer=get_node_or_null("/root/Session")
+	var arrival=Vector3.INF
+	if transfer and not transfer.pending.is_empty():
+		story.restore(transfer.pending.story)
+		arrival=transfer.pending.position
+		transfer.pending={}
 	kit=Kit.new(self)
 	build_environment()
-	build_structure()
-	Wing.structure(self)
-	kit.finish_walls()
-	build_residence()
-	build_workshop()
-	build_mess()
-	build_supply()
-	build_south()
-	build_corridor()
-	build_dressing()
-	Wing.furnish(self)
+	if floor_id=="life":
+		zones.append_array(Wing.ZONES)
+		build_structure()
+		Wing.structure(self)
+		kit.finish_walls()
+		build_residence()
+		build_workshop()
+		build_mess()
+		build_supply()
+		build_south()
+		build_corridor()
+		build_dressing()
+		Wing.furnish(self)
+		build_implied_life()
+	else:
+		zones=Labor.ZONES.duplicate(true)
+		Labor.build(self)
 	kit.batch_static()
-	build_people()
+	build_people() if floor_id=="life" else build_labor_people()
 	navigation=preload("res://scripts/route_grid.gd").new()
 	navigation.setup(self)
 	setup_daily_routines()
-	build_targets()
-	Wing.targets(self)
-	target("pipe_exit",Vector3(10.8,0,8.6),"检修管线出口")
+	if floor_id=="life":
+		build_targets()
+		Wing.targets(self)
+		target("pipe_exit",Vector3(10.8,0,8.6),"检修管线出口")
+		target("other_life",Vector3(14,0,-5.5),"其它生活区")
+	else:Labor.targets(self)
+	if arrival.is_finite():player.position=arrival
+	story.context.floor=floor_id
 	kit.prepare_highlights()
 	camera=Camera3D.new()
 	add_child(camera)
@@ -100,6 +119,10 @@ func _ready():
 	add_child(wall_veil)
 	wall_veil.setup(self)
 	previous_position=player.position
+	if DisplayServer.get_name()!="headless" and "--skip-intro" not in OS.get_cmdline_user_args():
+		if story.flags.get("comic",{}).get("active",false):hud.call_deferred("show_comic")
+		elif story.ending:hud.call_deferred("show_chapter_end")
+		elif floor_id=="life" and not story.f("intro_done"):hud.call_deferred("show_comic","intro")
 	if "--capture" in OS.get_cmdline_user_args():
 		capture_mode=true
 		capture_later()
@@ -139,7 +162,7 @@ func build_structure():
 	kit.box("FloorCollision",Vector3(0,-0.10,0.5),Vector3(30,0.20,19),"tile",true).visible=false
 	for zone in zones:
 		var r:Rect2=zone.rect
-		var m=kit.box("Floor_"+zone.code,Vector3(r.get_center().x,0.006,r.get_center().y),Vector3(r.size.x-0.04,0.012,r.size.y-0.04),"tile" if zone.code not in ["02","07","08"] else "concrete")
+		var m=kit.box("Floor_"+zone.code,Vector3(r.get_center().x,0.006,r.get_center().y),Vector3(r.size.x-0.04,0.012,r.size.y-0.04),"wood" if zone.code=="08" else ("tile" if zone.code not in ["02","07"] else "concrete"))
 		m.material_override=m.material_override.duplicate()
 		m.material_override.uv1_scale=Vector3.ONE/2.4
 		if zone.code=="01":m.material_override.albedo_color=Color("b7a88a")
@@ -147,8 +170,10 @@ func build_structure():
 	kit.wall("North",Vector2(-15,-9),Vector2(15,-9))
 	kit.wall("WestNorth",Vector2(-15,-9),Vector2(-15,.74))
 	kit.wall("WestSouth",Vector2(-15,2.46),Vector2(-15,10))
-	kit.wall("SouthCut",Vector2(-15,10),Vector2(15,10),true)
-	kit.wall("EastCut",Vector2(15,-9),Vector2(15,10),true)
+	kit.wall("SouthCut",Vector2(-15,10),Vector2(9,10),true)
+	kit.box("RampSouthRail",Vector3(12,.5,9.9),Vector3(6,.9,.18),"wood",true)
+	kit.wall("EastCut",Vector2(15,-9),Vector2(15,3.2),true)
+	kit.box("RampEdgeStop",Vector3(14.9,1.3,6.6),Vector3(.22,2.6,6.8),"dark",true).visible=false
 	# North rooms: independent spaces linked by a 3.2m main circulation spine.
 	for x in [-8,1,10]:kit.wall("NorthPartition",Vector2(x,-9),Vector2(x,0),true)
 	# Two homes, one unchanged common foyer. Existing NPC/target coordinates stay
@@ -326,7 +351,7 @@ func build_south():
 	kit.box("AirlockFrame",Vector3(-3.3,1.15,9.55),Vector3(2.25,2.3,0.45),"dark",true)
 	kit.box("AirlockDoor",Vector3(-3.3,1.1,9.28),Vector3(1.6,2.15,0.15),"metal")
 	kit.cyl("AirlockWheel",Vector3(-3.3,1.05,9.15),0.25,0.08,"brass").rotation.x=PI/2
-	kit.signboard("СБОР / ВЫХОД",Vector3(-3.3,2.5,9.2),2.8)
+	kit.signboard("ЛЕСТНИЦА / ВНИЗ",Vector3(-3.3,2.5,9.2),2.8)
 	for x in [-7,1.2]:kit.locker(Vector3(x,0,6.8))
 	kit.lamp(Vector3(-4,2.5,4),true,2.1,6)
 	# Guard station and relay.
@@ -344,15 +369,15 @@ func build_south():
 	for z in [8.6,8.75,8.9,9.05,9.2]:kit.box("HatchGrille",Vector3(7.8,0.12,z),Vector3(0.65,0.015,0.035),"dark")
 	kit.lamp(Vector3(4.5,2.3,3.7),true,2.0,6)
 	kit.lamp(Vector3(8.6,2.3,8.8),false,1.3,5)
-	# Extension tunnel: rails are embedded, never trip colliders.
-	for z in [6.0,7.25]:kit.box("EmbeddedRail",Vector3(12,0.035,z),Vector3(5.7,0.035,0.07),"metal")
-	for x in range(10,15):kit.box("RailSleeper",Vector3(x,0.02,6.63),Vector3(0.16,0.025,1.8),"wood")
-	kit.crate(Vector3(13.5,0,9.0),Vector3(1.1,0.7,0.65))
-	kit.pipe(Vector3(14.5,2.2,3.7),Vector3(14.5,2.2,9.5),0.11)
-	kit.lamp(Vector3(12,2.4,3.5),false,1.9,6)
-	kit.box("TunnelBlack",Vector3(14.8,1.2,6.6),Vector3(0.1,2.4,2.3),"black")
-	for z in [5.4,7.8]:kit.box("TunnelMouth",Vector3(14.6,1.25,z),Vector3(0.3,2.5,0.25),"dark")
-	kit.box("TunnelLintel",Vector3(14.6,2.5,6.6),Vector3(0.3,0.3,2.65),"dark")
+	# Open maintenance ramp, visually descending beyond a safe interaction edge.
+	kit.box("RampVoid",Vector3(18,-1.0,6.6),Vector3(7,.4,5),"black")
+	for i in 9:
+		kit.box("RampStep",Vector3(15.0+i*.45,-.05-i*.16,6.6),Vector3(.5,.12,2.6),"wood")
+	for z in [5.1,8.1]:
+		kit.box("ScrapRampRail",Vector3(16.8,-.14,z),Vector3(4,.8,.12),"rust").rotation.z=-atan(.16/.45)
+		for x in [15,16.5,18]:kit.box("RampPost",Vector3(x,.50-maxf(x-15,0)*.16/.45,z),Vector3(.08,1.3,.08),"wood")
+	kit.lamp(Vector3(14.4,2.2,4.2),false,1.5,5)
+	kit.signboard("ТЕХНИЧЕСКИЙ СПУСК",Vector3(12,2.3,3.36),3)
 
 func build_corridor():
 	# Dense wall dressing is decorative and kept above 2m or out of circulation.
@@ -373,9 +398,10 @@ func build_corridor():
 	kit.box("ManifoldNeedle",Vector3(2.83,1.51,.352),Vector3(.012,.11,.012),"dark").rotation.z=-.7
 	kit.label("ОТОПЛЕНИЕ / 12",Vector3(2.8,1.08,.30),17)
 
-func person(id: String,p: Vector3,coat: String="green",hat: bool=false):
+func person(id: String,p: Vector3,coat: String="green",hat: bool=false,art:String=""):
 	var a=Actor.new()
 	a.name=id
+	a.art_id=art
 	add_child(a)
 	a.position=p
 	a.setup(kit,false,coat,hat)
@@ -395,13 +421,13 @@ func build_people():
 	person("mikhail",Vector3(1.65,0,-3.25),"wood",true)
 	person("cook",Vector3(5.5,0,-6.6),"cream")
 	person("supply",Vector3(12.4,0,-6.5),"blue")
-	person("commander",Vector3(-0.5,0,5.1),"green",true)
 	person("igor",Vector3(6.3,0,6.6),"green",true)
 	person("resident",Vector3(-25.0,0,-5.1),"cloth",true)
 	person("diner",Vector3(-25.0,0,-1.6),"blue")
 	person("queue",Vector3(13.6,0,-3.2),"wood")
 
 func setup_daily_routines():
+	if floor_id=="labor":Labor.routines(self);return
 	var stops={"semyon":Vector3(-13.3,0,-2.0),"nina":Vector3(-1.9,0,-6),"mikhail":Vector3(1.65,0,-2.0),"cook":Vector3(7.2,0,-6.4),"supply":Vector3(13.3,0,-6.5),"commander":Vector3(-1.5,0,5.4),"resident":Vector3(-24.1,0,-7.8),"diner":Vector3(-24.2,0,.3),"queue":Vector3(12.2,0,-2.3)}
 	for id in npcs:
 		var actor=npcs[id]
@@ -420,7 +446,7 @@ func target(id: String,p: Vector3,label: String,kind: String="inspect"):
 	targets[id]={"pos":p,"label":label,"kind":kind,"ring":ring,"marker":marker}
 
 func build_targets():
-	for pair in [["semyon","谢苗诺夫"],["nina","妮娜"],["mikhail","米哈伊尔"],["cook","加琳娜"],["supply","柳德米拉"],["commander","科瓦廖夫"],["igor","老伊戈尔"]]:target(pair[0],npcs[pair[0]].position,pair[1],"talk")
+	for pair in [["semyon","谢苗诺夫"],["nina","妮娜"],["mikhail","米哈伊尔"],["cook","加琳娜"],["supply","柳德米拉"],["igor","老伊戈尔"]]:target(pair[0],npcs[pair[0]].position,pair[1],"talk")
 	target("box",Vector3(-12.1,0,-4.5),"老爹的木箱")
 	target("radio",Vector3(-11.2,0,-6.9),"旧收音机")
 	target("notice",Vector3(11,0,0.65),"征召令")
@@ -428,11 +454,11 @@ func build_targets():
 	target("valve",Vector3(8.6,0,-6.0),"回水阀")
 	target("cabinet",Vector3(-9,0,8.1),"断电配电柜")
 	target("relay",Vector3(7.7,0,4.5),"压力监测箱")
-	target("gate",Vector3(8.2,0,6.7),"维修正门")
+	target("gate",Vector3(8.2,0,6.7),"维修门")
 	target("side",Vector3(8.2,0,4.5),"检修侧门")
 	target("hatch",Vector3(7.7,0,8.7),"检修盖板")
-	target("lift",Vector3(-3.3,0,8.3),"集合气闸")
-	target("exit",Vector3(13.4,0,6.6),"延伸线出口")
+	target("lift",Vector3(-3.3,0,8.3),"楼梯 / 作业层")
+	target("exit",Vector3(13.4,0,6.6),"维修坡道出口")
 
 func _physics_process(delta):
 	if not initialized:return
@@ -444,35 +470,36 @@ func _physics_process(delta):
 			step_audio.pitch_scale=0.97+fmod(phase,0.07)
 			if DisplayServer.get_name()!="headless":step_audio.play()
 	else:step_clock=0.3
-	if waiting_shift:
-		if phase>=8.0:
-			waiting_shift=false
-			story.route="shift"
-			story.flags.side_pass=true
+	if floor_id=="life":
+		if waiting_shift:
+			if phase>=8.0:
+				waiting_shift=false
+				story.route="shift"
+				story.flags.side_pass=true
+				side_body.set_deferred("disabled",true)
+				side_mesh.visible=false
+				hud.toast("黄灯已亮 · 侧门开启，穿过侧门进入东段")
+				story.changed.emit()
+			else:hud.prompt.text="等候换班 · 还有 %d 秒  /  Esc 可取消" % ceili(8.0-phase)
+		# After the timed opening, never close on a player in the doorway. Keep it open once passed.
+		if story.f("side_pass") and player.position.x>9.45:story.flags.side_crossed=true
+		if story.f("side_pass") and not story.f("side_crossed") and phase<8 and not waiting_shift:
+			if absf(player.position.x-9)>0.6:
+				side_body.set_deferred("disabled",false)
+				side_mesh.visible=true
+				story.flags.side_pass=false
+				story.route=""
+		if story.f("side_crossed"):
 			side_body.set_deferred("disabled",true)
 			side_mesh.visible=false
-			hud.toast("黄灯已亮 · 侧门开启，穿过侧门进入东段")
-			story.changed.emit()
-		else:hud.prompt.text="等候换班 · 还有 %d 秒  /  Esc 可取消" % ceili(8.0-phase)
-	# After the timed opening, never close on a player in the doorway. Keep it open once passed.
-	if story.f("side_pass") and player.position.x>9.45:story.flags.side_crossed=true
-	if story.f("side_pass") and not story.f("side_crossed") and phase<8 and not waiting_shift:
-		if absf(player.position.x-9)>0.6:
-			side_body.set_deferred("disabled",false)
-			side_mesh.visible=true
-			story.flags.side_pass=false
-			story.route=""
-	if story.f("side_crossed"):
-		side_body.set_deferred("disabled",true)
-		side_mesh.visible=false
-	update_guard(delta)
-	if player.position.x>9.4 and previous_position.x<=9.4:
-		if absf(player.position.z-6.7)<0.9 and story.f("gate"):
-			story.route=story.flags.get("gate_route","permit")
-			story.changed.emit()
-		elif absf(player.position.z-4.5)<0.9 and story.f("side_pass"):
-			story.route="shift"
-			story.changed.emit()
+		update_guard(delta)
+		if player.position.x>9.4 and previous_position.x<=9.4:
+			if absf(player.position.z-6.7)<0.9 and story.f("gate"):
+				story.route=story.flags.get("gate_route","permit")
+				story.changed.emit()
+			elif absf(player.position.z-4.5)<0.9 and story.f("side_pass"):
+				story.route="shift"
+				story.changed.emit()
 	previous_position=player.position
 	find_nearest()
 	player.blocked=hud.modal_visible() or waiting_shift
@@ -502,7 +529,7 @@ func find_nearest():
 	var cue=nearest if not hud.modal_visible() else ""
 	if cue=="gate" and story.f("gate"):cue=""
 	if cue=="side" and (story.f("side_crossed") or story.f("side_pass")):cue=""
-	kit.highlight(cue,npcs)
+	kit.highlight({"armory":"armorer","main_gate":"main_guard"}.get(cue,cue),npcs)
 	if not waiting_shift:hud.set_prompt(nearest)
 
 func update_guard(delta:float):
@@ -524,6 +551,9 @@ func update_guard(delta:float):
 	refresh_guard_context()
 
 func refresh_guard_context():
+	if not npcs.has("igor"):
+		story.context.hatch_clear=false
+		return
 	var clear=false
 	if story.f("guard_task"):
 		var guard=npcs.igor
@@ -538,18 +568,22 @@ func refresh_guard_context():
 	if previous!=clear and hud:hud.refresh_status()
 
 func set_camera(delta: float, instant: bool = false):
-	var focus=Vector3(-6,0,-1.5) if overview else Vector3(player.position.x*.90,.4,player.position.z*.85)
+	var focus=(Vector3(-6,0,-1.5) if floor_id=="life" else Vector3(1,0,.5)) if overview else Vector3(player.position.x*.90,.4,player.position.z*.85)
 	if capture_mode:focus=debug_camera_target
 	var desired=focus+Vector3(23,30,27)
 	if instant:camera.position=desired
 	else:camera.position=camera.position.lerp(desired,1-exp(-delta*3.5))
 	camera.look_at(camera.position-Vector3(23,30,27),Vector3.UP)
-	var desired_size=39.0 if overview else camera_size
+	var desired_size=(39.0 if floor_id=="life" else 44.0) if overview else camera_size
 	camera.size=lerpf(camera.size,desired_size,1-exp(-delta*5)) if not instant else desired_size
 
 func _unhandled_input(event):
 	if not initialized:return
 	if event.is_action_pressed("ui_cancel"):
+		if hud.comic_active:
+			hud.show_comic_pause()
+			get_viewport().set_input_as_handled()
+			return
 		if waiting_shift:
 			waiting_shift=false
 			player.blocked=false
@@ -584,6 +618,14 @@ func perform(key: String, id: String):
 	if not story.last_action_valid:
 		hud.show_reply(id,reply)
 		return
+	if key in ["travel_down","travel_up"]:
+		travel_floor("labor" if key=="travel_down" else "life")
+		return
+	if key=="shop":
+		story.Conversation.reply(story,id,hud.last_choice,reply)
+		hud.last_choice=""
+		hud.show_shop()
+		return
 	if npcs.has(id):
 		var painter=npcs[id].visual.get_node("Painter")
 		painter.react(story.last_outcome.get("kind","success"))
@@ -612,6 +654,7 @@ func on_story_changed():
 func save_game():
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z]
+	data.floor=floor_id
 	var file=FileAccess.open(save_path,FileAccess.WRITE)
 	if file:
 		file.store_string(JSON.stringify(data,"\t"))
@@ -626,17 +669,24 @@ func load_game():
 	if not data is Dictionary or data.get("version",0)!=1:
 		hud.toast("存档格式无效")
 		return
-	story.restore(data)
 	var p=data.get("position",[-10.5,0.04,-3.4])
+	if data.get("floor","life")!=floor_id:
+		get_node("/root/Session").enter(data,data.get("floor","life"),Vector3(p[0],maxf(p[1],.04),p[2]))
+		return
+	story.restore(data)
 	player.position=Vector3(p[0],maxf(p[1],0.04),p[2])
 	player.velocity=Vector3.ZERO
 	waiting_shift=false
 	guard_away_time=0.0
+	hud.comic_active=false
 	hud.close()
+	if story.flags.get("comic",{}).get("active",false):hud.show_comic()
+	elif story.ending:hud.show_chapter_end()
 	hud.toast("已读取本地手记")
 
 func restart():
-	get_tree().reload_current_scene()
+	get_node("/root/Session").clear()
+	get_tree().change_scene_to_file("res://scenes/d6.tscn")
 
 func _exit_tree():
 	# Release looping audio before node teardown (also avoids Dummy-driver leaks
@@ -713,3 +763,38 @@ func build_dressing():
 	kit.box("Banner",Vector3(-2.4,2.1,-8.70),Vector3(0.7,1.4,0.025),"red")
 	kit.label("★",Vector3(-2.4,2.3,-8.67),55,Color("d3b471"))
 	kit.label("1982",Vector3(-2.4,1.8,-8.67),23,Color("d3b471"))
+
+func build_labor_people():
+	player=Actor.new()
+	player.name="Ivan";add_child(player)
+	player.position=Vector3(-10,.04,1.8)
+	player.add_to_group("player");player.setup(kit,true,"green")
+	Labor.people(self)
+
+func floor_name()->String:return "生活层" if floor_id=="life" else "作业层"
+
+func travel_floor(destination:String):
+	var positions:Dictionary=story.flags.get("floor_positions",{}).duplicate(true)
+	positions[floor_id]=[player.position.x,.04,player.position.z]
+	story.flags.floor_positions=positions
+	var fallback=[-10,.04,1.8] if destination=="labor" else [-3.3,.04,8.0]
+	var p=positions.get(destination,fallback)
+	get_node("/root/Session").enter(story.serialize(),destination,Vector3(p[0],.04,p[2]))
+
+func build_implied_life():
+	# Closed doors keep these dressed continuation spaces outside navigation.
+	kit.box("DistantLifeFloor",Vector3(-17.5,-.01,-1.7),Vector3(4.7,.1,3.6),"tile")
+	for x in [-19.8,-15.2]:kit.box("DistantLifeSide",Vector3(x,1.3,-1.7),Vector3(.18,2.6,3.6),"rust")
+	kit.box("DistantLifeBlack",Vector3(-17.5,1.2,-3.6),Vector3(4.7,2.4,.2),"black")
+	kit.lamp(Vector3(-17.5,2.2,-3.4),true,.9,4)
+	kit.box("DistantEastFloor",Vector3(18,-.02,-5.5),Vector3(6,.1,3),"concrete")
+	for z in [-7,-4]:kit.box("DistantEastWall",Vector3(18,1.25,z),Vector3(6,2.5,.18),"rust")
+	kit.box("DistantEastBlack",Vector3(21,1.25,-5.5),Vector3(.2,2.5,3),"black")
+	kit.box("ClosedEastDoor",Vector3(14.83,1,-5.5),Vector3(.12,2,1.4),"metal")
+	kit.lamp(Vector3(19,2.2,-6.8),false,.9,4)
+
+func return_checkpoint():
+	var data=story.departure_checkpoint.duplicate(true)
+	if data.is_empty():return
+	var p=data.get("position",[-3.3,.04,8])
+	get_node("/root/Session").enter(data,data.get("floor","life"),Vector3(p[0],p[1],p[2]))

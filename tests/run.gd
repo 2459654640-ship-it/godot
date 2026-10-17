@@ -299,7 +299,7 @@ func ui_tests():
 	# End-to-end official departure preflight does not overwrite an alternative route.
 	actions(w.story,["accept","get_kit"])
 	w.story.route="hatch"
-	w.perform("leave_official","lift")
+	w.perform("leave_official","main_gate")
 	check(w.pending_route=="official" and w.story.route=="hatch","departure cancellation preserves alternative route")
 	w.hud.close()
 	w.pending_route="official"

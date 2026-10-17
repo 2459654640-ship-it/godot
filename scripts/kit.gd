@@ -5,6 +5,7 @@ var mats: Dictionary = {}
 var solids: Array[Dictionary] = []
 var occluders: Array[Dictionary] = []
 var wall_sections: Array[Dictionary] = []
+var scrap_meshes:Array[MeshInstance3D]=[]
 var wall_meshes: Array[MeshInstance3D] = []
 var veil_materials:Dictionary={}
 var highlight_material: ShaderMaterial

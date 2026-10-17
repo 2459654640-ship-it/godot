@@ -28,3 +28,9 @@ Materials: layered plaster/paint, ceramic tiles, worn wood, concrete, wool and
 medallion carpet. They are applied to actual modular meshes. Item atlas: fourteen
 quest items plus spare satchel and mug illustrations. V4 adds a clean cloth and
 a signed heating-maintenance record, bringing usable quest illustrations to sixteen.
+
+V5 adds the 4x2 inventory-v5.png atlas, packed by tools/pack_inventory_v5.py.
+The final generated cinematic originals live in assets/cinematics (including
+masked and unmasked travel variants); these are illustrations for cutscenes,
+never substitutes for the 3D levels. Sergey and the veteran have separate
+identities from Semyon. Runtime does not call an image service.

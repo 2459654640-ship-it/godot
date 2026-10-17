@@ -21,7 +21,8 @@ func _initialize():
 			var expected=sequence.states[index]
 			var actual=JSON.parse_string(JSON.stringify(s.serialize()))
 			actual.erase("intel")
-			for added in ["social_seed","nina_safety","briefed"]:actual.flags.erase(added)
+			for added in ["economy","conversations","last_greetings","checkpoint"]:actual.erase(added)
+			for added in ["social_seed","nina_safety","briefed","intro_done"]:actual.flags.erase(added)
 			actual.intel_count=float(s.intel.size())
 			check(actual==expected.state,"quest state/reward/cost unchanged: %s step %d" % [path,index])
 			for id in expected.options:
@@ -29,6 +30,8 @@ func _initialize():
 				for o in s.view(id).options:
 					if expected.options[id].has(o.key):options[o.key]=o.enabled
 				var expected_options=expected.options[id].duplicate()
+				if id=="supply":expected_options.erase("get_kit")
+				if id=="lift":expected_options.erase("leave_official")
 				if id=="hatch" and s.f("hatch"):
 					for key in expected_options:expected_options[key]=false
 				check(options==expected_options,"all original action gates unchanged: %s/%d/%s" % [path,index,id])

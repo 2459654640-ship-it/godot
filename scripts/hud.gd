@@ -1,4 +1,7 @@
 extends Control
+const ComicUI=preload("res://scripts/ui_comic.gd")
+const Dialogue=preload("res://scripts/ui_dialogue.gd")
+const Journal=preload("res://scripts/journal.gd")
 const MapView=preload("res://scripts/minimap.gd")
 var world
 var font=preload("res://assets/fonts/MetroSans.otf")
@@ -26,6 +29,7 @@ var muted=Color("8b9a92")
 var dialogue_id=""
 var dialog_title: Label
 var is_departure=false
+var comic_active=false
 var typing:Array=[]
 var last_choice=""
 
@@ -73,7 +77,7 @@ func setup(w):
 	b.add_child(title)
 	var top=panel(Vector2(298,28),Vector2(516,56))
 	var topbox=margin_box(top,17,11)
-	location_label=label("居住层 / 伊万的卧室",19,text_color)
+	location_label=label("生活层 / 伊万的卧室",19,text_color)
 	topbox.add_child(location_label)
 	var tag=panel(Vector2(1240,28),Vector2(328,56))
 	var tb=margin_box(tag,17,11)
@@ -97,7 +101,7 @@ func setup(w):
 	# Minimap has geometry, not a screenshot of the reference.
 	var mp=panel(Vector2(1302,106),Vector2(266,214))
 	var mb=margin_box(mp,6,5)
-	var mt=label("D–6  /  居住层",14,muted)
+	var mt=label("D–6  /  "+world.floor_name(),14,muted)
 	mt.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	mb.add_child(mt)
 	map_small=MapView.new()
@@ -162,7 +166,6 @@ func setup(w):
 	modal.add_theme_stylebox_override("panel",style(Color("101c1e"),Color("766747"),1,0))
 	modal.visible=false
 	refresh_status()
-	toast("老爹已经起来了。去隔壁看看，离站前还有些话要说。",7)
 
 func style(bg: Color,border: Color,width: int=1,rad: int=0) -> StyleBoxFlat:
 	var s=StyleBoxFlat.new()
@@ -319,48 +322,18 @@ func start_modal(title:String,subtitle:String,wide:bool=false):
 	target_label.visible=false
 
 func show_dialogue(id:String):
-	dialogue_id=id
 	var v=world.story.view(id)
-	start_modal(v.name,v.role+"   /   D–6 居住层")
-	character_prose(id,v.body)
-	rule()
-	if v.options.is_empty():body("这里暂时没有可执行的操作。",17,muted)
-	var chatting=false
-	for option in v.options:
-		var o:Dictionary=option
-		if world.story.Narrative.CHAT.has(o.key) and not chatting:
-			chatting=true
-			rule()
-			body("随口聊聊",16,muted)
-		var row=HBoxContainer.new()
-		modal_box.add_child(row)
-		var b=button(o.text,func():last_choice=o.text;world.perform(o.key,id),o.enabled)
-		b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-		b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-		row.add_child(b)
-		if o.has("check"):
-			var chance=label(o.check.tier+" · "+str(o.check.chance)+"%",16,Color("9ab79a") if o.check.chance>=70 else amber)
-			chance.custom_minimum_size.x=84
-			chance.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
-			chance.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
-			row.add_child(chance)
-			b.tooltip_text="每种说法只能尝试一次。失败可改用住户签字的维修记录；读取同一存档不会重掷。"
-		if not o.enabled:body("  └ "+o.reason,15,muted)
-	modal_box.add_child(button("结束交谈" if v.role!="调查" else "收起调查",func():close(),true,true))
+	var first=world.story.Conversation.visit(world.story,id,v.body)
+	Dialogue.render(self,id,first)
 
 func show_reply(id:String,text:String):
-	dialogue_id=id
-	var v=world.story.view(id)
-	start_modal(v.name,v.role+"   /   D–6 居住层")
-	if last_choice!="":body("伊万  /  "+last_choice,16,muted)
-	var outcome=world.story.last_outcome
-	if not outcome.is_empty():body("说服成功" if outcome.kind=="success" else "未能说服 · 可以另找凭据",16,Color("9db49a") if outcome.kind=="success" else Color("ca997d"))
-	character_prose(id,text)
-	rule()
-	modal_box.add_child(button("继续交谈 / 调查",func():show_dialogue(id)))
-	modal_box.add_child(button("返回探索",func():close()))
+	var first=world.story.Conversation.reply(world.story,id,last_choice,text)
+	last_choice=""
+	Dialogue.render(self,id,first)
 
 func close():
+	if comic_active:show_comic_pause();return
+	if world.story.ending and world.story.flags.has("chapter_endpoint"):show_chapter_end();return
 	finish_typing()
 	dialogue_id=""
 	last_choice=""
@@ -385,7 +358,7 @@ func set_prompt(id:String):
 func refresh_status():
 	if not objective:return
 	objective.text=world.story.objective()
-	inventory_count.text="%02d 件随身物品" % world.story.items.size()
+	inventory_count.text="%d 制式弹 · %d 土制弹" % [world.story.economy.military,world.story.economy.handmade]
 	route_label.text=world.story.ROUTES.get(world.story.route,"尚未选择离站方式")
 	var signature=",".join(world.story.items)
 	if quick_items and signature!=quick_signature:
@@ -402,8 +375,8 @@ func refresh_status():
 			quick_items.add_child(icon)
 		quick_signature=signature
 func tick(delta:float):
-	location_label.text="D–6 居住层  /  "+world.room_name
-	status_label.text="16 XI 1982   /   "+("换班 · 黄灯" if world.phase>=8 else "07:42 · 早班")
+	location_label.text="D–6 "+world.floor_name()+"  /  "+world.room_name
+	status_label.text=str(world.story.flags.get("story_day",16))+" XI 1982  /  "+str(world.story.flags.get("story_time","07:42"))+" · "+("旅程" if comic_active or world.story.ending else ("换班" if world.phase>=8 else "早班"))
 	map_small.queue_redraw()
 	if is_instance_valid(map_large):map_large.queue_redraw()
 	if toast_time>0:
@@ -417,7 +390,11 @@ func toast(text:String,duration:float=4.0):
 
 func show_inventory():
 	start_modal("随身物品","INVENTORY   /   道具通过对话与场景互动使用",true)
-	if world.story.items.is_empty():body("背包还是空的。老爹房里的木箱收着你的旧物。")
+	var ammo=HBoxContainer.new();ammo.add_theme_constant_override("separation",18);modal_box.add_child(ammo)
+	for kind in ["military","handmade"]:
+		ammo.add_child(icon_rect("res://assets/visual/item_"+kind+".png",52))
+		ammo.add_child(label(world.story.Economy.AMMO[kind].name+" × "+str(world.story.economy[kind]),19,amber))
+	if world.story.items.is_empty() and world.story.economy.goods.is_empty():body("物品袋里暂时没有其它东西。",17,muted)
 	for id in world.story.items:
 		var item=world.story.ITEMS[id]
 		var row=HBoxContainer.new()
@@ -437,52 +414,87 @@ func show_inventory():
 		detail.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 		description.add_child(detail)
 		rule()
-
-func show_journal():
-	start_modal("离站前的手记","16 XI 1982   /   伊万",true)
-	body(world.story.objective(),24,amber)
-	rule()
-	body("净水危机",21,amber)
-	body("净水设施停了。小队明晨去东郊找滤芯，名单上有我。先找中尉问清楚，再把今天该办的事办完。",18)
-	body("记着要办的事",21,amber)
 	var s=world.story
-	var notes=[["征召安排",s.f("kit"),"找科瓦廖夫登记，拿签字去供应点领装备。收拾妥当再到气闸报到。"]]
-	if s.f("nina_job") or s.has("permit"):
-		notes.append(["妮娜的维修单",s.has("permit"),"洗漱间断电柜有备用保险芯。修好东侧监测箱，再回去找她签字。"])
-	if s.f("cook_job") or s.f("valve"):
-		notes.append(["食堂漏水",s.f("valve"),"灶台边的回水接头需要拧紧。妮娜那里有扳手；修好后叫加琳娜看看。"])
-	if s.f("cache"):notes.append(["那瓶旧酒",s.f("gate") and s.route=="bribe","老爹一直没开过的战前酒。伊戈尔也许认得，交出去就收不回了。"])
-	if s.f("shift"):notes.append(["压力表边的侧门",s.f("side_crossed"),"米哈伊尔说，等黄灯亮起，伊戈尔去查表时再走。先记好门的位置。"])
-	if s.has("map"):notes.append(["旧检修管线",s.f("hatch"),"先让伊戈尔离开岗哨。可以聊天劝他查表，也可以修好西翼暖气，拿住户签字的记录请他复核。盖板要用工具拆，硬撬会损坏匕首。"])
-	if s.f("heat_job") or s.has("report"):notes.append(["西翼暖气",s.has("report"),"问妮娜借扳手，去洗衣间取干布；给家属房暖气排气，再找帕维尔签维修记录。"])
-	if s.f("guard_task"):notes.append(["伊戈尔查表",s.f("hatch"),"等他真正走到主通道再动盖板。他会查一会儿表，对话期间不计时。错过仍可凭维修记录再请他复核。"])
-	for pair in notes:
-		body(("◆ " if pair[1] else "◇ ")+pair[0],20,amber if pair[1] else text_color)
-		body(pair[2],16,muted)
-	rule()
-	body("已获得的情报",21,amber)
-	if world.story.intel.is_empty():body("尚无记录。调查征召令、收音机和走廊记号。",18,muted)
-	for info in world.story.intel:body("— "+info,18)
+	rule();body("体力 %d · 饱食 %d · 辐射 %d"%[s.economy.health,s.economy.food,s.economy.radiation],18,amber)
+	for id in s.economy.goods:
+		var good:Dictionary=s.Economy.GOODS[id]
+		var row=HBoxContainer.new();modal_box.add_child(row)
+		row.add_child(icon_rect("res://assets/visual/item_"+id+".png",64))
+		row.add_child(label(good.name+" × "+str(s.economy.goods[id]),20,text_color))
+		row.add_spacer(false)
+		if good.effect!="":row.add_child(button("使用",func():toast(s.Economy.consume(s,id));show_inventory(),true,true))
 
-func show_map():
-	start_modal("D–6 居住层","LEVEL PLAN   /   金色：出入口 · 蓝色：居民",true)
-	map_large=MapView.new()
-	map_large.custom_minimum_size=Vector2(720,340)
-	map_large.world=world
-	map_large.expanded=true
-	modal_box.add_child(map_large)
-	var legend=GridContainer.new()
-	legend.columns=3
-	legend.add_theme_constant_override("h_separation",18)
-	modal_box.add_child(legend)
-	for zone in world.zones:
-		if zone.code in ["00","09","10"]:continue
-		legend.add_child(label(zone.code+"  "+("伊万 / 老爹" if zone.code=="01" else zone.name),16,text_color))
-	body("西翼连廊连接轮班宿舍、家属房和洗衣间。B 区夜班住户正在休息；东段通行仍需手续或另找办法。",18)
-	body("Tab 切换斜俯视总览，滚轮调整镜头距离。地图不用于传送。",16,muted)
+func show_journal(tab:String="tasks",shown_floor:String=""):
+	start_modal("伊万的日志","任务 · 百科 · 地图",true)
+	var tabs=HBoxContainer.new();modal_box.add_child(tabs)
+	for pair in [["tasks","任务"],["lore","百科"],["map","地图"]]:
+		tabs.add_child(button(pair[1],func():show_journal(pair[0]),true,true))
+	rule()
+	if tab=="tasks":
+		body(world.story.objective(),23,amber)
+		for task in Journal.tasks(world.story):
+			body(("◆ " if task.done else "◇ ")+task.name,21,amber if task.done else text_color)
+			body(task.background,17,muted)
+			if not task.done:body(task.step,18,text_color)
+		if not world.story.intel.is_empty():
+			rule();body("已经听说的事",21,amber)
+			for entry in world.story.intel:body(entry,17)
+		if not world.story.flags.get("comic_records",[]).is_empty():
+			rule();body("旅程记录",22,amber)
+			for record in world.story.flags.comic_records:
+				body(record.title,20,amber);body(record.body,17)
+				if record.choice!="":body("伊万："+record.choice,17,muted)
+	elif tab=="lore":
+		for entry in Journal.encyclopedia(world.story):
+			body(entry[0],22,amber);body(entry[1],18);rule()
+	else:
+		var requested=world.floor_id if shown_floor=="" else shown_floor
+		var floors=HBoxContainer.new();modal_box.add_child(floors)
+		for pair in [["life","生活层"],["labor","作业层"]]:floors.add_child(button(pair[1],func():show_journal("map",pair[0]),true,true))
+		body("当前楼层："+world.floor_name()+" · 楼梯连接上下层",18,amber)
+		map_large=MapView.new();map_large.custom_minimum_size=Vector2(720,320)
+		map_large.world=world;map_large.expanded=true;map_large.display_floor=requested;modal_box.add_child(map_large)
+		var legend=GridContainer.new();legend.columns=3;legend.add_theme_constant_override("h_separation",18);modal_box.add_child(legend)
+		for zone in (world.LIFE_ZONES+world.Wing.ZONES if requested=="life" else world.Labor.ZONES):
+			if zone.code in ["00","09","10","L0"]:continue
+			legend.add_child(label(zone.code+"  "+("伊万 / 老爹" if zone.code=="01" else zone.name),15,text_color))
+		body("金色：通路与门口 · 蓝色：附近的人。地图只显示本层可探索的区域；门后还有其它生活或作业区。",16,muted)
+
+func show_map():show_journal("map")
+
+func icon_rect(path:String,size:float=68)->TextureRect:
+	var icon=TextureRect.new();icon.texture=load(path)
+	icon.custom_minimum_size=Vector2(size,size);icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	return icon
+
+func show_shop(message:String=""):
+	start_modal("第七供应点 · 柳德米拉","只收制式弹 · 生活物资，不售武器",true)
+	var s=world.story
+	body("制式弹 %d  /  土制弹 %d（不能抵账）"%[s.economy.military,s.economy.handmade],22,amber)
+	if message!="":body(message,18,Color("a4bca0"))
+	for id in s.Economy.GOODS:
+		var good:Dictionary=s.Economy.GOODS[id]
+		var row=HBoxContainer.new();row.add_theme_constant_override("separation",14);modal_box.add_child(row)
+		row.add_child(icon_rect("res://assets/visual/item_"+id+".png"))
+		var b=VBoxContainer.new();b.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(b)
+		b.add_child(label(good.name+"  ·  "+str(good.price)+" 发",21,amber))
+		var detail=label(good.detail,16,muted);detail.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;b.add_child(detail)
+		b.add_child(label("余货 %d · 已有 %d"%[s.economy.stock.get(id,0),s.economy.goods.get(id,0)],15,muted))
+		row.add_child(button("购买",func():shop_buy(id),s.economy.military>=good.price and s.economy.stock.get(id,0)>0,true))
+	if s.has("vodka"):
+		rule();body("战前伏特加 · 收购 18 发制式弹",21,amber)
+		modal_box.add_child(button("出售这瓶伏特加…",func():confirm_sale()))
+	modal_box.add_child(button("返回交谈",func():show_dialogue("supply")))
+
+func confirm_sale():
+	start_modal("卖掉这瓶酒？","交易确认",true)
+	body("柳德米拉愿意出 18 发制式弹。卖出后，这瓶酒就不能再拿去交换或交给别人。",21)
+	modal_box.add_child(button("确认出售 · 18 发",func():shop_sell()))
+	modal_box.add_child(button("先留着",func():show_shop()))
 
 func show_pause():
-	start_modal("暂停 / 现场记录","D–6   /   视觉与关卡原型",true)
+	start_modal("暂停 / 现场记录","D–6   /   现场记录",true)
 	modal_box.add_child(button("继续探索",func():close()))
 	modal_box.add_child(button("保存手记  [F5]",func():world.save_game()))
 	modal_box.add_child(button("读取手记  [F9]",func():world.load_game()))
@@ -490,7 +502,7 @@ func show_pause():
 	modal_box.add_child(button("声音："+("关" if AudioServer.is_bus_mute(0) else "开"),func():AudioServer.set_bus_mute(0,not AudioServer.is_bus_mute(0));show_pause()))
 	rule()
 	body("WASD / 方向键：8 方向移动\nE：交谈 / 调查\nI：背包　J：手记　M：地图\nTab：总览　滚轮：缩放\nEsc：关闭界面 / 菜单",20)
-	body("画面：3D 场景与多方向绘制人物。靠近时显示互动轮廓；挡住人物的墙面会自动渐隐。",16,muted)
+	body("靠近人物或物件时会出现互动提示。图文旅程可在暂停页保存，也能打开背包使用物资。",16,muted)
 func show_restart_confirm():
 	start_modal("重新开始？","当前未保存的进度将丢失",true)
 	modal_box.add_child(button("确认重新开始",func():world.restart()))
@@ -498,25 +510,68 @@ func show_restart_confirm():
 
 func show_departure(confirmed:bool):
 	var s=world.story
-	var departure_route=world.pending_route if not confirmed else s.route
-	start_modal("门的另一边" if confirmed else "确认离开 D–6？","DEPARTURE   /   "+s.ROUTES.get(departure_route,"尚未选择"),true)
+	if confirmed:
+		show_chapter_end()
+		return
+	start_modal("离开 D-6？","出发确认 / "+s.ROUTES.get(world.pending_route,""),true)
 	is_departure=true
-	body("你选择了："+s.ROUTES.get(departure_route,""),26,amber)
-	if not confirmed:
-		body("该带的都带了吗？确认后会记录这次离站。你也可以先回去，把没办完的事办完。",20)
-		if not s.has("mask") or not s.has("filter"):body("防护不全：没有完整的面具与滤毒罐。这条路不会自动补给；是否仍然离开？",20,Color("d29270"))
-		modal_box.add_child(button("确认离站 · 查看本次记录",func():s.route=world.pending_route;s.ending=true;s.changed.emit();show_departure(true)))
-		modal_box.add_child(button("还没准备好，返回探索",func():close()))
+	body("离开后将进入图文旅程。确认前可以返回上下两层，办完还没办的事。",21)
+	if not s.has("mask") or not s.has("filter"):body("你没有完整防护，单独离站会暴露在辐射尘与污浊空气中。仍要出发吗？",20,Color("d09c7a"))
+	modal_box.add_child(button("确认出发",func():
+		var snapshot=s.serialize().duplicate(true);snapshot.erase("checkpoint")
+		snapshot.floor=world.floor_id;snapshot.position=[world.player.position.x,.04,world.player.position.z]
+		s.departure_checkpoint=snapshot
+		s.route=world.pending_route;s.ending=false
+		show_comic("official" if s.route=="official" else "solo")))
+	modal_box.add_child(button("再准备一下",func():close()))
+
+func show_comic(sequence:String=""):
+	ComicUI.render(self,sequence)
+	tick(0)
+
+func comic_choose(index:int=-1):
+	finish_typing()
+	var s=world.story
+	var old_panel=s.Comic.panel(s)
+	if s.flags.comic.sequence=="intro":s.Conversation.append(s,"semyon",old_panel.body,"semyon")
+	s.Comic.choose(s,index)
+	if s.flags.comic.active:show_comic()
 	else:
-		body("你在气闸候车区等过了这一夜。天快亮时，小队开始点名。轨道车上的人往里挪了挪，给你空出一个位置。" if s.route=="official" else "你沿着轨道继续往前。脚步声在隧道里传得很远，走了好一阵，才听不见身后居住层的机器声。",22)
-		body("携带物品：%d 件　／　情报：%d 条" % [s.items.size(),s.intel.size()],20)
-		body("防护装备："+("齐备" if s.has("mask") and s.has("filter") else "不齐备 · 风险已确认"),20)
-		if s.f("father") or s.has("frequency"):body("带走的疑问：父亲的去向与东方-7。没有证实，也没有遗忘。",20)
-		if s.route=="bribe":body("代价：战前伏特加已交出；通行没有写入登记簿。",18,amber)
-		if s.route=="shift":body("代价：用物资或劳动换到时间窗；没有额外装备。",18,amber)
-		if s.route=="hatch":body("代价：绕行旧管线；工具是否保留取决于拆卸方式。",18,amber)
-		rule()
-		body("D–6 · 本章结束",18,muted)
-		modal_box.add_child(button("返回 D–6，继续比较其他办法",func():s.ending=false;s.changed.emit();close()))
-		modal_box.add_child(button("保存这次离站记录",func():world.save_game()))
-		modal_box.add_child(button("重新开始",func():show_restart_confirm()))
+		comic_active=false
+		if s.f("intro_done") and not s.ending:close();refresh_status();toast("第一件事：到第七供应点领取今日维生素 D",7)
+		else:show_chapter_end()
+
+func show_comic_pause():
+	start_modal("旅程暂停","已读的面板和选择会随存档保存",true)
+	modal_box.add_child(button("继续剧情",func():show_comic()))
+	modal_box.add_child(button("查看背包 / 使用物资",func():show_inventory()))
+	modal_box.add_child(button("保存当前进度",func():world.save_game()))
+	modal_box.add_child(button("读取存档",func():world.load_game()))
+	modal_box.add_child(button("重新开始",func():show_restart_confirm()))
+
+func show_chapter_end():
+	comic_active=false
+	start_modal("水厂外围" if world.story.flags.get("chapter_endpoint","")=="waterworks_exterior" else "初遇谢尔盖","本段旅程已记录",true)
+	is_departure=true
+	body("你已抵达水处理厂外围。队伍停下来确认入口，下一步还需要仔细观察。" if world.story.flags.get("chapter_endpoint","")=="waterworks_exterior" else "你与谢尔盖第一次交谈过。是否同行、如何面对地表，留在接下来的旅程中决定。",23)
+	body("随身物资、制式弹和这一路的选择都已保留。",18,muted)
+	modal_box.add_child(button("保存旅程",func():world.save_game()))
+	modal_box.add_child(button("查看日志",func():show_journal()))
+	if not world.story.departure_checkpoint.is_empty():modal_box.add_child(button("回溯到离站前，比较其它选择",func():world.return_checkpoint()))
+	modal_box.add_child(button("重新开始",func():show_restart_confirm()))
+
+func dialogue_actor()->String:return {"armory":"armorer","main_gate":"main_guard"}.get(dialogue_id,dialogue_id)
+
+func shop_buy(id:String):
+	var s=world.story
+	var before=s.economy.ledger.size()
+	var result=s.Economy.buy(s,id)
+	if s.economy.ledger.size()>before:s.Conversation.reply(s,"supply","「买一份"+s.Economy.GOODS[id].name+"。」",result)
+	show_shop(result)
+
+func shop_sell():
+	var s=world.story
+	var before=s.economy.ledger.size()
+	var result=s.Economy.sell_vodka(s)
+	if s.economy.ledger.size()>before:s.Conversation.reply(s,"supply","「这瓶酒，按你说的价收吧。」",result)
+	show_shop(result)
