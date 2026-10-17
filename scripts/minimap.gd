@@ -15,10 +15,15 @@ func polygon(r:Rect2) -> PackedVector2Array:
 
 func _draw():
 	if not world:return
-	drawing_scale=minf((size.x-26)/43.0,(size.y-32)/25.0)
-	origin=Vector2(size.x*0.51,size.y*0.49)
-	for x in range(-16,17,4):draw_line(project(Vector2(x,-10)),project(Vector2(x,11)),Color(0.44,0.48,0.40,0.12))
-	for z in range(-10,12,4):draw_line(project(Vector2(-16,z)),project(Vector2(16,z)),Color(0.44,0.48,0.40,0.12))
+	var bounds=Rect2()
+	var first=true
+	for zone in world.zones:
+		for corner in [zone.rect.position,Vector2(zone.rect.end.x,zone.rect.position.y),zone.rect.end,Vector2(zone.rect.position.x,zone.rect.end.y)]:
+			var flat=Vector2((corner.x-corner.y)*.86,(corner.x+corner.y)*.45)
+			if first:bounds=Rect2(flat,Vector2.ZERO);first=false
+			else:bounds=bounds.expand(flat)
+	drawing_scale=minf((size.x-32)/bounds.size.x,(size.y-(80 if expanded else 24))/bounds.size.y)
+	origin=Vector2(size.x*.5,size.y*.5)-bounds.get_center()*drawing_scale
 	for zone in world.zones:
 		var r:Rect2=zone.rect
 		var points=polygon(r.grow(-0.14))
@@ -28,14 +33,9 @@ func _draw():
 		draw_colored_polygon(points,Color("364239") if zone.code=="00" else Color("26302b"))
 		draw_polyline(PackedVector2Array([points[0],points[1],points[2],points[3],points[0]]),Color("65705e"),1.2,true)
 		if zone.code=="01":draw_line(project(Vector2(-11.95,-9)),project(Vector2(-11.95,-2.8)),gold,1.2,true)
-		if expanded and zone.code!="00":
-			var center=project(r.get_center())
-			var text=zone.code+" / "+zone.name
-			if zone.code=="01":text="01 / 伊万 · 谢苗诺夫"
-			var width=world.kit.font.get_string_size(text,HORIZONTAL_ALIGNMENT_LEFT,-1,14).x
-			draw_string(world.kit.font,center+Vector2(-width/2,-5),text,HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("c5bea2"))
-		elif zone.code!="00":draw_string(world.kit.font,project(r.get_center())+Vector2(-5,4),zone.code,HORIZONTAL_ALIGNMENT_LEFT,-1,10,Color("84907c"))
-	for p in [Vector2(-10.5,0),Vector2(-3.5,0),Vector2(5.2,0),Vector2(12.3,0),Vector2(-11,3.2),Vector2(-3.4,3.2),Vector2(5.6,3.2)]:
+		if zone.code not in ["00","09","10"]:
+			draw_string(world.kit.font,project(r.get_center())+Vector2(-6,4),zone.code,HORIZONTAL_ALIGNMENT_LEFT,-1,14 if expanded else 10,Color("c5bea2"))
+	for p in [Vector2(-10.5,0),Vector2(-3.5,0),Vector2(5.2,0),Vector2(12.3,0),Vector2(-11,3.2),Vector2(-3.4,3.2),Vector2(5.6,3.2)]+world.Wing.DOORS:
 		var center=project(p)
 		draw_line(center-Vector2(3,1.5),center+Vector2(3,1.5),gold,2,true)
 	for id in ["lift","gate","side","hatch"]:

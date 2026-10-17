@@ -23,7 +23,7 @@ func story_tests():
 	s.act("get_kit")
 	check(s.items.size()==n,"equipment cannot duplicate")
 	s=Story.new()
-	actions(s,["borrow_wrench","nina_job","get_fuse","fix_relay","claim_permit","use_permit"])
+	actions(s,["nina_safety","nina_job","get_fuse","fix_relay","claim_permit","use_permit"])
 	check(s.route=="permit" and s.f("gate") and s.has("mask"),"repair permit route complete")
 	check(not s.has("fuse") and s.has("wrench"),"fuse consumed and wrench retained")
 	s=Story.new()
@@ -38,20 +38,22 @@ func story_tests():
 	check(s.f("side") and s.f("shift") and not s.has("cigarettes") and s.has("map"),"smoke/intel side route unlocked")
 	check(not s.has("mask"),"intel route does not invent equipment")
 	s=Story.new()
-	actions(s,["borrow_wrench","cook_job","fix_valve","claim_soup","give_soup","use_shift"])
+	actions(s,["nina_safety","cook_job","fix_valve","claim_soup","give_soup","use_shift"])
 	check(s.f("side") and s.f("valve") and not s.has("soup"),"labor/soup alternate intel route complete")
 	s=Story.new()
+	s.context.hatch_clear=true
 	actions(s,["search_box","hatch_knife"])
 	check(s.route=="hatch" and not s.has("knife") and not s.has("mask"),"knife hatch route has its stated cost")
 	s=Story.new()
-	actions(s,["borrow_wrench","hatch_wrench"])
+	s.context.hatch_clear=true
+	actions(s,["nina_safety","hatch_wrench"])
 	check(s.route=="hatch" and s.has("wrench"),"wrench hatch route retains tool")
 	actions(s,["tune","chalk","search_box","father","vitamins","give_vitamins"])
 	check(s.f("father") and s.has("photo") and s.has("frequency"),"father and signal remain optional clues")
 	check(not s.has("vitamins") and s.f("vitamins_given"),"vitamins have persistent use")
 	var restored=Story.new()
 	restored.restore(JSON.parse_string(JSON.stringify(s.serialize())))
-	check(restored.serialize()==s.serialize(),"state roundtrip preserves inventory, flags, intel and route")
+	check(JSON.parse_string(JSON.stringify(restored.serialize()))==JSON.parse_string(JSON.stringify(s.serialize())),"state roundtrip preserves inventory, flags, intel and route")
 
 func step(frames:int):
 	for i in frames:await physics_frame
@@ -80,12 +82,12 @@ func connectivity(open_exit:bool=false):
 	var query=PhysicsShapeQueryParameters3D.new()
 	query.shape=cap
 	query.collision_mask=1
-	for x in range(59):
-		for z in range(37):
-			var point=Vector3(-14.5+x*0.5,0.92,-8.5+z*0.5)
+	for x in range(88):
+		for z in range(48):
+			var point=Vector3(-28.5+x*0.5,0.92,-13.5+z*0.5)
 			query.transform=Transform3D(Basis.IDENTITY,point)
 			if w.get_world_3d().direct_space_state.intersect_shape(query).is_empty():free[Vector2i(x,z)]=point
-	var start=Vector2i(8,11)
+	var start=Vector2i(36,20)
 	if not free.has(start):
 		check(false,"connectivity spawn cell clear")
 		return
@@ -112,9 +114,14 @@ func connectivity(open_exit:bool=false):
 			if hit.is_empty() or hit.position.distance_to(end)<0.48:
 				accessible=true
 				break
-		if id=="exit" and not open_exit:check(not accessible,"extension exit inaccessible before opening a route")
+		if id in ["exit","pipe_exit"] and not open_exit:check(not accessible,"extension exit inaccessible before opening a route")
 		else:check(accessible,"target reachable with capsule clearance and line of sight: "+id)
 	print("CONNECTIVITY: ",reached.size()," reachable half-metre cells; east exit open=",open_exit)
+
+func on_floor(p:Vector2) -> bool:
+	for zone in w.zones:
+		if zone.rect.grow(-.3).has_point(p):return true
+	return false
 
 func physics_tests():
 	w=load("res://scenes/d6.tscn").instantiate()
@@ -177,7 +184,7 @@ func physics_tests():
 		var did_probe=false
 		for face in faces:
 			var p:Vector2=face[0]
-			if not Rect2(-14.7,-8.7,29.4,18.4).has_point(p):continue
+			if not on_floor(p):continue
 			var query=PhysicsShapeQueryParameters3D.new()
 			var cap=CapsuleShape3D.new()
 			cap.radius=0.27
@@ -205,7 +212,7 @@ func physics_tests():
 		for sides in [Vector2(-1,-1),Vector2(1,-1),Vector2(-1,1),Vector2(1,1)]:
 			var corner=Vector2(r.position.x if sides.x<0 else r.end.x,r.position.y if sides.y<0 else r.end.y)
 			var p=corner+sides*0.55
-			if not Rect2(-14.7,-8.7,29.4,18.4).has_point(p):continue
+			if not on_floor(p):continue
 			var query=PhysicsShapeQueryParameters3D.new()
 			var cap=CapsuleShape3D.new()
 			cap.radius=0.27
@@ -304,7 +311,10 @@ func ui_tests():
 	w.hud.close()
 	w.story=Story.new()
 	w.story.changed.connect(w.on_story_changed)
-	w.story.act("borrow_wrench")
+	w.story.act("nina_safety")
+	w.story.flags.guard_task=true
+	w.npcs.igor.set_physics_process(false)
+	w.npcs.igor.position=Vector3(2.8,0,1.4)
 	w.perform("hatch_wrench","hatch")
 	await step(2)
 	check(w.player.position.x>9.5 and w.story.route=="hatch","hatch action reaches far side physically")

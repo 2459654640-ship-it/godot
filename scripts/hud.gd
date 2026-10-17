@@ -26,6 +26,28 @@ var muted=Color("8b9a92")
 var dialogue_id=""
 var dialog_title: Label
 var is_departure=false
+var typing:Array=[]
+var last_choice=""
+
+func _process(delta:float):
+	advance_typing(delta)
+
+func advance_typing(delta:float):
+	for entry in typing:
+		if not is_instance_valid(entry.label):continue
+		entry.elapsed+=delta
+		entry.label.visible_characters=mini(entry.total,floori(entry.elapsed*entry.rate))
+	typing=typing.filter(func(entry):return is_instance_valid(entry.label) and entry.label.visible_characters<entry.total)
+
+func finish_typing():
+	for entry in typing:
+		if is_instance_valid(entry.label):entry.label.visible_characters=-1
+	typing.clear()
+
+func _input(event):
+	if modal_visible() and not typing.is_empty() and event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_SPACE,KEY_ENTER,KEY_KP_ENTER]:
+		finish_typing()
+		get_viewport().set_input_as_handled()
 
 func setup(w):
 	world=w
@@ -217,6 +239,7 @@ func body(text:String,sz:int=21,c:Color=Color("c8cebd")):
 func prose(text:String,sz:int=21,parent:Control=null):
 	var rich=RichTextLabel.new()
 	rich.bbcode_enabled=true
+	rich.visible_characters_behavior=TextServer.VC_CHARS_AFTER_SHAPING
 	rich.fit_content=true
 	rich.scroll_active=false
 	rich.add_theme_font_size_override("normal_font_size",sz)
@@ -233,6 +256,13 @@ func prose(text:String,sz:int=21,parent:Control=null):
 	markup+=text.substr(cursor).replace("[","[lb]")
 	rich.text=markup
 	(parent if parent else modal_box).add_child(rich)
+	if dialogue_id!="":
+		var total=rich.get_total_character_count()
+		rich.visible_characters=0
+		typing.append({"label":rich,"total":total,"elapsed":0.0,"rate":maxf(180.0,float(total)/1.2)})
+		rich.mouse_filter=Control.MOUSE_FILTER_STOP
+		rich.gui_input.connect(func(event):
+			if event is InputEventMouseButton and event.pressed and event.button_index==MOUSE_BUTTON_LEFT:finish_typing();rich.accept_event())
 	return rich
 
 func character_prose(id:String,text:String):
@@ -253,6 +283,8 @@ func character_prose(id:String,text:String):
 	words.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 
 func start_modal(title:String,subtitle:String,wide:bool=false):
+	typing.clear()
+	if wide:dialogue_id=""
 	for child in modal.get_children():
 		modal.remove_child(child)
 		child.queue_free()
@@ -280,7 +312,7 @@ func start_modal(title:String,subtitle:String,wide:bool=false):
 	modal_box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	modal_box.add_theme_constant_override("separation",13)
 	scroller.add_child(modal_box)
-	main.add_child(label("ESC  返回     /     对话期间移动暂停",14,muted))
+	main.add_child(label("空格 / 点击正文  显示全文    ·    ESC  返回",14,muted))
 	modal.visible=true
 	scrim.visible=true
 	is_departure=false
@@ -300,21 +332,38 @@ func show_dialogue(id:String):
 			chatting=true
 			rule()
 			body("随口聊聊",16,muted)
-		var b=button(o.text,func():world.perform(o.key,id),o.enabled)
+		var row=HBoxContainer.new()
+		modal_box.add_child(row)
+		var b=button(o.text,func():last_choice=o.text;world.perform(o.key,id),o.enabled)
 		b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-		modal_box.add_child(b)
+		b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		row.add_child(b)
+		if o.has("check"):
+			var chance=label(o.check.tier+" · "+str(o.check.chance)+"%",16,Color("9ab79a") if o.check.chance>=70 else amber)
+			chance.custom_minimum_size.x=84
+			chance.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
+			chance.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
+			row.add_child(chance)
+			b.tooltip_text="每种说法只能尝试一次。失败可改用住户签字的维修记录；读取同一存档不会重掷。"
 		if not o.enabled:body("  └ "+o.reason,15,muted)
 	modal_box.add_child(button("结束交谈" if v.role!="调查" else "收起调查",func():close(),true,true))
 
 func show_reply(id:String,text:String):
+	dialogue_id=id
 	var v=world.story.view(id)
 	start_modal(v.name,v.role+"   /   D–6 居住层")
+	if last_choice!="":body("伊万  /  "+last_choice,16,muted)
+	var outcome=world.story.last_outcome
+	if not outcome.is_empty():body("说服成功" if outcome.kind=="success" else "未能说服 · 可以另找凭据",16,Color("9db49a") if outcome.kind=="success" else Color("ca997d"))
 	character_prose(id,text)
 	rule()
 	modal_box.add_child(button("继续交谈 / 调查",func():show_dialogue(id)))
 	modal_box.add_child(button("返回探索",func():close()))
 
 func close():
+	finish_typing()
+	dialogue_id=""
+	last_choice=""
 	modal.visible=false
 	scrim.visible=false
 	is_departure=false
@@ -404,7 +453,9 @@ func show_journal():
 		notes.append(["食堂漏水",s.f("valve"),"灶台边的回水接头需要拧紧。妮娜那里有扳手；修好后叫加琳娜看看。"])
 	if s.f("cache"):notes.append(["那瓶旧酒",s.f("gate") and s.route=="bribe","老爹一直没开过的战前酒。伊戈尔也许认得，交出去就收不回了。"])
 	if s.f("shift"):notes.append(["压力表边的侧门",s.f("side_crossed"),"米哈伊尔说，等黄灯亮起，伊戈尔去查表时再走。先记好门的位置。"])
-	if s.has("map"):notes.append(["旧检修管线",s.f("hatch"),"草图上有一条绕过岗哨的管线。盖板得用工具打开，匕首硬撬可能会断。"])
+	if s.has("map"):notes.append(["旧检修管线",s.f("hatch"),"先让伊戈尔离开岗哨。可以聊天劝他查表，也可以修好西翼暖气，拿住户签字的记录请他复核。盖板要用工具拆，硬撬会损坏匕首。"])
+	if s.f("heat_job") or s.has("report"):notes.append(["西翼暖气",s.has("report"),"问妮娜借扳手，去洗衣间取干布；给家属房暖气排气，再找帕维尔签维修记录。"])
+	if s.f("guard_task"):notes.append(["伊戈尔查表",s.f("hatch"),"等他真正走到主通道再动盖板。他会查一会儿表，对话期间不计时。错过仍可凭维修记录再请他复核。"])
 	for pair in notes:
 		body(("◆ " if pair[1] else "◇ ")+pair[0],20,amber if pair[1] else text_color)
 		body(pair[2],16,muted)
@@ -416,11 +467,18 @@ func show_journal():
 func show_map():
 	start_modal("D–6 居住层","LEVEL PLAN   /   金色：出入口 · 蓝色：居民",true)
 	map_large=MapView.new()
-	map_large.custom_minimum_size=Vector2(720,460)
+	map_large.custom_minimum_size=Vector2(720,340)
 	map_large.world=world
 	map_large.expanded=true
 	modal_box.add_child(map_large)
-	body("这是一张平面导览图。房间由主通道连接；东段正门与侧门均有实体门闩。",18)
+	var legend=GridContainer.new()
+	legend.columns=3
+	legend.add_theme_constant_override("h_separation",18)
+	modal_box.add_child(legend)
+	for zone in world.zones:
+		if zone.code in ["00","09","10"]:continue
+		legend.add_child(label(zone.code+"  "+("伊万 / 老爹" if zone.code=="01" else zone.name),16,text_color))
+	body("西翼连廊连接轮班宿舍、家属房和洗衣间。B 区夜班住户正在休息；东段通行仍需手续或另找办法。",18)
 	body("Tab 切换斜俯视总览，滚轮调整镜头距离。地图不用于传送。",16,muted)
 
 func show_pause():

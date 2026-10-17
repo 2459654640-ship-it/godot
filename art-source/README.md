@@ -7,8 +7,9 @@ was imported as a background or used as a substitute for 3D level geometry.
 
 The character direction sheets share the Ivan sheet as a style/identity
 reference. Every cast member has a separate design; five authored views mirror
-to eight directions. Ivan has idle and two authored stride poses. NPC walking
-uses restrained 2D mesh deformation for the short existing yielding motion.
+to eight directions. Ivan has idle and two authored stride poses. All ten NPCs now have two authored stride rows and a conversational gesture row;
+real physics velocity selects their walk poses, and dialogue selects their talk pose.
+The rear-diagonal source column is mirrored during packing to match runtime yaw.
 Portraits are cropped from the same figures so their identity matches gameplay.
 
 `tools/painted-sources.json` maps source files to runtime atlases. Rebuild with:
@@ -25,4 +26,5 @@ repaint the character sheets. Original source PNGs are retained unchanged.
 
 Materials: layered plaster/paint, ceramic tiles, worn wood, concrete, wool and
 medallion carpet. They are applied to actual modular meshes. Item atlas: fourteen
-quest items plus spare satchel and mug illustrations.
+quest items plus spare satchel and mug illustrations. V4 adds a clean cloth and
+a signed heating-maintenance record, bringing usable quest illustrations to sixteen.

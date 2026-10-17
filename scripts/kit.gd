@@ -188,9 +188,9 @@ func finish_walls():
 		for z in [r.position.y,r.end.y]:
 			if z not in zs:zs.append(z)
 	# Short connected runs permit local fading, without overlapping wall boxes.
-	for x in range(-14,16,2):
+	for x in range(-30,16,2):
 		if float(x) not in xs:xs.append(float(x))
-	for z in range(-8,11,2):
+	for z in range(-14,11,2):
 		if float(z) not in zs:zs.append(float(z))
 	xs.sort()
 	zs.sort()
@@ -270,7 +270,10 @@ func doorway(x: float, z: float, along_z: bool = false):
 	n.position = Vector3(x,0,z)
 	if along_z: n.rotation.y = PI/2
 	for side in [-1,1]:
-		box("DoorJamb",Vector3(side*0.79,1.06,0),Vector3(0.13,2.12,0.30),"dark",false,n)
+		box("DoorJamb",Vector3(side*0.79,1.06,0),Vector3(0.13,2.12,0.30),"dark",true,n)
+		var centre=Vector3(x,0,z)+n.basis*Vector3(side*.79,0,0)
+		var footprint=Vector2(.30,.13) if along_z else Vector2(.13,.30)
+		solids.append({"name":"DoorJamb","rect":Rect2(Vector2(centre.x,centre.z)-footprint/2,footprint),"bottom":0.0,"top":2.12})
 		box("DoorEdge",Vector3(side*0.79,1.08,0.17),Vector3(0.025,2.0,0.02),"brass",false,n)
 	box("DoorLintel",Vector3(0,2.15,0),Vector3(1.72,0.18,0.32),"metal",false,n)
 	box("ConcreteDoorBeam",Vector3(0,2.49,0),Vector3(2.12,0.42,0.35),"concrete",false,n)

@@ -1,5 +1,6 @@
 extends RefCounted
 const Narrative=preload("res://scripts/narrative.gd")
+const Life=preload("res://scripts/resident_dialogue.gd")
 ## State and authored dialogue live outside level geometry; no future chapters are fixed.
 signal changed
 var flags: Dictionary = {}
@@ -8,6 +9,28 @@ var intel: Array[String] = []
 var route = ""
 var ending = false
 var last_reply = ""
+var context:Dictionary={}
+var last_outcome:Dictionary={}
+var last_action_valid=false
+# Tests can inject the roll without changing saves or the displayed chance.
+var roll_override=-1.0
+
+func _init():
+	flags.social_seed=int(randi())
+
+func guard_clear() -> bool:return context.get("hatch_clear",false)
+
+func resolve_check(key:String,chance:int) -> bool:
+	var records:Dictionary=flags.get("social_checks",{}).duplicate(true)
+	if records.has(key):return records[key].success
+	var hash_text=(str(flags.social_seed)+":"+key).sha256_text()
+	var roll=float(hash_text.substr(0,8).hex_to_int()%10000)/100.0
+	if roll_override>=0.0:roll=roll_override
+	var success=roll<float(chance)
+	records[key]={"chance":chance,"roll":roll,"success":success}
+	flags.social_checks=records
+	last_outcome={"kind":"success" if success else "failure","chance":chance,"key":key}
+	return success
 const ITEMS = {
  "knife":["旧匕首","谢苗诺夫留下的工具。可以撬开卧室暗格与检修口；硬撬会损坏刃口。","工具"],
  "cigarettes":["半包香烟","受潮但仍可交换。米哈伊尔知道岗哨换班的空隙。","交换"],
@@ -22,7 +45,9 @@ const ITEMS = {
  "mask":["防毒面具","空气防护装备，与净水设施的滤芯不是一回事。","装备"],
  "filter":["备用滤毒罐","配合防毒面具使用。出发前检查接口密封，别让罐口受潮。","装备"],
  "vitamins":["维生素 D","供应员留给居民的配给。米哈伊尔的手一直在抖。","人情"],
- "frequency":["手抄频率","收音机里断续出现的「东方-7」。尚未证实与父亲有关。","线索"]
+ "frequency":["手抄频率","收音机里断续出现的「东方-7」。尚未证实与父亲有关。","线索"],
+ "rag":["公用干布","洗衣间借来的。排气时垫住阀口，防止热水烫手；用完放回盆里。","维修"],
+ "report":["暖气维修记录","帕维尔签过字的支管记录。当班值守须到主通道总表复核，可请伊戈尔过去。","凭据"]
 }
 const ROUTES = {"official":"随征召小队出发", "permit":"持检修许可离站", "bribe":"用战前酒换取通行", "shift":"趁换班走侧门", "hatch":"绕行旧检修管线"}
 
@@ -101,15 +126,22 @@ func view(id: String) -> Dictionary:
 		"exit":
 			v.name="东段尽头 · 未完工延伸线"
 			v.options=[opt("leave_east","整理背包，准备离开 D-6",route!="", "先通过正门、侧门或检修管线")]
-	return Narrative.decorate(v,self)
+	return Life.decorate(Narrative.decorate(v,self),self)
 
 func act(key: String) -> String:
 	# Revalidate the same conditions used by the UI before mutating state.
 	var valid=false
-	for id in ["box","radio","notice","chalk","semyon","mikhail","cook","valve","nina","cabinet","relay","supply","commander","igor","side","hatch","lift","exit"]:
+	last_action_valid=false
+	last_outcome={}
+	for id in ["box","radio","notice","chalk","semyon","mikhail","cook","valve","nina","cabinet","relay","supply","commander","igor","side","hatch","lift","exit"]+Life.IDS:
 		for o in view(id).options:
 			if o.key==key and o.enabled:valid=true
 	if not valid:return "条件尚未满足，或这件事已经做过了。"
+	last_action_valid=true
+	if Life.handles(key):
+		last_reply=Life.act(key,self)
+		changed.emit()
+		return last_reply
 	if Narrative.CHAT.has(key):
 		last_reply=Narrative.CHAT[key][2]
 		changed.emit()
@@ -173,7 +205,7 @@ func act(key: String) -> String:
 		"get_kit":
 			flags.kit=true
 			for id in ["mask","filter"]:give(id)
-		"briefing":pass
+		"briefing":flags.briefed=true
 		"accept":
 			flags.accepted=true
 			give("order")
@@ -203,6 +235,7 @@ func act(key: String) -> String:
 
 func objective() -> String:
 	if ending:return "离站记录已收好"
+	if f("guard_task") and not f("hatch"):return "伊戈尔在查表 · 用工具拆下旧盖板" if guard_clear() else "等伊戈尔离开岗哨，再检查旧盖板"
 	if f("gate") or route=="hatch" or route=="shift":return "穿过东侧通道，在延伸线尽头确认离站"
 	if f("kit"):return "准备好后，到集合气闸随征召小队离站"
 	if f("accepted"):return "携登记单到第 7 供应点领取防护装备"
@@ -214,6 +247,10 @@ func serialize() -> Dictionary:
 	return {"version":1,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending}
 func restore(data: Dictionary):
 	flags=data.get("flags",{}).duplicate()
+	if not flags.has("social_seed"):
+		flags.social_seed=JSON.stringify(data).sha256_text().substr(0,8).hex_to_int()
+	context={}
+	last_outcome={}
 	items.assign(data.get("items",[]))
 	intel.assign(data.get("intel",[]))
 	route=data.get("route","")

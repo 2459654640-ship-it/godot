@@ -9,14 +9,22 @@ uniform float focus : hint_range(0.0,1.0) = 0.0;
 uniform vec3 light_tint : source_color = vec3(0.91,0.89,0.82);
 uniform float gait = 0.0;
 uniform float motion = 0.0;
+uniform float reaction = 0.0;
 
 void vertex() {
-	// Pixel-art figure lies on a true depth-tested billboard, foot anchored.
-	MODELVIEW_MATRIX = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0],INV_VIEW_MATRIX[1],INV_VIEW_MATRIX[2],MODEL_MATRIX[3]);
+	// A vertical Y-locked billboard has genuine geometric body depth.
+	// Screen-facing quads tilt through walls; fragment DEPTH overrides can
+	// self-fight with the renderer's depth prepass/MSAA. Neither is needed.
+	vec3 right=normalize(vec3(INV_VIEW_MATRIX[0].x,0.0,INV_VIEW_MATRIX[0].z));
+	vec3 up=vec3(0.0,1.0,0.0);
+	MODELVIEW_MATRIX = VIEW_MATRIX * mat4(vec4(right,0.0),vec4(up,0.0),vec4(cross(right,up),0.0),MODEL_MATRIX[3]);
 	MODELVIEW_NORMAL_MATRIX = mat3(MODELVIEW_MATRIX);
 	float leg = smoothstep(0.56,0.92,UV.y);
 	VERTEX.x += sin(gait + (UV.x < 0.5 ? 0.0 : 3.14159))*leg*motion*0.018;
 	VERTEX.y += max(0.0,sin(gait+(UV.x < 0.5 ? 0.0 : 3.14159)))*leg*motion*0.035;
+	float upper=1.0-smoothstep(0.15,0.65,UV.y);
+	VERTEX.x+=sin(abs(reaction)*18.0)*upper*0.018*max(-reaction,0.0);
+	VERTEX.y-=abs(sin(reaction*14.0))*upper*0.020*max(reaction,0.0);
 }
 
 vec4 sample_frame(vec2 uv) {

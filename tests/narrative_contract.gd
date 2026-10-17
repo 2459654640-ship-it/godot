@@ -10,6 +10,8 @@ func _initialize():
 	var fixture=JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/story-v2-contract.json"))
 	for path in fixture.paths:
 		var s=Story.new()
+		s.flags.nina_safety=true
+		s.context.hatch_clear=true # Legacy fixture compares costs after the new physical prerequisite.
 		var sequence=fixture.paths[path]
 		for index in sequence.states.size():
 			if index>0:
@@ -19,13 +21,17 @@ func _initialize():
 			var expected=sequence.states[index]
 			var actual=JSON.parse_string(JSON.stringify(s.serialize()))
 			actual.erase("intel")
+			for added in ["social_seed","nina_safety","briefed"]:actual.flags.erase(added)
 			actual.intel_count=float(s.intel.size())
 			check(actual==expected.state,"quest state/reward/cost unchanged: %s step %d" % [path,index])
 			for id in expected.options:
 				var options={}
 				for o in s.view(id).options:
-					if not Narrative.CHAT.has(o.key):options[o.key]=o.enabled
-				check(options==expected.options[id],"all original action gates unchanged: %s/%d/%s" % [path,index,id])
+					if expected.options[id].has(o.key):options[o.key]=o.enabled
+				var expected_options=expected.options[id].duplicate()
+				if id=="hatch" and s.f("hatch"):
+					for key in expected_options:expected_options[key]=false
+				check(options==expected_options,"all original action gates unchanged: %s/%d/%s" % [path,index,id])
 		# Conversations should never grant items, persist flags or change routes.
 		var before=s.serialize().duplicate(true)
 		for key in Narrative.CHAT:

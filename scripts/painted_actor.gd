@@ -10,21 +10,29 @@ var cycle=0.0
 var focused=false
 var pose_count=1
 var actor_id="ivan"
-const HEIGHTS={"ivan":1.46,"semyon":1.42,"nina":1.40,"mikhail":1.43,"cook":1.39,"supply":1.42,"commander":1.48,"igor":1.53,"resident":1.43,"diner":1.40,"queue":1.48}
+var reaction=""
+var reaction_time=0.0
+var current_pose=0
+const HEIGHTS={"ivan":1.75,"semyon":1.70,"nina":1.68,"mikhail":1.72,"cook":1.66,"supply":1.70,"commander":1.78,"igor":1.84,"resident":1.72,"diner":1.68,"queue":1.78}
 
 func setup(body):
 	actor=body
 	actor_id="ivan" if body.is_player else String(body.name)
-	pose_count=3 if actor_id=="ivan" else 1
+	var manifest=JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/atlas.json"))
+	pose_count=int(manifest[actor_id].poses)
 	sprite=MeshInstance3D.new()
 	sprite.name="PaintedFigure"
 	var quad=QuadMesh.new()
 	quad.subdivide_width=8
 	quad.subdivide_depth=12
-	var height:float=HEIGHTS.get(actor_id,1.46)
-	quad.size=Vector2(height*208.0/324.0,height*352.0/324.0)
+	# Upright Y-axis billboard: true world height and geometric depth.
+	# Keep painted width proportional to the fixed 40-degree projected height.
+	var height:float=HEIGHTS.get(actor_id,1.75)
+	quad.size=Vector2(height*.762*float(manifest[actor_id].cell[0])/324.0,height*352.0/324.0)
 	quad.center_offset=Vector3(0,quad.size.y/2-height*10.0/324.0,0)
 	sprite.mesh=quad
+	sprite.extra_cull_margin=1.0
+	sprite.ignore_occlusion_culling=true
 	sprite.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	material=ShaderMaterial.new()
 	material.shader=load("res://assets/visual/painted_actor.gdshader")
@@ -60,6 +68,10 @@ func setup(body):
 	contact.material_override=ink
 	body.add_child(contact)
 
+func react(kind:String):
+	reaction=kind
+	reaction_time=1.0
+
 func _process(delta):
 	if not is_instance_valid(actor):return
 	var camera=get_viewport().get_camera_3d()
@@ -78,15 +90,19 @@ func _process(delta):
 		direction_ready=true
 	var column=mini(angle_slot,8-angle_slot)
 	var speed=Vector2(actor.velocity.x,actor.velocity.z).length()
-	cycle+=delta*speed*0.95
+	cycle+=delta*speed*(.95 if actor.is_player else 1.65)
 	var pose=0
 	if speed>0.2 and pose_count>1:
 		pose=[1,0,2,0][floori(cycle*2.0)%4]
+	elif actor.animation_state=="talk" and pose_count>3:pose=3
+	current_pose=pose
+	reaction_time=maxf(0.0,reaction_time-delta)
+	material.set_shader_parameter("reaction",(1.0 if reaction=="success" else -1.0)*reaction_time if reaction_time>0 else 0.0)
 	material.set_shader_parameter("frame_origin",Vector2(column*.2,float(pose)/pose_count))
 	material.set_shader_parameter("mirror",angle_slot>4)
 	material.set_shader_parameter("focus",1.0 if focused else 0.0)
 	material.set_shader_parameter("gait",cycle*PI*2)
-	material.set_shader_parameter("motion",clampf(speed/2.65,0,1) if pose_count==1 else 0.0)
+	material.set_shader_parameter("motion",0.0)
 	# Painted key/fill remains readable, with a restrained room-color tint.
 	var warm=clampf((1.8-actor.global_position.z)*0.04,-.04,.05)
 	material.set_shader_parameter("light_tint",Vector3(.94+warm,.91,.84-warm))

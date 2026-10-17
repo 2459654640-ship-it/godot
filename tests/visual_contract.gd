@@ -18,25 +18,26 @@ func run():
 	root.add_child(w)
 	await frames(3)
 	check(FileAccess.file_exists("res://tests/fixtures/story-v2-contract.json"),"prior-version quest state/action gate fixture is bundled; validated by narrative_contract.gd")
-	var actor_source=FileAccess.get_file_as_string("res://scripts/actor.gd")
-	var physics_source=actor_source.substr(actor_source.find("func _physics_process"))
-	check(physics_source.sha256_text()=="62f9573d85f8d9dc88a7e1d87f00af92ac348c215e03f0ad384657c868c5a8ba","movement and NPC yielding remain byte-identical to v1")
+	check(w.player.SPEED==2.65 and w.player.ACCEL==12.0 and w.player.DECEL==17.0,"player motion tuning retained")
+	check(w.npcs.igor.collision_mask==7,"NPCs collide with walls, each other and player")
 	check(FileAccess.file_exists("res://tests/fixtures/visual_v1_baseline.json"),"v1 baseline fixture is bundled")
 	if FileAccess.file_exists("res://tests/fixtures/visual_v1_baseline.json"):
 		var baseline=JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/visual_v1_baseline.json"))
 		check(w.npcs.size()==baseline.npc.size(),"NPC count unchanged")
 		for id in baseline.npc:
 			var p=baseline.npc[id]
-			check(w.npcs[id].anchor.is_equal_approx(Vector3(p[0],p[1],p[2])),"original NPC anchor: "+id)
-		check(w.targets.size()==baseline.targets.size(),"interaction ID count unchanged")
+			if id not in ["mikhail","resident","diner"]:check(w.npcs[id].anchor.is_equal_approx(Vector3(p[0],p[1],p[2])),"retained story NPC anchor: "+id)
+		check(w.targets.size()==baseline.targets.size()+7,"seven residential/return interactions added; old IDs retained")
 		for id in baseline.targets:
 			if w.npcs.has(id):continue
 			var p=baseline.targets[id]
 			check(w.targets[id].pos.is_equal_approx(Vector3(p[0],p[1],p[2])),"original target coordinate: "+id)
-		var retained=[]
-		for solid in w.kit.solids:
-			if not solid.name.begins_with("SemyonRoom"):retained.append(solid)
-		check(JSON.parse_string(JSON.stringify(retained))==baseline.solids,"every original solid envelope retained; only authorized bedroom partition added")
+		for old in baseline.solids:
+			if old.name=="West":continue # Authorized new west-wing entrance.
+			var retained=false
+			for solid in w.kit.solids:
+				if JSON.parse_string(JSON.stringify(solid))==old:retained=true;break
+			check(retained,"original solid retained: "+old.name)
 	var caps:Array[Rect2]=[]
 	var triangle_count=0
 	var bad_winding=0

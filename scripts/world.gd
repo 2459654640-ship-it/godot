@@ -3,6 +3,7 @@ const Kit = preload("res://scripts/kit.gd")
 const Actor = preload("res://scripts/actor.gd")
 const Story = preload("res://scripts/story.gd")
 const HUD = preload("res://scripts/hud.gd")
+const Wing=preload("res://scripts/residential_wing.gd")
 var kit
 var story
 var player
@@ -30,6 +31,8 @@ var debug_camera_target=Vector3.ZERO
 var capture_mode=false
 var room_name="伊万的卧室"
 var wall_veil
+var navigation
+var guard_away_time=0.0
 var zones=[
  {"name":"伊万的卧室","rect":Rect2(-15,-9,7,9),"code":"01"},
  {"name":"维修工坊","rect":Rect2(-8,-9,9,9),"code":"02"},
@@ -44,9 +47,11 @@ var zones=[
 func _ready():
 	inputs()
 	story=Story.new()
+	zones.append_array(Wing.ZONES)
 	kit=Kit.new(self)
 	build_environment()
 	build_structure()
+	Wing.structure(self)
 	kit.finish_walls()
 	build_residence()
 	build_workshop()
@@ -55,9 +60,15 @@ func _ready():
 	build_south()
 	build_corridor()
 	build_dressing()
+	Wing.furnish(self)
 	kit.batch_static()
 	build_people()
+	navigation=preload("res://scripts/route_grid.gd").new()
+	navigation.setup(self)
+	setup_daily_routines()
 	build_targets()
+	Wing.targets(self)
+	target("pipe_exit",Vector3(10.8,0,8.6),"检修管线出口")
 	kit.prepare_highlights()
 	camera=Camera3D.new()
 	add_child(camera)
@@ -134,7 +145,8 @@ func build_structure():
 		if zone.code=="01":m.material_override.albedo_color=Color("b7a88a")
 		if zone.code=="08":m.material_override.albedo_color=Color("677b7b")
 	kit.wall("North",Vector2(-15,-9),Vector2(15,-9))
-	kit.wall("West",Vector2(-15,-9),Vector2(-15,10))
+	kit.wall("WestNorth",Vector2(-15,-9),Vector2(-15,.74))
+	kit.wall("WestSouth",Vector2(-15,2.46),Vector2(-15,10))
 	kit.wall("SouthCut",Vector2(-15,10),Vector2(15,10),true)
 	kit.wall("EastCut",Vector2(15,-9),Vector2(15,10),true)
 	# North rooms: independent spaces linked by a 3.2m main circulation spine.
@@ -355,6 +367,11 @@ func build_corridor():
 	kit.label("ПРИКАЗ\nD–6\n16 / XI / 82",Vector3(11,1.53,-0.10),24,Color("333a31"))
 	kit.label("★ — ◯",Vector3(-7.6,1.0,-0.13),35,Color("d1cdb4"))
 	kit.signboard("D–6  /  ЖИЛОЙ УРОВЕНЬ",Vector3(0,2.35,-0.15),5.1)
+	kit.box("HeatingManifold",Vector3(2.8,1.25,.18),Vector3(.65,.75,.18),"metal")
+	kit.cyl("ManifoldGauge",Vector3(2.8,1.48,.30),.14,.065,"metal").rotation.x=PI/2
+	kit.cyl("ManifoldDial",Vector3(2.8,1.48,.34),.115,.01,"paper").rotation.x=PI/2
+	kit.box("ManifoldNeedle",Vector3(2.83,1.51,.352),Vector3(.012,.11,.012),"dark").rotation.z=-.7
+	kit.label("ОТОПЛЕНИЕ / 12",Vector3(2.8,1.08,.30),17)
 
 func person(id: String,p: Vector3,coat: String="green",hat: bool=false):
 	var a=Actor.new()
@@ -375,14 +392,21 @@ func build_people():
 	player.visual.rotation.y=-2.4
 	person("semyon",Vector3(-12.1,0,-2.2),"wood",true)
 	person("nina",Vector3(-3.8,0,-6.1),"blue")
-	person("mikhail",Vector3(2.0,0,-3.9),"wood",true)
+	person("mikhail",Vector3(1.65,0,-3.25),"wood",true)
 	person("cook",Vector3(5.5,0,-6.6),"cream")
 	person("supply",Vector3(12.4,0,-6.5),"blue")
 	person("commander",Vector3(-0.5,0,5.1),"green",true)
 	person("igor",Vector3(6.3,0,6.6),"green",true)
-	person("resident",Vector3(-5,0,4.4),"cloth",true)
-	person("diner",Vector3(7.9,0,-3.1),"blue")
+	person("resident",Vector3(-25.0,0,-5.1),"cloth",true)
+	person("diner",Vector3(-25.0,0,-1.6),"blue")
 	person("queue",Vector3(13.6,0,-3.2),"wood")
+
+func setup_daily_routines():
+	var stops={"semyon":Vector3(-13.3,0,-2.0),"nina":Vector3(-1.9,0,-6),"mikhail":Vector3(1.65,0,-2.0),"cook":Vector3(7.2,0,-6.4),"supply":Vector3(13.3,0,-6.5),"commander":Vector3(-1.5,0,5.4),"resident":Vector3(-24.1,0,-7.8),"diner":Vector3(-24.2,0,.3),"queue":Vector3(12.2,0,-2.3)}
+	for id in npcs:
+		var actor=npcs[id]
+		actor.navigation=navigation
+		if stops.has(id):actor.patrol.assign([actor.anchor,stops[id]])
 
 func target(id: String,p: Vector3,label: String,kind: String="inspect"):
 	# Keep target data and interaction coordinates stable; no ground ring or
@@ -441,8 +465,7 @@ func _physics_process(delta):
 	if story.f("side_crossed"):
 		side_body.set_deferred("disabled",true)
 		side_mesh.visible=false
-	if npcs.has("igor"):
-		npcs.igor.anchor=Vector3(7.3,0,5.5) if phase>=8 else Vector3(6.3,0,6.6)
+	update_guard(delta)
 	if player.position.x>9.4 and previous_position.x<=9.4:
 		if absf(player.position.z-6.7)<0.9 and story.f("gate"):
 			story.route=story.flags.get("gate_route","permit")
@@ -482,14 +505,46 @@ func find_nearest():
 	kit.highlight(cue,npcs)
 	if not waiting_shift:hud.set_prompt(nearest)
 
+func update_guard(delta:float):
+	if not npcs.has("igor"):return
+	var guard=npcs.igor
+	var inspection=Vector3(2.8,0,1.4)
+	if story.f("guard_task"):
+		guard.anchor=inspection
+		if Vector2(guard.position.x-inspection.x,guard.position.z-inspection.z).length()<.65:
+			if guard_away_time==0.0:guard_away_time=45.0
+			if not hud.modal_visible():guard_away_time=maxf(.001,guard_away_time-delta)
+			if guard_away_time<=.001:
+				story.flags.guard_task=false
+				guard_away_time=0.0
+				hud.toast("伊戈尔查完总表，正往岗哨走。维修记录仍可用。")
+	else:
+		guard_away_time=0.0
+		guard.anchor=Vector3(7.3,0,5.5) if phase>=8 else Vector3(6.3,0,6.6)
+	refresh_guard_context()
+
+func refresh_guard_context():
+	var clear=false
+	if story.f("guard_task"):
+		var guard=npcs.igor
+		# A promise to leave is insufficient: the guard must physically reach
+		# the corridor, where the room's opaque wall blocks his sight line.
+		if guard.position.z<2.6:
+			var end=targets.hatch.pos+Vector3(0,1.2,0)
+			var ray=PhysicsRayQueryParameters3D.create(guard.position+Vector3(0,1.5,0),end,1)
+			clear=not get_world_3d().direct_space_state.intersect_ray(ray).is_empty()
+	var previous=story.guard_clear()
+	story.context.hatch_clear=clear
+	if previous!=clear and hud:hud.refresh_status()
+
 func set_camera(delta: float, instant: bool = false):
-	var focus=Vector3(0,0,0.8) if overview else Vector3(player.position.x*0.78,0.4,player.position.z*0.65)
+	var focus=Vector3(-6,0,-1.5) if overview else Vector3(player.position.x*.90,.4,player.position.z*.85)
 	if capture_mode:focus=debug_camera_target
 	var desired=focus+Vector3(23,30,27)
 	if instant:camera.position=desired
 	else:camera.position=camera.position.lerp(desired,1-exp(-delta*3.5))
 	camera.look_at(camera.position-Vector3(23,30,27),Vector3.UP)
-	var desired_size=31.0 if overview else camera_size
+	var desired_size=39.0 if overview else camera_size
 	camera.size=lerpf(camera.size,desired_size,1-exp(-delta*5)) if not instant else desired_size
 
 func _unhandled_input(event):
@@ -516,6 +571,7 @@ func _unhandled_input(event):
 		if event.button_index==MOUSE_BUTTON_WHEEL_DOWN:camera_size=clampf(camera_size+1,10,28)
 
 func interact(id: String):
+	refresh_guard_context()
 	if id=="side" and story.f("side") and not story.f("side_crossed"):
 		waiting_shift=true
 		hud.toast("已开始等候黄灯 · Esc 取消")
@@ -523,14 +579,24 @@ func interact(id: String):
 	hud.show_dialogue(id)
 
 func perform(key: String, id: String):
+	refresh_guard_context()
 	var reply=story.act(key)
+	if not story.last_action_valid:
+		hud.show_reply(id,reply)
+		return
+	if npcs.has(id):
+		var painter=npcs[id].visual.get_node("Painter")
+		painter.react(story.last_outcome.get("kind","success"))
 	if key in ["leave_official","leave_east"]:
 		if (key=="leave_official" and story.f("kit")) or (key=="leave_east" and story.route!=""):
 			pending_route="official" if key=="leave_official" else story.route
 			hud.show_departure(false)
 		return
-	if key in ["hatch_wrench","hatch_knife"] and story.f("hatch"):
+	if key in ["hatch_wrench","hatch_knife","hatch_pass"] and story.f("hatch"):
 		player.position=Vector3(11.0,0.04,8.6)
+		player.velocity=Vector3.ZERO
+	if key=="return_pipe":
+		player.position=Vector3(7.2,0.04,8.5)
 		player.velocity=Vector3.ZERO
 	hud.show_reply(id,reply)
 
@@ -565,6 +631,7 @@ func load_game():
 	player.position=Vector3(p[0],maxf(p[1],0.04),p[2])
 	player.velocity=Vector3.ZERO
 	waiting_shift=false
+	guard_away_time=0.0
 	hud.close()
 	hud.toast("已读取本地手记")
 
