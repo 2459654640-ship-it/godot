@@ -1,0 +1,76 @@
+{
+  "stations": [
+    {
+      "id": "night_letters",
+      "frequency": "67.4",
+      "name": "夜班来信",
+      "ru": "Письма ночной смены",
+      "description": "夜班结束后的点歌时段，播放关于相逢、思念与离别的抒情歌曲。",
+      "tracks": [
+        "ferry",
+        "your_eyes",
+        "moon_serenade",
+        "i_want_you"
+      ]
+    },
+    {
+      "id": "old_voices",
+      "frequency": "70.2",
+      "name": "旧日留声",
+      "ru": "Голоса прошлого",
+      "description": "居民们保存下来的旧录音。不同语言的歌，留住了人们记忆中的远方。",
+      "tracks": [
+        "end_of_world",
+        "edelweiss"
+      ]
+    },
+    {
+      "id": "morning_light",
+      "frequency": "72.6",
+      "name": "清晨微光",
+      "ru": "Утренний свет",
+      "description": "交班前的舒缓节目。有人在听歌时想起了地表的风、雨后的街道和清晨。",
+      "tracks": [
+        "after_rain"
+      ]
+    }
+  ],
+  "tracks": {
+    "ferry": {
+      "zh": "渡口",
+      "ru": "Переправа",
+      "file": "ferry.ogg"
+    },
+    "your_eyes": {
+      "zh": "你的眼神",
+      "ru": "Твой взгляд",
+      "file": "your_eyes.ogg"
+    },
+    "moon_serenade": {
+      "zh": "月半小夜曲",
+      "ru": "Серенада под полумесяцем",
+      "file": "moon_serenade.ogg"
+    },
+    "i_want_you": {
+      "zh": "我要你",
+      "ru": "Я хочу быть с тобой",
+      "file": "i_want_you.ogg"
+    },
+    "end_of_world": {
+      "zh": "世界末日",
+      "ru": "Конец света",
+      "original": "The End of the World",
+      "file": "end_of_world.ogg"
+    },
+    "edelweiss": {
+      "zh": "雪绒花",
+      "ru": "Эдельвейс",
+      "file": "edelweiss.ogg"
+    },
+    "after_rain": {
+      "zh": "雨后清风有香",
+      "ru": "Аромат ветра после дождя",
+      "file": "after_rain.ogg"
+    }
+  }
+}

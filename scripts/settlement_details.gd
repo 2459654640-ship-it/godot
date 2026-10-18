@@ -2,9 +2,17 @@ extends RefCounted
 ## Settlements are places to live: rooms communicate through several routes,
 ## while trackwork, heating, cooking and water supply have visible destinations.
 const Detail=preload("res://scripts/facility_detail.gd")
-static func rug(k,p:Vector3,size:Vector2):
- var m=k.mats.cloth.duplicate();m.albedo_texture=load("res://assets/visual/rug.png");m.uv1_triplanar=false;m.uv1_world_triplanar=false;m.uv1_scale=Vector3.ONE;m.normal_enabled=false
- var floor=k.box("WovenRug",p+Vector3(0,.032,0),Vector3(size.x,.018,size.y),"cloth");floor.material_override=m;floor.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+static func rug(k,p:Vector3,size:Vector2,variant:String="burgundy",heading:float=0):
+ var source={"burgundy":"rug","indigo":"rug_indigo","olive":"rug_olive","runner":"rug"}.get(variant,"rug")
+ var repeats=2 if variant=="runner" else 1
+ var texture:Texture2D=load("res://assets/visual/"+source+".png")
+ var native=Vector2(texture.get_width(),texture.get_height()*repeats)
+ var requested=Vector2(size.y,size.x) if absf(sin(heading))>.7 else size
+ var actual=native*minf(requested.x/native.x,requested.y/native.y)
+ var m=k.mats.cloth.duplicate();m.albedo_texture=texture;m.uv1_triplanar=false;m.uv1_world_triplanar=false;m.uv1_scale=Vector3(1,repeats,1);m.normal_enabled=false
+ var floor=k.box("WovenRug",p+Vector3(0,.032,0),Vector3(actual.x,.018,actual.y),"cloth")
+ floor.rotation.y=heading;floor.material_override=m;floor.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+ floor.set_meta("rug_variant",variant);floor.set_meta("rug_native_aspect",native.x/native.y);floor.set_meta("rug_repeat",repeats)
 static func radiator(k,p:Vector3,width:float=2.0):
  for n in range(int(width/.15)):k.box("RadiatorFin",p+Vector3(-width/2+n*.15,.53,0),Vector3(.10,.78,.22),"old_iron")
  for y in [.23,.82]:k.pipe(p+Vector3(-width/2-.1,y,0),p+Vector3(width/2+.1,y,0),.045,"metal")
@@ -70,7 +78,7 @@ static func commune(w):
   k.cyl("WaterCanLid",Vector3(x,.98,-1.5),.35,.035,"metal")
  k.pipe(Vector3(6.5,1.3,-3.7),Vector3(10.8,1.3,-3.7),.09,"metal")
  k.box("OpenAllocationBook",Vector3(8,1.02,.5),Vector3(.7,.035,.5),"paper")
- k.bench(Vector3(-7.2,0,5.45),4,true,PI);rug(k,Vector3(-3,0,.5),Vector2(4,3))
+ k.bench(Vector3(-7.2,0,5.45),4,true,PI);rug(k,Vector3(-3,0,.5),Vector2(4,3),"indigo",PI/2)
  commune_garden(w)
  # Dining room keeps clear routes between tables, kitchen and medical room.
  for x in [-7,-1]:
@@ -172,7 +180,7 @@ static func commune_homes(w):
   k.pipe(Vector3(12.3,y,13.7),Vector3(22.75,y,13.7),.045,"metal")
  k.box("ResidentLedgerStand",Vector3(14.8,.48,11),Vector3(.75,.96,.6),"wood",true)
  k.box("ResidentLedger",Vector3(14.8,.98,11),Vector3(.65,.03,.45),"paper")
- for p in [Vector3(14,0,9),Vector3(21,0,9),Vector3(14,0,20),Vector3(21,0,21)]:rug(k,p,Vector2(2,1.8))
+ for p in [Vector3(14,0,9),Vector3(21,0,9),Vector3(14,0,20),Vector3(21,0,21)]:rug(k,p,Vector2(2,1.8),"olive" if p.x<17 else "indigo")
  k.table(Vector3(21,0,21.5),2.0);linen(k,Vector3(21,.82,21.5))
  k.box("ChildDrawing",Vector3(22.82,1.1,18),Vector3(.025,.55,.65),"paper")
 static func commune_production(w):
@@ -258,18 +266,19 @@ static func sech(w):
    for dz in [-.74,0,.74]:k.box("WindowMullion",Vector3(exterior,1.7,z+dz),Vector3(.07,.8,.035),"metal")
    k.box("HabitationRib",Vector3(x-1.9,1.4,z),Vector3(.08,2.8,.10),"old_iron")
   k.box("CarriagePaintBand",Vector3(x,1,19.86),Vector3(3.8,.16,.035),"red")
- for x in [-14,-6]:
-  for z in [7.3,17.6]:k.bed(Vector3(x,0,z),"cloth")
+ for x in [-14.7,-5.3]:
+  for z in [6.4,10.8,13.4 if x< -10 else 16.7,18.5]:k.bed(Vector3(x,0,z),"cloth",PI/2 if x< -10 else -PI/2)
  for z in [9.3,15.5]:
   k.pipe(Vector3(-15.8,2.5,z),Vector3(-4.2,2.5,z),.02,"metal")
-  k.box("FamilyCurtain",Vector3(-13.7,1.4,z),Vector3(4.1,2.2,.035),"cloth")
+  for x in [-13.7,-6.3]:
+   k.box("FamilyCurtain",Vector3(x,1.4,z),Vector3(4.1,2.2,.035),"cloth",true)
  for x in [-15,-5]:k.locker(Vector3(x,0,12))
  k.box("BunkNoticeStool",Vector3(-11.4,.35,11.5),Vector3(.6,.7,.6),"wood",true)
  k.box("BunkNoticePaper",Vector3(-11.4,.72,11.5),Vector3(.55,.025,.45),"paper")
- rug(k,Vector3(-10,0,12),Vector2(3.6,5));rug(k,Vector3(2,0,-10),Vector2(8,3))
+ rug(k,Vector3(-10,0,12),Vector2(3,4.5),"indigo");rug(k,Vector3(2,0,-11.5),Vector2(8,3),"runner",PI/2)
  # The central public hall has several exits, workshop, laundry and resting spots.
  k.table(Vector3(3,0,2),3.4);k.bench(Vector3(3,0,3.1),3.1);k.bench(Vector3(3,0,.9),3.1,true,PI)
- k.bench(Vector3(7.5,0,6),2.5,true,-PI/2);rug(k,Vector3(1,0,6),Vector2(3,3))
+ k.bench(Vector3(7.5,0,6),2.5,true,-PI/2);rug(k,Vector3(1,0,6),Vector2(3,3),"olive")
  for z in [-3,3,8]:
   k.lamp(Vector3(0,2.8,z),true,1.35,7)
   k.box("DepotTrussFoot",Vector3(-3.7,1.5,z),Vector3(.18,3,.18),"metal")
@@ -279,7 +288,8 @@ static func sech(w):
  k.table(Vector3(-12,0,2.5),3.1);k.bench(Vector3(-12,0,3.6),2.8)
  for x in [-15,-5]:k.locker(Vector3(x,0,3.8))
  # Separate meeting room, with Cossack icons and a ceremonial sabre.
- k.table(Vector3(2,0,-11.5),6);k.bench(Vector3(2,0,-12.6),5.5,true,PI);k.bench(Vector3(2,0,-10.4),5.5)
+ k.table(Vector3(2,0,-11.5),6);k.bench(Vector3(2,0,-12.6),5.5);k.bench(Vector3(2,0,-10.4),5.5,true,PI)
+ chair(k,Vector3(7.8,0,-11.5),-PI/2)
  k.box("CossackIconFrame",Vector3(7,1.9,-13.8),Vector3(.6,.8,.06),"wood")
  k.box("CossackIconCenter",Vector3(7,1.9,-13.75),Vector3(.35,.55,.025),"brass")
  k.box("CossackSabre",Vector3(8,1.7,-13.75),Vector3(.05,1.25,.04),"metal").rotation.z=.25

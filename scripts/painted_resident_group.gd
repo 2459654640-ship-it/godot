@@ -14,12 +14,18 @@ func setup(w,id:String,p:Vector3,count:int,height:float=1.73):
  world=w;position=p;name="ResidentGroup_"+id;w.add_child(self)
  set_meta("resident_count",count);set_meta("stationary",true)
  var texture:Texture2D=load("res://assets/characters/group_"+id+".png")
- var width=height*.762*texture.get_width()/texture.get_height()
+ # New crowd drawings use the existing elevated camera; discard only their
+ # transparent canvas margins, preserving pixels and authored anatomy.
+ var regions:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/groups.json"))
+ var region:Array=regions[id].region
+ var width=height*.762*float(region[2])/float(region[3])
  set_meta("footprint_width",width)
  var mesh=MeshInstance3D.new();mesh.name="PaintedResidents"
  var quad=QuadMesh.new();quad.size=Vector2(width,height);quad.center_offset=Vector3(0,height/2,0);mesh.mesh=quad
  material=ShaderMaterial.new();material.shader=load("res://assets/visual/painted_actor.gdshader")
- material.set_shader_parameter("painted_map",texture);material.set_shader_parameter("frame_size",Vector2.ONE)
+ material.set_shader_parameter("painted_map",texture)
+ material.set_shader_parameter("frame_origin",Vector2(region[0],region[1])/Vector2(texture.get_size()))
+ material.set_shader_parameter("frame_size",Vector2(region[2],region[3])/Vector2(texture.get_size()))
  material.set_shader_parameter("texel_size",Vector2.ONE/Vector2(texture.get_size()))
  material.set_shader_parameter("light_tint",Vector3(.66,.63,.55));mesh.material_override=material
  mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;add_child(mesh)

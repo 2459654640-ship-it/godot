@@ -52,6 +52,7 @@ var vitals_label:Label
 var leads_button:Button
 var last_guidance=""
 var shop_tab="buy"
+var radio_open=false
 
 func _process(delta:float):
 	advance_typing(delta)
@@ -150,7 +151,7 @@ func setup(w):
 	var key_panel=panel(Vector2(32,769),Vector2(250,93))
 	var kb=margin_box(key_panel,16,12)
 	kb.add_child(label("W A S D    移动       E   互动",16,text_color))
-	kb.add_child(label("Tab  总览   /   滚轮  缩放",15,muted))
+	kb.add_child(label("Tab  总览   /   滚轮  切换目标或缩放",15,muted))
 	# Minimap has geometry, not a screenshot of the reference.
 	var mp=panel(Vector2(1302,106),Vector2(266,214))
 	var mb=margin_box(mp,6,5)
@@ -343,6 +344,7 @@ func character_prose(id:String,text:String):
 	words.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 
 func start_modal(title:String,subtitle:String,wide:bool=false):
+	radio_open=false
 	typing.clear();speech_buttons.clear()
 	if wide:dialogue_id=""
 	for child in modal.get_children():
@@ -397,6 +399,7 @@ func close():
 	if world.story.ending and world.story.flags.has("chapter_endpoint"):show_chapter_end();return
 	finish_typing()
 	dialogue_id=""
+	radio_open=false
 	last_choice=""
 	modal.visible=false
 	scrim.visible=false
@@ -420,6 +423,8 @@ func set_prompt(id:String):
 	var actor=world.target_actor(id)
 	var live_position:Vector3=actor.global_position if actor else t.pos
 	prompt.text="[ E ]   "+("交谈 · " if t.kind=="talk" else ("拾取 · " if t.kind=="collect" else "调查 · "))+t.label
+	if world.interaction_candidates.size()>1:
+		prompt.text+="   [ 滚轮切换 %d/%d ]"%[world.interaction_candidates.find(id)+1,world.interaction_candidates.size()]
 	target_label.text=("◇  " if t.kind=="talk" else "⌕  ")+t.label
 	target_label.visible=not modal_visible()
 	var p:Vector2=world.camera.unproject_position(live_position+Vector3(0,2.2,0))
@@ -514,10 +519,11 @@ func show_inventory():
 	for id in s.economy.goods:
 		var good:Dictionary=s.Economy.GOODS[id]
 		var row=HBoxContainer.new();modal_box.add_child(row)
-		row.add_child(icon_rect("res://assets/visual/item_"+id+".png",64))
+		row.add_child(icon_rect(item_icon(id),64))
 		row.add_child(label(good.name+" × "+str(s.economy.goods[id]),20,text_color))
 		row.add_spacer(false)
 		if good.effect!="":row.add_child(button("使用",func():toast(s.Economy.consume(s,id));show_inventory(),true,true))
+		elif id=="portable_radio":row.add_child(button("收听音乐",func():world.public_radio.open_controls(true),true,true))
 
 func show_journal(tab:String="tasks",shown_floor:String=""):
 	start_modal("伊万的手记","随身卷宗   /   任务、地图与见闻",true)
@@ -711,6 +717,7 @@ func highlight_items(text:String)->String:
 func show_map():show_journal("map")
 
 func item_icon(id:String)->String:
+	if id=="portable_radio":return "res://assets/visual/item_portable_radio.svg"
 	return "res://assets/visual/item_"+world.story.Campaign.ITEM_ART.get(id,id)+".png"
 
 func icon_rect(path:String,size:float=68)->TextureRect:
@@ -766,7 +773,7 @@ func show_pause():
 	if is_instance_valid(world.combat) and world.combat.active:modal_box.add_child(button("重试本场战斗（恢复战前资源）",func():world.combat.retry()))
 	audio_controls()
 	rule()
-	body("WASD / 方向键：8 方向移动\nE：交谈 / 调查\nI：背包　J：手记　M：地图\nTab：总览　滚轮：缩放\nEsc：关闭界面 / 菜单",20)
+	body("WASD / 方向键：8 方向移动\nE：与当前选中的目标交互\nI：背包　J：手记　M：地图\nTab：总览　滚轮：附近有多个目标时切换，否则缩放\nEsc：关闭界面 / 菜单",20)
 	body("靠近人物或物件时会出现互动提示。图文旅程可在暂停页保存，也能打开背包使用物资。",16,muted)
 func show_restart_confirm():
 	start_modal("重新开始？","当前未保存的进度将丢失",true)
@@ -884,7 +891,7 @@ func make_cinematic():
 func audio_controls():
 	rule();body("声音",20,amber)
 	var session=world.get_node("/root/Session")
-	for pair in [["Master","总音量"],["Music","背景旋律"],["Effects","交互音效"],["Footsteps","脚步声"]]:
+	for pair in [["Master","总音量"],["Music","背景旋律"],["Radio","收音机音乐"],["Effects","交互音效"],["Footsteps","脚步声"]]:
 		var row=HBoxContainer.new();modal_box.add_child(row)
 		var name_label=label(pair[1],17,muted);name_label.custom_minimum_size.x=190;row.add_child(name_label)
 		var slider=HSlider.new();slider.min_value=0;slider.max_value=1;slider.step=.05;slider.value=session.volume(pair[0]);slider.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(slider)

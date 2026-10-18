@@ -2,6 +2,10 @@ extends Node3D
 const SaveStore=preload("res://scripts/save_store.gd")
 const Publications=preload("res://scripts/publications.gd")
 const PublicationPlaces=preload("res://scripts/publication_places.gd")
+const PublicRadio=preload("res://scripts/public_radio.gd")
+var public_radio
+var interaction_candidates:Array[String]=[]
+var chosen_interaction=""
 var played_seconds=0.0
 var arrival_data:Dictionary={}
 var combat
@@ -100,6 +104,7 @@ func _ready():
 		zones=CampaignMaps.rooms(floor_id)
 		CampaignMaps.build(self)
 	PublicationPlaces.build(self)
+	public_radio=PublicRadio.new();add_child(public_radio);public_radio.setup(self)
 	kit.batch_static()
 	build_people() if floor_id=="life" else build_labor_people()
 	navigation=preload("res://scripts/route_grid.gd").new()
@@ -573,7 +578,8 @@ func target_actor(id:String):
 
 func find_nearest():
 	nearest=""
-	var best=1.7
+	interaction_candidates.clear()
+	var distances:Dictionary={}
 	for id in targets:
 		if id in ["d6_return_desk","coal_gate_entry"] and not story.f("d6_returned"):continue
 		var t=targets[id]
@@ -585,14 +591,25 @@ func find_nearest():
 			var q=PhysicsRayQueryParameters3D.create(player.position+Vector3(0,1.2,0),t.pos+Vector3(0,1.2,0),1)
 			var hit=get_world_3d().direct_space_state.intersect_ray(q)
 			reachable=hit.is_empty() or hit.position.distance_to(t.pos+Vector3(0,1.2,0))<0.48
-		if d<best and reachable:
-			best=d
-			nearest=id
+		if d<1.7 and reachable:
+			interaction_candidates.append(id)
+			distances[id]=d
+	interaction_candidates.sort_custom(func(a,b):return distances[a]<distances[b] if not is_equal_approx(distances[a],distances[b]) else a<b)
+	if chosen_interaction not in interaction_candidates:chosen_interaction=""
+	if not interaction_candidates.is_empty():nearest=chosen_interaction if chosen_interaction!="" else interaction_candidates[0]
 	var cue=nearest if not hud.modal_visible() else ""
 	if cue=="gate" and story.f("gate"):cue=""
 	if cue=="side" and (story.f("side_crossed") or story.f("side_pass")):cue=""
 	kit.highlight({"armory":"armorer","main_gate":"main_guard"}.get(cue,cue),npcs)
 	if not waiting_shift:hud.set_prompt(nearest)
+
+func cycle_interaction(direction:int)->bool:
+	find_nearest()
+	if interaction_candidates.size()<2:return false
+	var index=interaction_candidates.find(nearest)
+	chosen_interaction=interaction_candidates[posmod(index+direction,interaction_candidates.size())]
+	find_nearest()
+	return true
 
 func update_guard(delta:float):
 	if not npcs.has("igor"):return
@@ -680,6 +697,8 @@ func _unhandled_input(event):
 	if event.is_action_pressed("map"):hud.show_map()
 	if event.is_action_pressed("overview"):overview=not overview
 	if event is InputEventMouseButton and event.pressed:
+		if event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN] and cycle_interaction(-1 if event.button_index==MOUSE_BUTTON_WHEEL_UP else 1):
+			get_viewport().set_input_as_handled();return
 		if event.button_index==MOUSE_BUTTON_WHEEL_UP:camera_size=clampf(camera_size-1,10,28)
 		if event.button_index==MOUSE_BUTTON_WHEEL_DOWN:camera_size=clampf(camera_size+1,10,28)
 
@@ -687,6 +706,7 @@ func interact(id: String):
 	if is_instance_valid(combat) and combat.active:
 		hud.toast("先清理眼前的威胁。老兵倒地时靠近并按住 E 救援。",3);return
 	if id=="common_blocks":hud.show_blocks();return
+	if id=="public_radio":public_radio.open_controls();return
 	if id.begins_with("pub_"):
 		if not targets.has(id):return
 		if Publications.acquire(story,id):
@@ -857,10 +877,12 @@ func restore_placement(data:Dictionary):
 		actor.visual.rotation.y=float(entry.get("facing",0));actor.path_points.clear();actor.goal=Vector3.INF;actor.reached_anchor=false
 
 func restart():
+	public_radio.stop()
 	get_node("/root/Session").clear()
 	get_tree().change_scene_to_file("res://scenes/d6.tscn")
 
 func return_menu():
+	public_radio.stop()
 	get_node("/root/Session").clear()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 

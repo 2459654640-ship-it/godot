@@ -361,16 +361,27 @@ func crate(p: Vector3, size: Vector3 = Vector3(0.65,0.55,0.6)):
 	for z in [-size.z/2-0.01,size.z/2+0.01]:
 		for x in [-size.x*0.35,size.x*0.35]:box("CrateStrap",p+Vector3(x,size.y/2,z),Vector3(0.055,size.y,0.025),"metal")
 
-func bed(p: Vector3,blanket:String="red"):
-	box("BedFrame",p+Vector3(0,0.35,0),Vector3(1.0,0.15,2.0),"dark",true)
-	ellipsoid("BedMattress",p+Vector3(0,0.48,0),Vector3(0.455,0.09,0.975),"cloth")
-	box("BedFootprint",p+Vector3(0,0.2,0),Vector3(1.02,0.4,2.02),"dark",true).visible=false
-	ellipsoid("Pillow",p+Vector3(0,0.60,-0.70),Vector3(0.325,0.08,0.20),"paper")
-	box("Blanket",p+Vector3(0,0.58,0.37),Vector3(0.92,0.08,1.0),blanket)
-	for x in [-0.30,-0.10,0.10,0.30]:
-		box("QuiltStitch",p+Vector3(x,0.625,0.37),Vector3(0.006,0.006,0.94),"cloth")
-	for z in [-0.96,0.96]:
-		for x in [-0.48,0.48]:cyl("BedPost",p+Vector3(x,0.4,z),0.035,0.8,"metal")
+func bed(p: Vector3,blanket:String="red",heading:float=0.0):
+	# Cardinal orientations keep authored physics and route-grid bounds aligned.
+	var basis=Basis(Vector3.UP,heading)
+	var across=absf(sin(heading))>.7
+	var specs=[
+		["BedFrame",Vector3(0,.35,0),Vector3(1,.15,2),"dark",true],
+		["BedFootprint",Vector3(0,.2,0),Vector3(1.02,.4,2.02),"dark",true],
+		["Blanket",Vector3(0,.58,.37),Vector3(.92,.08,1),blanket,false]]
+	for x in [-.30,-.10,.10,.30]:specs.append(["QuiltStitch",Vector3(x,.625,.37),Vector3(.006,.006,.94),"cloth",false])
+	for spec in specs:
+		var extent:Vector3=spec[2]
+		if across:extent=Vector3(extent.z,extent.y,extent.x)
+		var piece=box(spec[0],p+basis*spec[1],extent,spec[3],spec[4])
+		piece.set_meta("bed_head",basis*Vector3.FORWARD)
+		if spec[0]=="BedFootprint":piece.visible=false
+	for spec in [["BedMattress",Vector3(0,.48,0),Vector3(.455,.09,.975),"cloth"],["Pillow",Vector3(0,.60,-.70),Vector3(.325,.08,.20),"paper"]]:
+		var radius:Vector3=spec[2]
+		if across:radius=Vector3(radius.z,radius.y,radius.x)
+		ellipsoid(spec[0],p+basis*spec[1],radius,spec[3])
+	for z in [-.96,.96]:
+		for x in [-.48,.48]:cyl("BedPost",p+basis*Vector3(x,.4,z),.035,.8,"metal")
 
 func locker(p: Vector3, height: float = 1.85):
 	box("Locker",p+Vector3(0,height/2,0),Vector3(0.75,height,0.55),"metal",true)

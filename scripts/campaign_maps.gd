@@ -207,6 +207,7 @@ static func bookcase(k,p:Vector3,length:float):
 			k.box("BookSpineWear",p+Vector3(front*.238,y+height*.6,-length/2+.16+index*.13),Vector3(.008,.015,.075),"paper")
 static func coal(w):
 	var k=w.kit
+	Settlement.rug(k,Vector3(-12,0,11.9),Vector2(2,2),"olive")
 	for x in [-26.1,-24.9]:k.box("CoalHaulRail",Vector3(x,.025,-7.5),Vector3(.08,.05,27),"metal")
 	for z in range(-21,8,2):
 		for x in [-27.6,-18.4]:k.box("MineSupport",Vector3(x,1.3,z),Vector3(.22,2.6,.25),"wood",true)
@@ -244,6 +245,7 @@ static func coal(w):
 	k.signboard("休养间 / 请轻声",Vector3(10,2.1,-2.17),3.4)
 static func starcity(w):
 	var k=w.kit
+	Settlement.rug(k,Vector3(-16,0,11.6),Vector2(2,3),"indigo")
 	# A large mission-control volume, concentric consoles and a separate service wing.
 	for x in [-5.8,5.8]:
 		for z in [-13,-7,1]:k.box("ControlHallPillar",Vector3(x,2.3,z),Vector3(.35,4.6,.35),"blue",true)
@@ -363,7 +365,7 @@ static func targets(w):
 		w.target("plant_guide",w.npcs.plant_guide.position,"科瓦廖夫","talk")
 		w.target("plant_veteran",w.npcs.plant_veteran.position,"老兵","talk")
 static func residents(w):
-	var layouts={"commune":[["ambient_worker",6,4],["ambient_woman",-4.1,11.1],["ambient_woman",-7,21],["ambient_worker",9,-5.2],["ambient_child",15,9]],"sech":[["ambient_worker",0,3],["ambient_child",-10,14],["ambient_elder",-5,17],["ambient_woman",-8,2],["ambient_worker",16,-10]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4]],"starcity":[["ambient_worker",4,-11],["ambient_woman",-18,8]]}
+	var layouts={"commune":[["ambient_worker",6,4],["ambient_woman",-4.1,11.1],["ambient_woman",-7,21],["ambient_worker",9,-5.2],["ambient_child",15,9]],"sech":[["ambient_worker",0,3],["ambient_child",-10,14],["ambient_elder",-7,17.6],["ambient_woman",-8,2],["ambient_worker",16,-10]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4]],"starcity":[["ambient_worker",4,-11],["ambient_woman",-18,8]]}
 	for index in layouts.get(w.floor_id,[]).size():
 		var entry=layouts[w.floor_id][index]
 		w.person("resident_%s_%d"%[entry[0],index],Vector3(entry[1],0,entry[2]),"cloth",false,entry[0])

@@ -112,7 +112,10 @@ func _process(delta):
 			ink.set_shader_parameter("painted_map",texture);ink.set_shader_parameter("frame_size",Vector2(.2,1.0/pose_count));ink.set_shader_parameter("texel_size",Vector2.ONE/Vector2(texture.get_size()))
 	var column=mini(angle_slot,8-angle_slot)
 	var speed=Vector2(actor.velocity.x,actor.velocity.z).length()
-	cycle+=delta*speed/(1.7 if actor.is_player else (.85 if actor_id in ["ambient_child","commune_child"] else 1.15))
+	var phase_delta=delta*speed/(1.7 if actor.is_player else (.85 if actor_id in ["ambient_child","commune_child"] else 1.15))
+	# Keep the planted pose visible even when a rendered frame takes longer
+	# than one animation phase; never skip directly between the two strides.
+	cycle+=minf(phase_delta,.249) if actor.is_player else phase_delta
 	var walking=speed>0.15
 	var pose=0
 	if armed:
@@ -133,7 +136,10 @@ func _process(delta):
 	material.set_shader_parameter("frame_origin",Vector2(column*.2,float(pose)/pose_count))
 	var mirrored_frames:Array=manifest[atlas_id].get("frame_mirror",[])
 	var pose_mirrored=false if mirrored_frames.is_empty() else bool(mirrored_frames[pose][column])
-	material.set_shader_parameter("mirror",(angle_slot>4)!=pose_mirrored)
+	# Ivan's authored rear diagonal points left; the other side-angle cells
+	# point right. Correct this source-view convention for every outfit/pose.
+	var view_mirrored=(angle_slot>4)!=(column==3 and actor_id in ["ivan","ivan_masked"])
+	material.set_shader_parameter("mirror",view_mirrored!=pose_mirrored)
 	material.set_shader_parameter("focus",1.0 if focused else 0.0)
 	material.set_shader_parameter("down_amount",1.0 if is_instance_valid(director) and actor_id=="veteran_masked" and director.veteran_health<=0 else 0.0)
 	light_clock+=delta

@@ -1,6 +1,7 @@
 extends RefCounted
 ## Standard ammunition is money; handmade ammunition is a separate reserve.
 const GOODS={
+"portable_radio":{"name":"随身收音机","price":12,"stock":1,"icon":"portable_radio","detail":"带耳机的小型接收机，附可反复使用的供电电池。可在背包打开，随身收听居民转播网；不会额外消耗电池或子弹。","effect":"","amount":0},
 "bread":{"name":"黑面包","price":4,"stock":8,"icon":"bread","detail":"一份当天的黑面包。恢复 30 点饱食。","effect":"food","amount":30},
 "bandage":{"name":"洁净绷带","price":5,"stock":5,"icon":"bandage","detail":"洗净煮过的布与包扎材料。恢复 15 点生命。","effect":"health","amount":15},
 "medkit":{"name":"急救包","price":12,"stock":2,"icon":"medkit","detail":"密封药品和敷料。恢复 40 点生命。","effect":"health","amount":40},
@@ -32,11 +33,14 @@ static func restored(saved:Dictionary)->Dictionary:
 	var data=fresh()
 	for key in data:
 		if saved.has(key):data[key]=saved[key].duplicate(true) if saved[key] is Dictionary or saved[key] is Array else saved[key]
+	# New optional shop items must also appear in saves made before their addition.
+	if not data.stock.has("portable_radio"):data.stock.portable_radio=1
 	for kind in ["military","handmade"]:data[kind]=maxi(0,int(data[kind]))
 	return data
 static func buy(s,id:String)->String:
 	if not GOODS.has(id):return "这里没有这种物资。"
 	var g:Dictionary=GOODS[id]
+	if id=="portable_radio" and int(s.economy.goods.get(id,0))>0:return "你已经有一台随身收音机了。"
 	if s.economy.stock.get(id,0)<=0:return "这批已经卖完了，等下一次补货。"
 	if s.economy.military<g.price:return "制式子弹不够。土制弹不能抵账。"
 	s.economy.military-=g.price

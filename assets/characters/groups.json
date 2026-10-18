@@ -1,0 +1,68 @@
+{
+  "workers": {
+    "region": [
+      70,
+      163,
+      1118,
+      949
+    ],
+    "source": "group_workers.png",
+    "camera_elevation_degrees": 40,
+    "revision": 16
+  },
+  "queue": {
+    "region": [
+      31,
+      248,
+      1210,
+      748
+    ],
+    "source": "group_queue.png",
+    "camera_elevation_degrees": 40,
+    "revision": 16
+  },
+  "family": {
+    "region": [
+      139,
+      203,
+      1043,
+      912
+    ],
+    "source": "group_family.png",
+    "camera_elevation_degrees": 40,
+    "revision": 16
+  },
+  "readers": {
+    "region": [
+      256,
+      95,
+      815,
+      1032
+    ],
+    "source": "group_readers.png",
+    "camera_elevation_degrees": 40,
+    "revision": 16
+  },
+  "assembly": {
+    "region": [
+      36,
+      288,
+      1193,
+      712
+    ],
+    "source": "group_assembly.png",
+    "camera_elevation_degrees": 40,
+    "revision": 16
+  },
+  "militia": {
+    "region": [
+      144,
+      147,
+      1005,
+      1013
+    ],
+    "source": "group_militia.png",
+    "camera_elevation_degrees": 40,
+    "revision": 16
+  }
+}
