@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-19",
+  "godot": "4.6.3.stable",
+  "regression_suites": [
+    {
+      "suite": "VISUAL_CONTRACT",
+      "checks": 1104,
+      "failures": 0
+    },
+    {
+      "suite": "ACTORS_V13",
+      "checks": 61,
+      "failures": 0
+    },
+    {
+      "suite": "V11_COMBAT",
+      "checks": 22,
+      "failures": 0
+    },
+    {
+      "suite": "EQUIPMENT_V12",
+      "checks": 16,
+      "failures": 0
+    }
+  ],
+  "regression_checks": 1203,
+  "failures": 0,
+  "art_checks": 458,
+  "eight_direction_pose_groups": 80,
+  "updated_sets": 8,
+  "rendered_pose_sheets": 10,
+  "animated_review_sheets": 10,
+  "review_note": "Fixed-camera pose samples; not normal gameplay video.",
+  "previous_editorial_copy_still_matches": true
+}

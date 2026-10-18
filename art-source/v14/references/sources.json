@@ -1,0 +1,76 @@
+{
+  "057fff3-ivan": {
+    "file": "ivan.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 3,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  },
+  "057fff3-commander": {
+    "file": "commander.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      208,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324
+  },
+  "2e799a3-veteran_masked": {
+    "file": "veteran_masked.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "2e799a3-commander_masked": {
+    "file": "commander_masked.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "2e799a3-ivan_masked": {
+    "file": "ivan_masked.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 3,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle",
+      "left_stride",
+      "right_stride"
+    ]
+  }
+}

@@ -93,20 +93,29 @@ def figures(path,rows,columns=5):
         if max(heights)>np.median(heights)*1.3:raise ValueError((path,'a figure includes a neighbouring row',heights))
     return result
 
-def pack(actor,rows,width=280,clips=None):
+def pack(actor,rows,width=280,clips=None,revision=13):
     rows=[list(angles) for angles in rows]
     frame_mirror=[[False]*5 for angles in rows]
-    if actor in ['ivan','ivan_masked','commander','commander_masked'] and len(rows)==3:
+    normalized_pairs=[];normalized_columns=[4]
+    if actor in ['ivan','ivan_masked','commander','commander_masked'] and len(rows)==3:normalized_pairs=[(1,2)]
+    if revision>=14:
+        normalized_columns=[0,4]
+        if actor in ['ivan_combat','ivan_masked_combat']:normalized_pairs=[(3,4),(5,6)]
+    if normalized_pairs:
         def bias(crop):
             mask=np.asarray(crop.getchannel('A'))>100
             _,head=np.where(mask[:round(crop.height*.15)])
             _,toe=np.where(mask[-round(crop.height*.045):])
             return float(toe.mean()-head.mean())
-        if bias(rows[1][4])*bias(rows[2][4])>0:
-            # The direct rear silhouette is symmetric for these outfits.
-            # Mirror one complete authored pose in the renderer; no isolated
-            # limb sliding or deformation is used to fabricate a second step.
-            rows[1][4]=rows[2][4];frame_mirror[1][4]=True
+        for a,b in normalized_pairs:
+            for column in normalized_columns:
+                if bias(rows[a][column])*bias(rows[b][column])>0:
+                    # Symmetric straight-on outfits can reuse one COMPLETE
+                    # pose with a renderer mirror. No isolated limb is warped.
+                    # The veteran's asymmetric satchel is never gait-mirrored.
+                    chosen=b if revision==13 or abs(bias(rows[b][column]))>=abs(bias(rows[a][column])) else a
+                    other=a if chosen==b else b
+                    rows[other][column]=rows[chosen][column];frame_mirror[other][column]=True
     atlas=Image.new('RGBA',(5*width,352*len(rows)))
     metrics=[];samples=[]
     for row,angles in enumerate(rows):
@@ -152,7 +161,7 @@ def pack(actor,rows,width=280,clips=None):
     manifest=json.loads((DEST/'atlas.json').read_text())
     target=np.median(np.array(samples),axis=0)
     exposure=np.clip(np.exp(np.median(np.log(target/np.maximum(.003,np.array(samples))),axis=2)),.88,1.12)
-    manifest[actor]={'file':actor+'.png','directions':8,'source_angles':5,'poses':len(rows),'cell':[width,352],'baseline':342,'body_pixels':324,'rear_diagonal_normalized':True,'clips':clips or ['idle','walk_left','walk_right'][:len(rows)],'packing_revision':13,'exposure':np.round(exposure,5).tolist(),'frame_mirror':frame_mirror}
+    manifest[actor]={'file':actor+'.png','directions':8,'source_angles':5,'poses':len(rows),'cell':[width,352],'baseline':342,'body_pixels':324,'rear_diagonal_normalized':True,'clips':clips or ['idle','walk_left','walk_right'][:len(rows)],'packing_revision':revision,'exposure':np.round(exposure,5).tolist(),'frame_mirror':frame_mirror}
     (DEST/'atlas.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
     return metrics
 

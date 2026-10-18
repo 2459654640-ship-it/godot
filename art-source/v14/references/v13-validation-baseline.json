@@ -1,0 +1,38 @@
+{
+  "commit": "fd1177f443c8215f9326775529e54dd75d89981a",
+  "note": "Validation measurements only; not image-generation references.",
+  "sets": {
+    "ivan": {
+      "upper_head_width_px": 57,
+      "upper_torso_envelope_px": 146
+    },
+    "commander": {
+      "upper_head_width_px": 48,
+      "upper_torso_envelope_px": 149
+    },
+    "veteran_masked": {
+      "upper_head_width_px": 62,
+      "upper_torso_envelope_px": 178
+    },
+    "ivan_masked": {
+      "upper_head_width_px": 61,
+      "upper_torso_envelope_px": 153
+    },
+    "commander_masked": {
+      "upper_head_width_px": 48,
+      "upper_torso_envelope_px": 145
+    },
+    "ivan_masked_combat": {
+      "upper_head_width_px": 64,
+      "upper_torso_envelope_px": 129
+    },
+    "veteran_masked_combat": {
+      "upper_head_width_px": 60,
+      "upper_torso_envelope_px": 144
+    },
+    "ivan_combat": {
+      "upper_head_width_px": 65,
+      "upper_torso_envelope_px": 130
+    }
+  }
+}

@@ -1,12 +1,12 @@
 # 地铁1982 · D-6
 
-Godot 4.6.3 的等距 2.5D 叙事探索游戏。当前为 **v13：人物全套校正、可阅读刊物与公社方块终端**。保留原有手绘角色和地下设施的美术方向，包含 D-6 两层、水处理厂、公社、谢契、煤运设施与星城。
+Godot 4.6.3 的等距 2.5D 叙事探索游戏。当前为 **v14：回归早期人物比例，校正八方向动作**。保留原有手绘角色和地下设施的美术方向，包含 D-6 两层、水处理厂、公社、谢契、煤运设施与星城。
 
 1962 年核战争爆发时，伊万三岁。二十年后，缺水与征召把他推向地表。他可以随 D-6 小队出发，也可以设法逃离，随后经由不同势力调查北方信号和父亲的下落。加入公社或谢契后还能探索、承担工作、取得信任，再前往星城；终章放在调查和交接完成之后。设施间的地表、隧道与列车行程采用全屏图文互动。
 
-[主菜单](docs/screenshots/visual-v11/main-menu.png) · [人物与群众比例](docs/screenshots/visual-v13/ivan-and-seated-residents.png) · [水厂材质](docs/screenshots/visual-v13/waterworks-pump.png) · [伊万步态预览](docs/screenshots/visual-v13/ivan-right-down.webp) · [刊物阅读](docs/screenshots/visual-v13/publication-reader.png) · [方块终端](docs/screenshots/visual-v13/terminal-playing.png)
+[主菜单](docs/screenshots/visual-v11/main-menu.png) · [早期／v13／v14 比例对比](docs/screenshots/visual-v14/proportion-comparison.png) · [人物与群众比例](docs/screenshots/visual-v14/ivan-and-residents.png) · [伊万八方向步态](docs/screenshots/visual-v14/ivan-walk.webp) · [老兵移动装填](docs/screenshots/visual-v14/veteran_masked_combat-reload.webp) · [刊物阅读](docs/screenshots/visual-v13/publication-reader.png)
 
-本轮说明与验证：[V13](docs/PEOPLE-AND-PAGES-V13.md)。另附可单独下载的 [全文案与分支校订本（Word）](docs/copy/地铁1982-v13-全文案与分支校订本.docx)，包含旁白、对话、任务、物品、界面文字、刊物正文、触发条件与源码位置。[V12](docs/COMMUNE-FACTORY-V12.md) 等旧版说明保留作历史记录。
+本轮说明与验证：[V14](docs/PROPORTIONS-V14.md)。[V13](docs/PEOPLE-AND-PAGES-V13.md) 和更早说明保留作历史记录。另附 [全文案与分支校订本（Word）](docs/copy/地铁1982-v13-全文案与分支校订本.docx)；本次人物美术更新没有修改剧情文案，该校订本仍适用。
 
 ## 运行
 
@@ -42,6 +42,12 @@ cd /workspace/godot
 公社食堂西墙边有旧训练终端。靠近按 E，选择开始后用左右键移动方块、上键或 X 顺时针旋转、Z 逆时针旋转、下键软降、空格落底，P 暂停、R 重开、Esc 离开。最高分随存档保存，游玩不消耗物资。
 
 ## 本轮内容
+
+- 重新提取 V3 的伊万与中尉、V8 首次加入的老兵原图。每次绘制固定使用这些早期参考，恢复较小的头部、手掌和自然身材，更新五套基本装束及三套持枪动作图集与对应头像。
+- 普通、戴面具、持枪行走及移动装填的八个方向都包含两侧迈步与中立过渡，按“左—站—右—站”循环。完整姿态统一脚底锚点、身高与曝光，不切腿拼接。
+- 补画持枪正反面和老兵背面。老兵的不对称挎包保持同一侧；新增完整的八方向三姿态截图及四相位预览，便于逐帧查看。
+
+以下为 v13 已有并继续保留的内容：
 
 - 伊万普通、戴面具与两套持枪服装统一完整身体比例；普通和戴面具中尉补上两侧迈步。重绘老兵持枪步态与移动装填，站立帧继续作为步态过渡，避免换弹或射击时腿部冻结。
 - 校正莫罗、厨师、儿童、谢契长老和谢尔盖的全身图集与肖像。自动对齐完整人形，避免不同原图行高造成裁脚、拉胖。无走路图的单姿态人物固定活动，不再滑动让路。所有居民群体采用与单人一致的场景光照取样，明暗变化平滑过渡。
