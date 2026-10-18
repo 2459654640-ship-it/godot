@@ -17,6 +17,9 @@ var room_lamps:Array=[]
 var atlas_id=""
 var light_clock=.2
 var sampled_light=Vector3(.75,.72,.66)
+var light_target=Vector3(.75,.72,.66)
+var light_ready=false
+const PaintedLight=preload("res://scripts/painted_light.gd")
 var manifest:Dictionary={}
 const HEIGHTS={"commune_moro":1.78,"commune_guard":1.70,"commune_cook":1.65,"sech_cook":1.64,"commune_child":1.19,"ambient_worker":1.76,"ambient_woman":1.65,"ambient_child":1.19,"ambient_elder":1.61,"commune_printer":1.69,"commune_grower":1.64,"sech_quartermaster":1.78,"star_technician":1.76,"commune_leader":1.65,"sech_elder":1.70,"sergey":1.79,"coal_clerk":1.71,"coal_medic":1.64,"coal_brother":1.72,"star_guard":1.74,"veteran_masked":1.77,"commander_masked":1.78,"ivan_masked":1.75,"anna":1.68,"father":1.73,"ivan":1.75,"semyon":1.70,"nina":1.68,"mikhail":1.72,"cook":1.66,"supply":1.70,"commander":1.78,"igor":1.84,"resident":1.72,"diner":1.68,"queue":1.78}
 
@@ -113,43 +116,34 @@ func _process(delta):
 	var walking=speed>0.15
 	var pose=0
 	if armed:
-		if actor_id=="ivan" and walking:pose=[1,0,2,0][floori(cycle*4)%4]
+		var reloading=is_instance_valid(director) and ((actor.is_player and director.reload_time>0) or (actor_id=="veteran_masked" and director.veteran_reload>0))
+		if reloading:pose=[5,2,6,2][floori(cycle*4)%4] if walking and pose_count>=7 else 2
+		elif walking:
+			if pose_count>=5:pose=[3,0,4,0][floori(cycle*4)%4]
+			elif actor_id=="ivan":pose=[1,0,2,0][floori(cycle*4)%4]
 		elif reaction=="shot" and reaction_time>0:pose=1
-		elif (actor.is_player and director.reload_time>0) or (actor_id=="veteran_masked" and director.veteran_reload>0):pose=2
-		elif walking and pose_count>=5:pose=[3,0,4,0][floori(cycle*4)%4]
 	elif walking and pose_count>=3:
 		pose=[1,0,2,0][floori(cycle*4)%4]
 	elif actor.animation_state=="talk" and pose_count>3:pose=3
 	current_pose=pose
 	reaction_time=maxf(0.0,reaction_time-delta)
 	material.set_shader_parameter("reaction",(1.0 if reaction=="success" else -1.0)*reaction_time if reaction_time>0 and reaction!="shot" else 0.0)
+	material.set_shader_parameter("shot_recoil",reaction_time/.14 if reaction=="shot" else 0.0)
+	material.set_shader_parameter("aim_screen",Vector2(sin(angle),cos(angle)))
 	material.set_shader_parameter("frame_origin",Vector2(column*.2,float(pose)/pose_count))
-	material.set_shader_parameter("mirror",angle_slot>4)
+	var mirrored_frames:Array=manifest[atlas_id].get("frame_mirror",[])
+	var pose_mirrored=false if mirrored_frames.is_empty() else bool(mirrored_frames[pose][column])
+	material.set_shader_parameter("mirror",(angle_slot>4)!=pose_mirrored)
 	material.set_shader_parameter("focus",1.0 if focused else 0.0)
 	material.set_shader_parameter("down_amount",1.0 if is_instance_valid(director) and actor_id=="veteran_masked" and director.veteran_health<=0 else 0.0)
-	# Painted key/fill remains readable, with a restrained room-color tint.
-	var warm=clampf((1.8-actor.global_position.z)*0.04,-.04,.05)
-	var floor=actor.get_parent().get("floor_id")
-	if floor=="waterworks":warm=-.05
-	elif floor=="commune":warm=.07
-	elif floor in ["starcity","coal"]:warm=-.04
-	var tint=Vector3(.94+warm,.91,.84-warm)
-	# Sample authored room lamps, keeping their painted shading but allowing
-	# a figure to become darker/cooler as it leaves the light pool.
 	light_clock+=delta
 	if light_clock>=.16:
 		light_clock=0
-		var energy=.34;var color=Vector3(.30,.34,.34)*energy
-		for lamp in room_lamps:
-			if not is_instance_valid(lamp):continue
-			var distance=actor.global_position.distance_to(lamp.global_position-Vector3(0,.8,0))
-			if distance>lamp.omni_range:continue
-			var strength=pow(maxf(0,1-distance/lamp.omni_range),2)*lamp.light_energy*.48
-			var query=PhysicsRayQueryParameters3D.create(actor.global_position+Vector3.UP*.95,lamp.global_position,1)
-			if not actor.get_world_3d().direct_space_state.intersect_ray(query).is_empty():strength*=.15
-			energy+=strength;color+=Vector3(lamp.light_color.r,lamp.light_color.g,lamp.light_color.b)*strength
-		var illumination=clampf(.46+energy*.25,.49,1.02)
-		var lamp_tint=color/maxf(energy,.01)
-		sampled_light=tint*Vector3(illumination,illumination,illumination).lerp(lamp_tint,.12)
-	var lit=sampled_light
-	for ink in [material]:ink.set_shader_parameter("light_tint",lit)
+		light_target=PaintedLight.sample(world,actor.global_position,room_lamps)
+		if not light_ready:sampled_light=light_target;light_ready=true
+	sampled_light=sampled_light.lerp(light_target,1-exp(-delta*5.0))
+	# Normalize small baked exposure differences between drawings in linear
+	# light. Authored room lighting remains independent and smoothly blended.
+	var exposures:Array=manifest[atlas_id].get("exposure",[])
+	var exposure=1.0 if exposures.is_empty() else float(exposures[pose][column])
+	material.set_shader_parameter("light_tint",sampled_light*exposure)

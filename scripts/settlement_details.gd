@@ -95,7 +95,7 @@ static func commune(w):
  k.pipe(Vector3(13,2.4,-12),Vector3(22,2.4,-12),.016,"metal")
  for x in [14,16,18,20]:k.box("DryingPrint",Vector3(x,1.9,-12),Vector3(.65,.85,.025),"paper")
  for spec in [["workers",-5.5,1.0,3],["queue",9.5,4.3,4],["family",14.1,19.7,3],["readers",9.6,-9.6,2],["assembly",-5,-8.3,3],["militia",26.7,.8,2]]:
-  preload("res://scripts/painted_resident_group.gd").new().setup(w,spec[0],Vector3(spec[1],0,spec[2]),spec[3],1.18 if spec[0]=="assembly" else 1.73)
+  preload("res://scripts/painted_resident_group.gd").new().setup(w,spec[0],Vector3(spec[1],0,spec[2]),spec[3],1.28 if spec[0]=="assembly" else 1.73)
 static func commune_garden(w):
  var k=w.kit
  # Existing mushroom puzzle bay stays recognizable; the enlarged farm grows four crop types.

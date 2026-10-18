@@ -1,4 +1,9 @@
 extends Control
+const Publications=preload("res://scripts/publications.gd")
+var observed_publications:Array=[]
+var collection_scroll=0
+var terminal_game
+var modal_hint:Label
 const UiSurface=preload("res://scripts/ui_surface.gd")
 const ComicUI=preload("res://scripts/ui_comic.gd")
 const Dialogue=preload("res://scripts/ui_dialogue.gd")
@@ -370,7 +375,8 @@ func start_modal(title:String,subtitle:String,wide:bool=false):
 	modal_box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	modal_box.add_theme_constant_override("separation",13)
 	scroller.add_child(modal_box)
-	main.add_child(label("空格 / 点击正文  显示全文    ·    ESC  返回",14,muted))
+	modal_hint=label("空格 / 点击正文  显示全文    ·    ESC  返回",14,muted)
+	main.add_child(modal_hint)
 	modal.visible=true
 	scrim.visible=true
 	is_departure=false
@@ -397,6 +403,12 @@ func close():
 	is_departure=false
 	world.player.blocked=false
 	map_large=null
+	if is_instance_valid(terminal_game):
+		terminal_game.save_record()
+		terminal_game.set_process_input(false)
+		terminal_game.set_process(false)
+		world.autosave()
+		terminal_game=null
 
 func modal_visible() -> bool:return modal.visible
 func set_prompt(id:String):
@@ -407,7 +419,7 @@ func set_prompt(id:String):
 	var t=world.targets[id]
 	var actor=world.target_actor(id)
 	var live_position:Vector3=actor.global_position if actor else t.pos
-	prompt.text="[ E ]   "+("交谈 · " if t.kind=="talk" else "调查 · ")+t.label
+	prompt.text="[ E ]   "+("交谈 · " if t.kind=="talk" else ("拾取 · " if t.kind=="collect" else "调查 · "))+t.label
 	target_label.text=("◇  " if t.kind=="talk" else "⌕  ")+t.label
 	target_label.visible=not modal_visible()
 	var p:Vector2=world.camera.unproject_position(live_position+Vector3(0,2.2,0))
@@ -510,8 +522,8 @@ func show_inventory():
 func show_journal(tab:String="tasks",shown_floor:String=""):
 	start_modal("伊万的手记","随身卷宗   /   任务、地图与见闻",true)
 	modal.position=Vector2(230,84);modal.size=Vector2(1140,832)
-	var tabs=HBoxContainer.new();tabs.add_theme_constant_override("separation",8);modal_box.add_child(tabs)
-	for pair in [["tasks","01  事要办"],["map","02  地图"],["lore","03  百科"],["leads","04  留意的事"],["history","05  已读记录"],["closed","06  完成与失败"]]:
+	var tabs=HFlowContainer.new();tabs.add_theme_constant_override("h_separation",8);tabs.add_theme_constant_override("v_separation",6);modal_box.add_child(tabs)
+	for pair in [["tasks","01  事要办"],["map","02  地图"],["lore","03  百科"],["leads","04  留意的事"],["history","05  已读记录"],["closed","06  完成与失败"],["collection","07  收集品"]]:
 		var b=button(pair[1],func():show_journal(pair[0]),true,true)
 		if tab==pair[0]:b.add_theme_color_override("font_color",amber)
 		tabs.add_child(b)
@@ -548,6 +560,8 @@ func show_journal(tab:String="tasks",shown_floor:String=""):
 			if record.choice!="":body("伊万："+record.choice,18,muted)
 	elif tab=="lore":
 		for entry in Journal.encyclopedia(s):body(entry[0],24,amber);body(entry[1],19);rule()
+	elif tab=="collection":
+		show_collection()
 	elif tab=="map":
 		var requested=world.floor_id if shown_floor=="" else shown_floor
 		var floors=GridContainer.new();floors.columns=3;floors.add_theme_constant_override("h_separation",10);modal_box.add_child(floors)
@@ -587,7 +601,11 @@ func inventory_snapshot()->Dictionary:
 func observe_progress():
 	var now=inventory_snapshot();var quests={}
 	for t in Journal.tasks(world.story):quests[t.id]=t.status
-	if not observing:observed_inventory=now;observed_tasks=quests;observing=true;return
+	var books:Array=world.story.flags.get("publications",{}).keys()
+	if not observing:observed_inventory=now;observed_tasks=quests;observed_publications=books;observing=true;return
+	for id in books:
+		if id not in observed_publications:receipt("获得刊物 · "+Publications.entry(id).title)
+	observed_publications=books
 	var events={}
 	for t in Journal.tasks(world.story):
 		var event=""
@@ -605,6 +623,70 @@ func observe_progress():
 		gained.append(title+" ×"+str(amount))
 	if not gained.is_empty():receipt("获得物品 · "+"、".join(gained))
 	observed_inventory=now;observed_tasks=quests
+
+func show_collection():
+	var s=world.story
+	modal_hint.text="鼠标停留查看线索   ·   已收录的刊物可以打开阅读   ·   ESC  返回"
+	body("随身书架   %02d / %02d"%[Publications.count(s),Publications.data().entries.size()],25,amber)
+	body("找到的书刊可以随时翻阅。未收录的只留剪影；鼠标停在书影上，看看你想起了哪里。",17,muted)
+	for series in Publications.data().series:
+		rule()
+		var entries:Array=Publications.data().entries.filter(func(book):return book.series==series.id)
+		body(series.name+"   "+str(Publications.count(s,series.id))+" / "+str(entries.size()),22,amber)
+		body(series.description,16,muted)
+		var grid=GridContainer.new();grid.columns=3;grid.add_theme_constant_override("h_separation",14);grid.add_theme_constant_override("v_separation",12);modal_box.add_child(grid)
+		for book in entries:
+			var found=Publications.owned(s,book.id)
+			var panel=PanelContainer.new();panel.custom_minimum_size=Vector2(338,230)
+			panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+			panel.add_theme_stylebox_override("panel",style(Color("21302a") if found else Color("14201e"),Color("8e7a54") if found else Color("3d4c44"),1,3))
+			panel.tooltip_text=(book.author+" · "+book.date) if found else book.hint
+			grid.add_child(panel)
+			var box=margin_box(panel,16,13)
+			var row=HBoxContainer.new();row.add_theme_constant_override("separation",16);box.add_child(row)
+			var icon=TextureRect.new();icon.texture=Publications.icon(book);icon.custom_minimum_size=Vector2(91,125);icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;icon.mouse_filter=Control.MOUSE_FILTER_PASS
+			var shader=ShaderMaterial.new();shader.shader=load("res://assets/visual/publication_icon.gdshader");shader.set_shader_parameter("unknown",not found);icon.material=shader;row.add_child(icon)
+			if not found:
+				var question=Label.new();question.text="?";question.add_theme_font_size_override("font_size",43);question.add_theme_color_override("font_color",Color("a8af95"));question.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;question.vertical_alignment=VERTICAL_ALIGNMENT_CENTER;question.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);question.mouse_filter=Control.MOUSE_FILTER_IGNORE;icon.add_child(question)
+			var words=VBoxContainer.new();words.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(words)
+			var title=label(book.title if found else "未收录",19,text_color if found else muted);title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;title.custom_minimum_size.x=170;words.add_child(title)
+			words.add_child(label("第 %02d 册"%int(book.issue),14,muted))
+			if found:
+				var state=world.story.flags.publications[book.id]
+				words.add_child(label("已翻阅" if state.read else "尚未翻阅",14,amber))
+				box.add_child(button("翻开阅读",func():collection_scroll=modal_box.get_parent().scroll_vertical;show_publication(book.id),true,true))
+			else:box.add_child(label("鼠标停留 · 回想线索",14,muted))
+	if collection_scroll>0:modal_box.get_parent().set_deferred("scroll_vertical",collection_scroll)
+
+func show_publication(id:String):
+	var book=Publications.read(world.story,id)
+	if book.is_empty():return
+	world.autosave()
+	start_modal("翻开一册旧书","随身卷宗   /   刊物阅读",true)
+	modal.position=Vector2(265,84);modal.size=Vector2(1070,832)
+	modal_hint.text="滚轮翻页   ·   合上书返回收藏   ·   ESC  返回探索"
+	var header=HBoxContainer.new();header.add_theme_constant_override("separation",28);modal_box.add_child(header)
+	var icon=TextureRect.new();icon.texture=Publications.icon(book);icon.custom_minimum_size=Vector2(110,148);icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;header.add_child(icon)
+	var info=VBoxContainer.new();info.size_flags_horizontal=Control.SIZE_EXPAND_FILL;header.add_child(info)
+	var title=label(book.title,28,amber);title.add_theme_font_override("font",serif);title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;info.add_child(title)
+	info.add_child(label(book.author,18,text_color));info.add_child(label(book.date,16,muted))
+	rule()
+	var paper=PanelContainer.new();paper.add_theme_stylebox_override("panel",style(Color("c8bea0"),Color("8e8264"),1,2));modal_box.add_child(paper)
+	var inset=margin_box(paper,30,25)
+	var text=RichTextLabel.new();text.bbcode_enabled=false;text.text=book.body;text.fit_content=true;text.scroll_active=false;text.add_theme_color_override("default_color",Color("293329"));text.add_theme_font_override("normal_font",serif);text.add_theme_font_size_override("normal_font_size",23);text.add_theme_constant_override("line_separation",10);inset.add_child(text)
+	modal_box.add_child(button("合上书 · 返回刊物收藏",func():show_journal("collection"),true,true))
+
+func show_blocks():
+	start_modal("下工之后 · 方块","公社公共终端   /   消遣与练习",true)
+	modal.position=Vector2(300,90);modal.size=Vector2(1000,820)
+	modal_hint.text="方向键操作   ·   空格落下   ·   P 暂停   ·   ESC  退出终端"
+	body("这台旧训练终端被机修组修好了。下工的居民轮流在这里消磨一会儿时间。",18,muted)
+	terminal_game=preload("res://scripts/blocks_game.gd").new()
+	terminal_game.best=int(world.story.flags.get("blocks_best",0))
+	terminal_game.record_changed.connect(func(value):world.story.flags.blocks_best=value)
+	terminal_game.leave_requested.connect(func():close())
+	modal_box.add_child(terminal_game)
+	modal_box.add_child(button("关掉屏幕 · 回到食堂",func():close(),true,true))
 func receipt(text:String):
 	if not is_instance_valid(receipt_box):
 		receipt_box=VBoxContainer.new();receipt_box.position=Vector2(360,105);receipt_box.custom_minimum_size.x=650;receipt_box.mouse_filter=Control.MOUSE_FILTER_IGNORE;add_child(receipt_box)
@@ -616,6 +698,7 @@ func highlight_items(text:String)->String:
 	var names=[]
 	for id in world.story.ITEMS:names.append(world.story.ITEMS[id][0])
 	for id in world.story.Economy.GOODS:names.append(world.story.Economy.GOODS[id].name)
+	for book in Publications.data().entries:names.append(book.title)
 	names.append_array(["扳手","保险芯","制式子弹","土制子弹","滤毒罐","匕首","香烟","照片","伏特加","面具","滤芯","干布"])
 	names.sort_custom(func(a,b):return a.length()>b.length())
 	var patterns=[]

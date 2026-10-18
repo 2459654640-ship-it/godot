@@ -1,0 +1,151 @@
+{
+  "godot": "4.6.3.stable",
+  "suite_count": 23,
+  "checks": 6783,
+  "failures": 0,
+  "suites": [
+    {
+      "suite": "D6_TEST",
+      "checks": 1861,
+      "failures": 0
+    },
+    {
+      "suite": "VISUAL_CONTRACT",
+      "checks": 1104,
+      "failures": 0
+    },
+    {
+      "suite": "NARRATIVE_CONTRACT",
+      "checks": 1942,
+      "failures": 0
+    },
+    {
+      "suite": "RESIDENT_CONTRACT",
+      "checks": 103,
+      "failures": 0
+    },
+    {
+      "suite": "CHAPTER_CONTRACT",
+      "checks": 123,
+      "failures": 0
+    },
+    {
+      "suite": "FLOOR_CONTRACT",
+      "checks": 39,
+      "failures": 0
+    },
+    {
+      "suite": "CAMPAIGN_CONTRACT",
+      "checks": 366,
+      "failures": 0
+    },
+    {
+      "suite": "CAMPAIGN_UI",
+      "checks": 17,
+      "failures": 0
+    },
+    {
+      "suite": "REFINEMENT",
+      "checks": 43,
+      "failures": 0
+    },
+    {
+      "suite": "PRESENTATION",
+      "checks": 30,
+      "failures": 0
+    },
+    {
+      "suite": "EXPLORATION",
+      "checks": 223,
+      "failures": 0
+    },
+    {
+      "suite": "V9",
+      "checks": 138,
+      "failures": 0
+    },
+    {
+      "suite": "V10",
+      "checks": 109,
+      "failures": 0
+    },
+    {
+      "suite": "V11",
+      "checks": 179,
+      "failures": 0
+    },
+    {
+      "suite": "V11_COMBAT",
+      "checks": 22,
+      "failures": 0
+    },
+    {
+      "suite": "OCCLUSION_V11",
+      "checks": 9,
+      "failures": 0
+    },
+    {
+      "suite": "VISUAL_FIXES_V11_1",
+      "checks": 90,
+      "failures": 0
+    },
+    {
+      "suite": "COMMUNE_V12",
+      "checks": 137,
+      "failures": 0
+    },
+    {
+      "suite": "FACTORY_V12",
+      "checks": 49,
+      "failures": 0
+    },
+    {
+      "suite": "EQUIPMENT_V12",
+      "checks": 16,
+      "failures": 0
+    },
+    {
+      "suite": "PLATFORM_V12",
+      "checks": 12,
+      "failures": 0
+    },
+    {
+      "suite": "ACTORS_V13",
+      "checks": 61,
+      "failures": 0
+    },
+    {
+      "suite": "PUBLICATIONS_V13",
+      "checks": 110,
+      "failures": 0
+    }
+  ],
+  "art_audit": 532,
+  "word": {
+    "docx_bytes": 6511821,
+    "paragraphs": 9475,
+    "text_characters": 410155,
+    "coverage": {
+      "total": 2963,
+      "missing": 0
+    },
+    "embedded_images": 26
+  },
+  "visual_review": {
+    "base_character_sets": 36,
+    "repacked_sets": 14,
+    "combat_sets": 3,
+    "group_variants": 6,
+    "renderer": "OpenGL compatibility, Mesa llvmpipe",
+    "resolution": [
+      1600,
+      1000
+    ],
+    "captures": "docs/screenshots/visual-v13",
+    "note": "Fixed-position phase samples and staged cast comparisons, plus actual scene/UI captures; not a normal-play video.",
+    "phase_sequences": 32,
+    "moving_reload_sequences": 2,
+    "waterworks_floor_shader": "Final triangular sampling shader compiled and captured in the OpenGL scene pass after the full regression."
+  },
+  "publication_chinese_glyphs_per_font": 938
+}

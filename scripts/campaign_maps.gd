@@ -30,7 +30,10 @@ static func build(w):
 		if id=="waterworks" and room.code=="01":lamp_position.x=-18.1
 		if id=="waterworks" and room.code=="03":lamp_position.x=5.9
 		if id=="commune" and room.code=="02":lamp_position=Vector3(-3,2.5,-3.80) # Mounted beside the double door, clear of its leaves.
-		k.lamp(lamp_position,warm,power,8)
+		var lamp=k.lamp(lamp_position,warm,power,8)
+		if id=="waterworks":
+			lamp.light_color=Color("c9c8af") if room.code in ["02","04","05"] else Color("b7cac3")
+			lamp.shadow_enabled=true;lamp.shadow_bias=.035;lamp.shadow_normal_bias=.35
 	for entry in plan.doors:
 		if entry[2]=="z":
 			var label=""
@@ -81,6 +84,13 @@ static func waterworks(w):
 	for x in [-16,-12,-8,8,12,16]:
 		var window=k.box("FrostedFactoryWindow",Vector3(x,2,-13.9),Vector3(2.5,1.1,.04),"cold_light")
 		for dx in [-.8,0,.8]:k.box("WindowMullion",Vector3(x+dx,2,-13.84),Vector3(.045,1.15,.06),"metal")
+	# Broad cool window fill complements dimmer, warmer maintenance fixtures.
+	# Actual shadowed lights are inside the masonry, with no bright indoor sun.
+	for x in [-12,12]:
+		var daylight=OmniLight3D.new();daylight.name="FactoryWindowFill";w.add_child(daylight)
+		daylight.position=Vector3(x,2.05,-13.35);daylight.light_color=Color("acbfc4");daylight.light_energy=1.65;daylight.omni_range=11;daylight.omni_attenuation=2.0;daylight.shadow_enabled=true;daylight.shadow_normal_bias=.35
+	k.lamp(Vector3(-7,2.65,.22),false,1.5,8)
+	k.lamp(Vector3(11,2.65,.22),false,1.5,8)
 	for x in [8,12,16]:
 		for z in [-12,-10]:k.crate(Vector3(x,0,z),Vector3(1.35,1,1))
 	for z in [-9,-5]:k.pipe(Vector3(-18,2.8,z),Vector3(18,2.8,z),.12,"rust")
@@ -353,7 +363,7 @@ static func targets(w):
 		w.target("plant_guide",w.npcs.plant_guide.position,"科瓦廖夫","talk")
 		w.target("plant_veteran",w.npcs.plant_veteran.position,"老兵","talk")
 static func residents(w):
-	var layouts={"commune":[["ambient_worker",6,4],["ambient_woman",-6,12],["ambient_woman",-7,21],["ambient_worker",9,-5.2],["ambient_child",15,9]],"sech":[["ambient_worker",0,3],["ambient_child",-10,14],["ambient_elder",-5,17],["ambient_woman",-8,2],["ambient_worker",16,-10]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4]],"starcity":[["ambient_worker",4,-11],["ambient_woman",-18,8]]}
+	var layouts={"commune":[["ambient_worker",6,4],["ambient_woman",-4.1,11.1],["ambient_woman",-7,21],["ambient_worker",9,-5.2],["ambient_child",15,9]],"sech":[["ambient_worker",0,3],["ambient_child",-10,14],["ambient_elder",-5,17],["ambient_woman",-8,2],["ambient_worker",16,-10]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4]],"starcity":[["ambient_worker",4,-11],["ambient_woman",-18,8]]}
 	for index in layouts.get(w.floor_id,[]).size():
 		var entry=layouts[w.floor_id][index]
 		w.person("resident_%s_%d"%[entry[0],index],Vector3(entry[1],0,entry[2]),"cloth",false,entry[0])

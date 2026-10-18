@@ -71,6 +71,9 @@ func setup(kit, player: bool, coat: String = "green", hat: bool = false):
 	painting.name="Painter"
 	visual.add_child(painting)
 	painting.setup(self)
+	# A still painting may turn to talk, but cannot slide around as a walk.
+	# Combat-controlled actors use their independent complete combat atlas.
+	if not player and painting.pose_count<3:stationary=true
 	anchor=position
 	rest_time=3.0+float(String(name).hash()%50)/10.0
 

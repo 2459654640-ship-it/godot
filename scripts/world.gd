@@ -1,5 +1,7 @@
 extends Node3D
 const SaveStore=preload("res://scripts/save_store.gd")
+const Publications=preload("res://scripts/publications.gd")
+const PublicationPlaces=preload("res://scripts/publication_places.gd")
 var played_seconds=0.0
 var arrival_data:Dictionary={}
 var combat
@@ -97,6 +99,7 @@ func _ready():
 	else:
 		zones=CampaignMaps.rooms(floor_id)
 		CampaignMaps.build(self)
+	PublicationPlaces.build(self)
 	kit.batch_static()
 	build_people() if floor_id=="life" else build_labor_people()
 	navigation=preload("res://scripts/route_grid.gd").new()
@@ -193,7 +196,7 @@ func build_environment():
 	light.light_energy=0.32
 	if floor_id not in ["life","labor"]:
 		light.light_color=Color("b9ccd2") if floor_id=="waterworks" else Color("8d9fa8")
-		light.light_energy=.48 if floor_id=="waterworks" else .12
+		light.light_energy=.21 if floor_id=="waterworks" else .12
 	light.shadow_enabled=true
 	light.directional_shadow_max_distance=65
 	light.shadow_bias=0.04
@@ -683,6 +686,14 @@ func _unhandled_input(event):
 func interact(id: String):
 	if is_instance_valid(combat) and combat.active:
 		hud.toast("先清理眼前的威胁。老兵倒地时靠近并按住 E 救援。",3);return
+	if id=="common_blocks":hud.show_blocks();return
+	if id.begins_with("pub_"):
+		if not targets.has(id):return
+		if Publications.acquire(story,id):
+			PublicationPlaces.refresh(self)
+			hud.toast("刊物已收入手记。按 J，在“收集品”里翻阅。",5)
+			autosave()
+		return
 	refresh_guard_context()
 	if id=="commander" and story.f("d6_returned"):hud.show_dialogue("d6_return_desk");return
 	if id in ["coal_door","main_gate"] and story.f("d6_returned"):hud.show_dialogue("coal_gate_entry");return
@@ -750,6 +761,7 @@ func perform(key: String, id: String):
 
 func on_story_changed():
 	story.context.floor=floor_id
+	PublicationPlaces.refresh(self)
 	if floor_id=="commune":
 		var shade=get_node_or_null("FungusShade")
 		if shade:shade.position.y=2.08 if story.f("grow_fixed") else 2.38
@@ -799,7 +811,7 @@ func clear_arrival(p:Vector3)->Vector3:
 func save_snapshot()->Dictionary:
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z];data.floor=floor_id
-	data.layout_revision=12;data.played_seconds=played_seconds
+	data.layout_revision=13;data.played_seconds=played_seconds
 	data.camera_size=camera_size;data.facing=player.visual.rotation.y
 	data.world_state={"phase":phase,"guard_away_time":guard_away_time,"waiting_shift":waiting_shift,"pending_route":pending_route}
 	data.npc_positions={}

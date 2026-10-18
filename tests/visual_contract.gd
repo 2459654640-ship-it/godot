@@ -28,7 +28,7 @@ func run():
 			if id=="commander":continue
 			var p=baseline.npc[id]
 			if id not in ["mikhail","resident","diner"]:check(w.npcs[id].anchor.is_equal_approx(Vector3(p[0],p[1],p[2])),"retained story NPC anchor: "+id)
-		check(w.targets.size()==baseline.targets.size()+8,"residential, return and inside safety-latch interactions retain original IDs")
+		check(w.targets.size()==baseline.targets.size()+10,"original interactions plus residential, return, safety latch and two collectible publications")
 		for id in baseline.targets:
 			if w.npcs.has(id) or id=="commander":continue
 			var p=baseline.targets[id]

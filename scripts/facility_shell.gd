@@ -20,7 +20,9 @@ static func build(w,plan:Dictionary,zones:Array):
 		if w.floor_id!="sech" or zones[index].code=="00":k.box("Foundation",Vector3(r.get_center().x,-.3,r.get_center().y),Vector3(r.size.x,.5,r.size.y),"concrete")
 		k.box("FloorCollision",Vector3(r.get_center().x,-.1,r.get_center().y),Vector3(r.size.x,.2,r.size.y),material,true).visible=false
 		var floor=k.box("Floor_"+str(index),Vector3(r.get_center().x,.009,r.get_center().y),Vector3(r.size.x-.02,.018,r.size.y-.02),material)
-		floor.material_override=floor.material_override.duplicate();floor.material_override.albedo_color=tint
+		floor.material_override=floor.material_override.duplicate()
+		if floor.material_override is ShaderMaterial:floor.material_override.set_shader_parameter("base_color",tint)
+		else:floor.material_override.albedo_color=tint
 		floor.set_meta("room_code",zones[index].code);floor.set_meta("floor_finish",material)
 		for z in [int(r.position.y),int(r.end.y)]:
 			for x in range(int(r.position.x),int(r.end.x)):edge(edges,"z",z,x,index)

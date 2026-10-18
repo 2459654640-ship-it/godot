@@ -172,6 +172,7 @@ func lamp(p: Vector3, warm: bool = true, power: float = 1.8, radius: float = 6.0
 	l.shadow_normal_bias=0.8
 	# Battered diffuser cover and protective cage, kept clear of the light face.
 	for x in [-0.26,0.0,0.26]:box("LampCage",p+Vector3(x,-0.03,0.17),Vector3(0.018,0.18,0.025),"dark")
+	return l
 
 func wall(id: String, a: Vector2, b: Vector2, cut: bool = false):
 	var p = Vector3((a.x+b.x)/2,1.4,(a.y+b.y)/2)
@@ -253,11 +254,14 @@ func finish_walls():
 			material.set_shader_parameter("normal_map",load("res://assets/visual/"+wall_normal+".png" if i==0 else "res://assets/visual/cement_normal.png"))
 			material.set_shader_parameter("base_color",wall_color)
 			material.set_shader_parameter("normal_strength",0.45 if i==0 else 0.30)
+			if wall_finish_theme=="factory":
+				material.set_shader_parameter("albedo_map",load("res://assets/visual/factory_plaster_v13.png"))
+				material.set_shader_parameter("normal_strength",0.0)
 			if not wall_room_profiles.is_empty() and i==0 and wall_finish_theme=="factory":
 				material.set_shader_parameter("factory_finish",true)
-				material.set_shader_parameter("factory_blue",load("res://assets/visual/plant_blue_wall.png"))
-				material.set_shader_parameter("factory_tile",load("res://assets/visual/plant_ivory_tile.png"))
-				material.set_shader_parameter("factory_archive",load("res://assets/visual/plant_archive_wall.png"))
+				material.set_shader_parameter("factory_blue",load("res://assets/visual/factory_green_wall_v13.png"))
+				material.set_shader_parameter("factory_tile",load("res://assets/visual/factory_wall_tile_v13.png"))
+				material.set_shader_parameter("factory_archive",load("res://assets/visual/factory_plaster_v13.png"))
 				material.set_shader_parameter("normal_strength",0.0)
 			elif not wall_room_profiles.is_empty() and i==0:
 				material.set_shader_parameter("commune_finish",true)

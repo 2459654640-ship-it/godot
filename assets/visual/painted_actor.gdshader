@@ -9,6 +9,8 @@ uniform float focus : hint_range(0.0,1.0) = 0.0;
 uniform vec3 light_tint : source_color = vec3(0.91,0.89,0.82);
 uniform float reaction = 0.0;
 uniform float down_amount = 0.0;
+uniform float shot_recoil = 0.0;
+uniform vec2 aim_screen=vec2(0.0);
 
 void vertex() {
 	// A vertical Y-locked billboard has genuine geometric body depth.
@@ -26,6 +28,10 @@ void vertex() {
 	float upper=1.0-smoothstep(0.15,0.65,UV.y);
 	VERTEX.x+=sin(abs(reaction)*18.0)*upper*0.018*max(-reaction,0.0);
 	VERTEX.y-=abs(sin(reaction*14.0))*upper*0.020*max(reaction,0.0);
+	// A small upper-body recoil is independent of the lower-body gait.
+	float recoil=sin(clamp(shot_recoil,0.0,1.0)*3.14159265);
+	float chest=1.0-smoothstep(.38,.65,UV.y);
+	VERTEX.xy+=vec2(-aim_screen.x*.025,aim_screen.y*.012)*recoil*chest;
 }
 
 vec4 sample_frame(vec2 uv) {

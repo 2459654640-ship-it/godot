@@ -6,6 +6,10 @@ var material:ShaderMaterial
 var light_clock=0.0
 var lamps:Array=[]
 var light_excludes:Array[RID]=[]
+const PaintedLight=preload("res://scripts/painted_light.gd")
+var light_target=Vector3(.66,.63,.55)
+var light_current=Vector3(.66,.63,.55)
+var light_ready=false
 func setup(w,id:String,p:Vector3,count:int,height:float=1.73):
  world=w;position=p;name="ResidentGroup_"+id;w.add_child(self)
  set_meta("resident_count",count);set_meta("stationary",true)
@@ -31,18 +35,10 @@ func setup(w,id:String,p:Vector3,count:int,height:float=1.73):
  shadow.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;add_child(shadow)
 func _process(delta):
  light_clock+=delta
- if light_clock<.25:return
- light_clock=0
- if lamps.is_empty():lamps=world.find_children("*","OmniLight3D",false,false)
- var energy=.34;var color=Vector3(.30,.34,.34)*energy
- for lamp in lamps:
-  if not is_instance_valid(lamp):continue
-  var distance=global_position.distance_to(lamp.global_position-Vector3.UP*.8)
-  if distance>lamp.omni_range:continue
-  var strength=pow(maxf(0,1-distance/lamp.omni_range),2)*lamp.light_energy*.48
-  var ray=PhysicsRayQueryParameters3D.create(global_position+Vector3.UP*.95,lamp.global_position,1)
-  ray.exclude=light_excludes
-  if not get_world_3d().direct_space_state.intersect_ray(ray).is_empty():strength*=.15
-  energy+=strength;color+=Vector3(lamp.light_color.r,lamp.light_color.g,lamp.light_color.b)*strength
- var level=clampf(.46+energy*.25,.49,1.02)
- material.set_shader_parameter("light_tint",Vector3(1.01,.91,.77)*Vector3.ONE.lerp(color/maxf(.01,energy),.12)*level)
+ if light_clock>=.25 or not light_ready:
+  light_clock=0
+  if lamps.is_empty():lamps=world.find_children("*","OmniLight3D",false,false)
+  light_target=PaintedLight.sample(world,global_position,lamps,light_excludes)
+  if not light_ready:light_current=light_target;light_ready=true
+ light_current=light_current.lerp(light_target,1-exp(-delta*5.0))
+ material.set_shader_parameter("light_tint",light_current)

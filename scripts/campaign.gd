@@ -74,6 +74,8 @@ static func act(s,key:String)->String:
 	for good in a.get("goods",{}):
 		if int(a.goods[good])>0:receipts.append(s.Economy.GOODS[good].name+" ×"+str(a.goods[good]))
 	if not receipts.is_empty():reply+="\n入袋："+"、".join(receipts)+"。"
+	for book in preload("res://scripts/publications.gd").reward(s,key):
+		reply+="\n"+book.get("reward_reply","对方又从自己的书里挑出一册，递给你：")+book.title+"。已收入手记的刊物收藏。"
 	return reply
 
 static func side_tasks(s)->Array:
