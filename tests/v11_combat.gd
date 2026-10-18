@@ -15,7 +15,8 @@ func run():
  check(c.enabled and w.story.has("revolver") and w.story.economy.handmade>=30,"squad issues functional weapon and minimum ammunition")
  check(w.story.economy.goods.get("antirad",0)>=1 and w.story.economy.goods.get("bandage",0)>=2,"first expedition has medicine without purchasing")
  w.story.flags.plant_diagram=true;w.player.position=Vector3(-13,.04,-2);c.begin("pump");await frames()
- check(c.active and c.enemies.size()==2 and c.checkpoint.position[0]==-13,"room encounter makes an exact pre-fight checkpoint")
+ check(c.active and c.enemies.size()==3 and c.checkpoint.position[0]==-13,"room encounter makes an exact pre-fight checkpoint")
+ w.toggle_weapon()
  for enemy in c.enemies:enemy.set_physics_process(false)
  var enemy=c.enemies[0];enemy.position=Vector3(-13,.04,-5);await frames()
  var military=w.story.economy.military;var hp=enemy.hp;var clip=c.clip

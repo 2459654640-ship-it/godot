@@ -12,4 +12,4 @@ python tools/make_combat_audio.py
 
 独立物品原稿用于背包左轮图标。音效是短时离线合成，走路仍使用原来有来源记录的 Kenney CC0 采样；未添加持续噪声底。
 
-v10 原生 3D 人物及其上游 CC0 许可证已移到 experiments/ivan-render-lab/art-source/v10/ivan，保留作未验收的独立技术基线，正式游戏不加载。
+v10 的 3D 伊万试验未通过外观验收，已按用户要求在 v12 删除独立项目与对应预览。

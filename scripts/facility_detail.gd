@@ -121,8 +121,8 @@ static func waterworks(w):
  k.box("RadiationWarningPlate",Vector3(-17,1.2,-13.7),Vector3(.65,.7,.04),"brass")
  k.label("☢",Vector3(-17,1.2,-13.65),40,Color("283329"))
  # Ceramic splashback, chipped painted steel, drains and old maintenance equipment.
- for span in [[-12.5,-13.84,12.5],[12,-13.84,13],[-16.5,4.17,10]]:
-  k.box("FactoryTileSplashback",Vector3(span[0],.85,span[1]),Vector3(span[2],1.65,.045),"plant_tile")
+ # Wall finishes are sampled on the actual shell. Separate splashback boxes
+ # used to span the archive doorway at (-17,4), hiding an open passage.
  for x in [-17,-9,6,17]:
   k.box("DrainChannel",Vector3(x,.025,1.8),Vector3(1.5,.026,.22),"dark")
   for dx in range(10):k.box("DrainGrateBar",Vector3(x-.65+dx*.14,.043,1.8),Vector3(.025,.017,.24),"metal")
@@ -135,9 +135,6 @@ static func waterworks(w):
   k.cyl("ChemicalDrum",Vector3(x,.48,drum_z),.32,.96,"old_iron")
   for y in [.12,.82]:k.cyl("DrumBand",Vector3(x,y,drum_z),.334,.035,"metal")
   k.box("DrumLabel",Vector3(x,.55,drum_z+.325),Vector3(.3,.32,.012),"paper")
- for x in [7,17]:
-  for z in [-11,-4]:
-   k.box("FloorSpall",Vector3(x,.029,z),Vector3(1.2,.022,.45),"concrete")
  k.signboard("ВОДООЧИСТКА  /  1962",Vector3(-12,2.25,-13.73),4.7)
  k.signboard("先卸压 · 后送电",Vector3(0,2.05,4.22),3.0)
  k.box("ControlWarningPlate",Vector3(0,1.0,5.77),Vector3(.45,.3,.025),"paper")

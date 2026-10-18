@@ -7,10 +7,14 @@ var target_body
 var path=PackedVector3Array()
 var repath=0.0
 var animation=0.0
+var arrival_time=.9
+var move_speed=1.65
 var material:StandardMaterial3D
 var sprite:Sprite3D
 func setup(owner_node,p:Vector3):
  director=owner_node;position=p;collision_layer=8;collision_mask=1|2|4|8
+ # One faster flanker per encounter, same health and readable bite windup.
+ move_speed=1.95 if director.enemies.size()==2 else 1.65
  var shape=CollisionShape3D.new();var capsule=CapsuleShape3D.new();capsule.radius=.27;capsule.height=.75;shape.shape=capsule;shape.position.y=.375;add_child(shape)
  sprite=Sprite3D.new();sprite.name="MutantPainting";sprite.texture=load("res://assets/characters/tunnel_scavenger.png");sprite.hframes=5;sprite.vframes=4;sprite.pixel_size=.0040;sprite.position.y=.47;sprite.billboard=BaseMaterial3D.BILLBOARD_FIXED_Y;sprite.alpha_cut=SpriteBase3D.ALPHA_CUT_DISCARD;sprite.no_depth_test=false;sprite.shaded=true;add_child(sprite)
 func damage(amount:int):
@@ -22,6 +26,8 @@ func damage(amount:int):
 func _physics_process(delta):
  if not is_instance_valid(director) or hp<=0:return
  if director.paused():velocity=Vector3.ZERO;return
+ if arrival_time>0:
+  arrival_time-=delta;velocity=Vector3.ZERO;return
  cooldown=maxf(0,cooldown-delta);repath-=delta;animation+=delta
  target_body=director.w.player
  if director.veteran_health>0 and is_instance_valid(director.veteran) and position.distance_to(director.veteran.position)<position.distance_to(target_body.position)*.8:target_body=director.veteran
@@ -43,7 +49,7 @@ func _physics_process(delta):
    if other==self or not is_instance_valid(other):continue
    var apart=position-other.position;apart.y=0
    if apart.length()<.8:direction+=apart.normalized()*.5
-  velocity.x=direction.x*1.65;velocity.z=direction.z*1.65
+  velocity.x=direction.x*move_speed;velocity.z=direction.z*move_speed
  velocity.y=-.2;move_and_slide()
  var camera=director.w.camera;var forward=offset.normalized();var view=camera.global_basis.z;view.y=0
  var angle=atan2(forward.dot(camera.global_basis.x),forward.dot(view.normalized()));var slot=posmod(roundi(angle/(PI/4)),8);var column=mini(slot,8-slot)

@@ -32,7 +32,7 @@ func run():
  check(s.f("igor_settled"),"short chore settles guard without spending required items")
  s.act("igor_done");check(not s.last_action_valid,"guard cannot demand repeat payment")
  # Rejected tasks remain visible, cannot pay out, and cannot block another main line.
- s=Story.new();s.context.floor="waterworks";act(s,"mail_accept");s.Progression.fail(s,["waterworks"],"小队已经离开")
+ s=Story.new();s.context.floor="waterworks";s.flags.plant_diagram=true;act(s,"mail_accept");s.Progression.fail(s,["waterworks"],"小队已经离开")
  var task=Journal.tasks(s).filter(func(t):return t.id=="last_mail")[0]
  check(task.failed and task.status=="已失败" and task.step.contains("离开"),"failed side task retains a reason in journal")
  s.act("c_mail_clue");check(not s.last_action_valid,"failed job cannot continue or farm rewards")
@@ -42,7 +42,7 @@ func run():
  ["sech",["north_accept","north_record","north_chock","north_axle","north_verify"],"sech",[],"sech",[],["ending_train","ending_caravan"]],
  ["starcity",["weather_accept","weather_clock","weather_power","weather_test","weather_return"],"starcity",[],"starcity",[],["ending_weather"]]]
  for path in paths:
-  s=Story.new();s.economy.military=0;s.economy.goods={};s.context.floor=path[0];s.flags.star_registered=true;s.flags.father_met=true;s.flags.radio_fixed=true
+  s=Story.new();s.economy.military=0;s.economy.goods={};s.context.floor=path[0];s.flags.star_registered=true;s.flags.father_met=true;s.flags.radio_fixed=true;s.flags.press_done=true
   for key in path[1]:act(s,key)
   s.context.floor=path[2]
   for key in path[3]:act(s,key)
@@ -53,15 +53,15 @@ func run():
     act(t,ending);check(not t.ending and (t.f("commune_member") or t.f("sech_member")),"old short ending now opens a playable membership: "+ending)
    else:
     t.flags.journey_ready=true;act(t,ending);check(t.ending,"post-handover ending reached: "+ending)
- s=Story.new();s.context.floor="waterworks"
+ s=Story.new();s.context.floor="waterworks";s.flags.mail_done=true
  for key in ["pressure_copy_accept","pressure_copy_inspect","pressure_copy_compare","pressure_copy_return"]:act(s,key)
- s.context.floor="coal"
+ s.context.floor="coal";s.flags.linen_done=true
  for key in ["names_accept","names_archive","names_tags","names_return"]:act(s,key)
- s.context.floor="starcity";s.flags.father_met=true;s.flags.journey_ready=true
+ s.context.floor="starcity";s.flags.father_met=true;s.flags.journey_ready=true;s.flags.tape_done=true
  for key in ["archive_labels_accept","archive_labels_inspect","archive_labels_compare","archive_labels_return","ending_records"]:act(s,key)
  check(s.ending and s.flags.campaign_ending=="records","combined evidence ending requires three different completed chains")
  for chain in [["commune","medicine_seal"],["coal","mine_air"]]:
-  s=Story.new();s.context.floor=chain[0]
+  s=Story.new();s.context.floor=chain[0];s.flags["anna_reunited" if chain[1]=="medicine_seal" else "names_done"]=true
   for suffix in ["_accept","_inspect","_compare","_return"]:act(s,chain[1]+suffix)
   check(Journal.tasks(s).any(func(t):return t.id==chain[1] and t.done),"new optional chain reaches real completion")
  s=Story.new();s.context.floor="commune"

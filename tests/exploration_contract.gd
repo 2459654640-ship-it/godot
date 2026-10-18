@@ -25,6 +25,8 @@ func run():
 		["starcity","father_letters",["letter_accept","letter_read","letter_plain"],0]]
 	for flow in flows:
 		var s=Story.new();s.context.floor=flow[0]
+		var prerequisites={"last_mail":"plant_diagram","spare_seals":"plant_bled","commune_press":"greenhouse_fixed","mushroom_light":"greenhouse_fixed","coal_linen":"brother_care","coal_names":"linen_done","father_letters":"father_answered"}
+		if prerequisites.has(flow[1]):s.flags[prerequisites[flow[1]]]=true
 		if flow[1]=="father_letters":s.flags.father_met=true;s.flags.star_access=true
 		check(not Journal.tasks(s).any(func(t):return t.id==flow[1]),"unaccepted quest hidden: "+flow[1])
 		s.act("c_"+flow[2][-1]);check(not s.last_action_valid,"cannot claim before completing work: "+flow[1])
@@ -41,10 +43,10 @@ func run():
 		check(s.economy.health==100 and s.economy.food==60,"optional work does not silently rebalance survival stats")
 	# Both political choices are playable, preserve privacy and exclude one another.
 	for choice in ["press_private","press_public"]:
-		var s=Story.new();s.context.floor="commune"
+		var s=Story.new();s.context.floor="commune";s.flags.greenhouse_fixed=true
 		for key in ["press_accept","press_ledger",choice,"press_deliver"]:s.act("c_"+key);check(s.last_action_valid,"press choice reaches a real turn-in: "+key)
 		s.act("c_"+("press_public" if choice=="press_private" else "press_private"));check(not s.last_action_valid,"press identity choice is mutually exclusive")
-	var s=Story.new();s.context.floor="starcity";s.flags.father_met=true;s.flags.star_access=true
+	var s=Story.new();s.context.floor="starcity";s.flags.father_met=true;s.flags.star_access=true;s.flags.father_answered=true
 	for key in ["letter_accept","letter_read","letter_note"]:s.act("c_"+key);check(s.last_action_valid,"honest annotated letter route is reachable")
 	s.act("c_letter_plain");check(not s.last_action_valid and s.f("letter_note"),"letter outcome stays chosen")
 	# A late clue and reward are rejected on another facility, even if the UI is bypassed.

@@ -533,7 +533,7 @@
     "file": "ivan_masked_combat.png",
     "directions": 8,
     "source_angles": 5,
-    "poses": 3,
+    "poses": 5,
     "cell": [
       640,
       352
@@ -542,8 +542,10 @@
     "body_pixels": 324,
     "clips": [
       "ready",
-      "recoil",
-      "reload"
+      "shot",
+      "reload",
+      "walk_left",
+      "walk_right"
     ],
     "rear_diagonal_normalized": true
   },
@@ -551,7 +553,7 @@
     "file": "veteran_masked_combat.png",
     "directions": 8,
     "source_angles": 5,
-    "poses": 3,
+    "poses": 5,
     "cell": [
       640,
       352
@@ -560,8 +562,10 @@
     "body_pixels": 324,
     "clips": [
       "ready",
-      "recoil",
-      "reload"
+      "shot",
+      "reload",
+      "walk_left",
+      "walk_right"
     ],
     "rear_diagonal_normalized": true
   },
@@ -611,6 +615,56 @@
     "rear_diagonal_normalized": true,
     "clips": [
       "idle_2d_rig"
+    ]
+  },
+  "commune_moro": {
+    "file": "commune_moro.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "commune_guard": {
+    "file": "commune_guard.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle"
+    ]
+  },
+  "ivan_combat": {
+    "file": "ivan_combat.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 3,
+    "cell": [
+      640,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "ready",
+      "walk_left",
+      "walk_right"
     ]
   }
 }

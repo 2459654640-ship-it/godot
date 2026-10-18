@@ -19,12 +19,6 @@ static func build(w):
 	k.mats.blue=k.mats.metal.duplicate();k.mats.blue.albedo_color=Color("66858c")
 	k.mats.plaster.albedo_color=Color({"waterworks":"a3b4ad","commune":"c1b38f","sech":"8f9992","coal":"8a8c84","starcity":"a1b5bb"}[id])
 	Shell.build(w,plan,rooms(id))
-	for room in rooms(id):
-		if room.code=="00":continue
-		var r:Rect2=room.rect
-		if id!="commune":
-			k.box("RoomSkirting",Vector3(r.get_center().x,.25,r.position.y+.16),Vector3(r.size.x-.4,.4,.07),"corrugated" if id=="waterworks" else ("tile" if id=="coal" else "wood"))
-			if room.rect.size.x>7:k.box("ThresholdPatch",Vector3(r.get_center().x,.026,r.end.y-1),Vector3(2,.026,1.4),"metal" if id in ["waterworks","starcity"] else "tile")
 	for entry in plan.objects:furnish(k,entry,id)
 	for room in rooms(id):
 		if room.code=="00":continue
@@ -32,6 +26,9 @@ static func build(w):
 		var warm:bool=plan.warm or (id=="coal" and room.code in ["02","03"])
 		var power=2.4 if (warm and room.code in ["01","02"]) else 2.1
 		var lamp_position=Vector3(r.get_center().x,2.5,r.position.y+.65)
+		if id in ["waterworks","commune"]:lamp_position.z=r.position.y+.22
+		if id=="waterworks" and room.code=="01":lamp_position.x=-18.1
+		if id=="waterworks" and room.code=="03":lamp_position.x=5.9
 		if id=="commune" and room.code=="02":lamp_position=Vector3(-3,2.5,-3.80) # Mounted beside the double door, clear of its leaves.
 		k.lamp(lamp_position,warm,power,8)
 	for entry in plan.doors:
@@ -47,11 +44,12 @@ static func build(w):
 		w.campaign_gate.set_meta("closed_position",plan.gate)
 		for x in [-.94,.94]:k.box("GateRail",plan.gate+Vector3(x,0,0),Vector3(.1,2.5,.27),"metal")
 	match id:
-		"waterworks":waterworks(w);Detail.waterworks(w)
+		"waterworks":waterworks(w);Detail.waterworks(w);preload("res://scripts/factory_details_v12.gd").build(w)
 		"commune":Settlement.commune(w)
 		"sech":Settlement.sech(w)
 		"coal":coal(w)
 		"starcity":starcity(w)
+	k.finish_walls()
 static func waterworks(w):
 	var k=w.kit
 	# Unheated surface building; outside snow and ruins are scenery beyond solid walls.
@@ -94,9 +92,10 @@ static func waterworks(w):
 	for x in [-3,0,3]:k.box("CableTrenchCover",Vector3(x,.025,2),Vector3(1.8,.05,.5),"metal")
 	k.signboard("值班图 / 入口登记",Vector3(8,1.8,4.7),2.7)
 	k.bench(Vector3(16,0,10.8),2.8,true,PI)
-	for x in [-19.3,19.3]:
-		for z in [-11,-6,-1,6]:
-			var drift=k.box("SnowDrift",Vector3(x,-.08,z),Vector3(1.4,.5,3),"concrete");drift.material_override=snow
+	# The archive extends farther west than the pump room. Snow follows the
+	# exterior footprint instead of putting white slabs inside the archive.
+	for p in [Vector2(-20.3,-11),Vector2(-20.3,-6),Vector2(-24.3,1),Vector2(-24.3,6),Vector2(-24.3,10),Vector2(20.3,-11),Vector2(20.3,-6),Vector2(20.3,1),Vector2(20.3,6)]:
+		var drift=k.ellipsoid("SnowDrift",Vector3(p.x,-.12,p.y),Vector3(.75,.28,1.6),"concrete");drift.material_override=snow
 static func commune(w):
 	var k=w.kit
 	# Tall station columns define an open public hall instead of a corridor of identical cells.
@@ -338,9 +337,11 @@ static func rack(k,p:Vector3,width:float,material:String):
 static func people(w):
 	var arts={"plant_guide":"commander_masked","commune_leader":"commune_leader","commune_anna":"anna","sech_elder":"sech_elder","sech_sergey":"sergey","coal_clerk":"coal_clerk","coal_medic":"coal_medic","coal_brother":"coal_brother","star_guard":"star_guard","star_father":"father"}
 	for person_id in ["commune_printer","commune_grower","sech_quartermaster","star_technician"]:arts[person_id]=person_id
-	arts.merge({"commune_cook":"commune_cook","commune_child":"commune_child","sech_cook":"sech_cook"})
+	arts.merge({"commune_cook":"commune_cook","commune_child":"commune_child","commune_moro":"commune_moro","commune_guard":"commune_guard","commune_baranova":"ambient_elder","sech_cook":"sech_cook"})
 	for e in LAYOUTS[w.floor_id].objects:
 		if e[3]=="npc":w.person(e[0],Vector3(e[1],0,e[2]),"green",true,arts[e[0]])
+	for id in ["commune_moro","commune_guard","commune_baranova"]:
+		if w.npcs.has(id):w.npcs[id].stationary=true
 	if w.floor_id=="waterworks":
 		w.person("plant_guide",Vector3(10,0,7.5),"green",true,"commander_masked")
 		w.person("plant_veteran",Vector3(13,0,7),"green",true,"veteran_masked")
@@ -352,7 +353,7 @@ static func targets(w):
 		w.target("plant_guide",w.npcs.plant_guide.position,"科瓦廖夫","talk")
 		w.target("plant_veteran",w.npcs.plant_veteran.position,"老兵","talk")
 static func residents(w):
-	var layouts={"commune":[["ambient_worker",6,4],["ambient_woman",-6,12],["ambient_elder",15,15],["ambient_woman",-7,21],["ambient_worker",7,-8],["ambient_child",5,21]],"sech":[["ambient_worker",0,3],["ambient_child",-10,14],["ambient_elder",-5,17],["ambient_woman",-8,2],["ambient_worker",16,-10]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4]],"starcity":[["ambient_worker",4,-11],["ambient_woman",-18,8]]}
+	var layouts={"commune":[["ambient_worker",6,4],["ambient_woman",-6,12],["ambient_woman",-7,21],["ambient_worker",9,-5.2],["ambient_child",15,9]],"sech":[["ambient_worker",0,3],["ambient_child",-10,14],["ambient_elder",-5,17],["ambient_woman",-8,2],["ambient_worker",16,-10]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4]],"starcity":[["ambient_worker",4,-11],["ambient_woman",-18,8]]}
 	for index in layouts.get(w.floor_id,[]).size():
 		var entry=layouts[w.floor_id][index]
 		w.person("resident_%s_%d"%[entry[0],index],Vector3(entry[1],0,entry[2]),"cloth",false,entry[0])

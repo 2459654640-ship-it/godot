@@ -15,10 +15,6 @@
     }
   },
   "character": {
-    "method": "Blender geometry + skeletal animation + existing Ivan texture projection",
-    "source": "ivan/ivan.blend",
-    "foundation": "ivan/base/source.json",
-    "relocated_project": "experiments/ivan-render-lab",
-    "status": "unaccepted visual baseline; independent experiment only"
+    "status": "Rejected 3D Ivan experiment deleted at user request in v12. No native model or pilot runtime remains."
   }
 }

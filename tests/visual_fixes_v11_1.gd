@@ -23,8 +23,8 @@ func run():
  for floor in w.find_children("Floor_*","MeshInstance3D",true,false):
   finishes[floor.get_meta("floor_finish")]=true
   var code=floor.get_meta("room_code")
-  var room=w.zones.filter(func(r):return r.code==code)[0]
-  check(Vector2(floor.position.x,floor.position.z).is_equal_approx(room.rect.get_center()),"floor seam follows room footprint: "+code)
+  var matches=w.zones.filter(func(r):return r.code==code and Vector2(floor.position.x,floor.position.z).is_equal_approx(r.rect.get_center()))
+  check(matches.size()==1,"floor seam follows room footprint: "+code)
  check(finishes.size()>=5,"different functional rooms use visibly different floor surfaces")
  for mesh in w.find_children("*","MeshInstance3D",true,false):
   if mesh.get_meta("design_id","")=="BenchSeat" and mesh.position.x<2 and mesh.position.z>7 and mesh.position.z<15:
@@ -38,7 +38,7 @@ func run():
  var hit=w.get_world_3d().direct_space_state.intersect_ray(ray)
  check(not hit.is_empty() and hit.collider.get_parent().get_meta("design_id",hit.collider.get_parent().name)=="MedicalPrivacyHull","medical screen has real body collision")
  var groups=w.find_children("ResidentGroup_*","Node3D",false,false)
- check(groups.size()==4,"four distinct fixed resident groups")
+ check(groups.size()==6,"six distinct fixed resident groups")
  var people=0
  for group in groups:
   people+=group.get_meta("resident_count")
@@ -47,7 +47,7 @@ func run():
   var query=PhysicsRayQueryParameters3D.create(old+Vector3(0,1,2),old+Vector3(0,1,-2),1)
   var result=w.get_world_3d().direct_space_state.intersect_ray(query)
   check(not result.is_empty(),"resident group blocks passage through figures: "+group.name)
- check(people==12,"twelve extra background residents")
+ check(people==17,"seventeen extra background residents")
  var lit_group=groups[0];var lamp=OmniLight3D.new();w.add_child(lamp);lamp.position=lit_group.position+Vector3(0,2.4,.8);lamp.omni_range=6;lamp.light_energy=5
  lit_group.lamps=[lamp];lit_group._process(1);var bright:Vector3=lit_group.material.get_shader_parameter("light_tint")
  lamp.light_energy=0;lit_group._process(1);var dark:Vector3=lit_group.material.get_shader_parameter("light_tint")

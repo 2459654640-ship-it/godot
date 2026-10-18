@@ -1,7 +1,8 @@
 extends CharacterBody3D
-## Depth-tested painterly figures. Movement/physics retain v1 behavior.
+## Depth-tested painted figures with physical support on low steps.
 var art_id=""
 var combat_controlled=false
+var stationary=false
 var combat_velocity=Vector3.ZERO
 var aim_direction=Vector3.ZERO
 var is_player = false
@@ -40,7 +41,7 @@ func setup(kit, player: bool, coat: String = "green", hat: bool = false):
 	collision_layer = 4 if player else 2
 	collision_mask = 3 if player else 7
 	floor_max_angle = deg_to_rad(35)
-	floor_snap_length = 0.15
+	floor_snap_length = 0.28
 	var cs = CollisionShape3D.new()
 	var cap = CapsuleShape3D.new()
 	cap.radius = 0.26 if player else 0.30
@@ -49,6 +50,14 @@ func setup(kit, player: bool, coat: String = "green", hat: bool = false):
 	cs.position.y = 0.86
 	if art_id in ["ambient_child","commune_child"]:cap.radius=.2;cap.height=1.18;cs.position.y=.59
 	add_child(cs)
+	# A real flat sole supports a foot at a low platform edge. A capsule alone
+	# rests on its curved tip there, letting the painted boot enter the riser.
+	var sole=CollisionShape3D.new()
+	sole.name="FootSupport"
+	var foot=CylinderShape3D.new()
+	foot.radius=cap.radius
+	foot.height=.06
+	sole.shape=foot;sole.position.y=.03;add_child(sole)
 	visual = Node3D.new()
 	add_child(visual)
 	# Preserve the original controller's limb pivots and animation contract;
@@ -80,6 +89,7 @@ func npc_motion(delta:float) -> Vector3:
 	if talking:
 		animation_state="talk"
 		return Vector3.ZERO
+	if stationary:return Vector3.ZERO
 	if is_instance_valid(world.hud) and world.hud.modal_visible():return Vector3.ZERO
 	var away=position-player.position
 	away.y=0.0
@@ -143,6 +153,7 @@ func _physics_process(delta):
 	velocity.z=move_toward(velocity.z,desired.z,rate*delta)
 	velocity.y -= 18.0*delta
 	if is_on_floor(): velocity.y=-0.1
+	step_up(Vector3(velocity.x,0,velocity.z)*delta)
 	move_and_slide()
 	var speed=Vector2(velocity.x,velocity.z).length()
 	walk=lerpf(walk,speed/SPEED,delta*12)
@@ -164,3 +175,19 @@ func _physics_process(delta):
 	var stride_length=1.7 if is_player else (.85 if art_id in ["ambient_child","commune_child"] else 1.15)
 	visual.position.y=absf(sin(gait_distance*TAU/stride_length))*.018*walk
 	if not is_player: visual.position.y+=sin(clock*1.7)*0.005
+
+func step_up(motion:Vector3):
+	if not is_on_floor() or velocity.y>0 or motion.length()<.0001:return
+	if not test_move(global_transform,motion):return
+	var rise=Vector3.UP*.26
+	if test_move(global_transform,rise):return
+	var raised=global_transform;raised.origin+=rise
+	if test_move(raised,motion):return
+	raised.origin+=motion
+	var landing=KinematicCollision3D.new()
+	if not test_move(raised,Vector3.DOWN*.29,landing):return
+	if landing.get_normal().dot(Vector3.UP)<cos(floor_max_angle):return
+	var height=raised.origin.y+landing.get_travel().y-global_position.y
+	if height<.025 or height>.242:return
+	global_position.y+=height
+	velocity.y=-.1

@@ -57,6 +57,7 @@ static func choose(s,index:int=-1):
 		s.flags.comic_records=records
 	if p.has("end"):
 		state.active=false
+		for flag in p.get("finish_flags",[]):s.flags[flag]=true
 		if p.end=="intro":
 			s.flags.intro_done=true
 			if not s.f("rations_issued"):

@@ -97,7 +97,7 @@ func run():
 			await frames(60);w.player.motion_override=Vector2.ZERO
 			check(w.player.position.z>gate_position.z+.25,"blue inner door physically blocks entry before isolation")
 			w.player.use_override=false
-		w.story.flags.intro_done=true;w.story.flags.star_access=true;w.story.flags.plant_power=true;w.on_story_changed();await frames(80)
+		w.story.flags.intro_done=true;w.story.flags.battle_pump=true;w.story.flags.battle_workshop=true;w.story.flags.battle_warehouse=true;w.story.flags.star_access=true;w.story.flags.plant_power=true;w.on_story_changed();await frames(80)
 		w.navigation=preload("res://scripts/route_grid.gd").new();w.navigation.setup(w)
 		var seen=reachable();check(seen.size()>1000,"substantial connected floor: "+id)
 		for target_id in w.targets:

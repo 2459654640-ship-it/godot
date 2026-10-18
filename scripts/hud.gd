@@ -424,6 +424,7 @@ func refresh_status():
 		vitals_label.text="生命 %d   /   饱食 %d"%[world.story.economy.health,world.story.economy.food]
 		leads_button.text="留意的事 · "+str(Journal.leads(world.story).size())
 	inventory_count.text="%d 制式弹 · %d 土制弹" % [world.story.economy.military,world.story.economy.handmade]
+	if world.story.equipped_weapon()!="":inventory_count.text+="\n1  "+("收枪" if world.story.weapon_drawn() else "拔枪")+" · "+world.story.ITEMS[world.story.equipped_weapon()][0]
 	route_label.text=world.story.ROUTES.get(world.story.route,"尚未选择离站方式")
 	var signature=",".join(world.story.items)
 	if quick_items and signature!=quick_signature:
@@ -458,7 +459,16 @@ func toast(text:String,duration:float=4.0):
 	toast_time=duration
 
 func show_inventory():
-	start_modal("随身物品","INVENTORY   /   道具通过对话与场景互动使用",true)
+	start_modal("随身装备与物品","INVENTORY   /   装备、补给与旅途中留下的东西",true)
+	var weapon=world.story.equipped_weapon()
+	body("武器栏",17,amber)
+	var slot=HBoxContainer.new();slot.add_theme_constant_override("separation",18);modal_box.add_child(slot)
+	if weapon!="":slot.add_child(icon_rect(item_icon(weapon),68))
+	slot.add_child(label("空置" if weapon=="" else world.story.ITEMS[weapon][0]+(" · 已拔出" if world.story.weapon_drawn() else " · 已收起"),22,text_color))
+	slot.add_spacer(false)
+	if weapon!="":slot.add_child(button("卸下",func():world.story.equip_weapon("");show_inventory(),true,true))
+	body("在下方选择武器装备。返回场景后按 1 拔枪 / 收枪；遇到敌人不会自动拔枪。",17,muted)
+	rule()
 	var ammo=HBoxContainer.new();ammo.add_theme_constant_override("separation",18);modal_box.add_child(ammo)
 	for kind in ["military","handmade"]:
 		ammo.add_child(icon_rect("res://assets/visual/item_"+kind+".png",52))
@@ -482,6 +492,10 @@ func show_inventory():
 		var detail=label(item[1],18,text_color)
 		detail.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 		description.add_child(detail)
+		if item[2]=="武器":
+			var key:String=id
+			if key==weapon:row.add_child(label("已装备",18,amber))
+			else:row.add_child(button("装备",func():world.story.equip_weapon(key);show_inventory(),true,true))
 		rule()
 	var s=world.story
 	rule();body("生命 %d · 饱食 %d · 辐射 %d"%[s.economy.health,s.economy.food,s.economy.radiation],18,amber)
@@ -716,6 +730,7 @@ func comic_choose(index:int=-1):
 	if s.flags.comic.active:show_comic()
 	else:
 		comic_active=false
+		world.sync_event_music("")
 		if s.flags.has("resume_dialogue"):
 			var id:String=s.flags.resume_dialogue;s.flags.erase("resume_dialogue");show_dialogue(id)
 		elif s.flags.has("next_facility"):

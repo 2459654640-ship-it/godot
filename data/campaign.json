@@ -245,7 +245,7 @@
       "after": [
         [
           "commune_member",
-          "叶莲娜把一张轮值表递给你。\n「客铺已经改成住户登记。去议事厅听完今天的提案，我们再安排工作。」"
+          "叶莲娜把住户登记卡递给你。\n「客铺已经给你留好了。先听完今天的议事；温室那边还没办完，就先把那件事做好，我们一件一件安排。」"
         ],
         [
           "commune_trusted",
@@ -604,7 +604,8 @@
         "press_accept",
         "press_deliver",
         "printer_politics",
-        "workers_deliver"
+        "workers_deliver",
+        "memory_print"
       ],
       "after": [
         [
@@ -642,20 +643,21 @@
       "name": "卓娅 / 温室班组",
       "role": "居民 / 交谈",
       "facility": "commune",
-      "body": "卓娅把刚剪下的烂叶丢进桶里，抬头看向温室北端。\n「回水泵有些堵，菌棚也迟迟不出菇。我得把这批芽菜分好，你要愿意帮忙，先看菌架上的记录卡，查查光和温度。」\n她擦了擦手。\n「回水和遮光分开查，芽菜区的补光灯别关。」",
+      "body": "卓娅正把一盘芽菜搬离菌架，听见你走近，才擦了擦手。\n「新来的？叶莲娜提过你会修东西。西边扩出来的是育苗区，北边和中间的架子种平菇，南边有白菜和土豆。菌棚用弱光，要挂遮光布；芽菜得补光，别把它们当成一种作物管。」\n她指了指东墙的泵。\n「回水最近不畅，我先把这一盘分完。你要接维修，就先问叶莲娜登记。泵修好后，咱们再慢慢查菌棚。」",
       "options": [
         "grow_accept",
         "grow_return",
-        "grow_talk"
+        "grow_talk",
+        "memory_grower"
       ],
       "after": [
         [
           "greenhouse_fixed",
-          "卓娅听了听已经平稳的回水声，放下手里的接水盆。\n「泵那边好了，多谢。菌棚的光和温度还没复查，北端架上的记录卡写着要求。旁边芽菜的灯要留着。」"
+          "卓娅听了听已经平稳的回水声，放下手里的接水盆。\n「泵那边好了，多谢。菌棚的光和温度还没复查，中间旧菌架的记录卡写着要求，就在帆布棚前面。旁边芽菜的灯要留着。」"
         ],
         [
           "grow_fixed",
-          "卓娅掀开帘角看了一眼，又轻轻盖好。\n「菌棚已经遮好了，芽菜那边也没断光。你把记录交给我，我再核一遍。」"
+          "卓娅站到棚边，检查遮光布有没有碰到菌袋。\n「菌棚已经遮好了，芽菜那边也没断光。你把记录交给我，我再核一遍。」"
         ],
         [
           "grow_done",
@@ -665,7 +667,7 @@
       "spoken": true
     },
     "commune_mushroom": {
-      "name": "温室北端 / A 棚菌架",
+      "name": "温室中部 / A 棚旧菌架",
       "role": "现场 / 调查",
       "facility": "commune",
       "body": "木架上分层放着菌袋，上方的遮光棚由固定带支撑，架顶有高度标线。旁边 B 棚的芽菜用独立补光灯，两区的要求写在记录卡上。",
@@ -821,7 +823,9 @@
         "commune_heat_accept",
         "commune_heat_deliver",
         "meal_accept",
-        "meal_return"
+        "meal_return",
+        "moro_listeners",
+        "memory_hint"
       ],
       "after": [
         [
@@ -837,7 +841,7 @@
     "commune_hall": {
       "facility": "commune",
       "name": "人民议事厅 / 居民议事",
-      "body": "低讲台正对着三排座位。墙上贴着公开配给、轮值和居民提案；讲台旁留着一张未写满的发言顺序表。",
+      "body": "议事厅只留了两排座位，前排坐着刚下工的居民，侧墙有人翻看提案。讲台后的门通往生产联络廊，机修、缝补和锅炉班都从那里进出。墙上列着守备轮值、供水与居民发言顺序。",
       "role": "调查",
       "spoken": false,
       "options": [
@@ -847,7 +851,7 @@
     "commune_radiator": {
       "facility": "commune",
       "name": "家属房暖气支管",
-      "body": "暖气片下半截冰凉，支管已经关断。旁边的维修盘里有排气钥匙、抹布和接水盆，不必另找工具。",
+      "body": "东南家属隔间的暖气沿后墙安装，支管贴墙接回总管。排气口朝向旁边的接水盆，阀钥匙和干布留在工具盘里。",
       "role": "调查",
       "spoken": false,
       "options": [
@@ -868,7 +872,7 @@
     "commune_bunks": {
       "facility": "commune",
       "name": "家属房 / 住户记录",
-      "body": "住户表记着铺位、送饭和行动不便的人。最下方有一处改动：巴拉诺娃已经从医务室搬到家属房，食堂那张单还没有更新。",
+      "body": "中间走道通向四间家属隔间，每户有一张双人床、床头柜、衣物格和墙边暖气。住户登记册放在西侧第一间的矮柜上，另夹着送饭记录。巴拉诺娃刚从医务室搬到东南隔间，食堂那份登记还没改。",
       "role": "调查",
       "spoken": false,
       "options": [
@@ -991,6 +995,144 @@
       "options": [
         "enter_coal",
         "return_commune"
+      ]
+    },
+    "commune_moro": {
+      "facility": "commune",
+      "name": "莫罗 / 锅炉班",
+      "role": "公社居民",
+      "body": "锅炉房里，一个黑头发的青年正把压力表读数抄进本子。桌角压着炭笔画，旧吉他靠在工具箱旁。\n「先站在白线外，炉门刚关。」\n他放下铅笔，朝你点头。\n「我叫莫罗。要找锅炉班的人，就是我。要找会弹吉他的，也碰巧是我。」",
+      "spoken": true,
+      "options": [
+        "moro_work",
+        "moro_music",
+        "moro_roots",
+        "moro_accept",
+        "moro_decline",
+        "moro_reconsider",
+        "moro_poster_people",
+        "moro_poster_slogan",
+        "moro_public",
+        "moro_private",
+        "moro_thanks"
+      ],
+      "after": [
+        [
+          "moro_job",
+          "莫罗将工具和吉他分开放好。\n「你先去机修间看那只报废扬声器。我把这班炉看完，咱们再核照明余量。别把供暖用的零件拆给我。」"
+        ],
+        [
+          "moro_amp_fixed",
+          "修好的小音箱摆在锅炉房门内。\n「声音够一间屋子听了。还得和守备班说时间，再问问玛尔法，住户愿不愿意来。有人嫌吵，我们就换地方。」"
+        ],
+        [
+          "moro_ready",
+          "莫罗试过吉他，将画好的小纸张晾在桌上。\n「时间和地方都问过了。议事厅可以借，锅炉房值班后也能坐几个人。你愿意热闹一点，还是先小声试一次？」"
+        ],
+        [
+          "moro_played",
+          "莫罗擦去琴弦上的汗，重新系好工作围裙。\n「明早还得添煤。不过以后下了工，总算有件可以一起盼的事了。」"
+        ],
+        [
+          "moro_done",
+          "墙边多了两张练习用的歌单，字迹各不相同。\n「鼓手刚来问下次什么时候练。我说先把轮班表对好，别又只剩锅炉工一个人等。」"
+        ]
+      ]
+    },
+    "commune_guard": {
+      "facility": "commune",
+      "name": "亚历山德拉 / 守备班",
+      "role": "公社居民",
+      "body": "亚历山德拉把步枪检查完，枪口朝下收入架内。她的袖子上缝着褪色的红布。\n「守备值班、武器领用和出入登记都在这里。我们要防中央的侦察队，也得守住换水、送药的人走的那条路。」\n她用铅笔点了点轮值表。\n「武装班归居民议事监督。换班可以问，具体岗哨口令不能随便传。」",
+      "spoken": true,
+      "options": [
+        "guard_custom",
+        "guard_front",
+        "moro_permission",
+        "memory_guard"
+      ],
+      "after": [
+        [
+          "moro_schedule",
+          "亚历山德拉把允许借用议事厅的时段夹回簿里。\n「轮值照旧，留一侧通道。想听的人下班后自己去，值岗的人不会被叫离岗位。」"
+        ],
+        [
+          "memory_guard_checked",
+          "守备簿里补上了一张待核的记述，原始报告没有被撕掉。\n「我已经写明哪几项是当年亲见，哪几项来自记录。等卓娅也核过，再按家属的意思处理。」"
+        ]
+      ]
+    },
+    "commune_baranova": {
+      "facility": "commune",
+      "name": "巴拉诺娃 / 家属隔间",
+      "role": "公社居民",
+      "body": "老妇人坐在隔间门边，将一件补过多次的外套叠在膝上。床头有一只旧工牌，背面的字已经磨淡。\n「你是新来的伊万吧？进来坐一会儿。东西少，地方倒够两个人住……以前我总把另一边也铺好。」",
+      "spoken": true,
+      "options": [
+        "baranova_life",
+        "memory_accept",
+        "memory_decline",
+        "memory_public",
+        "memory_private",
+        "memory_return",
+        "memory_reconsider",
+        "memory_finish"
+      ],
+      "after": [
+        [
+          "memory_job",
+          "巴拉诺娃把工牌交给你看，没有让你带走。\n「尼古拉·巴拉诺夫。先查他当班的维修记录，再问当年在场的人。查到什么就告诉我，我不想靠猜的把他再活一遍。」"
+        ],
+        [
+          "memory_checked",
+          "老妇人听完泵房记录和两位见证人的话，摸了摸工牌。\n「当年的事，我终于能说得确切一些了。你先问我怎么留下这些话，我也想一想。」"
+        ],
+        [
+          "memory_done",
+          "巴拉诺娃把新抄页夹在旧工牌后，床的另一侧放上了给来访孩子留的坐垫。\n「我还会想他。可孩子们来的时候，也该有个地方坐。你下次路过，进来喝口热水。」"
+        ]
+      ]
+    },
+    "commune_salvage": {
+      "facility": "commune",
+      "name": "机修间 / 报废扬声器",
+      "role": "现场 / 调查",
+      "body": "报废架上是一只纸盆扬声器，旁边有线圈接头、绝缘套和已拆下的旧保险件。领用卡注明扬声器可修复，供暖设备的备件不得挪用。",
+      "spoken": false,
+      "options": [
+        "moro_parts",
+        "moro_repair",
+        "moro_wrong"
+      ]
+    },
+    "commune_shift_archive": {
+      "facility": "commune",
+      "name": "机修间 / 旧泵房交接本",
+      "role": "现场 / 调查",
+      "body": "防水纸夹里保存着公社接管供水站那年的维修记录。封面写着班组、日期与设备编号，事故后的补充记录另附在末页。",
+      "spoken": false,
+      "options": [
+        "memory_record"
+      ]
+    },
+    "commune_tailor": {
+      "facility": "commune",
+      "name": "缝补工房 / 公用裁台",
+      "role": "现场 / 调查",
+      "body": "裁台上摆着缝纫机、旧鞋楦和按大小分格的布片。废纸篮里留着空白包装纸，炭笔和少量旧颜料由下工的人共用。",
+      "spoken": false,
+      "options": [
+        "moro_paper"
+      ]
+    },
+    "commune_boiler": {
+      "facility": "commune",
+      "name": "锅炉房 / 供暖与照明记录",
+      "role": "现场 / 调查",
+      "body": "锅炉压力与回水温度逐班记录，供暖回路有封签。独立照明支路的检修页注明允许的剩余负载，试机前须按实际耗电核对。",
+      "spoken": false,
+      "options": [
+        "moro_power_plan"
       ]
     }
   },
@@ -1242,7 +1384,7 @@
     },
     "commune_join": {
       "text": "「我愿意帮忙。眼下缺什么人手？」",
-      "reply": "「西边温室的回水堵了，卓娅正守着；篮钩和灌水壶就在泵旁，不用另找工具。娜佳在东北联络室印公报，也缺人校稿。」\n她把你的名字写进临时帮工栏。\n「帮忙和入社是两回事。政治上的决定，你想清楚再说。」",
+      "reply": "「先帮卓娅查温室的回水泵。泵就在温室东侧，篮钩和灌水壶放在旁边，工具不用另找。修好后回来告诉我，我再介绍别的工作。」\n叶莲娜将你的名字写进临时帮工栏。\n「做这份工不用先加入公社。你可以一边了解这里，一边考虑自己的去向。」",
       "once": true,
       "flags": {
         "commune_joined": true
@@ -1849,7 +1991,13 @@
       "flags": {
         "mail_job": true
       },
-      "req": {}
+      "req": {},
+      "offer_for": "mail_job",
+      "offer_unlock": {
+        "all": [
+          "plant_diagram"
+        ]
+      }
     },
     "mail_clue": {
       "text": "抄下夜班邮袋的柜号",
@@ -1914,7 +2062,13 @@
       "flags": {
         "seal_job": true
       },
-      "req": {}
+      "req": {},
+      "offer_for": "seal_job",
+      "offer_unlock": {
+        "all": [
+          "plant_bled"
+        ]
+      }
     },
     "seal_measure": {
       "text": "比对泵组样品卡，记下垫片规格",
@@ -1989,7 +2143,19 @@
       "flags": {
         "press_job": true
       },
-      "req": {}
+      "req": {},
+      "offer_for": "press_job",
+      "offer_unlock": {
+        "all": [
+          "greenhouse_fixed"
+        ]
+      },
+      "offer_busy": [
+        [
+          "workers_job",
+          "workers_done"
+        ]
+      ]
     },
     "press_ledger": {
       "text": "对照病房代领，把供水总数算清",
@@ -2063,12 +2229,18 @@
     },
     "grow_accept": {
       "text": "「我帮你查菌棚。记录卡在哪里？」",
-      "reply": "「记录卡就在西侧温室北端的菌架旁。先看菌袋和芽菜各要多少光，再动遮光棚的固定带。」\n卓娅递给你一支铅笔。\n「菌架上方那块布是给蘑菇遮光的，别把隔壁芽菜的补光灯也遮了。调整好叫我，我再和你一起检查。」",
+      "reply": "「记录卡就在温室中间，旧菌架朝走道的那一面。先看菌袋和芽菜各要多少光，再动遮光棚的固定带。」\n卓娅递给你一支铅笔。\n「菌架上方那块布是给蘑菇遮光的，别把隔壁芽菜的补光灯也遮了。调整好叫我，我再和你一起检查。」",
       "once": true,
       "flags": {
         "grow_job": true
       },
-      "req": {}
+      "req": {},
+      "offer_for": "grow_job",
+      "offer_unlock": {
+        "all": [
+          "greenhouse_fixed"
+        ]
+      }
     },
     "grow_read": {
       "text": "比对菌架记录与灯下温度",
@@ -2278,7 +2450,13 @@
       "flags": {
         "linen_job": true
       },
-      "req": {}
+      "req": {},
+      "offer_for": "linen_job",
+      "offer_unlock": {
+        "all": [
+          "brother_care"
+        ]
+      }
     },
     "linen_tags": {
       "text": "读工牌板旁的洗消色标",
@@ -2343,7 +2521,13 @@
       "flags": {
         "names_job": true
       },
-      "req": {}
+      "req": {},
+      "offer_for": "names_job",
+      "offer_unlock": {
+        "all": [
+          "linen_done"
+        ]
+      }
     },
     "names_archive": {
       "text": "核对休养转移日期与死亡登记",
@@ -2483,6 +2667,12 @@
         "all": [
           "father_met"
         ]
+      },
+      "offer_for": "letter_job",
+      "offer_unlock": {
+        "all": [
+          "father_answered"
+        ]
       }
     },
     "letter_read": {
@@ -2560,7 +2750,19 @@
         "workers_job": true
       },
       "once": true,
-      "req": {}
+      "req": {},
+      "offer_for": "workers_job",
+      "offer_unlock": {
+        "all": [
+          "press_done"
+        ]
+      },
+      "offer_busy": [
+        [
+          "press_job",
+          "press_done"
+        ]
+      ]
     },
     "workers_draft": {
       "text": "核对共同诉求与有限探访担保",
@@ -2829,7 +3031,13 @@
         "pressure_job": true
       },
       "once": true,
-      "req": {}
+      "req": {},
+      "offer_for": "pressure_job",
+      "offer_unlock": {
+        "all": [
+          "mail_done"
+        ]
+      }
     },
     "pressure_copy_inspect": {
       "text": "核对泵房铭牌的绿区刻度",
@@ -2880,7 +3088,13 @@
         "parcel_job": true
       },
       "once": true,
-      "req": {}
+      "req": {},
+      "offer_for": "parcel_job",
+      "offer_unlock": {
+        "all": [
+          "anna_reunited"
+        ]
+      }
     },
     "medicine_seal_inspect": {
       "text": "按医护交换清单核对包数",
@@ -2931,7 +3145,13 @@
         "air_job": true
       },
       "once": true,
-      "req": {}
+      "req": {},
+      "offer_for": "air_job",
+      "offer_unlock": {
+        "all": [
+          "names_done"
+        ]
+      }
     },
     "mine_air_inspect": {
       "text": "查最近两班通风巡检原始时间",
@@ -2982,7 +3202,13 @@
         "labels_job": true
       },
       "once": true,
-      "req": {}
+      "req": {},
+      "offer_for": "labels_job",
+      "offer_unlock": {
+        "all": [
+          "tape_done"
+        ]
+      }
     },
     "archive_labels_inspect": {
       "text": "从移交单核对带盒编号与日期",
@@ -3106,8 +3332,8 @@
       }
     },
     "commune_main_work": {
-      "text": "「我听过议事了。下一步我能负责什么？」",
-      "reply": "「有两件事想请你负责。温室的回水泵请卓娅带你查一遍，联络组还有一份工人意见稿，需要到煤运窗口请那边的工人过目。两件做完，再来找我安排长期工作。」\n叶莲娜将探访手续夹进你的手记。\n「问意见时别催着人签名，不同意的也照实记。我们得先听清楚他们的想法。」",
+      "text": "「温室修好了，议事也听过了。接下来呢？」",
+      "reply": "「接下来是一份联络工作。先到东北联络室的登记桌核对工人诉求和限区担保，再按医护交换手续去 D-6 煤运休息区，请工人自己决定要不要署名。回来把各自的意见交给娜佳，最后再来找我。」\n叶莲娜把探访手续夹好。\n「这趟不能替别人表态。拒绝的人也照实记，我们得先听清楚他们在担心什么。」",
       "once": true,
       "flags": {
         "commune_chapter_work": true,
@@ -3116,7 +3342,8 @@
       },
       "req": {
         "all": [
-          "assembly_done"
+          "assembly_done",
+          "greenhouse_fixed"
         ]
       }
     },
@@ -3138,12 +3365,19 @@
     },
     "commune_heat_accept": {
       "text": "「住户说家属房很冷，我去看看？」",
-      "reply": "「东南家属房的支管。我把工具放在墙边了。先排气，确认不漏，再慢慢开回水。修好来告诉我，我得通知送饭的人别把盆放在暖气上。」",
+      "reply": "「家属区最里面那两户，暖气片一直有积气。沿中间走道进去，东南隔间的暖气就在后墙，不在走道中央。工具盘放在旁边。」\n玛尔法递给你一块干布。\n「先关支管、慢慢排气，确认不漏，再开回水。修完来告诉我，老人们今天就能睡个暖和觉。」",
       "once": true,
       "flags": {
         "commune_heat_job": true
       },
-      "req": {}
+      "req": {},
+      "offer_for": "commune_heat_job",
+      "offer_unlock": {
+        "any": [
+          "greenhouse_fixed",
+          "assembly_done"
+        ]
+      }
     },
     "commune_heat_bleed": {
       "text": "关紧支管，用钥匙缓慢排出积气。",
@@ -3197,7 +3431,13 @@
       "flags": {
         "meal_job": true
       },
-      "req": {}
+      "req": {},
+      "offer_for": "meal_job",
+      "offer_unlock": {
+        "all": [
+          "commune_heat_done"
+        ]
+      }
     },
     "meal_record": {
       "text": "核对搬迁日期与新铺位。",
@@ -3296,7 +3536,13 @@
       "flags": {
         "stove_job": true
       },
-      "req": {}
+      "req": {},
+      "offer_for": "stove_job",
+      "offer_unlock": {
+        "all": [
+          "radio_fixed"
+        ]
+      }
     },
     "stove_clear": {
       "text": "打开下段清灰口，收集积灰。",
@@ -3350,7 +3596,13 @@
       "flags": {
         "blanket_job": true
       },
-      "req": {}
+      "req": {},
+      "offer_for": "blanket_job",
+      "offer_unlock": {
+        "all": [
+          "stove_done"
+        ]
+      }
     },
     "blanket_find": {
       "text": "按蓝线标记辨认晾晒的羊毛毯。",
@@ -3730,6 +3982,491 @@
       "flags": {
         "father_history_heard": true
       }
+    },
+    "moro_work": {
+      "text": "「你平时做什么工作？」",
+      "reply": "「锅炉工。添煤、清灰、盯水位，交班之前把表抄齐。大家屋里暖不暖，先看我们这边有没有把活干好。」\n莫罗指了指桌角的画本。\n「画画和弹琴是下班后的事。小时候我想画城里的人，后来只剩地下这些脸能画了。」",
+      "once": true,
+      "req": {},
+      "flags": {},
+      "category": "闲聊"
+    },
+    "moro_roots": {
+      "text": "「你是莫斯科人吗？」",
+      "reply": "「我是哈萨克族。我爸教过我几首家乡的歌，也教我把自己的名字写全。小时候跟家人来莫斯科，战争后就在地下过了。」\n他笑了一下。\n「有人问我要用俄语还是哈萨克语唱。我两种都想试试，只要这里的人听得懂。我们在地下过的是一样的日子，想改变的事情也有很多。」",
+      "once": true,
+      "req": {},
+      "flags": {},
+      "category": "闲聊"
+    },
+    "moro_music": {
+      "text": "「你想组个乐队？」",
+      "reply": "「想。机修间有人会弹贝斯，缝补班有个姑娘打节拍比机器还准，就是都没多少空。」\n莫罗轻轻拨了两下琴弦。\n「我想唱轮班、冬天、等人回家的那些事，也唱我们想让日子变成什么样。公社说人人都能开口，我想试试，唱出来的时候是不是也一样。」\n他看向报废件领用单。\n「音箱坏着，场地也得先问好。你要有兴趣，等手里的事告一段落，咱们可以一起弄。」",
+      "once": true,
+      "req": {},
+      "flags": {
+        "moro_known": true
+      },
+      "category": "闲聊"
+    },
+    "moro_accept": {
+      "text": "「我愿意帮你筹备这次排练，从音箱查起。」",
+      "reply": "「好。机修间报废架上那只扬声器还能救，先看领用卡，别动锅炉班的备件。再回来核照明余量，够用才能接。」\n他将一张空白准备单递给你。\n「咱们先把声音弄出来。至于唱什么、给谁听，得问问这里的人。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_known"
+        ],
+        "not": [
+          "moro_job",
+          "moro_declined"
+        ]
+      },
+      "flags": {
+        "moro_job": true
+      },
+      "category": "任务",
+      "offer_for": "moro_job",
+      "offer_unlock": {
+        "all": [
+          "moro_known"
+        ]
+      }
+    },
+    "moro_decline": {
+      "text": "「这次我先不帮了，我还有别的事。」",
+      "reply": "莫罗点点头，把准备单收回。\n「没事。你愿意听的时候再来，借炉边暖手也不用替我干活。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_known"
+        ],
+        "not": [
+          "moro_job",
+          "moro_declined"
+        ]
+      },
+      "flags": {
+        "moro_declined": true
+      },
+      "category": "决定"
+    },
+    "moro_reconsider": {
+      "text": "「上次没答应。你还需要人帮忙吗？」",
+      "reply": "「还需要。别急着答应，先看看你手里的事忙完没有。真要帮，就从机修间那只扬声器开始。」",
+      "once": false,
+      "req": {
+        "all": [
+          "moro_declined"
+        ]
+      },
+      "flags": {
+        "moro_declined": false
+      },
+      "category": "闲聊"
+    },
+    "moro_parts": {
+      "text": "核对报废领用卡，检查纸盆、接头和线圈",
+      "reply": "你核对编号，用表检查线圈。纸盆只有一处开胶，接头断开，线圈仍通。领用卡允许用报废绝缘套和接头修复，供暖备件另放在封签柜里。你将可用件登记在准备单上。",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_job"
+        ]
+      },
+      "flags": {
+        "moro_parts_found": true
+      }
+    },
+    "moro_power_plan": {
+      "text": "按设备铭牌核对独立照明支路的余量",
+      "reply": "照明检修页留有十二瓦余量，小音箱按最低档试机只需五瓦。你与莫罗对过铭牌，在准备单上记明支路和限值；供暖的封签、温室补光和医务用电都保持原状。",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_parts_found"
+        ]
+      },
+      "flags": {
+        "moro_power_checked": true
+      }
+    },
+    "moro_repair": {
+      "text": "断开音箱电源，修接头和纸盆，低档试音",
+      "reply": "你确认音箱未接电，重新焊牢接头，套好绝缘，再将开胶的纸盆压合。莫罗按准备单接入独立支路，慢慢抬起音量。第一声和弦很轻，但没有破音。\n「够了，先别再拧。让人听清，比把整条走廊都震醒强。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_power_checked"
+        ]
+      },
+      "flags": {
+        "moro_amp_fixed": true
+      }
+    },
+    "moro_wrong": {
+      "text": "提议直接借供暖柜的保险件试机",
+      "reply": "你看见领用卡上的红字，停下了手。供暖支路不能挪给音箱；这次修复用报废架上的配套接头，供电则按独立照明支路的限值接入。",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_parts_found"
+        ],
+        "not": [
+          "moro_amp_fixed"
+        ]
+      },
+      "flags": {}
+    },
+    "moro_permission": {
+      "text": "「莫罗想下工后排练，哪里合适？」",
+      "reply": "亚历山德拉先看耗电记录，再翻轮值表。\n「议事结束后可以借厅，音量就按你们试的那档。出入口留一侧通道，警报响就停。值岗的人照旧值岗，没人必须来听。」\n她写好时段。\n「另外问问住户。有的人刚从医务室回来，夜里得睡觉。愿意唱，也得让不想听的人有地方清静。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_amp_fixed"
+        ]
+      },
+      "flags": {
+        "moro_schedule": true
+      }
+    },
+    "moro_listeners": {
+      "text": "「我们想办一场小排练，住户会介意吗？」",
+      "reply": "玛尔法放下勺子想了想。\n「饭后那会儿合适，孩子还没睡。可别把它排进轮值，说大家都得去。巴拉诺娃愿意来就给她留张靠门的椅子，不愿意来也别催。」\n「还有，别只唱胜仗。我们也想听有人把累、害怕和想家唱出来。这样明早端着锅走过来，还知道昨晚唱的是自己。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_schedule"
+        ]
+      },
+      "flags": {
+        "moro_audience": true
+      }
+    },
+    "moro_paper": {
+      "text": "向缝补班借废包装纸、炭笔和旧颜料",
+      "reply": "值班工人从废纸篮里挑出背面干净的包装纸，借你一支炭笔和一点余下的颜料。\n「别拿裁样图。用完把笔还回这个杯子里。莫罗以前给我们画过全班合影，脸画得比名单好认。」\n你在借用页签字，带着材料回锅炉房。",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_audience"
+        ]
+      },
+      "flags": {
+        "moro_paper_ready": true
+      }
+    },
+    "moro_poster_people": {
+      "text": "「画下这些下工的人吧，先问他们愿不愿意。」",
+      "reply": "莫罗在纸上画添煤的手、补鞋的鞋楦和抱饭盒的孩子，分别问过当事人，才把画钉到告示栏。小字写明时间、地点与自愿参加。\n「以后有人问我们想改变什么，就先让他看看，我们想让谁过得好一点。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_paper_ready"
+        ],
+        "not": [
+          "moro_ready"
+        ]
+      },
+      "flags": {
+        "moro_ready": true,
+        "moro_poster_direct": false
+      },
+      "category": "决定"
+    },
+    "moro_poster_slogan": {
+      "text": "「把想说的话写直一点，画也留着。」",
+      "reply": "莫罗在画旁写下自己的话：轮到我们说话，也轮到我们听。下面画着炉火和一双拿工具的手，另注明演出时间与自愿参加。\n「别写成谁的命令。哪天唱得不好，底下的人得能说不好。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_paper_ready"
+        ],
+        "not": [
+          "moro_ready"
+        ]
+      },
+      "flags": {
+        "moro_ready": true,
+        "moro_poster_direct": true
+      },
+      "category": "决定"
+    },
+    "moro_public": {
+      "text": "「在议事厅演吧，让愿意来的人坐一坐。」",
+      "reply": "你们等议事结束后搬好音箱，将一侧通道空出来。下工的居民陆续进门，莫罗站在讲台前，先试了一个很轻的和弦。",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_ready"
+        ],
+        "not": [
+          "moro_booked"
+        ]
+      },
+      "flags": {
+        "moro_booked": true,
+        "moro_public": true
+      },
+      "travel": "moro_public_night",
+      "category": "决定"
+    },
+    "moro_private": {
+      "text": "「先在锅炉房小声练一次，别急着上台。」",
+      "reply": "你们约在交班以后试琴。接班工守着炉，吉他和音箱放在工具线外；门口的人听见和弦，探头问能不能坐一会儿。",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_ready"
+        ],
+        "not": [
+          "moro_booked"
+        ]
+      },
+      "flags": {
+        "moro_booked": true,
+        "moro_private": true
+      },
+      "travel": "moro_quiet_night",
+      "category": "决定"
+    },
+    "moro_thanks": {
+      "text": "「第一场唱完了，你还想继续吗？」",
+      "reply": "「想啊。今天有人说鼓太快，也有人说那段话该再唱慢一点。能有人当面说这些，我就觉得这支乐队真有点样子了。」\n莫罗将手抄歌页折好递给你。\n「这份留着，上面有你帮着画的那一笔。工时补给我也替你领了，下次你愿意来，直接坐，不用再帮一遍忙。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_played"
+        ]
+      },
+      "flags": {
+        "moro_done": true
+      },
+      "give": [
+        "moro_card"
+      ],
+      "reward": {
+        "military": 6,
+        "handmade": 8
+      },
+      "goods": {
+        "bandage": 1
+      }
+    },
+    "baranova_life": {
+      "text": "「这间隔间住得惯吗？」",
+      "reply": "「比病房自在。我做过食堂记账，也在家里改过衣服。以后手不抖了，还能替孩子补个袖口。」\n她摸了摸床头的工牌。\n「尼古拉活着的时候，什么单子都要记。我以前嫌他啰嗦，如今倒盼着他能留下一张写全的。」",
+      "once": true,
+      "req": {},
+      "flags": {},
+      "category": "闲聊"
+    },
+    "memory_hint": {
+      "text": "「送饭卡上那个划掉的名字，是谁的？」",
+      "reply": "「巴拉诺娃的丈夫，尼古拉。旧卡一直合记两个人，改登记那天她没舍得让我扔。」\n玛尔法把卡片放平。\n「公社最早接管供水站时他就没了，纪念册里却没找到名字。她自己知道一些，但怕说错。你若真想问，去东南家属隔间坐下来，先听她讲，别一见面就许诺能替她翻案。」",
+      "once": true,
+      "req": {
+        "all": [
+          "meal_done",
+          "press_done"
+        ]
+      },
+      "flags": {
+        "memory_known": true
+      },
+      "category": "闲聊"
+    },
+    "memory_accept": {
+      "text": "「我愿意帮你核对那年的记录，再回来告诉你。」",
+      "reply": "巴拉诺娃将工牌翻过来，指给你看维修班的编号。\n「他以前是中央的卫兵，后来离队来这里做泵房维修。那年接管供水站，有人再没回来，他也在里面。纪念册按原单位整理，把他的名字漏掉了。」\n「你先查机修间的旧交接本，再问守备班和卓娅。他们知道的未必一样。查完来告诉我，别先替我把他的名字贴到墙上。」",
+      "once": true,
+      "req": {
+        "all": [
+          "memory_known"
+        ],
+        "not": [
+          "memory_job",
+          "memory_declined"
+        ]
+      },
+      "flags": {
+        "memory_job": true
+      },
+      "category": "任务"
+    },
+    "memory_decline": {
+      "text": "「这件事我暂时帮不了。工牌你收好。」",
+      "reply": "「好，难为你听我讲这些。以后有消息再告诉我就行，别勉强。」\n巴拉诺娃把工牌放回床头，没有将它塞进你的手里。",
+      "once": true,
+      "req": {
+        "all": [
+          "memory_known"
+        ],
+        "not": [
+          "memory_job",
+          "memory_declined"
+        ]
+      },
+      "flags": {
+        "memory_declined": true
+      },
+      "category": "决定"
+    },
+    "memory_record": {
+      "text": "按工牌编号核对供水站旧交接本",
+      "reply": "交接本记着接管供水站当日的故障：通道起火，回水失压，维修班有人留下打开手动旁通。尼古拉的编号在当班维修栏，原单位另写为中央警备。事故补页列出两名获救儿童，却没有逐一记下留守者的去向。你抄好日期、编号和缺失处，准备分别求证。",
+      "once": true,
+      "req": {
+        "all": [
+          "memory_job"
+        ]
+      },
+      "flags": {
+        "memory_record_found": true
+      }
+    },
+    "memory_guard": {
+      "text": "「这份交接本能说明尼古拉那天做了什么吗？」",
+      "reply": "亚历山德拉看过编号，取出守备旧簿。\n「我当时在外侧接人。他从烟里把两个孩子交给我，之后又折回去。我亲眼见到的是这些，最后那段我没看见。」\n她指着后来编的纪念册底稿。\n「这里按原单位把人分开，他被归进中央那一页，誊抄时漏了。我那时也没重新核过。这个错我得写清，但不能把没见过的经过也补上。泵房里面的事，得再问卓娅。」",
+      "once": true,
+      "req": {
+        "all": [
+          "memory_record_found"
+        ]
+      },
+      "flags": {
+        "memory_guard_checked": true
+      }
+    },
+    "memory_grower": {
+      "text": "「尼古拉折回泵房之后，你见过他吗？」",
+      "reply": "卓娅停下剪叶的手，听你读完交接日期。\n「见过。他把旁通打开后，叫我领剩下的人出去。我在通道口回头，看见他还守着阀，烟已经盖过肩膀了。后来找到他时，人没了。」\n她坐下，在抄页上写自己的姓名。\n「他以前替中央站过岗，这我知道。那天他救了谁，我也知道。两件事都记着，别为了让字好看，只留其中一件。」",
+      "once": true,
+      "req": {
+        "all": [
+          "memory_guard_checked"
+        ]
+      },
+      "flags": {
+        "memory_checked": true
+      }
+    },
+    "memory_public": {
+      "text": "「你愿意把核实过的经过写进公社记述吗？」",
+      "reply": "巴拉诺娃把两份见证读了很久。\n「愿意。写他的名字，也写他原先在哪里做事。别说他一辈子没犯过错，就写那天他做了什么。活着的亲属别列出来，我不想让他们再被盘问。」\n她在公开授权栏签下名字。\n「再给家里留一份。墙上的纸会旧，我手里的也能拿出来读。」",
+      "once": true,
+      "req": {
+        "all": [
+          "memory_checked"
+        ],
+        "not": [
+          "memory_consent"
+        ]
+      },
+      "flags": {
+        "memory_consent": true,
+        "memory_public": true
+      },
+      "category": "决定"
+    },
+    "memory_private": {
+      "text": "「我们只留家里的抄本，你觉得呢？」",
+      "reply": "「也好。让我先把这些看明白，公开的事以后再说。」\n巴拉诺娃把授权页折回空白面。\n「这次只抄给我，别放进公报。你替我问过人、对过记录，我已经很感激了。」",
+      "once": true,
+      "req": {
+        "all": [
+          "memory_checked"
+        ],
+        "not": [
+          "memory_consent"
+        ]
+      },
+      "flags": {
+        "memory_consent": true,
+        "memory_private": true
+      },
+      "category": "决定"
+    },
+    "memory_print": {
+      "text": "按家属授权制作经过核实的记述与家庭抄本",
+      "reply": "娜佳将原始交接记录与两份见证逐项对过，保留原单位、日期和不确定的部分，删去在世亲属信息。\n「授权公开就另做一份存进公社记述，只留家用就只抄这一张。我会按她签的范围办。」\n她把家庭抄本递给你，收好授权原页。",
+      "once": true,
+      "req": {
+        "all": [
+          "memory_consent"
+        ]
+      },
+      "flags": {
+        "memory_card_ready": true
+      },
+      "give": [
+        "memory_card"
+      ]
+    },
+    "memory_return": {
+      "text": "把家庭抄本交给巴拉诺娃，陪她读完",
+      "reply": "你将抄本平放在床头，按她的速度读出日期、姓名和那天的经过。她听到最后，没有立刻回答，先把旧工牌放在纸边。",
+      "once": true,
+      "req": {
+        "all": [
+          "memory_card_ready"
+        ]
+      },
+      "flags": {
+        "memory_delivered": true
+      },
+      "travel": "memory_reading"
+    },
+    "memory_reconsider": {
+      "text": "「上次没有答应。你还想查那份记录吗？」",
+      "reply": "「想。但你自己决定有没有时间。愿意查，就从机修间的旧交接本开始，我把编号再指给你看。」",
+      "once": false,
+      "req": {
+        "all": [
+          "memory_declined"
+        ]
+      },
+      "flags": {
+        "memory_declined": false
+      },
+      "category": "闲聊"
+    },
+    "memory_finish": {
+      "text": "「这些记录我替你收好。以后还会来坐坐。」",
+      "reply": "巴拉诺娃将抄页夹进工牌袋。\n「来吧。下次不必带消息，带你自己来就行。」\n玛尔法送来两份热食，将核对记录的工时补给放在桌边。巴拉诺娃自己收好了工牌和抄页，抬头问起你来公社以后的日子。",
+      "once": true,
+      "req": {
+        "all": [
+          "memory_read"
+        ]
+      },
+      "flags": {
+        "memory_done": true
+      },
+      "reward": {
+        "military": 6
+      },
+      "goods": {
+        "bread": 2,
+        "medkit": 1
+      }
+    },
+    "guard_custom": {
+      "text": "「公社的武装班由谁决定行动？」",
+      "reply": "「紧急警报由当班队长先处置，出巡和用人得在轮值表上登记。要封交换路、征调居民，得拿到议事会上说明。」\n亚历山德拉合上枪械簿。\n「我们反对中央把枪和配给都握在少数人手里。自己办事，也得留能让住户追问的记录。这些规矩执行得怎么样，你可以去听议事。」",
+      "once": true,
+      "req": {},
+      "flags": {},
+      "category": "闲聊"
+    },
+    "guard_front": {
+      "text": "「中央的队伍离这里很近吗？」",
+      "reply": "「他们的哨探来过外侧废线，我们也在换水路上遇到过武装盘查。大规模进攻还没有，但路不能当成安全的。」\n她指了指没有公开标点的示意图。\n「所以有守备、工事和出入检查。具体位置不会贴在告示栏，换水送药的时段也要另核。住户听见警报，就先按疏散路线走，别跑来领枪。」",
+      "once": true,
+      "req": {},
+      "flags": {},
+      "category": "闲聊"
     }
   },
   "panels": {
@@ -4114,7 +4851,7 @@
       "stages": [
         {
           "target": "commune_mushroom",
-          "step": "去温室北端，先读菌架记录卡。",
+          "step": "去温室中间，先读帆布棚前的旧菌架记录卡。",
           "when": {}
         },
         {
@@ -4410,7 +5147,7 @@
         },
         {
           "target": "coal_clerk",
-          "step": "向D-6 下层返站审核与煤矿检票处征询本人意愿。",
+          "step": "在煤矿登记处请值班员协调，由工人本人决定是否署名。",
           "when": {
             "all": [
               "workers_transit"
@@ -4748,18 +5485,103 @@
               "assembly_done"
             ]
           },
-          "step": "找叶莲娜领取工作安排。",
+          "step": "找叶莲娜登记首份回水维修工作。",
           "target": "commune_leader",
           "place": "commune"
         },
         {
           "when": {
             "all": [
+              "assembly_done",
+              "commune_joined"
+            ],
+            "not": [
+              "greenhouse_fixed"
+            ]
+          },
+          "step": "先去温室东侧的回水泵，检查过滤篮、停泵清理，再灌水启动。",
+          "target": "commune_greenhouse",
+          "place": "commune"
+        },
+        {
+          "when": {
+            "all": [
+              "assembly_done",
+              "greenhouse_fixed"
+            ]
+          },
+          "step": "回水修好了，回叶莲娜那里领取下一份联络工作。",
+          "target": "commune_leader",
+          "place": "commune"
+        },
+        {
+          "target": "commune_records",
+          "step": "去东北联络室核对诉求和限区担保。",
+          "when": {
+            "all": [
               "commune_chapter_work"
             ]
           },
-          "step": "修复温室回水，并完成工人征询稿。两项任务可在手记中分别追踪。",
-          "target": "commune_leader",
+          "place": "commune"
+        },
+        {
+          "target": "commune_leave",
+          "step": "到东侧联络气闸，安排煤运窗口探访。",
+          "when": {
+            "all": [
+              "workers_draft",
+              "commune_chapter_work"
+            ]
+          },
+          "place": "commune"
+        },
+        {
+          "target": "coal_clerk",
+          "step": "在煤矿登记处请值班员协调，由工人本人决定是否署名。",
+          "when": {
+            "all": [
+              "workers_transit",
+              "commune_chapter_work"
+            ]
+          },
+          "place": "coal"
+        },
+        {
+          "target": "coal_exit",
+          "step": "带着原稿离开限区，返回公社。",
+          "when": {
+            "all": [
+              "workers_signed",
+              "commune_chapter_work"
+            ]
+          },
+          "place": "coal"
+        },
+        {
+          "target": "commune_printer",
+          "step": "回到公社，向娜佳交付原样记录。",
+          "when": {
+            "all": [
+              "workers_signed",
+              "commune_chapter_work"
+            ],
+            "floor": [
+              "commune"
+            ]
+          },
+          "place": "commune"
+        },
+        {
+          "when": {
+            "all": [
+              "workers_done"
+            ],
+            "not": [
+              "greenhouse_fixed"
+            ]
+          },
+          "step": "联络稿已经交付，接着去温室东侧修复回水，再向叶莲娜汇报。",
+          "target": "commune_greenhouse",
           "place": "commune"
         },
         {
@@ -4769,7 +5591,7 @@
               "workers_done"
             ]
           },
-          "step": "回人民议事厅向叶莲娜汇报。",
+          "step": "回人民议事厅向叶莲娜汇报，商量接下来的去向。",
           "target": "commune_leader",
           "place": "commune"
         }
@@ -4792,7 +5614,7 @@
       "stages": [
         {
           "when": {},
-          "step": "到东南家属房检查支管，先排气。",
+          "step": "到东南家属隔间后墙的暖气片，按工具盘说明检查支管。",
           "target": "commune_radiator",
           "place": "commune"
         },
@@ -5074,6 +5896,196 @@
       ],
       "actions": [
         "return_filters"
+      ]
+    },
+    {
+      "id": "moro_band",
+      "name": "轮班之后的歌",
+      "facility": "commune",
+      "kind": "支线",
+      "accepted": "moro_job",
+      "done": "moro_done",
+      "background": "锅炉工莫罗想和机修、缝补班的朋友组成乐队。帮他在供暖和轮值照常运转的前提下筹备第一次演出，地点与方式由你们商量。",
+      "lead": "锅炉房传出试弦的声音，墙边还摊着未画完的画。",
+      "stages": [
+        {
+          "target": "commune_salvage",
+          "step": "到北侧机修间报废架检查扬声器和领用卡。",
+          "when": {
+            "all": []
+          }
+        },
+        {
+          "target": "commune_boiler",
+          "step": "到锅炉房核照明支路余量，保留供暖封签。",
+          "when": {
+            "all": [
+              "moro_parts_found"
+            ]
+          }
+        },
+        {
+          "target": "commune_salvage",
+          "step": "回机修间，按领用卡修接头和纸盆，低档试音。",
+          "when": {
+            "all": [
+              "moro_power_checked"
+            ]
+          }
+        },
+        {
+          "target": "commune_guard",
+          "step": "向南侧守备班询问可借用的场地与时段。",
+          "when": {
+            "all": [
+              "moro_amp_fixed"
+            ]
+          }
+        },
+        {
+          "target": "commune_cook",
+          "step": "问食堂玛尔法，住户的休息和参与怎么安排。",
+          "when": {
+            "all": [
+              "moro_schedule"
+            ]
+          }
+        },
+        {
+          "target": "commune_tailor",
+          "step": "到生产走廊中间的缝补工房借废包装纸和画材。",
+          "when": {
+            "all": [
+              "moro_audience"
+            ]
+          }
+        },
+        {
+          "target": "commune_moro",
+          "step": "回锅炉房和莫罗商量海报的画与文字。",
+          "when": {
+            "all": [
+              "moro_paper_ready"
+            ]
+          }
+        },
+        {
+          "target": "commune_moro",
+          "step": "选择借用议事厅，或先在锅炉房小声排练。",
+          "when": {
+            "all": [
+              "moro_ready"
+            ]
+          }
+        },
+        {
+          "target": "commune_moro",
+          "step": "演出结束后再和莫罗聊一聊。",
+          "when": {
+            "all": [
+              "moro_played"
+            ]
+          }
+        }
+      ],
+      "actions": [
+        "moro_accept",
+        "moro_parts",
+        "moro_power_plan",
+        "moro_repair",
+        "moro_wrong",
+        "moro_permission",
+        "moro_listeners",
+        "moro_paper",
+        "moro_poster_people",
+        "moro_poster_slogan",
+        "moro_public",
+        "moro_private",
+        "moro_thanks"
+      ]
+    },
+    {
+      "id": "commune_memory",
+      "name": "补上的那一页",
+      "facility": "commune",
+      "kind": "支线",
+      "accepted": "memory_job",
+      "done": "memory_done",
+      "background": "巴拉诺娃想查清丈夫在公社接管供水站时的经过。分别核对维修记录与现场见证，公开范围由家属同意，保留无法证实的空白。",
+      "lead": "玛尔法还留着一张划过名字的旧送饭卡。",
+      "stages": [
+        {
+          "target": "commune_shift_archive",
+          "step": "到北侧机修间查旧泵房交接本，按工牌编号核对。",
+          "when": {
+            "all": []
+          }
+        },
+        {
+          "target": "commune_guard",
+          "step": "带着交接日期，问守备班亚历山德拉当年亲见的事。",
+          "when": {
+            "all": [
+              "memory_record_found"
+            ]
+          }
+        },
+        {
+          "target": "commune_grower",
+          "step": "到温室问卓娅泵房里的经过，与外侧见证对照。",
+          "when": {
+            "all": [
+              "memory_guard_checked"
+            ]
+          }
+        },
+        {
+          "target": "commune_baranova",
+          "step": "回东南家属隔间汇报，再询问是否公开。",
+          "when": {
+            "all": [
+              "memory_checked"
+            ]
+          }
+        },
+        {
+          "target": "commune_printer",
+          "step": "带家属授权到联络室，请娜佳制作家庭抄本。",
+          "when": {
+            "all": [
+              "memory_consent"
+            ]
+          }
+        },
+        {
+          "target": "commune_baranova",
+          "step": "将抄本带回东南隔间，陪巴拉诺娃读完。",
+          "when": {
+            "all": [
+              "memory_card_ready"
+            ]
+          }
+        },
+        {
+          "target": "commune_baranova",
+          "step": "读完后和巴拉诺娃告别，留下今后再来探望的约定。",
+          "when": {
+            "all": [
+              "memory_read"
+            ]
+          }
+        }
+      ],
+      "actions": [
+        "memory_accept",
+        "memory_record",
+        "memory_guard",
+        "memory_grower",
+        "memory_public",
+        "memory_private",
+        "memory_print",
+        "memory_return",
+        "memory_finish"
       ]
     }
   ]

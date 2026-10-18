@@ -7,6 +7,7 @@ static func render(h,sequence:String=""):
 		s.Comic.start(s,sequence)
 	var p=s.Comic.panel(s)
 	if p.is_empty():return
+	h.world.sync_event_music(p.get("music",""))
 	h.comic_active=true
 	h.dialogue_id=""
 	h.start_modal(p.title,"МЕТРО 1982   /   "+p.get("location","序幕" if s.flags.comic.sequence=="intro" else "旅程"),true)

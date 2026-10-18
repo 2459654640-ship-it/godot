@@ -6,11 +6,10 @@ var material:ShaderMaterial
 var light_clock=0.0
 var lamps:Array=[]
 var light_excludes:Array[RID]=[]
-func setup(w,id:String,p:Vector3,count:int):
+func setup(w,id:String,p:Vector3,count:int,height:float=1.73):
  world=w;position=p;name="ResidentGroup_"+id;w.add_child(self)
  set_meta("resident_count",count);set_meta("stationary",true)
  var texture:Texture2D=load("res://assets/characters/group_"+id+".png")
- var height=1.73
  var width=height*.762*texture.get_width()/texture.get_height()
  set_meta("footprint_width",width)
  var mesh=MeshInstance3D.new();mesh.name="PaintedResidents"

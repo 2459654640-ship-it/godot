@@ -94,12 +94,7 @@
     "factory-exit-opening.png",
     "filter-choice.png",
     "filter-return-story.png",
-    "ivan-cold.png",
-    "ivan-dark.png",
-    "ivan-stride.png",
-    "ivan-warm.png",
     "lieutenant-cargo.png",
-    "main-menu-sample-entry.png",
     "plant-interior-story.png",
     "veteran-cargo.png",
     "waterworks-overview.png",
@@ -107,10 +102,10 @@
     "zoya-after.png",
     "zoya-before.png"
   ],
-  "motion_preview": "ivan-walk.webp",
   "notes": [
     "Screenshots use prepared states and frozen cameras.",
     "Toe-pixel samples allow rasterization and antialias edge tolerance.",
-    "No platform export, hardware performance benchmark or audio listening test."
+    "No platform export, hardware performance benchmark or audio listening test.",
+    "Historical v10 results. Rejected 3D Ivan previews and native experiment were deleted in v12 at user request."
   ]
 }

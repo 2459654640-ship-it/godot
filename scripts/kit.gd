@@ -17,6 +17,7 @@ var wall_surface="wall"
 var wall_normal="wall_normal"
 var wall_color=Color.WHITE
 var wall_room_profiles:Array=[]
+var wall_finish_theme="commune"
 var font:Font
 
 func _init(parent: Node3D):
@@ -252,7 +253,13 @@ func finish_walls():
 			material.set_shader_parameter("normal_map",load("res://assets/visual/"+wall_normal+".png" if i==0 else "res://assets/visual/cement_normal.png"))
 			material.set_shader_parameter("base_color",wall_color)
 			material.set_shader_parameter("normal_strength",0.45 if i==0 else 0.30)
-			if not wall_room_profiles.is_empty() and i==0:
+			if not wall_room_profiles.is_empty() and i==0 and wall_finish_theme=="factory":
+				material.set_shader_parameter("factory_finish",true)
+				material.set_shader_parameter("factory_blue",load("res://assets/visual/plant_blue_wall.png"))
+				material.set_shader_parameter("factory_tile",load("res://assets/visual/plant_ivory_tile.png"))
+				material.set_shader_parameter("factory_archive",load("res://assets/visual/plant_archive_wall.png"))
+				material.set_shader_parameter("normal_strength",0.0)
+			elif not wall_room_profiles.is_empty() and i==0:
 				material.set_shader_parameter("commune_finish",true)
 				material.set_shader_parameter("finish_plaster",load("res://assets/visual/commune_plaster.png"))
 				material.set_shader_parameter("finish_tile",load("res://assets/visual/commune_ivory_tile.png"))

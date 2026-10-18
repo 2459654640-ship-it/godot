@@ -35,6 +35,8 @@ var step_variant=0
 var step_samples:Array[AudioStream]=[]
 var step_audio:AudioStreamPlayer
 var ambience:AudioStreamPlayer
+var event_music:AudioStreamPlayer
+var event_music_id=""
 var waiting_shift = false
 var pending_route=""
 var previous_position=Vector3.ZERO
@@ -71,7 +73,7 @@ func _ready():
 		played_seconds=float(transfer.pending.story.get("played_seconds",0))
 		camera_size=clampf(float(transfer.pending.story.get("camera_size",17)),10,28)
 		arrival=transfer.pending.position
-		if ((floor_id in ["sech","commune"] and transfer.pending.story.get("layout_revision",0)<11) or (floor_id not in ["life","labor","sech"] and transfer.pending.story.get("layout_revision",0)<8)):arrival=CampaignMaps.LAYOUTS[floor_id].spawn
+		if ((floor_id=="commune" and transfer.pending.story.get("layout_revision",0)<12) or (floor_id=="sech" and transfer.pending.story.get("layout_revision",0)<11) or (floor_id not in ["life","labor","sech"] and transfer.pending.story.get("layout_revision",0)<8)):arrival=CampaignMaps.LAYOUTS[floor_id].spawn
 		transfer.pending={}
 	kit=Kit.new(self)
 	build_environment()
@@ -159,7 +161,7 @@ func _ready():
 		capture_later()
 
 func inputs():
-	var actions={"move_left":[KEY_A,KEY_LEFT],"move_right":[KEY_D,KEY_RIGHT],"move_up":[KEY_W,KEY_UP],"move_down":[KEY_S,KEY_DOWN],"interact":[KEY_E],"inventory":[KEY_I],"journal":[KEY_J],"map":[KEY_M],"overview":[KEY_TAB],"save":[KEY_F5],"load":[KEY_F9],"reload":[KEY_R]}
+	var actions={"move_left":[KEY_A,KEY_LEFT],"move_right":[KEY_D,KEY_RIGHT],"move_up":[KEY_W,KEY_UP],"move_down":[KEY_S,KEY_DOWN],"interact":[KEY_E],"inventory":[KEY_I],"journal":[KEY_J],"map":[KEY_M],"overview":[KEY_TAB],"save":[KEY_F5],"load":[KEY_F9],"reload":[KEY_R],"draw_weapon":[KEY_1]}
 	for action in actions:
 		if not InputMap.has_action(action):InputMap.add_action(action)
 		for key in actions[action]:
@@ -549,6 +551,10 @@ func _physics_process(delta):
 				story.changed.emit()
 	previous_position=player.position
 	set_camera(delta)
+	if floor_id!="waterworks" and story.weapon_drawn() and not hud.modal_visible():
+		var cursor=get_viewport().get_mouse_position()
+		var aim_point=Plane(Vector3.UP,.62).intersects_ray(camera.project_ray_origin(cursor),camera.project_ray_normal(cursor))
+		if aim_point!=null:player.aim_direction=aim_point-player.position
 	find_nearest()
 	player.blocked=hud.modal_visible() or waiting_shift or departure_animating or (is_instance_valid(combat) and combat.defeated)
 	for zone in zones:
@@ -661,6 +667,9 @@ func _unhandled_input(event):
 		else:hud.confirm_slot(save_path,false,data)
 		return
 	if hud.modal_visible():return
+	if event.is_action_pressed("draw_weapon"):
+		if not (event is InputEventKey and event.echo):toggle_weapon()
+		return
 	if event.is_action_pressed("interact") and nearest!="" and not waiting_shift:
 		interact(nearest)
 	if event.is_action_pressed("inventory"):hud.show_inventory()
@@ -778,6 +787,8 @@ func clear_arrival(p:Vector3)->Vector3:
 	if floor_id not in ["commune","waterworks"]:return p
 	for solid in kit.solids:
 		if solid.name=="CampaignInnerGate" and story.f(campaign_gate_flag):continue
+		if solid.top<=.24 and solid.top>.025 and solid.bottom<.12 and solid.rect.has_point(Vector2(p.x,p.z)):
+			p.y=maxf(p.y,solid.top+.002);continue
 		if solid.top>.18 and solid.bottom<1.75 and solid.rect.grow(.28).has_point(Vector2(p.x,p.z)):
 			var nearest_cell=navigation.graph.get_closest_point(Vector2(p.x,p.z))
 			if nearest_cell>=0:
@@ -788,7 +799,7 @@ func clear_arrival(p:Vector3)->Vector3:
 func save_snapshot()->Dictionary:
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z];data.floor=floor_id
-	data.layout_revision=11;data.played_seconds=played_seconds
+	data.layout_revision=12;data.played_seconds=played_seconds
 	data.camera_size=camera_size;data.facing=player.visual.rotation.y
 	data.world_state={"phase":phase,"guard_away_time":guard_away_time,"waiting_shift":waiting_shift,"pending_route":pending_route}
 	data.npc_positions={}
@@ -813,7 +824,7 @@ func load_game(path:String=""):
 		get_node("/root/Session").enter(data,data.get("floor","life"),Vector3(p[0],maxf(p[1],.04),p[2]));return
 	hud.observing=false;story.restore(data)
 	player.position=clear_arrival(Vector3(p[0],maxf(p[1],.04),p[2]))
-	if floor_id in ["commune","sech"] and int(data.get("layout_revision",0))<11:player.position=CampaignMaps.LAYOUTS[floor_id].spawn
+	if (floor_id=="commune" and int(data.get("layout_revision",0))<12) or (floor_id=="sech" and int(data.get("layout_revision",0))<11):player.position=CampaignMaps.LAYOUTS[floor_id].spawn
 	played_seconds=float(data.get("played_seconds",0));camera_size=clampf(float(data.get("camera_size",17)),10,28)
 	waiting_shift=false;guard_away_time=0;restore_placement(data);player.velocity=Vector3.ZERO
 	hud.comic_active=false;hud.close()
@@ -825,7 +836,7 @@ func restore_placement(data:Dictionary):
 		var state:Dictionary=data.get("world_state",{})
 		phase=float(state.get("phase",0));guard_away_time=float(state.get("guard_away_time",0));waiting_shift=bool(state.get("waiting_shift",false));pending_route=String(state.get("pending_route",""))
 	player.visual.rotation.y=float(data.get("facing",player.visual.rotation.y))
-	if data.get("floor","")!=floor_id or int(data.get("layout_revision",0))<11:return
+	if data.get("floor","")!=floor_id or int(data.get("layout_revision",0))<(12 if floor_id=="commune" else 11):return
 	for id in data.get("npc_positions",{}):
 		if not npcs.has(id):continue
 		var entry:Dictionary=data.npc_positions[id];var p=entry.get("position",[])
@@ -842,6 +853,7 @@ func return_menu():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _exit_tree():
+	if is_instance_valid(event_music):event_music.stop();event_music.stream=null
 	# Release looping audio before node teardown (also avoids Dummy-driver leaks
 	# in headless visual/regression runs). No save or quest data is touched.
 	if is_instance_valid(ambience):
@@ -977,3 +989,21 @@ func return_checkpoint():
 	if data.is_empty():return
 	var p=data.get("position",[-3.3,.04,8])
 	get_node("/root/Session").enter(data,data.get("floor","life"),Vector3(p[0],p[1],p[2]))
+
+func sync_event_music(id:String):
+	if id==event_music_id:return
+	event_music_id=id
+	if not is_instance_valid(event_music):
+		event_music=AudioStreamPlayer.new();event_music.name="StoryMusic";event_music.bus="Music";event_music.volume_db=-5;add_child(event_music)
+	event_music.stop()
+	if is_instance_valid(ambience):ambience.stream_paused=id!=""
+	if id!="":
+		event_music.stream=load("res://assets/audio/"+id+".wav")
+		if DisplayServer.get_name()!="headless":event_music.play()
+	else:event_music.stream=null
+
+func toggle_weapon():
+	if story.equipped_weapon()=="":hud.toast("武器栏为空。打开背包装备武器。",4);return
+	if is_instance_valid(combat) and combat.reload_time>0:hud.toast("先完成装填，再收起武器。",3);return
+	story.flags.weapon_drawn=not story.weapon_drawn();story.changed.emit()
+	if not story.weapon_drawn():player.aim_direction=Vector3.ZERO

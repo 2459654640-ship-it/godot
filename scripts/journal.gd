@@ -97,7 +97,7 @@ static func leads(s)->Array:
 	elif floor=="sech" and not s.f("sech_joined"):out.append("长老还在调度台附近，那台没亮灯的电台似乎让他很挂心。")
 	elif floor=="starcity" and not s.f("star_registered"):out.append("蓝门值班室的哨兵一直望着入口。先报个姓名，也许比四处摸索更有用。")
 	for q in preload("res://scripts/campaign.gd").data().get("quests",[]):
-		if q.facility==floor and not s.f(q.accepted):
+		if q.facility==floor and not s.f(q.accepted) and preload("res://scripts/campaign.gd").quest_offered(s,q):
 			if q.id=="father_letters" and not s.f("father_met"):continue
 			out.append(q.lead)
 	return out

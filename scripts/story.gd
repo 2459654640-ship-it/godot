@@ -44,7 +44,9 @@ func resolve_check(key:String,chance:int) -> bool:
 	last_outcome={"kind":"success" if success else "failure","chance":chance,"key":key}
 	return success
 const ITEMS = {
- "revolver":["小队左轮","六发左轮手枪，使用土制弹。鼠标瞄准、左键射击、R 换弹。水厂交火前可重试且恢复战前资源。","武器"],
+ "moro_card":["莫罗的手抄歌页","下工之后第一次排练留下的歌页，页角有你参与的炭笔画。","纪念"],
+ "memory_card":["巴拉诺夫的家庭记述","对照交接本、现场见证与家属授权制作的家庭抄本。","私人文件"],
+ "revolver":["小队左轮","六发左轮手枪，使用土制弹。放入武器栏后按 1 拔枪 / 收枪，鼠标瞄准、左键射击、R 换弹。水厂战斗可以无损重试。","武器"],
  "water_core":["封存净水滤芯","核对过型号的两箱净水替换件，已经绑在小队的运输架上。","任务"],
  "relay_part":["控制回路保险件","水厂修配台取出的备用件，供仓门控制回路维修。","维修"],
  "anna_note":["安娜的寻亲纸条","姓名、班组编号和左手旧伤。核对身份，不能只靠同名。","任务"],
@@ -73,7 +75,20 @@ func has(id: String) -> bool: return id in items
 func f(id: String) -> bool: return flags.get(id,false)
 func give(id: String):
 	if not has(id):items.append(id)
-func take(id: String):items.erase(id)
+	if id=="revolver" and not flags.has("equipment"):equip_weapon(id)
+func take(id: String):
+	var was_equipped=equipped_weapon()==id
+	items.erase(id)
+	if was_equipped:equip_weapon("")
+func equipped_weapon()->String:
+	var slots=flags.get("equipment",{})
+	if not slots is Dictionary:return ""
+	var id=String(slots.get("weapon",""))
+	return id if has(id) and id=="revolver" else ""
+func equip_weapon(id:String)->bool:
+	if id!="" and (id!="revolver" or not has(id)):return false
+	flags.equipment={"weapon":id};flags.weapon_drawn=false;changed.emit();return true
+func weapon_drawn()->bool:return equipped_weapon()!="" and bool(flags.get("weapon_drawn",false))
 func know(text: String):
 	if text not in intel:intel.append(text)
 func opt(key: String, text: String, allowed: bool = true, reason: String = "") -> Dictionary:
@@ -156,6 +171,8 @@ func view(id: String) -> Dictionary:
 				if option.key.substr(2) in quest.get("actions",[]):quest_related=true
 			if not action.get("flags",{}).is_empty() or not action.get("give",[]).is_empty():quest_related=true
 		option.category="决定" if influence else ("任务" if quest_related else ("闲聊" if once_topic(option.key) else "调查"))
+		if option.key.begins_with("c_"):
+			option.category=Campaign.data().actions.get(option.key.substr(2),{}).get("category",option.category)
 		if once_topic(option.key) and option.key in read_topics:option.enabled=false;option.reason="已聊过，记在聊天记录里"
 	return v
 
@@ -298,7 +315,7 @@ static func once_topic(key:String)->bool:
 	return Narrative.CHAT.has(key) or key in ["father","vera_heat","semyon_advice","semyon_radio","briefing","igor_talk","armory_check","gate_daily","coal_ask","resident_shift","resident_igor","vera_day","vera_nina","knock_rooms","nina_reckless"]
 
 func serialize() -> Dictionary:
-	return {"version":1,"content_revision":11,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
+	return {"version":1,"content_revision":12,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
 func restore(data: Dictionary):
 	flags=data.get("flags",{}).duplicate(true)
 	read_topics.assign(data.get("read_topics",[]))
@@ -312,6 +329,8 @@ func restore(data: Dictionary):
 	context={}
 	last_outcome={}
 	items.assign(data.get("items",[]))
+	if not flags.has("equipment") and has("revolver"):
+		flags.equipment={"weapon":"revolver"};flags.weapon_drawn=false
 	intel.assign(data.get("intel",[]))
 	route=data.get("route","")
 	ending=data.get("ending",false)

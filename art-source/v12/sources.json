@@ -1,0 +1,17 @@
+{
+  "generator": "session image generation tool; exact model version not exposed",
+  "sources": {
+    "commune_cast.png": "exec-60f6918c-656a-462e-a780-068d2d0eaf8b.png",
+    "commune_groups.png": "exec-83fe0d02-ce61-440e-ba18-59d2de42759e.png",
+    "moro_scenes.png": "exec-51e445f0-2893-4b34-8c3a-9f01b74d6e8d.png",
+    "assets/cinematics/memory_alcove.png": "exec-bf37ca35-48a8-4085-8a74-265388abc6df.png",
+    "factory_materials.png": "exec-514d9622-832b-41a0-a949-41139d99337b.png",
+    "factory_decals.png": "exec-e1cb4450-8157-4fce-8c30-609024fa9e6b.png",
+    "ivan_armed_walk.png": "exec-303993bd-4c66-4b92-aff8-5455ad77154f.png",
+    "veteran_armed_walk.png": "exec-e15badc1-c341-41bd-83ae-f5cf41e1f27e.png",
+    "ivan_unmasked_armed.png": "exec-b71471ae-ee7c-457a-95cf-38fdc770e788.png",
+    "ivan_volume.png": "exec-9ea9c7e7-0924-47fd-9765-9e73fc4d070c.png"
+  },
+  "runtime_packing": "whole-figure crop/scale/head anchor; no repainted limbs or 3D Ivan source",
+  "music": "tools/make_moro_music.py; original procedural instrumental, no pre-existing recording or melody"
+}

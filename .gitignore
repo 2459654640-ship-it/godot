@@ -3,15 +3,3 @@ exports/
 *.log
 __pycache__/
 *.pyc
-
-# Rebuildable intermediate renders; the native model and final atlases are retained.
-art-source/v10/ivan/frames/
-*.blend1
-art-source/v10/ivan/probe/
-art-source/v10/ivan/probe.json
-
-# Standalone experiments keep their own editor cache and native bake outputs.
-experiments/**/.godot/
-experiments/**/art-source/**/frames/
-experiments/**/art-source/**/probe/
-experiments/**/*.blend1

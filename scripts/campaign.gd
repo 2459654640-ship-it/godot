@@ -2,7 +2,7 @@ extends RefCounted
 ## Authored continuation. Content is local JSON; no remote services or generated dialogue at runtime.
 static var _data:Dictionary={}
 const NAMES={"waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区"}
-const ITEM_ART={"revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
+const ITEM_ART={"moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
 static func data()->Dictionary:
 	if _data.is_empty():_data=JSON.parse_string(FileAccess.get_file_as_string("res://data/campaign.json"))
 	return _data
@@ -22,7 +22,15 @@ static func available(s,key:String)->bool:
 	if not data().actions.has(key):return false
 	var a:Dictionary=data().actions[key]
 	if s.Progression.failed_action(s,key):return false
+	if a.has("offer_for") and not s.f(a.offer_for):
+		if not permits(s,a.get("offer_unlock",{})):return false
+		for busy in a.get("offer_busy",[]):
+			if s.f(busy[0]) and not s.f(busy[1]):return false
 	return not (a.get("once",true) and s.f("c_done_"+key)) and permits(s,a.get("req",{}))
+static func quest_offered(s,q:Dictionary)->bool:
+	for key in q.get("actions",[]):
+		if data().actions[key].get("flags",{}).get(q.accepted,false) and available(s,key):return true
+	return false
 static func decorate(v:Dictionary,s)->Dictionary:
 	if not data().interactions.has(v.id):return v
 	var d:Dictionary=data().interactions[v.id]

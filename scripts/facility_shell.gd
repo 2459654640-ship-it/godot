@@ -3,6 +3,7 @@ extends RefCounted
 static func build(w,plan:Dictionary,zones:Array):
 	var k=w.kit
 	if w.floor_id=="commune":preload("res://scripts/commune_finishes.gd").prepare(k,zones)
+	if w.floor_id=="waterworks":preload("res://scripts/factory_finishes.gd").prepare(k,zones)
 	var edges={}
 	for index in zones.size():
 		var r:Rect2=zones[index].rect
@@ -15,6 +16,7 @@ static func build(w,plan:Dictionary,zones:Array):
 		var tint=Color(plan.palette)
 		if w.floor_id=="commune":
 			var finish=preload("res://scripts/commune_finishes.gd").floor_spec(zones[index].code);material=finish[0];tint=finish[1]
+		if w.floor_id=="waterworks":material=preload("res://scripts/factory_finishes.gd").FLOOR[zones[index].code];tint=Color.WHITE
 		if w.floor_id!="sech" or zones[index].code=="00":k.box("Foundation",Vector3(r.get_center().x,-.3,r.get_center().y),Vector3(r.size.x,.5,r.size.y),"concrete")
 		k.box("FloorCollision",Vector3(r.get_center().x,-.1,r.get_center().y),Vector3(r.size.x,.2,r.size.y),material,true).visible=false
 		var floor=k.box("Floor_"+str(index),Vector3(r.get_center().x,.009,r.get_center().y),Vector3(r.size.x-.02,.018,r.size.y-.02),material)
@@ -40,7 +42,6 @@ static func build(w,plan:Dictionary,zones:Array):
 		wall_with_doors(k,plan,line,start,end)
 	for d in plan.doors:
 		if d.size()<4:k.doorway(d[0],d[1],d[2]=="x")
-	k.finish_walls()
 static func edge(edges:Dictionary,axis:String,fixed:int,start:int,owner:int):
 	var key=axis+":"+str(fixed)+":"+str(start)
 	if not edges.has(key):edges[key]={"axis":axis,"fixed":fixed,"start":start,"owners":[]}

@@ -18,7 +18,7 @@ var atlas_id=""
 var light_clock=.2
 var sampled_light=Vector3(.75,.72,.66)
 var manifest:Dictionary={}
-const HEIGHTS={"commune_cook":1.65,"sech_cook":1.64,"commune_child":1.19,"ambient_worker":1.76,"ambient_woman":1.65,"ambient_child":1.19,"ambient_elder":1.61,"commune_printer":1.69,"commune_grower":1.64,"sech_quartermaster":1.78,"star_technician":1.76,"commune_leader":1.65,"sech_elder":1.70,"sergey":1.79,"coal_clerk":1.71,"coal_medic":1.64,"coal_brother":1.72,"star_guard":1.74,"veteran_masked":1.77,"commander_masked":1.78,"ivan_masked":1.75,"anna":1.68,"father":1.73,"ivan":1.75,"semyon":1.70,"nina":1.68,"mikhail":1.72,"cook":1.66,"supply":1.70,"commander":1.78,"igor":1.84,"resident":1.72,"diner":1.68,"queue":1.78}
+const HEIGHTS={"commune_moro":1.78,"commune_guard":1.70,"commune_cook":1.65,"sech_cook":1.64,"commune_child":1.19,"ambient_worker":1.76,"ambient_woman":1.65,"ambient_child":1.19,"ambient_elder":1.61,"commune_printer":1.69,"commune_grower":1.64,"sech_quartermaster":1.78,"star_technician":1.76,"commune_leader":1.65,"sech_elder":1.70,"sergey":1.79,"coal_clerk":1.71,"coal_medic":1.64,"coal_brother":1.72,"star_guard":1.74,"veteran_masked":1.77,"commander_masked":1.78,"ivan_masked":1.75,"anna":1.68,"father":1.73,"ivan":1.75,"semyon":1.70,"nina":1.68,"mikhail":1.72,"cook":1.66,"supply":1.70,"commander":1.78,"igor":1.84,"resident":1.72,"diner":1.68,"queue":1.78}
 
 func setup(body):
 	actor=body
@@ -97,7 +97,7 @@ func _process(delta):
 		direction_ready=true
 	var world=actor.get_parent()
 	var director=world.get("combat")
-	var armed=is_instance_valid(director) and director.enabled and (director.active or actor_id=="veteran_masked")
+	var armed=(actor.is_player and world.story.weapon_drawn()) or (is_instance_valid(director) and director.enabled and actor_id=="veteran_masked")
 	var chosen=(actor_id+"_combat") if armed and manifest.has(actor_id+"_combat") else actor_id
 	if chosen!=atlas_id:
 		atlas_id=chosen;pose_count=int(manifest[chosen].poses)
@@ -113,8 +113,10 @@ func _process(delta):
 	var walking=speed>0.15
 	var pose=0
 	if armed:
-		if reaction=="shot" and reaction_time>0:pose=1
+		if actor_id=="ivan" and walking:pose=[1,0,2,0][floori(cycle*4)%4]
+		elif reaction=="shot" and reaction_time>0:pose=1
 		elif (actor.is_player and director.reload_time>0) or (actor_id=="veteran_masked" and director.veteran_reload>0):pose=2
+		elif walking and pose_count>=5:pose=[3,0,4,0][floori(cycle*4)%4]
 	elif walking and pose_count>=3:
 		pose=[1,0,2,0][floori(cycle*4)%4]
 	elif actor.animation_state=="talk" and pose_count>3:pose=3
