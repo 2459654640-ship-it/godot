@@ -56,13 +56,13 @@ func ui():
  var box=VBoxContainer.new();panel.add_child(box)
  var title=Label.new();title.text="伊万 · 角色样片";title.add_theme_font_override("font",load("res://assets/fonts/MetroSerif.otf"));title.add_theme_font_size_override("font_size",30);box.add_child(title)
  caption=Label.new();box.add_child(caption)
- var note=Label.new();note.text="左：现有角色　　右：同一模型生成的八方向动画　　WASD 手动移动 / Esc 返回主菜单";note.add_theme_font_size_override("font_size",18);box.add_child(note)
+ var note=Label.new();note.text="左：现有角色　　右：同一模型生成的八方向动画　　WASD 手动移动 / Esc 退出试验";note.add_theme_font_size_override("font_size",18);box.add_child(note)
  var controls=HBoxContainer.new();controls.position=Vector2(42,900);controls.add_theme_constant_override("separation",14);canvas.add_child(controls)
  button(controls,"自动 / 手动",func():automatic=not automatic;time=0)
  button(controls,"站立 / 行走",func():moving=not moving)
  button(controls,"切换照明",func():set_lighting((lighting+1)%3))
  button(controls,"复位",reset)
- button(controls,"返回主菜单",leave)
+ button(controls,"退出试验",leave)
 func button(parent,text:String,action:Callable):
  var b=Button.new();b.text=text;b.custom_minimum_size=Vector2(190,55);b.add_theme_color_override("font_color",Color("e4d2aa"));parent.add_child(b);Surface.attach(b,"button");b.pressed.connect(action)
 func set_lighting(mode:int):
@@ -77,7 +77,7 @@ func set_lighting(mode:int):
 func reset():
  time=0
  for i in range(2):originals[i].position=Vector3(-2 if i==0 else 2,.04,0);originals[i].velocity=Vector3.ZERO
-func leave():get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+func leave():get_tree().quit()
 func _physics_process(delta):
  time+=delta
  var input=Input.get_vector("move_left","move_right","move_up","move_down")

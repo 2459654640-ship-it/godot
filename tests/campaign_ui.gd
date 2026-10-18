@@ -40,10 +40,14 @@ func run():
 	check(w.hud.comic_active and w.story.flags.comic.node=="return_crossing","real exit callback starts full-screen journey")
 	check(w.hud.modal.position==Vector2.ZERO and w.hud.modal.size==w.hud.get_viewport_rect().size,"journey covers entire viewport")
 	var save="user://campaign_ui_transit.json";w.save_path=save;w.save_game()
-	var original=w.story.flags.comic.node;w.hud.comic_choose(0);w.load_game();await frames()
+	var original=w.story.flags.comic.node;w.hud.comic_choose(0);w.load_game();await frames(10);w=current_scene
 	check(w.story.flags.comic.node==original and w.hud.comic_active,"saving mid-journey resumes at the unread node")
-	w.hud.comic_choose(0);await frames();w.hud.comic_choose(0);await frames();w.hud.comic_choose(1);await frames();w.hud.comic_choose();await frames(10);w=current_scene
-	await press_text("进入设施");w=current_scene
+	var panels=0
+	while w.floor_id=="waterworks" and w.story.flags.get("comic",{}).get("active",false) and panels<20:
+		var p:Dictionary=w.story.Comic.panel(w.story)
+		w.hud.comic_choose(1 if w.story.flags.comic.node=="return_standoff" else (0 if p.has("choices") else -1))
+		await frames(10);w=current_scene;panels+=1
+	check(panels<20,"expanded checkpoint and reception route does not loop")
 	check(w.floor_id=="commune" and w.story.f("water_secured"),"novel choice enters commune retaining waterworks state")
 	# Cross-facility load restores the original floor and active full-screen comic.
 	w.save_path=save;w.load_game();await frames(10);w=current_scene

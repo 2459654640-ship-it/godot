@@ -29,6 +29,13 @@ func _draw():
 	drawing_scale=minf((size.x-32)/bounds.size.x,(size.y-(80 if expanded else 24))/bounds.size.y)
 	origin=Vector2(size.x*.5,size.y*.5)-bounds.get_center()*drawing_scale
 	var focused=world.hud.Journal.active(world.story)
+	var focus_point=Vector2.INF
+	if not focused.is_empty():
+		if same and world.targets.has(focused.target):
+			var target:Vector3=world.targets[focused.target].pos;focus_point=Vector2(target.x,target.z)
+		elif world.CampaignMaps.LAYOUTS.has(floor):
+			for entry in world.CampaignMaps.LAYOUTS[floor].objects:
+				if entry[0]==focused.target:focus_point=Vector2(entry[1],entry[2])
 	for zone in zones:
 		var r:Rect2=zone.rect
 		var points=polygon(r.grow(-0.14))
@@ -37,12 +44,12 @@ func _draw():
 		draw_colored_polygon(shadow,Color("060c0c"))
 		draw_colored_polygon(points,Color("364239") if zone.code=="00" else Color("26302b"))
 		draw_polyline(PackedVector2Array([points[0],points[1],points[2],points[3],points[0]]),Color("65705e"),1.2,true)
-		if not focused.is_empty() and focused.place==floor and focused.area==zone.name:
+		if not focused.is_empty() and focused.place==floor and (focused.area==zone.name or (focus_point.is_finite() and r.has_point(focus_point))):
 			draw_colored_polygon(points,Color(.72,.56,.29,.19))
 			draw_polyline(PackedVector2Array([points[0],points[1],points[2],points[3],points[0]]),gold,2,true)
 			if expanded:draw_string(world.kit.font,project(r.get_center())+Vector2(-22,-15),"这一带",HORIZONTAL_ALIGNMENT_LEFT,-1,13,gold)
 		if zone.code=="01" and floor=="life":draw_line(project(Vector2(-11.95,-9)),project(Vector2(-11.95,-2.8)),gold,1.2,true)
-		if zone.code not in ["00","09","10"]:
+		if zone.code!="00" and not (floor=="life" and zone.code in ["09","10"]):
 			draw_string(world.kit.font,project(r.get_center())+Vector2(-6,4),zone.code,HORIZONTAL_ALIGNMENT_LEFT,-1,14 if expanded else 10,Color("c5bea2"))
 	if floor=="labor":
 		var stair=Rect2(-13.8,4.1,3.2,5.3)

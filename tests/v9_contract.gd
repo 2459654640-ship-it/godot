@@ -49,12 +49,15 @@ func run():
   s.context.floor=path[4]
   for key in path[5]:act(s,key)
   for ending in path[6]:
-   var t=Story.new();t.restore(s.serialize());t.context=s.context.duplicate();act(t,ending);check(t.ending,"new ending reached: "+ending)
+   var t=Story.new();t.restore(s.serialize());t.context=s.context.duplicate();if ending in ["ending_workers","ending_train","ending_caravan"]:
+    act(t,ending);check(not t.ending and (t.f("commune_member") or t.f("sech_member")),"old short ending now opens a playable membership: "+ending)
+   else:
+    t.flags.journey_ready=true;act(t,ending);check(t.ending,"post-handover ending reached: "+ending)
  s=Story.new();s.context.floor="waterworks"
  for key in ["pressure_copy_accept","pressure_copy_inspect","pressure_copy_compare","pressure_copy_return"]:act(s,key)
  s.context.floor="coal"
  for key in ["names_accept","names_archive","names_tags","names_return"]:act(s,key)
- s.context.floor="starcity";s.flags.father_met=true
+ s.context.floor="starcity";s.flags.father_met=true;s.flags.journey_ready=true
  for key in ["archive_labels_accept","archive_labels_inspect","archive_labels_compare","archive_labels_return","ending_records"]:act(s,key)
  check(s.ending and s.flags.campaign_ending=="records","combined evidence ending requires three different completed chains")
  for chain in [["commune","medicine_seal"],["coal","mine_air"]]:

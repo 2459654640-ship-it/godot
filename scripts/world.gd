@@ -1,4 +1,8 @@
 extends Node3D
+const SaveStore=preload("res://scripts/save_store.gd")
+var played_seconds=0.0
+var arrival_data:Dictionary={}
+var combat
 const Kit = preload("res://scripts/kit.gd")
 const Actor = preload("res://scripts/actor.gd")
 const Story = preload("res://scripts/story.gd")
@@ -62,9 +66,12 @@ func _ready():
 	var transfer=get_node_or_null("/root/Session")
 	var arrival=Vector3.INF
 	if transfer and not transfer.pending.is_empty():
+		arrival_data=transfer.pending.story.duplicate(true)
 		story.restore(transfer.pending.story)
+		played_seconds=float(transfer.pending.story.get("played_seconds",0))
+		camera_size=clampf(float(transfer.pending.story.get("camera_size",17)),10,28)
 		arrival=transfer.pending.position
-		if ((floor_id=="sech" and transfer.pending.story.get("layout_revision",0)<9) or (floor_id not in ["life","labor","sech"] and transfer.pending.story.get("layout_revision",0)<8)):arrival=CampaignMaps.LAYOUTS[floor_id].spawn
+		if ((floor_id in ["sech","commune"] and transfer.pending.story.get("layout_revision",0)<11) or (floor_id not in ["life","labor","sech"] and transfer.pending.story.get("layout_revision",0)<8)):arrival=CampaignMaps.LAYOUTS[floor_id].spawn
 		transfer.pending={}
 	kit=Kit.new(self)
 	build_environment()
@@ -98,10 +105,14 @@ func _ready():
 		Wing.targets(self)
 		target("pipe_exit",Vector3(10.8,0,8.6),"检修管线出口")
 		target("other_life",Vector3(17.04,0,1.6),"其它生活区")
-	elif floor_id=="labor":Labor.targets(self)
+	elif floor_id=="labor":
+		Labor.targets(self)
+		target("d6_return_desk",npcs.commander.position,"返站审核 / 科瓦廖夫","talk")
+		target("coal_gate_entry",targets.coal_door.pos,"煤矿限区检票")
 	else:CampaignMaps.targets(self)
 	if floor_id not in ["life","labor"]:CampaignMaps.residents(self)
 	if arrival.is_finite():player.position=clear_arrival(arrival)
+	if not arrival_data.is_empty():restore_placement(arrival_data)
 	story.context.floor=floor_id
 	if floor_id=="waterworks" and story.route=="official":story.flags.plant_briefed=true
 	kit.prepare_highlights()
@@ -133,21 +144,22 @@ func _ready():
 	for file in ["step","step_b","step_c","step_d"]:step_samples.append(load("res://assets/audio/"+file+".wav"))
 	on_story_changed()
 	set_camera(0,true)
+	combat=preload("res://scripts/combat.gd").new();add_child(combat);combat.setup(self)
 	initialized=true
+	call_deferred("autosave")
 	wall_veil=preload("res://scripts/wall_veil.gd").new()
 	add_child(wall_veil)
 	wall_veil.setup(self)
 	previous_position=player.position
-	if DisplayServer.get_name()!="headless" and "--skip-intro" not in OS.get_cmdline_user_args():
-		if story.flags.get("comic",{}).get("active",false):hud.call_deferred("show_comic")
-		elif story.ending:hud.call_deferred("show_chapter_end")
-		elif floor_id=="life" and not story.f("intro_done"):hud.call_deferred("show_comic","intro")
+	if story.flags.get("comic",{}).get("active",false):hud.call_deferred("show_comic")
+	elif story.ending:hud.call_deferred("show_chapter_end")
+	elif DisplayServer.get_name()!="headless" and "--skip-intro" not in OS.get_cmdline_user_args() and floor_id=="life" and not story.f("intro_done"):hud.call_deferred("show_comic","intro")
 	if "--capture" in OS.get_cmdline_user_args():
 		capture_mode=true
 		capture_later()
 
 func inputs():
-	var actions={"move_left":[KEY_A,KEY_LEFT],"move_right":[KEY_D,KEY_RIGHT],"move_up":[KEY_W,KEY_UP],"move_down":[KEY_S,KEY_DOWN],"interact":[KEY_E],"inventory":[KEY_I],"journal":[KEY_J],"map":[KEY_M],"overview":[KEY_TAB],"save":[KEY_F5],"load":[KEY_F9]}
+	var actions={"move_left":[KEY_A,KEY_LEFT],"move_right":[KEY_D,KEY_RIGHT],"move_up":[KEY_W,KEY_UP],"move_down":[KEY_S,KEY_DOWN],"interact":[KEY_E],"inventory":[KEY_I],"journal":[KEY_J],"map":[KEY_M],"overview":[KEY_TAB],"save":[KEY_F5],"load":[KEY_F9],"reload":[KEY_R]}
 	for action in actions:
 		if not InputMap.has_action(action):InputMap.add_action(action)
 		for key in actions[action]:
@@ -155,6 +167,8 @@ func inputs():
 			ev.physical_keycode=key
 			InputMap.action_add_event(action,ev)
 
+	if not InputMap.has_action("shoot"):
+		InputMap.add_action("shoot");var mouse=InputEventMouseButton.new();mouse.button_index=MOUSE_BUTTON_LEFT;InputMap.action_add_event("shoot",mouse)
 func build_environment():
 	var we=WorldEnvironment.new()
 	var e=Environment.new()
@@ -462,11 +476,14 @@ func build_people():
 func setup_daily_routines():
 	if floor_id not in ["life","labor"]:CampaignMaps.routines(self);return
 	if floor_id=="labor":Labor.routines(self);return
-	var stops={"semyon":Vector3(-13.3,0,-2.0),"nina":Vector3(-1.9,0,-6),"mikhail":Vector3(1.65,0,-2.0),"cook":Vector3(7.2,0,-6.4),"supply":Vector3(13.3,0,-6.5),"commander":Vector3(-1.5,0,5.4),"resident":Vector3(-24.1,0,-7.8),"diner":Vector3(-24.2,0,.3),"queue":Vector3(12.2,0,-2.3)}
+	# Quiet local activity: one nearby station within the NPC's own room.
+	var offsets={"nina":Vector3(.9,0,.4),"cook":Vector3(-.8,0,.4),"supply":Vector3(0,0,.8),"mikhail":Vector3(.7,0,.2),"resident":Vector3(.6,0,0),"diner":Vector3(.6,0,0)}
 	for id in npcs:
-		var actor=npcs[id]
-		actor.navigation=navigation
-		if stops.has(id):actor.patrol.assign([actor.anchor,stops[id]])
+		var actor=npcs[id];actor.navigation=navigation;actor.rest_time=20+float(id.hash()%100)/10
+		if offsets.has(id):
+			var destination=actor.anchor+offsets[id]
+			var path=navigation.path(actor.anchor,destination)
+			if not path.is_empty() and path[-1].distance_to(destination)<.55:actor.patrol.assign([actor.anchor,path[-1]])
 
 func target(id: String,p: Vector3,label: String,kind: String="inspect"):
 	# Keep target data and interaction coordinates stable; no ground ring or
@@ -497,6 +514,7 @@ func build_targets():
 
 func _physics_process(delta):
 	if not initialized:return
+	if not hud.modal_visible():played_seconds+=delta
 	phase=fmod(phase+delta,12.0)
 	var moved=Vector2(player.position.x-previous_position.x,player.position.z-previous_position.z).length()
 	var active=not departure_animating and not hud.modal_visible() and not waiting_shift and not story.flags.get("comic",{}).get("active",false)
@@ -532,7 +550,7 @@ func _physics_process(delta):
 	previous_position=player.position
 	set_camera(delta)
 	find_nearest()
-	player.blocked=hud.modal_visible() or waiting_shift or departure_animating
+	player.blocked=hud.modal_visible() or waiting_shift or departure_animating or (is_instance_valid(combat) and combat.defeated)
 	for zone in zones:
 		if zone.rect.has_point(Vector2(player.position.x,player.position.z)):
 			room_name=zone.name
@@ -542,12 +560,13 @@ func _physics_process(delta):
 	hud.tick(delta)
 
 func target_actor(id:String):
-	return npcs.get({"armory":"armorer","main_gate":"main_guard"}.get(id,id))
+	return npcs.get({"armory":"armorer","main_gate":"main_guard","d6_return_desk":"commander"}.get(id,id))
 
 func find_nearest():
 	nearest=""
 	var best=1.7
 	for id in targets:
+		if id in ["d6_return_desk","coal_gate_entry"] and not story.f("d6_returned"):continue
 		var t=targets[id]
 		var actor=target_actor(id)
 		if actor:t.pos=actor.global_position
@@ -572,7 +591,9 @@ func update_guard(delta:float):
 	var inspection=Vector3(2.8,0,1.4)
 	if story.f("side_inside_release") and player.position.x<8.2:story.flags.side_inside_release=false
 	if story.f("guard_task"):
-		guard.anchor=inspection
+		if guard.anchor!=inspection:
+			guard.purposeful=true;guard.yield_time=0;guard.path_points.clear();guard.goal=Vector3.INF;guard.reached_anchor=false
+			guard.anchor=inspection;guard.travel_to(inspection)
 		if Vector2(guard.position.x-inspection.x,guard.position.z-inspection.z).length()<.65:
 			if guard_away_time==0.0:guard_away_time=45.0
 			if not hud.modal_visible():guard_away_time=maxf(.001,guard_away_time-delta)
@@ -582,7 +603,10 @@ func update_guard(delta:float):
 				hud.toast("伊戈尔查完总表，正往岗哨走。维修记录仍可用。")
 	else:
 		guard_away_time=0.0
-		guard.anchor=Vector3(6.3,0,6.6)
+		var home=Vector3(6.3,0,6.6)
+		if guard.anchor!=home:
+			guard.yield_time=0;guard.goal=Vector3.INF;guard.reached_anchor=false;guard.anchor=home;guard.travel_to(home)
+		guard.purposeful=guard.position.distance_to(home)>.6
 		if story.f("side_pass") and not story.f("side_inside_release") and guard.position.distance_to(guard.anchor)<1.2 and absf(player.position.x-9)>.8:
 			story.flags.side_pass=false;story.flags.igor_suspicious=true
 			hud.toast("伊戈尔发现侧门开着，正在把门关上。",6)
@@ -630,6 +654,12 @@ func _unhandled_input(event):
 		else:hud.show_pause()
 		get_viewport().set_input_as_handled()
 		return
+	if event.is_action_pressed("save"):save_game();return
+	if event.is_action_pressed("load"):
+		var data=SaveStore.read(save_path)
+		if data.is_empty():hud.toast("没有可读取的快速手记。")
+		else:hud.confirm_slot(save_path,false,data)
+		return
 	if hud.modal_visible():return
 	if event.is_action_pressed("interact") and nearest!="" and not waiting_shift:
 		interact(nearest)
@@ -637,14 +667,18 @@ func _unhandled_input(event):
 	if event.is_action_pressed("journal"):hud.show_journal()
 	if event.is_action_pressed("map"):hud.show_map()
 	if event.is_action_pressed("overview"):overview=not overview
-	if event.is_action_pressed("save"):save_game()
-	if event.is_action_pressed("load"):load_game()
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index==MOUSE_BUTTON_WHEEL_UP:camera_size=clampf(camera_size-1,10,28)
 		if event.button_index==MOUSE_BUTTON_WHEEL_DOWN:camera_size=clampf(camera_size+1,10,28)
 
 func interact(id: String):
+	if is_instance_valid(combat) and combat.active:
+		hud.toast("先清理眼前的威胁。老兵倒地时靠近并按住 E 救援。",3);return
 	refresh_guard_context()
+	if id=="commander" and story.f("d6_returned"):hud.show_dialogue("d6_return_desk");return
+	if id in ["coal_door","main_gate"] and story.f("d6_returned"):hud.show_dialogue("coal_gate_entry");return
+	if id=="stairs_up" and story.f("d6_returned"):
+		hud.toast("返站通行仅限作业层与煤矿。先在审核窗口办理手续。",5);return
 	if id=="igor" and story.f("igor_suspicious") and not story.f("igor_debt_known"):
 		story.flags.igor_debt_known=true;story.changed.emit()
 	if id=="side" and story.f("side") and not story.f("side_pass"):
@@ -655,6 +689,7 @@ func interact(id: String):
 	hud.show_dialogue(id)
 
 func perform(key: String, id: String):
+	if is_instance_valid(combat) and combat.active:return
 	if departure_animating:return
 	refresh_guard_context()
 	var reply=story.act(key)
@@ -750,42 +785,53 @@ func clear_arrival(p:Vector3)->Vector3:
 				return Vector3(clear.x,.04,clear.y)
 	return p
 
-func save_game():
+func save_snapshot()->Dictionary:
 	var data=story.serialize()
-	data.position=[player.position.x,player.position.y,player.position.z]
-	data.floor=floor_id
-	data.layout_revision=10
-	var file=FileAccess.open(save_path,FileAccess.WRITE)
-	if file:
-		file.store_string(JSON.stringify(data,"\t"))
-		get_node("/root/Session").sound("save")
-		hud.toast("手记已保存 · F9 读取")
-	else:hud.toast("保存失败：用户目录不可写")
-
-func load_game():
-	if not FileAccess.file_exists(save_path):
-		hud.toast("尚无本地存档")
-		return
-	var data=JSON.parse_string(FileAccess.get_file_as_string(save_path))
-	if not data is Dictionary or data.get("version",0)!=1:
-		hud.toast("存档格式无效")
-		return
-	var p=data.get("position",[-10.5,0.04,-3.4])
-	if data.get("floor","life")!=floor_id:
-		get_node("/root/Session").enter(data,data.get("floor","life"),Vector3(p[0],maxf(p[1],.04),p[2]))
-		return
-	hud.observing=false
-	story.restore(data)
-	player.position=clear_arrival(Vector3(p[0],maxf(p[1],0.04),p[2]))
-	if ((floor_id=="sech" and data.get("layout_revision",0)<9) or (floor_id not in ["life","labor","sech"] and data.get("layout_revision",0)<8)):player.position=CampaignMaps.LAYOUTS[floor_id].spawn
-	player.velocity=Vector3.ZERO
-	waiting_shift=false
-	guard_away_time=0.0
-	hud.comic_active=false
-	hud.close()
+	data.position=[player.position.x,player.position.y,player.position.z];data.floor=floor_id
+	data.layout_revision=11;data.played_seconds=played_seconds
+	data.camera_size=camera_size;data.facing=player.visual.rotation.y
+	data.world_state={"phase":phase,"guard_away_time":guard_away_time,"waiting_shift":waiting_shift,"pending_route":pending_route}
+	data.npc_positions={}
+	for id in npcs:data.npc_positions[id]={"position":[npcs[id].position.x,npcs[id].position.y,npcs[id].position.z],"facing":npcs[id].visual.rotation.y}
+	return data
+func save_game(path:String=""):
+	if is_instance_valid(combat) and combat.active:
+		hud.toast("交火中不能手动保存；本场战斗开始前已有检查点。",5);return
+	var result=SaveStore.write(path if path!="" else save_path,save_snapshot(),"manual")
+	if result==OK:get_node("/root/Session").sound("save");hud.toast("手记已保存 · 可从读取列表选择")
+	else:hud.toast("保存失败，原手记仍保留："+error_string(result),7)
+func autosave():
+	if not initialized or story.ending:return
+	var result=SaveStore.write(SaveStore.auto_path(),save_snapshot(),"auto")
+	if result!=OK:push_warning("自动记录失败："+error_string(result))
+func load_game(path:String=""):
+	var source=path if path!="" else save_path
+	var data=SaveStore.read(source)
+	if data.is_empty():hud.toast("没有可读取的手记，或该存档及备份均已损坏。",6);return
+	var p=data.get("position",[-10.5,.04,-3.4])
+	if data.get("floor","life")!=floor_id or floor_id=="waterworks":
+		get_node("/root/Session").enter(data,data.get("floor","life"),Vector3(p[0],maxf(p[1],.04),p[2]));return
+	hud.observing=false;story.restore(data)
+	player.position=clear_arrival(Vector3(p[0],maxf(p[1],.04),p[2]))
+	if floor_id in ["commune","sech"] and int(data.get("layout_revision",0))<11:player.position=CampaignMaps.LAYOUTS[floor_id].spawn
+	played_seconds=float(data.get("played_seconds",0));camera_size=clampf(float(data.get("camera_size",17)),10,28)
+	waiting_shift=false;guard_away_time=0;restore_placement(data);player.velocity=Vector3.ZERO
+	hud.comic_active=false;hud.close()
 	if story.flags.get("comic",{}).get("active",false):hud.show_comic()
 	elif story.ending:hud.show_chapter_end()
-	hud.toast("已读取本地手记")
+	hud.toast("已读取手记"+(" · 自动恢复了上一次有效备份" if data.get("recovered_backup",false) else ""))
+func restore_placement(data:Dictionary):
+	if data.get("floor","")==floor_id:
+		var state:Dictionary=data.get("world_state",{})
+		phase=float(state.get("phase",0));guard_away_time=float(state.get("guard_away_time",0));waiting_shift=bool(state.get("waiting_shift",false));pending_route=String(state.get("pending_route",""))
+	player.visual.rotation.y=float(data.get("facing",player.visual.rotation.y))
+	if data.get("floor","")!=floor_id or int(data.get("layout_revision",0))<11:return
+	for id in data.get("npc_positions",{}):
+		if not npcs.has(id):continue
+		var entry:Dictionary=data.npc_positions[id];var p=entry.get("position",[])
+		if p.size()!=3:continue
+		var actor=npcs[id];actor.position=clear_arrival(Vector3(float(p[0]),.04,float(p[2])));actor.velocity=Vector3.ZERO
+		actor.visual.rotation.y=float(entry.get("facing",0));actor.path_points.clear();actor.goal=Vector3.INF;actor.reached_anchor=false
 
 func restart():
 	get_node("/root/Session").clear()
@@ -895,23 +941,23 @@ func facility_doors(id:String)->Array:
 	return CampaignMaps.doors(id)
 
 func travel_campaign(destination:String):
+	if destination in ["life","labor"]:
+		story.ending=false;story.flags.erase("next_facility")
+		story.flags.d6_returned=true;story.flags.departure_official=story.route=="official" and not story.f("sided_veteran")
+		var p=Vector3(23,.04,-9) if destination=="labor" else Vector3(-3.3,.04,8)
+		get_node("/root/Session").enter(save_snapshot(),destination,p);return
 	if not story.f("arrival_v8_"+destination):
 		story.flags["arrival_v8_"+destination]=true
-		hud.show_comic("arrive_"+destination)
-		return
-	story.ending=false
-	story.flags.erase("next_facility")
-	story.flags.campaign_location=destination
-	story.flags["visited_"+destination]=true
-	get_node("/root/Session").enter(story.serialize(),destination,CampaignMaps.LAYOUTS[destination].spawn)
-
+		hud.show_comic("arrive_"+destination);return
+	story.ending=false;story.flags.erase("next_facility")
+	story.flags.campaign_location=destination;story.flags["visited_"+destination]=true
+	get_node("/root/Session").enter(save_snapshot(),destination,CampaignMaps.LAYOUTS[destination].spawn)
 func travel_floor(destination:String):
 	var positions:Dictionary=story.flags.get("floor_positions",{}).duplicate(true)
-	positions[floor_id]=[player.position.x,.04,player.position.z]
-	story.flags.floor_positions=positions
+	positions[floor_id]=[player.position.x,.04,player.position.z];story.flags.floor_positions=positions
 	var fallback=[-10,.04,1.8] if destination=="labor" else [-3.3,.04,8.0]
 	var p=positions.get(destination,fallback)
-	get_node("/root/Session").enter(story.serialize(),destination,Vector3(p[0],.04,p[2]))
+	get_node("/root/Session").enter(save_snapshot(),destination,Vector3(p[0],.04,p[2]))
 
 func build_implied_life():
 	# Closed doors keep these dressed continuation spaces outside navigation.

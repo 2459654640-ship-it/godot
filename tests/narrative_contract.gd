@@ -23,15 +23,19 @@ func _initialize():
 			actual.erase("intel")
 			# Compare the original gameplay contract, excluding later save-envelope metadata.
 			for added in ["economy","conversations","last_greetings","checkpoint","read_topics","content_revision"]:actual.erase(added)
-			for added in ["social_seed","nina_safety","briefed","intro_done"]:actual.flags.erase(added)
+			for added in ["social_seed","nina_safety","briefed","intro_done","signal_heard"]:actual.flags.erase(added)
 			actual.intel_count=float(s.intel.size())
-			check(actual==expected.state,"quest state/reward/cost unchanged: %s step %d" % [path,index])
+			var expected_state:Dictionary=expected.state.duplicate(true)
+			if path=="memory" and index>=6:
+				expected_state.flags.erase("vitamins_given");expected_state.items.append("vitamins");expected_state.intel_count-=1
+			check(actual==expected_state,"quest state/reward/cost unchanged: %s step %d" % [path,index])
 			for id in expected.options:
 				var options={}
 				for o in s.view(id).options:
 					if expected.options[id].has(o.key):options[o.key]=o.enabled
 				var expected_options=expected.options[id].duplicate()
 				if id=="supply":expected_options.erase("get_kit")
+				if id=="mikhail":expected_options.erase("give_vitamins")
 				if id=="lift":expected_options.erase("leave_official")
 				if id=="exit" and expected_options.has("leave_east"):expected_options.leave_east=s.route!="" and s.has("mask") and s.has("filter")
 				if id=="hatch" and s.f("hatch"):

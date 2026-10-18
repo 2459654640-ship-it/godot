@@ -44,6 +44,7 @@ func resolve_check(key:String,chance:int) -> bool:
 	last_outcome={"kind":"success" if success else "failure","chance":chance,"key":key}
 	return success
 const ITEMS = {
+ "revolver":["小队左轮","六发左轮手枪，使用土制弹。鼠标瞄准、左键射击、R 换弹。水厂交火前可重试且恢复战前资源。","武器"],
  "water_core":["封存净水滤芯","核对过型号的两箱净水替换件，已经绑在小队的运输架上。","任务"],
  "relay_part":["控制回路保险件","水厂修配台取出的备用件，供仓门控制回路维修。","维修"],
  "anna_note":["安娜的寻亲纸条","姓名、班组编号和左手旧伤。核对身份，不能只靠同名。","任务"],
@@ -51,7 +52,7 @@ const ITEMS = {
  "archive":["转移名册抄页","星城档案中的姓名和护送记录，不足以替当事人回答二十年的事。","记忆"],
  "knife":["旧匕首","谢苗诺夫留下的工具。可以撬开卧室暗格与检修口；硬撬会损坏刃口。","工具"],
  "cigarettes":["半包香烟","受潮但仍可交换。米哈伊尔知道岗哨换班的空隙。","交换"],
- "photo":["母亲的照片","父母年轻时的合影，边角已经卷曲。给谢苗诺夫看看，也许他还记得当时的事。","记忆"],
+ "photo":["母亲的照片","父母年轻时的合影，背面留着母亲的铅笔字。可以问老爹往事，也可以留给失散的父亲辨认。","记忆"],
  "vodka":["战前伏特加","仅此一瓶。可与伊戈尔换通行；交出便无法收回。","交换"],
  "map":["维修通道草图","米哈伊尔标出的两道门与旧检修管线。可辅助辨认侧门。","情报"],
  "wrench":["借来的扳手","维修工妮娜的工具。能拧紧食堂阀门，也可完整拆下检修盖板。","工具"],
@@ -61,7 +62,7 @@ const ITEMS = {
  "order":["征召登记单","科瓦廖夫签字。去作业层装备库领取出发装备，再到集合气闸报到。","通行"],
  "mask":["防毒面具","贴合脸部的橡胶面罩，连接滤毒罐后用于过滤吸入的空气。","装备"],
  "filter":["备用滤毒罐","配合防毒面具使用。出发前检查接口密封，别让罐口受潮。","装备"],
- "vitamins":["维生素 D","供应员留给居民的配给。米哈伊尔的手一直在抖。","人情"],
+ "vitamins":["维生素 D","地下居民的维生素 D 配给。用于预防缺乏；伤病者应先由医护评估，不会立即治愈旧伤。","配给药品"],
  "frequency":["手抄频率","收音机里断续出现的「东方-7」。尚未证实与父亲有关。","线索"],
  "rag":["公用干布","洗衣间借来的。排气时垫住阀口，防止热水烫手；用完放回盆里。","维修"],
  "report":["暖气维修记录","帕维尔签过字的支管记录。当班值守须到主通道总表复核，可请伊戈尔过去。","凭据"]
@@ -85,7 +86,7 @@ func view(id: String) -> Dictionary:
 			v.options=[opt("search_box","翻查木箱",not f("searched"),"已搜寻"),opt("open_cache","撬开松动的底板",has("knife") and not f("cache"),"需要旧匕首" if not f("cache") else "暗格已空")]
 		"radio":
 			v.name="修过三次的收音机"
-			v.options=[opt("tune","记下频率",not has("frequency"),"已记下")]
+			v.options=[opt("tune","调谐收音机，记下能辨认的呼号",not has("frequency"),"已记下")]
 		"notice":
 			v.name="第 7 供应点 · 征召令"
 			v.options=[opt("read_notice","将征召令记入手记",not f("notice"),"已记录")]
@@ -144,7 +145,17 @@ func view(id: String) -> Dictionary:
 			v.name="东侧维修坡道"
 			v.options=[opt("leave_east","整理背包，准备离开 D-6",route!="" and has("mask") and has("filter"), "先通过维修门、侧门或检修管线")]
 	v=Progression.decorate(Economy.decorate(Campaign.decorate(Chapter.decorate(Life.decorate(Narrative.decorate(v,self),self),self),self),self),self)
+	if id=="mikhail":v.options=v.options.filter(func(o):return o.key!="give_vitamins")
 	for option in v.options:
+		var influence=option.key in ["accept","leave_official","leave_east","use_vodka","trade_smoke","give_soup","guard_bluff","hatch_knife","buy_protection"]
+		var quest_related=option.key in ["borrow_wrench","nina_job","cook_job","vera_heat","heat_job","father","tune","get_kit","vitamins","claim_soup","claim_report","claim_permit","nina_safety"]
+		if option.key.begins_with("c_"):
+			var action:Dictionary=Campaign.data().actions.get(option.key.substr(2),{})
+			influence=action.has("ending") or action.has("travel") or option.key in ["c_father_anger","c_father_truth","c_father_quiet"]
+			for quest in Campaign.data().get("quests",[]):
+				if option.key.substr(2) in quest.get("actions",[]):quest_related=true
+			if not action.get("flags",{}).is_empty() or not action.get("give",[]).is_empty():quest_related=true
+		option.category="决定" if influence else ("任务" if quest_related else ("闲聊" if once_topic(option.key) else "调查"))
 		if once_topic(option.key) and option.key in read_topics:option.enabled=false;option.reason="已聊过，记在聊天记录里"
 	return v
 
@@ -190,6 +201,7 @@ func act(key: String) -> String:
 			give("vodka")
 		"tune":
 			give("frequency")
+			flags.signal_heard=true
 			know("收音机里出现呼号「东方-7」，来源与含义未证实。")
 		"read_notice":
 			flags.notice=true
@@ -264,6 +276,8 @@ func act(key: String) -> String:
 		"leave_official":pass
 		"leave_east":pass
 	last_reply=Narrative.reply(key,last_reply)
+	if key=="nina_job" and has("wrench"):last_reply="「那把扳手你先留着，也能开监测箱的盖板。洗漱间的旧柜里有 2A 保险芯，我已经断开维修回路。换好以后看读数，回来说一声。」"
+	if key=="nina_job" and not has("wrench"):last_reply="「先跟我借把扳手，再到洗漱间旧柜里取 2A 保险芯。监测箱在东侧岗哨，我已经断开维修回路。工具借给你，用完回来告诉我。」"
 	changed.emit()
 	return last_reply
 
@@ -284,7 +298,7 @@ static func once_topic(key:String)->bool:
 	return Narrative.CHAT.has(key) or key in ["father","vera_heat","semyon_advice","semyon_radio","briefing","igor_talk","armory_check","gate_daily","coal_ask","resident_shift","resident_igor","vera_day","vera_nina","knock_rooms","nina_reckless"]
 
 func serialize() -> Dictionary:
-	return {"version":1,"content_revision":10,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
+	return {"version":1,"content_revision":11,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
 func restore(data: Dictionary):
 	flags=data.get("flags",{}).duplicate(true)
 	read_topics.assign(data.get("read_topics",[]))
@@ -324,6 +338,27 @@ func restore(data: Dictionary):
 	if int(data.get("content_revision",0))<10:
 		for key in ["grow_talk","veteran_road","plant_brief","plant_people"]:flags.erase("c_done_"+key)
 		read_topics.erase("igor_semyon")
+	if int(data.get("content_revision",0))<11:
+		if has("frequency"):flags.signal_heard=true
+		if f("vitamins_given") and not has("vitamins"):give("vitamins");flags.vitamins_given=false
+		if f("sech_water_fixed"):flags.water_tank_fixed=true
+		if f("plant_bled"):flags.battle_pump=true
+		if f("plant_fuse"):flags.battle_workshop=true
+		if f("radio_fixed") or f("commune_radio_known"):flags.signal_identified=true
+		var old_end=String(flags.get("campaign_ending",""))
+		if old_end in ["commune","anna","workers","sech","rail","caravan"]:
+			flags["commune_member" if old_end in ["commune","anna","workers"] else "sech_member"]=true
+			flags.erase("campaign_ending");flags.erase("chapter_endpoint");ending=false
+		if old_end in ["commune","anna","workers","sech","rail","caravan","home","tea"]:
+			var closed:Dictionary=flags.get("failed_quests",{}).duplicate(true)
+			for id in closed.keys():
+				if String(closed[id]).contains("旅程已经收束"):closed.erase(id)
+			flags.failed_quests=closed
+		if old_end in ["home","tea"]:
+			flags.erase("campaign_ending");flags.erase("chapter_endpoint");flags.filter_return_job=true;ending=false
+			Comic.start(self,"home_water" if old_end=="home" else "tea_return")
+		for key in ["commune_route","sech_custom"]:flags.erase("c_done_"+key)
+		read_topics.erase("semyon_child");read_topics.erase("semyon_advice")
 	# A v4 completion meant only "left D-6", not the unseen new chapter.
 	if ending and not flags.has("chapter_endpoint") and not flags.get("comic",{}).get("active",false) and route!="":
 		ending=false

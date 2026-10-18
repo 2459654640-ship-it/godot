@@ -2,7 +2,7 @@ extends RefCounted
 ## Authored continuation. Content is local JSON; no remote services or generated dialogue at runtime.
 static var _data:Dictionary={}
 const NAMES={"waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区"}
-const ITEM_ART={"water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
+const ITEM_ART={"revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
 static func data()->Dictionary:
 	if _data.is_empty():_data=JSON.parse_string(FileAccess.get_file_as_string("res://data/campaign.json"))
 	return _data
@@ -32,7 +32,7 @@ static func decorate(v:Dictionary,s)->Dictionary:
 	for key in d.options:
 		var words:String=data().actions[key].text
 		if key=="coal_return" and not s.f("brother_found"):words="沿原探访通路返回公社，稍后再来"
-		if key=="commune_route" and not s.has("frequency"):words="「北线能联系到什么地方？」"
+
 		v.options.append(s.opt("c_"+key,words,s.context.get("floor","")==d.facility and available(s,key)))
 	return v
 static func act(s,key:String)->String:
@@ -51,6 +51,10 @@ static func act(s,key:String)->String:
 		if count>0:
 			s.economy[kind]+=count
 			s.economy.ledger.append({"kind":"quest","id":key,"ammo":kind,"rounds":count})
+	if key in ["commune_coal","workers_coal"]:s.flags.d6_returned=true;s.flags.departure_official=s.route=="official" and not s.f("sided_veteran")
+	if key=="star_name":s.flags.signal_source_verified=true
+	if key=="sech_water":s.flags.water_tank_fixed=true
+	if key=="plant_leave":s.flags.filter_return_job=true
 	if key=="plant_leave":s.Progression.fail(s,["waterworks"],"小队已带物资离开水厂，无法再返回处理。")
 	if a.has("travel"):s.flags.next_sequence="coal_back" if key=="coal_return" and not s.f("brother_found") else a.travel
 	if a.has("ending"):finish(s,a.ending)
@@ -106,7 +110,7 @@ static func objective(s)->String:
 			if s.f("brother_identity"):return "找医护了解照护与探视安排"
 			return "先到登记台核对工牌，再查班组档案"
 		"starcity":
-			if s.f("father_met"):return "把想问的话问完，再到联络值班台决定去留"
+			if s.f("father_met"):return "与父亲谈完后，到联络值班台完成资料交接，再决定今后的去向"
 			if s.f("star_access"):return "蓝门已开 · 去测控室见父亲"
 			if s.f("star_zero"):return "确认身份后，到内门台合上旁路"
 			return "向哨兵报姓名 · 按规程隔离外线"

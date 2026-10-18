@@ -32,7 +32,7 @@ func run():
  for flag in ["greenhouse_fixed","grow_fixed","grow_done"]:
   var before=s.view("commune_grower").body;s.flags[flag]=true;check(s.view("commune_grower").body!=before,"grower acknowledges changed state: "+flag)
  # All four task directions agree with the target order in the journal.
- for entry in [["medicine_seal_accept",["联络","水井"]],["mine_air_accept",["档案","工牌板"]],["archive_labels_accept",["档案","带盒"]],["pressure_copy_accept",["铭牌","交接"]]]:
+ for entry in [["medicine_seal_accept",["联络","配给"]],["mine_air_accept",["档案","工牌板"]],["archive_labels_accept",["档案","带盒"]],["pressure_copy_accept",["铭牌","交接"]]]:
   var text:String=c.actions[entry[0]].reply
   check(text.contains(entry[1][0]) and text.contains(entry[1][1]),"named destinations in question answer: "+entry[0])
  s=Story.new();s.context.floor="starcity"
@@ -81,19 +81,8 @@ func run():
    await frames(60)
    check(not w.departure_animating and w.story.flags.comic.active and w.story.flags.comic.node=="return_crossing","animated departure continues into correct filter return journey")
   w.queue_free();await frames()
- var meta=JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/ivan_pilot/manifest.json"))
- check(meta.directions==8 and meta.frames==192 and meta.animations.walk.count==16,"pilot uses all real rendered directions and full stride cycle")
- var lab=load("res://scenes/ivan_pilot.tscn").instantiate();root.add_child(lab);await frames(8)
- lab.automatic=false;lab.moving=false;lab.reset()
- check(lab.originals.size()==2 and lab.pilot.sprite.material_override.shader.resource_path.ends_with("prerendered_actor.gdshader"),"side by side pilot is a separate scene")
- var session=root.get_node("Session");check(session.pending.is_empty(),"pilot does not consume or create story transfers")
- lab.originals[1].velocity=Vector3(1,0,0);lab.originals[1].set_physics_process(false)
- var poses={}
- for i in 90:
-  lab.pilot._process(1.0/60);poses[lab.pilot.current_pose]=true
- check(poses.size()==16,"pilot traverses all sixteen walk frames")
- for mode in range(3):
-  lab.set_lighting(mode);check(lab.lamps[0].light_energy>0 and lab.environment.ambient_light_energy>0,"real lamp and ambient lighting mode: "+str(mode))
- lab.queue_free();await frames()
+ check(not ResourceLoader.exists("res://scenes/ivan_pilot.tscn"),"game no longer exposes the rejected pilot")
+ check(FileAccess.file_exists("res://experiments/ivan-render-lab/project.godot"),"3D experiment remains a separate Godot project")
+ check(FileAccess.file_exists("res://experiments/ivan-render-lab/art-source/v10/ivan/ivan.blend"),"independent project retains editable native source")
  print("V10_RESULT checks=",checks," failures=",failed)
  quit(0 if failed==0 else 1)

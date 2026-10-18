@@ -16,13 +16,8 @@ func sample(lab,index:int)->Color:
   for y in range(-3,4):sum+=img.get_pixel(clampi(roundi(p.x)+x,0,img.get_width()-1),clampi(roundi(p.y)+y,0,img.get_height()-1))
  return sum/49
 func run():
- var menu=load("res://scenes/main_menu.tscn").instantiate();menu.save_path="user://pilot_test_missing.json";root.add_child(menu);current_scene=menu;await frames()
- var found=false
- for b in menu.find_children("*","Button",true,false):
-  if b.text=="伊万角色样片":b.pressed.emit();found=true;break
- await frames(6)
- var lab=current_scene
- check(found and lab.scene_file_path.ends_with("ivan_pilot.tscn"),"actual main-menu button opens the isolated character comparison")
+ var lab=load("res://scenes/ivan_pilot.tscn").instantiate();root.add_child(lab);current_scene=lab;await frames(6)
+ check(lab.scene_file_path.ends_with("ivan_pilot.tscn"),"independent project opens the character comparison directly")
  lab.automatic=false;lab.moving=false;lab.set_physics_process(false);lab.reset()
  for actor in lab.originals:
   actor.set_physics_process(false);actor.visual.rotation.y=atan2(-lab.camera.global_basis.z.x,-lab.camera.global_basis.z.z)

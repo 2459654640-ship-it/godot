@@ -13,7 +13,7 @@ const REPLIES={
 "vera_nina":"「妮娜上次给这儿换过灯，没收东西，就问能不能借个干净杯子。」\n维拉朝洗衣间指了指。\n「她把工具弄得干干净净，自己袖口倒全是油。你看见她，叫她把外套送来洗。」",
 "read_residents":"你看过登记板。西翼有四铺的轮班宿舍和家属房；B 区几道关着的门后，还有按班休息的住户。\n供暖支管号抄在维修栏下，复核位置是主通道的总压力表。",
 "knock_rooms":"门里先传来一声床架响。\n「夜班刚躺下……有急事吗？」\n你说没有，只是路过。\n「那就轻点。开水在洗衣间，别再拧走廊那个漏水龙头。」",
-"nina_safety":"「东侧监测箱，低压维修回路，已经断开。开关上有我的检修牌。」\n妮娜把扳手递给你。\n「先问清楚是对的。换完看读数，别碰旁边还在供电的那一路。」",
+"nina_safety":"「东侧监测箱，低压维修回路，已经断开。开关上有我的检修牌。」\n妮娜指给你看开关上的断电标记。\n「先问清楚是对的。换完看读数，别碰旁边还在供电的那一路。」",
 "nina_reckless":"妮娜没有笑。\n「你要觉得带电换也一样，我就不能把这活交给你。先把断电的事问明白，别拿自己试。」",
 "guard_greet":"「只有我。接班的人去领东西了。」\n伊戈尔换了条腿站着。\n「你要出去，就拿手续。要聊天，站边上，别把门口堵了。」",
 "guard_listen":"「搬煤那年伤的。站久了就这样，坐久了也一样。」\n他摆了摆手。\n「别替我操心。真有故障，报支管号，我还得去看总表；没事我可不能随便离岗。」",
@@ -65,7 +65,12 @@ static func decorate(v:Dictionary,s) -> Dictionary:
 			v.options.push_front(s.opt("nina_safety","「先确认一下：哪条回路已经断电？」",not s.f("nina_safety"),"断电范围已经确认"))
 			v.options.append(s.opt("nina_reckless","「换个保险芯，带电也能干吧？」",not s.f("nina_safety"),"她已经说明安全步骤"))
 			for o in v.options:
-				if o.key=="borrow_wrench" and not s.f("nina_safety"):o.enabled=false;o.reason="先向妮娜确认断电范围"
+				if o.key=="borrow_wrench":
+					o.enabled=not s.has("wrench") and (s.f("heat_job") or s.f("cook_job") or s.f("nina_job") or s.f("nina_safety"))
+					o.reason="借来的扳手已在背包里" if s.has("wrench") else "先说明要做哪项维修"
+			if s.f("heat_job") and not s.has("wrench"):
+				for o in v.options:
+					if o.key=="borrow_wrench":o.text="「维拉家的暖气要排气，借把扳手行吗？」"
 		"semyon":
 			v.options.append(s.opt("semyon_fear","「老爹，说实话，我有点怕。」"))
 			v.options.append(s.opt("semyon_bravado","「放心，我能应付。」"))
@@ -104,7 +109,7 @@ static func act(key:String,s) -> String:
 		"fix_heating":s.flags.heating_fixed=true;s.take("rag")
 		"claim_report":s.give("report")
 		"read_residents":s.flags.residents_read=true;s.know("西翼有轮班宿舍与家属房；暖气排气后，值班员须到主通道总表复核。")
-		"nina_safety":s.flags.nina_safety=true;s.give("wrench")
+		"nina_safety":s.flags.nina_safety=true
 		"nina_reckless":s.flags.nina_caution=true
 		"guard_greet":s.flags.guard_chat=true
 		"guard_listen":s.flags.guard_listened=true

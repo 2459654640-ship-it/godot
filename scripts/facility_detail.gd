@@ -115,6 +115,11 @@ static func waterworks(w):
   k.box("PressureNeedle",Vector3(x+.035,1.69,-9.28),Vector3(.015,.13,.012),"red").rotation.z=-.55
   k.label("НАСОС",Vector3(x,.50,-8.96),18)
   for dx in [-1.45,1.75]:k.box("PumpSafetyBoundary",Vector3(x+dx,.028,-10),Vector3(.07,.015,2.5),"brass")
+ # Mark contaminated sludge physically before the player reaches it.
+ for x in [-17,-15]:
+  k.box("SludgeSediment",Vector3(x,.036,-12),Vector3(1.5,.03,1.8),"dark")
+ k.box("RadiationWarningPlate",Vector3(-17,1.2,-13.7),Vector3(.65,.7,.04),"brass")
+ k.label("☢",Vector3(-17,1.2,-13.65),40,Color("283329"))
  # Ceramic splashback, chipped painted steel, drains and old maintenance equipment.
  for span in [[-12.5,-13.84,12.5],[12,-13.84,13],[-16.5,4.17,10]]:
   k.box("FactoryTileSplashback",Vector3(span[0],.85,span[1]),Vector3(span[2],1.65,.045),"plant_tile")

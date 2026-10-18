@@ -23,7 +23,7 @@ func story_checks():
 	s.act("nina_reckless")
 	s.act("borrow_wrench")
 	check(not s.has("wrench"),"unsafe answer does not grant the tool")
-	act(s,["nina_safety","heat_job","take_rag","fix_heating","claim_report","guard_report"])
+	act(s,["nina_safety","heat_job","borrow_wrench","take_rag","fix_heating","claim_report","guard_report"])
 	check(s.has("report") and not s.has("rag") and s.has("wrench"),"repair report has persistent item cost and tool remains")
 	check(not enabled(s,"hatch","hatch_wrench"),"guard's promise alone cannot open hatch")
 	s.context.hatch_clear=true
@@ -44,7 +44,7 @@ func story_checks():
 		loaded.act("guard_appeal")
 		check(JSON.parse_string(JSON.stringify(loaded.flags.social_checks))==JSON.parse_string(JSON.stringify(original)),"saved roll persists after reload")
 		if not won:
-			act(s,["nina_safety","take_rag","fix_heating","claim_report","guard_report"])
+			act(s,["nina_safety","borrow_wrench","take_rag","fix_heating","claim_report","guard_report"])
 			check(s.f("guard_task"),"failed persuasion never blocks guaranteed record path")
 	var legacy={"version":1,"flags":{"searched":true},"items":["knife"],"intel":[],"route":"","ending":false}
 	var a=Story.new();var b=Story.new()
@@ -149,7 +149,7 @@ func live_checks():
 	check(overlaps.is_empty(),"NPC patrol capsules never penetrate walls/furniture: "+str(overlaps))
 	for id in w.npcs:
 		if id=="semyon":continue # The nearby player keeps him available for conversation.
-		check(pose_seen[id].has(1) or pose_seen[id].has(2),"NPC uses authored strides during a real routine: "+id+str(pose_seen[id]))
+		if not w.npcs[id].patrol.is_empty():check(pose_seen[id].has(1) or pose_seen[id].has(2),"NPC uses articulated strides during a local routine: "+id+str(pose_seen[id]))
 	w.ambience.stop();w.ambience.stream=null
 	w.step_audio.stop();w.step_audio.stream=null
 	w.queue_free()

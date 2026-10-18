@@ -1,0 +1,12 @@
+config_version=5
+[application]
+config/name="Ivan Render Lab · 独立试验"
+run/main_scene="res://scenes/ivan_pilot.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+[display]
+window/size/viewport_width=1600
+window/size/viewport_height=1000
+window/stretch/mode="canvas_items"
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

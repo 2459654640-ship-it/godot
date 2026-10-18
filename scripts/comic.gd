@@ -34,7 +34,9 @@ static func start(s,sequence:String):
 static func panel(s)->Dictionary:
 	var node=s.flags.get("comic",{}).get("node","")
 	var p:Dictionary=PANELS.get(node,Campaign.data().panels.get(node,{})).duplicate(true)
-	p.merge(authored().get(node,{}),true)
+	var override:Dictionary=authored().get(node,{})
+	if override.has("next") or override.has("choices"):p.erase("end")
+	p.merge(override,true)
 	if p.has("lines"):
 		var paragraphs:Array[String]=[]
 		for line in p.lines:paragraphs.append(line.text if line.speaker=="旁白" else line.speaker+"：「"+line.text+"」")
@@ -64,13 +66,17 @@ static func choose(s,index:int=-1):
 			s.flags.resume_dialogue=p.end.substr(7)
 		elif p.end.begins_with("map:"):
 			s.flags.next_facility=p.end.substr(4)
+			if state.node in ["commune_reception","sech_reception","coal_descent"]:s.flags["arrival_v8_"+p.end.substr(4)]=true
 			s.ending=false
 		elif p.end.begins_with("ending:"):Campaign.finish(s,p.end.substr(7))
 		else:s.flags.chapter_endpoint=p.end;s.ending=true
 	elif p.has("choices"):
 		if index<0 or index>=p.choices.size():return
 		var choice:Dictionary=p.choices[index]
-		if choice.has("flag"):s.flags[choice.flag]=true
+		if choice.has("flag"):
+			s.flags[choice.flag]=true
+			if choice.flag=="sided_veteran":
+				s.take("water_core");s.flags.filter_return_job=false;s.flags.cargo_sent_with_lieutenant=true
 		state.node=choice.next
 	else:state.node=p.next
 	if state.node in ["official_surface","official_plant"]:s.flags.story_time="07:25"

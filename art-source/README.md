@@ -1,5 +1,7 @@
 # D-6 painterly asset sources
 
+Current v11 animation and asset notes: [v11/README.md](v11/README.md). Historical stride sheets below remain as source art; the current game uses aligned idle paintings with articulated 2D leg layers. The v10 model experiment moved to `experiments/ivan-render-lab`, including its native source and upstream licenses.
+
 These PNGs were generated for this project with the session's image generation
 tool. The generator's exact model name is not exposed; they are not claimed to
 have been made by a specifically named model. No screenshot/reference scene

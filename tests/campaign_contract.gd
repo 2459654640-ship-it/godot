@@ -50,15 +50,15 @@ func run():
 	var plant=restore(s)
 	for branch in [0,1,2]:
 		var t=comic(restore(plant),"return_crossing",branch)
-		check((t.flags.get("campaign_ending","")=="tea" if branch==0 else (t.flags.get("next_facility","")=="commune" if branch==1 else t.flags.get("campaign_ending","")=="home")),"each return choice reaches an ending or playable facility")
+		check((t.flags.get("next_facility","")==("commune" if branch==1 else "labor") and not t.ending),"each return choice reaches an ending or playable facility")
 	# Anna's chain never skips proof or the patient's consent.
 	s=Story.new();s.context.floor="commune"
 	for key in ["commune_join","anna_accept","anna_records","greenhouse_inspect","greenhouse_restart"]:action(s,key)
-	s=restore(s);s.context.floor="coal"
+	s=restore(s);s.context.floor="coal";s.flags.coal_access=true
 	s.act("c_coal_brother");check(not s.last_action_valid and not s.f("brother_found"),"patient encounter requires confirmed identity and care")
 	for key in ["coal_register","coal_archive","coal_medic","coal_brother"]:action(s,key)
 	s=restore(s);s.context.floor="commune";action(s,"anna_result");action(s,"anna_home")
-	check(s.flags.campaign_ending=="anna" and s.ending,"Anna chain reaches a saved ending")
+	check(s.f("commune_member") and not s.ending,"Anna follow-up opens a continued life in the commune")
 	# Solo routes connect through two different maps.
 	for branch in [0,1]:
 		s=comic(Story.new(),"companions",branch)
@@ -67,7 +67,7 @@ func run():
 	s.act("c_radio_tune");check(not s.last_action_valid,"radio cannot tune without power")
 	for key in ["sech_join","radio_manual","radio_power","radio_tune","sech_books","sech_water"]:action(s,key)
 	check(s.f("star_known") and s.f("radio_fixed"),"radio repair reveals Star City through play")
-	action(s,"sech_stay");check(s.flags.campaign_ending=="sech","Sech can be a complete route")
+	action(s,"sech_stay");check(s.f("sech_member") and not s.ending,"Sech commitment opens its continuing chapter")
 	var alternate=Story.new();alternate.context.floor="sech";alternate.economy.goods.battery=1
 	action(alternate,"radio_manual");action(alternate,"radio_battery")
 	check(alternate.f("radio_power") and not alternate.economy.goods.has("battery"),"battery is consumed by the alternate radio repair")
@@ -76,6 +76,7 @@ func run():
 	s=Story.new();s.context.floor="starcity"
 	s.act("c_father_meet");check(not s.last_action_valid,"father reveal is gated by actual access")
 	for key in ["star_name","star_manual","star_isolate","star_meter","star_bypass","star_archive","father_meet","father_semyon","father_truth","star_listen"]:action(s,key);s=restore(s)
+	for key in ["father_absence","star_handover_accept","weather_clock","weather_power","weather_test","weather_return","star_handover_finish"]:action(s,key)
 	for pair in [["ending_starcity","starcity"],["ending_bridge","bridge"],["star_reply","signal"],["star_coordinates","ocean"]]:
 		var t=restore(s);action(t,pair[0])
 		if pair[1]=="signal":action(t,"ending_signal")
@@ -84,11 +85,11 @@ func run():
 	# Every authored travel target resolves, including revisits.
 	for seq in Campaign.data().panels:
 		var panel:Dictionary=Campaign.data().panels[seq]
-		for c in panel.get("choices",[]):check(Campaign.data().panels.has(c.next),"choice destination exists: "+c.next)
-		if panel.has("next"):check(Campaign.data().panels.has(panel.next),"next destination exists: "+panel.next)
+		for c in panel.get("choices",[]):check(Campaign.data().panels.has(c.next) or s.Comic.authored().has(c.next),"choice destination exists: "+c.next)
+		if panel.has("next"):check(Campaign.data().panels.has(panel.next) or s.Comic.authored().has(panel.next),"next destination exists: "+panel.next)
 	# Real interiors: nav connectivity, interaction sight lines, doors crossed by the actual controller.
 	for id in Campaign.NAMES:
-		w=load("res://scenes/"+id+".tscn").instantiate();root.add_child(w);await frames(6)
+		w=load("res://scenes/"+id+".tscn").instantiate();root.add_child(w);current_scene=w;await frames(6)
 		check(w.initialized and w.floor_id==id,"facility starts: "+id)
 		if id=="starcity":
 			var gate_position=w.campaign_gate.position
@@ -121,8 +122,8 @@ func run():
 		w.player.use_override=false;w.hud.show_map();await frames();check(w.hud.modal_visible(),"facility map renders: "+id)
 		w.hud.close()
 		# Save on each new floor and read it through the real loader.
-		w.save_path="user://campaign_contract_"+id+".json";w.story.flags.test_saved=true;w.save_game();w.story.flags.test_saved=false;w.load_game()
-		check(w.story.f("test_saved"),"real save/load on facility: "+id);DirAccess.remove_absolute(w.save_path)
+		w.save_path="user://campaign_contract_"+id+".json";w.story.flags.test_saved=true;w.save_game();w.story.flags.test_saved=false;var test_path=w.save_path;w.load_game();await frames(8);w=current_scene
+		check(w.story.f("test_saved"),"real save/load on facility: "+id);DirAccess.remove_absolute(test_path)
 		w.queue_free();await frames()
 	print("CAMPAIGN_CONTRACT_RESULT checks=",checks," failures=",failed.size())
 	quit(0 if failed.is_empty() else 1)

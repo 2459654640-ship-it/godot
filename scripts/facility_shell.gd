@@ -41,6 +41,8 @@ static func edge(edges:Dictionary,axis:String,fixed:int,start:int,owner:int):
 	if not edges.has(key):edges[key]={"axis":axis,"fixed":fixed,"start":start,"owners":[]}
 	edges[key].owners.append(owner)
 static func wall_with_doors(k,plan:Dictionary,line:Dictionary,start:float,end:float):
+	for opening in plan.get("open_edges",[]):
+		if line.axis==opening[0] and line.fixed==opening[1] and start>=opening[2] and end<=opening[3]:return
 	var spans=[Vector2(start,end)]
 	for d in plan.doors:
 		if d[2]!=line.axis:continue

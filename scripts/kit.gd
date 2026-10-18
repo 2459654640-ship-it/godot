@@ -8,6 +8,8 @@ var wall_sections: Array[Dictionary] = []
 var scrap_meshes:Array[MeshInstance3D]=[]
 var wall_meshes: Array[MeshInstance3D] = []
 var veil_materials:Dictionary={}
+var roof_occluders:Array=[]
+var roof_material_cache:Dictionary={}
 var highlight_material: ShaderMaterial
 var highlight_proxies:Dictionary={}
 var previous_highlight=""
@@ -74,6 +76,7 @@ func box(id: String, p: Vector3, size: Vector3, material: String, solid: bool = 
 	var shape = BoxMesh.new()
 	shape.size = size
 	mesh.mesh = shape
+	mesh.set_meta("design_id",id)
 	mesh.material_override = mats[material]
 	(parent if parent else root).add_child(mesh)
 	mesh.position = p
@@ -103,6 +106,7 @@ func cyl(id: String, p: Vector3, radius: float, height: float, material: String,
 	s.height = height
 	s.radial_segments = 12
 	m.mesh = s
+	m.set_meta("design_id",id)
 	m.material_override = mats[material]
 	(parent if parent else root).add_child(m)
 	m.position = p
@@ -147,10 +151,9 @@ func label(text: String, p: Vector3, size: int = 42, color: Color = Color("d1c5a
 	l.position = p
 	return l
 
-func signboard(text: String, p: Vector3, width: float = 2.5):
-	box("SignBacking", p, Vector3(width,0.52,0.07), "dark")
-	box("SignRule", p+Vector3(0,-0.23,0.04), Vector3(width-0.08,0.025,0.018), "brass")
-	label(text,p+Vector3(0,0,0.045),38)
+func signboard(_text:String,_p:Vector3,_width:float=2.5):
+	# Room uses are recorded on the map; no floating black placards in the world.
+	pass
 
 func lamp(p: Vector3, warm: bool = true, power: float = 1.8, radius: float = 6.0):
 	box("LampBracket",p,Vector3(0.7,0.16,0.16),"dark")
@@ -240,6 +243,7 @@ func finish_walls():
 		var mesh=ArrayMesh.new()
 		for i in range(2):
 			var tool:SurfaceTool=groups[group_key][i]
+			if not tool.get_meta("has_vertices",false):continue
 			tool.generate_tangents()
 			var material=ShaderMaterial.new()
 			material.shader=load("res://assets/visual/masonry_veil.gdshader")
@@ -267,6 +271,7 @@ func finish_walls():
 		instance.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 func wall_quad(tool:SurfaceTool,points:Array,normal:Vector3,cap:bool=false):
+	tool.set_meta("has_vertices",true)
 	# Godot front faces use clockwise vertex order. Normals are explicit and
 	# unrelated to material transparency or the camera's moving position.
 	for index in [0,1,2,0,2,3]:
@@ -372,10 +377,16 @@ func batch_static():
 		var source=child.mesh
 		var material=child.material_override
 		if not material:continue
+		var overhead=false
+		var design_id=String(child.get_meta("design_id",String(child.name)))
+		var high_bounds: AABB=child.global_transform*child.get_aabb()
+		if high_bounds.position.y>1.85:
+			for word in ["Pipe","Cable","Lamp","Beam","Rib","Truss","Cross","Reflector","GrowTube","Rebar","Ceiling"]:
+				if design_id.contains(word):overhead=true
 		var veil=-1
 		var architectural=false
 		for prefix in ["Door","ConcreteDoor","Pipe","Cable","Lamp","Sign"]:
-			if child.name.begins_with(prefix):architectural=true
+			if design_id.begins_with(prefix):architectural=true
 		if architectural:
 			var distance=2.5
 			for index in wall_meshes.size():
@@ -384,7 +395,12 @@ func batch_static():
 				if bounds.has_point(Vector3(p.x,1,p.z)):
 					var d=Vector2(bounds.get_center().x-p.x,bounds.get_center().z-p.z).length()
 					if d<distance:distance=d;veil=index
-		if veil>=0:material=veil_prop_material(material,wall_meshes[veil])
+		if overhead and material is StandardMaterial3D:
+			var cell=Vector2i(floori(child.global_position.x/2.5),floori(child.global_position.z/2.5))
+			var roof_key=str(material.get_instance_id())+str(cell)
+			if not roof_material_cache.has(roof_key):roof_material_cache[roof_key]=new_veil_material(material)
+			material=roof_material_cache[roof_key]
+		elif veil>=0:material=veil_prop_material(material,wall_meshes[veil])
 		var transform:Transform3D=child.global_transform
 		var primitive:Mesh
 		var key=str(material.get_instance_id())+"_shadow_"+str(child.cast_shadow)+"_cell_"+str(floori(child.global_position.x/7.0))+"_"+str(floori(child.global_position.z/7.0))
@@ -403,7 +419,8 @@ func batch_static():
 			primitive.radial_segments=12
 			transform=transform.scaled_local(Vector3(source.bottom_radius,source.height,source.bottom_radius))
 		else:continue
-		if not groups.has(key):groups[key]={"mesh":primitive,"material":material,"transforms":[],"shadow":child.cast_shadow}
+		if not groups.has(key):groups[key]={"mesh":primitive,"material":material,"transforms":[],"shadow":child.cast_shadow,"overhead":overhead,"bounds":high_bounds}
+		else:groups[key].bounds=groups[key].bounds.merge(high_bounds)
 		groups[key].transforms.append(transform)
 		child.set_meta("batched_visual",true)
 		child.visible=false
@@ -416,14 +433,25 @@ func batch_static():
 		mm.instance_count=group.transforms.size()
 		for i in group.transforms.size():mm.set_instance_transform(i,group.transforms[i])
 		instance.multimesh=mm
-		instance.material_override=group.material
+		# A material can span different primitive/cell batches. Their coverage
+		# differs, so each overhead batch needs its own visibility parameter.
+		var render_material=group.material.duplicate() if group.overhead else group.material
+		instance.material_override=render_material
 		instance.cast_shadow=group.shadow
 		root.add_child(instance)
+		if group.overhead:
+			instance.name="OverheadVeil"
+			roof_occluders.append({"mesh":instance,"bounds":group.bounds,"material":render_material})
 
 func veil_prop_material(base:StandardMaterial3D,wall_mesh:MeshInstance3D) -> ShaderMaterial:
 	var list:Array=veil_materials[wall_mesh.get_instance_id()]
 	for entry in list:
 		if entry.base==base:return entry.material
+	var material=new_veil_material(base)
+	list.append({"base":base,"material":material})
+	return material
+
+func new_veil_material(base:StandardMaterial3D)->ShaderMaterial:
 	var material=ShaderMaterial.new()
 	material.shader=load("res://assets/visual/masonry_veil.gdshader")
 	material.set_shader_parameter("normal_strength",0.0)
@@ -433,7 +461,6 @@ func veil_prop_material(base:StandardMaterial3D,wall_mesh:MeshInstance3D) -> Sha
 	material.set_shader_parameter("triplanar",base.uv1_triplanar)
 	material.set_shader_parameter("map_scale",base.uv1_scale)
 	if base.emission_enabled:material.set_shader_parameter("emission_color",base.emission*base.emission_energy_multiplier)
-	list.append({"base":base,"material":material})
 	return material
 
 func prepare_highlights():
@@ -476,5 +503,5 @@ func highlight(id:String,npcs:Dictionary):
 		var painter=npcs[key].visual.get_node_or_null("Painter")
 		if painter:painter.focused=key==id
 		for mesh in npcs[key].visual.find_children("*","MeshInstance3D",true,false):
-			if mesh.name!="PaintedFigure":mesh.material_overlay=highlight_material if key==id else null
+			if mesh.name not in ["PaintedFigure","NearLeg","FarLeg"]:mesh.material_overlay=highlight_material if key==id else null
 	previous_highlight=id

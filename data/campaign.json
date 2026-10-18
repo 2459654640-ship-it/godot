@@ -133,14 +133,25 @@
       "facility": "sech",
       "name": "长老 / 调度台",
       "role": "谢契 / 营地",
-      "body": "老人扶正磨破帽檐的蓝帽，指向桌边挂着的一把钝口的旧马刀。\n「我们叫这里谢契。祖父讲过顿河的村社，我们就把旧军列当成自己的村庄。」\n他指着议事桌上的轮值牌。\n「阿塔曼由议事会推举，管守备，不管一个人的全部。中央叫我们匪，公社要我们站队；这两样，我们都没答应。」",
+      "body": "长老把磨破帽檐的蓝帽放在桌上，给你让出炉边的位置。\n「这里叫谢契。祖辈是哥萨克，讲究有事大家商量。我们在这座检修库安了家，住的是停用后拆下轮轴、固定在支座上的旧车厢。」\n「你先住客铺，热饭在厨房领。入伙要在议事会上当面说，也要听清轮值和守备的规矩。」",
       "options": [
         "sech_join",
         "sech_stay",
         "sech_custom",
-        "north_accept"
+        "north_accept",
+        "sech_trust"
       ],
-      "spoken": true
+      "spoken": true,
+      "after": [
+        [
+          "sech_member",
+          "长老把轮值簿摊在桌面上。\n「铺位留下了。先到议事桌介绍自己，知道同住的人叫什么，以后出门也好互相照应。」"
+        ],
+        [
+          "sech_trusted",
+          "长老把北线联络牌递给你。\n「彼得愿意送你到星城外门。去前在电台报好姓名，守卫同意了再开车。这里的铺位给你留着。」"
+        ]
+      ]
     },
     "sech_manual": {
       "facility": "sech",
@@ -225,9 +236,22 @@
         "commune_route",
         "commune_politics",
         "workers_accept",
-        "ending_workers"
+        "ending_workers",
+        "commune_main_work",
+        "commune_trust",
+        "commune_north_services"
       ],
-      "spoken": true
+      "spoken": true,
+      "after": [
+        [
+          "commune_member",
+          "叶莲娜把一张轮值表递给你。\n「客铺已经改成住户登记。去议事厅听完今天的提案，我们再安排工作。」"
+        ],
+        [
+          "commune_trusted",
+          "叶莲娜在联络簿上留着你的名字。\n「星城的访问信备好了。出发前把没办完的事办完，不急着今晚就走。」"
+        ]
+      ]
     },
     "commune_anna": {
       "facility": "commune",
@@ -270,9 +294,9 @@
     },
     "commune_well": {
       "facility": "commune",
-      "name": "水井 / 公开账簿",
+      "name": "配给室 / 公开账簿",
       "role": "调查",
-      "body": "取水的人把自己的份额划掉，再把铅笔递给下一位。有人替卧床的邻居多领了一罐，名字写在旁边。",
+      "body": "墙边的配水总管接着几只带盖的储水罐。柜台上的本子逐户记录领用量，病房代领单夹在另一页。这里给食堂和居民供水，并不向地面取水。",
       "options": [
         "commune_ledger",
         "press_ledger",
@@ -334,7 +358,9 @@
         "linen_accept",
         "linen_return",
         "mine_air_accept",
-        "mine_air_return"
+        "mine_air_return",
+        "vitamin_plan",
+        "vitamin_leave"
       ],
       "after": [
         [
@@ -358,7 +384,7 @@
       "facility": "coal",
       "name": "探视出口",
       "role": "调查",
-      "body": "出口只通向这次伤病交换的联络通路，另一道门仍锁着。值班员在你的限区函上核销入区时间；回公社后，接送还要双方医护另行约定。",
+      "body": "出口沿原来的煤运侧道返回 D-6 下层作业区。交回矿区存根后，还要在下层煤矿检票口销号，才能沿医护交换路线回公社。",
       "options": [
         "coal_return",
         "workers_return"
@@ -445,6 +471,7 @@
       "body": "老人从测控台后站起来，旧工作外套胸袋里仍插着一把小螺丝刀。台账上写着他的班次：测控技术保障。\n「伊万……」\n他取出另一张合影，没有走过来拥抱你。二十年的空白，就隔在桌子两边。",
       "options": [
         "father_meet",
+        "father_absence",
         "father_semyon",
         "father_truth",
         "father_anger",
@@ -452,9 +479,22 @@
         "father_work",
         "letter_accept",
         "letter_plain",
-        "letter_note"
+        "letter_note",
+        "father_photo"
       ],
       "after": [
+        [
+          "father_photo_seen",
+          "父亲把照片放回你面前，慢慢擦干工作服袖口。\n「我想听你说说她，也想听听你这些年过得怎么样。你问我的事，我会回答。」"
+        ],
+        [
+          "father_met",
+          "父亲将另一只杯子放到桌边，拉开椅子等你坐下。测控台上的指针缓慢摆动，你终于有机会把路上想过的问题逐个问出来。"
+        ],
+        [
+          "father_history_heard",
+          "父亲没有再拿工作解释自己的缺席。\n「这些年是我欠你们的。你愿不愿意留下一封回信，我都应该把你问的事说清楚。」"
+        ],
         [
           "letter_done",
           "旧信的空信封放在控制台边，寄出栏第一次写上了今天的日期。父亲没有再追问你会不会留下。\n「老谢收到后，若愿意回一句……你再告诉我。」"
@@ -486,7 +526,15 @@
         "ending_signal",
         "ending_ocean",
         "ending_weather",
-        "ending_records"
+        "ending_records",
+        "finish_commune",
+        "finish_sech",
+        "finish_workers",
+        "finish_rail",
+        "finish_caravan",
+        "finish_anna",
+        "finish_home",
+        "finish_tea"
       ],
       "spoken": false
     },
@@ -494,7 +542,7 @@
       "facility": "waterworks",
       "name": "老兵",
       "role": "D-6 / 同行者",
-      "body": "老兵的面罩玻璃上凝着一层雾。他试了试背带，向入口的暗廊看了一眼。\n「你先看清图，我盯住入口。不明白的别硬拧，听见不对劲就退回来。」",
+      "body": "老兵在面罩后试了试呼吸，将步枪保险推回原位。\n「我跟你一起进泵房。先看入口桌上的值班图，别急着开阀。废水沟边有爪印，听到动静就停下。」\n他拍了拍你的弹袋。\n「左轮用土制弹，制式弹留着换东西。开枪前看清我在哪边，没装满就按 R 退到掩体后换弹。」",
       "options": [
         "veteran_road",
         "veteran_watch",
@@ -502,7 +550,8 @@
         "mail_return",
         "pressure_copy_accept",
         "pressure_copy_return",
-        "veteran_cargo_check"
+        "veteran_cargo_check",
+        "weapon_service"
       ],
       "after": [
         [
@@ -666,7 +715,8 @@
       "options": [
         "books_read",
         "books_fire",
-        "books_dry"
+        "books_dry",
+        "blanket_find"
       ],
       "spoken": false
     },
@@ -749,6 +799,198 @@
       "options": [
         "north_chock",
         "north_axle"
+      ]
+    },
+    "commune_receiver": {
+      "facility": "commune",
+      "name": "联络室短波接收机",
+      "body": "接收机接在稳压电源上，旁边贴着每天的气象收听时刻。旋钮留着值班员的铅笔标记。",
+      "role": "调查",
+      "spoken": false,
+      "options": [
+        "commune_listen"
+      ]
+    },
+    "commune_cook": {
+      "facility": "commune",
+      "name": "玛尔法 / 食堂",
+      "body": "玛尔法把洗净的碗倒扣在布上，蒸汽将她的额发打湿。\n「先洗手。饭按户留了份，帮工的晚点来也有。要是看见孩子端着空罐子跑，叫他慢一点。」",
+      "role": "公社食堂 / 炊事",
+      "spoken": true,
+      "options": [
+        "commune_heat_accept",
+        "commune_heat_deliver",
+        "meal_accept",
+        "meal_return"
+      ],
+      "after": [
+        [
+          "commune_heat_done",
+          "玛尔法把热汤往柜台里面挪了挪。\n「暖气热了，家属房的人来道过谢。你吃饭了吗？厨房还有别的零碎事，有空再看看。」"
+        ],
+        [
+          "meal_done",
+          "玛尔法将新的送饭卡夹好。\n「米沙今天已经按新铺位送过一回了。老人吃上热饭，我们也放心。」"
+        ]
+      ]
+    },
+    "commune_hall": {
+      "facility": "commune",
+      "name": "人民议事厅 / 居民议事",
+      "body": "低讲台正对着三排座位。墙上贴着公开配给、轮值和居民提案；讲台旁留着一张未写满的发言顺序表。",
+      "role": "调查",
+      "spoken": false,
+      "options": [
+        "commune_assembly"
+      ]
+    },
+    "commune_radiator": {
+      "facility": "commune",
+      "name": "家属房暖气支管",
+      "body": "暖气片下半截冰凉，支管已经关断。旁边的维修盘里有排气钥匙、抹布和接水盆，不必另找工具。",
+      "role": "调查",
+      "spoken": false,
+      "options": [
+        "commune_heat_bleed",
+        "commune_heat_open"
+      ]
+    },
+    "commune_child": {
+      "facility": "commune",
+      "name": "米沙 / 食堂跑腿",
+      "body": "孩子把空饭盒抱在胸前。\n「我在帮玛尔法送饭。你别踩我画的格子，等地面干了再过去。」",
+      "role": "公社居民",
+      "spoken": true,
+      "options": [
+        "meal_child"
+      ]
+    },
+    "commune_bunks": {
+      "facility": "commune",
+      "name": "家属房 / 住户记录",
+      "body": "住户表记着铺位、送饭和行动不便的人。最下方有一处改动：巴拉诺娃已经从医务室搬到家属房，食堂那张单还没有更新。",
+      "role": "调查",
+      "spoken": false,
+      "options": [
+        "meal_record",
+        "meal_deliver"
+      ]
+    },
+    "sech_cook": {
+      "facility": "sech",
+      "name": "达里娅 / 共用厨房",
+      "body": "达里娅正将大麦粥从炉边端下来。\n「住客也有一碗。等开饭的人吃完，桌子还能拿来补衣服。烟道今天又不大顺，你进门别急着摘帽子。」",
+      "role": "谢契 / 炊事",
+      "spoken": true,
+      "options": [
+        "stove_accept",
+        "stove_return",
+        "blanket_return"
+      ],
+      "after": [
+        [
+          "stove_done",
+          "达里娅关上厨房门，烟道轻轻响着。\n「炉子这回抽得顺，门关上也不呛。洗手吃饭，灶上还有热的。」"
+        ],
+        [
+          "blanket_done",
+          "达里娅把空篮放回柜子。\n「蓝线毯送回去了，孩子刚睡着。你自己也找个暖和的地方，别一直站在过桥口。」"
+        ]
+      ]
+    },
+    "sech_stove": {
+      "facility": "sech",
+      "name": "厨房炉灶 / 烟道",
+      "body": "炉火已经熄灭，铁皮烟道末端积满烟灰。清灰口、长刷和接灰桶都在灶侧，墙上画着从下往上的三段编号。",
+      "role": "调查",
+      "spoken": false,
+      "options": [
+        "stove_clear",
+        "stove_brush"
+      ]
+    },
+    "sech_bunks": {
+      "facility": "sech",
+      "name": "居民铺位 / 轮值簿",
+      "body": "木隔板把车厢分成几户，帘子后垂着晾干的袜子。门边的轮值簿旁夹着一张寻物纸条：孩子的羊毛毯送去书房晾晒，至今没人取回。",
+      "role": "调查",
+      "spoken": false,
+      "options": [
+        "blanket_accept"
+      ]
+    },
+    "sech_meeting": {
+      "facility": "sech",
+      "name": "谢契议事 / 入伙轮值",
+      "body": "桌面铺着一张褪色的毯子，住户、巡轨和厨房的轮值牌分成三摞。长凳空着几处，等新住户坐下。",
+      "role": "调查",
+      "spoken": false,
+      "options": [
+        "sech_oath"
+      ]
+    },
+    "star_handover": {
+      "facility": "starcity",
+      "name": "联络值班 / 维修资料交接",
+      "body": "值班台摆着净水检测记录、北线中继测试表和一册空白交接簿。来访者要先完成身份确认，再决定将哪些核实过的资料交给外站。",
+      "role": "调查",
+      "spoken": false,
+      "options": [
+        "star_handover_accept",
+        "star_handover_finish"
+      ]
+    },
+    "d6_return_desk": {
+      "facility": "labor",
+      "name": "返站审核 / 科瓦廖夫中尉",
+      "role": "D-6 / 限区通行",
+      "body": "中尉将离站名册和探访函并排放在桌上。\n「先把离站经过说清。煤矿有自己的登记口，不管你来找谁，都得按范围进去。」",
+      "spoken": true,
+      "options": [
+        "return_official",
+        "return_explain",
+        "return_witness",
+        "return_audit",
+        "return_limited",
+        "return_filters",
+        "return_assignment"
+      ],
+      "after": [
+        [
+          {
+            "all": [
+              "d6_returned",
+              "departure_official"
+            ]
+          },
+          "科瓦廖夫核对了随队离站的签字，随后翻到你的返站记录。\n「身份没问题。把物资或探访手续分开办，去煤矿还需要限区章。」"
+        ],
+        [
+          {
+            "all": [
+              "d6_returned"
+            ],
+            "not": [
+              "departure_official"
+            ]
+          },
+          "中尉翻开未结案的离站记录，警卫站在门边。\n「你怎么从 D-6 离开的，为什么没有归队，现在都要说清。医护探访可以核实，擅离记录也要补齐。」"
+        ],
+        [
+          "return_reviewed",
+          "中尉将核对页夹回档案。\n「限区审核办过了。煤矿检票口在南侧，登记范围之外别乱走，回来记得销号。」"
+        ]
+      ]
+    },
+    "coal_gate_entry": {
+      "facility": "labor",
+      "name": "煤矿检票 / 下行通道",
+      "role": "D-6 / 限区入口",
+      "spoken": false,
+      "body": "检票员对照限区章和当班名册。门后的木支护通道沿煤运轨道向下，通往矿区登记和休养间。",
+      "options": [
+        "enter_coal",
+        "return_commune"
       ]
     }
   },
@@ -883,15 +1125,18 @@
       }
     },
     "sech_stay": {
-      "text": "「我想留下来。先把这里的日子过好。」",
-      "reply": "",
+      "text": "「我愿意留下，按谢契的规矩一起过日子。」",
+      "reply": "你决定先留下来。这里的人为你安排了铺位，下一班的工作还等着有人接手。",
       "once": true,
       "req": {
-        "all": [
-          "radio_fixed"
+        "not": [
+          "sech_member"
         ]
       },
-      "ending": "sech"
+      "flags": {
+        "sech_member": true
+      },
+      "travel": "sech_settle"
     },
     "radio_manual": {
       "text": "抄下线路，检查接地端",
@@ -918,7 +1163,7 @@
       }
     },
     "radio_tune": {
-      "text": "按纸上的刻度，辨认呼号",
+      "text": "慢慢调谐接收机，听清北线广播",
       "reply": "杂音里传来清晰的值班报号。\n东方-7 值班员：「这里是星城-2 测控站。北线来访者，先报姓名，停在蓝门隔离线外。」\n谢尔盖：「星城还通着。北线检修列车能到他们的外门。」",
       "once": true,
       "req": {
@@ -928,7 +1173,9 @@
       },
       "flags": {
         "radio_fixed": true,
-        "star_known": true
+        "star_known": true,
+        "signal_heard": true,
+        "signal_identified": true
       },
       "give": [
         "frequency"
@@ -949,12 +1196,12 @@
     },
     "sech_father": {
       "text": "「我在找父亲，星城会有他的记录吗？」",
-      "reply": "「你还没说姓名，我也没见过他们的进站名册，答不上来。」\n谢尔盖指向北线。\n「我接触过星城的货运员，能告诉你去哪扇门登记。带上姓名和照片，请值守核查，比我们在这里猜有用。」",
+      "reply": "「我不认识你父亲，也没看过星城的人员名册，不能替你确认他在不在那里。」\n谢尔盖指向北线。\n「我认识那边的货运员，知道外门的登记办法。带上姓名和照片，请值守核查。他们若肯接内线，才能问到确切的人。」",
       "once": true,
       "req": {
         "all": [
-          "star_known",
-          "father"
+          "father",
+          "star_known"
         ]
       }
     },
@@ -975,7 +1222,9 @@
       "once": false,
       "req": {
         "all": [
-          "star_known"
+          "star_known",
+          "north_done",
+          "radio_fixed"
         ]
       },
       "travel": "star_road"
@@ -1000,22 +1249,32 @@
       }
     },
     "commune_stay": {
-      "text": "「我暂时不再走了。把我记进轮班表。」",
-      "reply": "",
+      "text": "「我想加入公社。给我安排一份工作吧。」",
+      "reply": "你决定先留下来。这里的人为你安排了铺位，下一班的工作还等着有人接手。",
       "once": true,
       "req": {
-        "all": [
-          "commune_joined"
+        "not": [
+          "commune_member"
         ]
       },
-      "ending": "commune"
+      "flags": {
+        "commune_member": true
+      },
+      "travel": "commune_settle"
     },
     "commune_route": {
       "text": "「你听说过东方-7吗？」",
-      "reply": "「谢契沿北线走，那里能接到星城-2 的短波。星城是一座大型地下科研设施，东方-7 是它的呼号。」\n叶莲娜指向东北联络室。\n「我们交换过气象记录，但我没见过星城的人员名册。要找亲属，得先报姓名，请星城值守核查。」",
+      "reply": "「这个呼号我知道。星城-2 的测控值班台用它报气象，联络室也能接到。」\n叶莲娜取出一张联络表。\n「星城在地下，是战前留下的大型科研设施。我们只交换过气象和线路状况。你想找什么人，要把姓名报给他们，请值守查名册。我不能凭一个呼号替你保证。」",
       "once": true,
       "flags": {
-        "commune_radio_known": true
+        "commune_radio_known": true,
+        "star_known": true,
+        "signal_identified": true
+      },
+      "req": {
+        "all": [
+          "signal_heard"
+        ]
       }
     },
     "anna_accept": {
@@ -1049,14 +1308,20 @@
     },
     "anna_home": {
       "text": "陪安娜等下一班探视车，留在公社",
-      "reply": "",
+      "reply": "你决定先留下来。这里的人为你安排了铺位，下一班的工作还等着有人接手。",
       "once": true,
       "req": {
         "all": [
           "anna_reunited"
+        ],
+        "not": [
+          "commune_member"
         ]
       },
-      "ending": "anna"
+      "flags": {
+        "commune_member": true
+      },
+      "travel": "commune_settle"
     },
     "greenhouse_inspect": {
       "text": "先停泵，清理过滤篮",
@@ -1117,7 +1382,7 @@
     },
     "commune_ledger": {
       "text": "帮值班员核对一页漏记的送水账",
-      "reply": "你和水井值班员核过账目，漏记的是病房代领的半桶水。送水人补上了签名。\n水井值班员：「总数对上了。以后病房代领另写一栏，免得再漏。」",
+      "reply": "你和值班员核对了配水账，漏记的是给病房送去的半桶水。送水人补上签名，又将代领单单独夹好。\n配水值班员：「这样就对得上了。这盒抗辐射药你留着。北边排水沟还有战前的沉积物，面具只能防吸入，别在污泥边久站。」",
       "once": true,
       "flags": {
         "commune_ledger": true
@@ -1144,6 +1409,11 @@
       "req": {
         "all": [
           "star_known"
+        ],
+        "any": [
+          "commune_trusted",
+          "commune_radio_known",
+          "signal_identified"
         ]
       },
       "travel": "star_road"
@@ -1165,7 +1435,7 @@
       "once": true,
       "req": {
         "all": [
-          "anna_records"
+          "coal_access"
         ]
       },
       "flags": {
@@ -1222,7 +1492,7 @@
           "workers_draft"
         ]
       },
-      "travel": "anna_return"
+      "travel": "coal_exit_to_d6"
     },
     "star_name": {
       "text": "报上自己与父亲的姓名，说明来自 D-6",
@@ -1320,8 +1590,8 @@
       }
     },
     "father_meet": {
-      "text": "「你为什么一直没有回来？」",
-      "reply": "「我是这里的测控技术员。六二年奉调进地下设施，最初封闭，后来通路断了。写过的信没送到。」\n父亲按住桌沿。\n「再后来，北线能通人了。我还在用设备离不开人作理由。怕见你，也怕知道自己错过了什么。我有过离开的机会，是我一直拖着没有走。」",
+      "text": "「我是伊万。我们能坐下谈谈吗？」",
+      "reply": "父亲把椅子拉到桌边。\n「我认得你。值班室刚报来名字，我还以为是听错了。你长大了……我却一直没有回来。」\n他握着杯子的手没有松开。\n「你想问什么，就问吧。我不再让你对着一张没回音的纸。」",
       "once": true,
       "req": {
         "all": [
@@ -1335,7 +1605,7 @@
     },
     "father_semyon": {
       "text": "「老爹知道你在这里吗？」",
-      "reply": "「老谢把我们护送到外侧集结点就回 D-6 了。他没有进过星城，也不知道后来哪些入口还活着。」\n父亲把照片放平。\n「失联以后，是他养大了你。我欠他的，不是一句谢谢能还清的。」",
+      "reply": "「老谢把你母亲和你送到 D-6 的入口，后来又送我的信去找过北线的人。他没有进过星城，也不知道封闭后的入口在哪里。」\n父亲慢慢合上工作簿。\n「后来能通人了，我却还是拖着。是他照顾你长大。我应该亲口向他认错。」",
       "once": true,
       "req": {
         "all": [
@@ -1414,7 +1684,8 @@
       "req": {
         "all": [
           "father_met",
-          "father_answered"
+          "father_answered",
+          "journey_ready"
         ]
       },
       "ending": "starcity"
@@ -1426,7 +1697,8 @@
       "req": {
         "all": [
           "father_met",
-          "father_answered"
+          "father_answered",
+          "journey_ready"
         ]
       },
       "ending": "bridge"
@@ -1437,7 +1709,8 @@
       "once": true,
       "req": {
         "all": [
-          "cautious_signal"
+          "cautious_signal",
+          "journey_ready"
         ]
       },
       "ending": "signal"
@@ -1448,7 +1721,8 @@
       "once": true,
       "req": {
         "all": [
-          "coordinates_proposed"
+          "coordinates_proposed",
+          "journey_ready"
         ]
       },
       "ending": "ocean"
@@ -1471,8 +1745,8 @@
       "once": true
     },
     "father_quiet": {
-      "text": "先不回答，把母亲的照片放在桌上。",
-      "reply": "你没能说出准备过的话。父亲看着照片，慢慢坐下来。\n过了很久，他问你想不想喝点水。你点了点头。今天先到这里。",
+      "text": "先不回答，坐下来喝一口水。",
+      "reply": "你在桌边坐下，捧住那只掉了瓷的搪瓷杯。父亲没有再追问。仪表的指针在他背后缓慢摆动，过了很久，他才问起你这些年怎么过来的。",
       "flags": {
         "father_answered": true,
         "father_quiet": true
@@ -1530,7 +1804,7 @@
     },
     "veteran_road": {
       "text": "「他们的家人……回去怎么说？」",
-      "reply": "老兵摸了摸胸前装信的口袋。\n「把在哪儿遇险、怎么找过他们，都说清楚。遗物交给家属，别只递一张牺牲通知就走。」\n他看向入口。\n「这趟回去，我和中尉一起去。你愿意来，就跟着。」",
+      "reply": "老兵把步枪背带往肩上提了提。\n「我跟着你，先排查房间里的动静，再动设备。倒在地上还有气，就靠近按住 E，帮我一把；你伤了也先退回来包扎，别站着硬扛。」",
       "once": true
     },
     "veteran_watch": {
@@ -1545,14 +1819,14 @@
     },
     "commune_politics": {
       "text": "「你们准备怎么对抗中央苏维埃？」",
-      "reply": "「先让他们分在不同站里的工人能说上话，保住水井、粮食和印刷机，再组织守备。中央把我们叫叛徒，我们说他们背叛了革命。」\n她合上那本记着值夜人的册子。\n「口号容易，轮到谁守门、谁的孩子先吃饭，才看得出你说的算不算数。」",
+      "reply": "「中央苏维埃控制着 D-6。我们要推翻他们按身份分配水、药和住处的制度，让各站工人选出的代表共同管理。」\n叶莲娜翻开配给账。\n「现在先保住供水、粮食和地下联络，也得准备守备。中央随时可能封锁我们。愿意加入的人有权表决，也要承担轮班；你可以先听一次议事会，再作决定。」",
       "once": true,
       "flags": {},
       "req": {}
     },
     "sech_custom": {
       "text": "「谢契的规矩，谁说了算？」",
-      "reply": "「日常轮值归阿塔曼调度，大事在议事桌上说，愿留的人都有一句话。祖辈的马刀和圣像还在，可这里大多数人连马都没骑过。」\n老人笑了笑。\n「继承的若只剩一顶帽子，早晚也得拿去换面包。」",
+      "reply": "「阿塔曼是议事会推举的守备负责人，安排巡逻和遇袭时的指挥。粮食、接纳新住户和是否出远门，由居民在议事会上共同商量。」\n长老指了指轮值簿。\n「谢契不归中央苏维埃管，也没有加入公社。我们愿意跟他们交换物资，但不会让他们替这里的人作决定。留下的人要轮值，分到的口粮按户登记。」",
       "once": true,
       "flags": {},
       "req": {}
@@ -1710,7 +1984,7 @@
     },
     "press_accept": {
       "text": "「我帮你核账，再校一遍公报。」",
-      "reply": "「先看大厅水井旁的公开送水账，再来东北联络室的校稿台。把病房代领那栏算进去，别凭第一眼的合计下结论。」",
+      "reply": "「先看大厅储水总管旁的公开送水账，再来东北联络室的校稿台。把病房代领那栏算进去，别凭第一眼的合计下结论。」",
       "once": true,
       "flags": {
         "press_job": true
@@ -2341,7 +2615,7 @@
           "workers_signed"
         ]
       },
-      "travel": "anna_return"
+      "travel": "coal_exit_to_d6"
     },
     "workers_deliver": {
       "text": "把署名、编号与拒绝意见原样交给娜佳",
@@ -2358,15 +2632,20 @@
     },
     "ending_workers": {
       "text": "留下来，建立与 D-6 工人的回信窗口",
-      "reply": "",
-      "flags": {},
+      "reply": "你决定先留下来。这里的人为你安排了铺位，下一班的工作还等着有人接手。",
+      "flags": {
+        "commune_member": true
+      },
       "once": true,
       "req": {
         "all": [
           "workers_done"
+        ],
+        "not": [
+          "commune_member"
         ]
       },
-      "ending": "workers"
+      "travel": "commune_settle"
     },
     "north_accept": {
       "text": "「北线停着的列车，能再运人吗？」",
@@ -2431,28 +2710,38 @@
     },
     "ending_train": {
       "text": "和巡轨队一起维持北线通行",
-      "reply": "",
-      "flags": {},
+      "reply": "你决定先留下来。这里的人为你安排了铺位，下一班的工作还等着有人接手。",
+      "flags": {
+        "sech_member": true
+      },
       "once": true,
       "req": {
         "all": [
           "north_done"
+        ],
+        "not": [
+          "sech_member"
         ]
       },
-      "ending": "rail"
+      "travel": "sech_settle"
     },
     "ending_caravan": {
       "text": "组织以医药与居民接送为主的联络车队",
-      "reply": "",
-      "flags": {},
+      "reply": "你决定先留下来。这里的人为你安排了铺位，下一班的工作还等着有人接手。",
+      "flags": {
+        "sech_member": true
+      },
       "once": true,
       "req": {
         "all": [
           "north_done",
           "radio_fixed"
+        ],
+        "not": [
+          "sech_member"
         ]
       },
-      "ending": "caravan"
+      "travel": "sech_settle"
     },
     "weather_accept": {
       "text": "「能不能把各站的天气连起来？」",
@@ -2527,7 +2816,8 @@
       "req": {
         "all": [
           "weather_done",
-          "father_met"
+          "father_met",
+          "journey_ready"
         ]
       },
       "ending": "weather"
@@ -2585,7 +2875,7 @@
     },
     "medicine_seal_accept": {
       "text": "「这批敷料送走前，需要再核一遍吗？」",
-      "reply": "「正好。明天送去医护交换窗口，少一包都得在那儿重新拆封。」\n安娜把清单递给你。\n「先去东北联络档案室，按交换账核对敷料包数，再到大厅公用水井，请值班员见证装袋。两处都签过，封袋再拿回来给我。」",
+      "reply": "「正好。明天送去医护交换窗口，少一包都得在那儿重新拆封。」\n安娜把清单递给你。\n「先去东北联络档案室，按交换账核对敷料包数，再到大厅配给室，请值班员见证装袋。两处都签过，封袋再拿回来给我。」",
       "flags": {
         "parcel_job": true
       },
@@ -2606,8 +2896,8 @@
       }
     },
     "medicine_seal_compare": {
-      "text": "请水井值班员见证封袋数量",
-      "reply": "水井值班员按抄页重新点过封袋数量，确认与交换账相符，在见证栏签了字。你封好袋口，准备交回安娜。",
+      "text": "请配水值班员见证封袋数量",
+      "reply": "配水值班员按抄页重新点过封袋数量，确认与交换账相符，在见证栏签了字。你封好袋口，准备交回安娜。",
       "flags": {
         "parcel_checked": true
       },
@@ -2746,7 +3036,8 @@
           "pressure_done",
           "names_done",
           "labels_done",
-          "father_met"
+          "father_met",
+          "journey_ready"
         ]
       },
       "ending": "records"
@@ -2770,6 +3061,675 @@
         ]
       },
       "once": true
+    },
+    "father_photo": {
+      "text": "取出母亲的照片，让他看看。",
+      "reply": "父亲接过照片，拇指停在背面的铅笔字上。\n「这是她的字。那天在河边，她嫌我站得太直，非让我把领口松开。」\n他看了很久，才将照片平放到你面前。\n「她后来……是不是吃了很多苦？」\n你告诉他母亲在地下第四年病死，老爹一直陪着你。父亲低下头，眼泪落在工作服袖口上。照片没有离开你的手。",
+      "once": true,
+      "flags": {
+        "father_photo_seen": true
+      },
+      "req": {
+        "all": [
+          "star_access"
+        ],
+        "items": [
+          "photo"
+        ]
+      }
+    },
+    "commune_listen": {
+      "text": "戴上耳机，等值班广播。",
+      "reply": "电流声后，一个疲倦的男声按顺序报出时间、气温和北线风雪。\n东方-7 值班员：「这里是星城-2。北线来访者先报姓名，停在蓝门隔离线外，等候值守答复。」\n你记下时刻和频率。信号来自一座仍在运转的地下设施，值得查一查。",
+      "once": true,
+      "flags": {
+        "signal_heard": true,
+        "signal_identified": true,
+        "star_known": true
+      },
+      "req": {},
+      "give": [
+        "frequency"
+      ]
+    },
+    "commune_assembly": {
+      "text": "参加居民议事，听完守备与供水安排。",
+      "reply": "有人担心中央切断交换线路，有人要求先修家属房的暖气。叶莲娜让每位发言者把地点和所需人手说清。\n你投下赞成公开配给记录的一票，又在维修轮值栏签上姓名。会议没有掌声，散会后，食堂的人留下来搬座椅。",
+      "once": true,
+      "flags": {
+        "assembly_done": true
+      },
+      "req": {
+        "all": [
+          "commune_member"
+        ]
+      }
+    },
+    "commune_main_work": {
+      "text": "「我听过议事了。下一步我能负责什么？」",
+      "reply": "「温室和联络都得有人。回水泵请卓娅教你看；联络组有一份工人征询稿，需要你去煤运窗口核实。两件做完，再来领长期工作安排。」\n她将探访手续夹进你的手记。\n「不愿署名的人也照实记录。我们不能替他们答应。」",
+      "once": true,
+      "flags": {
+        "commune_chapter_work": true,
+        "commune_joined": true,
+        "workers_job": true
+      },
+      "req": {
+        "all": [
+          "assembly_done"
+        ]
+      }
+    },
+    "commune_trust": {
+      "text": "汇报温室维修与工人征询的结果。",
+      "reply": "叶莲娜核对完回水记录，又逐页看过征询稿。\n「这两件事都能交到你手里。联络组想请你去星城交换净水检测资料，问问那边愿不愿意开放固定回信窗口。」\n她递来盖章的访问信。\n「你还可以在这里住。出发的日子由你选，家属房的铺位先留着。」",
+      "once": true,
+      "flags": {
+        "commune_trusted": true,
+        "star_known": true
+      },
+      "req": {
+        "all": [
+          "commune_chapter_work",
+          "greenhouse_fixed",
+          "workers_done"
+        ]
+      }
+    },
+    "commune_heat_accept": {
+      "text": "「住户说家属房很冷，我去看看？」",
+      "reply": "「东南家属房的支管。我把工具放在墙边了。先排气，确认不漏，再慢慢开回水。修好来告诉我，我得通知送饭的人别把盆放在暖气上。」",
+      "once": true,
+      "flags": {
+        "commune_heat_job": true
+      },
+      "req": {}
+    },
+    "commune_heat_bleed": {
+      "text": "关紧支管，用钥匙缓慢排出积气。",
+      "reply": "你垫好抹布，将排气口对准盆。短促的气声过后，水流连成细线。你关回排气口，擦干接头，等了一会儿，没有渗漏。",
+      "once": true,
+      "flags": {
+        "commune_heat_bled": true
+      },
+      "req": {
+        "all": [
+          "commune_heat_job"
+        ]
+      }
+    },
+    "commune_heat_open": {
+      "text": "重新开启回水，逐段检查温度。",
+      "reply": "热水沿暖气片慢慢爬上来。你等到最远一节也温热，记下复查时间，把公用工具放回盘里。",
+      "once": true,
+      "flags": {
+        "commune_heat_fixed": true
+      },
+      "req": {
+        "all": [
+          "commune_heat_bled"
+        ]
+      }
+    },
+    "commune_heat_deliver": {
+      "text": "「暖气已经热了，接头也不漏。」",
+      "reply": "玛尔法摘下手套，在维修单上签了字。\n「多亏你。老人们今晚能睡安稳些。」\n她从公用维修报酬里数出子弹，又给你包好一份面包。",
+      "once": true,
+      "flags": {
+        "commune_heat_done": true
+      },
+      "req": {
+        "all": [
+          "commune_heat_fixed"
+        ]
+      },
+      "reward": {
+        "military": 6
+      },
+      "goods": {
+        "bread": 1
+      }
+    },
+    "meal_accept": {
+      "text": "「这份没领的饭，是给谁留的？」",
+      "reply": "「巴拉诺娃。医务室说她搬走了，家属房还没来领。你先去看住户记录，再问问米沙今天送到了哪里。别急着倒掉，人要是饿着等就麻烦了。」",
+      "once": true,
+      "flags": {
+        "meal_job": true
+      },
+      "req": {}
+    },
+    "meal_record": {
+      "text": "核对搬迁日期与新铺位。",
+      "reply": "巴拉诺娃今天搬到东南家属房。食堂登记卡还写着医务室，你抄下新铺位，留出送饭人的签名栏。",
+      "once": true,
+      "flags": {
+        "meal_record": true
+      },
+      "req": {
+        "all": [
+          "meal_job"
+        ]
+      }
+    },
+    "meal_child": {
+      "text": "「巴拉诺娃搬到家属房了。你今天去过那边吗？」",
+      "reply": "「我送到医务室，护士让我先拿回来。我以为她已经吃了。」\n米沙把饭盒递给你。\n「我跟你去，把新的铺位记在卡背上。下次我认识路。」",
+      "once": true,
+      "flags": {
+        "meal_located": true
+      },
+      "req": {
+        "all": [
+          "meal_record"
+        ]
+      }
+    },
+    "meal_deliver": {
+      "text": "和米沙把热饭送到正确铺位，再更新送饭卡。",
+      "reply": "老人接过重新热好的饭，先摸了摸孩子冻红的手。你把新铺位和送达时刻写在卡上，米沙认真签了自己的名字。",
+      "once": true,
+      "flags": {
+        "meal_delivered": true
+      },
+      "req": {
+        "all": [
+          "meal_located"
+        ]
+      }
+    },
+    "meal_return": {
+      "text": "交回更新后的送饭卡。",
+      "reply": "「以后谁搬房间，都得把食堂这份也改了。」\n玛尔法收起卡，给你补了一份热食和送饭的报酬。",
+      "once": true,
+      "flags": {
+        "meal_done": true
+      },
+      "req": {
+        "all": [
+          "meal_delivered"
+        ]
+      },
+      "reward": {
+        "military": 4
+      },
+      "goods": {
+        "bread": 1
+      }
+    },
+    "sech_oath": {
+      "text": "在议事会上介绍自己，接下第一轮工作。",
+      "reply": "你向围坐的住户说出名字和来处。有人问你的手艺，有人问 D-6 的储水还能撑多久。你一一回答。\n长老：「你会修线路，就先跟彼得查北线车，再把电台和水箱看好。这里出门的人，要能信得过身边的同伴。」\n你在轮值簿上签名。",
+      "once": true,
+      "flags": {
+        "sech_oath": true,
+        "sech_joined": true,
+        "north_job": true
+      },
+      "req": {
+        "all": [
+          "sech_member"
+        ]
+      }
+    },
+    "sech_trust": {
+      "text": "汇报水箱、电台和北线列车的检查结果。",
+      "reply": "长老等彼得签完检查栏，才将一枚旧铜牌放在你掌心。\n「这是谢契的联络牌。你想去星城，彼得愿意送到北线隔离口。我们先在电台报你的姓名，请值守确认再出发。」\n他把留给你的铺位重新压在轮值簿上。\n「出去办事，铺位还在。想回来，就在同一个频率叫我们。」",
+      "once": true,
+      "flags": {
+        "sech_trusted": true,
+        "star_known": true
+      },
+      "req": {
+        "all": [
+          "sech_oath",
+          "water_tank_fixed",
+          "radio_fixed",
+          "north_done"
+        ]
+      }
+    },
+    "stove_accept": {
+      "text": "「我来清烟道。炉子已经停了吗？」",
+      "reply": "「停了，也凉透了。先开下段清灰口，往桶里收灰；再刷上段。最后关严清灰口，我用纸条试抽力。别把烟灰倒进取水沟。」",
+      "once": true,
+      "flags": {
+        "stove_job": true
+      },
+      "req": {}
+    },
+    "stove_clear": {
+      "text": "打开下段清灰口，收集积灰。",
+      "reply": "你先垫好旧报纸，将结块的积灰一点点拨进桶，确认下段没有堵塞。",
+      "once": true,
+      "flags": {
+        "stove_lower": true
+      },
+      "req": {
+        "all": [
+          "stove_job"
+        ]
+      }
+    },
+    "stove_brush": {
+      "text": "刷通上段，关严清灰口，测试抽力。",
+      "reply": "长刷碰落最后一层烟垢。你装回盖板，用纸条贴近进风口；纸条稳定向内偏转。达里娅站在旁边确认后，才重新生火。",
+      "once": true,
+      "flags": {
+        "stove_fixed": true
+      },
+      "req": {
+        "all": [
+          "stove_lower"
+        ]
+      }
+    },
+    "stove_return": {
+      "text": "「烟道通了，清灰口也封好了。」",
+      "reply": "「这回能把门关上吃饭了。」\n达里娅留好明早的清灰轮值，将约好的报酬和一卷干净绷带交给你。",
+      "once": true,
+      "flags": {
+        "stove_done": true
+      },
+      "req": {
+        "all": [
+          "stove_fixed"
+        ]
+      },
+      "reward": {
+        "military": 5
+      },
+      "goods": {
+        "bandage": 1
+      }
+    },
+    "blanket_accept": {
+      "text": "记下寻物纸条，替住户取回羊毛毯。",
+      "reply": "门后的女人让你认清毯角缝着的蓝线。\n「书房在北边，我轮到照看炉子，一时走不开。找到了拿给厨房的达里娅就行，她知道是哪家的。」",
+      "once": true,
+      "flags": {
+        "blanket_job": true
+      },
+      "req": {}
+    },
+    "blanket_find": {
+      "text": "按蓝线标记辨认晾晒的羊毛毯。",
+      "reply": "你在书架旁的晾晒绳上找到毯子。摸过内层，已经干了；下面压着的书页也没有受潮，你将它们放回书架。",
+      "once": true,
+      "flags": {
+        "blanket_found": true
+      },
+      "req": {
+        "all": [
+          "blanket_job"
+        ]
+      }
+    },
+    "blanket_return": {
+      "text": "把蓝线毯交给达里娅，托她送回孩子的铺位。",
+      "reply": "达里娅把毯子折好，写上住户的名字。\n「替他们谢谢你。北边拿回来的这包药，给常出门的人留着。」",
+      "once": true,
+      "flags": {
+        "blanket_done": true
+      },
+      "req": {
+        "all": [
+          "blanket_found"
+        ]
+      },
+      "goods": {
+        "antirad": 1
+      },
+      "reward": {
+        "military": 3
+      }
+    },
+    "star_handover_accept": {
+      "text": "「我想把沿路核实的事留下，再问清怎么安全返回。」",
+      "reply": "值班技术员铺开表格。\n「先和你父亲谈完，再帮我们把气象中继测试做完。来路上有净水资料，就交一份型号抄页；没有也没关系，先整理当前的接收日志。送出去的内容得能复核。」",
+      "once": true,
+      "flags": {
+        "handover_job": true,
+        "weather_job": true
+      },
+      "req": {
+        "all": [
+          "father_met"
+        ]
+      }
+    },
+    "star_handover_finish": {
+      "text": "完成值班交接，确认回信与安全通路。",
+      "reply": "你把接收日志、线路测试结果与一路记下的姓名分开归档。值班员逐项签收，给 D-6、公社和谢契各留了一个约定的回信窗口。\n父亲陪你走到隔离线前。\n「这一次，你知道我在哪里，也知道什么时候能找到我。以后愿不愿意再来，由你自己决定。」\n旅途中的疑问有了能核实的答案。你终于可以选择下一段生活。",
+      "once": true,
+      "flags": {
+        "journey_ready": true
+      },
+      "req": {
+        "all": [
+          "handover_job",
+          "weather_done",
+          "father_answered",
+          "father_history_heard"
+        ]
+      }
+    },
+    "return_official": {
+      "text": "出示随队离站记录与公社的医护担保。",
+      "reply": "科瓦廖夫对照签字与物资交接记录，在探访函上加盖限区章。\n「你从正门随队出去，离队的事我记在备注里。现在只准探访和核对班组记录。煤矿登记口在作业层南边，办完回来销号。」",
+      "flags": {
+        "return_reviewed": true,
+        "coal_access": true
+      },
+      "req": {
+        "all": [
+          "d6_returned",
+          "departure_official"
+        ]
+      },
+      "once": true
+    },
+    "return_explain": {
+      "text": "说明自己未经批准离站，请求有限探访。",
+      "reply": "中尉翻出一张尚未结案的擅离记录。\n「你没有按出站名单归队。有人把你当失踪，也有人要求按擅离处理。我不能当这事没发生。」\n他又看过医护担保。\n「探访的事可以另核。老谢能证明身份，但还需要把离站口的维修记录补齐。你可以先找他作证；不愿牵连他，就在这里核对门禁记录。」",
+      "flags": {
+        "return_questioned": true
+      },
+      "req": {
+        "all": [
+          "d6_returned"
+        ],
+        "not": [
+          "departure_official"
+        ]
+      },
+      "once": true
+    },
+    "return_witness": {
+      "text": "请值班员接通老爹的内线，核实身份。",
+      "reply": "老爹听见你的声音，半天没说出话。\n谢苗诺夫：「人是伊万，我认得。让他先把该办的手续办完……伊万，你回来以后到门口叫我一声。」\n中尉记下见证。\n「身份核实了。再把这页出入登记对清，就能签有限通行。」",
+      "flags": {
+        "return_identity": true
+      },
+      "req": {
+        "all": [
+          "return_questioned"
+        ]
+      },
+      "once": true
+    },
+    "return_audit": {
+      "text": "逐项核对离站时刻、门禁口与领用装备。",
+      "reply": "你按实际经过填写维修口、离站时间和装备来源。记录没有被撕掉，中尉在旁边写明：本人返站，限制活动范围，待后续复核。\n「逃亡的指控先缓办。探访不等于撤销记录，你自己清楚。」",
+      "flags": {
+        "return_audited": true
+      },
+      "req": {
+        "all": [
+          "return_questioned"
+        ]
+      },
+      "once": true
+    },
+    "return_limited": {
+      "text": "递交核对页，申请煤矿限区通行。",
+      "reply": "中尉在探访函和登记页上签字。\n「只进煤运登记与休养区，守卫会带你过去。煤矿深处还在作业，不准乱走。办完回这个窗口销号，再沿原交换路线离开。」\n你收好通行页。煤矿口的红灯转成了等待检票的黄灯。",
+      "flags": {
+        "return_reviewed": true,
+        "coal_access": true
+      },
+      "req": {
+        "all": [
+          "return_audited"
+        ]
+      },
+      "once": true
+    },
+    "enter_coal": {
+      "text": "向检票员递上限区通行页，进入煤矿。",
+      "reply": "检票员撕下存根，开门让你跟着引导灯走。",
+      "flags": {
+        "coal_entry_logged": true
+      },
+      "req": {
+        "all": [
+          "coal_access"
+        ]
+      },
+      "once": true,
+      "travel": "coal_descent"
+    },
+    "return_commune": {
+      "text": "办完销号，沿交换路线返回公社。",
+      "reply": "你交回限区存根，值守将离站时刻填上。",
+      "flags": {},
+      "req": {
+        "all": [
+          "d6_returned",
+          "return_reviewed"
+        ]
+      },
+      "once": true,
+      "travel": "anna_return"
+    },
+    "vitamin_plan": {
+      "text": "「我有居民配发的维生素 D，适合给他用吗？」",
+      "reply": "医护检查药瓶标签与有效期。\n「可以补足缺乏，但得按剂量、配合饮食和复查。它治不了旧伤，也不能让记忆立刻恢复。」\n她在护理表里写下补充计划。\n「你愿意的话把这份留下。我会向他解释，得到同意再用。没有这瓶，我们也会从医务配给里安排，不会让治疗停着。」",
+      "flags": {
+        "vitamin_plan": true
+      },
+      "req": {
+        "all": [
+          "brother_care"
+        ],
+        "items": [
+          "vitamins"
+        ]
+      },
+      "once": true
+    },
+    "vitamin_leave": {
+      "text": "按护理计划留下这一份维生素 D。",
+      "reply": "医护核对数量，将药瓶收入带标签的药柜，并在你面前填上后续复查日期。\n「我会请他自己确认服用。你回公社时告诉安娜，照护已经安排上了，让她按约定的探视窗口来，别一个人闯矿区。」",
+      "flags": {
+        "vitamin_care": true
+      },
+      "req": {
+        "all": [
+          "vitamin_plan"
+        ],
+        "items": [
+          "vitamins"
+        ]
+      },
+      "once": true,
+      "take": [
+        "vitamins"
+      ],
+      "reward": {
+        "military": 4
+      }
+    },
+    "commune_north_services": {
+      "text": "「你们的联络室能联系到哪些地方？」",
+      "reply": "「北线的谢契、几处独立站，还有交换气象记录的值班台。那台接收机在联络室西侧，你可以听一次广播，再问娜佳有哪些记录能查。」",
+      "flags": {},
+      "req": {},
+      "once": true
+    },
+    "return_filters": {
+      "text": "将两箱滤芯与水厂型号记录正式交接。",
+      "reply": "中尉签收运输架，妮娜在检验栏写下型号与封存年份。两箱滤芯由维修班送去净水间。\n科瓦廖夫：「物资收到了。失去的人，我会按名字报上去。你先休息，北线有新的联络任务，等你缓过来再谈。」",
+      "once": true,
+      "flags": {
+        "d6_cargo_returned": true,
+        "return_reviewed": true
+      },
+      "req": {
+        "all": [
+          "d6_returned",
+          "water_secured"
+        ],
+        "not": [
+          "d6_cargo_returned"
+        ],
+        "items": [
+          "water_core"
+        ]
+      },
+      "take": [
+        "water_core"
+      ]
+    },
+    "return_assignment": {
+      "text": "「北线的联络任务是什么？」",
+      "reply": "「净水间还要做检测。医护交换组能把样本送到公社，再请他们联系别处的技术班。我给你登记成临时维修联络员，去之前先想清楚风险。」\n中尉递来有限联络页。\n「你去办技术交接，政治上的话自己听清。见到什么、说了什么，回来都要照实记。」",
+      "once": true,
+      "flags": {
+        "d6_delegate": true
+      },
+      "req": {
+        "all": [
+          "d6_cargo_returned"
+        ]
+      },
+      "travel": "delegation_road"
+    },
+    "finish_commune": {
+      "text": "回到公社，在自己的铺位安顿下来。",
+      "reply": "",
+      "once": true,
+      "flags": {},
+      "req": {
+        "all": [
+          "journey_ready",
+          "commune_member"
+        ]
+      },
+      "ending": "commune"
+    },
+    "finish_sech": {
+      "text": "回到谢契，接下一班北线轮值。",
+      "reply": "",
+      "once": true,
+      "flags": {},
+      "req": {
+        "all": [
+          "journey_ready",
+          "sech_member"
+        ]
+      },
+      "ending": "sech"
+    },
+    "finish_workers": {
+      "text": "回到公社，长期负责工人的回信窗口。",
+      "reply": "",
+      "once": true,
+      "flags": {},
+      "req": {
+        "all": [
+          "journey_ready",
+          "workers_done",
+          "commune_member"
+        ]
+      },
+      "ending": "workers"
+    },
+    "finish_rail": {
+      "text": "回到谢契，维持已经验收的北线巡轨。",
+      "reply": "",
+      "once": true,
+      "flags": {},
+      "req": {
+        "all": [
+          "journey_ready",
+          "north_done",
+          "sech_member"
+        ]
+      },
+      "ending": "rail"
+    },
+    "finish_caravan": {
+      "text": "把沿线联络接成接送居民和药品的车队。",
+      "reply": "",
+      "once": true,
+      "flags": {},
+      "req": {
+        "all": [
+          "journey_ready",
+          "north_done",
+          "radio_fixed",
+          "sech_member"
+        ]
+      },
+      "ending": "caravan"
+    },
+    "finish_anna": {
+      "text": "回公社与安娜一起等下一次探视车。",
+      "reply": "",
+      "once": true,
+      "flags": {},
+      "req": {
+        "all": [
+          "journey_ready",
+          "anna_reunited",
+          "commune_member"
+        ]
+      },
+      "ending": "anna"
+    },
+    "weapon_service": {
+      "text": "「能帮我检查这把左轮的击发机构吗？」",
+      "reply": "老兵把你带回的压力检修记录收好，借工具间的细锉清除枪机上的锈屑，又检查击针和转轮定位。\n「现在扳机顺了。别连着猛扣，先把准星放稳。」\n你试过空枪动作，确认转轮锁定后才装回子弹。",
+      "once": true,
+      "req": {
+        "all": [
+          "pressure_done",
+          "weapon_issued"
+        ]
+      },
+      "flags": {
+        "weapon_serviced": true
+      }
+    },
+    "finish_home": {
+      "text": "回到 D-6，把这一路的事讲给老爹听。",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "journey_ready",
+          "d6_cargo_returned"
+        ]
+      },
+      "flags": {},
+      "ending": "home"
+    },
+    "finish_tea": {
+      "text": "带着自己的见闻回到 D-6，面对那次拘捕留下的事。",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "journey_ready",
+          "arrested_veteran"
+        ]
+      },
+      "flags": {},
+      "ending": "tea"
+    },
+    "father_absence": {
+      "text": "「你知道我们在 D-6，为什么这么多年都没回来？」",
+      "reply": "父亲停了很久，才把这些年的经过说下去。\n「六二年我是奉调进地下设施的技术员。最初完全封闭，后来通路断了，寄出去的信一直没有回音。我不知道你们能不能收到。」\n他看着你，没再低头躲开。\n「再后来，北线能通人。我明明有过机会，却一直说设备离不开我。我怕回去见不到人，也怕知道自己已经错过了什么。是我一直在拖。你和你母亲付的代价，比我重得多。」",
+      "once": true,
+      "req": {
+        "all": [
+          "father_met"
+        ]
+      },
+      "flags": {
+        "father_history_heard": true
+      }
     }
   },
   "panels": {
@@ -2796,7 +3756,7 @@
       "body": "休息时，老兵递过水壶。\n「中央苏维埃的水一直是干净的。我们的坏了，就得自己出来找。」\n他把声音压低。\n「我认识公社的人。他们在串联各处的维修工和配给员。你愿意去看看，就跟我走；但这两箱东西，必须有人带回家。」",
       "choices": [
         {
-          "text": "「水必须回 D-6。其它事，到岔路再说。」",
+          "text": "「滤芯必须回 D-6。其它事，到岔路再说。」",
           "next": "return_standoff",
           "flag": "water_first"
         },
@@ -2810,8 +3770,8 @@
     "home_water": {
       "art": "wake",
       "title": "回到 D-6",
-      "body": "妮娜守着新装的滤芯，看了很久才肯拧开出水阀。\n加琳娜端着空锅站在后面。第一股清水流出来时，谁都没有欢呼。\n老爹摸了摸你的后背。\n「回来了。先坐下，汤还热。」",
-      "end": "ending:home"
+      "body": "运输架的木轮停在 D-6 气闸里。你们把两箱滤芯放到检验台上，妮娜带着人赶来核对型号。没人立刻欢呼，直到其中一人点了点头，候在门边的人才慢慢松开肩膀。\n老爹从生活层下来，摸过你的脸，又摸了摸外套袖口，像要确认人确实在这里。还有交接和返站登记要办，但这一次，你终于亲口说出了那句一路上想了很多次的话。\n「我回来了。」",
+      "end": "map:labor"
     },
     "commune_road": {
       "art": "commune",
@@ -2866,10 +3826,10 @@
       "end": "map:commune"
     },
     "coal_road": {
-      "art": "descent",
+      "art": "coal_entry",
       "title": "回到熟悉的地下",
-      "body": "你把探访函放在外衣口袋。一路上没有开灯追车，也没有绕岗哨。\n煤运口的值守看了很久编号，才让你在登记台旁等。\n「人能见。别把这里当成谁都能来回跑的过道。」",
-      "end": "map:coal"
+      "body": "联络组将有限探访函、班组编号和医护交换记录封在同一只文件袋里。\n带路人在外侧交换点停下，没有跟你走进 D-6。中央苏维埃的卫兵隔着检票窗看了一遍姓名，又将目光停在你的离站记录上。你知道，离开这里的方式会影响现在他们怎样看你。\n外门放行到下层作业区。煤矿检票口还要重新登记，探访函并不等于能在 D-6 随意走动。",
+      "end": "map:labor"
     },
     "anna_return": {
       "art": "commune",
@@ -2909,7 +3869,7 @@
       "art": "wake",
       "title": "回到名单里",
       "body": "老兵把枪放在雪上。中尉用绑箱子的备用绳系住他的手。\n回到 D-6 后，水重新流出来了。老兵被带进下层问话，你的名字旁边添了一条嘉奖。\n隔天，有人请你去上面喝茶。杯子里没有铁锈味。\n你想起轨道车上，那句关于父亲还没说完的话。",
-      "end": "ending:tea"
+      "end": "map:labor"
     },
     "father_reunion": {
       "art": "starcity",
@@ -2922,6 +3882,38 @@
       "art": "coal_threshold",
       "body": "你把尚未核完的记录夹回函里。返回公社的交换车已经到站，下次仍可按医护担保登记来访。\n有些事要多跑几趟，才会有确切的答案。",
       "end": "map:commune"
+    },
+    "commune_settle": {
+      "title": "把名字写进轮班表",
+      "art": "commune_threshold",
+      "body": "你把行李放进家属房里空出的柜子。隔壁有人补鞋，食堂送来一只还带着余温的饭盒。\n你决定暂时留下，成为公社的一员。中央苏维埃仍在外面，停水和封锁的威胁也没有过去。这里给你的不只是一个铺位，还有下一次轮到你时必须承担的事。\n傍晚，人民议事厅开始搬椅子。叶莲娜请你过去，先听听住在这里的人都在担心什么。",
+      "end": "resume:commune_leader",
+      "same_moment": true
+    },
+    "sech_settle": {
+      "title": "留下一个铺位",
+      "art": "sech_threshold",
+      "body": "旧车厢的木板被人擦得很干净。达里娅给你指了储物格的位置，长老把一张空白轮值牌放在你的行李上。\n你决定留在谢契。夜里，检修库的风沿着旧库门吹过，厨房炉火映在车窗上。几个住户围着桌子修鞋、补衣服，彼得还在看明早的巡轨单。\n有人叫你去议事车厢。留下之后的第一件事，是把自己的名字介绍给将来一起出门的人。",
+      "end": "resume:sech_elder",
+      "same_moment": true
+    },
+    "coal_descent": {
+      "title": "煤运线以下",
+      "art": "coal_entry",
+      "body": "铁门在身后合上，煤车链条的声音从下方传来。你沿窄梯走到登记点，鞋底沾了一层细黑的粉。\n作业巷在更深处。探访者被引向一旁有暖气的登记与休养区，墙上挂着工牌，洗衣架上晾着刚洗过的白布。安娜纸条上的班组编号还在你的衣袋里。",
+      "end": "map:coal"
+    },
+    "coal_exit_to_d6": {
+      "title": "矿门之外",
+      "art": "coal_entry",
+      "body": "你把探视登记交回窗口，沿原来的煤运侧道上行。\n下层作业区的灯光重新出现在眼前。离开 D-6 前，还要在煤矿检票口交回存根。你把核实到的名字和本人意愿写清楚，准备带回公社。",
+      "end": "map:labor"
+    },
+    "delegation_road": {
+      "title": "带着交接页离站",
+      "art": "commune_approach",
+      "body": "滤芯交到维修班后，你在 D-6 睡了一个完整的夜晚。第二天，医护交换组的人来领净水样本，中尉将有限联络页交到你手上。\n这次你的姓名写在出入登记上。老爹仍不放心，站在气闸边替你将背带理顺，直到卫兵提醒要关门。\n你跟着带路人走过两段封闭支线，到公社的外侧警戒门前停下。那边的人看过联络页，仍要问明姓名和来意。",
+      "next": "delegation_checkpoint"
     }
   },
   "endings": {
@@ -3081,7 +4073,7 @@
       "stages": [
         {
           "target": "commune_well",
-          "step": "核对大厅水井账里的居民与病房两栏。",
+          "step": "核对大厅配给室账里的居民与病房两栏。",
           "when": {}
         },
         {
@@ -3418,7 +4410,7 @@
         },
         {
           "target": "coal_clerk",
-          "step": "向煤运登记处征询本人意愿。",
+          "step": "向D-6 下层返站审核与煤矿检票处征询本人意愿。",
           "when": {
             "all": [
               "workers_transit"
@@ -3623,7 +4615,7 @@
         },
         {
           "target": "commune_well",
-          "step": "请水井值班员见证封袋数量",
+          "step": "请配给室值班员见证封袋数量",
           "when": {
             "all": [
               "parcel_manifest"
@@ -3732,6 +4724,356 @@
         "archive_labels_inspect",
         "archive_labels_return",
         "ending_records"
+      ]
+    },
+    {
+      "id": "commune_chapter",
+      "name": "在这里安家",
+      "facility": "commune",
+      "accepted": "commune_member",
+      "done": "commune_trusted",
+      "background": "你决定加入公社。一次承诺之后，还有共同生活和相互信任的工作。",
+      "lead": "议事厅的居民会议欢迎新住户旁听。",
+      "kind": "主线",
+      "stages": [
+        {
+          "when": {},
+          "step": "到人民议事厅参加居民议事。",
+          "target": "commune_hall",
+          "place": "commune"
+        },
+        {
+          "when": {
+            "all": [
+              "assembly_done"
+            ]
+          },
+          "step": "找叶莲娜领取工作安排。",
+          "target": "commune_leader",
+          "place": "commune"
+        },
+        {
+          "when": {
+            "all": [
+              "commune_chapter_work"
+            ]
+          },
+          "step": "修复温室回水，并完成工人征询稿。两项任务可在手记中分别追踪。",
+          "target": "commune_leader",
+          "place": "commune"
+        },
+        {
+          "when": {
+            "all": [
+              "greenhouse_fixed",
+              "workers_done"
+            ]
+          },
+          "step": "回人民议事厅向叶莲娜汇报。",
+          "target": "commune_leader",
+          "place": "commune"
+        }
+      ],
+      "actions": [
+        "commune_assembly",
+        "commune_main_work",
+        "commune_trust"
+      ]
+    },
+    {
+      "id": "commune_heat",
+      "name": "家属房的暖气",
+      "facility": "commune",
+      "accepted": "commune_heat_job",
+      "done": "commune_heat_done",
+      "background": "冬夜前，玛尔法请你修复家属房支管。",
+      "lead": "食堂的人正担心老人房里的暖气。",
+      "kind": "支线",
+      "stages": [
+        {
+          "when": {},
+          "step": "到东南家属房检查支管，先排气。",
+          "target": "commune_radiator",
+          "place": "commune"
+        },
+        {
+          "when": {
+            "all": [
+              "commune_heat_bled"
+            ]
+          },
+          "step": "重新打开回水，检查接头与温度。",
+          "target": "commune_radiator",
+          "place": "commune"
+        },
+        {
+          "when": {
+            "all": [
+              "commune_heat_fixed"
+            ]
+          },
+          "step": "向食堂玛尔法交回维修记录。",
+          "target": "commune_cook",
+          "place": "commune"
+        }
+      ],
+      "actions": [
+        "commune_heat_accept",
+        "commune_heat_bleed",
+        "commune_heat_open",
+        "commune_heat_deliver"
+      ]
+    },
+    {
+      "id": "meal_missing",
+      "name": "一份无人来领的饭",
+      "facility": "commune",
+      "accepted": "meal_job",
+      "done": "meal_done",
+      "background": "一名老人的送饭记录没有跟着搬迁更新。",
+      "lead": "食堂柜台有一只没人来领的饭盒。",
+      "kind": "支线",
+      "stages": [
+        {
+          "when": {},
+          "step": "到家属房查住户表。",
+          "target": "commune_bunks",
+          "place": "commune"
+        },
+        {
+          "when": {
+            "all": [
+              "meal_record"
+            ]
+          },
+          "step": "在公共厅问送饭的米沙。",
+          "target": "commune_child",
+          "place": "commune"
+        },
+        {
+          "when": {
+            "all": [
+              "meal_located"
+            ]
+          },
+          "step": "将热饭送到家属房的新铺位，更新卡片。",
+          "target": "commune_bunks",
+          "place": "commune"
+        },
+        {
+          "when": {
+            "all": [
+              "meal_delivered"
+            ]
+          },
+          "step": "把送饭卡交回食堂。",
+          "target": "commune_cook",
+          "place": "commune"
+        }
+      ],
+      "actions": [
+        "meal_accept",
+        "meal_record",
+        "meal_child",
+        "meal_deliver",
+        "meal_return"
+      ]
+    },
+    {
+      "id": "sech_chapter",
+      "name": "谢契的轮值簿",
+      "facility": "sech",
+      "accepted": "sech_member",
+      "done": "sech_trusted",
+      "background": "你在谢契留下了铺位，需要用共同的工作建立信任。",
+      "lead": "议事车厢在等新住户登记第一班轮值。",
+      "kind": "主线",
+      "stages": [
+        {
+          "when": {},
+          "step": "去议事桌参加入伙议事。",
+          "target": "sech_meeting",
+          "place": "sech"
+        },
+        {
+          "when": {
+            "all": [
+              "sech_oath"
+            ]
+          },
+          "step": "检查水箱，修复电台，并请彼得验收北线列车。可分别追踪对应任务。",
+          "target": "sech_elder",
+          "place": "sech"
+        },
+        {
+          "when": {
+            "all": [
+              "water_tank_fixed",
+              "radio_fixed",
+              "north_done"
+            ]
+          },
+          "step": "向长老汇报，安排前往星城的联络。",
+          "target": "sech_elder",
+          "place": "sech"
+        }
+      ],
+      "actions": [
+        "sech_oath",
+        "sech_trust"
+      ]
+    },
+    {
+      "id": "sech_stove",
+      "name": "一顿不呛人的晚饭",
+      "facility": "sech",
+      "accepted": "stove_job",
+      "done": "stove_done",
+      "background": "厨房烟道堵塞，住户不得不开门吃饭。",
+      "lead": "共用厨房的烟味有点重，达里娅正在找人帮忙。",
+      "kind": "支线",
+      "stages": [
+        {
+          "when": {},
+          "step": "到厨房炉灶，先开下段清灰口。",
+          "target": "sech_stove",
+          "place": "sech"
+        },
+        {
+          "when": {
+            "all": [
+              "stove_lower"
+            ]
+          },
+          "step": "刷通上段，关盖并测试抽力。",
+          "target": "sech_stove",
+          "place": "sech"
+        },
+        {
+          "when": {
+            "all": [
+              "stove_fixed"
+            ]
+          },
+          "step": "向达里娅交回工具。",
+          "target": "sech_cook",
+          "place": "sech"
+        }
+      ],
+      "actions": [
+        "stove_accept",
+        "stove_clear",
+        "stove_brush",
+        "stove_return"
+      ]
+    },
+    {
+      "id": "sech_blanket",
+      "name": "毯角的一根蓝线",
+      "facility": "sech",
+      "accepted": "blanket_job",
+      "done": "blanket_done",
+      "background": "住户请你取回送去书房晾晒的羊毛毯。",
+      "lead": "居民铺位门口贴着一张小小的寻物纸条。",
+      "kind": "支线",
+      "stages": [
+        {
+          "when": {},
+          "step": "到北侧书房检查晾晒绳。",
+          "target": "sech_bookshelf",
+          "place": "sech"
+        },
+        {
+          "when": {
+            "all": [
+              "blanket_found"
+            ]
+          },
+          "step": "把蓝线毯交给厨房的达里娅。",
+          "target": "sech_cook",
+          "place": "sech"
+        }
+      ],
+      "actions": [
+        "blanket_accept",
+        "blanket_find",
+        "blanket_return"
+      ]
+    },
+    {
+      "id": "final_handover",
+      "name": "把回信送出去",
+      "facility": "starcity",
+      "accepted": "handover_job",
+      "done": "journey_ready",
+      "background": "找到父亲后，旅程还需要一次完整的技术与联络交接。",
+      "lead": "联络值班台需要有人整理沿线的接收记录。",
+      "kind": "主线",
+      "stages": [
+        {
+          "when": {},
+          "step": "问清父亲这些年失联与未归的原因，并协助列夫完成气象中继测试。",
+          "target": "star_technician",
+          "place": "starcity"
+        },
+        {
+          "when": {
+            "all": [
+              "weather_done",
+              "father_answered",
+              "father_history_heard"
+            ]
+          },
+          "step": "回联络值班台，完成资料与回信交接。",
+          "target": "star_handover",
+          "place": "starcity"
+        }
+      ],
+      "actions": [
+        "star_handover_accept",
+        "star_handover_finish"
+      ]
+    },
+    {
+      "id": "vitamin_care",
+      "name": "把照护接下去",
+      "facility": "coal",
+      "accepted": "vitamin_plan",
+      "done": "vitamin_care",
+      "background": "矿区医护已确认维生素配给可用于持续补充治疗，旧伤与记忆问题仍需照护。",
+      "lead": "值班医护可以判断你带来的药物是否适用。",
+      "stages": [
+        {
+          "when": {},
+          "step": "向医护确认后，留下配给并核对后续护理安排。",
+          "target": "coal_medic",
+          "place": "coal"
+        }
+      ],
+      "actions": [
+        "vitamin_plan",
+        "vitamin_leave"
+      ]
+    },
+    {
+      "id": "return_filters",
+      "name": "把滤芯交到人手里",
+      "facility": "labor",
+      "accepted": "filter_return_job",
+      "done": "d6_cargo_returned",
+      "kind": "主线",
+      "background": "随队带回的滤芯还需要正式交给维修班。",
+      "lead": "返站审核窗口负责确认物资交接。",
+      "stages": [
+        {
+          "when": {},
+          "step": "携带水厂型号记录，向下层科瓦廖夫办理交接；没有携带滤芯时按探访流程审核。",
+          "target": "d6_return_desk",
+          "place": "labor"
+        }
+      ],
+      "actions": [
+        "return_filters"
       ]
     }
   ]

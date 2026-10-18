@@ -1,6 +1,9 @@
 extends CharacterBody3D
 ## Depth-tested painterly figures. Movement/physics retain v1 behavior.
 var art_id=""
+var combat_controlled=false
+var combat_velocity=Vector3.ZERO
+var aim_direction=Vector3.ZERO
 var is_player = false
 var blocked = false
 var camera: Camera3D
@@ -12,6 +15,7 @@ var right_arm: Node3D
 var anchor = Vector3.ZERO
 var clock = 0.0
 var walk = 0.0
+var gait_distance=0.0
 var yield_time=0.0
 var yield_direction=Vector3.ZERO
 var motion_override = Vector2.ZERO
@@ -25,6 +29,8 @@ var rest_time=4.0
 var look_target:Node3D
 var animation_state="idle"
 var blocked_time=0.0
+var purposeful=false
+var reached_anchor=false
 const SPEED = 2.65
 const ACCEL = 12.0
 const DECEL = 17.0
@@ -41,7 +47,7 @@ func setup(kit, player: bool, coat: String = "green", hat: bool = false):
 	cap.height = 1.72
 	cs.shape = cap
 	cs.position.y = 0.86
-	if art_id=="ambient_child":cap.radius=.2;cap.height=1.18;cs.position.y=.59
+	if art_id in ["ambient_child","commune_child"]:cap.radius=.2;cap.height=1.18;cs.position.y=.59
 	add_child(cs)
 	visual = Node3D.new()
 	add_child(visual)
@@ -63,6 +69,7 @@ func travel_to(destination:Vector3):
 	if destination.distance_to(goal)<0.05:return
 	goal=destination
 	path_points=navigation.path(position,destination) if navigation else PackedVector3Array([destination])
+	reached_anchor=false
 
 func npc_motion(delta:float) -> Vector3:
 	var world=get_parent()
@@ -78,7 +85,8 @@ func npc_motion(delta:float) -> Vector3:
 	away.y=0.0
 	# Yield using tested sweeps. Do not select a direction that enters a wall,
 	# another NPC, or the player; the larger visual clearance is intentional.
-	if away.length()<1.10 and yield_time<=0.0:
+	var player_driving=(player.use_override and player.motion_override.length()>.1) or Input.get_vector("move_left","move_right","move_up","move_down").length()>.1
+	if not purposeful and away.length()<1.10 and yield_time<=0.0 and (player_driving or player.velocity.dot(away)>.05):
 		var side=Vector3(-away.z,0,away.x).normalized()
 		for candidate in [side,-side,away.normalized()]:
 			if candidate.length()>0.1 and not test_move(global_transform,candidate*.65):
@@ -88,22 +96,24 @@ func npc_motion(delta:float) -> Vector3:
 	if yield_time>0.0:
 		yield_time-=delta
 		return yield_direction*1.25
-	if position.distance_to(anchor)>0.55:
+	if not purposeful and away.length()<1.4:return Vector3.ZERO
+	if position.distance_to(anchor)>0.55 and not reached_anchor:
 		travel_to(anchor)
-	elif not patrol.is_empty() and away.length()>2.8 and String(name)!="igor":
+	elif not purposeful and not patrol.is_empty() and away.length()>2.8 and String(name)!="igor":
 		rest_time-=delta
 		if rest_time<=0.0:
 			patrol_index=(patrol_index+1)%patrol.size()
 			anchor=patrol[patrol_index]
 			travel_to(anchor)
-			rest_time=9.0+float(String(name).hash()%60)/10.0
+			rest_time=25.0+float(String(name).hash()%120)/10.0
 	if path_points.is_empty():
-		goal=Vector3.INF
+		reached_anchor=true
 		return Vector3.ZERO
 	var next=path_points[0]-position
 	next.y=0.0
 	if next.length()<0.12:
 		path_points.remove_at(0)
+		if path_points.is_empty():reached_anchor=true
 		return Vector3.ZERO
 	if Vector2(velocity.x,velocity.z).length()<0.08:blocked_time+=delta
 	else:blocked_time=0.0
@@ -111,7 +121,7 @@ func npc_motion(delta:float) -> Vector3:
 		goal=Vector3.INF
 		travel_to(anchor)
 		blocked_time=0.0
-	return next.normalized()*(1.15 if String(name)=="igor" else .85)
+	return next.normalized()*(1.6 if purposeful else .72)
 
 func _physics_process(delta):
 	clock += delta
@@ -127,7 +137,7 @@ func _physics_process(delta):
 				desired=(r.normalized()*input.x+f.normalized()*input.y)*SPEED
 			else:desired=Vector3(input.x,0,input.y)*SPEED
 	else:
-		desired=npc_motion(delta)
+		desired=combat_velocity if combat_controlled else npc_motion(delta)
 	var rate=ACCEL if desired.length()>0.01 else DECEL
 	velocity.x=move_toward(velocity.x,desired.x,rate*delta)
 	velocity.z=move_toward(velocity.z,desired.z,rate*delta)
@@ -136,7 +146,9 @@ func _physics_process(delta):
 	move_and_slide()
 	var speed=Vector2(velocity.x,velocity.z).length()
 	walk=lerpf(walk,speed/SPEED,delta*12)
-	if speed>0.15:
+	if aim_direction.length()>.1:
+		visual.rotation.y=lerp_angle(visual.rotation.y,atan2(-aim_direction.x,-aim_direction.z),1-exp(-delta*18))
+	elif speed>0.15:
 		visual.rotation.y=lerp_angle(visual.rotation.y,atan2(-velocity.x,-velocity.z),1-exp(-delta*12))
 	elif is_instance_valid(look_target):
 		var towards=look_target.global_position-global_position
@@ -148,5 +160,7 @@ func _physics_process(delta):
 	right_leg.rotation.x=-stride
 	left_arm.rotation.x=-stride*0.75
 	right_arm.rotation.x=stride*0.75
-	visual.position.y=absf(sin(clock*10))*0.025*walk
+	gait_distance+=delta*speed
+	var stride_length=1.7 if is_player else (.85 if art_id in ["ambient_child","commune_child"] else 1.15)
+	visual.position.y=absf(sin(gait_distance*TAU/stride_length))*.018*walk
 	if not is_player: visual.position.y+=sin(clock*1.7)*0.005

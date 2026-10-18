@@ -143,7 +143,7 @@ func run():
 		if state.active:blockers.append(state)
 	check(not blockers.is_empty(),"real complete walls obstruct bedroom sight rays and fade")
 	for state in blockers:
-		check(is_equal_approx(state.opacity,w.wall_veil.FADED),"occluding wall reaches stable low opacity")
+		check(state.opacity>=(w.wall_veil.ROOF_FADED if state.roof else w.wall_veil.FADED)-.001 and state.opacity<.90,"occlusion opacity follows coverage within the readable minimum")
 		check(state.switches==1,"stationary wall acquires exactly once")
 	var original_player=w.player.position
 	w.player.position=Vector3(70,0,70)

@@ -1,0 +1,19 @@
+{
+  "generator": "session image generation tool; exact model name not exposed",
+  "characters": {
+    "ivan_masked_combat.png": "exec-0cd66d8e-b0dd-4ece-a45c-ec540f936c0d.png",
+    "veteran_masked_combat.png": "exec-66dd1e59-38b8-4611-af5c-b0552d629621.png",
+    "tunnel_scavenger.png": "exec-378b7413-1c9a-458b-b887-462cc5023e7d.png",
+    "combat_front_back.png": "exec-63b366f7-a35b-49d8-ab73-2b209cba35f2.png",
+    "residents.png": "exec-5405d82f-73b0-48de-ab3e-b9341e88e5b0.png"
+  },
+  "items": {"revolver.png": "exec-6fbeb7f0-fb99-4878-b0d1-1e39b51abef8.png"},
+  "cinematics": {
+    "commune_approach": "exec-9ca0ebae-28f1-4dbe-8a3d-642f1db915fa.png",
+    "sech_approach": "exec-4cf1ad4d-7505-4974-83ab-c8d72fb872d4.png",
+    "coal_entry": "exec-fc3abc1a-14f2-4dd4-b270-cc92cde6e2e6.png"
+  },
+  "cinematic_originals_location": "assets/cinematics/<name>.png",
+  "audio": "Original offline synthesis in tools/make_combat_audio.py; no third-party samples",
+  "runtime": "Prepared PNG/WAV files only; no online generation dependency"
+}

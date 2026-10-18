@@ -2,6 +2,7 @@ extends RefCounted
 const Campaign=preload("res://scripts/campaign.gd")
 const Plans=preload("res://scripts/facility_layouts.gd")
 const Detail=preload("res://scripts/facility_detail.gd")
+const Settlement=preload("res://scripts/settlement_details.gd")
 const Shell=preload("res://scripts/facility_shell.gd")
 const LAYOUTS=Plans.PLANS
 static func rooms(id:String)->Array:return Plans.rooms(id)
@@ -12,8 +13,8 @@ static func doors(id:String)->Array:
 	return out
 static func build(w):
 	var k=w.kit;var id:String=w.floor_id;var plan:Dictionary=LAYOUTS[id]
-	if id in ["commune","waterworks"]:Detail.materials(k)
-	var surfaces={"waterworks":["cement","cement_normal","a3b6bb"],"commune":["wall","wall_normal","d8c39b"],"sech":["corrugated","steel_normal","b99478"],"coal":["oxide","oxide_normal","a19883"],"starcity":["steel","steel_normal","a2c0cb"]}
+	if id in ["commune","waterworks","sech"]:Detail.materials(k)
+	var surfaces={"waterworks":["cement","cement_normal","a3b6bb"],"commune":["wall","wall_normal","d8c39b"],"sech":["corrugated","steel_normal","8a9990"],"coal":["oxide","oxide_normal","a19883"],"starcity":["steel","steel_normal","a2c0cb"]}
 	k.wall_surface=surfaces[id][0];k.wall_normal=surfaces[id][1];k.wall_color=Color(surfaces[id][2])
 	k.mats.blue=k.mats.metal.duplicate();k.mats.blue.albedo_color=Color("66858c")
 	k.mats.plaster.albedo_color=Color({"waterworks":"a3b4ad","commune":"c1b38f","sech":"8f9992","coal":"8a8c84","starcity":"a1b5bb"}[id])
@@ -44,8 +45,8 @@ static func build(w):
 		for x in [-.94,.94]:k.box("GateRail",plan.gate+Vector3(x,0,0),Vector3(.1,2.5,.27),"metal")
 	match id:
 		"waterworks":waterworks(w);Detail.waterworks(w)
-		"commune":commune(w);Detail.commune(w)
-		"sech":sech(w)
+		"commune":Settlement.commune(w)
+		"sech":Settlement.sech(w)
 		"coal":coal(w)
 		"starcity":starcity(w)
 static func waterworks(w):
@@ -194,6 +195,17 @@ static func bookcase(k,p:Vector3,length:float):
 			k.box("BookSpineWear",p+Vector3(front*.238,y+height*.6,-length/2+.16+index*.13),Vector3(.008,.015,.075),"paper")
 static func coal(w):
 	var k=w.kit
+	for x in [-26.1,-24.9]:k.box("CoalHaulRail",Vector3(x,.025,-7.5),Vector3(.08,.05,27),"metal")
+	for z in range(-21,8,2):
+		for x in [-27.6,-18.4]:k.box("MineSupport",Vector3(x,1.3,z),Vector3(.22,2.6,.25),"wood",true)
+		k.box("MineCrossTimber",Vector3(-23,2.65,z),Vector3(9.5,.25,.3),"wood")
+	for z in [-17,-9,-3]:
+		k.box("CoalMineCart",Vector3(-25.5,.6,z),Vector3(1.4,.9,2),"rust",true)
+		for n in range(7):k.ellipsoid("CoalLoad",Vector3(-26+float(n%3)*.45,1.1,-.6+z+float(n/3)*.4),Vector3(.28,.22,.3),"dark")
+	for z in [-20,-12,-4,4]:k.lamp(Vector3(-27.5,2.3,z),true,.85,6)
+	k.box("MineWinchFrame",Vector3(-20,.65,5),Vector3(1.7,1.3,1.4),"metal",true)
+	k.cyl("WinchCableDrum",Vector3(-20,1.2,5),.42,1.5,"rust").rotation.z=PI/2
+	k.pipe(Vector3(-20,1.3,5),Vector3(-20,2.7,-6),.045,"dark")
 	for x in [-16,-12,-8,-4]:
 		for z in [2.25,6.75]:k.box("MineTimber",Vector3(x,1.2,z),Vector3(.22,2.4,.22),"wood",true)
 		k.box("MineCrossbeam",Vector3(x,2.42,4.5),Vector3(.22,.2,4.8),"wood")
@@ -249,6 +261,8 @@ static func starcity(w):
 	for x in [10,13,16,19]:
 		k.box("TapeRecorder",Vector3(x,.8,-3.5),Vector3(1.5,1.6,.65),"blue",true)
 		for dx in [-.35,.35]:k.cyl("TapeReel",Vector3(x+dx,1.2,-3.1),.23,.05,"metal").rotation.x=PI/2
+	k.table(Vector3(12,0,2.7),2.4)
+	k.box("HandoverLedger",Vector3(12,.83,2.7),Vector3(.8,.04,.6),"paper")
 	k.cyl("ObservationClock",Vector3(19,2.1,-4.8),.3,.08,"metal").rotation.x=PI/2
 	k.cyl("ClockFace",Vector3(19,2.1,-4.74),.26,.025,"paper").rotation.x=PI/2
 	k.box("ClockMinuteHand",Vector3(19,2.2,-4.72),Vector3(.015,.2,.01),"dark")
@@ -321,6 +335,7 @@ static func rack(k,p:Vector3,width:float,material:String):
 static func people(w):
 	var arts={"plant_guide":"commander_masked","commune_leader":"commune_leader","commune_anna":"anna","sech_elder":"sech_elder","sech_sergey":"sergey","coal_clerk":"coal_clerk","coal_medic":"coal_medic","coal_brother":"coal_brother","star_guard":"star_guard","star_father":"father"}
 	for person_id in ["commune_printer","commune_grower","sech_quartermaster","star_technician"]:arts[person_id]=person_id
+	arts.merge({"commune_cook":"commune_cook","commune_child":"commune_child","sech_cook":"sech_cook"})
 	for e in LAYOUTS[w.floor_id].objects:
 		if e[3]=="npc":w.person(e[0],Vector3(e[1],0,e[2]),"green",true,arts[e[0]])
 	if w.floor_id=="waterworks":
@@ -334,7 +349,10 @@ static func targets(w):
 		w.target("plant_guide",w.npcs.plant_guide.position,"科瓦廖夫","talk")
 		w.target("plant_veteran",w.npcs.plant_veteran.position,"老兵","talk")
 static func residents(w):
-	var layouts={"commune":[["ambient_worker",5.3,2.5],["ambient_woman",-6,8],["ambient_child",5,7],["ambient_elder",15,12]],"sech":[["ambient_worker",0,5],["ambient_child",5,-11],["ambient_elder",-5,16]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4]],"starcity":[["ambient_worker",4,-11],["ambient_woman",-18,8]]}
-	for entry in layouts.get(w.floor_id,[]):w.person("resident_"+entry[0],Vector3(entry[1],0,entry[2]),"cloth",false,entry[0])
+	var layouts={"commune":[["ambient_worker",6,4],["ambient_woman",-6,12],["ambient_elder",15,15],["ambient_woman",-7,21],["ambient_worker",7,-8],["ambient_child",5,21]],"sech":[["ambient_worker",0,3],["ambient_child",-10,14],["ambient_elder",-5,17],["ambient_woman",-8,2],["ambient_worker",16,-10]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4]],"starcity":[["ambient_worker",4,-11],["ambient_woman",-18,8]]}
+	for index in layouts.get(w.floor_id,[]).size():
+		var entry=layouts[w.floor_id][index]
+		w.person("resident_%s_%d"%[entry[0],index],Vector3(entry[1],0,entry[2]),"cloth",false,entry[0])
+
 static func routines(w):
 	for id in w.npcs:w.npcs[id].navigation=w.navigation

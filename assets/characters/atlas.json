@@ -528,5 +528,89 @@
     "clips": [
       "idle"
     ]
+  },
+  "ivan_masked_combat": {
+    "file": "ivan_masked_combat.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 3,
+    "cell": [
+      640,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "clips": [
+      "ready",
+      "recoil",
+      "reload"
+    ],
+    "rear_diagonal_normalized": true
+  },
+  "veteran_masked_combat": {
+    "file": "veteran_masked_combat.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 3,
+    "cell": [
+      640,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "clips": [
+      "ready",
+      "recoil",
+      "reload"
+    ],
+    "rear_diagonal_normalized": true
+  },
+  "commune_cook": {
+    "file": "commune_cook.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle_2d_rig"
+    ]
+  },
+  "sech_cook": {
+    "file": "sech_cook.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle_2d_rig"
+    ]
+  },
+  "commune_child": {
+    "file": "commune_child.png",
+    "directions": 8,
+    "source_angles": 5,
+    "poses": 1,
+    "cell": [
+      240,
+      352
+    ],
+    "baseline": 342,
+    "body_pixels": 324,
+    "rear_diagonal_normalized": true,
+    "clips": [
+      "idle_2d_rig"
+    ]
   }
 }

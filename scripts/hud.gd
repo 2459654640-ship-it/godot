@@ -46,6 +46,7 @@ var food_bar:ProgressBar
 var vitals_label:Label
 var leads_button:Button
 var last_guidance=""
+var shop_tab="buy"
 
 func _process(delta:float):
 	advance_typing(delta)
@@ -86,8 +87,11 @@ func finish_typing():
 func scroll_dialogue_to(scroll:ScrollContainer,control:Control):
 	# Container geometry settles after the text/portrait rows become visible.
 	# Align the new exchange rather than leaving the old greeting on screen.
-	await get_tree().process_frame
-	await get_tree().process_frame
+	if not is_inside_tree():return
+	var tree=get_tree()
+	await tree.process_frame
+	if not is_inside_tree():return
+	await tree.process_frame
 	if is_instance_valid(scroll) and is_instance_valid(control) and control.is_visible_in_tree() and scroll.get_child_count()>0:
 		var content:Control=scroll.get_child(0)
 		scroll.scroll_vertical=roundi(control.global_position.y-content.global_position.y)
@@ -541,7 +545,7 @@ func show_journal(tab:String="tasks",shown_floor:String=""):
 		map_large.world=world;map_large.expanded=true;map_large.display_floor=requested;modal_box.add_child(map_large)
 		var legend=GridContainer.new();legend.columns=3;legend.add_theme_constant_override("h_separation",18);modal_box.add_child(legend)
 		for zone in world.facility_zones(requested):
-			if zone.code in ["00","09","10","L0"]:continue
+			if zone.code in ["00","L0"] or (requested=="life" and zone.code in ["09","10"]):continue
 			legend.add_child(label(zone.code+"  "+("伊万 / 老爹" if requested=="life" and zone.code=="01" else zone.name),15,text_color))
 		body("金色：通路与门口 · 蓝色：附近的人。地图只显示本层可探索的区域；门后还有其它生活或作业区。",16,muted)
 
@@ -618,38 +622,51 @@ func icon_rect(path:String,size:float=68)->TextureRect:
 	icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	return icon
 
-func show_shop(message:String=""):
-	start_modal("第七供应点 · 柳德米拉","只收制式弹 · 生活物资，不售武器",true)
+func show_shop(message:String="",tab:String=""):
+	if tab!="":shop_tab=tab
+	start_modal("第七供应点 · 柳德米拉","生活物资交易 · 任务物品与纪念物不出售",true)
 	var s=world.story
-	body("制式弹 %d  /  土制弹 %d（不能抵账）"%[s.economy.military,s.economy.handmade],22,amber)
+	var tabs=HBoxContainer.new();modal_box.add_child(tabs)
+	tabs.add_child(button("购买",func():show_shop("","buy"),true,true));tabs.add_child(button("出售",func():show_shop("","sell"),true,true))
+	body(("购买物资" if shop_tab=="buy" else "出售背包物资")+"  /  制式弹 %d · 土制弹 %d"%[s.economy.military,s.economy.handmade],22,amber)
 	if message!="":body(message,18,Color("a4bca0"))
-	for id in s.Economy.GOODS:
-		var good:Dictionary=s.Economy.GOODS[id]
+	var list=s.Economy.GOODS.keys() if shop_tab=="buy" else s.items.duplicate()
+	if shop_tab=="sell":
+		for id in s.economy.goods:
+			if int(s.economy.goods[id])>0:list.append(id)
+		if list.is_empty():body("背包里没有可展示的物品。",18,muted)
+	for id in list:
+		var good:Dictionary=s.Economy.GOODS.get(id,{})
 		var row=HBoxContainer.new();row.add_theme_constant_override("separation",14);modal_box.add_child(row)
-		row.add_child(icon_rect("res://assets/visual/item_"+id+".png"))
+		row.add_child(icon_rect(item_icon(id),64))
 		var b=VBoxContainer.new();b.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(b)
-		b.add_child(label(good.name+"  ·  "+str(good.price)+" 发",21,amber))
-		var detail=label(good.detail,16,muted);detail.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;b.add_child(detail)
-		b.add_child(label("余货 %d · 已有 %d"%[s.economy.stock.get(id,0),s.economy.goods.get(id,0)],15,muted))
-		row.add_child(button("购买",func():shop_buy(id),s.economy.military>=good.price and s.economy.stock.get(id,0)>0,true))
-	if s.has("vodka"):
-		rule();body("战前伏特加 · 收购 18 发制式弹",21,amber)
-		modal_box.add_child(button("出售这瓶伏特加…",func():confirm_sale()))
+		var title:String=good.get("name",s.ITEMS.get(id,[id])[0])
+		if shop_tab=="buy":
+			b.add_child(label(title+" · %d 发"%good.price,21,amber))
+			var detail=label(good.detail,16,muted);detail.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;b.add_child(detail)
+			b.add_child(label("余货 %d · 已有 %d"%[s.economy.stock.get(id,0),s.economy.goods.get(id,0)],15,muted))
+			row.add_child(button("购买",func():shop_buy(id),s.economy.military>=good.price and s.economy.stock.get(id,0)>0,true))
+		else:
+			var price:int=s.Economy.sale_price(s,id)
+			b.add_child(label(title+" × "+str(s.economy.goods.get(id,1)),21,amber))
+			b.add_child(label("收购价 %d 发 / 件"%price if price>0 else "任务所需 / 个人物品 · 不收购",16,muted))
+			row.add_child(button("出售一件" if price>0 else "不能出售",func():confirm_sale(id),price>0,true))
 	modal_box.add_child(button("返回交谈",func():show_dialogue("supply")))
-
-func confirm_sale():
-	start_modal("卖掉这瓶酒？","交易确认",true)
-	body("柳德米拉愿意出 18 发制式弹。卖出后，这瓶酒就不能再拿去交换或交给别人。",21)
-	modal_box.add_child(button("确认出售 · 18 发",func():shop_sell()))
-	modal_box.add_child(button("先留着",func():show_shop()))
+func confirm_sale(id:String="vodka"):
+	var s=world.story;var price:int=s.Economy.sale_price(s,id)
+	start_modal("出售这件物品？","交易确认",true)
+	body("柳德米拉愿意出 %d 发制式子弹。确认后从背包移除一件。"%price,21)
+	modal_box.add_child(button("确认出售 · %d 发"%price,func():shop_sell(id),price>0))
+	modal_box.add_child(button("先留着",func():show_shop("","sell")))
 
 func show_pause():
 	start_modal("暂停 / 现场记录","D–6   /   现场记录",true)
 	modal_box.add_child(button("继续探索",func():close()))
-	modal_box.add_child(button("保存手记  [F5]",func():world.save_game()))
-	modal_box.add_child(button("读取手记  [F9]",func():world.load_game()))
+	modal_box.add_child(button("保存手记…  [F5 快速保存]",func():show_saves(true)))
+	modal_box.add_child(button("读取手记…  [F9 快速读取]",func():show_saves(false)))
 	modal_box.add_child(button("重新开始（保留已有存档）",func():show_restart_confirm()))
 	modal_box.add_child(button("返回主界面…",func():show_menu_confirm()))
+	if is_instance_valid(world.combat) and world.combat.active:modal_box.add_child(button("重试本场战斗（恢复战前资源）",func():world.combat.retry()))
 	audio_controls()
 	rule()
 	body("WASD / 方向键：8 方向移动\nE：交谈 / 调查\nI：背包　J：手记　M：地图\nTab：总览　滚轮：缩放\nEsc：关闭界面 / 菜单",20)
@@ -777,7 +794,7 @@ func audio_controls():
 		var bus_name:String=pair[0]
 		slider.value_changed.connect(func(value):session.set_volume(bus_name,value);readout.text=str(roundi(value*100))+"%")
 
-func dialogue_actor()->String:return {"armory":"armorer","main_gate":"main_guard"}.get(dialogue_id,dialogue_id)
+func dialogue_actor()->String:return {"armory":"armorer","main_gate":"main_guard","d6_return_desk":"commander"}.get(dialogue_id,dialogue_id)
 
 func shop_buy(id:String):
 	var s=world.story
@@ -786,9 +803,35 @@ func shop_buy(id:String):
 	if s.economy.ledger.size()>before:s.Conversation.reply(s,"supply","「买一份"+s.Economy.GOODS[id].name+"。」",result)
 	show_shop(result)
 
-func shop_sell():
+func shop_sell(id:String="vodka"):
 	var s=world.story
 	var before=s.economy.ledger.size()
-	var result=s.Economy.sell_vodka(s)
-	if s.economy.ledger.size()>before:s.Conversation.reply(s,"supply","「这瓶酒，按你说的价收吧。」",result)
+	var result=s.Economy.sell(s,id)
+	if s.economy.ledger.size()>before:s.Conversation.reply(s,"supply","「这件东西，按你说的价收吧。」",result)
 	show_shop(result)
+
+func show_saves(saving:bool):
+	start_modal("保存手记" if saving else "读取手记","三个手动位置 · 快速记录 · 三个轮换自动记录",true)
+	var store=world.SaveStore
+	for i in store.paths().size():
+		var path:String=store.paths()[i];var data=store.read(path)
+		if saving and i>=4:continue
+		var title=["快速手记","手动一","手动二","手动三","自动一","自动二","自动三"][i]
+		var row=HBoxContainer.new();modal_box.add_child(row)
+		var words=label(title+"  /  "+store.summary(data),17,text_color);words.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(words)
+		row.add_child(button("保存" if saving else "读取",func():confirm_slot(path,saving,data),saving or not data.is_empty(),true))
+	modal_box.add_child(button("返回",func():show_comic_pause() if comic_active else show_pause()))
+func confirm_slot(path:String,saving:bool,data:Dictionary):
+	if saving and data.is_empty():world.save_game(path);show_saves(true);return
+	start_modal("覆盖这份手记？" if saving else "读取这份手记？","读取会放弃当前未保存的进度；上一次有效记录保留为备份。",true)
+	body(world.SaveStore.summary(data),20,amber)
+	modal_box.add_child(button("确认保存" if saving else "确认读取",func():
+		if saving:world.save_game(path);show_saves(true)
+		else:world.load_game(path)))
+	modal_box.add_child(button("返回列表",func():show_saves(saving)))
+
+func show_combat_defeat():
+	start_modal("你倒在了水厂里","本场战斗前已保留检查点 · 重试恢复当时的资源",true)
+	body("面罩内的呼吸声渐渐远去。远处传来老兵叫你的名字。",23)
+	modal_box.add_child(button("从交火前重试",func():world.combat.retry()))
+	modal_box.add_child(button("读取其它手记",func():show_saves(false)))

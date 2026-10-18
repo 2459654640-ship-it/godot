@@ -1,7 +1,7 @@
 extends RefCounted
 ## A persistent transcript above a separate, pinned reply list.
 static func portrait(h,id:String)->String:
-	var art={"armory":"queue","main_gate":"commander"}.get(id,id)
+	var art={"armory":"queue","main_gate":"commander","d6_return_desk":"commander","coal_gate_entry":"queue"}.get(id,id)
 	if id=="ivan" and h.world.player.art_id!="":art=h.world.player.art_id
 	if h.world.npcs.has(id) and h.world.npcs[id].art_id!="":art=h.world.npcs[id].art_id
 	return "res://assets/portraits/"+art+".png"
@@ -56,6 +56,11 @@ static func render(h,id:String,first_new:int):
 		available+=1
 		var row=HBoxContainer.new();choices.add_child(row)
 		var b=h.button(o.text,func():h.last_choice=o.text;h.world.perform(o.key,id))
+		var category:String=o.get("category","调查")
+		var colors={"任务":Color("d9bd80"),"决定":Color("d39e82"),"闲聊":Color("a4b3ac"),"调查":Color("bdc8bc")}
+		b.add_theme_color_override("font_color",colors[category])
+		var tag=h.label(category,14,colors[category]);tag.custom_minimum_size.x=48;tag.vertical_alignment=VERTICAL_ALIGNMENT_CENTER;row.add_child(tag)
+		b.tooltip_text={"任务":"与已知任务、道具或调查进展有关。","决定":"会影响去向、消耗物品或改变关系。","闲聊":"了解人物与日常生活。","调查":"进一步查看现场或了解情况。"}[category]
 		h.speech_buttons.append(b);b.disabled=not h.typing.is_empty()
 		b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;b.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(b)
 		if o.has("check"):

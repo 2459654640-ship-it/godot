@@ -49,11 +49,11 @@ func run():
 	s.act("c_letter_plain");check(not s.last_action_valid and s.f("letter_note"),"letter outcome stays chosen")
 	# A late clue and reward are rejected on another facility, even if the UI is bypassed.
 	s.context.floor="sech";s.act("c_tape_read");check(not s.last_action_valid,"remote facility action rejected")
-	s=Story.new();s.context.floor="commune";s.give("frequency")
+	s=Story.new();s.context.floor="commune";s.give("frequency");s.flags.signal_heard=true
 	var answer=s.act("c_commune_route")
-	check(answer.contains("星城-2") and answer.contains("呼号") and answer.contains("没见过星城的人员名册") and answer.contains("报姓名"),"Elena answers the exact call-sign question and admits her knowledge limit")
+	check(answer.contains("星城-2") and answer.contains("呼号") and answer.contains("不能") and answer.contains("姓名"),"Elena answers the exact call-sign question and admits her knowledge limit")
 	check(Campaign.data().interactions.commune_leader.body.contains("推翻") and Campaign.data().interactions.commune_leader.body.contains("中央苏维埃"),"commune opposition is explicit in the encounter")
-	check(Campaign.data().interactions.coal_clerk.body.contains("中央苏维埃") and Campaign.data().interactions.sech_elder.body.contains("顿河"),"D-6 jurisdiction and Cossack identity are stated")
+	check(Campaign.data().interactions.coal_clerk.body.contains("中央苏维埃") and Campaign.data().interactions.sech_elder.body.contains("哥萨克"),"D-6 jurisdiction and Cossack identity are stated")
 	var parts=s.Conversation.split_text("电台亮了。\n谢尔盖：「星城还在。」\n东方-7 值班员：「请报姓名。」","sech_radio")
 	check(parts.size()==3 and parts[1].name=="谢尔盖" and parts[2].name=="东方-7 值班员","radio conversation attributes each quotation to its own speaker")
 	var legacy=s.serialize().duplicate(true);legacy.content_revision=7;legacy.flags.c_done_mail_return=true
@@ -67,7 +67,7 @@ func run():
 	# Real UI button dispatch: different questions must keep their own key and reply.
 	var w=load("res://scenes/commune.tscn").instantiate();root.add_child(w);current_scene=w
 	for i in 8:await physics_frame
-	w.story.flags.intro_done=true;w.hud.comic_active=false;w.hud.close();w.story.give("frequency")
+	w.story.flags.intro_done=true;w.hud.comic_active=false;w.hud.close();w.story.give("frequency");w.story.flags.signal_heard=true
 	w.hud.show_dialogue("commune_leader")
 	for expected in [["c_commune_route","星城-2"],["c_commune_politics","守备"]]:
 		var option=w.story.view("commune_leader").options.filter(func(o):return o.key==expected[0])[0]
