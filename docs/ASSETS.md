@@ -236,3 +236,15 @@
 - [cover_15](../assets/publications/cover_15.png)
 - [cover_16](../assets/publications/cover_16.png)
 - [cover_17](../assets/publications/cover_17.png)
+
+## v17 当前补充素材
+
+- [伊万正背面腿部动作](../assets/characters/ivan_axial_legs.png)：正面与背面各三姿态，供普通、戴面具、持枪及换弹动作组合使用。
+- [科研地胶](../assets/visual/star_linoleum.png)
+- [公共水磨石](../assets/visual/star_terrazzo.png)
+- [实验瓷砖](../assets/visual/star_lab_tile.png)
+- [配电防滑胶面](../assets/visual/star_rubber.png)
+- [设施搪瓷](../assets/visual/star_enamel.png)
+- [科研墙面](../assets/visual/star_wall.png)
+- [仪器合金](../assets/visual/star_alloy.png)
+- [轨道与测控示意图](../assets/visual/star_telemetry.png)

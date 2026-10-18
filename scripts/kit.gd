@@ -263,6 +263,11 @@ func finish_walls():
 				material.set_shader_parameter("factory_tile",load("res://assets/visual/factory_wall_tile_v13.png"))
 				material.set_shader_parameter("factory_archive",load("res://assets/visual/factory_plaster_v13.png"))
 				material.set_shader_parameter("normal_strength",0.0)
+			elif wall_finish_theme=="starcity" and i==0:
+				material.set_shader_parameter("star_finish",true)
+				material.set_shader_parameter("star_enamel",load("res://assets/visual/star_enamel.png"))
+				material.set_shader_parameter("star_tile",load("res://assets/visual/star_lab_tile.png"))
+				material.set_shader_parameter("normal_strength",0.0)
 			elif not wall_room_profiles.is_empty() and i==0:
 				material.set_shader_parameter("commune_finish",true)
 				material.set_shader_parameter("finish_plaster",load("res://assets/visual/commune_plaster.png"))

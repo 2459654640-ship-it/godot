@@ -46,6 +46,7 @@ func setup(body):
 	sprite.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	material=ShaderMaterial.new()
 	material.shader=load("res://assets/visual/painted_actor.gdshader")
+	if actor_id in ["ivan","ivan_masked"]:material.set_shader_parameter("axial_legs_map",load("res://assets/characters/ivan_axial_legs.png"))
 	var texture:Texture2D=load("res://assets/characters/"+actor_id+".png")
 	material.set_shader_parameter("painted_map",texture)
 	material.set_shader_parameter("frame_size",Vector2(0.2,1.0/pose_count))
@@ -115,18 +116,21 @@ func _process(delta):
 	var phase_delta=delta*speed/(1.7 if actor.is_player else (.85 if actor_id in ["ambient_child","commune_child"] else 1.15))
 	# Keep the planted pose visible even when a rendered frame takes longer
 	# than one animation phase; never skip directly between the two strides.
-	cycle+=minf(phase_delta,.249) if actor.is_player else phase_delta
+	cycle+=minf(phase_delta,.219) if actor.is_player else phase_delta
 	var walking=speed>0.15
+	var phase=fposmod(cycle,1.0)
+	# Give both contact poses a little more screen time, including diagonals.
+	var beat=0 if phase<.22 else (1 if phase<.50 else (2 if phase<.72 else 3))
 	var pose=0
 	if armed:
 		var reloading=is_instance_valid(director) and ((actor.is_player and director.reload_time>0) or (actor_id=="veteran_masked" and director.veteran_reload>0))
-		if reloading:pose=[5,2,6,2][floori(cycle*4)%4] if walking and pose_count>=7 else 2
+		if reloading:pose=[5,2,6,2][beat] if walking and pose_count>=7 else 2
 		elif walking:
-			if pose_count>=5:pose=[3,0,4,0][floori(cycle*4)%4]
-			elif actor_id=="ivan":pose=[1,0,2,0][floori(cycle*4)%4]
+			if pose_count>=5:pose=[3,0,4,0][beat]
+			elif actor_id=="ivan":pose=[1,0,2,0][beat]
 		elif reaction=="shot" and reaction_time>0:pose=1
 	elif walking and pose_count>=3:
-		pose=[1,0,2,0][floori(cycle*4)%4]
+		pose=[1,0,2,0][beat]
 	elif actor.animation_state=="talk" and pose_count>3:pose=3
 	current_pose=pose
 	reaction_time=maxf(0.0,reaction_time-delta)
@@ -136,9 +140,16 @@ func _process(delta):
 	material.set_shader_parameter("frame_origin",Vector2(column*.2,float(pose)/pose_count))
 	var mirrored_frames:Array=manifest[atlas_id].get("frame_mirror",[])
 	var pose_mirrored=false if mirrored_frames.is_empty() else bool(mirrored_frames[pose][column])
-	# Ivan's authored rear diagonal points left; the other side-angle cells
-	# point right. Correct this source-view convention for every outfit/pose.
-	var view_mirrored=(angle_slot>4)!=(column==3 and actor_id in ["ivan","ivan_masked"])
+	var axial=walking and actor_id in ["ivan","ivan_masked"] and column in [0,4]
+	# Dedicated front/back legs alternate anatomically. Never flip Ivan's
+	# head, coat, backpack or weapon to manufacture the opposite stride.
+	if axial:pose_mirrored=false
+	material.set_shader_parameter("axial_legs",axial)
+	material.set_shader_parameter("axial_legs_origin",Vector2(0 if column==0 else .5,float([1,0,2,0][beat])/3.0))
+	material.set_shader_parameter("axial_legs_width",float(manifest[atlas_id].cell[0])/280.0)
+	# Unarmed rear diagonals are authored left-facing. Combat sheets already
+	# face right: their original view must not inherit the unarmed correction.
+	var view_mirrored=(angle_slot>4)!=(column==3 and atlas_id in ["ivan","ivan_masked"])
 	material.set_shader_parameter("mirror",view_mirrored!=pose_mirrored)
 	material.set_shader_parameter("focus",1.0 if focused else 0.0)
 	material.set_shader_parameter("down_amount",1.0 if is_instance_valid(director) and actor_id=="veteran_masked" and director.veteran_health<=0 else 0.0)
@@ -152,4 +163,7 @@ func _process(delta):
 	# light. Authored room lighting remains independent and smoothly blended.
 	var exposures:Array=manifest[atlas_id].get("exposure",[])
 	var exposure=1.0 if exposures.is_empty() else float(exposures[pose][column])
+	# The replacement legs have their own consistent baked light; do not
+	# apply the original upper-body frame's exposure correction twice.
+	material.set_shader_parameter("axial_legs_exposure",1.0/exposure)
 	material.set_shader_parameter("light_tint",sampled_light*exposure)

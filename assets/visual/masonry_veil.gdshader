@@ -12,6 +12,9 @@ uniform vec3 map_scale = vec3(1.0);
 uniform vec3 emission_color : source_color = vec3(0.0);
 uniform bool commune_finish = false;
 uniform bool factory_finish = false;
+uniform bool star_finish = false;
+uniform sampler2D star_enamel : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D star_tile : source_color, filter_linear_mipmap, repeat_enable;
 uniform sampler2D factory_blue : source_color, filter_linear_mipmap, repeat_enable;
 uniform sampler2D factory_tile : source_color, filter_linear_mipmap, repeat_enable;
 uniform sampler2D factory_archive : source_color, filter_linear_mipmap, repeat_enable;
@@ -74,6 +77,18 @@ void fragment() {
 		else ALBEDO=mix(wet,dry,smoothstep(1.65,1.68,world_height));
 	}
 	EMISSION = emission_color;
+	if(star_finish) {
+		vec3 plaster=texture(albedo_map,UV).rgb;
+		vec3 enamel=texture(star_enamel,UV).rgb;
+		float style=floor(finish_style+.5);
+		vec3 lower=enamel*vec3(.58,.71,.70);
+		float dado=1.15;
+		if(style==21.0){lower=texture(star_tile,UV*1.35).rgb;dado=1.85;}
+		if(style==22.0){lower=enamel*vec3(.44,.50,.44);dado=1.45;}
+		if(style==23.0){lower=enamel*vec3(.83,.81,.65);dado=.86;}
+		ALBEDO=mix(lower,plaster,smoothstep(dado-.02,dado+.02,world_height));
+		if(abs(world_height-dado)<.025)ALBEDO*=.63;
+	}
 	if (normal_strength>0.0) {
 		NORMAL_MAP = texture(normal_map,UV).rgb;
 		NORMAL_MAP_DEPTH = normal_strength;

@@ -13,20 +13,23 @@ static func doors(id:String)->Array:
 	return out
 static func build(w):
 	var k=w.kit;var id:String=w.floor_id;var plan:Dictionary=LAYOUTS[id]
-	if id in ["commune","waterworks","sech"]:Detail.materials(k)
+	if id in ["commune","waterworks","sech","starcity"]:Detail.materials(k)
 	var surfaces={"waterworks":["cement","cement_normal","a3b6bb"],"commune":["wall","wall_normal","d8c39b"],"sech":["corrugated","steel_normal","8a9990"],"coal":["oxide","oxide_normal","a19883"],"starcity":["steel","steel_normal","a2c0cb"]}
 	k.wall_surface=surfaces[id][0];k.wall_normal=surfaces[id][1];k.wall_color=Color(surfaces[id][2])
 	k.mats.blue=k.mats.metal.duplicate();k.mats.blue.albedo_color=Color("66858c")
 	k.mats.plaster.albedo_color=Color({"waterworks":"a3b4ad","commune":"c1b38f","sech":"8f9992","coal":"8a8c84","starcity":"a1b5bb"}[id])
 	Shell.build(w,plan,rooms(id))
-	for entry in plan.objects:furnish(k,entry,id)
+	for entry in plan.objects:
+		if id!="starcity":furnish(k,entry,id)
 	for room in rooms(id):
 		if room.code=="00":continue
 		var r:Rect2=room.rect
 		var warm:bool=plan.warm or (id=="coal" and room.code in ["02","03"])
 		var power=2.4 if (warm and room.code in ["01","02"]) else 2.1
 		var lamp_position=Vector3(r.get_center().x,2.5,r.position.y+.65)
+		if id=="starcity":lamp_position.z=r.position.y+.18
 		if id in ["waterworks","commune"]:lamp_position.z=r.position.y+.22
+		if id=="starcity" and room.code=="03":lamp_position=Vector3(4.2,2.5,-14.82)
 		if id=="waterworks" and room.code=="01":lamp_position.x=-18.1
 		if id=="waterworks" and room.code=="03":lamp_position.x=5.9
 		if id=="commune" and room.code=="02":lamp_position=Vector3(-3,2.5,-3.80) # Mounted beside the double door, clear of its leaves.
@@ -39,7 +42,7 @@ static func build(w):
 			var label=""
 			for room in rooms(id):
 				if room.code!="00" and absf(room.rect.position.y-entry[1])<.01 and entry[0]>room.rect.position.x and entry[0]<room.rect.end.x:label=room.name;break
-			if label!="":k.signboard(label,Vector3(entry[0],2.35,entry[1]+.16),3.5)
+			if label!="" and id!="starcity":k.signboard(label,Vector3(entry[0],2.35,entry[1]+.16),3.5)
 	if plan.has("gate"):
 		w.campaign_gate_flag=plan.gate_flag
 		w.campaign_gate=k.box("CampaignInnerGate",plan.gate,Vector3(1.82,2.2,.18),"corrugated" if id=="waterworks" else "blue",true)
@@ -244,44 +247,7 @@ static func coal(w):
 	k.signboard("中央苏维埃 · D-6 / 限区探访",Vector3(-13,2.1,13.8),4.3)
 	k.signboard("休养间 / 请轻声",Vector3(10,2.1,-2.17),3.4)
 static func starcity(w):
-	var k=w.kit
-	Settlement.rug(k,Vector3(-16,0,11.6),Vector2(2,3),"indigo")
-	# A large mission-control volume, concentric consoles and a separate service wing.
-	for x in [-5.8,5.8]:
-		for z in [-13,-7,1]:k.box("ControlHallPillar",Vector3(x,2.3,z),Vector3(.35,4.6,.35),"blue",true)
-	for angle in [-150,-120,-90,-60,-30]:
-		var a=deg_to_rad(angle);var p=Vector3(cos(a)*4.2,0,-5+sin(a)*4.2)
-		var console=k.box("MissionConsole",p+Vector3(0,.65,0),Vector3(1.8,1.3,.8),"blue",true)
-		k.box("MonitorBezel",p+Vector3(0,1.52,.1),Vector3(1.4,.68,.3),"dark")
-		var screen=k.box("MissionScreen",p+Vector3(0,1.52,.26),Vector3(1.15,.46,.025),"dark")
-		var phosphor=ShaderMaterial.new();phosphor.shader=load("res://assets/visual/monitor.gdshader");screen.material_override=phosphor
-		for dx in [-.45,0,.45]:k.cyl("MissionDial",p+Vector3(dx,1.15,.43),.08,.04,"cream").rotation.x=PI/2
-	k.cyl("OrbitalModel",Vector3(0,3.3,-5),.7,.1,"metal")
-	k.pipe(Vector3(-1.5,3.3,-5),Vector3(1.5,3.3,-5),.07,"brass")
-	k.pipe(Vector3(0,3.3,-6.5),Vector3(0,3.3,-3.5),.07,"brass")
-	k.label("ВОСТОК–7",Vector3(0,3,-14.7),42)
-	k.table(Vector3(3,0,-12),2.2)
-	k.lamp(Vector3(3,2.15,-12.5),true,2.4,5)
-	for x in [-9,-7,-5,-3]:k.locker(Vector3(x,0,-18),2)
-	for z in [-10,-7,-4]:
-		k.box("ResearchRack",Vector3(-21.4,1,z),Vector3(.8,2,1.5),"blue",true)
-		for y in [.4,.9,1.4]:k.box("RackModule",Vector3(-20.95,y,z),Vector3(.03,.25,1.2),"metal")
-	k.signboard("星城地下设施 / 测控技术保障",Vector3(0,2.7,-14.7),7)
-	k.signboard("深层实验与生活分区 / 授权通行",Vector3(-8,1.8,-18.8),3.5)
-	for x in [-20,-18,-16]:k.box("FacilitySection",Vector3(x,1.6,14.75),Vector3(1.5,.9,.04),"blue")
-	for z in [7,9]:k.bench(Vector3(-21,0,z),2,true,PI/2)
-	for x in [9,12,15,18]:k.box("CableRoute",Vector3(x,.03,4.5),Vector3(2.7,.04,.18),"metal")
-	for x in [10,13,16,19]:rack(k,Vector3(x,0,5.3),1.7,"metal")
-	for x in [10,13,16,19]:
-		k.box("TapeRecorder",Vector3(x,.8,-3.5),Vector3(1.5,1.6,.65),"blue",true)
-		for dx in [-.35,.35]:k.cyl("TapeReel",Vector3(x+dx,1.2,-3.1),.23,.05,"metal").rotation.x=PI/2
-	k.table(Vector3(12,0,2.7),2.4)
-	k.box("HandoverLedger",Vector3(12,.83,2.7),Vector3(.8,.04,.6),"paper")
-	k.cyl("ObservationClock",Vector3(19,2.1,-4.8),.3,.08,"metal").rotation.x=PI/2
-	k.cyl("ClockFace",Vector3(19,2.1,-4.74),.26,.025,"paper").rotation.x=PI/2
-	k.box("ClockMinuteHand",Vector3(19,2.2,-4.72),Vector3(.015,.2,.01),"dark")
-	k.box("ClockHourHand",Vector3(19.07,2.1,-4.71),Vector3(.15,.015,.01),"dark")
-	k.signboard("外线隔离 / 禁止误送电",Vector3(-16,2.1,-10.8),4)
+	preload("res://scripts/starcity_v17.gd").build(w)
 static func furnish(k,e:Array,id:String):
 	var p=Vector3(e[1],0,e[2]);var kind:String=e[3]
 	if kind=="tank" and id=="sech":

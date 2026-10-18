@@ -1,6 +1,11 @@
 shader_type spatial;
 render_mode unshaded, cull_disabled;
 uniform sampler2D painted_map : source_color, filter_linear_mipmap, repeat_disable;
+uniform sampler2D axial_legs_map : source_color, filter_linear_mipmap, repeat_disable;
+uniform bool axial_legs = false;
+uniform vec2 axial_legs_origin = vec2(0.0);
+uniform float axial_legs_width = 1.0;
+uniform float axial_legs_exposure = 1.0;
 uniform vec2 frame_origin = vec2(0.0);
 uniform vec2 frame_size = vec2(0.2,1.0);
 uniform vec2 texel_size = vec2(0.001);
@@ -37,7 +42,15 @@ void vertex() {
 vec4 sample_frame(vec2 uv) {
 	uv=clamp(uv,vec2(0.003),vec2(0.997));
 	if (mirror) uv.x=1.0-uv.x;
-	return texture(painted_map,frame_origin+uv*frame_size);
+	vec4 paint=texture(painted_map,frame_origin+uv*frame_size);
+	if(axial_legs && uv.y>.615) {
+		vec2 legs_uv=vec2((uv.x-.5)*axial_legs_width+.5,uv.y);
+		vec4 legs=texture(axial_legs_map,axial_legs_origin+clamp(legs_uv,vec2(.003),vec2(.997))*vec2(.5,1.0/3.0));
+		legs.rgb*=axial_legs_exposure;
+		if(legs_uv.x<0.0 || legs_uv.x>1.0)legs=vec4(0.0);
+		paint=mix(paint,legs,smoothstep(.615,.64,uv.y));
+	}
+	return paint;
 }
 
 void fragment() {

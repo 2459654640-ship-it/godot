@@ -4,6 +4,7 @@ const Comic=preload("res://scripts/comic.gd")
 const Chapter=preload("res://scripts/d6_chapter.gd")
 const Economy=preload("res://scripts/economy.gd")
 const Conversation=preload("res://scripts/conversation.gd")
+const FirstMeetings=preload("res://scripts/first_meetings.gd")
 const Campaign=preload("res://scripts/campaign.gd")
 const Progression=preload("res://scripts/progression.gd")
 const Life=preload("res://scripts/resident_dialogue.gd")
@@ -160,6 +161,7 @@ func view(id: String) -> Dictionary:
 			v.name="东侧维修坡道"
 			v.options=[opt("leave_east","整理背包，准备离开 D-6",route!="" and has("mask") and has("filter"), "先通过维修门、侧门或检修管线")]
 	v=Progression.decorate(Economy.decorate(Campaign.decorate(Chapter.decorate(Life.decorate(Narrative.decorate(v,self),self),self),self),self),self)
+	v=FirstMeetings.decorate(v,self)
 	if id=="mikhail":v.options=v.options.filter(func(o):return o.key!="give_vitamins")
 	for option in v.options:
 		var influence=option.key in ["accept","leave_official","leave_east","use_vodka","trade_smoke","give_soup","guard_bluff","hatch_knife","buy_protection"]
@@ -173,6 +175,7 @@ func view(id: String) -> Dictionary:
 		option.category="决定" if influence else ("任务" if quest_related else ("闲聊" if once_topic(option.key) else "调查"))
 		if option.key.begins_with("c_"):
 			option.category=Campaign.data().actions.get(option.key.substr(2),{}).get("category",option.category)
+		if option.key.begins_with("meet_"):option.category="闲聊"
 		if once_topic(option.key) and option.key in read_topics:option.enabled=false;option.reason="已聊过，记在聊天记录里"
 	return v
 
@@ -186,6 +189,8 @@ func act(key: String) -> String:
 			if o.key==key and o.enabled:valid=true
 	if not valid:return "条件尚未满足，或这件事已经做过了。"
 	last_action_valid=true
+	if key.begins_with("meet_"):
+		last_reply=FirstMeetings.act(self,key);changed.emit();return last_reply
 	if once_topic(key):read_topics.append(key)
 	if Progression.handles(key):
 		last_reply=Progression.act(self,key);changed.emit();return last_reply

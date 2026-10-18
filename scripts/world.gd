@@ -79,7 +79,7 @@ func _ready():
 		played_seconds=float(transfer.pending.story.get("played_seconds",0))
 		camera_size=clampf(float(transfer.pending.story.get("camera_size",17)),10,28)
 		arrival=transfer.pending.position
-		if ((floor_id=="commune" and transfer.pending.story.get("layout_revision",0)<12) or (floor_id=="sech" and transfer.pending.story.get("layout_revision",0)<11) or (floor_id not in ["life","labor","sech"] and transfer.pending.story.get("layout_revision",0)<8)):arrival=CampaignMaps.LAYOUTS[floor_id].spawn
+		if ((floor_id=="commune" and transfer.pending.story.get("layout_revision",0)<12) or (floor_id=="sech" and transfer.pending.story.get("layout_revision",0)<11) or (floor_id=="starcity" and transfer.pending.story.get("layout_revision",0)<17) or (floor_id not in ["life","labor","sech"] and transfer.pending.story.get("layout_revision",0)<8)):arrival=CampaignMaps.LAYOUTS[floor_id].spawn
 		transfer.pending={}
 	kit=Kit.new(self)
 	build_environment()
@@ -831,7 +831,7 @@ func clear_arrival(p:Vector3)->Vector3:
 func save_snapshot()->Dictionary:
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z];data.floor=floor_id
-	data.layout_revision=13;data.played_seconds=played_seconds
+	data.layout_revision=17;data.played_seconds=played_seconds
 	data.camera_size=camera_size;data.facing=player.visual.rotation.y
 	data.world_state={"phase":phase,"guard_away_time":guard_away_time,"waiting_shift":waiting_shift,"pending_route":pending_route}
 	data.npc_positions={}
@@ -856,7 +856,7 @@ func load_game(path:String=""):
 		get_node("/root/Session").enter(data,data.get("floor","life"),Vector3(p[0],maxf(p[1],.04),p[2]));return
 	hud.observing=false;story.restore(data)
 	player.position=clear_arrival(Vector3(p[0],maxf(p[1],.04),p[2]))
-	if (floor_id=="commune" and int(data.get("layout_revision",0))<12) or (floor_id=="sech" and int(data.get("layout_revision",0))<11):player.position=CampaignMaps.LAYOUTS[floor_id].spawn
+	if (floor_id=="commune" and int(data.get("layout_revision",0))<12) or (floor_id=="sech" and int(data.get("layout_revision",0))<11) or (floor_id=="starcity" and int(data.get("layout_revision",0))<17):player.position=CampaignMaps.LAYOUTS[floor_id].spawn
 	played_seconds=float(data.get("played_seconds",0));camera_size=clampf(float(data.get("camera_size",17)),10,28)
 	waiting_shift=false;guard_away_time=0;restore_placement(data);player.velocity=Vector3.ZERO
 	hud.comic_active=false;hud.close()
@@ -868,7 +868,7 @@ func restore_placement(data:Dictionary):
 		var state:Dictionary=data.get("world_state",{})
 		phase=float(state.get("phase",0));guard_away_time=float(state.get("guard_away_time",0));waiting_shift=bool(state.get("waiting_shift",false));pending_route=String(state.get("pending_route",""))
 	player.visual.rotation.y=float(data.get("facing",player.visual.rotation.y))
-	if data.get("floor","")!=floor_id or int(data.get("layout_revision",0))<(12 if floor_id=="commune" else 11):return
+	if data.get("floor","")!=floor_id or int(data.get("layout_revision",0))<(17 if floor_id=="starcity" else (12 if floor_id=="commune" else 11)):return
 	for id in data.get("npc_positions",{}):
 		if not npcs.has(id):continue
 		var entry:Dictionary=data.npc_positions[id];var p=entry.get("position",[])

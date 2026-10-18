@@ -25,9 +25,9 @@ const PLANS={
 	"objects":[["coal_archive",-10,-6,"desk"],["coal_medic",4,-15,"npc"],["coal_brother",10,-6,"npc"],["coal_clerk",-13,10,"npc"],["coal_exit",12,6,"exit"],["coal_tagboard",-15,12,"marker"],["coal_wash",-4,10,"wash"]]},
 "starcity":{
 	"spawn":Vector3(-14,.04,10),"palette":"81969a","ambient":"7e9da7","energy":.16,"warm":false,
-	"rooms":[["01","配电隔离室",Rect2(-22,-11,11,9)],["02","旧转移档案",Rect2(-11,-19,9,4)],["03","测控室",Rect2(-7,-15,14,17)],["04","蓝门值班室",Rect2(-22,6,15,9)],["05","内门联锁台",Rect2(-7,6,14,5)],["06","远程通信室",Rect2(7,-5,14,11)],["00","检修侧廊",Rect2(-11,-11,4,13)],["00","隔离前廊",Rect2(-22,-2,11,4)],["00","蓝门前廊",Rect2(-22,2,29,4)]],
-	"doors":[[-16,-2,"z"],[-9,2,"z"],[-16,2,"z"],[-14,6,"z"],[0,6,"z"],[0,2,"z"],[7,4,"x"],[-4,-15,"z"]],
-	"objects":[["star_isolator",-16,-6,"panel"],["star_archive",-6,-17,"desk"],["star_father",-1.5,-12,"npc"],["star_manual",-18,10,"paper"],["star_guard",-12,10,"npc"],["star_bypass",3,8,"panel"],["star_radio",14,0,"radio"],["star_exit",17,4,"exit"],["star_technician",18,1,"npc"],["star_tape",19,-1,"marker"],["star_calibrator",10,1,"bench"],["star_handover",12,4,"marker"]],
+	"rooms":[["01","配电隔离室",Rect2(-22,-11,11,9)],["02","旧转移档案",Rect2(-11,-19,9,4)],["03","测控室",Rect2(-7,-15,14,17)],["04","蓝门值班室",Rect2(-22,6,15,9)],["05","内门联锁台",Rect2(-7,6,14,5)],["06","远程通信室",Rect2(7,-5,14,11)],["07","环境与真空试验舱",Rect2(21,-17,12,14)],["08","仪器准备与标定间",Rect2(7,-20,14,8)],["00","试验联络廊",Rect2(7,-12,14,3)],["00","检修侧廊",Rect2(-11,-11,4,13)],["00","隔离前廊",Rect2(-22,-2,11,4)],["00","蓝门前廊",Rect2(-22,2,29,4)]],
+	"doors":[[-16,-2,"z"],[-9,2,"z"],[-16,2,"z"],[-14,6,"z"],[0,6,"z"],[0,2,"z"],[7,4,"x"],[-4,-15,"z"],[7,-10.5,"x",1.0],[21,-10.5,"x",1.0],[14,-12,"z",1.0]],
+	"objects":[["star_isolator",-16,-6,"panel"],["star_archive",-6,-17,"desk"],["star_father",-1.5,-12,"npc"],["star_manual",-18,10,"paper"],["star_guard",-12,10,"npc"],["star_bypass",3,8,"panel"],["star_radio",14,0,"radio"],["star_exit",17,4,"exit"],["star_technician",18,1,"npc"],["star_tape",19,-1,"marker"],["star_calibrator",10,1,"bench"],["star_handover",12,4,"marker"],["star_vacuum",24.5,-4.1,"marker"],["star_instrument",14,-17.3,"marker"]],
 	"gate":Vector3(0,1.1,2),"gate_flag":"star_access"}}
 static func rooms(id:String)->Array:
 	var out=[]

@@ -24,8 +24,8 @@ static func split_text(text:String,speaker:String)->Array:
 static func append(s,id:String,text:String,speaker:String)->int:
 	if not s.conversations.has(id):s.conversations[id]=[]
 	var first=s.conversations[id].size()
-	var campaign:Dictionary=s.Campaign.data().interactions
-	if campaign.has(id) and not campaign[id].get("spoken",false):speaker="narrator"
+	# split_text already separates narration from quoted speech. Keep the NPC
+	# identity for quotes, including authored campaign dialogue and introductions.
 	for part in split_text(text,speaker):s.conversations[id].append(part)
 	return first
 static func visit(s,id:String,body:String)->int:

@@ -385,6 +385,7 @@ func start_modal(title:String,subtitle:String,wide:bool=false):
 	target_label.visible=false
 
 func show_dialogue(id:String):
+	world.story.FirstMeetings.begin(world.story,id)
 	var v=world.story.view(id)
 	var first=world.story.Conversation.visit(world.story,id,v.body)
 	Dialogue.render(self,id,first)
