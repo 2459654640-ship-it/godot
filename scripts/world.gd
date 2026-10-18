@@ -296,7 +296,7 @@ func build_residence():
 	kit.locker(Vector3(-14.2,0,-2.0))
 	kit.locker(Vector3(-14.2,0,-2.65))
 	kit.bench(Vector3(-11.8,0,-1.4),1.1,true,PI)
-	kit.poster(Vector3(-12.5,1.65,-8.87),"МОСКВА · 1962",false)
+	kit.poster(Vector3(-12.7,1.65,-8.87),"МОСКВА · 1962",false)
 	kit.signboard("01 / ЖИЛОЙ ОТСЕК",Vector3(-10.4,2.1,-8.83),3.0)
 	kit.signboard("СЕМЁНОВ",Vector3(-13.45,2.22,-8.82),2.1)
 	kit.label("谢苗诺夫",Vector3(-13.45,1.85,-8.78),22,Color("bcb28f"))
@@ -374,7 +374,7 @@ func build_supply():
 	kit.box("Ledger",Vector3(13.3,1.1,-5.45),Vector3(0.50,0.035,0.35),"paper")
 	kit.signboard("07 / СНАБЖЕНИЕ",Vector3(12.5,2.3,-8.8),3.1)
 	kit.lamp(Vector3(12.2,2.3,-8.6),false,2.4,7)
-	kit.poster(Vector3(10.14,1.45,-2.2),"НОРМА / 1982",false)
+	kit.poster(Vector3(10.14,1.45,-2.2),"НОРМА / 1982",false,PI/2)
 
 func build_south():
 	# Washroom: sinks and heater are wall fixtures with unified collision hulls.

@@ -54,7 +54,8 @@ static func commune(w):
  k.box("LecternBase",Vector3(.5,.62,-10.65),Vector3(.9,.84,.62),"wood",true)
  k.box("LecternTop",Vector3(.5,1.08,-10.65),Vector3(1.05,.08,.72),"wood").rotation.x=-.12
  k.box("AssemblyRedDrape",Vector3(.5,2.3,-11.79),Vector3(12,.50,.08),"red")
- for x in [-8,9]:Detail.art(k,"CommuneWorkersPoster",Vector3(x,1.6,-11.80),Vector2(1.15,1.7),"res://assets/visual/commune_poster_0.png")
+ # Keep the entire west frame clear of the production-corridor doorway.
+ for x in [-7.4,9]:Detail.art(k,"CommuneWorkersPoster",Vector3(x,1.6,-11.80),Vector2(1.15,1.7),"res://assets/visual/commune_poster_0.png")
  for z in [-8.2,-6.2]:
   for x in [-7,-5,-3,4,6,8]:
    if z==-8.2 and x<0:continue # The seated group includes its own wooden bench.

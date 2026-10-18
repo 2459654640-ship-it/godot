@@ -378,8 +378,12 @@ func locker(p: Vector3, height: float = 1.85):
 	box("LockerHandle",p+Vector3(0.22,height*0.50,0.32),Vector3(0.035,0.15,0.025),"brass")
 	for y in [height-0.25,height-0.32,height-0.39]:box("LockerVent",p+Vector3(0,y,0.31),Vector3(0.4,0.018,0.02),"dark")
 
-func poster(p: Vector3, text: String, red: bool = true):
+func poster(p: Vector3, text: String, red: bool = true, heading: float = 0.0):
+	# The face and its caption share the mounting wall's outward normal.
+	var facing=Basis(Vector3.UP,heading)
 	var m=MeshInstance3D.new()
+	m.name="WallPoster"
+	m.set_meta("wall_poster",text)
 	var q=QuadMesh.new()
 	q.size=Vector2(0.88,1.2)
 	m.mesh=q
@@ -389,9 +393,10 @@ func poster(p: Vector3, text: String, red: bool = true):
 	mat.texture_filter=BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	m.material_override=mat
 	root.add_child(m)
-	m.position=p+Vector3(0,0,0.012)
+	m.position=p+facing*Vector3(0,0,0.012)
+	m.rotation.y=heading
 	# Opaque poster face is in front of masonry, never a transparent overlay.
-	label(text,p+Vector3(0,-0.71,0.025),18,Color("bfb494"))
+	label(text,p+facing*Vector3(0,-0.71,0.025),18,Color("bfb494")).rotation.y=heading
 
 func batch_static():
 	# Render repeated modules in material batches; their physics bodies remain independent.
