@@ -1,0 +1,183 @@
+{
+  "version": "v12",
+  "engine": "Godot 4.6.3 stable",
+  "headless": {
+    "suites": [
+      {
+        "suite": "D6_TEST_RESULT",
+        "checks": 1855,
+        "failures": 0
+      },
+      {
+        "suite": "VISUAL_CONTRACT_RESULT",
+        "checks": 1102,
+        "failures": 0
+      },
+      {
+        "suite": "NARRATIVE_CONTRACT_RESULT",
+        "checks": 1942,
+        "failures": 0
+      },
+      {
+        "suite": "RESIDENT_CONTRACT_RESULT",
+        "checks": 103,
+        "failures": 0
+      },
+      {
+        "suite": "CHAPTER_CONTRACT_RESULT",
+        "checks": 123,
+        "failures": 0
+      },
+      {
+        "suite": "FLOOR_CONTRACT_RESULT",
+        "checks": 37,
+        "failures": 0
+      },
+      {
+        "suite": "CAMPAIGN_CONTRACT_RESULT",
+        "checks": 357,
+        "failures": 0
+      },
+      {
+        "suite": "CAMPAIGN_UI_RESULT",
+        "checks": 17,
+        "failures": 0
+      },
+      {
+        "suite": "REFINEMENT_RESULT",
+        "checks": 43,
+        "failures": 0
+      },
+      {
+        "suite": "PRESENTATION_RESULT",
+        "checks": 30,
+        "failures": 0
+      },
+      {
+        "suite": "EXPLORATION_RESULT",
+        "checks": 223,
+        "failures": 0
+      },
+      {
+        "suite": "V9_RESULT",
+        "checks": 138,
+        "failures": 0
+      },
+      {
+        "suite": "V10_RESULT",
+        "checks": 109,
+        "failures": 0
+      },
+      {
+        "suite": "V11_RESULT",
+        "checks": 174,
+        "failures": 0
+      },
+      {
+        "suite": "V11_COMBAT_RESULT",
+        "checks": 22,
+        "failures": 0
+      },
+      {
+        "suite": "OCCLUSION_V11_RESULT",
+        "checks": 9,
+        "failures": 0
+      },
+      {
+        "suite": "VISUAL_FIXES_V11_1_RESULT",
+        "checks": 90,
+        "failures": 0
+      },
+      {
+        "suite": "COMMUNE_V12_RESULT",
+        "checks": 135,
+        "failures": 0
+      },
+      {
+        "suite": "FACTORY_V12_RESULT",
+        "checks": 49,
+        "failures": 0
+      },
+      {
+        "suite": "EQUIPMENT_V12_RESULT",
+        "checks": 16,
+        "failures": 0
+      },
+      {
+        "suite": "PLATFORM_V12_RESULT",
+        "checks": 12,
+        "failures": 0
+      }
+    ],
+    "total_checks": 6586,
+    "total_failures": 0,
+    "targeted_followup": {
+      "suite": "commune_v12",
+      "checks": 135,
+      "failures": 0,
+      "reason": "Verify sequential main guidance and unfinished work in legacy parallel assignments after full regression."
+    }
+  },
+  "graphics": {
+    "renderer": "OpenGL Compatibility / Mesa llvmpipe",
+    "captures": {
+      "delivery-commune": [
+        "CAPTURE commune-overview",
+        "CAPTURE small-assembly",
+        "CAPTURE production-wing",
+        "CAPTURE boiler-room",
+        "CAPTURE expanded-farm",
+        "CAPTURE family-alcoves",
+        "CAPTURE militia-room",
+        "CAPTURE moro-first-talk",
+        "CAPTURE moro_public_night",
+        "CAPTURE moro_quiet_night",
+        "CAPTURE memory_reading"
+      ],
+      "delivery-factory": [
+        "CAPTURE factory-archive-door",
+        "CAPTURE factory-pump-room",
+        "CAPTURE factory-repair-room",
+        "CAPTURE factory-filter-warehouse",
+        "CAPTURE factory-combat",
+        "CAPTURE weapon-equipment-slot"
+      ],
+      "delivery-stage": [
+        "CAPTURE stage-edge-support",
+        "CAPTURE stage-feet-on",
+        "CAPTURE stage-feet-off"
+      ],
+      "final-actors": [
+        "ACTOR_CAPTURE ivan-front",
+        "ACTOR_CAPTURE ivan-right-down",
+        "ACTOR_CAPTURE ivan-left-down",
+        "ACTOR_CAPTURE ivan-side",
+        "ACTOR_CAPTURE ivan-rear-right",
+        "ACTOR_CAPTURE ivan-back",
+        "ACTOR_CAPTURE unmasked-armed-right-down",
+        "ACTOR_CAPTURE unmasked-armed-left-down",
+        "ACTOR_CAPTURE masked-right-down",
+        "ACTOR_CAPTURE masked-left-down",
+        "ACTOR_CAPTURE armed-ivan-front",
+        "ACTOR_CAPTURE armed-ivan-right-down",
+        "ACTOR_CAPTURE armed-ivan-left-down",
+        "ACTOR_CAPTURE armed-ivan-side",
+        "ACTOR_CAPTURE armed-ivan-rear-right",
+        "ACTOR_CAPTURE armed-ivan-back",
+        "ACTOR_CAPTURE veteran-front",
+        "ACTOR_CAPTURE veteran-right-down",
+        "ACTOR_CAPTURE veteran-left-down",
+        "ACTOR_CAPTURE veteran-side",
+        "ACTOR_CAPTURE veteran-rear-right",
+        "ACTOR_CAPTURE veteran-back"
+      ]
+    },
+    "note": "Prepared state screenshots and four phase whole-pose samples, not a complete manual campaign playthrough."
+  },
+  "not_checked": [
+    "Hardware performance benchmark",
+    "Audio listening quality",
+    "Platform export"
+  ],
+  "removed": "Rejected 3D Ivan native project and pilot previews"
+}

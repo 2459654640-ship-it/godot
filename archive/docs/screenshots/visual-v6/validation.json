@@ -1,0 +1,66 @@
+{
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "date": "2026-10-17",
+  "full_suite": [
+    {
+      "suite": "D6_TEST_RESULT",
+      "checks": 1827,
+      "failures": 0
+    },
+    {
+      "suite": "VISUAL_CONTRACT_RESULT",
+      "checks": 1113,
+      "failures": 0
+    },
+    {
+      "suite": "NARRATIVE_CONTRACT_RESULT",
+      "checks": 1753,
+      "failures": 0
+    },
+    {
+      "suite": "RESIDENT_CONTRACT_RESULT",
+      "checks": 113,
+      "failures": 0
+    },
+    {
+      "suite": "CHAPTER_CONTRACT_RESULT",
+      "checks": 101,
+      "failures": 0
+    },
+    {
+      "suite": "FLOOR_CONTRACT_RESULT",
+      "checks": 35,
+      "failures": 0
+    },
+    {
+      "suite": "CAMPAIGN_CONTRACT_RESULT",
+      "checks": 253,
+      "failures": 0
+    },
+    {
+      "suite": "CAMPAIGN_UI_RESULT",
+      "checks": 15,
+      "failures": 0
+    }
+  ],
+  "total_checks": 5210,
+  "failures": 0,
+  "graphical_ui": {
+    "checks": 15,
+    "failures": 0
+  },
+  "post_stair_visual_adjustment_floor_check": {
+    "checks": 35,
+    "failures": 0,
+    "connected_cells": 4163
+  },
+  "renderer": "Xorg dummy / Mesa llvmpipe / OpenGL Compatibility",
+  "missing_authored_chinese_glyphs": 0,
+  "audio_clipped_samples": 0,
+  "screenshots_are": "actual engine viewport captures with controlled test states; not new illustrations",
+  "limitations": [
+    "Software rendering and Dummy audio output do not validate device performance or listening on player hardware.",
+    "New characters reuse existing painted figures and portraits.",
+    "Earlier HTML is a narrative reference; this is a nine-ending adaptation, not an exact remake of every old branch."
+  ]
+}

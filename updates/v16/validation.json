@@ -1,0 +1,51 @@
+{
+  "checks": 2172,
+  "suites": 11,
+  "failures": 0,
+  "results": [
+    {
+      "suite": "visual_contract",
+      "checks": 1105
+    },
+    {
+      "suite": "campaign_contract",
+      "checks": 371
+    },
+    {
+      "suite": "campaign_ui",
+      "checks": 17
+    },
+    {
+      "suite": "floor_contract",
+      "checks": 40
+    },
+    {
+      "suite": "publications_v13",
+      "checks": 110
+    },
+    {
+      "suite": "actors_v13",
+      "checks": 61
+    },
+    {
+      "suite": "commune_v12",
+      "checks": 138
+    },
+    {
+      "suite": "visual_fixes_v11_1",
+      "checks": 90
+    },
+    {
+      "suite": "public_radio_v16",
+      "checks": 97
+    },
+    {
+      "suite": "ivan_gait_v16",
+      "checks": 102
+    },
+    {
+      "suite": "furnishings_v16",
+      "checks": 41
+    }
+  ]
+}

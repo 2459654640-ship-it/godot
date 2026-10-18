@@ -1,0 +1,128 @@
+{
+  "checks": 458,
+  "failures": 0,
+  "eight_direction_pose_groups": 80,
+  "sets": {
+    "ivan": {
+      "poses": 3,
+      "height_range": [
+        320,
+        320
+      ],
+      "front_metrics": {
+        "upper_head_width_px": 51,
+        "upper_torso_envelope_px": 146
+      },
+      "v13_front_metrics": {
+        "upper_head_width_px": 57,
+        "upper_torso_envelope_px": 146
+      }
+    },
+    "commander": {
+      "poses": 3,
+      "height_range": [
+        320,
+        322
+      ],
+      "front_metrics": {
+        "upper_head_width_px": 45,
+        "upper_torso_envelope_px": 140
+      },
+      "v13_front_metrics": {
+        "upper_head_width_px": 48,
+        "upper_torso_envelope_px": 149
+      }
+    },
+    "veteran_masked": {
+      "poses": 1,
+      "height_range": [
+        322,
+        322
+      ],
+      "front_metrics": {
+        "upper_head_width_px": 47,
+        "upper_torso_envelope_px": 138
+      },
+      "v13_front_metrics": {
+        "upper_head_width_px": 62,
+        "upper_torso_envelope_px": 178
+      }
+    },
+    "ivan_masked": {
+      "poses": 3,
+      "height_range": [
+        319,
+        321
+      ],
+      "front_metrics": {
+        "upper_head_width_px": 50,
+        "upper_torso_envelope_px": 142
+      },
+      "v13_front_metrics": {
+        "upper_head_width_px": 61,
+        "upper_torso_envelope_px": 153
+      }
+    },
+    "commander_masked": {
+      "poses": 3,
+      "height_range": [
+        319,
+        321
+      ],
+      "front_metrics": {
+        "upper_head_width_px": 48,
+        "upper_torso_envelope_px": 142
+      },
+      "v13_front_metrics": {
+        "upper_head_width_px": 48,
+        "upper_torso_envelope_px": 145
+      }
+    },
+    "ivan_masked_combat": {
+      "poses": 7,
+      "height_range": [
+        318,
+        322
+      ],
+      "front_metrics": {
+        "upper_head_width_px": 55,
+        "upper_torso_envelope_px": 110
+      },
+      "v13_front_metrics": {
+        "upper_head_width_px": 64,
+        "upper_torso_envelope_px": 129
+      }
+    },
+    "veteran_masked_combat": {
+      "poses": 7,
+      "height_range": [
+        318,
+        322
+      ],
+      "front_metrics": {
+        "upper_head_width_px": 53,
+        "upper_torso_envelope_px": 125
+      },
+      "v13_front_metrics": {
+        "upper_head_width_px": 60,
+        "upper_torso_envelope_px": 144
+      }
+    },
+    "ivan_combat": {
+      "poses": 7,
+      "height_range": [
+        318,
+        322
+      ],
+      "front_metrics": {
+        "upper_head_width_px": 52,
+        "upper_torso_envelope_px": 112
+      },
+      "v13_front_metrics": {
+        "upper_head_width_px": 65,
+        "upper_torso_envelope_px": 130
+      }
+    }
+  },
+  "note": "Head-width sampling includes hair/cap; torso envelope can include sleeves. These measurements are not an anatomical head-count test."
+}
