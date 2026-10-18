@@ -1,0 +1,67 @@
+[
+  {
+    "suite": "first_meetings_v17",
+    "ok": true,
+    "checks": 293
+  },
+  {
+    "suite": "starcity_v17",
+    "ok": true,
+    "checks": 34
+  },
+  {
+    "suite": "campaign_contract",
+    "ok": true,
+    "checks": 373
+  },
+  {
+    "suite": "campaign_ui",
+    "ok": true,
+    "checks": 17
+  },
+  {
+    "suite": "narrative_contract",
+    "ok": true,
+    "checks": 1942
+  },
+  {
+    "suite": "resident_contract",
+    "ok": true,
+    "checks": 103
+  },
+  {
+    "suite": "commune_v12",
+    "ok": true,
+    "checks": 138
+  },
+  {
+    "suite": "public_radio_v16",
+    "ok": true,
+    "checks": 97
+  },
+  {
+    "suite": "ivan_gait_v16",
+    "ok": true,
+    "checks": 102
+  },
+  {
+    "suite": "actors_v13",
+    "ok": true,
+    "checks": 61
+  },
+  {
+    "suite": "publications_v13",
+    "ok": true,
+    "checks": 110
+  },
+  {
+    "suite": "ivan_gait_v17",
+    "ok": true,
+    "checks": 7256
+  },
+  {
+    "suite": "visual_contract",
+    "ok": true,
+    "checks": 1105
+  }
+]
