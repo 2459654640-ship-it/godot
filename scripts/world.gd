@@ -743,7 +743,7 @@ func on_story_changed():
 	story.context.floor=floor_id
 	if floor_id=="commune":
 		var shade=get_node_or_null("FungusShade")
-		if shade:shade.position.y=1.45 if story.f("grow_fixed") else 2.25
+		if shade:shade.position.y=2.08 if story.f("grow_fixed") else 2.38
 	if campaign_gate:
 		var state=1 if story.f(campaign_gate_flag) else 0
 		if state!=campaign_gate_state:

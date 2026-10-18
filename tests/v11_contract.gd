@@ -115,7 +115,7 @@ func run():
   if id=="commune":check(w.find_children("StationArchStone*","MeshInstance3D",true,false).is_empty() and w.zones.size()>=10,"expanded commune without floating arches")
   if id=="sech":
    for rail in w.find_children("DepotRail*","MeshInstance3D",true,false):check(rail.position.x>20,"active rails outside all habitation rooms")
-   var child=w.npcs.get("resident_ambient_child_1");check(is_instance_valid(child) and child.visual.get_node("Painter").legs.size()==2,"child has an articulated two-leg gait")
+   var child=w.npcs.get("resident_ambient_child_1");check(is_instance_valid(child) and child.visual.get_node("Painter").sprite.mesh is QuadMesh and child.visual.get_node("Painter").find_children("*Leg*","MeshInstance3D",true,false).is_empty(),"child uses one complete painted figure without split-leg deformation")
   w.queue_free();await frames()
  print("V11_RESULT checks=",checks," failures=",failures)
  quit(0 if failures==0 else 1)

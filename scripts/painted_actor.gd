@@ -1,6 +1,6 @@
 extends Node3D
 ## Eight-direction painterly figures in the existing 3D physics world.
-## Five authored angles are mirrored; aligned 2D leg layers drive the gait.
+## Five authored angles are mirrored; walking selects complete painted poses.
 var actor
 var sprite:MeshInstance3D
 var material:ShaderMaterial
@@ -13,9 +13,6 @@ var actor_id="ivan"
 var reaction=""
 var reaction_time=0.0
 var current_pose=0
-var legs:Array[MeshInstance3D]=[]
-var leg_materials:Array[ShaderMaterial]=[]
-var gait_phase=0.0
 var room_lamps:Array=[]
 var atlas_id=""
 var light_clock=.2
@@ -52,13 +49,6 @@ func setup(body):
 	material.set_shader_parameter("texel_size",Vector2.ONE/Vector2(texture.get_size()))
 	sprite.material_override=material
 	add_child(sprite)
-	# Articulated 2D cutouts use ONE body drawing. Head, torso and clothing
-	# cannot change size between independently generated stride drawings.
-	for side in [-1,1]:
-		var leg=MeshInstance3D.new();leg.name="FarLeg" if side<0 else "NearLeg"
-		leg.mesh=quad;leg.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		var ink:ShaderMaterial=material.duplicate();ink.set_shader_parameter("part",side)
-		leg.material_override=ink;add_child(leg);legs.append(leg);leg_materials.append(ink)
 	# Cheap volumetric casters and a soft contact shadow integrate the drawing
 	# with real room lighting without replacing navigation or collision.
 	for spec in [[Vector3(0,.95,0),.18,1.30],[Vector3(0,1.60,0),.10,.26]]:
@@ -115,43 +105,26 @@ func _process(delta):
 		var height:float=HEIGHTS.get(actor_id,1.75)
 		sprite.mesh.size=Vector2(height*.762*float(manifest[chosen].cell[0])/324.0,height*352.0/324.0)
 		sprite.mesh.subdivide_width=48 if armed else 20
-		for ink in [material]+leg_materials:
+		for ink in [material]:
 			ink.set_shader_parameter("painted_map",texture);ink.set_shader_parameter("frame_size",Vector2(.2,1.0/pose_count));ink.set_shader_parameter("texel_size",Vector2.ONE/Vector2(texture.get_size()))
 	var column=mini(angle_slot,8-angle_slot)
 	var speed=Vector2(actor.velocity.x,actor.velocity.z).length()
 	cycle+=delta*speed/(1.7 if actor.is_player else (.85 if actor_id in ["ambient_child","commune_child"] else 1.15))
 	var walking=speed>0.15
-	gait_phase=cycle*TAU
 	var pose=0
 	if armed:
 		if reaction=="shot" and reaction_time>0:pose=1
 		elif (actor.is_player and director.reload_time>0) or (actor_id=="veteran_masked" and director.veteran_reload>0):pose=2
-	current_pose=(1 if sin(gait_phase)>=0 else 2) if walking else 0
+	elif walking and pose_count>=3:
+		pose=[1,0,2,0][floori(cycle*4)%4]
+	elif actor.animation_state=="talk" and pose_count>3:pose=3
+	current_pose=pose
 	reaction_time=maxf(0.0,reaction_time-delta)
 	material.set_shader_parameter("reaction",(1.0 if reaction=="success" else -1.0)*reaction_time if reaction_time>0 and reaction!="shot" else 0.0)
 	material.set_shader_parameter("frame_origin",Vector2(column*.2,float(pose)/pose_count))
 	material.set_shader_parameter("mirror",angle_slot>4)
 	material.set_shader_parameter("focus",1.0 if focused else 0.0)
-	material.set_shader_parameter("gait",cycle*PI*2)
-	var hem=.60
-	if actor_id in ["ambient_woman","ambient_elder","commune_cook"]:hem=.81
-	elif actor_id=="sech_cook":hem=.74
-	elif actor_id in ["semyon","commune_leader","sech_elder","coal_medic"]:hem=.70
-	var rig_direction=float(column)*PI/4
-	for ink in [material]+leg_materials:
-		ink.set_shader_parameter("frame_origin",Vector2(column*.2,float(pose)/pose_count))
-		ink.set_shader_parameter("mirror",angle_slot>4)
-		ink.set_shader_parameter("gait",gait_phase)
-		ink.set_shader_parameter("motion",1.0 if walking else 0.0)
-		ink.set_shader_parameter("hem",hem)
-		ink.set_shader_parameter("frame_pixels",float(manifest[atlas_id].cell[0]))
-		ink.set_shader_parameter("step_length",.14 if actor.is_player else (.085 if actor_id in ["ambient_child","commune_child"] else .12))
-		ink.set_shader_parameter("down_amount",1.0 if is_instance_valid(director) and actor_id=="veteran_masked" and director.veteran_health<=0 else 0.0)
-		ink.set_shader_parameter("side_view",column==2)
-		ink.set_shader_parameter("stride_axis",Vector2(sin(rig_direction),cos(rig_direction)))
-		ink.set_shader_parameter("focus",1.0 if focused else 0.0)
-		ink.set_shader_parameter("reaction",material.get_shader_parameter("reaction"))
-	for leg in legs:leg.visible=walking
+	material.set_shader_parameter("down_amount",1.0 if is_instance_valid(director) and actor_id=="veteran_masked" and director.veteran_health<=0 else 0.0)
 	# Painted key/fill remains readable, with a restrained room-color tint.
 	var warm=clampf((1.8-actor.global_position.z)*0.04,-.04,.05)
 	var floor=actor.get_parent().get("floor_id")
@@ -177,4 +150,4 @@ func _process(delta):
 		var lamp_tint=color/maxf(energy,.01)
 		sampled_light=tint*Vector3(illumination,illumination,illumination).lerp(lamp_tint,.12)
 	var lit=sampled_light
-	for ink in [material]+leg_materials:ink.set_shader_parameter("light_tint",lit)
+	for ink in [material]:ink.set_shader_parameter("light_tint",lit)

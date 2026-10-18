@@ -16,6 +16,7 @@ var previous_highlight=""
 var wall_surface="wall"
 var wall_normal="wall_normal"
 var wall_color=Color.WHITE
+var wall_room_profiles:Array=[]
 var font:Font
 
 func _init(parent: Node3D):
@@ -251,6 +252,12 @@ func finish_walls():
 			material.set_shader_parameter("normal_map",load("res://assets/visual/"+wall_normal+".png" if i==0 else "res://assets/visual/cement_normal.png"))
 			material.set_shader_parameter("base_color",wall_color)
 			material.set_shader_parameter("normal_strength",0.45 if i==0 else 0.30)
+			if not wall_room_profiles.is_empty() and i==0:
+				material.set_shader_parameter("commune_finish",true)
+				material.set_shader_parameter("finish_plaster",load("res://assets/visual/commune_plaster.png"))
+				material.set_shader_parameter("finish_tile",load("res://assets/visual/commune_ivory_tile.png"))
+				material.set_shader_parameter("finish_cement",load("res://assets/visual/cement.png"))
+				material.set_shader_parameter("normal_strength",.16)
 			tool.set_material(material)
 			tool.commit(mesh)
 		var instance=MeshInstance3D.new()
@@ -272,11 +279,17 @@ func finish_walls():
 
 func wall_quad(tool:SurfaceTool,points:Array,normal:Vector3,cap:bool=false):
 	tool.set_meta("has_vertices",true)
+	var style=0
+	if not cap and not wall_room_profiles.is_empty():
+		var center:Vector3=(points[0]+points[1]+points[2]+points[3])*.25+normal*.18
+		for profile in wall_room_profiles:
+			if profile.rect.has_point(Vector2(center.x,center.z)):style=profile.style;break
 	# Godot front faces use clockwise vertex order. Normals are explicit and
 	# unrelated to material transparency or the camera's moving position.
 	for index in [0,1,2,0,2,3]:
 		var p:Vector3=points[index]
 		tool.set_normal(normal)
+		tool.set_uv2(Vector2(style,0))
 		tool.set_uv(Vector2(p.x,p.z)*0.55 if cap else Vector2((p.x if absf(normal.z)>0.5 else p.z)/3.0,1.0-p.y/2.7))
 		tool.add_vertex(p)
 

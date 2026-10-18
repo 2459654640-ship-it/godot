@@ -46,6 +46,7 @@ func obstruction(bounds:AABB,padding:float=0.0)->bool:return coverage(bounds,pad
 func _process(delta):
  if not is_instance_valid(world) or not world.initialized:return
  for state in states:
+  if state.mesh.get_meta("dynamic",false) and state.mesh is MeshInstance3D:state.bounds=state.mesh.global_transform*state.mesh.get_aabb()
   var fraction=coverage(state.bounds,.06 if state.active else 0,state.roof)
   if world.overview and not state.roof and state.mesh.get_meta("foreground",false):fraction=maxf(fraction,.32)
   var hit=fraction>0

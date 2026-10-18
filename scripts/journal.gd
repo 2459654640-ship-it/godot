@@ -17,7 +17,7 @@ static func tasks(s)->Array:
 		out.append(row("pressure","东段压力监测",s.has("permit"),"life","妮娜的监测箱烧坏了保险芯，检修回路已断电。",step,target,area))
 	if s.f("cook_job") or s.f("valve"):out.append(row("kitchen","厨房漏水",s.f("soup_claimed"),"life","加琳娜接了一夜漏水，答应给帮忙的人留热汤。","漏已止住，回厨房找加琳娜。" if s.f("valve") else "先向维修工坊的妮娜借扳手，再看食堂灶台旁的回水阀。","cook" if s.f("valve") else ("valve" if s.has("wrench") else "nina"),"公共食堂" if s.has("wrench") or s.f("valve") else "维修工坊"))
 	if s.f("heat_job") or s.f("heating_fixed"):out.append(row("heating","西翼暖气",s.has("report"),"life","帕维尔请你看看西翼家属房的暖气。","修好后找帕维尔复核。" if s.f("heating_fixed") else "借扳手，到西翼晾晒架取公用干布；再看家属房的排气阀。","resident" if s.f("heating_fixed") else ("heating" if s.has("rag") else "laundry"),"西翼家属房"))
-	if s.f("shift"):out.append(row("shift","换班时的侧门",s.f("side_crossed"),"life","米哈伊尔说黄灯亮起时，岗哨会去查表。","先请伊戈尔去走廊查表，等他实际离开视线，再到压力表旁侧门等黄灯。","side","东侧维修岗"))
+	if s.f("shift"):out.append(row("shift","换班时的侧门",s.f("side_crossed"),"life","米哈伊尔说黄灯亮起时，侧门有短暂的检修窗口，伊戈尔未必会离岗。","先请伊戈尔去走廊查表，等他实际离开视线，再到压力表旁侧门等黄灯。","side","东侧维修岗"))
 	if s.f("quest_photo") or s.f("father"):out.append(row("photo","旧照片",s.f("father"),"life","你决定找老爹问一问照片上的往事。","回相邻卧室，把照片递给谢苗诺夫。","semyon","谢苗诺夫的卧室"))
 	if s.f("plant_briefed") or s.f("plant_diagram") or s.f("water_secured"):
 		var step="入口气闸的值班桌上压着一张图；就在进门左手、科瓦廖夫附近。";var target="plant_diagram";var area="入口气闸"
@@ -93,7 +93,7 @@ static func leads(s)->Array:
 	elif floor=="waterworks" and not s.f("plant_briefed") and not s.f("plant_diagram"):out.append("科瓦廖夫在入口附近等着。桌上的旧值班图或许能省些弯路。")
 	elif floor=="commune":
 		if not s.f("anna_request"):out.append("南侧医务室的年轻女人听见 D-6 的名字时，似乎想问点什么。")
-		if not s.f("commune_joined"):out.append("委员会的老人正在排轮班表，也许知道这里缺什么人手。")
+		if not s.f("commune_joined"):out.append("叶莲娜正在排轮班表，也许知道公社哪里缺人帮忙。")
 	elif floor=="sech" and not s.f("sech_joined"):out.append("长老还在调度台附近，那台没亮灯的电台似乎让他很挂心。")
 	elif floor=="starcity" and not s.f("star_registered"):out.append("蓝门值班室的哨兵一直望着入口。先报个姓名，也许比四处摸索更有用。")
 	for q in preload("res://scripts/campaign.gd").data().get("quests",[]):
@@ -109,5 +109,5 @@ static func encyclopedia(s)->Array:
 	if floor=="commune" or s.f("commune_joined"):rows.append(["莫斯科公社","反对中央苏维埃特权的革命组织，依靠工人委员会、地下联络和武装守备维持独立。伤病交换窗口只允许有限的人道探访，并未结束敌对。"])
 	if floor=="sech" or s.f("sech_joined"):rows.append(["废土谢契","带有哥萨克传统的独立共同体，以旧军列检修库为落脚处；议事、阿塔曼与轮值并存，不服从中央，也未加入公社。"])
 	if floor=="starcity" or s.f("star_known"):rows.append(["星城-2","大型地下科研设施，具有测控、材料、低温、供电与生活分区。当前可进入外侧维护与测控区域。不能凭一个呼号确认失联者的身份。"])
-	if s.f("father_met"):rows.append(["父亲的工作","父亲在星城的测控技术班维护与校准设备，研究计划由各组共同维持。他的工作不能替二十年的缺席作答。 "])
+	if s.f("father_met"):rows.append(["父亲的工作","父亲在星城的测控技术班维护与校准设备，研究计划由各组共同维持。早期封闭管理和断路造成了失联，之后为何一直没有回去，需要与他当面谈清。"])
 	return rows

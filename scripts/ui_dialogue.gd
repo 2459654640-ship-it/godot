@@ -5,6 +5,8 @@ static func portrait(h,id:String)->String:
 	if id=="ivan" and h.world.player.art_id!="":art=h.world.player.art_id
 	if h.world.npcs.has(id) and h.world.npcs[id].art_id!="":art=h.world.npcs[id].art_id
 	return "res://assets/portraits/"+art+".png"
+static func gutter(row:HBoxContainer):
+	var space=Control.new();space.custom_minimum_size.x=24;row.add_child(space)
 static func render(h,id:String,first_new:int):
 	var s=h.world.story
 	var view=s.view(id)
@@ -26,7 +28,7 @@ static func render(h,id:String,first_new:int):
 			words.add_theme_color_override("default_color",Color("94a39b"))
 		else:
 			var row=HBoxContainer.new();block=row;row.add_theme_constant_override("separation",12);history.add_child(row)
-			if mine:row.add_spacer(false)
+			if mine:gutter(row)
 			var path=portrait(h,entry.speaker)
 			if ResourceLoader.exists(path) and not mine:
 				var face=TextureRect.new();face.texture=load(path);face.custom_minimum_size=Vector2(66,78)
@@ -37,7 +39,7 @@ static func render(h,id:String,first_new:int):
 			box.add_child(h.label("伊万" if mine else entry.get("name",view.name),13,h.amber if mine else Color("95b6b4")))
 			var words=h.prose("「"+entry.text+"」",19,box)
 			words.add_theme_color_override("default_color",Color("e0d0ad") if mine else Color("d7d9c9"))
-			if not mine:row.add_spacer(false)
+			if not mine:gutter(row)
 			elif ResourceLoader.exists(path):
 				var face=TextureRect.new();face.texture=load(path);face.custom_minimum_size=Vector2(66,78)
 				face.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;face.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;row.add_child(face)

@@ -2,6 +2,7 @@ extends RefCounted
 ## Build every shared wall once; authored openings use their actual axis.
 static func build(w,plan:Dictionary,zones:Array):
 	var k=w.kit
+	if w.floor_id=="commune":preload("res://scripts/commune_finishes.gd").prepare(k,zones)
 	var edges={}
 	for index in zones.size():
 		var r:Rect2=zones[index].rect
@@ -11,10 +12,14 @@ static func build(w,plan:Dictionary,zones:Array):
 		if w.floor_id=="waterworks" and zones[index].code in ["05","06"]:material="tile"
 		if w.floor_id=="coal" and zones[index].code in ["02","03"]:material="tile"
 		if w.floor_id=="starcity" and zones[index].code=="03":material="tile"
+		var tint=Color(plan.palette)
+		if w.floor_id=="commune":
+			var finish=preload("res://scripts/commune_finishes.gd").floor_spec(zones[index].code);material=finish[0];tint=finish[1]
 		if w.floor_id!="sech" or zones[index].code=="00":k.box("Foundation",Vector3(r.get_center().x,-.3,r.get_center().y),Vector3(r.size.x,.5,r.size.y),"concrete")
 		k.box("FloorCollision",Vector3(r.get_center().x,-.1,r.get_center().y),Vector3(r.size.x,.2,r.size.y),material,true).visible=false
 		var floor=k.box("Floor_"+str(index),Vector3(r.get_center().x,.009,r.get_center().y),Vector3(r.size.x-.02,.018,r.size.y-.02),material)
-		floor.material_override=floor.material_override.duplicate();floor.material_override.albedo_color=Color(plan.palette)
+		floor.material_override=floor.material_override.duplicate();floor.material_override.albedo_color=tint
+		floor.set_meta("room_code",zones[index].code);floor.set_meta("floor_finish",material)
 		for z in [int(r.position.y),int(r.end.y)]:
 			for x in range(int(r.position.x),int(r.end.x)):edge(edges,"z",z,x,index)
 		for x in [int(r.position.x),int(r.end.x)]:

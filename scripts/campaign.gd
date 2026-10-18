@@ -91,7 +91,7 @@ static func objective(s)->String:
 	match s.context.get("floor",""):
 		"waterworks":
 			if s.f("water_secured"):return "两箱净水滤芯已装稳 · 到东南厂区铁门集合"
-			if s.f("plant_power"):return "压力恢复 · 打开封存仓库"
+			if s.f("plant_power"):return "仓门回路已供电 · 打开封存仓库"
 			if s.f("plant_bled") and s.f("plant_fuse"):return "把备用件装入送电柜，恢复仓门回路"
 			if s.f("plant_diagram"):return "按值班图卸压，并到修配台取备用件"
 			return "查阅水厂值班图，再检查泵房"
@@ -118,7 +118,7 @@ static func objective(s)->String:
 static func tasks(s)->Array:
 	var rows=[]
 	var quests=[
-		["plant_briefed","water_secured","给 D-6 的水","按值班图处理旁通、供电与仓库压力锁，核对封存滤芯。"],
+		["plant_briefed","water_secured","给 D-6 的滤芯","按值班图处理旁通、供电与仓库压力锁，核对封存滤芯。"],
 		["commune_joined","greenhouse_fixed","温室的回水","先检查并停泵清理过滤篮，再灌满管线重新启动。"],
 		["anna_request","anna_reunited","一个确切的名字","核对公社记录，持函去 D-6 煤运登记处，确认身份和照护安排后回报安娜。"],
 		["sech_joined","radio_fixed","东方-7","先查接线图，再恢复电源并调谐电台。"],

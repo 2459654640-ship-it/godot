@@ -10,7 +10,7 @@ const PLANS={
 "commune":{
  "spawn":Vector3(25,.04,2),"palette":"c4b99f","ambient":"b0a68b","energy":.24,"warm":true,
  "rooms":[["01","地下温室",Rect2(-23,-13,12,24)],["02","公共厅与配给室",Rect2(-11,-4,23,10)],["03","联络档案室",Rect2(12,-13,11,13)],["04","人民议事厅",Rect2(-11,-19,23,15)],["05","公社医务室",Rect2(-11,16,13,8)],["06","联络气闸",Rect2(23,0,7,4)],["07","家属房与客铺",Rect2(12,4,11,20)],["08","公社食堂",Rect2(-11,6,13,10)],["09","共用厨房",Rect2(2,6,10,10)],["10","家属房",Rect2(2,16,10,8)],["00","联络前厅",Rect2(12,0,11,4)]],
- "doors":[[-11,-6,"x"],[-11,3,"x"],[12,-7,"x"],[12,2,"x"],[23,2,"x"],[17,4,"z"],[12,9,"x"],[12,19,"x"],[-3,6,"z"],[5,6,"z"],[2,11,"x"],[-5,16,"z"],[7,16,"z"],[2,20,"x"],[0,-4,"z",1.7]],
+ "doors":[[-11,-6,"x"],[-11,3,"x"],[12,-7,"x"],[12,2,"x"],[23,2,"x"],[17,4,"z"],[12,9,"x"],[12,19,"x"],[-3,6,"z"],[5,6,"z"],[2,11,"x"],[-5,16,"z"],[7,16,"z"],[2,20,"x"],[.5,-4,"z",1.5]],
  "objects":[["commune_greenhouse",-12.8,-2,"garden"],["commune_well",8,2,"ledger"],["commune_records",17,-6,"desk"],["commune_leader",-5,-15,"npc"],["commune_anna",-4,20,"npc"],["commune_leave",25,2,"exit"],["commune_printer",20,-3,"npc"],["commune_grower",-13,7,"npc"],["commune_proof",20,-7,"press"],["commune_mushroom",-20,-6.5,"marker"],["commune_receiver",14,-10,"radio"],["commune_cook",5,11,"npc"],["commune_hall",2,-10,"marker"],["commune_radiator",17,18,"marker"],["commune_child",3,3,"npc"],["commune_bunks",17,12,"marker"]]},
 "sech":{
  "spawn":Vector3(17,.04,16),"palette":"ad9b80","ambient":"929caf","energy":.23,"warm":true,

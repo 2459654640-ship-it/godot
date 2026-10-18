@@ -10,11 +10,17 @@ uniform bool has_texture = true;
 uniform bool triplanar = false;
 uniform vec3 map_scale = vec3(1.0);
 uniform vec3 emission_color : source_color = vec3(0.0);
+uniform bool commune_finish = false;
+uniform sampler2D finish_plaster : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D finish_tile : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D finish_cement : source_color, filter_linear_mipmap, repeat_enable;
+varying float finish_style;
 varying float world_height;
 varying vec3 world_position;
 varying vec3 world_normal;
 
 void vertex() {
+	finish_style=UV2.x;
 	world_height = (MODEL_MATRIX * vec4(VERTEX, 1.0)).y;
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	world_normal = normalize(MODEL_NORMAL_MATRIX * NORMAL);
@@ -35,6 +41,24 @@ void fragment() {
 		} else {texel = texture(albedo_map,UV).rgb;}
 	}
 	ALBEDO = texel * base_color.rgb;
+	if (commune_finish && finish_style>0.5) {
+		float style=floor(finish_style+0.5);
+		vec3 plaster=texture(finish_plaster,UV).rgb;
+		vec3 finish=plaster;
+		vec3 paint=vec3(0.73,0.69,0.59);
+		float dado=1.05;
+		if(style<1.5) { paint=vec3(0.39,0.22,0.19);dado=1.10; }
+		else if(style<2.5) {
+			finish=texture(finish_cement,UV).rgb*vec3(0.79,0.87,0.79);
+			paint=vec3(0.30,0.39,0.34);dado=.62;
+		} else if(style<3.5) { paint=vec3(0.58,0.48,0.31);dado=1.32; }
+		else if(style<4.5) {
+			finish=mix(texture(finish_tile,UV).rgb,plaster,smoothstep(1.48,1.52,world_height));
+			paint=vec3(0.80,0.84,0.76);dado=.14;
+		} else { paint=vec3(0.54,0.55,0.43);dado=.75; }
+		ALBEDO=finish*mix(paint,vec3(1.0),smoothstep(dado-.025,dado+.025,world_height));
+		if(abs(world_height-dado)<.018 && style!=4.0)ALBEDO*=.65;
+	}
 	ROUGHNESS = 0.94;
 	EMISSION = emission_color;
 	if (normal_strength>0.0) {

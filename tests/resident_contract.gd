@@ -133,12 +133,13 @@ func live_checks():
 	for id in w.npcs:visited[id]=w.npcs[id].position;pose_seen[id]=[]
 	for frame in 1800:
 		await physics_frame
-		if frame%30!=0:continue
 		for id in w.npcs:
 			var npc=w.npcs[id]
 			var painter=npc.visual.get_node("Painter")
-			painter._process(.1)
+			painter._process(0)
 			if painter.current_pose not in pose_seen[id]:pose_seen[id].append(painter.current_pose)
+			# Brief local steps can fit between two half-second collision samples.
+			if frame%30!=0:continue
 			var shape=CapsuleShape3D.new()
 			shape.radius=.285;shape.height=1.69
 			var query=PhysicsShapeQueryParameters3D.new()

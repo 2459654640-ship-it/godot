@@ -8,7 +8,7 @@ static func materials(k):
   k.mats[spec[0]]=m
  k.mats.leaf.cull_mode=BaseMaterial3D.CULL_DISABLED
  k.mats.leaf.normal_enabled=false;k.mats.leaf.uv1_triplanar=false;k.mats.leaf.uv1_world_triplanar=false;k.mats.leaf.uv1_scale=Vector3.ONE
- var shade=k.mats.cloth.duplicate();shade.albedo_color=Color("333e31");k.mats.fungus_shade=shade
+ var shade=k.mats.cloth.duplicate();shade.albedo_color=Color("737d66");k.mats.fungus_shade=shade
 static func art(k,name:String,p:Vector3,size:Vector2,texture:String):
  var frame=k.box("PosterFrame",p-Vector3(0,0,.026),Vector3(size.x+.07,size.y+.07,.045),"wood")
  var quad=MeshInstance3D.new();quad.name=name;quad.set_meta("poster_art",name);var q=QuadMesh.new();q.size=size;quad.mesh=q

@@ -24,23 +24,22 @@ static func linen(k,p:Vector3):
 static func chair(k,p:Vector3,heading:float=0):
  # Same facing convention as benches: the back is behind local -Z.
  var basis=Basis(Vector3.UP,heading)
- k.box("AssemblySeat",p+Vector3(0,.47,0),Vector3(.52,.09,.5),"wood",true)
+ k.box("AssemblySeat",p+Vector3(0,.47,0),Vector3(.52,.09,.5),"wood",true).set_meta("seat_forward",basis*Vector3.BACK)
  var back=k.box("AssemblyChairBack",p+basis*Vector3(0,.86,-.22),Vector3(.54,.62,.07),"wood");back.rotation.y=heading
  for x in [-.21,.21]:
   for z in [-.2,.2]:k.box("ChairLeg",p+basis*Vector3(x,.23,z),Vector3(.05,.46,.05),"metal")
 static func commune(w):
  var k=w.kit
- # Four columns support straight transverse beams over the PUBLIC hall.
- # No unattached decorative arches floating above rooms.
- for z in [-2,4]:
-  for x in [-8.7,9.7]:
-   k.cyl("StationColumn",Vector3(x,1.75,z),.29,3.5,"tile")
-   k.box("ColumnCollision",Vector3(x,1.4,z),Vector3(.58,2.8,.58),"tile",true).visible=false
-   k.box("ColumnPlinth",Vector3(x,.13,z),Vector3(.76,.26,.76),"terrazzo")
-   k.cyl("ColumnCapital",Vector3(x,3.40,z),.42,.18,"cream")
-  k.box("HallStructuralBeam",Vector3(.5,3.55,z),Vector3(19.4,.22,.38),"plaster")
+ # Half-columns sit against the actual hall walls, clear of all door openings.
+ for z in [-2.9,4.85]:
+  for x in [-10.91,11.91]:
+   k.cyl("HallWallPilaster",Vector3(x,1.34,z),.25,2.68,"commune_ivory_tile")
+   k.box("PilasterCollision",Vector3(x,1.30,z),Vector3(.46,2.60,.46),"tile",true).visible=false
+   k.box("PilasterPlinth",Vector3(x,.12,z),Vector3(.56,.24,.56),"commune_terrazzo")
+   k.cyl("PilasterCapital",Vector3(x,2.59,z),.30,.18,"cream")
+ preload("res://scripts/assembly_door.gd").new().setup(w)
  # Assembly room is a compact Soviet public hall with a low stage and aisles.
- k.box("AssemblyLowStage",Vector3(.5,.12,-17),Vector3(17,.24,2.6),"wood")
+ k.box("AssemblyLowStage",Vector3(.5,.12,-17),Vector3(17,.24,2.6),"wood",true)
  k.box("LecternBase",Vector3(.5,.42,-15.9),Vector3(.9,.84,.62),"wood",true)
  k.box("LecternTop",Vector3(.5,.88,-15.9),Vector3(1.05,.08,.72),"wood").rotation.x=-.12
  k.box("AssemblyRedDrape",Vector3(.5,2.35,-18.77),Vector3(13.6,.7,.08),"red")
@@ -58,13 +57,14 @@ static func commune(w):
   k.cyl("WaterCanLid",Vector3(x,.98,-1.5),.35,.035,"metal")
  k.pipe(Vector3(6.5,1.3,-3.7),Vector3(10.8,1.3,-3.7),.09,"metal")
  k.box("OpenAllocationBook",Vector3(8,1.02,.5),Vector3(.7,.035,.5),"paper")
- k.bench(Vector3(-5,0,3.7),3.4);rug(k,Vector3(-3,0,.5),Vector2(4,3))
+ k.bench(Vector3(-7.2,0,5.45),4,true,PI);rug(k,Vector3(-3,0,.5),Vector2(4,3))
  # Greenhouse layout and equipment retain the well received planting art.
  for x in [-20,-16]:
   for z in [-9,-3,4]:
    if x==-20 and z==-9:continue
    k.box("GreenhouseBed",Vector3(x,.4,z),Vector3(2.2,.8,3.7),"old_iron",true);Detail.vegetables(k,x,z)
  for x in [-21,-19]:
+  k.box("FungusRackHull",Vector3(x,.85,-9.4),Vector3(.72,1.7,2.35),"wood",true).visible=false
   for y in [.48,1.03]:
    k.box("FungusShelf",Vector3(x,y,-9.4),Vector3(.65,.08,2.3),"wood")
    for z in [-10,-9.4,-8.8]:
@@ -72,7 +72,14 @@ static func commune(w):
     for dx in [-.08,.07]:
      k.cyl("MushroomStem",Vector3(x+dx,y+.34,z),.024,.12,"paper")
      k.ellipsoid("MushroomCap",Vector3(x+dx,y+.4,z),Vector3(.09,.035,.075),"cream")
- k.box("FungusShade",Vector3(-20,2.25,-8),Vector3(2.3,.7,.035),"fungus_shade").set_meta("dynamic",true)
+ # A horizontal canopy belongs above the mushroom shelves, not across the aisle.
+ for x in [-21.5,-18.5]:
+  for z in [-10.6,-8.2]:k.box("MushroomCanopyPost",Vector3(x,1.2,z),Vector3(.055,2.4,.055),"metal",true)
+ for z in [-10.6,-8.2]:k.pipe(Vector3(-21.5,2.42,z),Vector3(-18.5,2.42,z),.025,"metal")
+ var canopy=k.box("FungusShade",Vector3(-20,2.38,-9.4),Vector3(2.95,.035,2.35),"fungus_shade",true)
+ canopy.set_meta("dynamic",true)
+ canopy.material_override=k.new_veil_material(k.mats.fungus_shade)
+ k.roof_occluders.append({"mesh":canopy,"bounds":canopy.global_transform*canopy.get_aabb(),"material":canopy.material_override})
  k.box("GreenhouseReturnPump",Vector3(-12.6,.55,-3.4),Vector3(.75,1.1,.55),"old_iron",true)
  k.cyl("GreenhouseFilterBasket",Vector3(-12.6,.85,-3),.22,.45,"metal")
  k.pipe(Vector3(-22,.7,-3.4),Vector3(-12.6,.7,-3.4),.055,"metal")
@@ -83,7 +90,7 @@ static func commune(w):
  # Dining and kitchen are separate; table orientation and wide aisles remain readable.
  for x in [-7,-1]:
   for z in [9,13]:
-   k.table(Vector3(x,0,z),3.7);k.bench(Vector3(x,0,z-1.05),3.4,true,PI);k.bench(Vector3(x,0,z+1.05),3.4)
+   k.table(Vector3(x,0,z),3.7);k.bench(Vector3(x,0,z-1.05),3.4);k.bench(Vector3(x,0,z+1.05),3.4,true,PI)
  Detail.art(k,"CommuneBreadPoster",Vector3(-8,1.8,6.18),Vector2(1.2,1.7),"res://assets/visual/commune_poster_1.png")
  stove(k,Vector3(8,0,8));k.table(Vector3(7,0,14),4)
  for x in [3.2,10.8]:k.locker(Vector3(x,0,14.5))
@@ -92,12 +99,20 @@ static func commune(w):
  for x in [-8,-2]:
   k.bed(Vector3(x,0,21),"paper");k.table(Vector3(x,0,18),1.4)
   k.box("MedicalSplashback",Vector3(x,1.0,23.81),Vector3(3,1.7,.05),"plant_tile")
+ # One framed medical screen between beds; its full panel blocks walking.
+ var linen_mat=k.mats.cloth.duplicate();linen_mat.albedo_color=Color("89948b");k.mats.medical_linen=linen_mat
+ k.box("MedicalPrivacyHull",Vector3(-5.3,1.0,21.5),Vector3(.12,2.0,2.4),"metal",true).visible=false
+ for z in [20.3,22.7]:
+  k.box("MedicalScreenPost",Vector3(-5.3,1.0,z),Vector3(.055,2,.055),"metal")
+  k.box("MedicalScreenFoot",Vector3(-5.3,.07,z),Vector3(.65,.1,.14),"metal",true)
+ for y in [.4,1.94]:k.pipe(Vector3(-5.3,y,20.3),Vector3(-5.3,y,22.7),.025,"metal")
+ k.box("MedicalPrivacyLinen",Vector3(-5.3,1.16,21.5),Vector3(.035,1.5,2.32),"medical_linen")
  for x in [4.5,9.5]:k.bed(Vector3(x,0,21),"red")
  for x in [15,20]:
   for z in [7,21]:k.bed(Vector3(x,0,z),"cloth")
- for z in [10,16]:
-  k.box("PrivacyCurtain",Vector3(20,1.3,z),Vector3(4.7,2.5,.035),"cloth")
-  k.pipe(Vector3(17.7,2.6,z),Vector3(22.3,2.6,z),.018,"metal")
+ k.box("FamilyLinenCabinet",Vector3(17.5,.65,23.35),Vector3(2.6,1.3,.65),"wood",true)
+ for x in [16.9,18.1]:k.box("LinenCabinetDoor",Vector3(x,.65,22.99),Vector3(1.1,1.15,.05),"wood")
+ linen(k,Vector3(17.5,1.32,23.35))
  radiator(k,Vector3(17.5,0,19),2)
  k.box("ResidentLedgerStand",Vector3(16,.48,11),Vector3(.75,.96,.6),"wood",true)
  k.box("ResidentLedger",Vector3(16,.98,11),Vector3(.65,.03,.45),"paper")
@@ -107,6 +122,9 @@ static func commune(w):
  for z in [-10,-8]:k.table(Vector3(19,0,z),3)
  k.pipe(Vector3(13,2.4,-12),Vector3(22,2.4,-12),.016,"metal")
  for x in [14,16,18,20]:k.box("DryingPrint",Vector3(x,1.9,-12),Vector3(.65,.85,.025),"paper")
+ # Small fixed social groups leave door approaches and quest stations clear.
+ for spec in [["workers",-5.5,1.0,3],["queue",9.5,4.3,4],["family",19.9,16.1,3],["readers",8.2,-6.7,2]]:
+  preload("res://scripts/painted_resident_group.gd").new().setup(w,spec[0],Vector3(spec[1],0,spec[2]),spec[3])
 static func sech(w):
  var k=w.kit
  # Active rails are beside the platform, never underneath the settlement rooms.

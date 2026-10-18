@@ -70,7 +70,7 @@ func run():
    check(transcript_scroll.scroll_vertical>100 and latest.get_global_rect().intersects(transcript_scroll.get_global_rect()),"changed greeting is shown after old transcript, including instant text reveal")
    w.hud.close()
    w.story.flags.grow_fixed=true;w.on_story_changed()
-   check(w.get_node("FungusShade").visible and is_equal_approx(w.get_node("FungusShade").position.y,1.45) and w.get_node("FungusShade").get_meta("dynamic",false),"shade moves visibly after adjustment and is not baked into static batches")
+   check(w.get_node("FungusShade").visible and is_equal_approx(w.get_node("FungusShade").position.y,2.08) and w.get_node("FungusShade").get_meta("dynamic",false),"shade moves visibly after adjustment and is not baked into static batches")
   else:
    check(w.targets.plant_exit.pos.z>10 and w.factory_exit_leaves.size()==2,"factory exit target is on an actual double gate")
    var leaf:Node3D=w.factory_exit_leaves[0]

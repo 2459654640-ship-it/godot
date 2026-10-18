@@ -22,15 +22,18 @@ static func build(w):
 	for room in rooms(id):
 		if room.code=="00":continue
 		var r:Rect2=room.rect
-		k.box("RoomSkirting",Vector3(r.get_center().x,.25,r.position.y+.16),Vector3(r.size.x-.4,.4,.07),"corrugated" if id=="waterworks" else ("tile" if id=="coal" else "wood"))
-		if room.rect.size.x>7:k.box("ThresholdPatch",Vector3(r.get_center().x,.026,r.end.y-1),Vector3(2,.026,1.4),"metal" if id in ["waterworks","starcity"] else "tile")
+		if id!="commune":
+			k.box("RoomSkirting",Vector3(r.get_center().x,.25,r.position.y+.16),Vector3(r.size.x-.4,.4,.07),"corrugated" if id=="waterworks" else ("tile" if id=="coal" else "wood"))
+			if room.rect.size.x>7:k.box("ThresholdPatch",Vector3(r.get_center().x,.026,r.end.y-1),Vector3(2,.026,1.4),"metal" if id in ["waterworks","starcity"] else "tile")
 	for entry in plan.objects:furnish(k,entry,id)
 	for room in rooms(id):
 		if room.code=="00":continue
 		var r:Rect2=room.rect
 		var warm:bool=plan.warm or (id=="coal" and room.code in ["02","03"])
 		var power=2.4 if (warm and room.code in ["01","02"]) else 2.1
-		k.lamp(Vector3(r.get_center().x,2.5,r.position.y+.65),warm,power,8)
+		var lamp_position=Vector3(r.get_center().x,2.5,r.position.y+.65)
+		if id=="commune" and room.code=="02":lamp_position=Vector3(-3,2.5,-3.80) # Mounted beside the double door, clear of its leaves.
+		k.lamp(lamp_position,warm,power,8)
 	for entry in plan.doors:
 		if entry[2]=="z":
 			var label=""
