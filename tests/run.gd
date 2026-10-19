@@ -237,7 +237,7 @@ func physics_tests():
 	print("FIXTURE_COVERAGE: ",fixtures," fixtures/wall sections; ",probes," exposed-face movement probes")
 	# Representative wall corners, furniture circulation and hatch access.
 	for pair in [
-		[Vector3(1.6,0,-1.1),Vector3(1.6,0,-5.9),"canteen west aisle"],
+		[Vector3(1.6,0,-2.9),Vector3(1.6,0,-5.9),"canteen west aisle beyond radio table"],
 		[Vector3(5.1,0,-1.2),Vector3(5.1,0,-6.6),"canteen central aisle"],
 		[Vector3(-6,0,-2),Vector3(-6,0,-4.4),"workshop crate approach"],
 		[Vector3(6.4,0,8.7),Vector3(7.7,0,8.7),"hatch approach"]]:await travel(pair[0],pair[1],pair[2])
@@ -245,6 +245,8 @@ func physics_tests():
 	var npc=w.npcs.resident
 	npc.position=Vector3(-3.4,0,3.2)
 	npc.anchor=npc.position
+	npc.home_anchor=npc.position
+	npc.work_area=Rect2(-5,1,4,5)
 	npc.collision_layer=2
 	npc.set_physics_process(true)
 	await travel(Vector3(-3.4,0,2),Vector3(-3.4,0,4.7),"NPC yields in a door")

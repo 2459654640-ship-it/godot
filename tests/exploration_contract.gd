@@ -70,7 +70,7 @@ func run():
 	var w=load("res://scenes/commune.tscn").instantiate();root.add_child(w);current_scene=w
 	for i in 8:await physics_frame
 	w.story.flags.intro_done=true;w.hud.comic_active=false;w.hud.close();w.story.give("frequency");w.story.flags.signal_heard=true
-	w.hud.show_dialogue("commune_leader")
+	w.story.flags.first_meeting_commune_leader=2;w.hud.show_dialogue("commune_leader")
 	for expected in [["c_commune_route","星城-2"],["c_commune_politics","守备"]]:
 		var option=w.story.view("commune_leader").options.filter(func(o):return o.key==expected[0])[0]
 		var found=false

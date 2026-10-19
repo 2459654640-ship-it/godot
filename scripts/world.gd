@@ -109,7 +109,6 @@ func _ready():
 	build_people() if floor_id=="life" else build_labor_people()
 	navigation=preload("res://scripts/route_grid.gd").new()
 	navigation.setup(self)
-	setup_daily_routines()
 	if floor_id=="life":
 		build_targets()
 		Wing.targets(self)
@@ -121,6 +120,8 @@ func _ready():
 		target("coal_gate_entry",targets.coal_door.pos,"煤矿限区检票")
 	else:CampaignMaps.targets(self)
 	if floor_id not in ["life","labor"]:CampaignMaps.residents(self)
+	setup_daily_routines()
+	preload("res://scripts/npc_workplace.gd").configure(self)
 	if arrival.is_finite():player.position=clear_arrival(arrival)
 	if not arrival_data.is_empty():restore_placement(arrival_data)
 	story.context.floor=floor_id
@@ -755,6 +756,10 @@ func perform(key: String, id: String):
 		else:hud.show_reply(id,reply)
 		return
 	get_node("/root/Session").sound("interact")
+	if key=="room_radio_music":
+		story.Conversation.reply(story,id,hud.last_choice,reply);hud.last_choice=""
+		public_radio.open_controls(false,targets.radio.pos)
+		return
 	if key in ["travel_down","travel_up"]:
 		travel_floor("labor" if key=="travel_down" else "life")
 		return

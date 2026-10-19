@@ -52,7 +52,7 @@ func run():
 	check(lit.distance_to(painter.sampled_light)>.12,"character still becomes darker after entering an occluded light pool")
 	shield.queue_free();lamp.queue_free();w.queue_free();await frames()
 	w=load("res://scenes/commune.tscn").instantiate();root.add_child(w);current_scene=w;await frames(6)
-	check(w.npcs.commune_moro.stationary and w.npcs.commune_child.stationary,"single-pose residents cannot slide as fake walkers")
+	check(w.npcs.commune_moro.stationary and not w.npcs.commune_child.stationary,"workstation musician stays put while the individually rigged child can walk")
 	var plan=w.story.Campaign.data().panels.return_standoff
 	check(plan.choices[1].text=="支持老兵离队，让中尉把两箱净水滤芯运回 D-6，并和老兵一同前往公社。","requested companion choice is exact")
 	w.queue_free();await frames()

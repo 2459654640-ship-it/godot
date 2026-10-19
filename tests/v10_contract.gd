@@ -61,7 +61,7 @@ func run():
    var before=Vector3(-12.6,.04,-3.4);var safe=w.clear_arrival(before)
    check(safe.distance_to(before)>.5 and safe.distance_to(before)<2.5,"old save inside a new pump relocates to a nearby navigable cell")
    check(w.clear_arrival(Vector3(-2,.04,4))==Vector3(-2,.04,4),"unobstructed saved positions remain unchanged")
-   w.hud.show_dialogue("commune_grower");w.hud.finish_typing()
+   w.story.flags.first_meeting_commune_grower=2;w.hud.show_dialogue("commune_grower");w.hud.finish_typing()
    for i in 5:await process_frame
    w.story.flags.grow_done=true;w.hud.show_dialogue("commune_grower");w.hud.finish_typing()
    for i in 6:await process_frame

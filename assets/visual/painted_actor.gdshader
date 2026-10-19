@@ -1,11 +1,6 @@
 shader_type spatial;
 render_mode unshaded, cull_disabled;
 uniform sampler2D painted_map : source_color, filter_linear_mipmap, repeat_disable;
-uniform sampler2D axial_legs_map : source_color, filter_linear_mipmap, repeat_disable;
-uniform bool axial_legs = false;
-uniform vec2 axial_legs_origin = vec2(0.0);
-uniform float axial_legs_width = 1.0;
-uniform float axial_legs_exposure = 1.0;
 uniform vec2 frame_origin = vec2(0.0);
 uniform vec2 frame_size = vec2(0.2,1.0);
 uniform vec2 texel_size = vec2(0.001);
@@ -16,6 +11,11 @@ uniform float reaction = 0.0;
 uniform float down_amount = 0.0;
 uniform float shot_recoil = 0.0;
 uniform vec2 aim_screen=vec2(0.0);
+uniform float puppet_stride = 0.0;
+uniform vec2 puppet_direction = vec2(0.0);
+uniform float idle_time = 0.0;
+uniform float idle_amount = 0.0;
+uniform float idle_members = 1.0;
 
 void vertex() {
 	// A vertical Y-locked billboard has genuine geometric body depth.
@@ -37,19 +37,28 @@ void vertex() {
 	float recoil=sin(clamp(shot_recoil,0.0,1.0)*3.14159265);
 	float chest=1.0-smoothstep(.38,.65,UV.y);
 	VERTEX.xy+=vec2(-aim_screen.x*.025,aim_screen.y*.012)*recoil*chest;
+	// Deform the leg mesh itself, preserving every painted pixel. Moving UVs
+	// across the centre seam clips a boot on narrow side views.
+	float leg=(1.0-2.0*smoothstep(.46,.54,UV.x))*(mirror ? -1.0 : 1.0);
+	float phase=puppet_stride*leg;
+	float lower=smoothstep(.61,.96,UV.y);
+	float knee=sin(clamp((UV.y-.61)/.35,0.0,1.0)*3.14159265);
+	VERTEX.x+=phase*(puppet_direction.x*.07*lower+puppet_direction.y*.012*knee);
+	VERTEX.y+=max(0.0,phase)*(.028*lower+.012*knee);
+	// Small independent breaths, with feet fixed. Subdivided crowd quads let
+	// neighbours move on different rhythms instead of swaying as one card.
+	float member=floor(min(UV.x,.999)*idle_members);
+	float breath=sin(idle_time*(1.55+member*.13)+member*2.37);
+	float resting=(1.0-smoothstep(.48,.94,UV.y))*idle_amount;
+	VERTEX.y+=breath*.006*resting;
+	VERTEX.x+=sin(idle_time*.71+member*1.83)*.005*resting;
 }
 
 vec4 sample_frame(vec2 uv) {
 	uv=clamp(uv,vec2(0.003),vec2(0.997));
 	if (mirror) uv.x=1.0-uv.x;
+
 	vec4 paint=texture(painted_map,frame_origin+uv*frame_size);
-	if(axial_legs && uv.y>.615) {
-		vec2 legs_uv=vec2((uv.x-.5)*axial_legs_width+.5,uv.y);
-		vec4 legs=texture(axial_legs_map,axial_legs_origin+clamp(legs_uv,vec2(.003),vec2(.997))*vec2(.5,1.0/3.0));
-		legs.rgb*=axial_legs_exposure;
-		if(legs_uv.x<0.0 || legs_uv.x>1.0)legs=vec4(0.0);
-		paint=mix(paint,legs,smoothstep(.615,.64,uv.y));
-	}
 	return paint;
 }
 

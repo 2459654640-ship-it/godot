@@ -237,9 +237,9 @@
 - [cover_16](../assets/publications/cover_16.png)
 - [cover_17](../assets/publications/cover_17.png)
 
-## v17 当前补充素材
+## v18 当前人物素材
 
-- [伊万正背面腿部动作](../assets/characters/ivan_axial_legs.png)：正面与背面各三姿态，供普通、戴面具、持枪及换弹动作组合使用。
+- 伊万四套图集均为八个独立方向。普通／面具为每方向三姿态；持枪／面具持枪为每方向七姿态，包含移动换弹。全部共用同一套腿部动作和固定头部。打包工具为 `tools/pack_motion_v18.py`；生成原图留在独立资料库的 `updates/v18/art-source`。
 - [科研地胶](../assets/visual/star_linoleum.png)
 - [公共水磨石](../assets/visual/star_terrazzo.png)
 - [实验瓷砖](../assets/visual/star_lab_tile.png)

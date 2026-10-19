@@ -14,6 +14,9 @@ var right_leg: Node3D
 var left_arm: Node3D
 var right_arm: Node3D
 var anchor = Vector3.ZERO
+var home_anchor=Vector3.ZERO
+var work_area=Rect2(-100,-100,200,200)
+var roam_radius=1.05
 var clock = 0.0
 var walk = 0.0
 var gait_distance=0.0
@@ -71,10 +74,8 @@ func setup(kit, player: bool, coat: String = "green", hat: bool = false):
 	painting.name="Painter"
 	visual.add_child(painting)
 	painting.setup(self)
-	# A still painting may turn to talk, but cannot slide around as a walk.
-	# Combat-controlled actors use their independent complete combat atlas.
-	if not player and painting.pose_count<3:stationary=true
 	anchor=position
+	home_anchor=position
 	rest_time=3.0+float(String(name).hash()%50)/10.0
 
 func travel_to(destination:Vector3):
@@ -92,24 +93,32 @@ func npc_motion(delta:float) -> Vector3:
 	if talking:
 		animation_state="talk"
 		return Vector3.ZERO
-	if stationary:return Vector3.ZERO
 	if is_instance_valid(world.hud) and world.hud.modal_visible():return Vector3.ZERO
+	var displaced=Vector2(position.x-home_anchor.x,position.z-home_anchor.z).length()
+	if not purposeful and (displaced>roam_radius or (stationary and displaced>.42)):
+		if anchor.distance_to(home_anchor)>.05 or path_points.is_empty():
+			anchor=home_anchor;goal=Vector3.INF;reached_anchor=false;yield_time=0
+			travel_to(home_anchor)
+	elif stationary:return Vector3.ZERO
 	var away=position-player.position
 	away.y=0.0
 	# Yield using tested sweeps. Do not select a direction that enters a wall,
 	# another NPC, or the player; the larger visual clearance is intentional.
 	var player_driving=(player.use_override and player.motion_override.length()>.1) or Input.get_vector("move_left","move_right","move_up","move_down").length()>.1
-	if not purposeful and away.length()<1.10 and yield_time<=0.0 and (player_driving or player.velocity.dot(away)>.05):
+	if not purposeful and displaced<roam_radius and away.length()<1.10 and yield_time<=0.0 and (player_driving or player.velocity.dot(away)>.05):
 		var side=Vector3(-away.z,0,away.x).normalized()
 		for candidate in [side,-side,away.normalized()]:
-			if candidate.length()>0.1 and not test_move(global_transform,candidate*.65):
+			var destination=position+candidate*.65
+			if candidate.length()>0.1 and work_area.has_point(Vector2(destination.x,destination.z)) and destination.distance_to(home_anchor)<roam_radius and not test_move(global_transform,candidate*.65):
 				yield_direction=candidate
 				yield_time=.50
 				break
 	if yield_time>0.0:
 		yield_time-=delta
+		if yield_time<=0:
+			anchor=home_anchor;goal=Vector3.INF;reached_anchor=false;path_points.clear()
 		return yield_direction*1.25
-	if not purposeful and away.length()<1.4:return Vector3.ZERO
+	if not purposeful and away.length()<1.4 and displaced<.42:return Vector3.ZERO
 	if position.distance_to(anchor)>0.55 and not reached_anchor:
 		travel_to(anchor)
 	elif not purposeful and not patrol.is_empty() and away.length()>2.8 and String(name)!="igor":

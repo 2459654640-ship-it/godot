@@ -72,7 +72,7 @@ func run():
    w.player.position=r.global_position+Vector3(30,.04,0);r.update_mix(1)
    check(r.audible==0 and r.audio.volume_db<=-79,"distance is measured from player, becoming inaudible far away")
    w.player.position=approach;w.hud.dialogue_id="semyon";r.update_mix(1)
-   check(r.suppressed and r.audio.stream_paused,"NPC dialogue temporarily pauses music")
+   check(not r.suppressed and not r.audio.stream_paused,"NPC dialogue leaves music playing")
    w.hud.dialogue_id="";w.hud.comic_active=true;r.update_mix(1)
    check(r.suppressed,"full-screen narration pauses music")
    w.hud.comic_active=false;r.update_mix(1)

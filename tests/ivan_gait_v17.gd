@@ -24,17 +24,12 @@ func run():
      if p.current_pose==center:planted+=1
      if angle in [0,4]:
       check(not p.material.get_shader_parameter("mirror"),"front/back never flip torso or weapon: "+art+mode+str(angle))
-      check(bool(p.material.get_shader_parameter("axial_legs")),"front/back use independent drawn leg poses")
-     else:check(not p.material.get_shader_parameter("axial_legs"),"diagonal views retain their authored perspective")
+      check(p.source_count==8 and p.current_column==angle,"front/back use their own complete drawn directional cells")
+     else:check(p.source_count==8 and p.current_column==angle,"each diagonal has its own complete drawn directional cell")
     check(poses.size()==3 and planted>=50,"all eight directions visibly retain both strides and contact poses: "+art+mode+str(angle))
    a.velocity=Vector3.ZERO;p._process(0)
-   check(not p.material.get_shader_parameter("axial_legs"),"standing returns to original idle illustration")
+   check(p.current_pose==(2 if mode=="reload" else 0),"standing uses the appropriate complete contact illustration")
   a.queue_free()
  w.queue_free()
  for i in 3:await process_frame
- var image=load("res://assets/characters/ivan_axial_legs.png").get_image()
- for column in 2:
-  var left=image.get_region(Rect2i(column*280,352,280,352));var right=image.get_region(Rect2i(column*280,704,280,352))
-  left.flip_x()
-  check(left.get_data()!=right.get_data(),"opposite stride is distinct artwork, not a mirror of the entire illustration")
  print("IVAN_GAIT_V17_RESULT checks=",checks," failures=",failures);quit(0 if failures==0 else 1)

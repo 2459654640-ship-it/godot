@@ -162,6 +162,7 @@ func view(id: String) -> Dictionary:
 			v.options=[opt("leave_east","整理背包，准备离开 D-6",route!="" and has("mask") and has("filter"), "先通过维修门、侧门或检修管线")]
 	v=Progression.decorate(Economy.decorate(Campaign.decorate(Chapter.decorate(Life.decorate(Narrative.decorate(v,self),self),self),self),self),self)
 	v=FirstMeetings.decorate(v,self)
+	if id=="radio":v.options.append(opt("room_radio_music","打开音乐频道",context.get("floor","")=="life"))
 	if id=="mikhail":v.options=v.options.filter(func(o):return o.key!="give_vitamins")
 	for option in v.options:
 		var influence=option.key in ["accept","leave_official","leave_east","use_vodka","trade_smoke","give_soup","guard_bluff","hatch_knife","buy_protection"]
@@ -189,6 +190,7 @@ func act(key: String) -> String:
 			if o.key==key and o.enabled:valid=true
 	if not valid:return "条件尚未满足，或这件事已经做过了。"
 	last_action_valid=true
+	if key=="room_radio_music":return "你把旋钮转到居民音乐转播的频段。"
 	if key.begins_with("meet_"):
 		last_reply=FirstMeetings.act(self,key);changed.emit();return last_reply
 	if once_topic(key):read_topics.append(key)

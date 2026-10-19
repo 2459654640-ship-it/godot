@@ -1,6 +1,6 @@
 extends Node3D
 ## Eight-direction painterly figures in the existing 3D physics world.
-## Five authored angles are mirrored; walking selects complete painted poses.
+## Ivan uses eight explicit views. Older residents retain five authored views.
 var actor
 var sprite:MeshInstance3D
 var material:ShaderMaterial
@@ -9,10 +9,14 @@ var direction_ready=false
 var cycle=0.0
 var focused=false
 var pose_count=1
+var source_count=5
 var actor_id="ivan"
 var reaction=""
 var reaction_time=0.0
 var current_pose=0
+var current_column=0
+var current_beat=0
+var idle_clock=0.0
 var room_lamps:Array=[]
 var atlas_id=""
 var light_clock=.2
@@ -28,6 +32,7 @@ func setup(body):
 	actor_id=body.art_id if body.art_id!="" else ("ivan" if body.is_player else String(body.name))
 	manifest=JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/atlas.json"))
 	pose_count=int(manifest[actor_id].poses)
+	source_count=int(manifest[actor_id].get("source_angles",5))
 	atlas_id=actor_id
 	room_lamps=actor.get_parent().find_children("*","OmniLight3D",false,false)
 	sprite=MeshInstance3D.new()
@@ -46,10 +51,9 @@ func setup(body):
 	sprite.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	material=ShaderMaterial.new()
 	material.shader=load("res://assets/visual/painted_actor.gdshader")
-	if actor_id in ["ivan","ivan_masked"]:material.set_shader_parameter("axial_legs_map",load("res://assets/characters/ivan_axial_legs.png"))
 	var texture:Texture2D=load("res://assets/characters/"+actor_id+".png")
 	material.set_shader_parameter("painted_map",texture)
-	material.set_shader_parameter("frame_size",Vector2(0.2,1.0/pose_count))
+	material.set_shader_parameter("frame_size",Vector2(1.0/source_count,1.0/pose_count))
 	material.set_shader_parameter("texel_size",Vector2.ONE/Vector2(texture.get_size()))
 	sprite.material_override=material
 	add_child(sprite)
@@ -100,27 +104,29 @@ func _process(delta):
 		angle_slot=proposed
 		direction_ready=true
 	var world=actor.get_parent()
+	idle_clock+=delta
 	var director=world.get("combat")
 	var armed=(actor.is_player and world.story.weapon_drawn()) or (is_instance_valid(director) and director.enabled and actor_id=="veteran_masked")
 	var chosen=(actor_id+"_combat") if armed and manifest.has(actor_id+"_combat") else actor_id
 	if chosen!=atlas_id:
-		atlas_id=chosen;pose_count=int(manifest[chosen].poses)
+		atlas_id=chosen;pose_count=int(manifest[chosen].poses);source_count=int(manifest[chosen].get("source_angles",5))
 		var texture:Texture2D=load("res://assets/characters/"+chosen+".png")
 		var height:float=HEIGHTS.get(actor_id,1.75)
 		sprite.mesh.size=Vector2(height*.762*float(manifest[chosen].cell[0])/324.0,height*352.0/324.0)
 		sprite.mesh.subdivide_width=48 if armed else 20
 		for ink in [material]:
-			ink.set_shader_parameter("painted_map",texture);ink.set_shader_parameter("frame_size",Vector2(.2,1.0/pose_count));ink.set_shader_parameter("texel_size",Vector2.ONE/Vector2(texture.get_size()))
-	var column=mini(angle_slot,8-angle_slot)
+			ink.set_shader_parameter("painted_map",texture);ink.set_shader_parameter("frame_size",Vector2(1.0/source_count,1.0/pose_count));ink.set_shader_parameter("texel_size",Vector2.ONE/Vector2(texture.get_size()))
+	var column=angle_slot if source_count==8 else mini(angle_slot,8-angle_slot)
 	var speed=Vector2(actor.velocity.x,actor.velocity.z).length()
 	var phase_delta=delta*speed/(1.7 if actor.is_player else (.85 if actor_id in ["ambient_child","commune_child"] else 1.15))
 	# Keep the planted pose visible even when a rendered frame takes longer
 	# than one animation phase; never skip directly between the two strides.
-	cycle+=minf(phase_delta,.219) if actor.is_player else phase_delta
+	cycle+=minf(phase_delta,.219)
 	var walking=speed>0.15
 	var phase=fposmod(cycle,1.0)
 	# Give both contact poses a little more screen time, including diagonals.
 	var beat=0 if phase<.22 else (1 if phase<.50 else (2 if phase<.72 else 3))
+	current_beat=beat
 	var pose=0
 	if armed:
 		var reloading=is_instance_valid(director) and ((actor.is_player and director.reload_time>0) or (actor_id=="veteran_masked" and director.veteran_reload>0))
@@ -133,24 +139,23 @@ func _process(delta):
 		pose=[1,0,2,0][beat]
 	elif actor.animation_state=="talk" and pose_count>3:pose=3
 	current_pose=pose
+	current_column=column
+	material.set_shader_parameter("puppet_stride",float([1,0,-1,0][beat]) if walking and pose_count<3 else 0.0)
+	material.set_shader_parameter("puppet_direction",Vector2(sin(angle),cos(angle)))
+	material.set_shader_parameter("idle_time",idle_clock+float(posmod(String(actor.name).hash(),1000))/80.0)
+	material.set_shader_parameter("idle_amount",0.0 if walking else 1.0)
 	reaction_time=maxf(0.0,reaction_time-delta)
 	material.set_shader_parameter("reaction",(1.0 if reaction=="success" else -1.0)*reaction_time if reaction_time>0 and reaction!="shot" else 0.0)
 	material.set_shader_parameter("shot_recoil",reaction_time/.14 if reaction=="shot" else 0.0)
 	material.set_shader_parameter("aim_screen",Vector2(sin(angle),cos(angle)))
-	material.set_shader_parameter("frame_origin",Vector2(column*.2,float(pose)/pose_count))
+	material.set_shader_parameter("frame_origin",Vector2(float(column)/source_count,float(pose)/pose_count))
 	var mirrored_frames:Array=manifest[atlas_id].get("frame_mirror",[])
 	var pose_mirrored=false if mirrored_frames.is_empty() else bool(mirrored_frames[pose][column])
-	var axial=walking and actor_id in ["ivan","ivan_masked"] and column in [0,4]
-	# Dedicated front/back legs alternate anatomically. Never flip Ivan's
-	# head, coat, backpack or weapon to manufacture the opposite stride.
-	if axial:pose_mirrored=false
-	material.set_shader_parameter("axial_legs",axial)
-	material.set_shader_parameter("axial_legs_origin",Vector2(0 if column==0 else .5,float([1,0,2,0][beat])/3.0))
-	material.set_shader_parameter("axial_legs_width",float(manifest[atlas_id].cell[0])/280.0)
-	# Unarmed rear diagonals are authored left-facing. Combat sheets already
-	# face right: their original view must not inherit the unarmed correction.
-	var view_mirrored=(angle_slot>4)!=(column==3 and atlas_id in ["ivan","ivan_masked"])
+	# New eight-view sheets store all actual directions, including both rear
+	# diagonals. Older five-view residents retain their authored convention.
+	var view_mirrored=(angle_slot>4) if source_count==5 else false
 	material.set_shader_parameter("mirror",view_mirrored!=pose_mirrored)
+	material.set_shader_parameter("puppet_direction",Vector2(sin(angle)*(-1.0 if view_mirrored!=pose_mirrored else 1.0),cos(angle)))
 	material.set_shader_parameter("focus",1.0 if focused else 0.0)
 	material.set_shader_parameter("down_amount",1.0 if is_instance_valid(director) and actor_id=="veteran_masked" and director.veteran_health<=0 else 0.0)
 	light_clock+=delta
@@ -163,7 +168,4 @@ func _process(delta):
 	# light. Authored room lighting remains independent and smoothly blended.
 	var exposures:Array=manifest[atlas_id].get("exposure",[])
 	var exposure=1.0 if exposures.is_empty() else float(exposures[pose][column])
-	# The replacement legs have their own consistent baked light; do not
-	# apply the original upper-body frame's exposure correction twice.
-	material.set_shader_parameter("axial_legs_exposure",1.0/exposure)
 	material.set_shader_parameter("light_tint",sampled_light*exposure)

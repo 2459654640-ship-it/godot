@@ -103,7 +103,9 @@ static func commune(w):
  for z in [-10,-8]:k.table(Vector3(19,0,z),3)
  k.pipe(Vector3(13,2.4,-12),Vector3(22,2.4,-12),.016,"metal")
  for x in [14,16,18,20]:k.box("DryingPrint",Vector3(x,1.9,-12),Vector3(.65,.85,.025),"paper")
- for spec in [["workers",-5.5,1.0,3],["queue",9.5,4.3,4],["family",14.1,19.7,3],["readers",9.6,-9.6,2],["assembly",-5,-8.3,3],["militia",26.7,.8,2]]:
+ # Waiting residents face the allocation area, readers stand by archive
+ # tables, and the bench audience leaves a passage behind the low stage.
+ for spec in [["workers",-5.5,1.0,3],["queue",8.0,3.2,4],["family",14.1,19.7,3],["readers",16.0,-8.4,2],["assembly",-5,-7.5,3],["militia",26.7,.8,2]]:
   preload("res://scripts/painted_resident_group.gd").new().setup(w,spec[0],Vector3(spec[1],0,spec[2]),spec[3],1.28 if spec[0]=="assembly" else 1.73)
 static func commune_garden(w):
  var k=w.kit

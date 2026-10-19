@@ -80,7 +80,7 @@ func run():
  for phase in [0.0,.25,.5,.75]:
   painter.cycle=phase;painter._process(0);poses.append(painter.current_pose)
  check(poses==[1,0,2,0],"walk uses opposite authored stride poses separated by neutral stance")
- w.hud.show_dialogue("commune_anna");w.hud.finish_typing()
+ w.story.flags.first_meeting_commune_anna=2;w.hud.show_dialogue("commune_anna");w.hud.finish_typing()
  for i in 8:await process_frame
  var spoken=w.hud.modal.find_children("*","RichTextLabel",true,false).filter(func(n):return n.get_parsed_text().contains("听说你从 D-6 来"))
  check(spoken.size()==1 and spoken[0].size.x>390,"long natural dialogue uses the available transcript width")

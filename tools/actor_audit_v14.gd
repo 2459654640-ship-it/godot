@@ -31,7 +31,7 @@ func build_actor(id:String,angle:int,row:int,reloading:bool):
 	p._process(0)
 	var spec=p.manifest[p.atlas_id]
 	var exposures:Array=spec.get("exposure",[])
-	var gain=1.0 if exposures.is_empty() else float(exposures[p.current_pose][mini(angle,8-angle)])
+	var gain=1.0 if exposures.is_empty() else float(exposures[p.current_pose][p.current_column])
 	p.material.set_shader_parameter("light_tint",Vector3(.87,.86,.83)*gain)
 	var label=Label3D.new();label.text=str(angle*45)+"° / "+str(p.current_pose);label.font_size=24;label.pixel_size=.005;label.no_depth_test=true;label.billboard=BaseMaterial3D.BILLBOARD_ENABLED;label.position=a.position-Vector3.UP*.20;stage.add_child(label);objects.append(label)
 func clear_figures():

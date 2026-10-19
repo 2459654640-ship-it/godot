@@ -16,6 +16,7 @@ var station=0
 var track=0
 var enabled=false
 var portable=false
+var local_origin=Vector3.INF
 var paused=false
 var suppressed=false
 var audible=0.0
@@ -65,9 +66,9 @@ func advance(direction:int):
 func refresh_ui():
  if is_instance_valid(world.hud) and world.hud.radio_open:UI.render(world.hud)
 func owns_portable()->bool:return int(world.story.economy.goods.get("portable_radio",0))>0
-func open_controls(use_portable:bool=false):
+func open_controls(use_portable:bool=false,receiver_position:Vector3=Vector3.INF):
  if use_portable and not owns_portable():world.hud.toast("先在第七供应点购买随身收音机。",4);return
- portable=use_portable;UI.render(world.hud)
+ portable=use_portable;local_origin=receiver_position;UI.render(world.hud)
 func restore_portable(saved:Dictionary):
  if not owns_portable():return
  station=clampi(int(saved.get("station",0)),0,catalog.stations.size()-1)
@@ -85,17 +86,18 @@ func _process(delta:float):
 func update_mix(delta:float):
  if not is_instance_valid(audio):return
  if portable and not owns_portable():stop();portable=false
- var narrative=is_instance_valid(world.hud) and (world.hud.comic_active or world.hud.dialogue_id!="")
+ var narrative=is_instance_valid(world.hud) and world.hud.comic_active
  var battle=is_instance_valid(world.combat) and world.combat.active
  suppressed=narrative or battle or world.event_music_id!=""
  audio.stream_paused=paused or suppressed
- var distance=Vector2(world.player.position.x-global_position.x,world.player.position.z-global_position.z).length() if is_instance_valid(world.player) else 0.0
+ var origin=local_origin if local_origin.is_finite() else global_position
+ var distance=Vector2(world.player.position.x-origin.x,world.player.position.z-origin.z).length() if is_instance_valid(world.player) else 0.0
  audible=(1.0 if portable else 1.0-smoothstep(3.0,18.0,distance)) if enabled and not paused and not suppressed else 0.0
  audio.volume_db=linear_to_db(maxf(.0001,audible*.60))
  if is_instance_valid(world.ambience):world.ambience.volume_db=lerpf(world.ambience.volume_db,-8.0-13.0*audible,1.0-exp(-delta*6.0))
 func status()->String:
  if not enabled:return "电源关闭 · 选择频道或歌曲开始收听"
- var state="剧情 / 战斗期间暂时停播" if suppressed else ("已暂停" if paused else "正在播放")
+ var state="过场 / 战斗期间暂时停播" if suppressed else ("已暂停" if paused else "正在播放")
  var elapsed=audio.get_playback_position();var duration=audio.stream.get_length() if audio.stream else 0.0
  return "%s    %02d:%02d / %02d:%02d"%[state,int(elapsed)/60,int(elapsed)%60,int(duration)/60,int(duration)%60]
 func _exit_tree():

@@ -2,7 +2,7 @@
   "ivan": {
     "file": "ivan.png",
     "directions": 8,
-    "source_angles": 5,
+    "source_angles": 8,
     "poses": 3,
     "cell": [
       280,
@@ -10,33 +10,42 @@
     ],
     "baseline": 342,
     "body_pixels": 324,
-    "rear_diagonal_normalized": true,
     "clips": [
       "idle",
       "walk_left",
       "walk_right"
     ],
-    "packing_revision": 14,
+    "packing_revision": 18,
+    "reference_commit": "057fff3",
     "exposure": [
       [
-        0.91233,
-        0.95547,
-        1.01273,
-        0.97513,
-        0.9725
-      ],
-      [
         1.0,
         1.0,
         1.0,
-        0.99395,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
         1.0
       ],
       [
         1.0,
-        1.06534,
         1.0,
-        1.02136,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
         1.0
       ]
     ],
@@ -46,16 +55,25 @@
         false,
         false,
         false,
+        false,
+        false,
+        false,
         false
       ],
       [
-        true,
         false,
         false,
         false,
-        true
+        false,
+        false,
+        false,
+        false,
+        false
       ],
       [
+        false,
+        false,
+        false,
         false,
         false,
         false,
@@ -520,7 +538,7 @@
   "ivan_masked": {
     "file": "ivan_masked.png",
     "directions": 8,
-    "source_angles": 5,
+    "source_angles": 8,
     "poses": 3,
     "cell": [
       280,
@@ -528,38 +546,50 @@
     ],
     "baseline": 342,
     "body_pixels": 324,
-    "rear_diagonal_normalized": true,
     "clips": [
       "idle",
       "walk_left",
       "walk_right"
     ],
-    "packing_revision": 14,
+    "packing_revision": 18,
+    "reference_commit": "057fff3",
     "exposure": [
       [
-        1.01115,
-        0.93606,
-        0.99931,
         1.0,
-        1.0439
-      ],
-      [
         1.0,
-        0.99423,
         1.0,
-        0.98723,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
         1.0
       ],
       [
         1.0,
-        1.03257,
         1.0,
-        1.01517,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
         1.0
       ]
     ],
     "frame_mirror": [
       [
+        false,
+        false,
+        false,
         false,
         false,
         false,
@@ -571,10 +601,16 @@
         false,
         false,
         false,
-        true
+        false,
+        false,
+        false,
+        false
       ],
       [
-        true,
+        false,
+        false,
+        false,
+        false,
         false,
         false,
         false,
@@ -778,7 +814,7 @@
   "ivan_masked_combat": {
     "file": "ivan_masked_combat.png",
     "directions": 8,
-    "source_angles": 5,
+    "source_angles": 8,
     "poses": 7,
     "cell": [
       400,
@@ -786,7 +822,6 @@
     ],
     "baseline": 342,
     "body_pixels": 324,
-    "rear_diagonal_normalized": true,
     "clips": [
       "ready",
       "shot",
@@ -796,56 +831,78 @@
       "reload_walk_left",
       "reload_walk_right"
     ],
-    "packing_revision": 14,
+    "packing_revision": 18,
+    "reference_commit": "057fff3",
     "exposure": [
       [
         1.0,
-        0.97522,
-        0.98268,
-        0.94105,
-        0.96281
-      ],
-      [
         1.0,
-        0.97522,
-        0.98268,
-        0.94105,
-        0.96281
-      ],
-      [
-        0.94496,
-        1.12,
-        1.12,
-        1.12,
-        0.95615
-      ],
-      [
-        0.98755,
-        0.98922,
-        0.99419,
-        0.99192,
-        1.03369
-      ],
-      [
-        0.98755,
-        0.99469,
-        0.98943,
-        0.97505,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
         1.0
       ],
       [
-        1.01954,
-        1.12,
-        1.12,
-        1.12,
-        1.02754
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ],
       [
-        1.01954,
-        1.12,
-        1.12,
-        1.12,
-        1.02754
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     ],
     "frame_mirror": [
@@ -854,10 +911,6 @@
         false,
         false,
         false,
-        false
-      ],
-      [
-        false,
         false,
         false,
         false,
@@ -868,24 +921,6 @@
         false,
         false,
         false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        true,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        true,
         false,
         false,
         false,
@@ -896,7 +931,50 @@
         false,
         false,
         false,
-        true
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
       ]
     ]
   },
@@ -1184,7 +1262,7 @@
   "ivan_combat": {
     "file": "ivan_combat.png",
     "directions": 8,
-    "source_angles": 5,
+    "source_angles": 8,
     "poses": 7,
     "cell": [
       400,
@@ -1192,7 +1270,6 @@
     ],
     "baseline": 342,
     "body_pixels": 324,
-    "rear_diagonal_normalized": true,
     "clips": [
       "ready",
       "shot",
@@ -1202,56 +1279,78 @@
       "reload_walk_left",
       "reload_walk_right"
     ],
-    "packing_revision": 14,
+    "packing_revision": 18,
+    "reference_commit": "057fff3",
     "exposure": [
       [
-        0.98873,
-        1.06533,
         1.0,
-        0.98886,
-        1.03509
-      ],
-      [
-        0.98873,
-        1.06533,
         1.0,
-        0.98886,
-        1.03509
-      ],
-      [
-        0.98462,
-        0.97176,
-        1.00004,
-        0.95381,
-        1.02218
-      ],
-      [
-        1.01955,
-        1.05677,
-        0.99837,
-        1.02345,
-        0.98585
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ],
       [
         1.0,
-        0.99751,
-        1.00574,
-        1.01994,
-        0.95706
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ],
       [
-        1.09198,
-        0.96951,
-        0.9851,
-        1.04462,
-        1.00616
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ],
       [
-        1.09198,
-        1.04171,
-        1.00045,
-        1.03979,
-        1.00616
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
       ]
     ],
     "frame_mirror": [
@@ -1260,10 +1359,6 @@
         false,
         false,
         false,
-        false
-      ],
-      [
-        false,
         false,
         false,
         false,
@@ -1273,10 +1368,6 @@
         false,
         false,
         false,
-        false,
-        false
-      ],
-      [
         false,
         false,
         false,
@@ -1288,16 +1379,45 @@
         false,
         false,
         false,
+        false,
+        false,
+        false,
         false
       ],
       [
-        true,
         false,
         false,
         false,
-        true
+        false,
+        false,
+        false,
+        false,
+        false
       ],
       [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
         false,
         false,
         false,
