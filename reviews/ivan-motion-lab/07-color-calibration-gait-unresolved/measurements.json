@@ -1,0 +1,194 @@
+{
+  "06-back-left": {
+    "regions": {
+      "coat": [
+        145,
+        150,
+        190,
+        250
+      ],
+      "pants": [
+        125,
+        355,
+        290,
+        390
+      ]
+    },
+    "frames": {
+      "standing": {
+        "linear_rgb_gains": {
+          "coat": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "pants": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "sample_count": {
+          "coat": 4233,
+          "pants": 2801
+        },
+        "median_linear_rgb_distance_before": {
+          "coat": 0.0,
+          "pants": 0.0
+        },
+        "median_linear_rgb_distance_after": {
+          "coat": 0.0,
+          "pants": 0.0
+        }
+      },
+      "A": {
+        "linear_rgb_gains": {
+          "coat": [
+            0.8357038814066846,
+            0.8718472968146107,
+            0.811596831796317
+          ],
+          "pants": [
+            1.224908582111272,
+            1.266375941459626,
+            1.179996525295943
+          ]
+        },
+        "sample_count": {
+          "coat": 4308,
+          "pants": 3042
+        },
+        "median_linear_rgb_distance_before": {
+          "coat": 0.02313105757035578,
+          "pants": 0.01145501651994315
+        },
+        "median_linear_rgb_distance_after": {
+          "coat": 0.0,
+          "pants": 3.469446951953614e-18
+        }
+      },
+      "B": {
+        "linear_rgb_gains": {
+          "coat": [
+            0.9334314317853368,
+            0.9723277987167519,
+            0.8988449586974738
+          ],
+          "pants": [
+            0.9380214494856661,
+            1.0385039642672016,
+            1.0847279908367364
+          ]
+        },
+        "sample_count": {
+          "coat": 3750,
+          "pants": 3363
+        },
+        "median_linear_rgb_distance_before": {
+          "coat": 0.008301043212678105,
+          "pants": 0.003855714721084913
+        },
+        "median_linear_rgb_distance_after": {
+          "coat": 0.0,
+          "pants": 0.0
+        }
+      }
+    }
+  },
+  "04-back-right": {
+    "regions": {
+      "coat": [
+        180,
+        150,
+        220,
+        250
+      ],
+      "pants": [
+        95,
+        355,
+        240,
+        390
+      ]
+    },
+    "frames": {
+      "standing": {
+        "linear_rgb_gains": {
+          "coat": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "pants": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "sample_count": {
+          "coat": 3128,
+          "pants": 2697
+        },
+        "median_linear_rgb_distance_before": {
+          "coat": 0.0,
+          "pants": 0.0
+        },
+        "median_linear_rgb_distance_after": {
+          "coat": 0.0,
+          "pants": 0.0
+        }
+      },
+      "A": {
+        "linear_rgb_gains": {
+          "coat": [
+            0.9205821979738722,
+            0.9507397742371295,
+            0.9067037895389117
+          ],
+          "pants": [
+            0.9709899202216079,
+            0.966068484850799,
+            1.0378960447873462
+          ]
+        },
+        "sample_count": {
+          "coat": 3706,
+          "pants": 3319
+        },
+        "median_linear_rgb_distance_before": {
+          "coat": 0.012533821373135919,
+          "pants": 0.002464500567329831
+        },
+        "median_linear_rgb_distance_after": {
+          "coat": 0.0,
+          "pants": 0.0
+        }
+      },
+      "B": {
+        "linear_rgb_gains": {
+          "coat": [
+            0.7865097296893259,
+            0.8220309565117391,
+            0.8252751630828842
+          ],
+          "pants": [
+            0.9164425488919802,
+            0.9337452703043785,
+            0.9640347354113576
+          ]
+        },
+        "sample_count": {
+          "coat": 3607,
+          "pants": 2746
+        },
+        "median_linear_rgb_distance_before": {
+          "coat": 0.039729875216249946,
+          "pants": 0.00592143237870297
+        },
+        "median_linear_rgb_distance_after": {
+          "coat": 0.0,
+          "pants": 0.0
+        }
+      }
+    }
+  }
+}
