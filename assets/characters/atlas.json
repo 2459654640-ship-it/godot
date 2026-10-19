@@ -80,6 +80,13 @@
         false,
         false
       ]
+    ],
+    "opposite_stride_angles": [
+      1,
+      2,
+      3,
+      5,
+      7
     ]
   },
   "semyon": {
@@ -616,6 +623,13 @@
         false,
         false
       ]
+    ],
+    "opposite_stride_angles": [
+      1,
+      2,
+      3,
+      5,
+      7
     ]
   },
   "commander_masked": {
@@ -976,6 +990,13 @@
         false,
         false
       ]
+    ],
+    "opposite_stride_angles": [
+      1,
+      2,
+      3,
+      5,
+      7
     ]
   },
   "veteran_masked_combat": {
@@ -1424,6 +1445,13 @@
         false,
         false
       ]
+    ],
+    "opposite_stride_angles": [
+      1,
+      2,
+      3,
+      5,
+      7
     ]
   }
 }

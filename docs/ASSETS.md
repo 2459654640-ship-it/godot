@@ -239,7 +239,7 @@
 
 ## v18 当前人物素材
 
-- 伊万四套图集均为八个独立方向。普通／面具为每方向三姿态；持枪／面具持枪为每方向七姿态，包含移动换弹。全部共用同一套腿部动作和固定头部。打包工具为 `tools/pack_motion_v18.py`；生成原图留在独立资料库的 `updates/v18/art-source`。
+- 伊万四套图集均为八个独立方向。普通／面具为每方向三姿态；持枪／面具持枪为每方向七姿态，包含移动换弹。全部共用同一套腿部动作和固定头部。v18.2 为五个问题方向补绘另一侧迈步腿部，使用 `opposite-strides.json` 指定独立修正原图，保留原有上半身。打包工具为 `tools/pack_motion_v18.py`；原始图集留在独立资料库的 `updates/v18/art-source`，五个迈步修正源位于 `updates/v18.2/art-source`。
 - [科研地胶](../assets/visual/star_linoleum.png)
 - [公共水磨石](../assets/visual/star_terrazzo.png)
 - [实验瓷砖](../assets/visual/star_lab_tile.png)

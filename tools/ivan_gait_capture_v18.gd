@@ -1,7 +1,10 @@
 extends "res://tools/actor_audit_v14.gd"
 func _initialize():call_deferred("run")
 func run():
- var folder="/tmp/metro1982-review/v18";DirAccess.make_dir_recursive_absolute(folder)
+ var folder="/tmp/metro1982-review/v18"
+ for arg in OS.get_cmdline_user_args():
+  if arg.begins_with("--output="):folder=arg.trim_prefix("--output=")
+ DirAccess.make_dir_recursive_absolute(folder)
  stage=Stage.new();root.add_child(stage);stage.kit=preload("res://scripts/kit.gd").new(stage)
  var environment=WorldEnvironment.new();var setting=Environment.new();setting.background_mode=Environment.BG_COLOR;setting.background_color=Color("60685f");environment.environment=setting;stage.add_child(environment)
  camera=Camera3D.new();stage.add_child(camera);camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.size=9.5;camera.position=Vector3(23,30,27);camera.look_at(Vector3.ZERO);camera.current=true

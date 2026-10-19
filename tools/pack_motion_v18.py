@@ -66,6 +66,18 @@ def pack(sources,report_path):
    cell,ratio=registered(im,i%4,i//4,4,2,idle[i]);art[n].append(cell);report['registration'][n].append(round(ratio,4))
  left=[head_lock(art['walk_left'][i],idle[i]) for i in range(8)]
  right=[head_lock(art['walk_right'][i],idle[i]) for i in range(8)]
+ # Optional individually redrawn opposite strides; leave every other view intact.
+ corrections=sources/'opposite-strides.json'
+ if corrections.exists():
+  for key,name in json.loads(corrections.read_text()).items():
+   angle=int(key)
+   if angle not in [1,2,3,5,7]:raise ValueError('Only the five reviewed faulty views may be replaced')
+   src=sources/name
+   frame,ratio=registered(Image.open(src).convert('RGBA'),0,0,1,1,idle[angle])
+   right[angle]=upper_lower(right[angle],frame)
+   # Keep existing head, torso, hands and equipment pixel-identical. Only
+   # the newly painted legs below the shared outfit seam are replaced.
+   report.setdefault('opposite_stride_redraw',{})[key]={'file':name,'sha256':hashlib.sha256(src.read_bytes()).hexdigest(),'width_registration':round(ratio,4)}
  body=[idle,left,right]
  masked=[[masked_head(row[i],art['masked'][i]) for i in range(8)] for row in body]
  ready=[head_lock(art['armed'][i],idle[i]) for i in range(8)]
@@ -87,6 +99,7 @@ def pack(sources,report_path):
   atlas.save(ROOT/'assets/characters'/f'{actor}.png',optimize=True)
   clips=['idle','walk_left','walk_right'] if len(rows)==3 else ['ready','shot','reload','walk_left','walk_right','reload_walk_left','reload_walk_right']
   manifest[actor]={'file':actor+'.png','directions':8,'source_angles':8,'poses':len(rows),'cell':[width,H],'baseline':342,'body_pixels':324,'clips':clips,'packing_revision':18,'reference_commit':'057fff3','exposure':[[1.0]*8 for _ in rows],'frame_mirror':[[False]*8 for _ in rows]}
+  if corrections.exists():manifest[actor]['opposite_stride_angles']=[1,2,3,5,7]
   report[actor]={'head_identical_during_walk':all(np.array_equal(np.asarray(rows[p][i])[:80,102:178],np.asarray(rows[0][i])[:80,102:178]) for p in ([1,2] if len(rows)==3 else [3,4]) for i in range(8)),'waist_widths':[[round(core_width(c),1) for c in row] for row in rows]}
  path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
  for actor,row in [('ivan',idle),('ivan_masked',masked[0])]:

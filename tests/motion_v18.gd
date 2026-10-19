@@ -12,7 +12,30 @@ func freeze(w):
  w.set_physics_process(false);w.player.set_physics_process(false)
  for npc in w.npcs.values():npc.set_physics_process(false)
  if is_instance_valid(w.combat):w.combat.enabled=false;w.combat.set_physics_process(false)
+func contact_boot_center(image:Image) -> float:
+ # The two corrected strides deliberately alternate the lower contact boot.
+ # This catches distinct files that still depict the same anatomical step.
+ var bottom=-1
+ for y in range(image.get_height()-1,-1,-1):
+  for x in image.get_width():
+   if image.get_pixel(x,y).a>.47:bottom=y;break
+  if bottom>=0:break
+ var sum_x=0.0;var count=0
+ for y in range(maxi(0,bottom-7),bottom+1):
+  for x in image.get_width():
+   if image.get_pixel(x,y).a>.47:sum_x+=x;count+=1
+ return sum_x/maxi(1,count)-image.get_width()*.5
+func opposite_stride_tests():
+ for id in ["ivan","ivan_masked","ivan_combat","ivan_masked_combat"]:
+  var image=Image.load_from_file("res://assets/characters/"+id+".png")
+  var width=400 if id.ends_with("combat") else 280
+  for poses in ([[3,4],[5,6]] if id.ends_with("combat") else [[1,2]]):
+   for angle in [1,2,3,5,7]:
+    var a=contact_boot_center(image.get_region(Rect2i(angle*width,poses[0]*352,width,352)))
+    var b=contact_boot_center(image.get_region(Rect2i(angle*width,poses[1]*352,width,352)))
+    check(a*b<0 and absf(a-b)>25,"contact boots alternate sides in the reviewed faulty view: "+id+str(poses)+str(angle))
 func run():
+ opposite_stride_tests()
  var w=load("res://scenes/waterworks.tscn").instantiate();root.add_child(w);current_scene=w;await frames();freeze(w)
  w.story.give("revolver");w.story.equip_weapon("revolver")
  for art in ["ivan","ivan_masked"]:
