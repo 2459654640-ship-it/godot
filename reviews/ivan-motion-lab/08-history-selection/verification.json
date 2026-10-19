@@ -1,0 +1,111 @@
+{
+  "approved_files_unchanged": [
+    "standing/01-front.png",
+    "standing/02-front-right.png",
+    "standing/03-right.png",
+    "standing/04-back-right.png",
+    "standing/05-back.png",
+    "standing/06-back-left.png",
+    "standing/07-left.png",
+    "standing/08-front-left.png",
+    "steps/01-front-A.png",
+    "steps/01-front-B.png",
+    "steps/02-front-right-A.png",
+    "steps/02-front-right-B.png",
+    "steps/03-right-A.png",
+    "steps/03-right-B.png",
+    "steps/04-back-right-A.png",
+    "steps/05-back-A.png",
+    "steps/05-back-B.png",
+    "steps/06-back-left-B.png",
+    "steps/07-left-A.png",
+    "steps/07-left-B.png",
+    "steps/08-front-left-A.png",
+    "steps/08-front-left-B.png"
+  ],
+  "count": 22,
+  "new_ai_generations": 0,
+  "gait_approved": false,
+  "color_preview_only": {
+    "06-back-left": {
+      "A": {
+        "coat_gain": [
+          0.8924913912586104,
+          0.8955362699459232,
+          0.7851785489135521
+        ],
+        "pants_gain": [
+          1.0,
+          1.0385039642672016,
+          1.0411440347004912
+        ],
+        "alpha_unchanged": true
+      },
+      "B": {
+        "coat_gain": [
+          0.9334314317853368,
+          1.0,
+          0.8988449586974738
+        ],
+        "pants_gain": [
+          1.0679436994107678,
+          1.266375941459626,
+          1.179996525295943
+        ],
+        "alpha_unchanged": true
+      }
+    },
+    "04-back-right": {
+      "A": {
+        "coat_gain": [
+          0.9591276456670609,
+          1.0259939317905375,
+          0.9674490068864697
+        ],
+        "pants_gain": [
+          0.8661367383774908,
+          0.8454875136062027,
+          0.866517761933752
+        ],
+        "alpha_unchanged": true
+      },
+      "B": {
+        "coat_gain": [
+          0.9792618002011984,
+          1.0259939317905375,
+          0.9674490068864697
+        ],
+        "pants_gain": [
+          1.1291966954129071,
+          1.112538920448651,
+          1.0778591570089082
+        ],
+        "alpha_unchanged": true
+      }
+    }
+  },
+  "approved_sha256": {
+    "standing/01-front.png": "cfabe44ce2e7008c7d2e11ca2db046e2b29574d6b7325a285daa004753e09e0f",
+    "standing/02-front-right.png": "4bf5206d9669679b7e79f1d0bedf88ecd02e1b866c7b2ed79ee34ab4542e50ef",
+    "standing/03-right.png": "787e3a5fa213229c18865e9c2accb8c1b17e9050ad44d1ff13872d4dc553baaa",
+    "standing/04-back-right.png": "b4fad41abf889ba0168b9680e6e170bc5ffaa075d8b7743eb9652751f7dd26cd",
+    "standing/05-back.png": "59375d37820e95f9cfac2cd14c825cb0a6aa2c398f6bbb1f5e97b0c2baf2ad51",
+    "standing/06-back-left.png": "62472f22f479882866314e764b23a8793a2629c1190e041c3cffe20c833340bd",
+    "standing/07-left.png": "101a507d2c8027c554d4e231e0e4ba32ca6aaddadc136f3396a1034de3642cc1",
+    "standing/08-front-left.png": "5aee207550841afb16f0983b4dba9976e49844ac0ba9b985adf34cbdbbbbe605",
+    "steps/01-front-A.png": "4aafcc136b6a1f1f698f890d7ce5e05a963f6e7d6a09feeff915be0c9052cf38",
+    "steps/01-front-B.png": "c398aa6efd515c51e099c4dba6470ee3f23d8defa5a8c7db33c903a6c3192f15",
+    "steps/02-front-right-A.png": "4279c7482f39f952fae5dcc92aceac9fc0f02967f28f1e2339886977dce76506",
+    "steps/02-front-right-B.png": "0f29989a501a37115f440460cb0bb8b912a107e910e33090b24319e0c9dec6b8",
+    "steps/03-right-A.png": "1e3951f96bf2a3cb4d8a59b2af39826680c941b6a52a87dae7b83e962fe814f9",
+    "steps/03-right-B.png": "ef66cebe317f05a0fdb2da33a295af4cd43a69ced2c85a1c2d8bec53ff61e56d",
+    "steps/04-back-right-A.png": "e277e932db1d619d90e1dcf46384049517f8fec9b65692117bc60b6a9d56d534",
+    "steps/05-back-A.png": "1e7cf5c54dd7468591db17b8b01d4140a2fabe2af01b9ad40bfb4ce35273cd73",
+    "steps/05-back-B.png": "2a12da6adf892d83270df4c62c4082776e3196ea070c1f6669d605766f43d66a",
+    "steps/06-back-left-B.png": "17503a5b0ae0cd457477d4371444c6cc0701a1e67846c48527620231288bc540",
+    "steps/07-left-A.png": "3e0a3d027b07cbb1f240c58042efee49829528a39dccca508572be1155dd364c",
+    "steps/07-left-B.png": "c7a38b42c6971151574ab2799831e6b9269b529580a2cb1bd1002b90effe239e",
+    "steps/08-front-left-A.png": "0b390d030d76aa2b718acdd802885775f32c76a7da447a18e22456de6aec23fa",
+    "steps/08-front-left-B.png": "940b92e009267c9e152f1ff2847fd408564e3f5a9a1e79019171db3858c48222"
+  }
+}
