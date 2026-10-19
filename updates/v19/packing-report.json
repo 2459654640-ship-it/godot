@@ -1,0 +1,1058 @@
+{
+  "reference_commit": "057fff3",
+  "anatomical_compositing": false,
+  "registration": "whole-figure uniform scale and translation only",
+  "source_sha256": {
+    "unarmed.png": "e9e18316eeb485645809dca661183a0e34b62fe4a319d3012ce39f15eeee36e9",
+    "masked-reload.png": "9c1d29e815bdf6e0dc5b29ee938f28c14dd869fdcd8746887c9d9ffc8103a236",
+    "reload.png": "e75dae53cc831c598c5c2607f4c92b025276dbb6dc2b03c95b9587b321cff0b6",
+    "masked-armed.png": "ac54d90d027eb5f361b9a995002cdf4fb28c0883677294adfffe6f96c301859d",
+    "armed.png": "fde4a5be38cbfe3baa3b05c97af70dbb0895840aed6507c92458c8aacc2d2e93",
+    "masked.png": "9036931dd7f45cb3374322c6c04beca4b11b03873d2676139e28d9f1d5923188",
+    "right-6.png": "aa33d5aff44f3123c83cdfda03984608f9fecb9c64695a459ba415fc249e6a1a",
+    "idle-6.png": "0a0f8a770286e259a623e888e3ac4d4b5270860139336d72d5768515358f57af",
+    "review-back.png": "b84efddcfdd6cce60226a0c9831c4e62ba88fcddc47b886354670749b124a20d",
+    "review-front.png": "f86008728ad6d8fc3dcf5c6861a846a27d4647466509b327afd6e0ee85aeb43d",
+    "base-review.png": "e3f9c1e4cc6f6e4638b59492302555e96510f6576e77b368521d13eecc73d381",
+    "base-poses.png": "cd7480130b58a7419f60423f279df6bd8284897ab2e970f34da05de9008c12b3",
+    "rear-right-pose-guide.png": "c2c1025a3e29188e00aa3ceb91e477072f0f82f652e8f4f1f1a595d7866d67cc",
+    "right-7.png": "ea5ddb29f0cee16e3c4ed81aa328df73726fbb287364edf6af8c3e11b545e833",
+    "right-5.png": "589f6a85536cf12a876237078292c4426ebf8e2f0f6ceceec8e56d8d941e158b",
+    "right-3.png": "331cc0d2ba274949620cdeea96e02d7cbd3139fadc0e4dfe9871ff156a5da9a5",
+    "right-2.png": "13e01ccdab94a480c4b41118cad4f059a4ea630283d564a59a3aed5e326038b5",
+    "right-1.png": "c1426c7bf5eb17f25f4e95aaf0cd7a78ca81b1477db98c4c865037dd8e70d3ac",
+    "right-front-guide.png": "1ba39f0003de6169843ad790b9c8d9179beaf4a5fbb8689f0abed87d45574a56",
+    "idle-7.png": "e25c8226f78cceaf952c82a51453f53aeef9876cc8965b5e8d6406504695e08d",
+    "idle-5.png": "3b5cc9219d8f39c9281e6ec162cb01f5bf3fff49b435e951c2a5333dfefcd6a6",
+    "idle-3.png": "f0cbbe2ba4c2a21e580aab8711af95368127b28e79a145d3971268b100ba9166",
+    "idle-2.png": "bc4319ec66a85990be0b68305506739e55e9b3d7bb1e3eb7c6d2277cf6394759",
+    "idle-1.png": "50d7cf96863f2b3370348e6558cbb18a80f71ac1af798b1fa2cd09b2c9aa023e",
+    "walk-right.png": "6a0aaadf1e122053f784865a15da895f061c3af6627a77505a3fa9f5f8da222d",
+    "walk-left.png": "67963c7c04bfbdd1449423e535de2891d8bad50dcd26d898cb2fb6565f98160a",
+    "guide-right.png": "2af75f57b051c9aae5eb5dcc398b9a2732efea3218d558249b5ff8a6eec87b3c",
+    "guide-left.png": "68d1555e8fc8add68a4cb102af62154394184ec7b6f80343ab24148381cb6bed",
+    "idle-master.png": "5419156181d73f5a9bef86a7e1a66ec67165fcf1438dc8699fd67f3940a01db2"
+  },
+  "metrics": {
+    "ivan": [
+      [
+        {
+          "head_span": 52,
+          "shoulder_span": 129,
+          "hip_span": 126,
+          "body_height": 324
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 119,
+          "hip_span": 105,
+          "body_height": 324
+        },
+        {
+          "head_span": 63,
+          "shoulder_span": 101,
+          "hip_span": 61,
+          "body_height": 323
+        },
+        {
+          "head_span": 60,
+          "shoulder_span": 113,
+          "hip_span": 105,
+          "body_height": 322
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 130,
+          "hip_span": 122,
+          "body_height": 324
+        },
+        {
+          "head_span": 62,
+          "shoulder_span": 108,
+          "hip_span": 95,
+          "body_height": 324
+        },
+        {
+          "head_span": 63,
+          "shoulder_span": 101,
+          "hip_span": 64,
+          "body_height": 324
+        },
+        {
+          "head_span": 60,
+          "shoulder_span": 121,
+          "hip_span": 106,
+          "body_height": 323
+        }
+      ],
+      [
+        {
+          "head_span": 56,
+          "shoulder_span": 139,
+          "hip_span": 119,
+          "body_height": 324
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 121,
+          "hip_span": 90,
+          "body_height": 323
+        },
+        {
+          "head_span": 65,
+          "shoulder_span": 110,
+          "hip_span": 121,
+          "body_height": 324
+        },
+        {
+          "head_span": 63,
+          "shoulder_span": 127,
+          "hip_span": 104,
+          "body_height": 323
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 138,
+          "hip_span": 119,
+          "body_height": 323
+        },
+        {
+          "head_span": 63,
+          "shoulder_span": 124,
+          "hip_span": 107,
+          "body_height": 323
+        },
+        {
+          "head_span": 65,
+          "shoulder_span": 115,
+          "hip_span": 115,
+          "body_height": 324
+        },
+        {
+          "head_span": 61,
+          "shoulder_span": 142,
+          "hip_span": 146,
+          "body_height": 324
+        }
+      ],
+      [
+        {
+          "head_span": 58,
+          "shoulder_span": 147,
+          "hip_span": 97,
+          "body_height": 322
+        },
+        {
+          "head_span": 61,
+          "shoulder_span": 130,
+          "hip_span": 135,
+          "body_height": 324
+        },
+        {
+          "head_span": 61,
+          "shoulder_span": 103,
+          "hip_span": 108,
+          "body_height": 324
+        },
+        {
+          "head_span": 60,
+          "shoulder_span": 121,
+          "hip_span": 73,
+          "body_height": 324
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 145,
+          "hip_span": 125,
+          "body_height": 323
+        },
+        {
+          "head_span": 61,
+          "shoulder_span": 116,
+          "hip_span": 100,
+          "body_height": 323
+        },
+        {
+          "head_span": 63,
+          "shoulder_span": 103,
+          "hip_span": 92,
+          "body_height": 324
+        },
+        {
+          "head_span": 61,
+          "shoulder_span": 130,
+          "hip_span": 101,
+          "body_height": 323
+        }
+      ]
+    ],
+    "ivan_masked": [
+      [
+        {
+          "head_span": 49,
+          "shoulder_span": 123,
+          "hip_span": 120,
+          "body_height": 323
+        },
+        {
+          "head_span": 53,
+          "shoulder_span": 110,
+          "hip_span": 100,
+          "body_height": 323
+        },
+        {
+          "head_span": 58,
+          "shoulder_span": 95,
+          "hip_span": 58,
+          "body_height": 323
+        },
+        {
+          "head_span": 56,
+          "shoulder_span": 108,
+          "hip_span": 101,
+          "body_height": 324
+        },
+        {
+          "head_span": 52,
+          "shoulder_span": 125,
+          "hip_span": 117,
+          "body_height": 324
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 104,
+          "hip_span": 91,
+          "body_height": 324
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 97,
+          "hip_span": 60,
+          "body_height": 323
+        },
+        {
+          "head_span": 53,
+          "shoulder_span": 114,
+          "hip_span": 103,
+          "body_height": 323
+        }
+      ],
+      [
+        {
+          "head_span": 54,
+          "shoulder_span": 134,
+          "hip_span": 112,
+          "body_height": 323
+        },
+        {
+          "head_span": 58,
+          "shoulder_span": 119,
+          "hip_span": 88,
+          "body_height": 324
+        },
+        {
+          "head_span": 64,
+          "shoulder_span": 109,
+          "hip_span": 119,
+          "body_height": 323
+        },
+        {
+          "head_span": 58,
+          "shoulder_span": 122,
+          "hip_span": 102,
+          "body_height": 324
+        },
+        {
+          "head_span": 54,
+          "shoulder_span": 133,
+          "hip_span": 116,
+          "body_height": 322
+        },
+        {
+          "head_span": 63,
+          "shoulder_span": 123,
+          "hip_span": 105,
+          "body_height": 323
+        },
+        {
+          "head_span": 65,
+          "shoulder_span": 112,
+          "hip_span": 106,
+          "body_height": 323
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 136,
+          "hip_span": 142,
+          "body_height": 322
+        }
+      ],
+      [
+        {
+          "head_span": 55,
+          "shoulder_span": 142,
+          "hip_span": 93,
+          "body_height": 323
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 122,
+          "hip_span": 124,
+          "body_height": 323
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 97,
+          "hip_span": 102,
+          "body_height": 324
+        },
+        {
+          "head_span": 54,
+          "shoulder_span": 116,
+          "hip_span": 69,
+          "body_height": 323
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 141,
+          "hip_span": 121,
+          "body_height": 324
+        },
+        {
+          "head_span": 60,
+          "shoulder_span": 115,
+          "hip_span": 97,
+          "body_height": 323
+        },
+        {
+          "head_span": 60,
+          "shoulder_span": 97,
+          "hip_span": 86,
+          "body_height": 323
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 123,
+          "hip_span": 96,
+          "body_height": 323
+        }
+      ]
+    ],
+    "ivan_combat": [
+      [
+        {
+          "head_span": 53,
+          "shoulder_span": 123,
+          "hip_span": 83,
+          "body_height": 324
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 111,
+          "hip_span": 74,
+          "body_height": 324
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 138,
+          "hip_span": 62,
+          "body_height": 323
+        },
+        {
+          "head_span": 56,
+          "shoulder_span": 130,
+          "hip_span": 75,
+          "body_height": 323
+        },
+        {
+          "head_span": 51,
+          "shoulder_span": 122,
+          "hip_span": 83,
+          "body_height": 323
+        },
+        {
+          "head_span": 56,
+          "shoulder_span": 140,
+          "hip_span": 72,
+          "body_height": 323
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 141,
+          "hip_span": 63,
+          "body_height": 323
+        },
+        {
+          "head_span": 53,
+          "shoulder_span": 120,
+          "hip_span": 77,
+          "body_height": 323
+        }
+      ],
+      [
+        {
+          "head_span": 53,
+          "shoulder_span": 123,
+          "hip_span": 83,
+          "body_height": 324
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 111,
+          "hip_span": 74,
+          "body_height": 324
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 138,
+          "hip_span": 62,
+          "body_height": 323
+        },
+        {
+          "head_span": 56,
+          "shoulder_span": 130,
+          "hip_span": 75,
+          "body_height": 323
+        },
+        {
+          "head_span": 51,
+          "shoulder_span": 122,
+          "hip_span": 83,
+          "body_height": 323
+        },
+        {
+          "head_span": 56,
+          "shoulder_span": 140,
+          "hip_span": 72,
+          "body_height": 323
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 141,
+          "hip_span": 63,
+          "body_height": 323
+        },
+        {
+          "head_span": 53,
+          "shoulder_span": 120,
+          "hip_span": 77,
+          "body_height": 323
+        }
+      ],
+      [
+        {
+          "head_span": 50,
+          "shoulder_span": 131,
+          "hip_span": 80,
+          "body_height": 323
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 127,
+          "hip_span": 75,
+          "body_height": 323
+        },
+        {
+          "head_span": 61,
+          "shoulder_span": 120,
+          "hip_span": 63,
+          "body_height": 323
+        },
+        {
+          "head_span": 60,
+          "shoulder_span": 127,
+          "hip_span": 76,
+          "body_height": 324
+        },
+        {
+          "head_span": 51,
+          "shoulder_span": 129,
+          "hip_span": 85,
+          "body_height": 324
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 124,
+          "hip_span": 73,
+          "body_height": 323
+        },
+        {
+          "head_span": 61,
+          "shoulder_span": 123,
+          "hip_span": 66,
+          "body_height": 323
+        },
+        {
+          "head_span": 56,
+          "shoulder_span": 129,
+          "hip_span": 76,
+          "body_height": 324
+        }
+      ],
+      [
+        {
+          "head_span": 55,
+          "shoulder_span": 130,
+          "hip_span": 85,
+          "body_height": 323
+        },
+        {
+          "head_span": 58,
+          "shoulder_span": 120,
+          "hip_span": 86,
+          "body_height": 323
+        },
+        {
+          "head_span": 69,
+          "shoulder_span": 111,
+          "hip_span": 84,
+          "body_height": 322
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 151,
+          "hip_span": 78,
+          "body_height": 324
+        },
+        {
+          "head_span": 54,
+          "shoulder_span": 128,
+          "hip_span": 84,
+          "body_height": 323
+        },
+        {
+          "head_span": 60,
+          "shoulder_span": 149,
+          "hip_span": 79,
+          "body_height": 324
+        },
+        {
+          "head_span": 63,
+          "shoulder_span": 130,
+          "hip_span": 87,
+          "body_height": 323
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 123,
+          "hip_span": 77,
+          "body_height": 323
+        }
+      ],
+      [
+        {
+          "head_span": 58,
+          "shoulder_span": 128,
+          "hip_span": 80,
+          "body_height": 323
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 115,
+          "hip_span": 69,
+          "body_height": 323
+        },
+        {
+          "head_span": 61,
+          "shoulder_span": 145,
+          "hip_span": 86,
+          "body_height": 323
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 139,
+          "hip_span": 68,
+          "body_height": 324
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 129,
+          "hip_span": 86,
+          "body_height": 324
+        },
+        {
+          "head_span": 56,
+          "shoulder_span": 145,
+          "hip_span": 64,
+          "body_height": 324
+        },
+        {
+          "head_span": 61,
+          "shoulder_span": 144,
+          "hip_span": 73,
+          "body_height": 323
+        },
+        {
+          "head_span": 56,
+          "shoulder_span": 124,
+          "hip_span": 75,
+          "body_height": 324
+        }
+      ],
+      [
+        {
+          "head_span": 53,
+          "shoulder_span": 140,
+          "hip_span": 81,
+          "body_height": 324
+        },
+        {
+          "head_span": 63,
+          "shoulder_span": 126,
+          "hip_span": 85,
+          "body_height": 324
+        },
+        {
+          "head_span": 68,
+          "shoulder_span": 131,
+          "hip_span": 92,
+          "body_height": 323
+        },
+        {
+          "head_span": 64,
+          "shoulder_span": 128,
+          "hip_span": 74,
+          "body_height": 323
+        },
+        {
+          "head_span": 53,
+          "shoulder_span": 133,
+          "hip_span": 85,
+          "body_height": 324
+        },
+        {
+          "head_span": 68,
+          "shoulder_span": 133,
+          "hip_span": 73,
+          "body_height": 322
+        },
+        {
+          "head_span": 64,
+          "shoulder_span": 131,
+          "hip_span": 90,
+          "body_height": 323
+        },
+        {
+          "head_span": 64,
+          "shoulder_span": 135,
+          "hip_span": 73,
+          "body_height": 322
+        }
+      ],
+      [
+        {
+          "head_span": 56,
+          "shoulder_span": 147,
+          "hip_span": 86,
+          "body_height": 322
+        },
+        {
+          "head_span": 63,
+          "shoulder_span": 130,
+          "hip_span": 71,
+          "body_height": 323
+        },
+        {
+          "head_span": 64,
+          "shoulder_span": 124,
+          "hip_span": 79,
+          "body_height": 324
+        },
+        {
+          "head_span": 60,
+          "shoulder_span": 130,
+          "hip_span": 71,
+          "body_height": 324
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 142,
+          "hip_span": 88,
+          "body_height": 323
+        },
+        {
+          "head_span": 60,
+          "shoulder_span": 123,
+          "hip_span": 59,
+          "body_height": 322
+        },
+        {
+          "head_span": 64,
+          "shoulder_span": 122,
+          "hip_span": 77,
+          "body_height": 323
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 131,
+          "hip_span": 81,
+          "body_height": 323
+        }
+      ]
+    ],
+    "ivan_masked_combat": [
+      [
+        {
+          "head_span": 51,
+          "shoulder_span": 122,
+          "hip_span": 80,
+          "body_height": 324
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 104,
+          "hip_span": 80,
+          "body_height": 323
+        },
+        {
+          "head_span": 58,
+          "shoulder_span": 92,
+          "hip_span": 62,
+          "body_height": 323
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 100,
+          "hip_span": 71,
+          "body_height": 324
+        },
+        {
+          "head_span": 50,
+          "shoulder_span": 121,
+          "hip_span": 77,
+          "body_height": 323
+        },
+        {
+          "head_span": 58,
+          "shoulder_span": 102,
+          "hip_span": 67,
+          "body_height": 322
+        },
+        {
+          "head_span": 60,
+          "shoulder_span": 94,
+          "hip_span": 61,
+          "body_height": 323
+        },
+        {
+          "head_span": 54,
+          "shoulder_span": 114,
+          "hip_span": 77,
+          "body_height": 324
+        }
+      ],
+      [
+        {
+          "head_span": 51,
+          "shoulder_span": 122,
+          "hip_span": 80,
+          "body_height": 324
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 104,
+          "hip_span": 80,
+          "body_height": 323
+        },
+        {
+          "head_span": 58,
+          "shoulder_span": 92,
+          "hip_span": 62,
+          "body_height": 323
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 100,
+          "hip_span": 71,
+          "body_height": 324
+        },
+        {
+          "head_span": 50,
+          "shoulder_span": 121,
+          "hip_span": 77,
+          "body_height": 323
+        },
+        {
+          "head_span": 58,
+          "shoulder_span": 102,
+          "hip_span": 67,
+          "body_height": 322
+        },
+        {
+          "head_span": 60,
+          "shoulder_span": 94,
+          "hip_span": 61,
+          "body_height": 323
+        },
+        {
+          "head_span": 54,
+          "shoulder_span": 114,
+          "hip_span": 77,
+          "body_height": 324
+        }
+      ],
+      [
+        {
+          "head_span": 49,
+          "shoulder_span": 135,
+          "hip_span": 82,
+          "body_height": 323
+        },
+        {
+          "head_span": 54,
+          "shoulder_span": 123,
+          "hip_span": 76,
+          "body_height": 324
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 109,
+          "hip_span": 63,
+          "body_height": 323
+        },
+        {
+          "head_span": 53,
+          "shoulder_span": 124,
+          "hip_span": 72,
+          "body_height": 323
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 128,
+          "hip_span": 82,
+          "body_height": 324
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 126,
+          "hip_span": 68,
+          "body_height": 324
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 109,
+          "hip_span": 66,
+          "body_height": 323
+        },
+        {
+          "head_span": 52,
+          "shoulder_span": 135,
+          "hip_span": 81,
+          "body_height": 324
+        }
+      ],
+      [
+        {
+          "head_span": 55,
+          "shoulder_span": 125,
+          "hip_span": 82,
+          "body_height": 323
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 110,
+          "hip_span": 82,
+          "body_height": 323
+        },
+        {
+          "head_span": 60,
+          "shoulder_span": 101,
+          "hip_span": 120,
+          "body_height": 323
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 119,
+          "hip_span": 70,
+          "body_height": 323
+        },
+        {
+          "head_span": 53,
+          "shoulder_span": 129,
+          "hip_span": 100,
+          "body_height": 323
+        },
+        {
+          "head_span": 62,
+          "shoulder_span": 111,
+          "hip_span": 72,
+          "body_height": 323
+        },
+        {
+          "head_span": 62,
+          "shoulder_span": 103,
+          "hip_span": 82,
+          "body_height": 324
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 119,
+          "hip_span": 93,
+          "body_height": 322
+        }
+      ],
+      [
+        {
+          "head_span": 56,
+          "shoulder_span": 130,
+          "hip_span": 81,
+          "body_height": 324
+        },
+        {
+          "head_span": 56,
+          "shoulder_span": 108,
+          "hip_span": 73,
+          "body_height": 324
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 95,
+          "hip_span": 80,
+          "body_height": 323
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 107,
+          "hip_span": 68,
+          "body_height": 324
+        },
+        {
+          "head_span": 53,
+          "shoulder_span": 128,
+          "hip_span": 88,
+          "body_height": 324
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 106,
+          "hip_span": 114,
+          "body_height": 323
+        },
+        {
+          "head_span": 61,
+          "shoulder_span": 100,
+          "hip_span": 73,
+          "body_height": 323
+        },
+        {
+          "head_span": 54,
+          "shoulder_span": 123,
+          "hip_span": 70,
+          "body_height": 322
+        }
+      ],
+      [
+        {
+          "head_span": 51,
+          "shoulder_span": 138,
+          "hip_span": 83,
+          "body_height": 324
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 134,
+          "hip_span": 86,
+          "body_height": 323
+        },
+        {
+          "head_span": 63,
+          "shoulder_span": 125,
+          "hip_span": 85,
+          "body_height": 324
+        },
+        {
+          "head_span": 58,
+          "shoulder_span": 127,
+          "hip_span": 69,
+          "body_height": 323
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 129,
+          "hip_span": 83,
+          "body_height": 323
+        },
+        {
+          "head_span": 59,
+          "shoulder_span": 134,
+          "hip_span": 70,
+          "body_height": 324
+        },
+        {
+          "head_span": 66,
+          "shoulder_span": 139,
+          "hip_span": 87,
+          "body_height": 322
+        },
+        {
+          "head_span": 53,
+          "shoulder_span": 144,
+          "hip_span": 84,
+          "body_height": 324
+        }
+      ],
+      [
+        {
+          "head_span": 52,
+          "shoulder_span": 139,
+          "hip_span": 81,
+          "body_height": 324
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 130,
+          "hip_span": 70,
+          "body_height": 323
+        },
+        {
+          "head_span": 58,
+          "shoulder_span": 121,
+          "hip_span": 75,
+          "body_height": 323
+        },
+        {
+          "head_span": 56,
+          "shoulder_span": 129,
+          "hip_span": 75,
+          "body_height": 323
+        },
+        {
+          "head_span": 57,
+          "shoulder_span": 129,
+          "hip_span": 89,
+          "body_height": 323
+        },
+        {
+          "head_span": 55,
+          "shoulder_span": 123,
+          "hip_span": 62,
+          "body_height": 323
+        },
+        {
+          "head_span": 63,
+          "shoulder_span": 121,
+          "hip_span": 77,
+          "body_height": 323
+        },
+        {
+          "head_span": 54,
+          "shoulder_span": 131,
+          "hip_span": 75,
+          "body_height": 324
+        }
+      ]
+    ]
+  },
+  "production_sources": {
+    "ivan": "unarmed.png",
+    "ivan_masked": "masked.png",
+    "ivan_combat": [
+      "armed.png",
+      "reload.png"
+    ],
+    "ivan_masked_combat": [
+      "masked-armed.png",
+      "masked-reload.png"
+    ]
+  }
+}

@@ -1,0 +1,233 @@
+[
+  {
+    "suite": "run",
+    "ok": true,
+    "checks": 1888,
+    "returncode": 0,
+    "log": "validation-logs/run.log"
+  },
+  {
+    "suite": "visual_contract",
+    "ok": true,
+    "checks": 1106,
+    "returncode": 0,
+    "log": "validation-logs/visual_contract.log"
+  },
+  {
+    "suite": "narrative_contract",
+    "ok": true,
+    "checks": 1942,
+    "returncode": 0,
+    "log": "validation-logs/narrative_contract.log"
+  },
+  {
+    "suite": "resident_contract",
+    "ok": true,
+    "checks": 114,
+    "returncode": 0,
+    "log": "validation-logs/resident_contract.log"
+  },
+  {
+    "suite": "chapter_contract",
+    "ok": true,
+    "checks": 141,
+    "returncode": 0,
+    "log": "validation-logs/chapter_contract.log"
+  },
+  {
+    "suite": "floor_contract",
+    "ok": true,
+    "checks": 40,
+    "returncode": 0,
+    "log": "validation-logs/floor_contract.log"
+  },
+  {
+    "suite": "campaign_contract",
+    "ok": true,
+    "checks": 391,
+    "returncode": 0,
+    "log": "validation-logs/campaign_contract.log"
+  },
+  {
+    "suite": "campaign_ui",
+    "ok": true,
+    "checks": 17,
+    "returncode": 0,
+    "log": "validation-logs/campaign_ui.log"
+  },
+  {
+    "suite": "refinement_contract",
+    "ok": true,
+    "checks": 39,
+    "returncode": 0,
+    "log": "validation-logs/refinement_contract.log"
+  },
+  {
+    "suite": "presentation_contract",
+    "ok": true,
+    "checks": 35,
+    "returncode": 0,
+    "log": "validation-logs/presentation_contract.log"
+  },
+  {
+    "suite": "exploration_contract",
+    "ok": true,
+    "checks": 186,
+    "returncode": 0,
+    "log": "validation-logs/exploration_contract.log"
+  },
+  {
+    "suite": "v9_contract",
+    "ok": true,
+    "checks": 119,
+    "returncode": 0,
+    "log": "validation-logs/v9_contract.log"
+  },
+  {
+    "suite": "v10_contract",
+    "ok": true,
+    "checks": 119,
+    "returncode": 0,
+    "log": "validation-logs/v10_contract.log"
+  },
+  {
+    "suite": "v11_contract",
+    "ok": true,
+    "checks": 180,
+    "returncode": 0,
+    "log": "validation-logs/v11_contract.log"
+  },
+  {
+    "suite": "v11_combat",
+    "ok": true,
+    "checks": 22,
+    "returncode": 0,
+    "log": "validation-logs/v11_combat.log"
+  },
+  {
+    "suite": "occlusion_v11",
+    "ok": true,
+    "checks": 9,
+    "returncode": 0,
+    "log": "validation-logs/occlusion_v11.log"
+  },
+  {
+    "suite": "visual_fixes_v11_1",
+    "ok": true,
+    "checks": 91,
+    "returncode": 0,
+    "log": "validation-logs/visual_fixes_v11_1.log"
+  },
+  {
+    "suite": "commune_v12",
+    "ok": true,
+    "checks": 138,
+    "returncode": 0,
+    "log": "validation-logs/commune_v12.log"
+  },
+  {
+    "suite": "factory_v12",
+    "ok": true,
+    "checks": 49,
+    "returncode": 0,
+    "log": "validation-logs/factory_v12.log"
+  },
+  {
+    "suite": "equipment_v12",
+    "ok": true,
+    "checks": 16,
+    "returncode": 0,
+    "log": "validation-logs/equipment_v12.log"
+  },
+  {
+    "suite": "platform_v12",
+    "ok": true,
+    "checks": 12,
+    "returncode": 0,
+    "log": "validation-logs/platform_v12.log"
+  },
+  {
+    "suite": "actors_v13",
+    "ok": true,
+    "checks": 61,
+    "returncode": 0,
+    "log": "validation-logs/actors_v13.log"
+  },
+  {
+    "suite": "publications_v13",
+    "ok": true,
+    "checks": 122,
+    "returncode": 0,
+    "log": "validation-logs/publications_v13.log"
+  },
+  {
+    "suite": "public_radio_v16",
+    "ok": true,
+    "checks": 105,
+    "returncode": 0,
+    "log": "validation-logs/public_radio_v16.log"
+  },
+  {
+    "suite": "ivan_gait_v16",
+    "ok": true,
+    "checks": 102,
+    "returncode": 0,
+    "log": "validation-logs/ivan_gait_v16.log"
+  },
+  {
+    "suite": "furnishings_v16",
+    "ok": true,
+    "checks": 40,
+    "returncode": 0,
+    "log": "validation-logs/furnishings_v16.log"
+  },
+  {
+    "suite": "first_meetings_v17",
+    "ok": true,
+    "checks": 293,
+    "returncode": 0,
+    "log": "validation-logs/first_meetings_v17.log"
+  },
+  {
+    "suite": "starcity_v17",
+    "ok": true,
+    "checks": 7,
+    "returncode": 0,
+    "log": "validation-logs/starcity_v17.log"
+  },
+  {
+    "suite": "ivan_gait_v17",
+    "ok": true,
+    "checks": 7254,
+    "returncode": 0,
+    "log": "validation-logs/ivan_gait_v17.log"
+  },
+  {
+    "suite": "motion_v18",
+    "ok": true,
+    "checks": 1024,
+    "returncode": 0,
+    "log": "validation-logs/motion_v18.log"
+  },
+  {
+    "suite": "expedition_v19",
+    "ok": true,
+    "checks": 101,
+    "returncode": 0,
+    "log": "validation-logs/expedition_v19.log"
+  },
+  {
+    "suite": "narrative_v19",
+    "ok": true,
+    "checks": 99,
+    "returncode": 0,
+    "log": "validation-logs/narrative_v19.log"
+  },
+  {
+    "suite": "crowds_v19",
+    "ok": true,
+    "checks": 16,
+    "returncode": 0,
+    "log": "validation-logs/crowds_v19.log"
+  }
+]
