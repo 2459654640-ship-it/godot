@@ -145,6 +145,14 @@ func npc_motion(delta:float) -> Vector3:
 		blocked_time=0.0
 	return next.normalized()*(1.6 if purposeful else .72)
 
+func stride_length() -> float:
+	if is_player:return 1.7
+	var painter=visual.get_node_or_null("Painter") if is_instance_valid(visual) else null
+	var cutout=is_instance_valid(painter) and painter.pose_count<3
+	if art_id in ["ambient_child","commune_child"]:return .62 if cutout else .85
+	if art_id=="ambient_elder":return .94
+	return .82 if cutout else 1.15
+
 func _physics_process(delta):
 	clock += delta
 	var desired=Vector3.ZERO
@@ -184,8 +192,7 @@ func _physics_process(delta):
 	left_arm.rotation.x=-stride*0.75
 	right_arm.rotation.x=stride*0.75
 	gait_distance+=delta*speed
-	var stride_length=1.7 if is_player else (.85 if art_id in ["ambient_child","commune_child"] else 1.15)
-	visual.position.y=absf(sin(gait_distance*TAU/stride_length))*.018*walk
+	visual.position.y=absf(sin(gait_distance*TAU/stride_length()))*.018*walk
 	if not is_player: visual.position.y+=sin(clock*1.7)*0.005
 
 func step_up(motion:Vector3):

@@ -52,6 +52,7 @@ func setup(body):
 	material=ShaderMaterial.new()
 	material.shader=load("res://assets/visual/painted_actor.gdshader")
 	var texture:Texture2D=load("res://assets/characters/"+actor_id+".png")
+	material.set_shader_parameter("gait_scale",height/1.75)
 	material.set_shader_parameter("painted_map",texture)
 	material.set_shader_parameter("frame_size",Vector2(1.0/source_count,1.0/pose_count))
 	material.set_shader_parameter("texel_size",Vector2.ONE/Vector2(texture.get_size()))
@@ -118,7 +119,7 @@ func _process(delta):
 			ink.set_shader_parameter("painted_map",texture);ink.set_shader_parameter("frame_size",Vector2(1.0/source_count,1.0/pose_count));ink.set_shader_parameter("texel_size",Vector2.ONE/Vector2(texture.get_size()))
 	var column=angle_slot if source_count==8 else mini(angle_slot,8-angle_slot)
 	var speed=Vector2(actor.velocity.x,actor.velocity.z).length()
-	var phase_delta=delta*speed/(1.7 if actor.is_player else (.85 if actor_id in ["ambient_child","commune_child"] else 1.15))
+	var phase_delta=delta*speed/actor.stride_length()
 	# Keep the planted pose visible even when a rendered frame takes longer
 	# than one animation phase; never skip directly between the two strides.
 	cycle+=minf(phase_delta,.219)
@@ -140,7 +141,7 @@ func _process(delta):
 	elif actor.animation_state=="talk" and pose_count>3:pose=3
 	current_pose=pose
 	current_column=column
-	material.set_shader_parameter("puppet_stride",float([1,0,-1,0][beat]) if walking and pose_count<3 else 0.0)
+	material.set_shader_parameter("puppet_stride",cos(TAU*phase) if walking and pose_count<3 else 0.0)
 	material.set_shader_parameter("puppet_direction",Vector2(sin(angle),cos(angle)))
 	material.set_shader_parameter("idle_time",idle_clock+float(posmod(String(actor.name).hash(),1000))/80.0)
 	material.set_shader_parameter("idle_amount",0.0 if walking else 1.0)

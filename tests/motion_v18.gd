@@ -63,6 +63,10 @@ func run():
     check(absf(float(painter.material.get_shader_parameter("puppet_stride")))>.9,"a single-illustration resident has a real independent-leg rig: "+id)
     painter.cycle=.25;painter._process(0)
     check(is_zero_approx(float(painter.material.get_shader_parameter("puppet_stride"))),"resident's rig includes planted transition: "+id)
+    painter.cycle=.125;painter._process(0)
+    check(float(painter.material.get_shader_parameter("puppet_stride"))>.6 and float(painter.material.get_shader_parameter("puppet_stride"))<.8,"single-pose leg motion has a smooth intermediate position: "+id)
+    painter.cycle=.375;painter._process(0)
+    check(float(painter.material.get_shader_parameter("puppet_stride"))<-.6,"the opposite leg advances on the next half-cycle: "+id)
     npc.velocity=Vector3.ZERO
   var chosen="supply" if floor=="life" else ("commune_printer" if floor=="commune" else "sech_quartermaster")
   var npc=w.npcs[chosen];var home=npc.home_anchor;var candidates=[]
