@@ -1,0 +1,64 @@
+{
+  "status": "review candidate; not integrated",
+  "cell": [
+    384,
+    512
+  ],
+  "layout": "8 original standing + 16 step frames",
+  "changes": [
+    {
+      "file": "04-back-right-B.png",
+      "source": "/workspace/generated_images/exec-27a21f1b-09e8-4386-bad7-97af6ceed8ea.png",
+      "reference": "04-back-right.png",
+      "scale": 0.35591958302308263,
+      "translation": [
+        -28,
+        1
+      ],
+      "pose_control": "shaded connected-leg pose guide; identity from original standing only"
+    },
+    {
+      "file": "06-back-left-A.png",
+      "source": "/workspace/generated_images/exec-0b437077-ec94-4e8b-a2fc-12a86a9d4318.png",
+      "reference": "06-back-left.png",
+      "scale": 0.34260614934114203,
+      "translation": [
+        9,
+        6
+      ],
+      "pose_control": "shaded connected-leg pose guide; identity from original standing only"
+    },
+    {
+      "file": "04-back-right-A.png",
+      "source": "/workspace/generated_images/exec-5d459ccd-b19e-460a-8f43-83cfc51a8df4.png",
+      "reference": "04-back-right.png",
+      "scale": 0.35591958302308263,
+      "translation": [
+        -26,
+        1
+      ],
+      "pose_control": "shaded connected-leg pose guide; identity from original standing only"
+    },
+    {
+      "file": "06-back-left-B.png",
+      "source": "/workspace/generated_images/exec-473f27f5-50cb-4bf7-8654-55bdeda467aa.png",
+      "reference": "06-back-left.png",
+      "scale": 0.34260614934114203,
+      "translation": [
+        14,
+        4
+      ],
+      "pose_control": "shaded connected-leg pose guide; identity from original standing only"
+    }
+  ],
+  "unchanged_steps": [
+    "02-front-right-A.png",
+    "02-front-right-B.png",
+    "03-right-A.png",
+    "03-right-B.png",
+    "07-left-A.png",
+    "07-left-B.png",
+    "08-front-left-A.png",
+    "08-front-left-B.png"
+  ]
+}

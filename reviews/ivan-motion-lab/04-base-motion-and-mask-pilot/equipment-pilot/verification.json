@@ -1,0 +1,17 @@
+[
+  {
+    "frame": "standing",
+    "outside_overlay_pixel_identical": true,
+    "body_and_legs_from_y128_pixel_identical": true
+  },
+  {
+    "frame": "A",
+    "outside_overlay_pixel_identical": true,
+    "body_and_legs_from_y128_pixel_identical": true
+  },
+  {
+    "frame": "B",
+    "outside_overlay_pixel_identical": true,
+    "body_and_legs_from_y128_pixel_identical": true
+  }
+]
