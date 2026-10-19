@@ -36,7 +36,9 @@ func _draw():
 		elif world.CampaignMaps.LAYOUTS.has(floor):
 			for entry in world.CampaignMaps.LAYOUTS[floor].objects:
 				if entry[0]==focused.target:focus_point=Vector2(entry[1],entry[2])
-	for zone in zones:
+	var drawing_zones=zones.duplicate()
+	if floor in ["surface","starcity"]:drawing_zones.sort_custom(func(a,b):return a.code=="00" and b.code!="00")
+	for zone in drawing_zones:
 		var r:Rect2=zone.rect
 		var points=polygon(r.grow(-0.14))
 		var shadow=points.duplicate()

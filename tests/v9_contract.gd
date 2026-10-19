@@ -39,8 +39,7 @@ func run():
  # Three distinct resource-free main chains, five new conclusions.
  var paths=[
  ["commune",["workers_accept","workers_draft","workers_coal"],"coal",["workers_sign","workers_return"],"commune",["workers_deliver"],["ending_workers"]],
- ["sech",["north_accept","north_record","north_chock","north_axle","north_verify"],"sech",[],"sech",[],["ending_train","ending_caravan"]],
- ["starcity",["weather_accept","weather_clock","weather_power","weather_test","weather_return"],"starcity",[],"starcity",[],["ending_weather"]]]
+ ["sech",["north_accept","north_record","north_chock","north_axle","north_verify"],"sech",[],"sech",[],["ending_train","ending_caravan"]]]
  for path in paths:
   s=Story.new();s.economy.military=0;s.economy.goods={};s.context.floor=path[0];s.flags.star_registered=true;s.flags.father_met=true;s.flags.radio_fixed=true;s.flags.press_done=true
   for key in path[1]:act(s,key)
@@ -58,8 +57,8 @@ func run():
  s.context.floor="coal";s.flags.linen_done=true
  for key in ["names_accept","names_archive","names_tags","names_return"]:act(s,key)
  s.context.floor="starcity";s.flags.father_met=true;s.flags.journey_ready=true;s.flags.tape_done=true
- for key in ["archive_labels_accept","archive_labels_inspect","archive_labels_compare","archive_labels_return","ending_records"]:act(s,key)
- check(s.ending and s.flags.campaign_ending=="records","combined evidence ending requires three different completed chains")
+ for key in ["archive_labels_accept","archive_labels_inspect","archive_labels_compare","archive_labels_return","ending_records"]:
+  s.act("c_"+key);check(not s.last_action_valid and not s.ending,"archived internal conclusion stays unavailable: "+key)
  for chain in [["commune","medicine_seal"],["coal","mine_air"]]:
   s=Story.new();s.context.floor=chain[0];s.flags["anna_reunited" if chain[1]=="medicine_seal" else "names_done"]=true
   for suffix in ["_accept","_inspect","_compare","_return"]:act(s,chain[1]+suffix)
@@ -71,7 +70,7 @@ func run():
  check(Campaign.data().endings.size()==14,"fourteen conclusions are authored")
  s=Story.new();s.context.floor="sech";s.flags.star_known=true
  check(not s.view("sech_sergey").options.any(func(o):return o.key=="c_sech_father" and o.enabled),"father-specific question is knowledge gated")
- act(s,"sech_visitors");check(s.last_reply.contains("登记") and not s.last_reply.contains("父亲"),"open visitor question gets a matching answer")
+ act(s,"sech_visitors");check(s.last_reply.contains("不能") and not s.last_reply.contains("父亲"),"open visitor question gets a matching answer")
  # Real moving door, physical distraction, return inspection and settlement.
  var w=load("res://scenes/d6.tscn").instantiate();root.add_child(w);current_scene=w;await frames(8)
  w.story.flags.intro_done=true;w.hud.comic_active=false;w.hud.close();w.story.flags.side=true;w.phase=8

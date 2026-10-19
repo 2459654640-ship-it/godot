@@ -79,7 +79,7 @@ func _ready():
 		played_seconds=float(transfer.pending.story.get("played_seconds",0))
 		camera_size=clampf(float(transfer.pending.story.get("camera_size",17)),10,28)
 		arrival=transfer.pending.position
-		if ((floor_id=="commune" and transfer.pending.story.get("layout_revision",0)<12) or (floor_id=="sech" and transfer.pending.story.get("layout_revision",0)<11) or (floor_id=="starcity" and transfer.pending.story.get("layout_revision",0)<17) or (floor_id not in ["life","labor","sech"] and transfer.pending.story.get("layout_revision",0)<8)):arrival=CampaignMaps.LAYOUTS[floor_id].spawn
+		if ((floor_id=="commune" and transfer.pending.story.get("layout_revision",0)<12) or (floor_id=="sech" and transfer.pending.story.get("layout_revision",0)<11) or (floor_id=="starcity" and transfer.pending.story.get("layout_revision",0)<19) or (floor_id not in ["life","labor","sech"] and transfer.pending.story.get("layout_revision",0)<8)):arrival=CampaignMaps.LAYOUTS[floor_id].spawn
 		transfer.pending={}
 	kit=Kit.new(self)
 	build_environment()
@@ -125,6 +125,14 @@ func _ready():
 	if arrival.is_finite():player.position=clear_arrival(arrival)
 	if not arrival_data.is_empty():restore_placement(arrival_data)
 	story.context.floor=floor_id
+	if floor_id=="starcity":
+		story.ending=false
+		# Old interior saves retain their history, but cannot resume an internal
+		# reunion/cutscene or bypass the current exterior-only chapter.
+		var sequence:String=story.flags.get("comic",{}).get("sequence","")
+		if story.flags.get("comic",{}).get("active",false) and sequence not in ["star_road","arrive_starcity","star_back_commune","star_back_sech"]:story.flags.comic={"active":false}
+		story.flags.erase("resume_dialogue")
+		story.flags.erase("next_sequence")
 	if floor_id=="waterworks" and story.route=="official":story.flags.plant_briefed=true
 	kit.prepare_highlights()
 	camera=Camera3D.new()
@@ -184,14 +192,15 @@ func build_environment():
 	var we=WorldEnvironment.new()
 	var e=Environment.new()
 	e.background_mode=Environment.BG_COLOR
-	e.background_color=Color("090b0b")
+	e.background_color=Color("a8bac4") if floor_id=="surface" else Color("090b0b")
 	e.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR
 	e.ambient_light_color=Color("9bada6")
 	e.ambient_light_energy=0.29
 	if floor_id not in ["life","labor"]:
 		var atmosphere:Dictionary=CampaignMaps.LAYOUTS[floor_id]
 		e.ambient_light_color=Color(atmosphere.ambient)
-		e.ambient_light_energy=atmosphere.energy
+		e.ambient_light_energy=.45 if floor_id=="surface" else atmosphere.energy
+		if floor_id=="surface":e.fog_enabled=true;e.fog_density=.0008;e.fog_light_color=Color("bac8cf")
 	e.tonemap_mode=Environment.TONE_MAPPER_FILMIC
 	we.environment=e
 	add_child(we)
@@ -202,7 +211,7 @@ func build_environment():
 	light.light_energy=0.32
 	if floor_id not in ["life","labor"]:
 		light.light_color=Color("b9ccd2") if floor_id=="waterworks" else Color("8d9fa8")
-		light.light_energy=.21 if floor_id=="waterworks" else .12
+		light.light_energy=.45 if floor_id=="surface" else (.21 if floor_id=="waterworks" else .12)
 	light.shadow_enabled=true
 	light.directional_shadow_max_distance=65
 	light.shadow_bias=0.04
@@ -704,8 +713,9 @@ func _unhandled_input(event):
 		if event.button_index==MOUSE_BUTTON_WHEEL_DOWN:camera_size=clampf(camera_size+1,10,28)
 
 func interact(id: String):
-	if is_instance_valid(combat) and combat.active:
+	if is_instance_valid(combat) and combat.active and not (floor_id=="surface" and id=="surface_exit"):
 		hud.toast("先清理眼前的威胁。老兵倒地时靠近并按住 E 救援。",3);return
+	if id.begins_with("surface_loot_"):preload("res://scripts/surface_site.gd").collect(self,id);return
 	if id=="common_blocks":hud.show_blocks();return
 	if id=="public_radio":public_radio.open_controls();return
 	if id.begins_with("pub_"):
@@ -730,13 +740,14 @@ func interact(id: String):
 	hud.show_dialogue(id)
 
 func perform(key: String, id: String):
-	if is_instance_valid(combat) and combat.active:return
+	if is_instance_valid(combat) and combat.active and not key.begins_with("c_surface_back_"):return
 	if departure_animating:return
 	refresh_guard_context()
 	var reply=story.act(key)
 	if not story.last_action_valid:
 		hud.show_reply(id,reply)
 		return
+	if key=="c_surface_trade":hud.shop_actor=id;hud.show_shop();return
 	if key.begins_with("c_"):
 		get_node("/root/Session").sound("interact")
 		if story.flags.has("next_sequence"):
@@ -766,7 +777,7 @@ func perform(key: String, id: String):
 	if key=="shop":
 		story.Conversation.reply(story,id,hud.last_choice,reply)
 		hud.last_choice=""
-		hud.show_shop()
+		hud.shop_actor="supply";hud.show_shop()
 		return
 	if npcs.has(id):
 		var painter=npcs[id].visual.get_node("Painter")
@@ -787,6 +798,9 @@ func perform(key: String, id: String):
 func on_story_changed():
 	story.context.floor=floor_id
 	PublicationPlaces.refresh(self)
+	if floor_id=="surface":
+		var water=get_node_or_null("SurfaceStandingWater")
+		if water:water.visible=not story.f("surface_drain_open")
 	if floor_id=="commune":
 		var shade=get_node_or_null("FungusShade")
 		if shade:shade.position.y=2.08 if story.f("grow_fixed") else 2.38
@@ -801,6 +815,7 @@ func on_story_changed():
 			else:
 				gate_tween=create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 				gate_tween.tween_property(campaign_gate,"position",destination,1.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+				gate_tween.finished.connect(func():if is_instance_valid(navigation):navigation.setup(self))
 				get_node("/root/Session").sound("interact")
 	if gate_mesh:animate_d6_door(gate_mesh,story.f("gate"))
 	if side_mesh:animate_d6_door(side_mesh,story.f("side_pass"))
@@ -821,7 +836,7 @@ func animate_d6_door(mesh:MeshInstance3D,opened:bool):
 
 func clear_arrival(p:Vector3)->Vector3:
 	# New decorative fixtures must not imprison an earlier saved position.
-	if floor_id not in ["commune","waterworks"]:return p
+	if floor_id not in ["commune","waterworks","surface","starcity"]:return p
 	for solid in kit.solids:
 		if solid.name=="CampaignInnerGate" and story.f(campaign_gate_flag):continue
 		if solid.top<=.24 and solid.top>.025 and solid.bottom<.12 and solid.rect.has_point(Vector2(p.x,p.z)):
@@ -836,7 +851,7 @@ func clear_arrival(p:Vector3)->Vector3:
 func save_snapshot()->Dictionary:
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z];data.floor=floor_id
-	data.layout_revision=17;data.played_seconds=played_seconds
+	data.layout_revision=19;data.played_seconds=played_seconds
 	data.camera_size=camera_size;data.facing=player.visual.rotation.y
 	data.world_state={"phase":phase,"guard_away_time":guard_away_time,"waiting_shift":waiting_shift,"pending_route":pending_route}
 	data.npc_positions={}
@@ -857,11 +872,11 @@ func load_game(path:String=""):
 	var data=SaveStore.read(source)
 	if data.is_empty():hud.toast("没有可读取的手记，或该存档及备份均已损坏。",6);return
 	var p=data.get("position",[-10.5,.04,-3.4])
-	if data.get("floor","life")!=floor_id or floor_id=="waterworks":
+	if data.get("floor","life")!=floor_id or floor_id in ["waterworks","surface","starcity"]:
 		get_node("/root/Session").enter(data,data.get("floor","life"),Vector3(p[0],maxf(p[1],.04),p[2]));return
 	hud.observing=false;story.restore(data)
 	player.position=clear_arrival(Vector3(p[0],maxf(p[1],.04),p[2]))
-	if (floor_id=="commune" and int(data.get("layout_revision",0))<12) or (floor_id=="sech" and int(data.get("layout_revision",0))<11) or (floor_id=="starcity" and int(data.get("layout_revision",0))<17):player.position=CampaignMaps.LAYOUTS[floor_id].spawn
+	if (floor_id=="commune" and int(data.get("layout_revision",0))<12) or (floor_id=="sech" and int(data.get("layout_revision",0))<11) or (floor_id=="starcity" and int(data.get("layout_revision",0))<19):player.position=CampaignMaps.LAYOUTS[floor_id].spawn
 	played_seconds=float(data.get("played_seconds",0));camera_size=clampf(float(data.get("camera_size",17)),10,28)
 	waiting_shift=false;guard_away_time=0;restore_placement(data);player.velocity=Vector3.ZERO
 	hud.comic_active=false;hud.close()
@@ -873,7 +888,7 @@ func restore_placement(data:Dictionary):
 		var state:Dictionary=data.get("world_state",{})
 		phase=float(state.get("phase",0));guard_away_time=float(state.get("guard_away_time",0));waiting_shift=bool(state.get("waiting_shift",false));pending_route=String(state.get("pending_route",""))
 	player.visual.rotation.y=float(data.get("facing",player.visual.rotation.y))
-	if data.get("floor","")!=floor_id or int(data.get("layout_revision",0))<(17 if floor_id=="starcity" else (12 if floor_id=="commune" else 11)):return
+	if data.get("floor","")!=floor_id or int(data.get("layout_revision",0))<(19 if floor_id=="starcity" else (12 if floor_id=="commune" else 11)):return
 	for id in data.get("npc_positions",{}):
 		if not npcs.has(id):continue
 		var entry:Dictionary=data.npc_positions[id];var p=entry.get("position",[])
@@ -972,7 +987,7 @@ func build_labor_people():
 	player=Actor.new()
 	player.name="Ivan";add_child(player)
 	player.position=Vector3(-10,.04,1.8)
-	if floor_id=="waterworks":player.art_id="ivan_masked"
+	if floor_id in ["waterworks","surface","starcity"]:player.art_id="ivan_masked"
 	player.add_to_group("player");player.setup(kit,true,"green")
 	if floor_id=="labor":Labor.people(self)
 	else:
@@ -992,6 +1007,10 @@ func facility_doors(id:String)->Array:
 	return CampaignMaps.doors(id)
 
 func travel_campaign(destination:String):
+	if destination=="starcity":
+		if floor_id in ["commune","sech"]:story.flags.star_return_home=floor_id
+		story.ending=false
+
 	if destination in ["life","labor"]:
 		story.ending=false;story.flags.erase("next_facility")
 		story.flags.d6_returned=true;story.flags.departure_official=story.route=="official" and not story.f("sided_veteran")

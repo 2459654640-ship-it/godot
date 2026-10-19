@@ -3,7 +3,7 @@ const Surface=preload("res://scripts/ui_surface.gd")
 const SaveStore=preload("res://scripts/save_store.gd")
 const SAVE="user://d6_save.json"
 var save_path=SAVE
-const SCENES=["life","labor","waterworks","commune","sech","coal","starcity"]
+const SCENES=["life","labor","waterworks","commune","sech","coal","starcity","surface"]
 var dialog:PanelContainer
 var status:Label
 var continue_button:Button

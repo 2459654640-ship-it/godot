@@ -37,6 +37,8 @@ static func panel(s)->Dictionary:
 	var override:Dictionary=authored().get(node,{})
 	if override.has("next") or override.has("choices"):p.erase("end")
 	p.merge(override,true)
+	if p.has("choices"):
+		p.choices=p.choices.filter(func(choice):return not s.f(choice.get("hide_if","")) and (not choice.has("requires") or s.f(choice.requires)))
 	if p.has("lines"):
 		var paragraphs:Array[String]=[]
 		for line in p.lines:paragraphs.append(line.text if line.speaker=="旁白" else line.speaker+"：「"+line.text+"」")

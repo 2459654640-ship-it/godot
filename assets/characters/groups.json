@@ -45,14 +45,36 @@
   },
   "assembly": {
     "region": [
-      36,
-      288,
-      1193,
-      712
+      0,
+      0,
+      1200,
+      600
     ],
     "source": "group_assembly.png",
     "camera_elevation_degrees": 40,
-    "revision": 16
+    "revision": 19,
+    "members": [
+      [
+        25,
+        37,
+        350,
+        543
+      ],
+      [
+        425,
+        73,
+        350,
+        507
+      ],
+      [
+        825,
+        33,
+        350,
+        547
+      ]
+    ],
+    "seat_forward": "east",
+    "row_axis": "north-south"
   },
   "militia": {
     "region": [

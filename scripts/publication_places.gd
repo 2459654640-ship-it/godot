@@ -17,6 +17,7 @@ const PLACES={
 	"pub_route_weather":Vector3(12.65,.805,2.85)}
 
 static func build(world):
+	if world.floor_id=="starcity":return
 	for book in Publications.data().entries:
 		if book.source.kind!="pickup" or book.source.floor!=world.floor_id:continue
 		if not Publications.owned(world.story,book.id):build_copy(world,book)
@@ -37,6 +38,7 @@ static func build_copy(world,book:Dictionary):
 	world.target(id,Vector3(p.x,0,p.z),"旧书刊","collect")
 
 static func refresh(world):
+	if world.floor_id=="starcity":return
 	for book in Publications.data().entries:
 		if book.source.kind!="pickup" or book.source.floor!=world.floor_id:continue
 		var node=world.get_node_or_null("Publication_"+book.id)

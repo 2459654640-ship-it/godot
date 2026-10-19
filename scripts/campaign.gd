@@ -1,8 +1,8 @@
 extends RefCounted
 ## Authored continuation. Content is local JSON; no remote services or generated dialogue at runtime.
 static var _data:Dictionary={}
-const NAMES={"waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区"}
-const ITEM_ART={"moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
+const NAMES={"waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区","surface":"地表旧泵站"}
+const ITEM_ART={"pool_sample":"mutant_sample","moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
 static func data()->Dictionary:
 	if _data.is_empty():_data=JSON.parse_string(FileAccess.get_file_as_string("res://data/campaign.json"))
 	return _data
@@ -19,6 +19,8 @@ static func permits(s,req:Dictionary)->bool:
 		if int(s.economy.goods.get(good,0))<int(req.goods[good]):return false
 	return true
 static func available(s,key:String)->bool:
+	if key in data().get("unreleased_star_actions",[]):return false
+	if key.begins_with("star_return_") and key!="star_return_"+String(s.flags.get("star_return_home","sech" if s.f("sech_member") else "commune")):return false
 	if not data().actions.has(key):return false
 	var a:Dictionary=data().actions[key]
 	if s.Progression.failed_action(s,key):return false
@@ -59,6 +61,14 @@ static func act(s,key:String)->String:
 		if count>0:
 			s.economy[kind]+=count
 			s.economy.ledger.append({"kind":"quest","id":key,"ammo":kind,"rounds":count})
+	if key=="surface_accept" and not s.has("revolver"):s.give("revolver")
+	if key=="surface_depart":
+		var home:String=s.context.get("floor","commune")
+		s.flags.surface_from_commune=home=="commune";s.flags.surface_from_sech=home=="sech";s.flags.surface_trip_active=true
+		s.flags.surface_trip_id=int(s.flags.get("surface_trip_id",0))+1;s.flags.surface_loot={}
+		for reset in ["battle_surface_yard","battle_surface_pool","surface_drain_open","surface_notes","c_done_surface_notes","c_done_surface_drain"]:s.flags.erase(reset)
+		s.economy.stock.ammo_pouch=maxi(4,int(s.economy.stock.get("ammo_pouch",0)))
+	if key=="star_perimeter_name":s.flags.signal_source_verified=true
 	if key in ["commune_coal","workers_coal"]:s.flags.d6_returned=true;s.flags.departure_official=s.route=="official" and not s.f("sided_veteran")
 	if key=="star_name":s.flags.signal_source_verified=true
 	if key=="sech_water":s.flags.water_tank_fixed=true
@@ -86,6 +96,8 @@ static func side_tasks(s)->Array:
 		for stage in q.stages:
 			if permits(s,stage.when):current=stage
 		var target:String=current.target
+		if q.facility=="starcity":current={"target":"star_perimeter_call","place":"starcity","step":"暂缓：星城内区封闭，先保留已取得的记录。"};target="star_perimeter_call"
+		if q.id=="surface_survey" and s.f("surface_sample_sealed") and s.f("surface_from_sech"):current=current.duplicate();current.target="sech_quartermaster";current.place="sech";target="sech_quartermaster"
 		rows.append({"kind":q.get("kind","支线"),"id":q.id,"name":q.name,"done":s.f(q.done),"place":current.get("place",q.facility),"background":q.background,"step":"已交付，报酬与经过记入手记。" if s.f(q.done) else current.step,"target":target,"area":data().interactions[target].name})
 	return rows
 static func finish(s,id:String):
@@ -111,7 +123,7 @@ static func objective(s)->String:
 			if s.f("anna_request") and not s.f("anna_records"):return "到联络室核对安娜哥哥的班组记录"
 			return "与公社居民交谈 · 选择留在这里或继续旅程"
 		"sech":
-			if s.f("radio_fixed"):return "东方-7 已接通 · 决定留下或前往星城"
+			if s.f("radio_fixed"):return "东方-7 已辨认 · 可尝试前往星城外围留信"
 			if s.f("radio_power"):return "按纸条刻度调谐电台，辨认呼号"
 			return "查阅调度台接线图，恢复短波电台"
 		"coal":
@@ -119,11 +131,13 @@ static func objective(s)->String:
 			if s.f("brother_care"):return "到休养间，征询本人的探视意愿"
 			if s.f("brother_identity"):return "找医护了解照护与探视安排"
 			return "先到登记台核对工牌，再查班组档案"
-		"starcity":
-			if s.f("father_met"):return "与父亲谈完后，到联络值班台完成资料交接，再决定今后的去向"
-			if s.f("star_access"):return "蓝门已开 · 去测控室见父亲"
-			if s.f("star_zero"):return "确认身份后，到内门台合上旁路"
-			return "向哨兵报姓名 · 按规程隔离外线"
+		"starcity":return "星城内区封闭 · 在外侧声讯柱留下询问信，然后返回聚落"
+		"surface":
+			if s.f("surface_done"):return "地表巡查 · 可以清理兽群、收集资源，随时从检修梯撤回"
+			if s.f("surface_sample_sealed"):return "样本已经封好 · 可从西南侧检修梯撤回交付"
+			if s.f("surface_drain_open"):return "清理下池威胁 · 到北侧沉淀池取样"
+			if s.f("surface_notes"):return "清理院内兽群 · 再转动西侧泄水阀"
+			return "先检查背风装卸台的补给，再到西侧控制箱读排水记录"
 	return ""
 static func tasks(s)->Array:
 	var rows=[]
@@ -132,7 +146,7 @@ static func tasks(s)->Array:
 		["commune_joined","greenhouse_fixed","温室的回水","先检查并停泵清理过滤篮，再灌满管线重新启动。"],
 		["anna_request","anna_reunited","一个确切的名字","核对公社记录，持函去 D-6 煤运登记处，确认身份和照护安排后回报安娜。"],
 		["sech_joined","radio_fixed","东方-7","先查接线图，再恢复电源并调谐电台。"],
-		["star_registered","father_met","蓝门后的人","按纸质规程隔离外线、确认无压、合旁路；然后去测控室。"]]
+		["star_inquiry_filed","unused_father_done","隔离线外的询问信","已留下寻找父亲的询问，尚无人员核查结果；内区封闭，可以先返回聚落。"]]
 	for q in quests:
 		if s.f(q[0]):rows.append({"name":q[2],"done":s.f(q[1]),"background":q[3],"step":objective(s)})
 	return rows

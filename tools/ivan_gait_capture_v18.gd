@@ -10,7 +10,8 @@ func run():
  camera=Camera3D.new();stage.add_child(camera);camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.size=9.5;camera.position=Vector3(23,30,27);camera.look_at(Vector3.ZERO);camera.current=true
  stage.story.give("revolver")
  var residents="--residents" in OS.get_cmdline_user_args()
- for id in (["ambient_child","commune_printer","sergey"] if residents else ["ivan","ivan_masked"]):
+ var ivan_ids=["ivan"] if "--normal-only" in OS.get_cmdline_user_args() else ["ivan","ivan_masked"]
+ for id in (["ambient_child","commune_printer","sergey"] if residents else ivan_ids):
   for mode in (["walk"] if residents else ["walk","armed","reload"]):
    var armed=mode!="walk"
    stage.story.flags.weapon_drawn=armed

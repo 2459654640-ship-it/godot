@@ -149,7 +149,7 @@
         ],
         [
           "sech_trusted",
-          "长老把北线联络牌递给你。\n「彼得愿意送你到星城外门。去前在电台报好姓名，守卫同意了再开车。这里的铺位给你留着。」"
+          "长老在北线图上指了指旧岔口。\n「彼得最远送你到那里。星城很少和外界往来，能否收到回话，要看他们的决定。你的铺位给你留着。」"
         ]
       ]
     },
@@ -178,7 +178,7 @@
       "after": [
         [
           "radio_fixed",
-          "短波电台已经恢复。东方-7 每隔一段时间重复一次联络窗口，偶尔还有来自北方的英语呼叫。"
+          "短波电台已经恢复。东方-7 偶尔播报北线气象，之后便长时间静默。谢契没有收到新的定时联络安排。"
         ]
       ],
       "spoken": false
@@ -249,7 +249,7 @@
         ],
         [
           "commune_trusted",
-          "叶莲娜在联络簿上留着你的名字。\n「星城的访问信备好了。出发前把没办完的事办完，不急着今晚就走。」"
+          "叶莲娜把封好的询问信交给你。\n「这只能说明你的来历，不能保证星城会让你进去。先把没有办完的事办完，出发不用急。」"
         ]
       ]
     },
@@ -687,7 +687,12 @@
         "watch_accept",
         "watch_return",
         "watch_custom",
-        "north_verify"
+        "north_verify",
+        "surface_brief",
+        "surface_accept",
+        "surface_depart",
+        "surface_turnin",
+        "surface_trade"
       ],
       "after": [
         [
@@ -1049,7 +1054,12 @@
         "guard_custom",
         "guard_front",
         "moro_permission",
-        "memory_guard"
+        "memory_guard",
+        "surface_brief",
+        "surface_accept",
+        "surface_depart",
+        "surface_turnin",
+        "surface_trade"
       ],
       "after": [
         [
@@ -1151,6 +1161,64 @@
       "body": "金属台面上固定着精密转台，旁边的纸卡记着日期、转速和测量误差。工具挂在各自的轮廓内，未接好的测试线圈在台角。",
       "options": [
         "star_instrument_read"
+      ]
+    },
+    "star_perimeter_call": {
+      "name": "外侧声讯柱",
+      "role": "星城外围 / 声讯",
+      "facility": "starcity",
+      "body": "声讯柱上的绿灯间歇亮起，旁边写着“停在隔离线外”。扬声器后的人没有报姓名。",
+      "options": [
+        "star_perimeter_name",
+        "star_perimeter_rules",
+        "star_return_commune",
+        "star_return_sech"
+      ]
+    },
+    "surface_board": {
+      "name": "旧泵站控制箱",
+      "role": "地表 / 排水记录",
+      "facility": "surface",
+      "body": "褪色的接线图画着上池与下池。下池排水由西侧的泄水阀控制，采样位在北侧沉淀池边。",
+      "options": [
+        "surface_notes"
+      ]
+    },
+    "surface_valve": {
+      "name": "西侧泄水阀",
+      "role": "地表 / 设施",
+      "facility": "surface",
+      "body": "阀轮上结着一层薄冰。排水沟通向下池，操作前需要核对控制箱里的图。",
+      "options": [
+        "surface_drain"
+      ]
+    },
+    "surface_sample": {
+      "name": "沉淀池采样位",
+      "role": "地表 / 调查",
+      "facility": "surface",
+      "body": "灰绿色的沉积物附在池边。先确认下池安全，再用封口瓶取样。",
+      "options": [
+        "surface_sample_take"
+      ]
+    },
+    "surface_exit": {
+      "name": "检修梯与回程标记",
+      "role": "地表 / 撤离",
+      "facility": "surface",
+      "body": "检修梯通向来时的地下通路。已找到的东西可以带回，没完成的委托也可以稍后再来。",
+      "options": [
+        "surface_back_commune",
+        "surface_back_sech"
+      ]
+    },
+    "surface_supply": {
+      "name": "背风装卸台的补给袋",
+      "role": "地表 / 补给",
+      "facility": "surface",
+      "body": "派工时留下的密封补给袋放在货箱上。取用的数量会记在委托里，这批物资只补发一次。",
+      "options": [
+        "surface_supply_take"
       ]
     }
   },
@@ -1324,7 +1392,7 @@
     },
     "radio_tune": {
       "text": "慢慢调谐接收机，听清北线广播",
-      "reply": "杂音里传来清晰的值班报号。\n东方-7 值班员：「这里是星城-2 测控站。北线来访者，先报姓名，停在蓝门隔离线外。」\n谢尔盖：「星城还通着。北线检修列车能到他们的外门。」",
+      "reply": "杂音里传来短促的值班报号。\n东方-7 值班员：「这里是星城-2。重复北线气象通告。非约定呼号请勿占用频率。」\n谢尔盖：「是那座地下设施的台。能收到，不代表他们愿意和我们通话。」",
       "once": true,
       "req": {
         "all": [
@@ -1356,7 +1424,7 @@
     },
     "sech_father": {
       "text": "「我在找父亲，星城会有他的记录吗？」",
-      "reply": "「我不认识你父亲，也没看过星城的人员名册，不能替你确认他在不在那里。」\n谢尔盖指向北线。\n「我认识那边的货运员，知道外门的登记办法。带上姓名和照片，请值守核查。他们若肯接内线，才能问到确切的人。」",
+      "reply": "「我不知道星城里有没有你父亲，也没有人员名册。我认识的运货人，最远只到过外侧隔离口。」\n谢尔盖想了想。\n「你可以留下姓名，请他们核查。别把这当成已经有了线索的证明。能不能问到人，要等他们答复。」",
       "once": true,
       "req": {
         "all": [
@@ -1377,7 +1445,7 @@
       }
     },
     "sech_star": {
-      "text": "乘检修列车去星城-2",
+      "text": "乘检修车到北线，前往星城外围",
       "reply": "",
       "once": false,
       "req": {
@@ -1424,7 +1492,7 @@
     },
     "commune_route": {
       "text": "「你听说过东方-7吗？」",
-      "reply": "「这个呼号我知道。星城-2 的测控值班台用它报气象，联络室也能接到。」\n叶莲娜取出一张联络表。\n「星城在地下，是战前留下的大型科研设施。我们只交换过气象和线路状况。你想找什么人，要把姓名报给他们，请值守查名册。我不能凭一个呼号替你保证。」",
+      "reply": "「东方-7 这个呼号，我们偶尔收得到。北线的人说，它来自叫星城的地下科研设施。那里还有人，能发气象通告，其他情况我们所知很少。」\n叶莲娜翻开联络簿。\n「公社送过几次气象和线路情况，答复很少，也没有固定往来。里面住着谁，我们不知道。你若要问一个姓名，可以试着留信，但我不能保证他们会查，更不能保证会让你入内。」",
       "once": true,
       "flags": {
         "commune_radio_known": true,
@@ -1526,7 +1594,7 @@
     },
     "commune_frequency": {
       "text": "查北线电台的联络窗口",
-      "reply": "北线簿注明：「东方-7 / 星城-2 测控值班，晚间整点监听。访客须先在外门登记。」\n旁边夹着一份零件回执，没有人员名册。你抄下呼号和来访登记的时段。",
+      "reply": "北线簿记着：「东方-7，偶尔在晚间整点出现。曾收到气象通告。」\n后面几次联络都标着“未获回复”。一张旧便条写明，询问信可留在外围交接点，禁止越过隔离线。这里没有人员名册，也没有访客通行时段。",
       "once": true,
       "req": {
         "all": [
@@ -1563,7 +1631,7 @@
       "travel": "coal_road"
     },
     "commune_star": {
-      "text": "按联络窗口去星城-2",
+      "text": "带询问信前往星城外围",
       "reply": "",
       "once": false,
       "req": {
@@ -2749,7 +2817,7 @@
     },
     "sech_visitors": {
       "text": "「你知道星城接不接受外人来访吗？」",
-      "reply": "「技术换班和送货的人能去外侧登记。报姓名、说明来意，门内的人核对以后才放行。我没进过深层。」",
+      "reply": "「通常不接待。运货人也只把东西留在指定交接点，等人走开，里面才来取。」\n「我没进去过。有人留过询问信，收到过一句回话，也有人等了几个月。介绍信只能说明你的来历，不能替你拿到通行许可。」",
       "flags": {},
       "once": true,
       "req": {
@@ -3324,7 +3392,7 @@
     },
     "commune_listen": {
       "text": "戴上耳机，等值班广播。",
-      "reply": "电流声后，一个疲倦的男声按顺序报出时间、气温和北线风雪。\n东方-7 值班员：「这里是星城-2。北线来访者先报姓名，停在蓝门隔离线外，等候值守答复。」\n你记下时刻和频率。信号来自一座仍在运转的地下设施，值得查一查。",
+      "reply": "电流声后，一个疲倦的男声报出北线气温和风雪。\n东方-7 值班员：「这里是星城-2。气象通告结束，恢复静默。」\n你记下时间和频率。广播没有提到如何进入，仍值得继续查证。",
       "once": true,
       "flags": {
         "signal_heard": true,
@@ -3367,7 +3435,7 @@
     },
     "commune_trust": {
       "text": "汇报温室维修与工人征询的结果。",
-      "reply": "叶莲娜核对完回水记录，又逐页看过征询稿。\n「这两件事都能交到你手里。联络组想请你去星城交换净水检测资料，问问那边愿不愿意开放固定回信窗口。」\n她递来盖章的访问信。\n「你还可以在这里住。出发的日子由你选，家属房的铺位先留着。」",
+      "reply": "叶莲娜核对完回水记录，又逐页看过征询稿。\n「我愿意替你写封信，说明你在这里做过的事，请星城的人考虑回复你的问题。但这封信不能保证入内。」\n她把信封交给你。\n「那边平时很少回话。你可以先在这里安顿，什么时候去外围，由你决定。客铺留着。」",
       "once": true,
       "flags": {
         "commune_trusted": true,
@@ -3532,7 +3600,7 @@
     },
     "sech_trust": {
       "text": "汇报水箱、电台和北线列车的检查结果。",
-      "reply": "长老等彼得签完检查栏，将一枚旧铜牌放进你掌心。\n「这是谢契的联络牌。水箱、电台和北线列车都查过了，大家出门也放心些。你想去星城，彼得愿意送你到北线隔离口。出发前我们会先报你的姓名，等那边确认。」\n他把写着你铺位编号的登记卡夹回轮值簿。\n「你的铺位留着。回来之前，在同一个频率叫我们一声就行。」",
+      "reply": "长老核对了水箱、电台和列车的检查栏，把联络牌交给你。\n「彼得能送你到北线旧岔口，再往前就是星城的隔离区。我们不能保证那边接待，你只能在外侧留信、等答复。别越过警戒线。」\n他把你的铺位登记卡放回轮值簿。\n「想回来随时回来。路上的标记认不清，就原路退，别冒险。」",
       "once": true,
       "flags": {
         "sech_trusted": true,
@@ -4505,6 +4573,241 @@
         ]
       },
       "category": "调查"
+    },
+    "star_perimeter_name": {
+      "text": "报上姓名，留下寻找父亲的询问信。",
+      "reply": "你把父亲的姓名、战前的工作和最后一次联系的时间读了两遍。值班员逐项复述，但没有确认里面是否有这个人。\n东方-7 值班员：「问题已记录。暂时没有核查结果，也没有入内许可。若有答复，会按你留下的呼号联络。请勿在隔离区久留。」",
+      "flags": {
+        "star_inquiry_filed": true
+      },
+      "once": true,
+      "req": {
+        "floor": [
+          "starcity"
+        ]
+      }
+    },
+    "star_perimeter_rules": {
+      "text": "「为什么不让外面的人进去？」",
+      "reply": "东方-7 值班员：「设施封闭管理。外侧只接收紧急报告与询问信息，我们不能为临时来访者开门。你可以在等候棚避风，随后原路返回。」\n声音停了一会儿，线路恢复安静。",
+      "once": true,
+      "req": {
+        "floor": [
+          "starcity"
+        ]
+      }
+    },
+    "star_return_commune": {
+      "text": "返回莫斯科公社，继续调查。",
+      "reply": "",
+      "once": false,
+      "travel": "star_back_commune",
+      "req": {
+        "floor": [
+          "starcity"
+        ]
+      }
+    },
+    "star_return_sech": {
+      "text": "返回谢契，继续调查。",
+      "reply": "",
+      "once": false,
+      "travel": "star_back_sech",
+      "req": {
+        "floor": [
+          "starcity"
+        ]
+      }
+    },
+    "surface_accept": {
+      "text": "「旧泵站的兽群和污染调查，我想接下来。」",
+      "reply": "「先清理靠近运货路的兽群，再按旧记录排干下池，取一瓶封好的样本。骨片和额外样本可以卖给收购人，委托用的那份会单独封好。遇到危险可以撤回，别为了交差丢命。」",
+      "flags": {
+        "surface_job": true
+      },
+      "once": true,
+      "req": {
+        "floor": [
+          "commune",
+          "sech"
+        ],
+        "all": [
+          "surface_offer_known"
+        ]
+      }
+    },
+    "surface_depart": {
+      "text": "准备好装备，前往旧地表泵站。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "surface_job"
+        ],
+        "items": [
+          "mask",
+          "filter",
+          "revolver"
+        ],
+        "floor": [
+          "commune",
+          "sech"
+        ]
+      },
+      "travel": "surface_outbound"
+    },
+    "surface_turnin": {
+      "text": "交付封存的沉淀池样本与观察记录。",
+      "reply": "「封口完好，记录也清楚。我们会先查这些沉积物有没有继续流进地下，不会让孩子们去碰。」\n对方在派工簿上签字，把约定的报酬交给你。多余的骨片和样本仍归你，可以到收购处出售。",
+      "once": true,
+      "req": {
+        "all": [
+          "surface_job",
+          "surface_sample_sealed"
+        ],
+        "floor": [
+          "commune",
+          "sech"
+        ],
+        "items": [
+          "pool_sample"
+        ]
+      },
+      "flags": {
+        "surface_done": true
+      },
+      "reward": {
+        "military": 10
+      },
+      "goods": {
+        "bandage": 2
+      },
+      "take": [
+        "pool_sample"
+      ]
+    },
+    "surface_trade": {
+      "text": "查看物资与怪物资源收购价格。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "commune",
+          "sech"
+        ]
+      },
+      "shop": true
+    },
+    "surface_notes": {
+      "text": "核对旧排水记录与采样位置。",
+      "reply": "图纸要求先开西侧泄水阀，等水位降低后再进入北池。红字提醒：沉淀物不能徒手触碰，取样后立即封瓶。",
+      "once": true,
+      "flags": {
+        "surface_notes": true
+      },
+      "req": {
+        "floor": [
+          "surface"
+        ]
+      }
+    },
+    "surface_drain": {
+      "text": "按图纸转动阀轮，排干下池通路。",
+      "reply": "阀轮在你手里转过半圈，冻住的污水从旁边的沟槽缓慢流下。下池露出通路，池底传来爪子刮过水泥的声音。",
+      "once": true,
+      "req": {
+        "all": [
+          "surface_notes",
+          "battle_surface_yard"
+        ],
+        "floor": [
+          "surface"
+        ]
+      },
+      "flags": {
+        "surface_drain_open": true
+      }
+    },
+    "surface_sample_take": {
+      "text": "戴好手套，封存一份委托样本。",
+      "reply": "你从沉积层边缘取样，封紧瓶口，另外记下池号、水位和附近兽群的痕迹。委托样本单独装好，不会作为收购物出售。",
+      "once": true,
+      "req": {
+        "all": [
+          "surface_drain_open",
+          "battle_surface_pool"
+        ],
+        "floor": [
+          "surface"
+        ]
+      },
+      "flags": {
+        "surface_sample_sealed": true
+      },
+      "give": [
+        "pool_sample"
+      ]
+    },
+    "surface_supply_take": {
+      "text": "取出首次派工的弹药与包扎材料。",
+      "reply": "你在补给单上划去领取栏，收起 24 发土制弹与两卷绷带。之后再来，需要自己准备补给。",
+      "once": true,
+      "flags": {
+        "surface_supply_taken": true
+      },
+      "reward": {
+        "handmade": 24
+      },
+      "goods": {
+        "bandage": 2
+      },
+      "req": {
+        "floor": [
+          "surface"
+        ]
+      }
+    },
+    "surface_back_commune": {
+      "text": "沿检修梯返回公社。",
+      "reply": "",
+      "once": false,
+      "travel": "surface_back_commune",
+      "req": {
+        "all": [
+          "surface_from_commune"
+        ],
+        "floor": [
+          "surface"
+        ]
+      }
+    },
+    "surface_back_sech": {
+      "text": "沿检修梯返回谢契。",
+      "reply": "",
+      "once": false,
+      "travel": "surface_back_sech",
+      "req": {
+        "all": [
+          "surface_from_sech"
+        ],
+        "floor": [
+          "surface"
+        ]
+      }
+    },
+    "surface_brief": {
+      "text": "「最近有什么需要去地表做的事？」",
+      "reply": "「旧泵站的兽群越来越靠近运货路。我们想请人清理院落，再按排水记录打开下池，带一份封好的沉淀物回来检查。外面的骨片和额外样本归你，可以卖到收购处。」\n「这活有危险。我们能提供一把旧左轮，首次派工的弹药和包扎材料放在检修梯旁。做完付 10 发制式弹和两卷绷带。你考虑好再接，途中也可以撤回。」",
+      "once": true,
+      "flags": {
+        "surface_offer_known": true
+      },
+      "req": {
+        "floor": [
+          "commune",
+          "sech"
+        ]
+      }
     }
   },
   "panels": {
@@ -4689,6 +4992,30 @@
       "art": "commune_approach",
       "body": "滤芯交到维修班后，你在 D-6 睡了一个完整的夜晚。第二天，医护交换组的人来领净水样本，中尉将有限联络页交到你手上。\n这次你的姓名写在出入登记上。老爹仍不放心，站在气闸边替你将背带理顺，直到卫兵提醒要关门。\n你跟着带路人走过两段封闭支线，到公社的外侧警戒门前停下。那边的人看过联络页，仍要问明姓名和来意。",
       "next": "delegation_checkpoint"
+    },
+    "star_back_commune": {
+      "art": "trolley",
+      "title": "暂时没有回信",
+      "body": "你离开隔离线，沿旧标记返回。询问信已经留下，门后的回答还没有到来。你仍可以回到住处，处理身边人的委托，为下一次出行做准备。",
+      "end": "map:commune"
+    },
+    "star_back_sech": {
+      "art": "trolley",
+      "title": "暂时没有回信",
+      "body": "你离开隔离线，沿旧标记返回。询问信已经留下，门后的回答还没有到来。你仍可以回到住处，处理身边人的委托，为下一次出行做准备。",
+      "end": "map:sech"
+    },
+    "surface_back_commune": {
+      "art": "trolley",
+      "title": "带着见到的东西回来",
+      "body": "你在检修梯下重新系紧背包，沿来时的路返回。封好的样本、骨片和记录都放在不同的袋里。回到有人守着的灯光下，你才松开一直握着枪带的手。",
+      "end": "map:commune"
+    },
+    "surface_back_sech": {
+      "art": "trolley",
+      "title": "带着见到的东西回来",
+      "body": "你在检修梯下重新系紧背包，沿来时的路返回。封好的样本、骨片和记录都放在不同的袋里。回到有人守着的灯光下，你才松开一直握着枪带的手。",
+      "end": "map:sech"
     }
   },
   "endings": {
@@ -6125,6 +6452,126 @@
         "memory_return",
         "memory_finish"
       ]
+    },
+    {
+      "id": "surface_survey",
+      "name": "地表泵站的来水",
+      "kind": "支线",
+      "facility": "surface",
+      "accepted": "surface_job",
+      "done": "surface_done",
+      "background": "运货路附近出现兽群。聚落请你清理危险，调查旧沉淀池的污染，封存一份样本。",
+      "actions": [
+        "surface_accept",
+        "surface_turnin"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "target": "surface_board",
+          "place": "surface",
+          "step": "准备面具与武器，从公社守备或谢契军需处出发，到控制箱核对排水记录。"
+        },
+        {
+          "when": {
+            "floor": [
+              "surface"
+            ]
+          },
+          "target": "surface_board",
+          "place": "surface",
+          "step": "查看西南侧控制箱旁的排水记录。兽群在运货路一带活动，可以先清理危险。"
+        },
+        {
+          "when": {
+            "all": [
+              "surface_notes"
+            ]
+          },
+          "target": "surface_valve",
+          "place": "surface",
+          "step": "清理院内兽群，然后打开西侧泄水阀。"
+        },
+        {
+          "when": {
+            "all": [
+              "surface_drain_open"
+            ]
+          },
+          "target": "surface_sample",
+          "place": "surface",
+          "step": "清理下池的威胁，封存一份沉淀物样本。"
+        },
+        {
+          "when": {
+            "all": [
+              "surface_sample_sealed"
+            ]
+          },
+          "target": "commune_guard",
+          "place": "commune",
+          "step": "带样本返回派工人处交付；谢契军需处也可代收。"
+        }
+      ]
     }
+  ],
+  "unreleased_star_actions": [
+    "archive_labels_accept",
+    "archive_labels_compare",
+    "archive_labels_inspect",
+    "archive_labels_return",
+    "ending_bridge",
+    "ending_ocean",
+    "ending_records",
+    "ending_signal",
+    "ending_starcity",
+    "ending_weather",
+    "father_absence",
+    "father_anger",
+    "father_meet",
+    "father_photo",
+    "father_quiet",
+    "father_semyon",
+    "father_truth",
+    "father_work",
+    "finish_anna",
+    "finish_caravan",
+    "finish_commune",
+    "finish_home",
+    "finish_rail",
+    "finish_sech",
+    "finish_tea",
+    "finish_workers",
+    "letter_accept",
+    "letter_note",
+    "letter_plain",
+    "letter_read",
+    "star_archive",
+    "star_bypass",
+    "star_coordinates",
+    "star_early",
+    "star_handover_accept",
+    "star_handover_finish",
+    "star_instrument_read",
+    "star_isolate",
+    "star_listen",
+    "star_manual",
+    "star_memorial",
+    "star_meter",
+    "star_name",
+    "star_reply",
+    "star_vacuum_read",
+    "tape_accept",
+    "tape_calibrate",
+    "tape_copy",
+    "tape_read",
+    "tape_return",
+    "tape_wrong",
+    "tech_scale",
+    "weather_accept",
+    "weather_clock",
+    "weather_power",
+    "weather_return",
+    "weather_test"
   ]
 }

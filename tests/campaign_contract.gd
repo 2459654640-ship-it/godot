@@ -72,16 +72,11 @@ func run():
 	action(alternate,"radio_manual");action(alternate,"radio_battery")
 	check(alternate.f("radio_power") and not alternate.economy.goods.has("battery"),"battery is consumed by the alternate radio repair")
 	alternate.act("c_radio_battery");check(not alternate.last_action_valid,"spent battery cannot power the receiver twice")
-	# Father line and all four Star City conclusions.
-	s=Story.new();s.context.floor="starcity"
-	s.act("c_father_meet");check(not s.last_action_valid,"father reveal is gated by actual access")
-	for key in ["star_name","star_manual","star_isolate","star_meter","star_bypass","star_archive","father_meet","father_semyon","father_truth","star_listen"]:action(s,key);s=restore(s)
-	for key in ["father_absence","star_handover_accept","weather_clock","weather_power","weather_test","weather_return","star_handover_finish"]:action(s,key)
-	for pair in [["ending_starcity","starcity"],["ending_bridge","bridge"],["star_reply","signal"],["star_coordinates","ocean"]]:
-		var t=restore(s);action(t,pair[0])
-		if pair[1]=="signal":action(t,"ending_signal")
-		if pair[1]=="ocean":action(t,"ending_ocean")
-		check(t.ending and t.flags.campaign_ending==pair[1],"reachable Star City ending: "+pair[1])
+	# The current chapter stops outside; legacy admission flags confer no access.
+	s=Story.new();s.context.floor="starcity";s.flags.star_access=true
+	for key in Campaign.data().unreleased_star_actions:
+		s.act("c_"+key);check(not s.last_action_valid,"interior action remains unavailable: "+key)
+	action(s,"star_perimeter_name");check(s.f("star_inquiry_filed") and not s.ending,"inquiry leaves the perimeter playable")
 	# Every authored travel target resolves, including revisits.
 	for seq in Campaign.data().panels:
 		var panel:Dictionary=Campaign.data().panels[seq]
@@ -92,12 +87,12 @@ func run():
 		w=load("res://scenes/"+id+".tscn").instantiate();root.add_child(w);current_scene=w;await frames(6)
 		check(w.initialized and w.floor_id==id,"facility starts: "+id)
 		if id=="starcity":
-			var gate_position=w.campaign_gate.position
+			var gate_position=w.get_node("StarPerimeterBarrier").position
 			w.player.camera=null;w.player.use_override=true;w.player.position=Vector3(gate_position.x,.04,gate_position.z+1.2);w.player.motion_override=Vector2.UP
 			await frames(60);w.player.motion_override=Vector2.ZERO
 			check(w.player.position.z>gate_position.z+.25,"blue inner door physically blocks entry before isolation")
 			w.player.use_override=false
-		w.story.flags.intro_done=true;w.story.flags.battle_pump=true;w.story.flags.battle_workshop=true;w.story.flags.battle_warehouse=true;w.story.flags.star_access=true;w.story.flags.plant_power=true;w.on_story_changed();await frames(80)
+		w.story.flags.intro_done=true;w.story.flags.battle_pump=true;w.story.flags.battle_workshop=true;w.story.flags.battle_warehouse=true;w.story.flags.star_access=true;w.story.flags.plant_power=true;w.story.flags.surface_drain_open=true;w.on_story_changed();await frames(80)
 		w.navigation=preload("res://scripts/route_grid.gd").new();w.navigation.setup(w)
 		var seen=reachable();check(seen.size()>1000,"substantial connected floor: "+id)
 		for target_id in w.targets:

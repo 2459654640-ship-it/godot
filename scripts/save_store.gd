@@ -1,7 +1,7 @@
 extends RefCounted
 ## Versioned local saves. A failed write never replaces the previous readable copy.
 const QUICK="user://d6_save.json"
-const FLOORS=["life","labor","waterworks","commune","sech","coal","starcity"]
+const FLOORS=["life","labor","waterworks","commune","sech","coal","starcity","surface"]
 static func paths()->Array:
 	return [QUICK,"user://saves/manual_1.json","user://saves/manual_2.json","user://saves/manual_3.json","user://saves/auto_0.json","user://saves/auto_1.json","user://saves/auto_2.json"]
 static func valid(d:Variant)->bool:
@@ -76,6 +76,6 @@ static func auto_path()->String:
 	return oldest
 static func summary(d:Dictionary)->String:
 	if d.is_empty():return "空存档位"
-	var names={"life":"D-6 · 生活层","labor":"D-6 · 作业层","waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","coal":"煤运休养区","starcity":"星城-2"}
+	var names={"life":"D-6 · 生活层","labor":"D-6 · 作业层","waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","coal":"煤运休养区","starcity":"星城外围","surface":"地表旧泵站"}
 	var date=Time.get_datetime_string_from_unix_time(int(d.get("saved_at",0))).replace("T"," ") if d.has("saved_at") else "旧版手记"
 	return names.get(d.get("floor","life"),"D-6")+"  ·  "+date+" UTC"+("  ·  已恢复备份" if d.get("recovered_backup",false) else "")

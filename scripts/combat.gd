@@ -3,6 +3,7 @@ extends Node
 const Enemy=preload("res://scripts/combat_enemy.gd")
 var w
 var enabled=false
+var encounters:Dictionary={}
 var active=false
 var defeated=false
 var encounter=""
@@ -29,17 +30,18 @@ const ENCOUNTERS={
  "workshop":{"rect":Rect2(-6,-10,11,10),"need":"plant_bled","skip":"plant_fuse","name":"修配间的巢穴","spawns":[Vector3(-3,.04,-8),Vector3(3,.04,-8),Vector3(2,.04,-2)]},
  "warehouse":{"rect":Rect2(5,-14,14,14),"need":"plant_power","skip":"water_secured","name":"封存仓库","spawns":[Vector3(8,.04,-5),Vector3(15,.04,-5),Vector3(12,.04,-11),Vector3(17,.04,-2)]}}
 func setup(world):
- w=world;enabled=w.floor_id=="waterworks"
+ w=world;enabled=w.floor_id in ["waterworks","surface"];encounters=preload("res://scripts/surface_site.gd").ENCOUNTERS if w.floor_id=="surface" else ENCOUNTERS
  if not enabled:return
  veteran=w.npcs.get("plant_veteran")
  if is_instance_valid(veteran):veteran.combat_controlled=true
- if not w.story.f("weapon_issued"):
+ if w.floor_id=="waterworks" and not w.story.f("weapon_issued"):
   w.story.flags.weapon_issued=true;w.story.give("revolver");w.story.economy.handmade+=18
   w.story.economy.goods.bandage=int(w.story.economy.goods.get("bandage",0))+2
   w.story.economy.goods.antirad=int(w.story.economy.goods.get("antirad",0))+1
   w.hud.toast("老兵递来左轮、18 发土制弹与药品。左轮已放入武器栏：按 1 拔枪 / 收枪，I 可更换装备。",10)
  clip=int(w.story.flags.get("weapon_clip",6));veteran_health=int(w.story.flags.get("veteran_health",100))
  label=Label.new();label.position=Vector2(420,855);label.size=Vector2(800,35);label.add_theme_font_size_override("font_size",19);label.add_theme_color_override("font_color",Color("dec99d"));w.hud.add_child(label)
+ var backing=StyleBoxFlat.new();backing.bg_color=Color(.025,.045,.04,.94);backing.border_color=Color("776b4f");backing.set_border_width_all(1);backing.set_corner_radius_all(3);backing.content_margin_left=10;backing.content_margin_right=10;backing.content_margin_top=5;backing.content_margin_bottom=5;label.add_theme_stylebox_override("normal",backing)
  reticle=Control.new();reticle.mouse_filter=Control.MOUSE_FILTER_IGNORE;w.hud.add_child(reticle)
  for offset in [Vector2(-9,0),Vector2(4,0),Vector2(0,-9),Vector2(0,4)]:
   var line=ColorRect.new();line.color=Color("dbc7a0");line.position=offset;line.size=Vector2(5,1) if offset.y==0 else Vector2(1,5);line.mouse_filter=Control.MOUSE_FILTER_IGNORE;reticle.add_child(line)
@@ -64,9 +66,9 @@ func _physics_process(delta):
  if active:
   if Input.is_action_pressed("shoot") and cooldown<=0 and reload_time<=0:shoot()
  else:
-  for id in ENCOUNTERS:
-   var e:Dictionary=ENCOUNTERS[id]
-   if not w.story.f("water_secured") and not w.story.f("battle_"+id) and not w.story.f(e.skip) and w.story.f(e.need) and e.rect.has_point(Vector2(w.player.position.x,w.player.position.z)):begin(id);break
+  for id in encounters:
+   var e:Dictionary=encounters[id]
+   if (w.floor_id!="waterworks" or not w.story.f("water_secured")) and not w.story.f("battle_"+id) and not w.story.f(e.skip) and w.story.f(e.need) and e.rect.has_point(Vector2(w.player.position.x,w.player.position.z)):begin(id);break
  if reload_time>0:
   reload_time=maxf(0,reload_time-delta)
   if reload_time<=0:
@@ -77,12 +79,12 @@ func _physics_process(delta):
   rescue=rescue+delta if near and Input.is_action_pressed("interact") else 0
   if rescue>=2:veteran_health=45;veteran_down=false;rescue=0;w.hud.toast("老兵重新站起，握住了步枪。",4);sync()
  var radiation=" · 辐射 %d"%w.story.economy.radiation if w.story.economy.radiation>0 else ""
- label.text=("武器栏空置 · I 装备武器" if w.story.equipped_weapon()=="" else ("装填中… %.1f"%reload_time if reload_time>0 else (("左轮 %d / 6 · 土制弹 %d"%[clip,w.story.economy.handmade])+ (" · 1 收枪" if w.story.weapon_drawn() else " · 1 拔枪"))))+"  /  老兵 "+("倒地：靠近并按住 E 2 秒" if veteran_health<=0 else "%d"%veteran_health)+radiation
+ label.text=("武器栏空置 · I 装备武器" if w.story.equipped_weapon()=="" else ("装填中… %.1f"%reload_time if reload_time>0 else (("左轮 %d / 6 · 土制弹 %d"%[clip,w.story.economy.handmade])+ (" · 1 收枪" if w.story.weapon_drawn() else " · 1 拔枪"))))+("  /  老兵 "+("倒地：靠近并按住 E 2 秒" if veteran_health<=0 else "%d"%veteran_health) if is_instance_valid(veteran) else "")+radiation
  if rescue>0:label.text+="  救援 %d%%"%int(rescue*50)
- if Rect2(-19,-14,7,7).has_point(Vector2(w.player.position.x,w.player.position.z)) and not w.story.f("radiation_warned"):
+ if w.floor_id=="waterworks" and Rect2(-19,-14,7,7).has_point(Vector2(w.player.position.x,w.player.position.z)) and not w.story.f("radiation_warned"):
   w.story.flags.radiation_warned=true;w.hud.toast("旧沉积物带有辐射，尽量绕开西北角的污泥积水。抗辐射药可在背包使用。",7)
  # Exposure only while moving near contaminated sediment; never while reading.
- if Rect2(-18,-13,5,5).has_point(Vector2(w.player.position.x,w.player.position.z)) and Vector2(w.player.velocity.x,w.player.velocity.z).length()>.2:
+ if w.floor_id=="waterworks" and Rect2(-18,-13,5,5).has_point(Vector2(w.player.position.x,w.player.position.z)) and Vector2(w.player.velocity.x,w.player.velocity.z).length()>.2:
   var exposure=float(w.story.flags.get("radiation_clock",0))+delta
   if exposure>=5:
    exposure-=5;w.story.economy.radiation=mini(60,w.story.economy.radiation+2)
@@ -94,13 +96,13 @@ func begin(id:String):
  if active or w.story.f("battle_"+id):return
  encounter=id
  # Visible field ammunition left by the squad prevents resource softlocks.
- var missing=maxi(0,ENCOUNTERS[id].spawns.size()*4-int(w.story.economy.handmade)-clip)
- if missing>0:w.story.economy.handmade+=missing;w.hud.toast("从小队随身弹袋补入 %d 发土制弹。"%missing,5)
+ var missing=maxi(0,encounters[id].spawns.size()*4-int(w.story.economy.handmade)-clip)
+ if missing>0 and w.floor_id=="waterworks":w.story.economy.handmade+=missing;w.hud.toast("从小队随身弹袋补入 %d 发土制弹。"%missing,5)
  sync();checkpoint=w.save_snapshot().duplicate(true);w.autosave()
  active=true
- for p in ENCOUNTERS[id].spawns:
-  var enemy=Enemy.new();w.add_child(enemy);enemy.setup(self,w.clear_arrival(p));enemies.append(enemy)
- w.hud.toast(ENCOUNTERS[id].name+" · "+("1 拔枪 · " if not w.story.weapon_drawn() else "")+"左键射击 / R 换弹；先清理威胁，再操作设备。",7)
+ for p in encounters[id].spawns:
+  var enemy=Enemy.new();w.add_child(enemy);enemy.setup(self,w.clear_arrival(p));enemy.set_meta("loot_key",id+"_"+str(enemies.size()));enemy.set_meta("loot_index",enemies.size());enemies.append(enemy)
+ w.hud.toast(encounters[id].name+" · "+("1 拔枪 · " if not w.story.weapon_drawn() else "")+"左键射击 / R 换弹；先清理威胁，再操作设备。",7)
 func reload_weapon():
  if reload_time>0 or clip>=6:return
  if int(w.story.economy.handmade)<=0:w.hud.toast("土制弹已用完。可救起老兵，或从暂停页重试本场战斗。",5);return
@@ -171,6 +173,7 @@ func bite(body,amount:int):
   if w.story.economy.health<=0:
    defeated=true;w.player.blocked=true;w.hud.show_combat_defeat()
 func enemy_fell(enemy):
+ if w.floor_id=="surface":preload("res://scripts/surface_site.gd").drop(w,enemy)
  enemies.erase(enemy)
  if enemies.is_empty():
   active=false;w.story.flags["battle_"+encounter]=true;sync();w.autosave()

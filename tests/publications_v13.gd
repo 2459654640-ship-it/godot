@@ -58,6 +58,8 @@ func run():
 		for actor in w.npcs.values():actor.set_physics_process(false)
 		if is_instance_valid(w.combat):w.combat.set_physics_process(false)
 		for book in entries:
+			if floor_id=="starcity":
+				check(not w.targets.has(book.id),"closed interior exposes no archived pickup: "+book.id);continue
 			if book.source.kind!="pickup" or book.source.floor!=floor_id:continue
 			locations+=1
 			check(w.targets.has(book.id) and w.get_node_or_null("Publication_"+book.id)!=null,"publication has physical copy and interaction on "+floor_id)
@@ -88,5 +90,5 @@ func run():
 			w.hud.terminal_game.score=1234;w.hud.terminal_game.save_record();w.hud.close()
 			check(w.story.flags.blocks_best==1234,"terminal record lives in normal save state")
 		w.queue_free();await frames()
-	check(locations==12,"all twelve exploration copies exist across actual maps")
+	check(locations==entries.filter(func(b):return b.source.kind=="pickup" and b.source.floor!="starcity").size(),"every currently open exploration copy exists; archived interior copies remain unavailable")
 	print("PUBLICATIONS_V13_RESULT checks=",checks," failures=",failures);quit(0 if failures==0 else 1)

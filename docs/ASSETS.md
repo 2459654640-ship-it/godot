@@ -237,14 +237,19 @@
 - [cover_16](../assets/publications/cover_16.png)
 - [cover_17](../assets/publications/cover_17.png)
 
-## v18 当前人物素材
+## v19 人物与地表素材
 
-- 伊万四套图集均为八个独立方向。普通／面具为每方向三姿态；持枪／面具持枪为每方向七姿态，包含移动换弹。全部共用同一套腿部动作和固定头部。v18.2 为五个问题方向补绘另一侧迈步腿部，使用 `opposite-strides.json` 指定独立修正原图，保留原有上半身。打包工具为 `tools/pack_motion_v18.py`；原始图集留在独立资料库的 `updates/v18/art-source`，五个迈步修正源位于 `updates/v18.2/art-source`。
-- [科研地胶](../assets/visual/star_linoleum.png)
-- [公共水磨石](../assets/visual/star_terrazzo.png)
-- [实验瓷砖](../assets/visual/star_lab_tile.png)
-- [配电防滑胶面](../assets/visual/star_rubber.png)
-- [设施搪瓷](../assets/visual/star_enamel.png)
-- [科研墙面](../assets/visual/star_wall.png)
-- [仪器合金](../assets/visual/star_alloy.png)
-- [轨道与测控示意图](../assets/visual/star_telemetry.png)
+伊万四套图集使用八个独立方向。普通／面具每方向三姿态；持枪／面具持枪每方向七行，包含移动换弹，射击行复用持枪站姿并配合短促后坐。所有最终帧均取自完整 AI 人物，不拼接身体区域。打包工具为 `tools/pack_motion_v19.py`；参考 v3 提交 `057fff3`，原始生成图、比例基准、逐方向复核图与打包记录保存在独立资料库 `updates/v19`。
+
+议事厅三位居民使用同一张分格原图中的三个完整人物，各自有座位位置、碰撞、接触阴影和独立待机材质。内区暂未开放的人物与科研素材仍保留供后续使用。
+
+- [地表积雪](../assets/visual/packed_snow.png)
+- [开裂沥青](../assets/visual/cracked_asphalt.png)
+- [残砖墙](../assets/visual/ruined_brick.png)
+- [碎砖杂物](../assets/visual/surface_rubble.png)
+- [变异兽骨片](../assets/visual/item_mutant_bone.png)
+- [变异样本](../assets/visual/item_mutant_sample.png)
+- [土制弹药包](../assets/visual/item_ammo_pouch.png)
+
+- [旧泵站过场](../assets/cinematics/surface_pumpyard.png)
+- [电车站伏击过场](../assets/cinematics/road_ambush.png)

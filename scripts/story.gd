@@ -45,6 +45,7 @@ func resolve_check(key:String,chance:int) -> bool:
 	last_outcome={"kind":"success" if success else "failure","chance":chance,"key":key}
 	return success
 const ITEMS = {
+ "pool_sample":["沉淀池封存样本","地表委托所需的污染样本，已单独封口。交给公社守备或谢契军需处，不能出售。","任务物品"],
  "moro_card":["莫罗的手抄歌页","下工之后第一次排练留下的歌页，页角有你参与的炭笔画。","纪念"],
  "memory_card":["巴拉诺夫的家庭记述","对照交接本、现场见证与家属授权制作的家庭抄本。","私人文件"],
  "revolver":["小队左轮","六发左轮手枪，使用土制弹。放入武器栏后按 1 拔枪 / 收枪，鼠标瞄准、左键射击、R 换弹。水厂战斗可以无损重试。","武器"],
@@ -322,7 +323,7 @@ static func once_topic(key:String)->bool:
 	return Narrative.CHAT.has(key) or key in ["father","vera_heat","semyon_advice","semyon_radio","briefing","igor_talk","armory_check","gate_daily","coal_ask","resident_shift","resident_igor","vera_day","vera_nina","knock_rooms","nina_reckless"]
 
 func serialize() -> Dictionary:
-	return {"version":1,"content_revision":13,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
+	return {"version":1,"content_revision":19,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
 func restore(data: Dictionary):
 	flags=data.get("flags",{}).duplicate(true)
 	preload("res://scripts/publications.gd").normalize(self)
@@ -365,6 +366,10 @@ func restore(data: Dictionary):
 	if int(data.get("content_revision",0))<10:
 		for key in ["grow_talk","veteran_road","plant_brief","plant_people"]:flags.erase("c_done_"+key)
 		read_topics.erase("igor_semyon")
+	if int(data.get("content_revision",0))<19:
+		# These corrected answers carry no material reward. Preserve witnessed
+		# transcripts, inventories, reward locks and all accepted quest progress.
+		for key in ["commune_route","commune_frequency","sech_father","sech_visitors"]:flags.erase("c_done_"+key)
 	if int(data.get("content_revision",0))<11:
 		if has("frequency"):flags.signal_heard=true
 		if f("vitamins_given") and not has("vitamins"):give("vitamins");flags.vitamins_given=false

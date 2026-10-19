@@ -15,8 +15,9 @@
       "walk_left",
       "walk_right"
     ],
-    "packing_revision": 18,
+    "packing_revision": 19,
     "reference_commit": "057fff3",
+    "whole_figure_redraw": true,
     "exposure": [
       [
         1.0,
@@ -80,13 +81,6 @@
         false,
         false
       ]
-    ],
-    "opposite_stride_angles": [
-      1,
-      2,
-      3,
-      5,
-      7
     ]
   },
   "semyon": {
@@ -548,7 +542,7 @@
     "source_angles": 8,
     "poses": 3,
     "cell": [
-      280,
+      400,
       352
     ],
     "baseline": 342,
@@ -558,8 +552,9 @@
       "walk_left",
       "walk_right"
     ],
-    "packing_revision": 18,
+    "packing_revision": 19,
     "reference_commit": "057fff3",
+    "whole_figure_redraw": true,
     "exposure": [
       [
         1.0,
@@ -623,13 +618,6 @@
         false,
         false
       ]
-    ],
-    "opposite_stride_angles": [
-      1,
-      2,
-      3,
-      5,
-      7
     ]
   },
   "commander_masked": {
@@ -845,8 +833,9 @@
       "reload_walk_left",
       "reload_walk_right"
     ],
-    "packing_revision": 18,
+    "packing_revision": 19,
     "reference_commit": "057fff3",
+    "whole_figure_redraw": true,
     "exposure": [
       [
         1.0,
@@ -990,13 +979,6 @@
         false,
         false
       ]
-    ],
-    "opposite_stride_angles": [
-      1,
-      2,
-      3,
-      5,
-      7
     ]
   },
   "veteran_masked_combat": {
@@ -1300,8 +1282,9 @@
       "reload_walk_left",
       "reload_walk_right"
     ],
-    "packing_revision": 18,
+    "packing_revision": 19,
     "reference_commit": "057fff3",
+    "whole_figure_redraw": true,
     "exposure": [
       [
         1.0,
@@ -1445,13 +1428,6 @@
         false,
         false
       ]
-    ],
-    "opposite_stride_angles": [
-      1,
-      2,
-      3,
-      5,
-      7
     ]
   }
 }

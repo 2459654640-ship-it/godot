@@ -5,6 +5,7 @@ static func tint(floor_id:String)->Vector3:
 	match floor_id:
 		"commune":return Vector3(1.01,.91,.77)
 		"waterworks":return Vector3(.89,.91,.89)
+		"surface":return Vector3(.94,.99,1.02)
 		"starcity","coal":return Vector3(.90,.91,.88)
 	return Vector3(.94,.91,.84)
 
@@ -26,4 +27,5 @@ static func sample(world:Node3D,origin:Vector3,lamps:Array,excluded:Array[RID]=[
 		energy+=strength
 		color+=Vector3(lamp.light_color.r,lamp.light_color.g,lamp.light_color.b)*strength
 	var level=clampf(.46+energy*.25,.49,1.02)
+	if world.floor_id=="surface":level=clampf(.79+energy*.08,.81,.95)
 	return tint(world.floor_id)*Vector3.ONE.lerp(color/maxf(.01,energy),.12)*level

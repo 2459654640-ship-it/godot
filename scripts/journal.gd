@@ -46,24 +46,20 @@ static func tasks(s)->Array:
 		var target="semyon" if current_floor in ["life","labor"] else ("commune_receiver" if current_floor=="commune" else "sech_radio")
 		var step="询问见过短波值班记录的人，或在公社联络室、谢契电台继续收听。"
 		if s.f("signal_identified"):
-			target="star_guard" if current_floor=="starcity" else ("commune_leave" if current_floor=="commune" else "sech_leave")
-			step="广播指向星城-2。安排北线通行，抵达外门后请值守核实呼号与人员记录。"
+			target="star_perimeter_call" if current_floor=="starcity" else ("commune_leave" if current_floor=="commune" else "sech_leave")
+			step="广播可能来自星城。先核实北线路况，在外围尝试提交询问信；没有入内许可。"
 		out.append(row("signal_trace","调查东方-7",s.f("signal_source_verified"),current_floor,"你实际听见了东方-7，记下了频率；还要查清电台在哪里。",step,target,"短波联络"))
 	if s.f("sech_joined") or s.f("radio_manual"):
 		out.append(row("radio","东方-7" if s.f("signal_heard") else "修复北线电台",s.f("radio_fixed"),"sech","谢契的电台坏了，居民想恢复与北线的日常联络。","西北调度台有接线图；确认接地后，再去左侧调度车厢南段的电台。" if not s.f("radio_power") else "接收机已通电，按纸上刻度慢慢调谐。","sech_manual" if not s.f("radio_manual") else "sech_radio","旧军列调度" if not s.f("radio_manual") else "电台维修室"))
-	if s.f("star_registered"):
-		var step="蓝门值班室的纸质规程在入口左边的桌上。";var target="star_manual";var area="蓝门值班室"
-		if s.f("star_manual"):step="去西北侧配电隔离室，断外线后看机械表。";target="star_isolator";area="配电隔离室"
-		if s.f("star_zero"):step="无压已经确认，回南侧中间的内门联锁台合旁路。";target="star_bypass";area="内门联锁台"
-		if s.f("star_access"):step="蓝门已经打开，北侧中央的测控室有人在等你。";target="star_father";area="测控室"
-		out.append(row("father","蓝门后的人",s.f("father_met"),"starcity","哨兵接通了内线，让你先确认检修回路。",step,target,area))
+	if s.f("star_registered") or s.f("star_inquiry_filed"):
+		out.append(row("father","蓝门后的人",false,"starcity","星城内区封闭，外界没有人员名册。已提交询问信，尚无核查结果。","在隔离线外等候答复，可以先返回聚落继续调查。","star_perimeter_call","星城外围"))
 	if s.context.get("floor","")=="labor" and s.f("d6_returned") and not s.f("return_reviewed"):
 		out.append(row("return_entry","返站身份审核",s.f("return_reviewed"),"labor","离站方式会影响返站手续，探访函仍需核验。","到集合区的科瓦廖夫面前说明离站经过，核对记录后申请限区通行。","commander","征召集合区"))
 	out.append_array(preload("res://scripts/campaign.gd").side_tasks(s))
 	if s.f("igor_debt_known") or s.f("igor_chore") or s.f("igor_settled"):out.append(row("igor_debt","岗哨的一笔旧账",s.f("igor_settled"),"life","伊戈尔替你隐瞒了侧门的事，要求财物补偿或清理岗灯。","清理压力监测箱旁岗灯后找伊戈尔验看；也可用三发制式弹或非任务物资结清。","igor" if s.f("igor_lamp_clean") else "relay","东侧维修岗"))
 	if s.f("workers_done"):out.append(row("workers_choice","回信的下一班",s.ending,"commune","工人的征询稿已交付，回信窗口需要有人长期维护。","回议事处找叶莲娜，决定留下联络或继续旅程。","commune_leader","人民议事厅"))
 	if s.f("north_done"):out.append(row("train_choice","第一班列车",s.ending,"sech","彼得已复核静态检修。","到东南接送车厢决定巡轨或联络；修复电台后可组织车队。","sech_leave","北线接送车厢"))
-	if s.f("weather_done"):out.append(row("weather_choice","观测网的值守",s.ending,"starcity","北线中继测试完成。","与父亲见面后，到联络值班台决定是否留下维护观测网。","star_exit","联络值班台"))
+	if s.f("weather_done"):out.append(row("weather_choice","观测网的值守",s.ending,"starcity","北线中继测试完成。","旧版观测记录已保留。星城内区暂时封闭，可在外围留信后返回聚落。","star_perimeter_call","外围询问台"))
 	return preload("res://scripts/progression.gd").annotate(s,out)
 static func active(s)->Dictionary:
 	var pending=tasks(s).filter(func(t):return not t.done and not t.failed)
@@ -95,7 +91,7 @@ static func leads(s)->Array:
 		if not s.f("anna_request"):out.append("南侧医务室的年轻女人听见 D-6 的名字时，似乎想问点什么。")
 		if not s.f("commune_joined"):out.append("叶莲娜正在排轮班表，也许知道公社哪里缺人帮忙。")
 	elif floor=="sech" and not s.f("sech_joined"):out.append("长老还在调度台附近，那台没亮灯的电台似乎让他很挂心。")
-	elif floor=="starcity" and not s.f("star_registered"):out.append("蓝门值班室的哨兵一直望着入口。先报个姓名，也许比四处摸索更有用。")
+	elif floor=="starcity" and not s.f("star_inquiry_filed"):out.append("隔离线外的通话柱还有电，也许可以在那里留下一封询问信。内区暂不接待访客。")
 	for q in preload("res://scripts/campaign.gd").data().get("quests",[]):
 		if q.facility==floor and not s.f(q.accepted) and preload("res://scripts/campaign.gd").quest_offered(s,q):
 			if q.id=="father_letters" and not s.f("father_met"):continue
@@ -108,6 +104,6 @@ static func encyclopedia(s)->Array:
 	var floor:String=s.context.get("floor","")
 	if floor=="commune" or s.f("commune_joined"):rows.append(["莫斯科公社","反对中央苏维埃特权的革命组织，依靠工人委员会、地下联络和武装守备维持独立。伤病交换窗口只允许有限的人道探访，并未结束敌对。"])
 	if floor=="sech" or s.f("sech_joined"):rows.append(["废土谢契","带有哥萨克传统的独立共同体，以旧军列检修库为落脚处；议事、阿塔曼与轮值并存，不服从中央，也未加入公社。"])
-	if floor=="starcity" or s.f("star_known"):rows.append(["星城-2","大型地下科研设施，具有测控、材料、低温、供电与生活分区。当前可进入外侧维护与测控区域。不能凭一个呼号确认失联者的身份。"])
+	if floor=="starcity" or s.f("star_known"):rows.append(["星城-2","北线上仍有人值守的地下科研设施。外界只能收到少量广播和零星回信，对内部人员与现状所知很少。内区封闭，询问信与介绍信不代表入内许可。"])
 	if s.f("father_met"):rows.append(["父亲的工作","父亲在星城的测控技术班维护与校准设备，研究计划由各组共同维持。早期封闭管理和断路造成了失联，之后为何一直没有回去，需要与他当面谈清。"])
 	return rows

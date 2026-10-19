@@ -3,6 +3,7 @@ extends Node3D
 ## Full-body group artwork: no fake walking, dialogue target or roaming route.
 var world
 var material:ShaderMaterial
+var member_materials:Array[ShaderMaterial]=[]
 var light_clock=0.0
 var idle_clock=0.0
 var lamps:Array=[]
@@ -18,6 +19,9 @@ func setup(w,id:String,p:Vector3,count:int,height:float=1.73):
  # New crowd drawings use the existing elevated camera; discard only their
  # transparent canvas margins, preserving pixels and authored anatomy.
  var regions:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/groups.json"))
+ if id=="assembly" and regions[id].has("members"):
+  setup_seated(w,texture,regions[id].members,height)
+  return
  var region:Array=regions[id].region
  var width=height*.762*float(region[2])/float(region[3])*.97
  set_meta("footprint_width",width)
@@ -30,6 +34,7 @@ func setup(w,id:String,p:Vector3,count:int,height:float=1.73):
  material.set_shader_parameter("texel_size",Vector2.ONE/Vector2(texture.get_size()))
  material.set_shader_parameter("light_tint",Vector3(.66,.63,.55));mesh.material_override=material
  material.set_shader_parameter("idle_amount",1.0);material.set_shader_parameter("idle_members",float(count))
+ material.set_shader_parameter("crowd_motion",1.0);member_materials.append(material)
  mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;add_child(mesh)
  # Matching physical footprint follows the diagonal group, not a thin sprite.
  var hull=w.kit.box("ResidentGroupHull",Vector3(0,.86,0),Vector3(width,1.72,.65),"dark",true,self)
@@ -43,7 +48,7 @@ func setup(w,id:String,p:Vector3,count:int,height:float=1.73):
  shadow.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;add_child(shadow)
 func _process(delta):
  idle_clock+=delta
- material.set_shader_parameter("idle_time",idle_clock+float(posmod(String(name).hash(),1000))/70.0)
+ for i in member_materials.size():member_materials[i].set_shader_parameter("idle_time",idle_clock+float(posmod(String(name).hash(),1000))/70.0+i*2.37)
  light_clock+=delta
  if light_clock>=.25 or not light_ready:
   light_clock=0
@@ -51,4 +56,26 @@ func _process(delta):
   light_target=PaintedLight.sample(world,global_position,lamps,light_excludes)
   if not light_ready:light_current=light_target;light_ready=true
  light_current=light_current.lerp(light_target,1-exp(-delta*5.0))
- material.set_shader_parameter("light_tint",light_current)
+ for ink in member_materials:ink.set_shader_parameter("light_tint",light_current)
+
+func setup_seated(w,texture:Texture2D,regions:Array,height:float):
+ # Each complete person/chair has its own actual floor position. The row runs
+ # north-south along the west wall, with every seat facing east into the hall.
+ set_meta("seat_forward",Vector3.RIGHT);set_meta("seat_row_axis",Vector3.BACK)
+ set_meta("footprint_width",3.2)
+ for i in regions.size():
+  var region:Array=regions[i]
+  var offset=Vector3(0,0,(i-1)*1.05)
+  var mesh=MeshInstance3D.new();mesh.name="SeatedResident_"+str(i)
+  var quad=QuadMesh.new();quad.size=Vector2(height*.762*region[2]/float(region[3]),height);quad.center_offset=Vector3(0,height/2,0);quad.subdivide_width=28;quad.subdivide_depth=36;mesh.mesh=quad;mesh.position=offset
+  var ink=ShaderMaterial.new();ink.shader=load("res://assets/visual/painted_actor.gdshader")
+  ink.set_shader_parameter("painted_map",texture);ink.set_shader_parameter("frame_origin",Vector2(region[0],region[1])/Vector2(texture.get_size()));ink.set_shader_parameter("frame_size",Vector2(region[2],region[3])/Vector2(texture.get_size()));ink.set_shader_parameter("texel_size",Vector2.ONE/Vector2(texture.get_size()))
+  ink.set_shader_parameter("idle_amount",1.0);ink.set_shader_parameter("idle_members",1.0);ink.set_shader_parameter("crowd_motion",1.0);ink.set_shader_parameter("light_tint",light_current)
+  mesh.material_override=ink;mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;add_child(mesh);member_materials.append(ink)
+  var hull=w.kit.box("SeatedResidentHull_"+str(i),offset+Vector3(0,.66,0),Vector3(.88,1.32,.78),"dark",true,self);hull.visible=false;light_excludes.append(hull.get_child(0).get_rid())
+  var shadow=MeshInstance3D.new();shadow.name="SeatContactShadow_"+str(i)
+  var plane=PlaneMesh.new();plane.size=Vector2(.90,.74);shadow.mesh=plane;shadow.position=offset+Vector3.UP*.052
+  var shade=ShaderMaterial.new();shade.shader=load("res://assets/visual/contact_shadow.gdshader");shadow.material_override=shade;shadow.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;add_child(shadow)
+  var point=global_position+offset
+  w.kit.solids.append({"name":name+str(i),"rect":Rect2(point.x-.44,point.z-.39,.88,.78),"bottom":0.0,"top":1.32})
+ material=member_materials[0]

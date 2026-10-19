@@ -66,7 +66,6 @@ static func commune(w):
  for x in [-7.4,9]:Detail.art(k,"CommuneWorkersPoster",Vector3(x,1.6,-11.80),Vector2(1.15,1.7),"res://assets/visual/commune_poster_0.png")
  for z in [-8.2,-6.2]:
   for x in [-7,-5,-3,4,6,8]:
-   if z==-8.2 and x<0:continue # The seated group includes its own wooden bench.
    chair(k,Vector3(x,0,z),PI)
  rug(k,Vector3(.5,0,-6.8),Vector2(2.3,3.4))
  k.table(Vector3(-7,.2,-10.8),2.8)
@@ -105,7 +104,7 @@ static func commune(w):
  for x in [14,16,18,20]:k.box("DryingPrint",Vector3(x,1.9,-12),Vector3(.65,.85,.025),"paper")
  # Waiting residents face the allocation area, readers stand by archive
  # tables, and the bench audience leaves a passage behind the low stage.
- for spec in [["workers",-5.5,1.0,3],["queue",8.0,3.2,4],["family",14.1,19.7,3],["readers",16.0,-8.4,2],["assembly",-5,-7.5,3],["militia",26.7,.8,2]]:
+ for spec in [["workers",-5.5,1.0,3],["queue",8.0,3.2,4],["family",14.1,19.7,3],["readers",16.0,-8.4,2],["assembly",-10.0,-9.15,3],["militia",26.7,.8,2]]:
   preload("res://scripts/painted_resident_group.gd").new().setup(w,spec[0],Vector3(spec[1],0,spec[2]),spec[3],1.28 if spec[0]=="assembly" else 1.73)
 static func commune_garden(w):
  var k=w.kit

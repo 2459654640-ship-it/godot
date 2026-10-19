@@ -13,7 +13,10 @@ static func doors(id:String)->Array:
 	return out
 static func build(w):
 	var k=w.kit;var id:String=w.floor_id;var plan:Dictionary=LAYOUTS[id]
-	if id in ["commune","waterworks","sech","starcity"]:Detail.materials(k)
+	if id in ["commune","waterworks","sech","starcity","surface"]:Detail.materials(k)
+	if id in ["surface","starcity"]:
+		preload("res://scripts/surface_site.gd").build(w) if id=="surface" else preload("res://scripts/star_perimeter.gd").build(w)
+		k.finish_walls();return
 	var surfaces={"waterworks":["cement","cement_normal","a3b6bb"],"commune":["wall","wall_normal","d8c39b"],"sech":["corrugated","steel_normal","8a9990"],"coal":["oxide","oxide_normal","a19883"],"starcity":["steel","steel_normal","a2c0cb"]}
 	k.wall_surface=surfaces[id][0];k.wall_normal=surfaces[id][1];k.wall_color=Color(surfaces[id][2])
 	k.mats.blue=k.mats.metal.duplicate();k.mats.blue.albedo_color=Color("66858c")
@@ -320,6 +323,8 @@ static func people(w):
 		if e[3]=="npc":w.person(e[0],Vector3(e[1],0,e[2]),"green",true,arts[e[0]])
 	for id in ["commune_moro","commune_guard","commune_baranova"]:
 		if w.npcs.has(id):w.npcs[id].stationary=true
+	if w.floor_id=="surface" and w.story.f("sided_veteran"):
+		w.person("plant_veteran",Vector3(-16.5,0,13),"green",true,"veteran_masked")
 	if w.floor_id=="waterworks":
 		w.person("plant_guide",Vector3(10,0,7.5),"green",true,"commander_masked")
 		w.person("plant_veteran",Vector3(13,0,7),"green",true,"veteran_masked")
@@ -327,11 +332,12 @@ static func targets(w):
 	for e in LAYOUTS[w.floor_id].objects:
 		var d:Dictionary=Campaign.data().interactions[e[0]]
 		w.target(e[0],Vector3(e[1],0,e[2]),d.name,"talk" if e[3]=="npc" else "inspect")
+	if w.floor_id=="surface":preload("res://scripts/surface_site.gd").restore_drops(w)
 	if w.floor_id=="waterworks":
 		w.target("plant_guide",w.npcs.plant_guide.position,"科瓦廖夫","talk")
 		w.target("plant_veteran",w.npcs.plant_veteran.position,"老兵","talk")
 static func residents(w):
-	var layouts={"commune":[["ambient_worker",6,4],["ambient_woman",-4.1,11.1],["ambient_woman",-7,21],["ambient_worker",9,-5.2],["ambient_child",15,9]],"sech":[["ambient_worker",0,3],["ambient_child",-10,14],["ambient_elder",-7,17.6],["ambient_woman",-8,2],["ambient_worker",16,-10]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4]],"starcity":[["ambient_worker",4,-11],["ambient_woman",-18,8]]}
+	var layouts={"commune":[["ambient_worker",6,4],["ambient_woman",-4.1,11.1],["ambient_woman",-7,21],["ambient_worker",9,-5.2],["ambient_child",15,9]],"sech":[["ambient_worker",0,3],["ambient_child",-10,14],["ambient_elder",-7,17.6],["ambient_woman",-8,2],["ambient_worker",16,-10]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4]],"starcity":[]}
 	for index in layouts.get(w.floor_id,[]).size():
 		var entry=layouts[w.floor_id][index]
 		w.person("resident_%s_%d"%[entry[0],index],Vector3(entry[1],0,entry[2]),"cloth",false,entry[0])

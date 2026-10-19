@@ -72,13 +72,9 @@ func run():
   check(s.flags.next_facility=="coal" and s.f("coal_access"),"reviewed route enters a separate mine map: "+route)
  s.context.floor="coal";s.flags.brother_care=true;s.give("vitamins");action(s,"c_vitamin_plan");action(s,"c_vitamin_leave")
  check(s.f("vitamin_care") and not s.has("vitamins"),"vitamin used in professional long-term care, not an instant cure")
- s=Story.new();s.context.floor="starcity";s.flags.star_access=true;s.give("photo");action(s,"c_father_photo")
- check(s.f("father_photo_seen") and s.has("photo"),"reunion recognizes family photo and retains it")
- s.flags.father_met=true;s.flags.father_answered=true
- check(not Campaign.available(s,"ending_bridge"),"father conversation alone is not an immediate ending")
- action(s,"c_father_absence");action(s,"c_star_handover_accept")
- for key in ["weather_clock","weather_power","weather_test","weather_return","star_handover_finish"]:action(s,"c_"+key)
- check(Campaign.available(s,"ending_bridge") and s.f("journey_ready"),"a completed final handover permits an actual ending")
+ s=Story.new();s.context.floor="starcity";s.flags.star_access=true;s.give("photo")
+ for key in ["father_photo","father_absence","star_handover_accept","weather_clock","weather_power","weather_test","weather_return","star_handover_finish","ending_bridge"]:
+  s.act("c_"+key);check(not s.last_action_valid and s.has("photo") and not s.ending,"closed interior retains keepsake and rejects future story: "+key)
  # Safe sale and protected keepsakes.
  s=Story.new();s.give("photo");s.give("wrench");s.economy.goods.bread=2
  var before=s.economy.military;s.Economy.sell(s,"bread");check(s.economy.military==before+2 and s.economy.goods.bread==1,"sell one consumable at a disclosed price")

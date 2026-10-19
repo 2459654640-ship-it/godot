@@ -28,7 +28,7 @@ func contact_boot_center(image:Image) -> float:
 func opposite_stride_tests():
  for id in ["ivan","ivan_masked","ivan_combat","ivan_masked_combat"]:
   var image=Image.load_from_file("res://assets/characters/"+id+".png")
-  var width=400 if id.ends_with("combat") else 280
+  var m:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/atlas.json"));var width:int=m[id].cell[0]
   for poses in ([[3,4],[5,6]] if id.ends_with("combat") else [[1,2]]):
    for angle in [1,2,3,5,7]:
     var a=contact_boot_center(image.get_region(Rect2i(angle*width,poses[0]*352,width,352)))
@@ -61,8 +61,14 @@ func run():
     var samples=[]
     for pose in [seen[0],seen[1],seen[2]]:samples.append(image.get_region(Rect2i(angle*width,pose*352,width,352)))
     check(samples[0].get_data()!=samples[1].get_data() and samples[2].get_data()!=samples[1].get_data(),"contact is distinct actual artwork, not just a pose number")
-    var head=Rect2i(width/2-38,0,76,80)
-    check(samples[0].get_region(head).get_data()==samples[2].get_region(head).get_data(),"head size/identity is identical in the two painted strides")
+    var head_counts=[]
+    for sample in samples:
+     var count=0
+     for yy in range(18,71):
+      for xx in range(width/2-44,width/2+44):
+       if sample.get_pixel(xx,yy).a>.5:count+=1
+     head_counts.append(count)
+    check(float(head_counts.max()-head_counts.min())/maxi(1,head_counts.max())<.18,"standing and both complete strides retain comparable head scale: "+art+mode+str(angle))
    # Actual slow rendering must still show a contact image between strides.
    for delta in [1.0/60,1.0/15,.30]:
     p.cycle=0;var previous=-1;var safe=true;var contacts=0;var center=2 if mode=="reload" else 0
@@ -126,7 +132,9 @@ func run():
     if not String(group.name).begins_with("ResidentGroup_"):continue
     var origin=group.position;var old=group.material.get_shader_parameter("idle_time");group._process(.8)
     check(group.position==origin and group.material.get_shader_parameter("idle_time")!=old,"crowds breathe in place without sliding")
-    check(group.material.get_shader_parameter("idle_members")==float(group.get_meta("resident_count")),"crowd members have independent idle phases")
+    var members=0.0
+    for ink in group.member_materials:members+=float(ink.get_shader_parameter("idle_members"))
+    check(members==float(group.get_meta("resident_count")),"crowd members have independent idle phases")
    check(w.get_node("ResidentGroup_queue").position==Vector3(8,0,3.2),"queue leaves the corner and waits at the allocation counter")
    check(w.get_node("ResidentGroup_readers").position==Vector3(16,0,-8.4),"readers stand by archive furnishings")
   w.queue_free();await frames()

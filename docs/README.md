@@ -17,6 +17,7 @@
 | 莫斯科公社 | [全景](maps/commune.png) |
 | 谢契 | [全景](maps/sech.png) |
 | 煤运设施 | [全景](maps/coal.png) |
-| 星城 | [全景](maps/starcity.png) |
+| 星城外围（内区未开放） | [全景](maps/starcity.png) |
+| 地表旧泵站 | [全景](maps/surface.png) |
 
 地图和人物图均由当前 Godot 工程实际渲染；素材索引指向 assets 中的原文件。

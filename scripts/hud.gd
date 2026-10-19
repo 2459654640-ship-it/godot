@@ -126,7 +126,7 @@ func setup(w):
 	brand.add_theme_font_override("font",mono)
 	line.add_child(brand)
 	line.add_spacer(false)
-	line.add_child(label({"life":"D–6","labor":"D–6","waterworks":"水厂","commune":"公社","sech":"谢契","coal":"D–6","starcity":"星城"}.get(world.floor_id,""),17,amber))
+	line.add_child(label({"life":"D–6","labor":"D–6","waterworks":"水厂","commune":"公社","sech":"谢契","coal":"D–6","starcity":"星城外围","surface":"地表"}.get(world.floor_id,""),17,amber))
 	var title=label("地铁 1982",27,text_color)
 	title.add_theme_font_override("font",serif)
 	b.add_child(title)
@@ -727,15 +727,16 @@ func icon_rect(path:String,size:float=68)->TextureRect:
 	icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	return icon
 
+var shop_actor="supply"
 func show_shop(message:String="",tab:String=""):
 	if tab!="":shop_tab=tab
-	start_modal("第七供应点 · 柳德米拉","生活物资交易 · 任务物品与纪念物不出售",true)
+	start_modal("第七供应点 · 柳德米拉" if shop_actor=="supply" else "聚落军需与资源收购","生活物资交易 · 任务物品与纪念物不出售",true)
 	var s=world.story
 	var tabs=HBoxContainer.new();modal_box.add_child(tabs)
 	tabs.add_child(button("购买",func():show_shop("","buy"),true,true));tabs.add_child(button("出售",func():show_shop("","sell"),true,true))
 	body(("购买物资" if shop_tab=="buy" else "出售背包物资")+"  /  制式弹 %d · 土制弹 %d"%[s.economy.military,s.economy.handmade],22,amber)
 	if message!="":body(message,18,Color("a4bca0"))
-	var list=s.Economy.GOODS.keys() if shop_tab=="buy" else s.items.duplicate()
+	var list=s.Economy.GOODS.keys().filter(func(id):return s.Economy.GOODS[id].get("purchase",true)) if shop_tab=="buy" else s.items.duplicate()
 	if shop_tab=="sell":
 		for id in s.economy.goods:
 			if int(s.economy.goods[id])>0:list.append(id)
@@ -756,11 +757,11 @@ func show_shop(message:String="",tab:String=""):
 			b.add_child(label(title+" × "+str(s.economy.goods.get(id,1)),21,amber))
 			b.add_child(label("收购价 %d 发 / 件"%price if price>0 else "任务所需 / 个人物品 · 不收购",16,muted))
 			row.add_child(button("出售一件" if price>0 else "不能出售",func():confirm_sale(id),price>0,true))
-	modal_box.add_child(button("返回交谈",func():show_dialogue("supply")))
+	modal_box.add_child(button("返回交谈",func():show_dialogue(shop_actor)))
 func confirm_sale(id:String="vodka"):
 	var s=world.story;var price:int=s.Economy.sale_price(s,id)
 	start_modal("出售这件物品？","交易确认",true)
-	body("柳德米拉愿意出 %d 发制式子弹。确认后从背包移除一件。"%price,21)
+	body("商人愿意出 %d 发制式子弹。确认后从背包移除一件。"%price,21)
 	modal_box.add_child(button("确认出售 · %d 发"%price,func():shop_sell(id),price>0))
 	modal_box.add_child(button("先留着",func():show_shop("","sell")))
 
@@ -906,14 +907,14 @@ func shop_buy(id:String):
 	var s=world.story
 	var before=s.economy.ledger.size()
 	var result=s.Economy.buy(s,id)
-	if s.economy.ledger.size()>before:s.Conversation.reply(s,"supply","「买一份"+s.Economy.GOODS[id].name+"。」",result)
+	if s.economy.ledger.size()>before:s.Conversation.reply(s,shop_actor,"「买一份"+s.Economy.GOODS[id].name+"。」",result)
 	show_shop(result)
 
 func shop_sell(id:String="vodka"):
 	var s=world.story
 	var before=s.economy.ledger.size()
 	var result=s.Economy.sell(s,id)
-	if s.economy.ledger.size()>before:s.Conversation.reply(s,"supply","「这件东西，按你说的价收吧。」",result)
+	if s.economy.ledger.size()>before:s.Conversation.reply(s,shop_actor,"「这件东西，按你说的价收吧。」",result)
 	show_shop(result)
 
 func show_saves(saving:bool):
@@ -937,7 +938,7 @@ func confirm_slot(path:String,saving:bool,data:Dictionary):
 	modal_box.add_child(button("返回列表",func():show_saves(saving)))
 
 func show_combat_defeat():
-	start_modal("你倒在了水厂里","本场战斗前已保留检查点 · 重试恢复当时的资源",true)
-	body("面罩内的呼吸声渐渐远去。远处传来老兵叫你的名字。",23)
+	start_modal("你倒在了"+("地表废墟里" if world.floor_id=="surface" else "水厂里"),"本场战斗前已保留检查点 · 重试恢复当时的资源",true)
+	body("面罩内的呼吸声渐渐远去。"+("远处传来老兵叫你的名字。" if is_instance_valid(world.combat.veteran) else "寒风还在废墟之间回响。"),23)
 	modal_box.add_child(button("从交火前重试",func():world.combat.retry()))
 	modal_box.add_child(button("读取其它手记",func():show_saves(false)))

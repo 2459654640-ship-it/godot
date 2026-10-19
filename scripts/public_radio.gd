@@ -8,7 +8,8 @@ const SITES={
  "commune":{"p":Vector3(-10.25,0,.2),"heading":PI/2,"place":"公共厅西侧"},
  "sech":{"p":Vector3(-3.3,0,6.2),"heading":PI/2,"place":"检修库公共厅西侧"},
  "coal":{"p":Vector3(-16.9,0,8.1),"heading":PI/2,"place":"探访登记等候区西侧"},
- "starcity":{"p":Vector3(-21.2,0,12.7),"heading":PI/2,"place":"蓝门值班室西南休息角"}}
+ "starcity":{"p":Vector3(-11.3,0,7.1),"heading":PI/2,"place":"外围等候棚西侧"},
+ "surface":{"p":Vector3(-19.9,0,15.8),"heading":PI/2,"place":"背风装卸台"}}
 var world
 var catalog:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/radio.json"))
 var audio:AudioStreamPlayer

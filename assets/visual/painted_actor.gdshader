@@ -17,6 +17,7 @@ uniform vec2 puppet_direction = vec2(0.0);
 uniform float idle_time = 0.0;
 uniform float idle_amount = 0.0;
 uniform float idle_members = 1.0;
+uniform float crowd_motion = 0.0;
 
 void vertex() {
 	// A vertical Y-locked billboard has genuine geometric body depth.
@@ -53,8 +54,16 @@ void vertex() {
 	float member=floor(min(UV.x,.999)*idle_members);
 	float breath=sin(idle_time*(1.55+member*.13)+member*2.37);
 	float resting=(1.0-smoothstep(.48,.94,UV.y))*idle_amount;
-	VERTEX.y+=breath*.006*resting;
-	VERTEX.x+=sin(idle_time*.71+member*1.83)*.005*resting;
+	VERTEX.y+=breath*mix(.006,.020,crowd_motion)*resting;
+	VERTEX.x+=sin(idle_time*.71+member*1.83)*mix(.005,.014,crowd_motion)*resting;
+	// Background residents occasionally turn their head or adjust a hand.
+	// Feet, seats and chair backs stay anchored; only the figure's upper mesh moves.
+	float head=1.0-smoothstep(.23,.40,UV.y);
+	float glance=sin(idle_time*.47+member*2.1);
+	VERTEX.x+=glance*.018*head*crowd_motion;
+	float gesture=pow(max(0.0,sin(idle_time*.63+member*2.7)),8.0);
+	float hands=smoothstep(.40,.49,UV.y)*(1.0-smoothstep(.64,.73,UV.y));
+	VERTEX.y+=gesture*.018*hands*crowd_motion;
 }
 
 vec4 sample_frame(vec2 uv) {

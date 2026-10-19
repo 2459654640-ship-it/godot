@@ -20,9 +20,7 @@ func run():
 		["sech","sech_watch",["watch_accept","watch_map","watch_wrong","watch_set","watch_stop","watch_return"],4],
 		["sech","sech_books",["sech_books","books_read","books_fire","books_dry","books_return"],2],
 		["coal","coal_linen",["linen_accept","linen_tags","linen_wrong","linen_sort","linen_return"],0],
-		["coal","coal_names",["names_accept","names_archive","names_tags","names_return"],3],
-		["starcity","star_tape",["tape_accept","tape_read","tape_wrong","tape_calibrate","tape_copy","tape_return"],4],
-		["starcity","father_letters",["letter_accept","letter_read","letter_plain"],0]]
+		["coal","coal_names",["names_accept","names_archive","names_tags","names_return"],3]]
 	for flow in flows:
 		var s=Story.new();s.context.floor=flow[0]
 		var prerequisites={"last_mail":"plant_diagram","spare_seals":"plant_bled","commune_press":"greenhouse_fixed","mushroom_light":"greenhouse_fixed","coal_linen":"brother_care","coal_names":"linen_done","father_letters":"father_answered"}
@@ -47,13 +45,13 @@ func run():
 		for key in ["press_accept","press_ledger",choice,"press_deliver"]:s.act("c_"+key);check(s.last_action_valid,"press choice reaches a real turn-in: "+key)
 		s.act("c_"+("press_public" if choice=="press_private" else "press_private"));check(not s.last_action_valid,"press identity choice is mutually exclusive")
 	var s=Story.new();s.context.floor="starcity";s.flags.father_met=true;s.flags.star_access=true;s.flags.father_answered=true
-	for key in ["letter_accept","letter_read","letter_note"]:s.act("c_"+key);check(s.last_action_valid,"honest annotated letter route is reachable")
-	s.act("c_letter_plain");check(not s.last_action_valid and s.f("letter_note"),"letter outcome stays chosen")
+	for key in ["letter_accept","letter_read","letter_note","letter_plain"]:
+		s.act("c_"+key);check(not s.last_action_valid,"archived internal letter task cannot be advanced from outside")
 	# A late clue and reward are rejected on another facility, even if the UI is bypassed.
 	s.context.floor="sech";s.act("c_tape_read");check(not s.last_action_valid,"remote facility action rejected")
 	s=Story.new();s.context.floor="commune";s.give("frequency");s.flags.signal_heard=true
 	var answer=s.act("c_commune_route")
-	check(answer.contains("星城-2") and answer.contains("呼号") and answer.contains("不能") and answer.contains("姓名"),"Elena answers the exact call-sign question and admits her knowledge limit")
+	check(answer.contains("星城") and answer.contains("呼号") and answer.contains("不能") and answer.contains("姓名"),"Elena answers the exact call-sign question and admits her knowledge limit")
 	check(Campaign.data().interactions.commune_leader.body.contains("推翻") and Campaign.data().interactions.commune_leader.body.contains("中央苏维埃"),"commune opposition is explicit in the encounter")
 	check(Campaign.data().interactions.coal_clerk.body.contains("中央苏维埃") and Campaign.data().interactions.sech_elder.body.contains("哥萨克"),"D-6 jurisdiction and Cossack identity are stated")
 	var parts=s.Conversation.split_text("电台亮了。\n谢尔盖：「星城还在。」\n东方-7 值班员：「请报姓名。」","sech_radio")
@@ -71,7 +69,7 @@ func run():
 	for i in 8:await physics_frame
 	w.story.flags.intro_done=true;w.hud.comic_active=false;w.hud.close();w.story.give("frequency");w.story.flags.signal_heard=true
 	w.story.flags.first_meeting_commune_leader=2;w.hud.show_dialogue("commune_leader")
-	for expected in [["c_commune_route","星城-2"],["c_commune_politics","守备"]]:
+	for expected in [["c_commune_route","星城"],["c_commune_politics","守备"]]:
 		var option=w.story.view("commune_leader").options.filter(func(o):return o.key==expected[0])[0]
 		var found=false
 		for b in w.hud.modal.find_children("*","Button",true,false):

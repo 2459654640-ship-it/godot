@@ -36,11 +36,8 @@ func run():
   var text:String=c.actions[entry[0]].reply
   check(text.contains(entry[1][0]) and text.contains(entry[1][1]),"named destinations in question answer: "+entry[0])
  s=Story.new();s.context.floor="starcity"
- check(not s.view("star_guard").body.contains("你父亲"),"guard does not know the visitor's family before registration")
- var registration=s.act("c_star_name")
- check(s.last_action_valid and registration.contains("你父亲是这里的测控技术员") and registration.contains("内线"),"father information follows an explicit checked registration")
- check(s.view("star_guard").body.contains("你父亲在测控厅"),"guard's later greeting remembers registration")
- s.flags.father_met=true;check(s.view("star_guard").body.contains("见过了"),"guard responds after the actual reunion")
+ s.act("c_star_name");check(not s.last_action_valid,"old internal registration cannot open the current perimeter")
+ s.act("c_star_perimeter_name");check(s.last_action_valid and s.last_reply.contains("没有确认") and not s.f("star_access"),"outside inquiry never confirms staff identity or permits entry")
  # Restoring earlier revisions keeps possessions/rewards, reopens corrected information only.
  s=Story.new();s.flags.c_done_grow_talk=true;s.flags.grow_done=true;s.economy.military=23;s.give("mask")
  var saved=s.serialize();saved.content_revision=9
