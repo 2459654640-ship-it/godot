@@ -1,0 +1,1282 @@
+[
+  {
+    "actor": "ivan",
+    "pose": 0,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 0,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 0,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 0,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 0,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 0,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 0,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 0,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 1,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 1,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 1,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 1,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 1,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 1,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 1,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 1,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 2,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 2,
+    "angle": 1,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 2,
+    "angle": 2,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 2,
+    "angle": 3,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 2,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 2,
+    "angle": 5,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 2,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan",
+    "pose": 2,
+    "angle": 7,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 0,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 0,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 0,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 0,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 0,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 0,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 0,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 0,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 1,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 1,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 1,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 1,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 1,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 1,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 1,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 1,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 2,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 2,
+    "angle": 1,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 2,
+    "angle": 2,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 2,
+    "angle": 3,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 2,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 2,
+    "angle": 5,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 2,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked",
+    "pose": 2,
+    "angle": 7,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 0,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 0,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 0,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 0,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 0,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 0,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 0,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 0,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 1,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 1,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 1,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 1,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 1,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 1,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 1,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 1,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 2,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 2,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 2,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 2,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 2,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 2,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 2,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 2,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 3,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 3,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 3,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 3,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 3,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 3,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 3,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 3,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 4,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 4,
+    "angle": 1,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 4,
+    "angle": 2,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 4,
+    "angle": 3,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 4,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 4,
+    "angle": 5,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 4,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 4,
+    "angle": 7,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 5,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 5,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 5,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 5,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 5,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 5,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 5,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 5,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 6,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 6,
+    "angle": 1,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 6,
+    "angle": 2,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 6,
+    "angle": 3,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 6,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 6,
+    "angle": 5,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 6,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_combat",
+    "pose": 6,
+    "angle": 7,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 0,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 0,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 0,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 0,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 0,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 0,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 0,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 0,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 1,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 1,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 1,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 1,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 1,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 1,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 1,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 1,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 2,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 2,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 2,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 2,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 2,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 2,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 2,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 2,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 3,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 3,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 3,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 3,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 3,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 3,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 3,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 3,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 4,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 4,
+    "angle": 1,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 4,
+    "angle": 2,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 4,
+    "angle": 3,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 4,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 4,
+    "angle": 5,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 4,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 4,
+    "angle": 7,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 5,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 5,
+    "angle": 1,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 5,
+    "angle": 2,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 5,
+    "angle": 3,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 5,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 5,
+    "angle": 5,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 5,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 5,
+    "angle": 7,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 6,
+    "angle": 0,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 6,
+    "angle": 1,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 6,
+    "angle": 2,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 6,
+    "angle": 3,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 6,
+    "angle": 4,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 6,
+    "angle": 5,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 6,
+    "angle": 6,
+    "expected_change": false,
+    "identical": true,
+    "upper_body_identical": true
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "pose": 6,
+    "angle": 7,
+    "expected_change": true,
+    "identical": false,
+    "upper_body_identical": true
+  }
+]

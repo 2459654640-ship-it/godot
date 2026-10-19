@@ -1,0 +1,662 @@
+[
+  {
+    "actor": "ivan",
+    "poses": [
+      1,
+      2
+    ],
+    "angle": 1,
+    "previous": {
+      "boot_centers": [
+        34.64092664092664,
+        13.104895104895093
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        34.64092664092664,
+        -11.171597633136088
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan",
+    "poses": [
+      1,
+      2
+    ],
+    "angle": 2,
+    "previous": {
+      "boot_centers": [
+        -47.171875,
+        -57.631178707224336
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -47.171875,
+        51.41049382716051
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan",
+    "poses": [
+      1,
+      2
+    ],
+    "angle": 3,
+    "previous": {
+      "boot_centers": [
+        -38.57725947521865,
+        -45.5067264573991
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -38.57725947521865,
+        26.567415730337075
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan",
+    "poses": [
+      1,
+      2
+    ],
+    "angle": 5,
+    "previous": {
+      "boot_centers": [
+        41.89597315436242,
+        42.012448132780094
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        41.89597315436242,
+        -10.767857142857139
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan",
+    "poses": [
+      1,
+      2
+    ],
+    "angle": 7,
+    "previous": {
+      "boot_centers": [
+        -34.556,
+        -32.970930232558146
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -34.556,
+        29.59420289855072
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked",
+    "poses": [
+      1,
+      2
+    ],
+    "angle": 1,
+    "previous": {
+      "boot_centers": [
+        34.64092664092664,
+        13.104895104895093
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        34.64092664092664,
+        -11.171597633136088
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked",
+    "poses": [
+      1,
+      2
+    ],
+    "angle": 2,
+    "previous": {
+      "boot_centers": [
+        -47.171875,
+        -57.631178707224336
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -47.171875,
+        51.41049382716051
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked",
+    "poses": [
+      1,
+      2
+    ],
+    "angle": 3,
+    "previous": {
+      "boot_centers": [
+        -38.57725947521865,
+        -45.5067264573991
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -38.57725947521865,
+        26.567415730337075
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked",
+    "poses": [
+      1,
+      2
+    ],
+    "angle": 5,
+    "previous": {
+      "boot_centers": [
+        41.89597315436242,
+        42.012448132780094
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        41.89597315436242,
+        -10.767857142857139
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked",
+    "poses": [
+      1,
+      2
+    ],
+    "angle": 7,
+    "previous": {
+      "boot_centers": [
+        -34.556,
+        -32.970930232558146
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -34.556,
+        29.59420289855072
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_combat",
+    "poses": [
+      3,
+      4
+    ],
+    "angle": 1,
+    "previous": {
+      "boot_centers": [
+        34.64092664092664,
+        13.104895104895093
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        34.64092664092664,
+        -11.171597633136088
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_combat",
+    "poses": [
+      3,
+      4
+    ],
+    "angle": 2,
+    "previous": {
+      "boot_centers": [
+        -47.171875,
+        -57.631178707224336
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -47.171875,
+        51.41049382716051
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_combat",
+    "poses": [
+      3,
+      4
+    ],
+    "angle": 3,
+    "previous": {
+      "boot_centers": [
+        -38.57725947521865,
+        -45.50672645739911
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -38.57725947521865,
+        26.567415730337075
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_combat",
+    "poses": [
+      3,
+      4
+    ],
+    "angle": 5,
+    "previous": {
+      "boot_centers": [
+        41.89597315436242,
+        42.012448132780094
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        41.89597315436242,
+        -10.767857142857139
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_combat",
+    "poses": [
+      3,
+      4
+    ],
+    "angle": 7,
+    "previous": {
+      "boot_centers": [
+        -34.55600000000001,
+        -32.970930232558146
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -34.55600000000001,
+        29.59420289855072
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_combat",
+    "poses": [
+      5,
+      6
+    ],
+    "angle": 1,
+    "previous": {
+      "boot_centers": [
+        34.64092664092664,
+        13.104895104895093
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        34.64092664092664,
+        -11.171597633136088
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_combat",
+    "poses": [
+      5,
+      6
+    ],
+    "angle": 2,
+    "previous": {
+      "boot_centers": [
+        -47.171875,
+        -57.631178707224336
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -47.171875,
+        51.41049382716051
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_combat",
+    "poses": [
+      5,
+      6
+    ],
+    "angle": 3,
+    "previous": {
+      "boot_centers": [
+        -38.57725947521865,
+        -45.50672645739911
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -38.57725947521865,
+        26.567415730337075
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_combat",
+    "poses": [
+      5,
+      6
+    ],
+    "angle": 5,
+    "previous": {
+      "boot_centers": [
+        41.89597315436242,
+        42.012448132780094
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        41.89597315436242,
+        -10.767857142857139
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_combat",
+    "poses": [
+      5,
+      6
+    ],
+    "angle": 7,
+    "previous": {
+      "boot_centers": [
+        -34.55600000000001,
+        -32.970930232558146
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -34.55600000000001,
+        29.59420289855072
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "poses": [
+      3,
+      4
+    ],
+    "angle": 1,
+    "previous": {
+      "boot_centers": [
+        34.64092664092664,
+        13.104895104895093
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        34.64092664092664,
+        -11.171597633136088
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "poses": [
+      3,
+      4
+    ],
+    "angle": 2,
+    "previous": {
+      "boot_centers": [
+        -47.171875,
+        -57.631178707224336
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -47.171875,
+        51.41049382716051
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "poses": [
+      3,
+      4
+    ],
+    "angle": 3,
+    "previous": {
+      "boot_centers": [
+        -38.57725947521865,
+        -45.50672645739911
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -38.57725947521865,
+        26.567415730337075
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "poses": [
+      3,
+      4
+    ],
+    "angle": 5,
+    "previous": {
+      "boot_centers": [
+        41.89597315436242,
+        42.012448132780094
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        41.89597315436242,
+        -10.767857142857139
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "poses": [
+      3,
+      4
+    ],
+    "angle": 7,
+    "previous": {
+      "boot_centers": [
+        -34.55600000000001,
+        -32.970930232558146
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -34.55600000000001,
+        29.59420289855072
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "poses": [
+      5,
+      6
+    ],
+    "angle": 1,
+    "previous": {
+      "boot_centers": [
+        34.64092664092664,
+        13.104895104895093
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        34.64092664092664,
+        -11.171597633136088
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "poses": [
+      5,
+      6
+    ],
+    "angle": 2,
+    "previous": {
+      "boot_centers": [
+        -47.171875,
+        -57.631178707224336
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -47.171875,
+        51.41049382716051
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "poses": [
+      5,
+      6
+    ],
+    "angle": 3,
+    "previous": {
+      "boot_centers": [
+        -38.57725947521865,
+        -45.50672645739911
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -38.57725947521865,
+        26.567415730337075
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "poses": [
+      5,
+      6
+    ],
+    "angle": 5,
+    "previous": {
+      "boot_centers": [
+        41.89597315436242,
+        42.012448132780094
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        41.89597315436242,
+        -10.767857142857139
+      ],
+      "alternate_contact_side": true
+    }
+  },
+  {
+    "actor": "ivan_masked_combat",
+    "poses": [
+      5,
+      6
+    ],
+    "angle": 7,
+    "previous": {
+      "boot_centers": [
+        -34.55600000000001,
+        -32.970930232558146
+      ],
+      "alternate_contact_side": false
+    },
+    "corrected": {
+      "boot_centers": [
+        -34.55600000000001,
+        29.59420289855072
+      ],
+      "alternate_contact_side": true
+    }
+  }
+]

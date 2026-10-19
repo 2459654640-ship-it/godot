@@ -1,0 +1,12 @@
+[
+  {
+    "suite": "motion_v18",
+    "checks": 1024,
+    "ok": true
+  },
+  {
+    "suite": "ivan_gait_v17",
+    "checks": 7254,
+    "ok": true
+  }
+]
