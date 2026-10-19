@@ -1,0 +1,114 @@
+[
+  {
+    "file": "01-front.png",
+    "direction": "正面",
+    "source_box": [
+      0,
+      0,
+      384,
+      512
+    ],
+    "size": [
+      384,
+      512
+    ]
+  },
+  {
+    "file": "02-front-right.png",
+    "direction": "右前方",
+    "source_box": [
+      384,
+      0,
+      768,
+      512
+    ],
+    "size": [
+      384,
+      512
+    ]
+  },
+  {
+    "file": "03-right.png",
+    "direction": "右侧面",
+    "source_box": [
+      768,
+      0,
+      1152,
+      512
+    ],
+    "size": [
+      384,
+      512
+    ]
+  },
+  {
+    "file": "04-back-right.png",
+    "direction": "右后方",
+    "source_box": [
+      1152,
+      0,
+      1536,
+      512
+    ],
+    "size": [
+      384,
+      512
+    ]
+  },
+  {
+    "file": "05-back.png",
+    "direction": "背面",
+    "source_box": [
+      0,
+      512,
+      384,
+      1024
+    ],
+    "size": [
+      384,
+      512
+    ]
+  },
+  {
+    "file": "06-back-left.png",
+    "direction": "左后方",
+    "source_box": [
+      384,
+      512,
+      768,
+      1024
+    ],
+    "size": [
+      384,
+      512
+    ]
+  },
+  {
+    "file": "07-left.png",
+    "direction": "左侧面",
+    "source_box": [
+      768,
+      512,
+      1152,
+      1024
+    ],
+    "size": [
+      384,
+      512
+    ]
+  },
+  {
+    "file": "08-front-left.png",
+    "direction": "左前方",
+    "source_box": [
+      1152,
+      512,
+      1536,
+      1024
+    ],
+    "size": [
+      384,
+      512
+    ]
+  }
+]
