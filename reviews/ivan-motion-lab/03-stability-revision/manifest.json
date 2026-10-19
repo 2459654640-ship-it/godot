@@ -1,0 +1,50 @@
+[
+  {
+    "direction": "01-front",
+    "phase": "A",
+    "reference": "../01/single-views/01-front.png",
+    "pair_source": "/workspace/generated_images/exec-cf47b0fd-9ab5-431b-919e-28f827afc30e.png",
+    "scale_shared_by_pair": 0.5047120418848168,
+    "translation": [
+      100,
+      2
+    ],
+    "status": "candidate_visual_review_required"
+  },
+  {
+    "direction": "01-front",
+    "phase": "B",
+    "reference": "../01/single-views/01-front.png",
+    "pair_source": "/workspace/generated_images/exec-cf47b0fd-9ab5-431b-919e-28f827afc30e.png",
+    "scale_shared_by_pair": 0.5047120418848168,
+    "translation": [
+      6,
+      2
+    ],
+    "status": "candidate_visual_review_required"
+  },
+  {
+    "direction": "05-back",
+    "phase": "A",
+    "reference": "../01/single-views/05-back.png",
+    "pair_source": "/workspace/generated_images/exec-7adb4f7f-0ab2-4646-ab2d-e34dd92d7f44.png",
+    "scale_shared_by_pair": 0.4825102880658436,
+    "translation": [
+      -1,
+      6
+    ],
+    "status": "candidate_visual_review_required"
+  },
+  {
+    "direction": "05-back",
+    "phase": "B",
+    "reference": "../01/single-views/05-back.png",
+    "pair_source": "/workspace/generated_images/exec-7adb4f7f-0ab2-4646-ab2d-e34dd92d7f44.png",
+    "scale_shared_by_pair": 0.4825102880658436,
+    "translation": [
+      84,
+      6
+    ],
+    "status": "candidate_visual_review_required"
+  }
+]
