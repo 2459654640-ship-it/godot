@@ -1,0 +1,182 @@
+[
+  {
+    "suite": "run",
+    "ok": true,
+    "checks": 1888,
+    "returncode": 0
+  },
+  {
+    "suite": "visual_contract",
+    "ok": true,
+    "checks": 1105,
+    "returncode": 0
+  },
+  {
+    "suite": "narrative_contract",
+    "ok": true,
+    "checks": 1942,
+    "returncode": 0
+  },
+  {
+    "suite": "resident_contract",
+    "ok": true,
+    "checks": 114,
+    "returncode": 0
+  },
+  {
+    "suite": "chapter_contract",
+    "ok": true,
+    "checks": 123,
+    "returncode": 0
+  },
+  {
+    "suite": "floor_contract",
+    "ok": true,
+    "checks": 40,
+    "returncode": 0
+  },
+  {
+    "suite": "campaign_contract",
+    "ok": true,
+    "checks": 373,
+    "returncode": 0
+  },
+  {
+    "suite": "campaign_ui",
+    "ok": true,
+    "checks": 17,
+    "returncode": 0
+  },
+  {
+    "suite": "refinement_contract",
+    "ok": true,
+    "checks": 43,
+    "returncode": 0
+  },
+  {
+    "suite": "presentation_contract",
+    "ok": true,
+    "checks": 30,
+    "returncode": 0
+  },
+  {
+    "suite": "exploration_contract",
+    "ok": true,
+    "checks": 223,
+    "returncode": 0
+  },
+  {
+    "suite": "v9_contract",
+    "ok": true,
+    "checks": 138,
+    "returncode": 0
+  },
+  {
+    "suite": "v10_contract",
+    "ok": true,
+    "checks": 109,
+    "returncode": 0
+  },
+  {
+    "suite": "v11_contract",
+    "ok": true,
+    "checks": 182,
+    "returncode": 0
+  },
+  {
+    "suite": "v11_combat",
+    "ok": true,
+    "checks": 22,
+    "returncode": 0
+  },
+  {
+    "suite": "occlusion_v11",
+    "ok": true,
+    "checks": 9,
+    "returncode": 0
+  },
+  {
+    "suite": "visual_fixes_v11_1",
+    "ok": true,
+    "checks": 90,
+    "returncode": 0
+  },
+  {
+    "suite": "commune_v12",
+    "ok": true,
+    "checks": 138,
+    "returncode": 0
+  },
+  {
+    "suite": "factory_v12",
+    "ok": true,
+    "checks": 49,
+    "returncode": 0
+  },
+  {
+    "suite": "equipment_v12",
+    "ok": true,
+    "checks": 16,
+    "returncode": 0
+  },
+  {
+    "suite": "platform_v12",
+    "ok": true,
+    "checks": 12,
+    "returncode": 0
+  },
+  {
+    "suite": "actors_v13",
+    "ok": true,
+    "checks": 61,
+    "returncode": 0
+  },
+  {
+    "suite": "publications_v13",
+    "ok": true,
+    "checks": 110,
+    "returncode": 0
+  },
+  {
+    "suite": "public_radio_v16",
+    "ok": true,
+    "checks": 97,
+    "returncode": 0
+  },
+  {
+    "suite": "ivan_gait_v16",
+    "ok": true,
+    "checks": 102,
+    "returncode": 0
+  },
+  {
+    "suite": "furnishings_v16",
+    "ok": true,
+    "checks": 41,
+    "returncode": 0
+  },
+  {
+    "suite": "first_meetings_v17",
+    "ok": true,
+    "checks": 293,
+    "returncode": 0
+  },
+  {
+    "suite": "starcity_v17",
+    "ok": true,
+    "checks": 34,
+    "returncode": 0
+  },
+  {
+    "suite": "ivan_gait_v17",
+    "ok": true,
+    "checks": 7254,
+    "returncode": 0
+  },
+  {
+    "suite": "motion_v18",
+    "ok": true,
+    "checks": 948,
+    "returncode": 0
+  }
+]
