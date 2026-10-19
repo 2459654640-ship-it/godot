@@ -1,0 +1,126 @@
+{
+  "errors": [],
+  "frames": [
+    {
+      "key": "06-back-left",
+      "phase": "A",
+      "alphaMismatch": 0,
+      "holdoutCoat": {
+        "before": 0.04329911078978578,
+        "after": 0.030217869988312912,
+        "counts": [
+          750,
+          750,
+          750
+        ]
+      },
+      "state": {
+        "direction": "06-back-left",
+        "phase": "A",
+        "sourcePngUnchanged": true,
+        "gaitAccepted": false
+      }
+    },
+    {
+      "key": "06-back-left",
+      "phase": "B",
+      "alphaMismatch": 0,
+      "holdoutCoat": {
+        "before": 0.02212226651781914,
+        "after": 0.02212226651781914,
+        "counts": [
+          750,
+          750,
+          750
+        ]
+      },
+      "state": {
+        "direction": "06-back-left",
+        "phase": "B",
+        "sourcePngUnchanged": true,
+        "gaitAccepted": false
+      }
+    },
+    {
+      "key": "06-back-left",
+      "phase": "standing",
+      "alphaMismatch": 0,
+      "holdoutCoat": {
+        "before": 0,
+        "after": 0,
+        "counts": [
+          750,
+          750,
+          750
+        ]
+      },
+      "state": {
+        "direction": "06-back-left",
+        "phase": "standing",
+        "sourcePngUnchanged": true,
+        "gaitAccepted": false
+      }
+    },
+    {
+      "key": "04-back-right",
+      "phase": "A",
+      "alphaMismatch": 0,
+      "holdoutCoat": {
+        "before": 0.01158948008026755,
+        "after": 0.01158948008026755,
+        "counts": [
+          625,
+          625,
+          625
+        ]
+      },
+      "state": {
+        "direction": "04-back-right",
+        "phase": "A",
+        "sourcePngUnchanged": true,
+        "gaitAccepted": false
+      }
+    },
+    {
+      "key": "04-back-right",
+      "phase": "B",
+      "alphaMismatch": 0,
+      "holdoutCoat": {
+        "before": 0.0022136014865239704,
+        "after": 0.0022136014865239704,
+        "counts": [
+          625,
+          625,
+          625
+        ]
+      },
+      "state": {
+        "direction": "04-back-right",
+        "phase": "B",
+        "sourcePngUnchanged": true,
+        "gaitAccepted": false
+      }
+    },
+    {
+      "key": "04-back-right",
+      "phase": "standing",
+      "alphaMismatch": 0,
+      "holdoutCoat": {
+        "before": 0,
+        "after": 0,
+        "counts": [
+          625,
+          625,
+          625
+        ]
+      },
+      "state": {
+        "direction": "04-back-right",
+        "phase": "standing",
+        "sourcePngUnchanged": true,
+        "gaitAccepted": false
+      }
+    }
+  ],
+  "checks": "six frame states, source/calibrated synchronization, alpha unchanged, manual frame stepping; gait remains unaccepted"
+}
