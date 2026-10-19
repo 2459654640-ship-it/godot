@@ -1,0 +1,306 @@
+[
+  {
+    "direction": "01-front",
+    "phase": "A",
+    "path": "/workspace/generated_images/exec-4ce806db-58fb-4aa4-bb65-a292499af4dc.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.3591654247391952,
+    "translation": [
+      19,
+      -3
+    ],
+    "status": "candidate_requires_review"
+  },
+  {
+    "direction": "01-front",
+    "phase": "B",
+    "path": "/workspace/generated_images/exec-dddcfb1e-10e1-406d-8129-2cda490654c1.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.3665399239543726,
+    "translation": [
+      34,
+      -7
+    ],
+    "status": "candidate_requires_review"
+  },
+  {
+    "direction": "02-front-right",
+    "phase": "A",
+    "path": "/workspace/generated_images/exec-1594c5b7-ee7a-4209-ba02-3891d67a64de.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.36267870579382994,
+    "translation": [
+      -2,
+      -2
+    ],
+    "status": "candidate_requires_review"
+  },
+  {
+    "direction": "02-front-right",
+    "phase": "B",
+    "path": "/workspace/generated_images/exec-d2516d22-144b-458f-ad07-e69db3b1c497.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.36432350718065004,
+    "translation": [
+      -13,
+      -1
+    ],
+    "status": "candidate_requires_review"
+  },
+  {
+    "direction": "03-right",
+    "phase": "A",
+    "path": "/workspace/generated_images/exec-034d48f2-59d0-469f-9f9f-f861899e9482.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.3630239520958084,
+    "translation": [
+      -25,
+      1
+    ],
+    "status": "candidate_requires_review"
+  },
+  {
+    "direction": "03-right",
+    "phase": "B",
+    "path": "/workspace/generated_images/exec-81f20d11-3bce-41bb-afd5-bfb57194a705.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.36221060492905155,
+    "translation": [
+      -40,
+      -1
+    ],
+    "status": "candidate_requires_review"
+  },
+  {
+    "direction": "04-back-right",
+    "phase": "A",
+    "path": "/workspace/generated_images/exec-ef9a98c8-c353-4ddd-ae91-6f93697532d3.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.3593984962406015,
+    "translation": [
+      -40,
+      -2
+    ],
+    "status": "rear_step_exchange_unresolved"
+  },
+  {
+    "direction": "04-back-right",
+    "phase": "B",
+    "path": "/workspace/generated_images/exec-58d53864-0b2e-495d-94fc-d4034794e284.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.3567164179104478,
+    "translation": [
+      -37,
+      1
+    ],
+    "status": "rear_step_exchange_unresolved"
+  },
+  {
+    "direction": "05-back",
+    "phase": "A",
+    "path": "/workspace/generated_images/exec-c678fe81-ce9a-4899-b3a1-8edf7aa338f9.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.34258582907231555,
+    "translation": [
+      21,
+      2
+    ],
+    "status": "candidate_requires_review"
+  },
+  {
+    "direction": "05-back",
+    "phase": "B",
+    "path": "/workspace/generated_images/exec-b05fba46-58ad-4c86-b784-9ad597ba333b.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.34233576642335767,
+    "translation": [
+      13,
+      6
+    ],
+    "status": "candidate_requires_review"
+  },
+  {
+    "direction": "06-back-left",
+    "phase": "A",
+    "path": "/workspace/generated_images/exec-73edd4a3-a082-4008-9a3c-2a162960ec14.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.3446244477172312,
+    "translation": [
+      21,
+      4
+    ],
+    "status": "rear_step_exchange_unresolved"
+  },
+  {
+    "direction": "06-back-left",
+    "phase": "B",
+    "path": "/workspace/generated_images/exec-0ee48f33-0ebf-4230-b0a9-4b8140a8c3bb.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.3516153268219384,
+    "translation": [
+      17,
+      -1
+    ],
+    "status": "rear_step_exchange_unresolved"
+  },
+  {
+    "direction": "07-left",
+    "phase": "A",
+    "path": "/workspace/generated_images/exec-5cb5782f-2cc8-45cf-bd3e-a1ade42501a6.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.3546205860255447,
+    "translation": [
+      3,
+      3
+    ],
+    "status": "candidate_requires_review"
+  },
+  {
+    "direction": "07-left",
+    "phase": "B",
+    "path": "/workspace/generated_images/exec-9bf47ed9-beaa-416e-a7c7-1a1108723714.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.3522388059701492,
+    "translation": [
+      6,
+      0
+    ],
+    "status": "candidate_requires_review"
+  },
+  {
+    "direction": "08-front-left",
+    "phase": "A",
+    "path": "/workspace/generated_images/exec-178411bb-cd50-44d3-9971-436f0733c9ae.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.3509544787077827,
+    "translation": [
+      -6,
+      4
+    ],
+    "status": "candidate_requires_review"
+  },
+  {
+    "direction": "08-front-left",
+    "phase": "B",
+    "path": "/workspace/generated_images/exec-4b8060e6-3f55-4c1a-bddd-c81a96e7ff09.png",
+    "raw_size": [
+      1086,
+      1448
+    ],
+    "canvas": [
+      384,
+      512
+    ],
+    "uniform_scale": 0.34839650145772594,
+    "translation": [
+      -9,
+      4
+    ],
+    "status": "candidate_requires_review"
+  }
+]
