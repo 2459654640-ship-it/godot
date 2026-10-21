@@ -1,0 +1,74 @@
+{
+  "01-front": {
+    "mask_does_not_change_body_below_y": 140,
+    "armed_lower_gait_unchanged_below_y": 340,
+    "reference_extent": 482,
+    "body_anchors": [
+      19,
+      246.05635880790794
+    ]
+  },
+  "02-front-right": {
+    "mask_does_not_change_body_below_y": 140,
+    "armed_lower_gait_unchanged_below_y": 340,
+    "reference_extent": 482,
+    "body_anchors": [
+      20,
+      228.42726737338046
+    ]
+  },
+  "03-right": {
+    "mask_does_not_change_body_below_y": 140,
+    "armed_lower_gait_unchanged_below_y": 340,
+    "reference_extent": 485,
+    "body_anchors": [
+      17,
+      176.37665081880613
+    ]
+  },
+  "04-back-right": {
+    "mask_does_not_change_body_below_y": 140,
+    "armed_lower_gait_unchanged_below_y": 340,
+    "reference_extent": 478,
+    "body_anchors": [
+      21,
+      154.50394557823128
+    ]
+  },
+  "05-back": {
+    "mask_does_not_change_body_below_y": 140,
+    "armed_lower_gait_unchanged_below_y": 340,
+    "reference_extent": 469,
+    "body_anchors": [
+      16,
+      239.75145180023227
+    ]
+  },
+  "06-back-left": {
+    "mask_does_not_change_body_below_y": 140,
+    "armed_lower_gait_unchanged_below_y": 340,
+    "reference_extent": 468,
+    "body_anchors": [
+      15,
+      207.93936381709742
+    ]
+  },
+  "07-left": {
+    "mask_does_not_change_body_below_y": 140,
+    "armed_lower_gait_unchanged_below_y": 340,
+    "reference_extent": 472,
+    "body_anchors": [
+      15,
+      173.79185520361992
+    ]
+  },
+  "08-front-left": {
+    "mask_does_not_change_body_below_y": 140,
+    "armed_lower_gait_unchanged_below_y": 340,
+    "reference_extent": 478,
+    "body_anchors": [
+      15,
+      153.02264150943395
+    ]
+  }
+}

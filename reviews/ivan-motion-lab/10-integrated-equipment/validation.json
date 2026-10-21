@@ -1,0 +1,150 @@
+{
+  "godot": "4.6.3",
+  "import": "passed",
+  "full_regression_exit_code": 0,
+  "suite_count": 33,
+  "runtime_total": 15896,
+  "runtime_suites": {
+    "D6_TEST_RESULT": {
+      "checks": 1888,
+      "failures": 0
+    },
+    "VISUAL_CONTRACT_RESULT": {
+      "checks": 1106,
+      "failures": 0
+    },
+    "NARRATIVE_CONTRACT_RESULT": {
+      "checks": 1942,
+      "failures": 0
+    },
+    "RESIDENT_CONTRACT_RESULT": {
+      "checks": 114,
+      "failures": 0
+    },
+    "CHAPTER_CONTRACT_RESULT": {
+      "checks": 141,
+      "failures": 0
+    },
+    "FLOOR_CONTRACT_RESULT": {
+      "checks": 40,
+      "failures": 0
+    },
+    "CAMPAIGN_CONTRACT_RESULT": {
+      "checks": 391,
+      "failures": 0
+    },
+    "CAMPAIGN_UI_RESULT": {
+      "checks": 17,
+      "failures": 0
+    },
+    "REFINEMENT_RESULT": {
+      "checks": 39,
+      "failures": 0
+    },
+    "PRESENTATION_RESULT": {
+      "checks": 35,
+      "failures": 0
+    },
+    "EXPLORATION_RESULT": {
+      "checks": 186,
+      "failures": 0
+    },
+    "V9_RESULT": {
+      "checks": 119,
+      "failures": 0
+    },
+    "V10_RESULT": {
+      "checks": 119,
+      "failures": 0
+    },
+    "V11_RESULT": {
+      "checks": 180,
+      "failures": 0
+    },
+    "V11_COMBAT_RESULT": {
+      "checks": 22,
+      "failures": 0
+    },
+    "OCCLUSION_V11_RESULT": {
+      "checks": 9,
+      "failures": 0
+    },
+    "VISUAL_FIXES_V11_1_RESULT": {
+      "checks": 91,
+      "failures": 0
+    },
+    "COMMUNE_V12_RESULT": {
+      "checks": 138,
+      "failures": 0
+    },
+    "FACTORY_V12_RESULT": {
+      "checks": 49,
+      "failures": 0
+    },
+    "EQUIPMENT_V12_RESULT": {
+      "checks": 16,
+      "failures": 0
+    },
+    "PLATFORM_V12_RESULT": {
+      "checks": 12,
+      "failures": 0
+    },
+    "ACTORS_V13_RESULT": {
+      "checks": 61,
+      "failures": 0
+    },
+    "PUBLICATIONS_V13_RESULT": {
+      "checks": 122,
+      "failures": 0
+    },
+    "PUBLIC_RADIO_V16_RESULT": {
+      "checks": 105,
+      "failures": 0
+    },
+    "IVAN_GAIT_V16_RESULT": {
+      "checks": 102,
+      "failures": 0
+    },
+    "FURNISHINGS_V16_RESULT": {
+      "checks": 40,
+      "failures": 0
+    },
+    "FIRST_MEETINGS_V17_RESULT": {
+      "checks": 293,
+      "failures": 0
+    },
+    "STARCITY_V19_RESULT": {
+      "checks": 7,
+      "failures": 0
+    },
+    "IVAN_GAIT_V17_RESULT": {
+      "checks": 7254,
+      "failures": 0
+    },
+    "MOTION_V18_RESULT": {
+      "checks": 1042,
+      "failures": 0
+    },
+    "EXPEDITION_V19_RESULT": {
+      "checks": 101,
+      "failures": 0
+    },
+    "NARRATIVE_V19_RESULT": {
+      "checks": 99,
+      "failures": 0
+    },
+    "CROWDS_V19_RESULT": {
+      "checks": 16,
+      "failures": 0
+    }
+  },
+  "asset_checks": 272,
+  "asset_failures": 0,
+  "visual_review": "Current atlas images inspected; no new in-engine rendered capture",
+  "full_historical_suite_rerun": true,
+  "exit_diagnostics": [
+    "public_radio_v16 assertions passed (105); process shutdown reported ObjectDB instances leaked and 2 resources still in use. Not investigated or fixed in this character-art update."
+  ],
+  "motion_test_update": "Approved-source foot silhouette fixtures replace the invalid screen-bottom boot lateral-sign guess; all runtime phase, scale and directional tests retained.",
+  "game_commit": "30dd451cd74f622e591a3d8c0bed83acf5d101e5"
+}

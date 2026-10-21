@@ -1,0 +1,354 @@
+{
+  "01-front": {
+    "standing": {
+      "coat_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "pants_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "5c6dbc18e4d62b83a7534fe89e438fb6b7ab47ee033e17c762ed4e71d6b04164"
+    },
+    "A": {
+      "coat_linear_gain": [
+        0.88,
+        0.88,
+        0.88
+      ],
+      "pants_linear_gain": [
+        0.88,
+        0.88,
+        0.88
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "37011d20e3f7e2bd84a1a41535d2e78b27b7d0125ca8206a49312edadb485dc7"
+    },
+    "B": {
+      "coat_linear_gain": [
+        0.88,
+        0.88,
+        0.88
+      ],
+      "pants_linear_gain": [
+        0.88,
+        0.88,
+        0.8803751289938061
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "bb84bdc6a1d8dedf5c8b93cf355d5fa9df51b675772b05f89d79d694b8114016"
+    }
+  },
+  "02-front-right": {
+    "standing": {
+      "coat_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "pants_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "c66b9b31a982e0fe4866948902a5f0183ea6acf68b00d62cd9a3633e1e721d62"
+    },
+    "A": {
+      "coat_linear_gain": [
+        0.9093380143809001,
+        0.9709899202216079,
+        0.8928271514774375
+      ],
+      "pants_linear_gain": [
+        0.966068484850799,
+        0.9598203821562442,
+        0.9178831924301357
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "c222fc022b4dcc6f0f8e46bc974d0b98ea558531799c94f4398230eb750a2ad5"
+    },
+    "B": {
+      "coat_linear_gain": [
+        0.9093380143809001,
+        0.9709899202216079,
+        0.8928271514774375
+      ],
+      "pants_linear_gain": [
+        0.88,
+        0.88,
+        0.8803751289938061
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "07646c6accb8e5d525cbfbfef411a159c95c56e27ead232feb0334156d6e992e"
+    }
+  },
+  "03-right": {
+    "standing": {
+      "coat_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "pants_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "6dd1a512fc427380b17099b5eba9b9ff397a3f5001ad267cde37b9901600388f"
+    },
+    "A": {
+      "coat_linear_gain": [
+        0.9126362774417619,
+        0.9723277987167519,
+        1.0
+      ],
+      "pants_linear_gain": [
+        1.12,
+        1.12,
+        1.12
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "2cb753a3adfcf022def7786274fae629b83030d30f5376256fac7b9f1b94294f"
+    },
+    "B": {
+      "coat_linear_gain": [
+        1.048173157659586,
+        1.12,
+        1.12
+      ],
+      "pants_linear_gain": [
+        0.88,
+        0.88,
+        0.88
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "0da021395aa6a242047194e34856537146e773b6baee7dadffe7281951a6399d"
+    }
+  },
+  "04-back-right": {
+    "standing": {
+      "coat_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "pants_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "fdb27103b268512d5f62d5d009f3ecb0bbab5779f83621fd5eb65df83d4eb287"
+    },
+    "A": {
+      "coat_linear_gain": [
+        0.9302060942302856,
+        1.0,
+        0.9243510734060982
+      ],
+      "pants_linear_gain": [
+        1.12,
+        1.12,
+        1.12
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "ef3ea3fde1632883cd2a57ff643b8b40059712966d9ab388c8de89b3ce6411b8"
+    },
+    "B": {
+      "coat_linear_gain": [
+        0.88,
+        0.8882464666322817,
+        0.88
+      ],
+      "pants_linear_gain": [
+        1.12,
+        1.12,
+        1.12
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "c28ad4109f167c370d414ca235bc8449cb245c3b21751f334cdbff2d61ea5a6a"
+    }
+  },
+  "05-back": {
+    "standing": {
+      "coat_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "pants_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "c4b8e464609a79bedc1df9091a9471f60ca800f069afcfb31b60974da3e1ecdb"
+    },
+    "A": {
+      "coat_linear_gain": [
+        0.88,
+        0.88,
+        0.88
+      ],
+      "pants_linear_gain": [
+        0.88,
+        0.88,
+        0.9584286137089355
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "852f2a61074ffec2e928003a4d63e50384e99d73eecf1044823fa9a78df1e46b"
+    },
+    "B": {
+      "coat_linear_gain": [
+        0.88,
+        0.88,
+        0.88
+      ],
+      "pants_linear_gain": [
+        0.88,
+        0.88,
+        0.88
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "49110fcc4dcaf198da96b3319f84ac71b0bb727e3a1140dc3df17687cad6a256"
+    }
+  },
+  "06-back-left": {
+    "standing": {
+      "coat_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "pants_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "95746dd4ff65cf19d7c521c0aafef8f571b84155d2284b94e86d699a568f5d42"
+    },
+    "A": {
+      "coat_linear_gain": [
+        1.0529555507200596,
+        1.0660737028437013,
+        1.0426046377289169
+      ],
+      "pants_linear_gain": [
+        1.12,
+        1.12,
+        1.12
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "f4bd9601a81b43d5d0bb3f797fae427f18aa400861288c86b3a961997364ac3c"
+    },
+    "B": {
+      "coat_linear_gain": [
+        0.88,
+        0.8842066775814227,
+        0.88
+      ],
+      "pants_linear_gain": [
+        1.12,
+        1.12,
+        1.12
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "ff844d7f4416935fabd90047cb31d44488222d976b23847f8fcbef28613ee5bc"
+    }
+  },
+  "07-left": {
+    "standing": {
+      "coat_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "pants_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "ed7cfb3e2a01efa16dbcbe7cf9f44a18c24c05e248c19f8ddf872eec98a5de68"
+    },
+    "A": {
+      "coat_linear_gain": [
+        0.9093380143809001,
+        0.9709899202216079,
+        0.9629236232195115
+      ],
+      "pants_linear_gain": [
+        0.88,
+        0.88,
+        0.88
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "5483c4b28a5a58d9d6d92a620f9c08212c72b05f3fc7b6fad043598d523eb6db"
+    },
+    "B": {
+      "coat_linear_gain": [
+        0.88,
+        0.8907867691539738,
+        0.88
+      ],
+      "pants_linear_gain": [
+        0.88,
+        0.8842183032545695,
+        0.88
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "d2096e0663bb719a2b89e4595c45ca23a0016fcc401083fc9506e101a23cfcdd"
+    }
+  },
+  "08-front-left": {
+    "standing": {
+      "coat_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "pants_linear_gain": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "d2abaf93fae2b53ded022f21eb17753b5d9a46bfc8190daab39add8e6b6876d3"
+    },
+    "A": {
+      "coat_linear_gain": [
+        0.9084741914020324,
+        1.0,
+        0.9255243323263155
+      ],
+      "pants_linear_gain": [
+        0.88,
+        0.88,
+        0.88
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "9c8ef5cd9db7b9e7c0c2507ff3ff5e57df4ca4bca4063042fc167d21ad08b124"
+    },
+    "B": {
+      "coat_linear_gain": [
+        0.88,
+        0.9154619887631859,
+        0.88
+      ],
+      "pants_linear_gain": [
+        0.88,
+        0.88,
+        0.88
+      ],
+      "alpha_unchanged": true,
+      "source_sha256": "2ef3e8050234c48f754d70dcfbbfe2482245895fce46fbe0623b6b5773776633"
+    }
+  }
+}
