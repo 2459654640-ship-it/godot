@@ -1,0 +1,1758 @@
+{
+  "masked-01-front": [
+    {
+      "phase": "standing",
+      "source": "raw/masked-standing.png",
+      "grid_bounds": [
+        0,
+        0,
+        384,
+        512
+      ],
+      "uniform_scale": 1.002079002079002,
+      "translation": [
+        0,
+        -1
+      ],
+      "solid_bounds": [
+        84.17463617463616,
+        17.037422037422036,
+        294.6112266112266,
+        501.04158004158
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.9181831207909442,
+      "head_area": 4529
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked-A.png",
+      "grid_bounds": [
+        0,
+        0,
+        384,
+        512
+      ],
+      "uniform_scale": 1.002079002079002,
+      "translation": [
+        -1,
+        1
+      ],
+      "solid_bounds": [
+        85.17879417879418,
+        18.035343035343033,
+        304.6340956340956,
+        506.04781704781703
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8685500623182385,
+      "head_area": 4619
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked-B.png",
+      "grid_bounds": [
+        0,
+        0,
+        384,
+        512
+      ],
+      "uniform_scale": 1.002079002079002,
+      "translation": [
+        -4,
+        2
+      ],
+      "solid_bounds": [
+        81.17671517671518,
+        18.033264033264032,
+        294.6195426195426,
+        504.04158004158
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8242894056847545,
+      "head_area": 4711
+    }
+  ],
+  "masked-02-front-right": [
+    {
+      "phase": "standing",
+      "source": "raw/masked-standing.png",
+      "grid_bounds": [
+        384,
+        0,
+        768,
+        512
+      ],
+      "uniform_scale": 0.9938144329896907,
+      "translation": [
+        -3,
+        4
+      ],
+      "solid_bounds": [
+        87.43711340206185,
+        18.90721649484536,
+        273.28041237113405,
+        502.8948453608248
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.9070007369196758,
+      "head_area": 4902
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked-A.png",
+      "grid_bounds": [
+        384,
+        0,
+        768,
+        512
+      ],
+      "uniform_scale": 0.9938144329896907,
+      "translation": [
+        0,
+        3
+      ],
+      "solid_bounds": [
+        84.47422680412372,
+        19.894845360824743,
+        303.11340206185565,
+        503.8824742268041
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.82063420498948,
+      "head_area": 5143
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked-B.png",
+      "grid_bounds": [
+        384,
+        0,
+        768,
+        512
+      ],
+      "uniform_scale": 0.9938144329896907,
+      "translation": [
+        -3,
+        4
+      ],
+      "solid_bounds": [
+        67.56082474226804,
+        18.90721649484536,
+        295.1443298969072,
+        504.8824742268041
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8239313522962022,
+      "head_area": 5125
+    }
+  ],
+  "masked-03-right": [
+    {
+      "phase": "standing",
+      "source": "raw/masked-standing.png",
+      "grid_bounds": [
+        768,
+        0,
+        1152,
+        512
+      ],
+      "uniform_scale": 0.9958932238193019,
+      "translation": [
+        -10,
+        2
+      ],
+      "solid_bounds": [
+        85.60574948665298,
+        14.946611909650924,
+        251.91991786447642,
+        502.9342915811089
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.721610358684328,
+      "head_area": 5398
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked-A.png",
+      "grid_bounds": [
+        768,
+        0,
+        1152,
+        512
+      ],
+      "uniform_scale": 0.9958932238193019,
+      "translation": [
+        -14,
+        1
+      ],
+      "solid_bounds": [
+        44.757700205338814,
+        15.938398357289529,
+        327.59137577002053,
+        501.9342915811089
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7362443210499747,
+      "head_area": 5484
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked-B.png",
+      "grid_bounds": [
+        768,
+        0,
+        1152,
+        512
+      ],
+      "uniform_scale": 0.9958932238193019,
+      "translation": [
+        -24,
+        1
+      ],
+      "solid_bounds": [
+        27.786447638603697,
+        14.942505133470227,
+        306.6365503080082,
+        497.95071868583165
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.617574011523942,
+      "head_area": 5522
+    }
+  ],
+  "masked-04-back-right": [
+    {
+      "phase": "standing",
+      "source": "raw/masked-standing.png",
+      "grid_bounds": [
+        1152,
+        0,
+        1536,
+        512
+      ],
+      "uniform_scale": 0.9855670103092784,
+      "translation": [
+        -3,
+        4
+      ],
+      "solid_bounds": [
+        87.67216494845361,
+        19.769072164948454,
+        270.0020618556701,
+        498.75463917525775
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.921823446232577,
+      "head_area": 5283
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked-A.png",
+      "grid_bounds": [
+        1152,
+        0,
+        1536,
+        512
+      ],
+      "uniform_scale": 0.9855670103092784,
+      "translation": [
+        7,
+        3
+      ],
+      "solid_bounds": [
+        89.78762886597939,
+        18.769072164948454,
+        299.7134020618557,
+        497.75463917525775
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8612480160387603,
+      "head_area": 5041
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked-B.png",
+      "grid_bounds": [
+        1152,
+        0,
+        1536,
+        512
+      ],
+      "uniform_scale": 0.9855670103092784,
+      "translation": [
+        -9,
+        2
+      ],
+      "solid_bounds": [
+        81.67216494845361,
+        17.769072164948454,
+        280.75670103092784,
+        495.76907216494845
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.6529642766658221,
+      "head_area": 5361
+    }
+  ],
+  "masked-05-back": [
+    {
+      "phase": "standing",
+      "source": "raw/masked-standing.png",
+      "grid_bounds": [
+        0,
+        512,
+        384,
+        1024
+      ],
+      "uniform_scale": 0.9832285115303984,
+      "translation": [
+        6,
+        7
+      ],
+      "solid_bounds": [
+        86.62473794549267,
+        13.882599580712789,
+        297.0356394129979,
+        485.832285115304
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.9226172691962952,
+      "head_area": 4567
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked-A.png",
+      "grid_bounds": [
+        0,
+        512,
+        384,
+        1024
+      ],
+      "uniform_scale": 0.9832285115303984,
+      "translation": [
+        1,
+        5
+      ],
+      "solid_bounds": [
+        78.67505241090147,
+        10.89937106918239,
+        295.9685534591195,
+        481.8658280922432
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8811801429866076,
+      "head_area": 4825
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked-B.png",
+      "grid_bounds": [
+        0,
+        512,
+        384,
+        1024
+      ],
+      "uniform_scale": 0.9832285115303984,
+      "translation": [
+        4,
+        0
+      ],
+      "solid_bounds": [
+        83.64150943396227,
+        10.815513626834383,
+        293.0691823899371,
+        482.7651991614256
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.9200963451670332,
+      "head_area": 4716
+    }
+  ],
+  "masked-06-back-left": [
+    {
+      "phase": "standing",
+      "source": "raw/masked-standing.png",
+      "grid_bounds": [
+        384,
+        512,
+        768,
+        1024
+      ],
+      "uniform_scale": 0.9852631578947368,
+      "translation": [
+        11,
+        1
+      ],
+      "solid_bounds": [
+        119.37894736842105,
+        7.896842105263158,
+        295.74105263157895,
+        483.77894736842103
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7406256334031485,
+      "head_area": 5795
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked-A.png",
+      "grid_bounds": [
+        384,
+        512,
+        768,
+        1024
+      ],
+      "uniform_scale": 0.9852631578947368,
+      "translation": [
+        5,
+        7
+      ],
+      "solid_bounds": [
+        94.65894736842105,
+        11.926315789473684,
+        312.4021052631579,
+        482.8821052631579
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8259013282732448,
+      "head_area": 5473
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked-B.png",
+      "grid_bounds": [
+        384,
+        512,
+        768,
+        1024
+      ],
+      "uniform_scale": 0.9852631578947368,
+      "translation": [
+        12,
+        0
+      ],
+      "solid_bounds": [
+        111.51157894736842,
+        8.867368421052632,
+        308.5642105263158,
+        477.85263157894735
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.6618884120171674,
+      "head_area": 5841
+    }
+  ],
+  "masked-07-left": [
+    {
+      "phase": "standing",
+      "source": "raw/masked-standing.png",
+      "grid_bounds": [
+        768,
+        512,
+        1152,
+        1024
+      ],
+      "uniform_scale": 0.9915966386554622,
+      "translation": [
+        12,
+        0
+      ],
+      "solid_bounds": [
+        129.00840336134453,
+        7.932773109243698,
+        298.57142857142856,
+        487.8655462184874
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7090987124463519,
+      "head_area": 5837
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked-A.png",
+      "grid_bounds": [
+        768,
+        512,
+        1152,
+        1024
+      ],
+      "uniform_scale": 0.9915966386554622,
+      "translation": [
+        6,
+        4
+      ],
+      "solid_bounds": [
+        80.36974789915966,
+        7.966386554621849,
+        355.0420168067227,
+        486.9075630252101
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8071655003289671,
+      "head_area": 5968
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked-B.png",
+      "grid_bounds": [
+        768,
+        512,
+        1152,
+        1024
+      ],
+      "uniform_scale": 0.9915966386554622,
+      "translation": [
+        -7,
+        3
+      ],
+      "solid_bounds": [
+        98.109243697479,
+        9.941176470588236,
+        347.0,
+        485.9075630252101
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7364130434782609,
+      "head_area": 5721
+    }
+  ],
+  "masked-08-front-left": [
+    {
+      "phase": "standing",
+      "source": "raw/masked-standing.png",
+      "grid_bounds": [
+        1152,
+        512,
+        1536,
+        1024
+      ],
+      "uniform_scale": 0.9937629937629938,
+      "translation": [
+        0,
+        2
+      ],
+      "solid_bounds": [
+        109.31392931392932,
+        9.950103950103951,
+        300.1164241164241,
+        493.91268191268193
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8948195896549014,
+      "head_area": 5336
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked-A.png",
+      "grid_bounds": [
+        1152,
+        512,
+        1536,
+        1024
+      ],
+      "uniform_scale": 0.9937629937629938,
+      "translation": [
+        0,
+        4
+      ],
+      "solid_bounds": [
+        91.42619542619543,
+        7.975051975051976,
+        319.991683991684,
+        496.90644490644496
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8429516709942206,
+      "head_area": 5327
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked-B.png",
+      "grid_bounds": [
+        1152,
+        512,
+        1536,
+        1024
+      ],
+      "uniform_scale": 0.9937629937629938,
+      "translation": [
+        -4,
+        4
+      ],
+      "solid_bounds": [
+        114.25779625779626,
+        11.950103950103951,
+        299.0977130977131,
+        495.91268191268193
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8347153123272526,
+      "head_area": 5077
+    }
+  ],
+  "armed-01-front": [
+    {
+      "phase": "standing",
+      "source": "raw/armed-standing.png",
+      "grid_bounds": [
+        0,
+        0,
+        384,
+        512
+      ],
+      "uniform_scale": 0.9717741935483871,
+      "translation": [
+        6,
+        3
+      ],
+      "solid_bounds": [
+        105.12096774193549,
+        17.576612903225808,
+        277.125,
+        500.5483870967742
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.807150980949673,
+      "head_area": 4781
+    },
+    {
+      "phase": "A",
+      "source": "raw/overrides/armed-01-front-A.png",
+      "grid_bounds": null,
+      "uniform_scale": 0.34361076456959544,
+      "translation": [
+        6,
+        3
+      ],
+      "solid_bounds": [
+        118.01710924968812,
+        18.806095170201388,
+        269.2058456603101,
+        487.83478880769917
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.6567569793296549,
+      "head_area": 4446
+    },
+    {
+      "phase": "B",
+      "source": "raw/overrides/armed-01-front-B.png",
+      "grid_bounds": null,
+      "uniform_scale": 0.34361076456959544,
+      "translation": [
+        3,
+        -1
+      ],
+      "solid_bounds": [
+        111.92461236856175,
+        18.58581358046694,
+        272.04722865799323,
+        479.71145963286403
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.6457017543859649,
+      "head_area": 4597
+    }
+  ],
+  "armed-02-front-right": [
+    {
+      "phase": "standing",
+      "source": "raw/armed-standing.png",
+      "grid_bounds": [
+        384,
+        0,
+        768,
+        512
+      ],
+      "uniform_scale": 0.9757085020242915,
+      "translation": [
+        7,
+        2
+      ],
+      "solid_bounds": [
+        102.61943319838056,
+        17.611336032388664,
+        342.6437246963563,
+        501.56275303643724
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.6422828522472651,
+      "head_area": 5100
+    },
+    {
+      "phase": "A",
+      "source": "raw/armed-A.png",
+      "grid_bounds": [
+        384,
+        0,
+        768,
+        512
+      ],
+      "uniform_scale": 0.9757085020242915,
+      "translation": [
+        6,
+        -4
+      ],
+      "solid_bounds": [
+        86.98380566801619,
+        19.417004048582996,
+        327.0080971659919,
+        483.85425101214577
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.6362046681365467,
+      "head_area": 5240
+    },
+    {
+      "phase": "B",
+      "source": "raw/armed-B.png",
+      "grid_bounds": [
+        384,
+        0,
+        768,
+        512
+      ],
+      "uniform_scale": 0.9757085020242915,
+      "translation": [
+        8,
+        -5
+      ],
+      "solid_bounds": [
+        97.76518218623482,
+        17.441295546558706,
+        336.8137651821862,
+        485.7813765182186
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.6070130263556498,
+      "head_area": 5371
+    }
+  ],
+  "armed-03-right": [
+    {
+      "phase": "standing",
+      "source": "raw/armed-standing.png",
+      "grid_bounds": [
+        768,
+        0,
+        1152,
+        512
+      ],
+      "uniform_scale": 1.0041407867494825,
+      "translation": [
+        -4,
+        1
+      ],
+      "solid_bounds": [
+        85.36853002070394,
+        16.06211180124224,
+        378.57763975155285,
+        515.120082815735
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.761547100940615,
+      "head_area": 5375
+    },
+    {
+      "phase": "A",
+      "source": "raw/armed-A.png",
+      "grid_bounds": [
+        768,
+        0,
+        1152,
+        512
+      ],
+      "uniform_scale": 1.0041407867494825,
+      "translation": [
+        0,
+        -5
+      ],
+      "solid_bounds": [
+        54.22360248447205,
+        16.086956521739133,
+        353.4575569358178,
+        497.07039337474123
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8027711164401812,
+      "head_area": 5407
+    },
+    {
+      "phase": "B",
+      "source": "raw/armed-B.png",
+      "grid_bounds": [
+        768,
+        0,
+        1152,
+        512
+      ],
+      "uniform_scale": 1.0041407867494825,
+      "translation": [
+        -4,
+        -8
+      ],
+      "solid_bounds": [
+        39.178053830227746,
+        15.095238095238098,
+        348.45341614906835,
+        495.0745341614907
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7746517344987708,
+      "head_area": 5701
+    }
+  ],
+  "armed-04-back-right": [
+    {
+      "phase": "standing",
+      "source": "raw/armed-standing.png",
+      "grid_bounds": [
+        1152,
+        0,
+        1536,
+        512
+      ],
+      "uniform_scale": 0.991701244813278,
+      "translation": [
+        12,
+        5
+      ],
+      "solid_bounds": [
+        88.3609958506224,
+        18.883817427385893,
+        365.04564315352695,
+        498.86721991701245
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.4695458457799605,
+      "head_area": 5588
+    },
+    {
+      "phase": "A",
+      "source": "raw/armed-A.png",
+      "grid_bounds": [
+        1152,
+        0,
+        1536,
+        512
+      ],
+      "uniform_scale": 0.991701244813278,
+      "translation": [
+        3,
+        -6
+      ],
+      "solid_bounds": [
+        87.29460580912863,
+        17.800829875518673,
+        332.24481327800834,
+        487.86721991701245
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.6532050310653129,
+      "head_area": 5577
+    },
+    {
+      "phase": "B",
+      "source": "raw/armed-B.png",
+      "grid_bounds": [
+        1152,
+        0,
+        1536,
+        512
+      ],
+      "uniform_scale": 0.991701244813278,
+      "translation": [
+        15,
+        -6
+      ],
+      "solid_bounds": [
+        89.37759336099586,
+        17.800829875518673,
+        332.344398340249,
+        490.8423236514523
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.5025915687629579,
+      "head_area": 5379
+    }
+  ],
+  "armed-05-back": [
+    {
+      "phase": "standing",
+      "source": "raw/armed-standing.png",
+      "grid_bounds": [
+        0,
+        512,
+        384,
+        1024
+      ],
+      "uniform_scale": 0.9936440677966102,
+      "translation": [
+        -1,
+        16
+      ],
+      "solid_bounds": [
+        94.38983050847457,
+        16.0,
+        275.2330508474576,
+        485.0
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8519689565967232,
+      "head_area": 5600
+    },
+    {
+      "phase": "A",
+      "source": "raw/armed-A.png",
+      "grid_bounds": [
+        0,
+        512,
+        384,
+        1024
+      ],
+      "uniform_scale": 0.9936440677966102,
+      "translation": [
+        5,
+        0
+      ],
+      "solid_bounds": [
+        106.35169491525424,
+        13.911016949152543,
+        269.3093220338983,
+        479.9300847457627
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8115477145148356,
+      "head_area": 5143
+    },
+    {
+      "phase": "B",
+      "source": "raw/armed-B.png",
+      "grid_bounds": [
+        0,
+        512,
+        384,
+        1024
+      ],
+      "uniform_scale": 0.9936440677966102,
+      "translation": [
+        2,
+        1
+      ],
+      "solid_bounds": [
+        102.35805084745763,
+        13.917372881355933,
+        270.28389830508473,
+        485.89830508474574
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8930550059358924,
+      "head_area": 5273
+    }
+  ],
+  "armed-06-back-left": [
+    {
+      "phase": "standing",
+      "source": "raw/armed-standing.png",
+      "grid_bounds": [
+        384,
+        512,
+        768,
+        1024
+      ],
+      "uniform_scale": 1.0042918454935623,
+      "translation": [
+        -3,
+        15
+      ],
+      "solid_bounds": [
+        51.231759656652365,
+        15.0,
+        293.2660944206009,
+        489.02575107296144
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8574183771869404,
+      "head_area": 6047
+    },
+    {
+      "phase": "A",
+      "source": "raw/armed-A.png",
+      "grid_bounds": [
+        384,
+        512,
+        768,
+        1024
+      ],
+      "uniform_scale": 1.0042918454935623,
+      "translation": [
+        -1,
+        -1
+      ],
+      "solid_bounds": [
+        67.29184549356223,
+        11.051502145922747,
+        318.3648068669528,
+        480.05579399141635
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.742635395422615,
+      "head_area": 6130
+    },
+    {
+      "phase": "B",
+      "source": "raw/armed-B.png",
+      "grid_bounds": [
+        384,
+        512,
+        768,
+        1024
+      ],
+      "uniform_scale": 1.0042918454935623,
+      "translation": [
+        -2,
+        0
+      ],
+      "solid_bounds": [
+        52.231759656652365,
+        11.047210300429185,
+        298.2832618025751,
+        483.06437768240346
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8589864355689525,
+      "head_area": 6097
+    }
+  ],
+  "armed-07-left": [
+    {
+      "phase": "standing",
+      "source": "raw/armed-standing.png",
+      "grid_bounds": [
+        768,
+        512,
+        1152,
+        1024
+      ],
+      "uniform_scale": 1.004255319148936,
+      "translation": [
+        -9,
+        10
+      ],
+      "solid_bounds": [
+        43.221276595744676,
+        10.0,
+        297.2978723404255,
+        488.0255319148936
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8389627168696936,
+      "head_area": 5921
+    },
+    {
+      "phase": "A",
+      "source": "raw/armed-A.png",
+      "grid_bounds": [
+        768,
+        512,
+        1152,
+        1024
+      ],
+      "uniform_scale": 1.004255319148936,
+      "translation": [
+        -6,
+        -1
+      ],
+      "solid_bounds": [
+        42.20425531914893,
+        12.055319148936169,
+        349.50638297872337,
+        482.04680851063824
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7710081550644132,
+      "head_area": 5544
+    },
+    {
+      "phase": "B",
+      "source": "raw/armed-B.png",
+      "grid_bounds": [
+        768,
+        512,
+        1152,
+        1024
+      ],
+      "uniform_scale": 1.004255319148936,
+      "translation": [
+        -5,
+        -1
+      ],
+      "solid_bounds": [
+        29.144680851063825,
+        12.055319148936169,
+        351.5106382978723,
+        485.05957446808503
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7998887584203695,
+      "head_area": 5645
+    }
+  ],
+  "armed-08-front-left": [
+    {
+      "phase": "standing",
+      "source": "raw/armed-standing.png",
+      "grid_bounds": [
+        1152,
+        512,
+        1536,
+        1024
+      ],
+      "uniform_scale": 1.0170212765957447,
+      "translation": [
+        -10,
+        4
+      ],
+      "solid_bounds": [
+        40.851063829787236,
+        6.034042553191489,
+        285.9531914893617,
+        493.1872340425532
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.673458262350937,
+      "head_area": 5797
+    },
+    {
+      "phase": "A",
+      "source": "raw/armed-A.png",
+      "grid_bounds": [
+        1152,
+        512,
+        1536,
+        1024
+      ],
+      "uniform_scale": 1.0170212765957447,
+      "translation": [
+        -8,
+        -1
+      ],
+      "solid_bounds": [
+        67.2595744680851,
+        13.238297872340425,
+        300.15744680851066,
+        496.32340425531913
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8457987072945522,
+      "head_area": 5803
+    },
+    {
+      "phase": "B",
+      "source": "raw/armed-B.png",
+      "grid_bounds": [
+        1152,
+        512,
+        1536,
+        1024
+      ],
+      "uniform_scale": 1.0170212765957447,
+      "translation": [
+        -4,
+        -1
+      ],
+      "solid_bounds": [
+        58.03829787234043,
+        12.221276595744682,
+        304.15744680851066,
+        501.4085106382979
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7655868742111905,
+      "head_area": 5491
+    }
+  ],
+  "masked_armed-01-front": [
+    {
+      "phase": "standing",
+      "source": "raw/masked_armed-standing.png",
+      "grid_bounds": [
+        0,
+        0,
+        384,
+        512
+      ],
+      "uniform_scale": 1.0041666666666667,
+      "translation": [
+        0,
+        -1
+      ],
+      "solid_bounds": [
+        95.39583333333333,
+        18.079166666666666,
+        276.1458333333333,
+        502.0875
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.745350682323072,
+      "head_area": 4763
+    },
+    {
+      "phase": "A",
+      "source": "raw/overrides/masked_armed-01-front-A.png",
+      "grid_bounds": null,
+      "uniform_scale": 0.3550644567219153,
+      "translation": [
+        -3,
+        -2
+      ],
+      "solid_bounds": [
+        114.52633517495396,
+        17.883609576427254,
+        270.7546961325967,
+        500.0611418047882
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7361494719740048,
+      "head_area": 4398
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked_armed-B.png",
+      "grid_bounds": [
+        0,
+        0,
+        384,
+        512
+      ],
+      "uniform_scale": 1.0041666666666667,
+      "translation": [
+        0,
+        -1
+      ],
+      "solid_bounds": [
+        106.44166666666666,
+        17.075,
+        283.175,
+        503.09166666666664
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8999311057526697,
+      "head_area": 5051
+    }
+  ],
+  "masked_armed-02-front-right": [
+    {
+      "phase": "standing",
+      "source": "raw/masked_armed-standing.png",
+      "grid_bounds": [
+        384,
+        0,
+        768,
+        512
+      ],
+      "uniform_scale": 1.0062630480167014,
+      "translation": [
+        12,
+        1
+      ],
+      "solid_bounds": [
+        95.51983298538622,
+        18.106471816283925,
+        342.05427974947804,
+        505.1377870563674
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.689192593525633,
+      "head_area": 5397
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked_armed-A.png",
+      "grid_bounds": [
+        384,
+        0,
+        768,
+        512
+      ],
+      "uniform_scale": 1.0062630480167014,
+      "translation": [
+        -11,
+        -3
+      ],
+      "solid_bounds": [
+        72.51983298538622,
+        19.13778705636743,
+        343.20459290187887,
+        504.15657620041753
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.6133788308009271,
+      "head_area": 5578
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked_armed-B.png",
+      "grid_bounds": [
+        384,
+        0,
+        768,
+        512
+      ],
+      "uniform_scale": 1.0062630480167014,
+      "translation": [
+        -8,
+        0
+      ],
+      "solid_bounds": [
+        78.53862212943632,
+        18.112734864300627,
+        334.12943632567845,
+        504.1377870563674
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7601834161253344,
+      "head_area": 5522
+    }
+  ],
+  "masked_armed-03-right": [
+    {
+      "phase": "standing",
+      "source": "raw/masked_armed-standing.png",
+      "grid_bounds": [
+        768,
+        0,
+        1152,
+        512
+      ],
+      "uniform_scale": 0.9979423868312757,
+      "translation": [
+        5,
+        1
+      ],
+      "solid_bounds": [
+        81.84156378600822,
+        15.969135802469134,
+        364.25925925925924,
+        501.96707818930037
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.6984598757092678,
+      "head_area": 5548
+    },
+    {
+      "phase": "A",
+      "source": "raw/overrides/masked_armed-03-right-A.png",
+      "grid_bounds": null,
+      "uniform_scale": 0.35286360639337927,
+      "translation": [
+        9,
+        -5
+      ],
+      "solid_bounds": [
+        48.87358752245186,
+        12.643180319668964,
+        377.38960507468795,
+        496.06632107859855
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7574285863491567,
+      "head_area": 5683
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked_armed-B.png",
+      "grid_bounds": [
+        768,
+        0,
+        1152,
+        512
+      ],
+      "uniform_scale": 0.9979423868312757,
+      "translation": [
+        -1,
+        0
+      ],
+      "solid_bounds": [
+        37.91975308641975,
+        15.96707818930041,
+        362.2510288065844,
+        498.97119341563786
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8438409854423292,
+      "head_area": 5692
+    }
+  ],
+  "masked_armed-04-back-right": [
+    {
+      "phase": "standing",
+      "source": "raw/masked_armed-standing.png",
+      "grid_bounds": [
+        1152,
+        0,
+        1536,
+        512
+      ],
+      "uniform_scale": 0.9979123173277662,
+      "translation": [
+        -1,
+        2
+      ],
+      "solid_bounds": [
+        86.81628392484342,
+        19.962421711899793,
+        339.2881002087683,
+        499.9582463465553
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7211239514284038,
+      "head_area": 5470
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked_armed-A.png",
+      "grid_bounds": [
+        1152,
+        0,
+        1536,
+        512
+      ],
+      "uniform_scale": 0.9979123173277662,
+      "translation": [
+        10,
+        3
+      ],
+      "solid_bounds": [
+        10.0,
+        20.962421711899793,
+        347.29436325678495,
+        507.9436325678497
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.6995318689232985,
+      "head_area": 5416
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked_armed-B.png",
+      "grid_bounds": [
+        1152,
+        0,
+        1536,
+        512
+      ],
+      "uniform_scale": 0.9979123173277662,
+      "translation": [
+        1,
+        1
+      ],
+      "solid_bounds": [
+        86.8204592901879,
+        19.960334029227557,
+        345.27974947807934,
+        501.9519832985386
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8388686377750776,
+      "head_area": 5241
+    }
+  ],
+  "masked_armed-05-back": [
+    {
+      "phase": "standing",
+      "source": "raw/masked_armed-standing.png",
+      "grid_bounds": [
+        0,
+        512,
+        384,
+        1024
+      ],
+      "uniform_scale": 1.0064377682403434,
+      "translation": [
+        0,
+        1
+      ],
+      "solid_bounds": [
+        103.66309012875537,
+        11.064377682403434,
+        282.8090128755365,
+        486.1030042918455
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7757929769748013,
+      "head_area": 4931
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked_armed-A.png",
+      "grid_bounds": [
+        0,
+        512,
+        384,
+        1024
+      ],
+      "uniform_scale": 1.0064377682403434,
+      "translation": [
+        -4,
+        2
+      ],
+      "solid_bounds": [
+        99.66309012875537,
+        12.064377682403434,
+        276.7961373390558,
+        492.1351931330472
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7849771156780041,
+      "head_area": 5665
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked_armed-B.png",
+      "grid_bounds": [
+        0,
+        512,
+        384,
+        1024
+      ],
+      "uniform_scale": 1.0064377682403434,
+      "translation": [
+        -1,
+        1
+      ],
+      "solid_bounds": [
+        92.59871244635194,
+        13.07725321888412,
+        277.7832618025751,
+        492.14163090128756
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8542647335718321,
+      "head_area": 5489
+    }
+  ],
+  "masked_armed-06-back-left": [
+    {
+      "phase": "standing",
+      "source": "raw/masked_armed-standing.png",
+      "grid_bounds": [
+        384,
+        512,
+        768,
+        1024
+      ],
+      "uniform_scale": 1.0,
+      "translation": [
+        9,
+        7
+      ],
+      "solid_bounds": [
+        33.0,
+        12.0,
+        298.0,
+        484.0
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.5781231532915732,
+      "head_area": 6149
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked_armed-A.png",
+      "grid_bounds": [
+        384,
+        512,
+        768,
+        1024
+      ],
+      "uniform_scale": 1.0,
+      "translation": [
+        -2,
+        -1
+      ],
+      "solid_bounds": [
+        40.0,
+        13.0,
+        324.0,
+        484.0
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.6116641475999375,
+      "head_area": 5724
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked_armed-B.png",
+      "grid_bounds": [
+        384,
+        512,
+        768,
+        1024
+      ],
+      "uniform_scale": 1.0,
+      "translation": [
+        2,
+        0
+      ],
+      "solid_bounds": [
+        67.0,
+        9.0,
+        305.0,
+        485.0
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7817263461711915,
+      "head_area": 6714
+    }
+  ],
+  "masked_armed-07-left": [
+    {
+      "phase": "standing",
+      "source": "raw/masked_armed-standing.png",
+      "grid_bounds": [
+        768,
+        512,
+        1152,
+        1024
+      ],
+      "uniform_scale": 0.9936842105263158,
+      "translation": [
+        -1,
+        7
+      ],
+      "solid_bounds": [
+        26.823157894736845,
+        12.962105263157895,
+        296.11157894736846,
+        487.9431578947369
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8861108470386919,
+      "head_area": 5611
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked_armed-A.png",
+      "grid_bounds": [
+        768,
+        512,
+        1152,
+        1024
+      ],
+      "uniform_scale": 0.9936842105263158,
+      "translation": [
+        -5,
+        0
+      ],
+      "solid_bounds": [
+        25.804210526315792,
+        10.930526315789475,
+        347.7578947368421,
+        483.9242105263158
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.64896642239965,
+      "head_area": 5918
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked_armed-B.png",
+      "grid_bounds": [
+        768,
+        512,
+        1152,
+        1024
+      ],
+      "uniform_scale": 0.9936842105263158,
+      "translation": [
+        4,
+        0
+      ],
+      "solid_bounds": [
+        39.77263157894737,
+        9.936842105263159,
+        353.7768421052632,
+        484.91789473684213
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7793406865782625,
+      "head_area": 5916
+    }
+  ],
+  "masked_armed-08-front-left": [
+    {
+      "phase": "standing",
+      "source": "raw/masked_armed-standing.png",
+      "grid_bounds": [
+        1152,
+        512,
+        1536,
+        1024
+      ],
+      "uniform_scale": 1.0020964360587001,
+      "translation": [
+        0,
+        3
+      ],
+      "solid_bounds": [
+        48.10062893081761,
+        9.0125786163522,
+        287.60167714884693,
+        494.0272536687631
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8327030033370412,
+      "head_area": 5606
+    },
+    {
+      "phase": "A",
+      "source": "raw/masked_armed-A.png",
+      "grid_bounds": [
+        1152,
+        512,
+        1536,
+        1024
+      ],
+      "uniform_scale": 1.0020964360587001,
+      "translation": [
+        4,
+        0
+      ],
+      "solid_bounds": [
+        52.10062893081761,
+        12.025157232704402,
+        307.63522012578613,
+        492.0293501048218
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.7160407433325557,
+      "head_area": 5545
+    },
+    {
+      "phase": "B",
+      "source": "raw/masked_armed-B.png",
+      "grid_bounds": [
+        1152,
+        512,
+        1536,
+        1024
+      ],
+      "uniform_scale": 1.0020964360587001,
+      "translation": [
+        0,
+        0
+      ],
+      "solid_bounds": [
+        48.10062893081761,
+        11.023060796645701,
+        301.6310272536687,
+        495.03563941299785
+      ],
+      "clipped": false,
+      "lower_silhouette_iou": 0.8632201979099232,
+      "head_area": 5687
+    }
+  ]
+}
