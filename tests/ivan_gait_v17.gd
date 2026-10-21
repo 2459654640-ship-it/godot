@@ -18,7 +18,7 @@ func run():
    for angle in 8:
     var right=w.camera.global_basis.x;var depth=w.camera.global_basis.z;depth.y=0;depth=depth.normalized();var direction=right*sin(angle*PI/4)+depth*cos(angle*PI/4)
     a.visual.rotation.y=atan2(-direction.x,-direction.z);a.velocity=direction*2.65;p.direction_ready=false;p.cycle=0
-    var center=2 if mode=="reload" else 0;var planted=0;var poses={}
+    var center=2 if mode=="reload" and p.pose_count>=7 else 0;var planted=0;var poses={}
     for frame in 120:
      p._process(1.0/120);poses[p.current_pose]=true
      if p.current_pose==center:planted+=1
@@ -28,7 +28,7 @@ func run():
      else:check(p.source_count==8 and p.current_column==angle,"each diagonal has its own complete drawn directional cell")
     check(poses.size()==3 and planted>=50,"all eight directions visibly retain both strides and contact poses: "+art+mode+str(angle))
    a.velocity=Vector3.ZERO;p._process(0)
-   check(p.current_pose==(2 if mode=="reload" else 0),"standing uses the appropriate complete contact illustration")
+   check(p.current_pose==(2 if mode=="reload" and p.pose_count>=7 else 0),"standing uses the appropriate complete contact illustration")
   a.queue_free()
  w.queue_free()
  for i in 3:await process_frame

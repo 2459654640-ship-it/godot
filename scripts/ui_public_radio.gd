@@ -8,7 +8,7 @@ static func render(h):
  var stations=HBoxContainer.new();stations.add_theme_constant_override("separation",8);h.modal_box.add_child(stations)
  for i in r.catalog.stations.size():
   var s:Dictionary=r.catalog.stations[i]
-  var b=h.button(s.frequency+" МГц\n"+s.name+"\n"+s.ru,func():r.select_station(i),true,true)
+  var b=h.button(s.frequency+" МГц\n"+s.name+(" / "+s.en if s.has("en") else "")+"\n"+s.ru,func():r.select_station(i),true,true)
   b.size_flags_horizontal=Control.SIZE_EXPAND_FILL;b.add_theme_font_size_override("font_size",15);stations.add_child(b)
   if i==r.station:b.add_theme_color_override("font_color",h.amber)
  h.body(r.current_station().description,17,h.muted)

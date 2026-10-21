@@ -24,12 +24,12 @@ func run():
 			w.combat.reload_time=1.2 if actor.is_player else 0.0
 			w.combat.veteran_reload=0.0 if actor.is_player else 1.2
 			var seen=phases(painter)
-			check(seen.size()==3 and seen.has(2) and seen.has(5) and seen.has(6),"moving reload keeps both actual stride drawings and planted transition: "+str(actor.name)+str(direction))
+			check(seen.size()==3 and seen.has(0 if painter.pose_count==3 else 2) and seen.has(1 if painter.pose_count==3 else 5) and seen.has(2 if painter.pose_count==3 else 6),"moving reload keeps both actual stride drawings and planted transition: "+str(actor.name)+str(direction))
 			actor.velocity=Vector3.ZERO;painter._process(0)
-			check(painter.current_pose==2,"standing reload uses stationary loading pose")
+			check(painter.current_pose==(0 if painter.pose_count==3 else 2),"standing reload uses stationary loading pose")
 			w.combat.reload_time=0;w.combat.veteran_reload=0;actor.velocity=Vector3(1,0,1)
 			painter.react("shot");seen=phases(painter)
-			check(seen.size()==3 and seen.has(0) and seen.has(3) and seen.has(4),"firing while moving preserves lower-body gait")
+			check(seen.size()==3 and seen.has(0) and seen.has(1 if painter.pose_count==3 else 3) and seen.has(2 if painter.pose_count==3 else 4),"firing while moving preserves lower-body gait")
 		actor.velocity=Vector3.ZERO;painter.reaction_time=0
 	var lieutenant=w.npcs.plant_guide;lieutenant.velocity=Vector3(1,0,1)
 	var painter=lieutenant.visual.get_node("Painter");painter.set_process(false)

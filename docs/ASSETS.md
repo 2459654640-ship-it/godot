@@ -4,7 +4,7 @@
 
 ## 人物与动作贴图
 
-[全部角色示意图](characters/all-characters.png) · [伊万八方向](characters/ivan-eight-directions.png) · [伊万戴面具八方向](characters/ivan_masked-eight-directions.png) · [持枪与换弹](characters/ivan_combat-eight-directions.png) · [面具持枪与换弹](characters/ivan_masked_combat-eight-directions.png)
+[全部角色示意图](characters/all-characters.png) · [伊万八方向](characters/ivan-eight-directions.png) · [伊万戴面具八方向](characters/ivan_masked-eight-directions.png) · [持枪三姿态](characters/ivan_combat-eight-directions.png) · [面具持枪三姿态](characters/ivan_masked_combat-eight-directions.png)
 
 | 编号 | 人物 / 装扮 | 完整贴图 | 方向 | 姿态数 |
 | --- | --- | --- | --- | --- |
@@ -12,7 +12,7 @@
 | 02 | 普通老人 | [ambient_elder](../assets/characters/ambient_elder.png) | 8 | 1 |
 | 03 | 普通妇女 | [ambient_woman](../assets/characters/ambient_woman.png) | 8 | 1 |
 | 04 | 普通工人 | [ambient_worker](../assets/characters/ambient_worker.png) | 8 | 1 |
-| 05 | 安娜 | [anna](../assets/characters/anna.png) | 8.0 | 1 |
+| 05 | 安娜 | [anna](../assets/characters/anna.png) | 8.0 | 1.0 |
 | 06 | 安娜的哥哥 | [coal_brother](../assets/characters/coal_brother.png) | 8 | 1 |
 | 07 | 煤运登记员 | [coal_clerk](../assets/characters/coal_clerk.png) | 8 | 1 |
 | 08 | 煤运医护 | [coal_medic](../assets/characters/coal_medic.png) | 8 | 1 |
@@ -25,26 +25,26 @@
 | 15 | 叶莲娜 | [commune_leader](../assets/characters/commune_leader.png) | 8 | 1 |
 | 16 | 莫罗 | [commune_moro](../assets/characters/commune_moro.png) | 8 | 1 |
 | 17 | 娜佳 | [commune_printer](../assets/characters/commune_printer.png) | 8 | 1 |
-| 18 | 维拉 | [cook](../assets/characters/cook.png) | 8.0 | 4 |
-| 19 | 食堂居民 | [diner](../assets/characters/diner.png) | 8.0 | 4 |
-| 20 | 伊万的父亲 | [father](../assets/characters/father.png) | 8.0 | 1 |
-| 21 | 伊戈尔 | [igor](../assets/characters/igor.png) | 8.0 | 4 |
+| 18 | 维拉 | [cook](../assets/characters/cook.png) | 8.0 | 4.0 |
+| 19 | 食堂居民 | [diner](../assets/characters/diner.png) | 8.0 | 4.0 |
+| 20 | 伊万的父亲 | [father](../assets/characters/father.png) | 8.0 | 1.0 |
+| 21 | 伊戈尔 | [igor](../assets/characters/igor.png) | 8.0 | 4.0 |
 | 22 | 伊万 | [ivan](../assets/characters/ivan.png) | 8 | 3 |
-| 23 | 伊万·持枪 | [ivan_combat](../assets/characters/ivan_combat.png) | 8 | 7 |
+| 23 | 伊万·持枪 | [ivan_combat](../assets/characters/ivan_combat.png) | 8 | 3 |
 | 24 | 伊万·面具 | [ivan_masked](../assets/characters/ivan_masked.png) | 8 | 3 |
-| 25 | 伊万·面具持枪 | [ivan_masked_combat](../assets/characters/ivan_masked_combat.png) | 8 | 7 |
-| 26 | 米哈伊尔 | [mikhail](../assets/characters/mikhail.png) | 8.0 | 4 |
-| 27 | 妮娜 | [nina](../assets/characters/nina.png) | 8.0 | 4 |
-| 28 | 排队居民 | [queue](../assets/characters/queue.png) | 8.0 | 4 |
-| 29 | 普通居民 | [resident](../assets/characters/resident.png) | 8.0 | 4 |
+| 25 | 伊万·面具持枪 | [ivan_masked_combat](../assets/characters/ivan_masked_combat.png) | 8 | 3 |
+| 26 | 米哈伊尔 | [mikhail](../assets/characters/mikhail.png) | 8.0 | 4.0 |
+| 27 | 妮娜 | [nina](../assets/characters/nina.png) | 8.0 | 4.0 |
+| 28 | 排队居民 | [queue](../assets/characters/queue.png) | 8.0 | 4.0 |
+| 29 | 普通居民 | [resident](../assets/characters/resident.png) | 8.0 | 4.0 |
 | 30 | 谢契厨房 | [sech_cook](../assets/characters/sech_cook.png) | 8 | 1 |
 | 31 | 谢契长老 | [sech_elder](../assets/characters/sech_elder.png) | 8 | 1 |
 | 32 | 谢契军需员 | [sech_quartermaster](../assets/characters/sech_quartermaster.png) | 8 | 1 |
-| 33 | 谢苗诺夫 | [semyon](../assets/characters/semyon.png) | 8.0 | 4 |
+| 33 | 谢苗诺夫 | [semyon](../assets/characters/semyon.png) | 8.0 | 4.0 |
 | 34 | 谢尔盖 | [sergey](../assets/characters/sergey.png) | 8 | 1 |
 | 35 | 星城守卫 | [star_guard](../assets/characters/star_guard.png) | 8 | 1 |
 | 36 | 列夫 | [star_technician](../assets/characters/star_technician.png) | 8 | 1 |
-| 37 | 柳德米拉 | [supply](../assets/characters/supply.png) | 8.0 | 4 |
+| 37 | 柳德米拉 | [supply](../assets/characters/supply.png) | 8.0 | 4.0 |
 | 38 | 老兵·面具 | [veteran_masked](../assets/characters/veteran_masked.png) | 8 | 1 |
 | 39 | 老兵·面具持枪 | [veteran_masked_combat](../assets/characters/veteran_masked_combat.png) | 8 | 7 |
 
@@ -253,3 +253,16 @@
 
 - [旧泵站过场](../assets/cinematics/surface_pumpyard.png)
 - [电车站伏击过场](../assets/cinematics/road_ambush.png)
+
+## v22 剧情插图与音乐
+
+- [anna_class](../assets/cinematics/anna_class.png)
+- [anna_empty_class](../assets/cinematics/anna_empty_class.png)
+- [anna_surface](../assets/cinematics/anna_surface.png)
+- [d6_ward](../assets/cinematics/d6_ward.png)
+- [frontline_station](../assets/cinematics/frontline_station.png)
+- [mine_rescue](../assets/cinematics/mine_rescue.png)
+- [mine_aftermath](../assets/cinematics/mine_aftermath.png)
+- [rail_evacuation](../assets/cinematics/rail_evacuation.png)
+
+原创剧情 [MIDI 原谱](../assets/audio/scores)及[署名说明](../assets/audio/licenses/original_story_scores.txt)。

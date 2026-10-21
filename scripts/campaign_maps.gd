@@ -13,7 +13,9 @@ static func doors(id:String)->Array:
 	return out
 static func build(w):
 	var k=w.kit;var id:String=w.floor_id;var plan:Dictionary=LAYOUTS[id]
-	if id in ["commune","waterworks","sech","starcity","surface"]:Detail.materials(k)
+	if id in ["commune","waterworks","sech","starcity","surface","railfront"]:Detail.materials(k)
+	if id=="railfront":
+		preload("res://scripts/frontline.gd").build(w);return
 	if id in ["surface","starcity"]:
 		preload("res://scripts/surface_site.gd").build(w) if id=="surface" else preload("res://scripts/star_perimeter.gd").build(w)
 		k.finish_walls();return
@@ -213,6 +215,12 @@ static func bookcase(k,p:Vector3,length:float):
 			k.box("BookSpineWear",p+Vector3(front*.238,y+height*.6,-length/2+.16+index*.13),Vector3(.008,.015,.075),"paper")
 static func coal(w):
 	var k=w.kit
+	var frame=Vector3(-23,1.15,-18)
+	for x in [-24.5,-21.5]:k.box("MineEscapeJamb",Vector3(x,1.2,-18),Vector3(.16,2.4,.2),"metal")
+	var grate=k.box("MineEscapeGrille",frame,Vector3(2.8,2.3,.10),"rust",true);grate.set_meta("dynamic",true)
+	if w.story.f("rescue_route_ready"):grate.position.x+=2.8
+	k.lamp(Vector3(-23,2.25,-19),true,1.1,5)
+
 	Settlement.rug(k,Vector3(-12,0,11.9),Vector2(2,2),"olive")
 	for x in [-26.1,-24.9]:k.box("CoalHaulRail",Vector3(x,.025,-7.5),Vector3(.08,.05,27),"metal")
 	for z in range(-21,8,2):
@@ -316,10 +324,17 @@ static func rack(k,p:Vector3,width:float,material:String):
 		k.box("ShelfBoard",p+Vector3(0,y,0),Vector3(width,.08,.55),material)
 		for x in [-.3,.3]:k.box("ShelfParcel",p+Vector3(x*width,y+.18,0),Vector3(width*.32,.28,.4),"paper" if y>1 else "wood")
 static func people(w):
+	if w.floor_id=="commune" and w.story.f("anna_outcome_done"):
+		w.person("commune_aleksei",Vector3(-2.9,0,20),"cloth",true,"coal_brother");w.npcs.commune_aleksei.stationary=true
+	if w.floor_id=="coal" and w.story.f("anna_rescue_started") and not w.story.f("anna_outcome_done"):
+		w.person("mine_anna",Vector3(7,0,-5.3),"cloth",true,"anna");w.npcs.mine_anna.stationary=true
+	if w.floor_id=="railfront":preload("res://scripts/frontline.gd").people(w);return
 	var arts={"plant_guide":"commander_masked","commune_leader":"commune_leader","commune_anna":"anna","sech_elder":"sech_elder","sech_sergey":"sergey","coal_clerk":"coal_clerk","coal_medic":"coal_medic","coal_brother":"coal_brother","star_guard":"star_guard","star_father":"father"}
 	for person_id in ["commune_printer","commune_grower","sech_quartermaster","star_technician"]:arts[person_id]=person_id
 	arts.merge({"commune_cook":"commune_cook","commune_child":"commune_child","commune_moro":"commune_moro","commune_guard":"commune_guard","commune_baranova":"ambient_elder","sech_cook":"sech_cook"})
 	for e in LAYOUTS[w.floor_id].objects:
+		if e[0]=="commune_anna" and w.story.f("anna_dead"):continue
+		if e[0]=="coal_brother" and w.story.f("anna_outcome_done"):continue
 		if e[3]=="npc":w.person(e[0],Vector3(e[1],0,e[2]),"green",true,arts[e[0]])
 	for id in ["commune_moro","commune_guard","commune_baranova"]:
 		if w.npcs.has(id):w.npcs[id].stationary=true
@@ -329,7 +344,10 @@ static func people(w):
 		w.person("plant_guide",Vector3(10,0,7.5),"green",true,"commander_masked")
 		w.person("plant_veteran",Vector3(13,0,7),"green",true,"veteran_masked")
 static func targets(w):
+	for extra in ["commune_aleksei","mine_anna"]:
+		if w.npcs.has(extra):w.target(extra,w.npcs[extra].position,Campaign.data().interactions[extra].name,"talk")
 	for e in LAYOUTS[w.floor_id].objects:
+		if (e[0]=="commune_anna" and w.story.f("anna_dead")) or (e[0]=="coal_brother" and w.story.f("anna_outcome_done")):continue
 		var d:Dictionary=Campaign.data().interactions[e[0]]
 		w.target(e[0],Vector3(e[1],0,e[2]),d.name,"talk" if e[3]=="npc" else "inspect")
 	if w.floor_id=="surface":preload("res://scripts/surface_site.gd").restore_drops(w)

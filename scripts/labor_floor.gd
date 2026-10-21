@@ -148,6 +148,8 @@ static func build(w):
 	preload("res://scripts/labor_dressing.gd").build(w)
 
 static func people(w):
+	w.person("ward_wounded",Vector3(-3,0,-8.4),"cloth",false,"resident")
+	w.npcs.ward_wounded.stationary=true
 	w.person("commander",Vector3(-8.5,0,9.5),"green",true)
 	w.person("armorer",Vector3(10,0,-8.0),"green",true,"queue")
 	w.person("main_guard",Vector3(17.8,0,-10),"green",true,"commander")

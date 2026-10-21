@@ -27,6 +27,7 @@ static func render(h,sequence:String=""):
 		var total=rich.get_total_character_count();rich.visible_characters=0
 		group.visible=false
 		h.typing.append({"label":rich,"total":total,"elapsed":0.0,"rate":48.0,"root":group})
+	if p.get("note","")!="":words.add_child(h.label(p.note,16,h.muted))
 	var main=h.modal_box.get_parent().get_parent()
 	var options=VBoxContainer.new();options.add_theme_constant_override("separation",10)
 	main.add_child(options);main.move_child(options,main.get_child_count()-2)

@@ -1,0 +1,1817 @@
+{
+  "revision": 22,
+  "interactions": {
+    "commune_anna": {
+      "facility": "commune",
+      "name": "安娜 / 医务室",
+      "role": "公社 / 医务",
+      "body": "安娜把几本练习册挪到桌角，给换药盆腾出地方。一本课本摊在讲四季的那页，纸边已经磨得发软。\n安娜：「先别碰那杯水，米沙刚拿来洗过画笔。我给你换一杯。」",
+      "options": [
+        "anna_lesson",
+        "anna_dream",
+        "anna_separation",
+        "anna_accept",
+        "anna_talk",
+        "anna_result",
+        "anna_warning",
+        "anna_medic_plan",
+        "anna_shelter",
+        "anna_rescue_depart",
+        "anna_prepare_status",
+        "anna_surface",
+        "anna_return_life",
+        "anna_home",
+        "medicine_seal_accept",
+        "medicine_seal_return"
+      ],
+      "spoken": true,
+      "after": [
+        [
+          {
+            "all": [
+              "anna_lesson_seen"
+            ],
+            "not": [
+              "anna_request"
+            ]
+          },
+          "安娜等孩子们走远，才从抽屉里拿出一张折旧的纸。\n安娜：「我哥哥叫阿列克谢·索科洛夫，在 D-6 二号施工班干过活，左手有烫伤。我想先确认他在哪里。这里的联络室存着交换记录，你愿意帮我核对一下吗？」"
+        ],
+        [
+          {
+            "all": [
+              "anna_request"
+            ],
+            "not": [
+              "anna_first_news"
+            ]
+          },
+          "安娜正在把工牌编号抄到另一张纸上。\n安娜：「有结果就来告诉我。查不到也告诉我，好吗？别为了让我安心，替他编一句平安。」"
+        ],
+        [
+          {
+            "all": [
+              "anna_first_news"
+            ],
+            "not": [
+              "anna_warning_seen"
+            ]
+          },
+          "哥哥的探视记录压在课本下面。安娜已经读过好几遍，仍会偶尔抽出来看他的签字。\n安娜：「他说暂时走不了，我明白。你能坐下来听他说话，已经很好了。下次我想托人给他带一双厚袜子。」"
+        ],
+        [
+          {
+            "all": [
+              "anna_warning_seen"
+            ],
+            "not": [
+              "anna_rescue_started",
+              "anna_outcome_done"
+            ]
+          },
+          "安娜把矿区来信、医护清单和一张孩子画的地图分别装进袋子。\n安娜：「我也去。我认得哥哥，转移名单里有家属的孩子跟着，也需要有人照看。医护和路线得先落实，我不会催你现在就出发。」"
+        ],
+        [
+          "anna_alive",
+          "安娜把休养安排贴在哥哥床边，另一只手还扶着他的杯子。\n安娜：「明天下午我再上课，今天先陪他把饭吃完。你要过来就晚一点，米沙说要考考你地图。」"
+        ],
+        [
+          "anna_dead",
+          "课桌上留着半截铅笔和几本收齐的练习册。没有人坐在安娜惯常坐的木箱上。"
+        ]
+      ]
+    },
+    "commune_class": {
+      "facility": "commune",
+      "name": "安娜的课桌",
+      "role": "课堂与来信",
+      "body": "练习册按孩子的名字码好，桌边还放着一张有待补完的地图。",
+      "options": [
+        "anna_memorial"
+      ],
+      "spoken": false
+    },
+    "mine_airgate": {
+      "facility": "coal",
+      "name": "旧支巷回风闸",
+      "role": "撤离路线",
+      "body": "闸旁有一块旧出口牌，主巷的声音在这里变得很远。先核对回风图，再检查闸后是否能抬担架通行。",
+      "options": [
+        "rescue_air_open"
+      ],
+      "spoken": false
+    },
+    "front_routes": {
+      "facility": "railfront",
+      "name": "南控制间 / 联络线图",
+      "role": "联络线任务",
+      "body": "旧图标出了南口、检修侧廊、西侧转移点与北口。北口信号只能在现场威胁清除后恢复。",
+      "options": [
+        "front_read_routes"
+      ],
+      "spoken": false
+    },
+    "front_cache": {
+      "facility": "railfront",
+      "name": "西侧转移点",
+      "role": "联络线任务",
+      "body": "地上放着不同班次留下的物资和回执。先核对本次派工的封签，不替私人信件作主。",
+      "options": [
+        "front_take_evidence"
+      ],
+      "spoken": false
+    },
+    "front_signal": {
+      "facility": "railfront",
+      "name": "北口接送信号",
+      "role": "联络线任务",
+      "body": "信号箱的回路仍在，箱盖上贴着两次检修日期。北口有武装或兽群活动时不能操作。",
+      "options": [
+        "front_restore_signal"
+      ],
+      "spoken": false
+    },
+    "front_exit": {
+      "facility": "railfront",
+      "name": "南口安全接送线",
+      "role": "联络线任务",
+      "body": "列车在安全线外等候。可以随时先撤回补给，已取得的调查进度不会丢失。",
+      "options": [
+        "front_return"
+      ],
+      "spoken": false
+    },
+    "front_supply": {
+      "facility": "railfront",
+      "name": "本班派工补给箱",
+      "role": "联络线任务",
+      "body": "按派工编号封装的土制弹与绷带，每趟任务只能领取一次。",
+      "options": [
+        "front_supply"
+      ],
+      "spoken": false
+    },
+    "commune_guard": {
+      "facility": "commune",
+      "name": "亚历山德拉 / 守备班",
+      "role": "公社居民",
+      "body": "亚历山德拉把步枪检查完，枪口朝下收入架内。她的袖子上缝着褪色的红布。\n「守备值班、武器领用和出入登记都在这里。我们要防中央的侦察队，也得守住换水、送药的人走的那条路。」\n她用铅笔点了点轮值表。\n「武装班归居民议事监督。换班可以问，具体岗哨口令不能随便传。」",
+      "spoken": true,
+      "options": [
+        "guard_custom",
+        "guard_front",
+        "moro_permission",
+        "memory_guard",
+        "surface_brief",
+        "surface_accept",
+        "surface_depart",
+        "surface_turnin",
+        "surface_trade",
+        "field_c1_accept",
+        "field_c1_report",
+        "field_c2_accept",
+        "field_c2_report",
+        "field_c3_accept",
+        "field_c3_report",
+        "anna_transport_commune",
+        "anna_transport_guest",
+        "cross_contact",
+        "north_inquiry"
+      ],
+      "after": [
+        [
+          "moro_schedule",
+          "亚历山德拉把允许借用议事厅的时段夹回簿里。\n「轮值照旧，留一侧通道。想听的人下班后自己去，值岗的人不会被叫离岗位。」"
+        ],
+        [
+          "memory_guard_checked",
+          "守备簿里补上了一张待核的记述，原始报告没有被撕掉。\n「我已经写明哪几项是当年亲见，哪几项来自记录。等卓娅也核过，再按家属的意思处理。」"
+        ]
+      ]
+    },
+    "sech_quartermaster": {
+      "name": "彼得 / 谢契轮值员",
+      "role": "居民 / 交谈",
+      "facility": "sech",
+      "body": "彼得将巡轨、守门和留守的轮值牌排在桌上，指了指北线的旧图。\n「北道岔换过方向，旗语牌却还指着东边的塌方线。阿塔曼已经叫停那一段巡轨，先把路和标记核清楚，才好让今晚的人出发。你愿意帮忙，就先看看最新勘查记录。」",
+      "options": [
+        "watch_accept",
+        "watch_return",
+        "watch_custom",
+        "north_verify",
+        "surface_brief",
+        "surface_accept",
+        "surface_depart",
+        "surface_turnin",
+        "surface_trade",
+        "field_s1_accept",
+        "field_s1_report",
+        "field_s2_accept",
+        "field_s2_report",
+        "field_s3_accept",
+        "field_s3_report",
+        "anna_transport_sech",
+        "cross_contact",
+        "north_inquiry"
+      ],
+      "after": [
+        [
+          "watch_done",
+          "彼得将东线轮值牌收进抽屉。\n「西行，东线停用。今晚每个人出门前，我都让他复述一遍。」"
+        ]
+      ],
+      "spoken": true
+    },
+    "commune_leave": {
+      "facility": "commune",
+      "name": "联络气闸 / 出发登记",
+      "role": "调查",
+      "body": "门边挂着三条路线的标牌。出站前可以继续留在设施里准备。",
+      "options": [
+        "commune_coal",
+        "commune_star",
+        "commune_sech",
+        "workers_coal",
+        "field_c1_depart",
+        "field_c2_depart",
+        "field_c3_depart"
+      ],
+      "spoken": false
+    },
+    "sech_leave": {
+      "facility": "sech",
+      "name": "北线检修列车",
+      "role": "调查",
+      "body": "旧军列的车灯映在库门上。地图和联络窗口已经准备好，是否出发由你决定。",
+      "options": [
+        "sech_star",
+        "sech_commune",
+        "ending_train",
+        "ending_caravan",
+        "field_s1_depart",
+        "field_s2_depart",
+        "field_s3_depart"
+      ],
+      "spoken": false
+    },
+    "coal_archive": {
+      "facility": "coal",
+      "name": "班组档案柜",
+      "role": "调查",
+      "body": "柜子里有换班单和旧工伤登记。纸张有些粘连，翻页要很慢。",
+      "options": [
+        "coal_archive",
+        "names_archive",
+        "mine_air_inspect",
+        "rescue_air_map"
+      ],
+      "spoken": false
+    },
+    "coal_medic": {
+      "facility": "coal",
+      "name": "值班医护",
+      "role": "D-6 / 医护",
+      "body": "「旧伤和长期暴露让他记不清很多事。家属来见他时，不要围着问『还记不记得』。」\n医护递来一张空白的探视安排。",
+      "options": [
+        "coal_medic",
+        "linen_accept",
+        "linen_return",
+        "mine_air_accept",
+        "mine_air_return",
+        "vitamin_plan",
+        "vitamin_leave",
+        "rescue_onsite_medic",
+        "rescue_review"
+      ],
+      "after": [
+        [
+          "linen_done",
+          "白牌布包已经送上洁净架，医护将领用记录夹回床边。\n「这一班够用了。去看人时别急着问他想起了什么，让他先坐稳。」"
+        ]
+      ],
+      "spoken": true
+    },
+    "coal_clerk": {
+      "facility": "coal",
+      "name": "煤运登记员",
+      "role": "D-6 / 登记",
+      "body": "登记员看过探访函的交换编号，将它压在登记簿旁。\n「这里归中央苏维埃的 D-6 管。你这份医护担保可以用，但只准去登记和休养区，去生活层的门不会放行。办完还得回来销号。」\n他翻到两条同姓记录，指给你看。\n「先核班组编号，再核左手的旧伤。名单上有同名的人，得把身份对准了，才能告诉家属。」",
+      "options": [
+        "coal_register",
+        "names_accept",
+        "names_return",
+        "workers_sign",
+        "rescue_onsite_transport"
+      ],
+      "after": [
+        [
+          "names_done",
+          "更正表的副本压在玻璃下，三位休养者和一位死者分别列明了编号。\n「我已经签字上报。配给办得按更正后的名单发粮，不能再把休养的人算进死亡那栏。」"
+        ]
+      ],
+      "spoken": true
+    },
+    "mine_anna": {
+      "facility": "coal",
+      "name": "安娜 / 转移家属",
+      "role": "撤离准备",
+      "body": "安娜在哥哥床边核对转移名单，把孩子的姓名另外抄了一份。\n安娜：「先去把备用出口看清楚。医护在北边等我们，开始转移以前都还来得及准备。」",
+      "options": [
+        "rescue_review"
+      ],
+      "spoken": true
+    },
+    "commune_aleksei": {
+      "facility": "commune",
+      "name": "阿列克谢 / 休养",
+      "role": "安娜的哥哥",
+      "body": "阿列克谢坐在床沿，杯子放在伸手够得到的地方。",
+      "options": [
+        "aleksei_after"
+      ],
+      "spoken": true,
+      "after": [
+        [
+          "anna_alive",
+          "阿列克谢看着安娜留下的药表。\n阿列克谢：「她怕我忘，一栏写给我看，一栏留给自己。我说我认得字，她说那也得照着来。」"
+        ],
+        [
+          "anna_dead",
+          "阿列克谢把晾干的练习册装进纸袋。\n阿列克谢：「这些先留在课堂，孩子们还要用。她自己的东西，我慢慢整理。」"
+        ]
+      ]
+    }
+  },
+  "actions": {
+    "lower_broadcast": {
+      "text": "停在医务间门边，听完这一段广播",
+      "req": {
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "lower_war_seen": true
+      },
+      "reply": "",
+      "travel": "lower_ward"
+    },
+    "anna_lesson": {
+      "text": "「这些本子是你教孩子用的？」",
+      "req": {
+        "not": [
+          "anna_lesson_seen"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "travel": "anna_class"
+    },
+    "anna_dream": {
+      "text": "「你自己有没有想做的事？」",
+      "req": {
+        "all": [
+          "anna_lesson_seen"
+        ]
+      },
+      "flags": {},
+      "reply": "安娜：「以前想当老师。后来觉得，能有一间上课时不用挪走药盆的屋子就很好。再往后……我想看看地表。有人说天晴时能看到很远，我想知道到底有多远。」\n她把削好的铅笔放进盒里。\n安娜：「不过得有人带路，面具也得合适。我不会带孩子去试运气。要是你以后碰见讲植物的书，帮我留意一本。」"
+    },
+    "anna_separation": {
+      "text": "「你和哥哥怎么分开的？」",
+      "req": {
+        "all": [
+          "anna_lesson_seen"
+        ]
+      },
+      "flags": {},
+      "reply": "安娜：「我跟医护交换队出来帮过工。后来公社收留了我们，交换线又停了，我没能回去。哥哥那时在二号施工班，信里总说一切都好。最后一张纸上只写了让我别回来，连落款都是匆匆划的。」\n她拿起抽屉里的纸，又放下。\n安娜：「我怕他真出了事，也怕他还在等，而我已经在这里过了三年。」"
+    },
+    "anna_accept": {
+      "text": "「把名字和当年的班组写给我，我去问。」",
+      "reply": "安娜写下阿列克谢的姓名、班组编号和左手烫伤的位置，又加了一行自己的名字。\n安娜：「如果见到他，先说我在公社做事，有地方住，也有饭吃。其它的话，让他愿意说的时候再说。」",
+      "once": true,
+      "flags": {
+        "anna_request": true
+      },
+      "give": [
+        "anna_note"
+      ],
+      "req": {
+        "all": [
+          "anna_lesson_seen"
+        ]
+      }
+    },
+    "anna_talk": {
+      "text": "「你为什么留在这里？」",
+      "reply": "「中央按身份发药，我见过人拿着配给证排到最后，药已经没了。」\n安娜把绷带卷好。\n「我留在公社，是因为我相信药该按伤病分。这不等于我们已经做对了每一件事。」",
+      "once": true,
+      "req": {
+        "all": [
+          "anna_lesson_seen"
+        ]
+      }
+    },
+    "anna_result": {
+      "text": "把核实过的记录与探视安排交给她",
+      "reply": "安娜先看见哥哥的签字，用手指沿着那几笔划了一遍。\n安娜：「是他。他写索字，总把最后一笔拖得很长。」\n她坐下来，听你把探视经过说完。你提到他的病，她没有打断；直到你说他愿意再见家属，她才小声问下一次交换窗口是什么时候。",
+      "once": true,
+      "req": {
+        "all": [
+          "brother_found"
+        ]
+      },
+      "flags": {
+        "anna_first_news": true
+      },
+      "travel": "anna_first_letter"
+    },
+    "anna_home": {
+      "text": "「我愿意在公社留下来，继续帮这里的人。」",
+      "reply": "你决定先留下来。这里的人为你安排了铺位，下一班的工作还等着有人接手。",
+      "once": true,
+      "req": {
+        "all": [
+          "anna_first_news"
+        ],
+        "not": [
+          "commune_member",
+          "sech_member",
+          "sech_member"
+        ]
+      },
+      "flags": {
+        "commune_member": true
+      },
+      "travel": "commune_settle"
+    },
+    "anna_warning": {
+      "text": "「你托人叫我来，收到新消息了？」",
+      "req": {
+        "all": [
+          "anna_first_news",
+          "chapter_first_field"
+        ],
+        "not": [
+          "anna_outcome_done"
+        ]
+      },
+      "flags": {
+        "anna_warning_seen": true
+      },
+      "reply": "",
+      "travel": "anna_warning_letter"
+    },
+    "anna_medic_plan": {
+      "text": "「先落实随行医护和救护物资。」",
+      "req": {
+        "all": [
+          "anna_warning_seen"
+        ]
+      },
+      "flags": {
+        "rescue_medic_ready": true
+      },
+      "reply": "安娜领你逐项核对氧气袋、敷料和搬运带，值班医护把自己的名字签在同行栏。\n安娜：「维生素可以等他安顿下来再评估。井下救急的东西得另外准备，不能混着算。」"
+    },
+    "anna_transport_commune": {
+      "text": "「矿区要转出一批伤病者，能安排接送吗？」",
+      "req": {
+        "all": [
+          "anna_warning_seen",
+          "commune_member"
+        ]
+      },
+      "flags": {
+        "rescue_transport_ready": true
+      },
+      "reply": "亚历山德拉把一辆货车从轮值表上划到医护交换队名下。\n亚历山德拉：「车只能到交换口，进不去 D-6。把确切出口和人数交给司机，别让他们在封锁线外盲等。」"
+    },
+    "anna_transport_sech": {
+      "text": "「我想借这次检修车接送矿区伤病者。」",
+      "req": {
+        "all": [
+          "anna_warning_seen",
+          "sech_member"
+        ]
+      },
+      "flags": {
+        "rescue_transport_ready": true
+      },
+      "reply": "彼得在回程单上加了担架的位置。\n彼得：「先把能坐的人安在后排，担架留在靠门的位置。到矿口报医护交换队的编号，别打谢契的旗子硬闯。」"
+    },
+    "anna_transport_guest": {
+      "text": "「我没有入伙，能替医护交换队安排一趟车吗？」",
+      "req": {
+        "all": [
+          "anna_warning_seen"
+        ],
+        "not": [
+          "commune_member",
+          "sech_member"
+        ]
+      },
+      "flags": {
+        "rescue_transport_ready": true
+      },
+      "reply": "亚历山德拉核对了医护的担保，安排你随交换队搬运物资，以此抵这次接送的人手。\n亚历山德拉：「医护签了担保，就按交换队的办法排车。你把这一班搬运接下来，到时按名单点清人。」"
+    },
+    "anna_shelter": {
+      "text": "帮安娜与住户商量临时休养铺位",
+      "req": {
+        "all": [
+          "anna_warning_seen"
+        ]
+      },
+      "flags": {
+        "rescue_shelter_ready": true
+      },
+      "reply": "两户居民愿意挪出靠暖气的下铺，安娜答应轮流做饭、洗床单。她没有替别人保证多久能腾回去，只把医护约定的复查日期写在床头。"
+    },
+    "anna_prepare_status": {
+      "text": "「我们还有哪些准备没落实？」",
+      "req": {
+        "all": [
+          "anna_warning_seen"
+        ]
+      },
+      "flags": {},
+      "reply": "先确认医护和接送，再到矿区查回风图并打开第二条撤离路线。矿区医护能够补办准备，开始转移前会再核对一遍。",
+      "once": false
+    },
+    "anna_rescue_depart": {
+      "text": "和安娜随医护交换队返回 D-6",
+      "req": {
+        "all": [
+          "anna_warning_seen"
+        ],
+        "not": [
+          "anna_rescue_started",
+          "anna_outcome_done"
+        ]
+      },
+      "flags": {
+        "anna_rescue_started": true
+      },
+      "reply": "",
+      "travel": "anna_rescue_road"
+    },
+    "rescue_air_map": {
+      "text": "对照原始巡检时刻，找出旧支巷的回风出口",
+      "req": {
+        "floor": [
+          "coal"
+        ],
+        "all": [
+          "anna_rescue_started"
+        ],
+        "not": [
+          "anna_outcome_done"
+        ]
+      },
+      "flags": {
+        "rescue_air_known": true
+      },
+      "reply": "原始纸条记着巡检员真正到场的时刻，誊抄本却沿用了上一班。西侧旧支巷并非彻底废弃：回风闸通向另一处检修出口，转移前需要亲自打开并查看积水。"
+    },
+    "rescue_air_open": {
+      "text": "打开西侧回风闸，确认检修出口可抬担架通行",
+      "req": {
+        "floor": [
+          "coal"
+        ],
+        "all": [
+          "rescue_air_known"
+        ],
+        "not": [
+          "anna_outcome_done"
+        ]
+      },
+      "flags": {
+        "rescue_route_ready": true
+      },
+      "reply": "你先试了闸后的气流，再清出门底的碎石。矿工跟你沿检修路走了一趟，确认担架能够转弯，留下一盏标记灯。主提升机停运时，这条路仍可使用。"
+    },
+    "rescue_onsite_medic": {
+      "text": "请矿区医护补齐撤离照护安排",
+      "req": {
+        "floor": [
+          "coal"
+        ],
+        "all": [
+          "anna_rescue_started"
+        ],
+        "not": [
+          "rescue_medic_ready",
+          "anna_outcome_done"
+        ]
+      },
+      "flags": {
+        "rescue_medic_ready": true
+      },
+      "reply": "值班医护把两位尚能行动的病人编进互助搬运组，替安娜留出照看孩子的人手。你协助核对床位与药包，重新签好清单。准备现在补上，仍然来得及。"
+    },
+    "rescue_onsite_transport": {
+      "text": "通过矿口电话补办医护交换队接送",
+      "req": {
+        "floor": [
+          "coal"
+        ],
+        "all": [
+          "anna_rescue_started"
+        ],
+        "not": [
+          "rescue_transport_ready",
+          "anna_outcome_done"
+        ]
+      },
+      "flags": {
+        "rescue_transport_ready": true
+      },
+      "reply": "你把出口、人数和担架数逐项报给交换队。对方复述一遍才挂断。矿区医护签了担保，这一班搬运由你负责，不另收通行财物。"
+    },
+    "rescue_review": {
+      "text": "核对撤离条件，与安娜决定何时开始",
+      "req": {
+        "floor": [
+          "coal"
+        ],
+        "all": [
+          "anna_rescue_started"
+        ],
+        "not": [
+          "anna_outcome_done"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "travel": "rescue_review"
+    },
+    "anna_memorial": {
+      "text": "整理安娜的课本，和留下的人谈一谈",
+      "req": {
+        "floor": [
+          "commune"
+        ],
+        "all": [
+          "anna_dead"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "travel": "anna_memorial"
+    },
+    "anna_return_life": {
+      "text": "「今天能帮你什么？」",
+      "req": {
+        "all": [
+          "anna_alive"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "travel": "anna_living_lesson"
+    },
+    "field_c1_accept": {
+      "text": "「我来接下药箱经过的地方这趟任务。」",
+      "req": {
+        "all": [
+          "commune_member"
+        ],
+        "not": [
+          "field_c1_done"
+        ]
+      },
+      "flags": {
+        "field_c1_accepted": true
+      },
+      "reply": "把交换队的药箱从联络站带回。中央的封锁截断了原通路，先查可用支路，再清理沿线威胁。"
+    },
+    "field_c1_depart": {
+      "text": "检查装备，出发：药箱经过的地方",
+      "req": {
+        "all": [
+          "field_c1_accepted"
+        ],
+        "not": [
+          "field_c1_done"
+        ],
+        "floor": [
+          "commune"
+        ],
+        "items": [
+          "mask",
+          "filter"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "travel": "c1_intro"
+    },
+    "field_c1_report": {
+      "text": "交回记录，汇报“药箱经过的地方”的经过",
+      "req": {
+        "all": [
+          "field_c1_ready"
+        ],
+        "not": [
+          "field_c1_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "field_c1_done": true,
+        "chapter_first_field": true
+      },
+      "reply": "药箱交回医务室后，有人立刻来领敷料。亚历山德拉没有先问你消灭了几只兽，只让你指出哪段路还能走。",
+      "travel": "c1_after",
+      "reward": {
+        "handmade": 18,
+        "military": 5
+      }
+    },
+    "field_c2_accept": {
+      "text": "「我来接下被截住的回信这趟任务。」",
+      "req": {
+        "all": [
+          "commune_member",
+          "field_c1_done"
+        ],
+        "not": [
+          "field_c2_done"
+        ]
+      },
+      "flags": {
+        "field_c2_accepted": true
+      },
+      "reply": "寻找被迫撤离的联络员，找回投递存根。核对名单的用途，再决定哪些内容可以带回。"
+    },
+    "field_c2_depart": {
+      "text": "检查装备，出发：被截住的回信",
+      "req": {
+        "all": [
+          "field_c2_accepted"
+        ],
+        "not": [
+          "field_c2_done"
+        ],
+        "floor": [
+          "commune"
+        ],
+        "items": [
+          "mask",
+          "filter"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "travel": "c2_intro"
+    },
+    "field_c2_report": {
+      "text": "交回记录，汇报“被截住的回信”的经过",
+      "req": {
+        "all": [
+          "field_c2_ready"
+        ],
+        "not": [
+          "field_c2_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "field_c2_done": true,
+        "chapter_first_field": true
+      },
+      "reply": "娜佳收下封好的邮袋，先安排向家属核实。亚历山德拉把暴露的窗口从地图上遮住，新的接应地点暂时只口头通知。",
+      "travel": "c2_after",
+      "reward": {
+        "handmade": 18,
+        "military": 5
+      }
+    },
+    "field_c3_accept": {
+      "text": "「我来接下最后一班撤离车这趟任务。」",
+      "req": {
+        "all": [
+          "commune_member",
+          "field_c2_done"
+        ],
+        "not": [
+          "field_c3_done"
+        ]
+      },
+      "flags": {
+        "field_c3_accepted": true
+      },
+      "reply": "中央封锁队逼近换乘口。恢复撤离信号、守住接送通道，把居民送走后撤回，不追击。"
+    },
+    "field_c3_depart": {
+      "text": "检查装备，出发：最后一班撤离车",
+      "req": {
+        "all": [
+          "field_c3_accepted"
+        ],
+        "not": [
+          "field_c3_done"
+        ],
+        "floor": [
+          "commune"
+        ],
+        "items": [
+          "mask",
+          "filter"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "travel": "c3_intro"
+    },
+    "field_c3_report": {
+      "text": "交回记录，汇报“最后一班撤离车”的经过",
+      "req": {
+        "all": [
+          "field_c3_ready"
+        ],
+        "not": [
+          "field_c3_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "field_c3_done": true,
+        "chapter_first_field": true,
+        "north_story_ready": true
+      },
+      "reply": "撤离名单由接收人员当面复点，留守班随后也回到公社。墙上的通行图少了一条线，食堂里多了几张临时床位登记。",
+      "travel": "c3_after",
+      "reward": {
+        "handmade": 18,
+        "military": 5
+      }
+    },
+    "field_s1_accept": {
+      "text": "「我来接下空车也要回家这趟任务。」",
+      "req": {
+        "all": [
+          "sech_member"
+        ],
+        "not": [
+          "field_s1_done"
+        ]
+      },
+      "flags": {
+        "field_s1_accepted": true
+      },
+      "reply": "替迟归的交换车队查路，找回回程登记。运货之后还要接人，核实停车点再放行。"
+    },
+    "field_s1_depart": {
+      "text": "检查装备，出发：空车也要回家",
+      "req": {
+        "all": [
+          "field_s1_accepted"
+        ],
+        "not": [
+          "field_s1_done"
+        ],
+        "floor": [
+          "sech"
+        ],
+        "items": [
+          "mask",
+          "filter"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "travel": "s1_intro"
+    },
+    "field_s1_report": {
+      "text": "交回记录，汇报“空车也要回家”的经过",
+      "req": {
+        "all": [
+          "field_s1_ready"
+        ],
+        "not": [
+          "field_s1_done"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "field_s1_done": true,
+        "chapter_first_field": true
+      },
+      "reply": "彼得重排了座位，先让等车的家属认清车队标记。你这次带回来的货不多，饭桌旁却终于坐齐了几个人。",
+      "travel": "s1_after",
+      "reward": {
+        "handmade": 18,
+        "military": 5
+      }
+    },
+    "field_s2_accept": {
+      "text": "「我来接下没有旗子的车队这趟任务。」",
+      "req": {
+        "all": [
+          "sech_member",
+          "field_s1_done"
+        ],
+        "not": [
+          "field_s2_done"
+        ]
+      },
+      "flags": {
+        "field_s2_accepted": true
+      },
+      "reply": "调查一辆私下交易后失联的货车。核对它带走和换回的东西，把事实带回议事会。"
+    },
+    "field_s2_depart": {
+      "text": "检查装备，出发：没有旗子的车队",
+      "req": {
+        "all": [
+          "field_s2_accepted"
+        ],
+        "not": [
+          "field_s2_done"
+        ],
+        "floor": [
+          "sech"
+        ],
+        "items": [
+          "mask",
+          "filter"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "travel": "s2_intro"
+    },
+    "field_s2_report": {
+      "text": "交回记录，汇报“没有旗子的车队”的经过",
+      "req": {
+        "all": [
+          "field_s2_ready"
+        ],
+        "not": [
+          "field_s2_done"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "field_s2_done": true,
+        "chapter_first_field": true
+      },
+      "reply": "长老让司机家属和军需员都坐下，把短缺、私卖和换回药物分别说明。有人要求处罚，有人问当时为什么领不到药。",
+      "travel": "s2_after",
+      "reward": {
+        "handmade": 18,
+        "military": 5
+      }
+    },
+    "field_s3_accept": {
+      "text": "「我来接下报复到哪里为止这趟任务。」",
+      "req": {
+        "all": [
+          "sech_member",
+          "field_s2_done"
+        ],
+        "not": [
+          "field_s3_done"
+        ]
+      },
+      "flags": {
+        "field_s3_accepted": true
+      },
+      "reply": "北线哨队遭袭后，奉命确认交火位置并接回滞留居民。先找到目击记录，再处理仍封锁通道的武装。"
+    },
+    "field_s3_depart": {
+      "text": "检查装备，出发：报复到哪里为止",
+      "req": {
+        "all": [
+          "field_s3_accepted"
+        ],
+        "not": [
+          "field_s3_done"
+        ],
+        "floor": [
+          "sech"
+        ],
+        "items": [
+          "mask",
+          "filter"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "travel": "s3_intro"
+    },
+    "field_s3_report": {
+      "text": "交回记录，汇报“报复到哪里为止”的经过",
+      "req": {
+        "all": [
+          "field_s3_ready"
+        ],
+        "not": [
+          "field_s3_done"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "field_s3_done": true,
+        "chapter_first_field": true,
+        "north_story_ready": true
+      },
+      "reply": "阿塔曼听完交火经过，撤回了扩大报复范围的命令，仍要求补回守备轮值。有人觉得你太谨慎，失踪者的家属则来问一个确切的名字。",
+      "travel": "s3_after",
+      "reward": {
+        "handmade": 18,
+        "military": 5
+      }
+    },
+    "front_read_routes": {
+      "text": "核对检修侧廊和接送线",
+      "req": {
+        "floor": [
+          "railfront"
+        ]
+      },
+      "flags": {},
+      "reply": "控制间的原图确认侧廊仍通西侧转移点。绕开断轨与封死的台阶，从站台中段进入；北口信号在尽头的控制箱。",
+      "once": false
+    },
+    "front_take_evidence": {
+      "text": "核对本次派工的物资、记录与遗留消息",
+      "req": {
+        "floor": [
+          "railfront"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "once": false
+    },
+    "front_restore_signal": {
+      "text": "清理北口后接通信号，确认对方收到回程通知",
+      "req": {
+        "floor": [
+          "railfront"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "once": false
+    },
+    "front_return": {
+      "text": "沿南口撤回派工聚落",
+      "req": {
+        "floor": [
+          "railfront"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "once": false
+    },
+    "front_supply": {
+      "text": "领取本班 24 发土制弹与两卷绷带",
+      "req": {
+        "floor": [
+          "railfront"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "once": false
+    },
+    "commune_stay": {
+      "text": "「我想加入公社。给我安排一份工作吧。」",
+      "reply": "你决定先留下来。这里的人为你安排了铺位，下一班的工作还等着有人接手。",
+      "once": true,
+      "req": {
+        "not": [
+          "commune_member",
+          "sech_member"
+        ]
+      },
+      "flags": {
+        "commune_member": true
+      },
+      "travel": "commune_settle"
+    },
+    "ending_workers": {
+      "text": "留下来，建立与 D-6 工人的回信窗口",
+      "reply": "你决定先留下来。这里的人为你安排了铺位，下一班的工作还等着有人接手。",
+      "flags": {
+        "commune_member": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "workers_done"
+        ],
+        "not": [
+          "commune_member",
+          "sech_member"
+        ]
+      },
+      "travel": "commune_settle"
+    },
+    "sech_stay": {
+      "text": "「我愿意留下，按谢契的规矩一起过日子。」",
+      "reply": "你决定先留下来。这里的人为你安排了铺位，下一班的工作还等着有人接手。",
+      "once": true,
+      "req": {
+        "not": [
+          "sech_member",
+          "commune_member"
+        ]
+      },
+      "flags": {
+        "sech_member": true
+      },
+      "travel": "sech_settle"
+    },
+    "ending_train": {
+      "text": "和巡轨队一起维持北线通行",
+      "reply": "你决定先留下来。这里的人为你安排了铺位，下一班的工作还等着有人接手。",
+      "flags": {
+        "sech_member": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "north_done"
+        ],
+        "not": [
+          "sech_member",
+          "commune_member"
+        ]
+      },
+      "travel": "sech_settle"
+    },
+    "ending_caravan": {
+      "text": "组织以医药与居民接送为主的联络车队",
+      "reply": "你决定先留下来。这里的人为你安排了铺位，下一班的工作还等着有人接手。",
+      "flags": {
+        "sech_member": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "north_done",
+          "radio_fixed"
+        ],
+        "not": [
+          "sech_member",
+          "commune_member"
+        ]
+      },
+      "travel": "sech_settle"
+    },
+    "commune_star": {
+      "text": "带询问信前往星城外围",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "star_known",
+          "north_story_ready",
+          "north_inquiry_ready"
+        ],
+        "any": [
+          "commune_trusted",
+          "commune_radio_known",
+          "signal_identified"
+        ]
+      },
+      "travel": "star_road"
+    },
+    "sech_star": {
+      "text": "乘检修车到北线，前往星城外围",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "star_known",
+          "north_done",
+          "radio_fixed",
+          "north_story_ready",
+          "north_inquiry_ready"
+        ]
+      },
+      "travel": "star_road"
+    },
+    "north_inquiry": {
+      "text": "「走过这些地方之后，我想再查查东方-7。」",
+      "req": {
+        "all": [
+          "north_story_ready",
+          "signal_heard"
+        ]
+      },
+      "flags": {
+        "north_inquiry_ready": true,
+        "star_known": true,
+        "signal_identified": true,
+        "signal_heard": true
+      },
+      "reply": "联络员让你亲自听完短波值班广播，记下东方-7 的固定窗口，再替你封好寻找父亲的询问信。北线有人接送到外围；介绍信不包含入内许可。"
+    },
+    "commune_sech": {
+      "text": "随联络班访问谢契，承担一班封件交接",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "cross_contact_ready"
+        ]
+      },
+      "travel": "sech_arrival"
+    },
+    "sech_commune": {
+      "text": "随联络班访问公社，承担一班封件交接",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "cross_contact_ready"
+        ]
+      },
+      "travel": "solo_commune"
+    },
+    "cross_contact": {
+      "text": "「我想访问另一处聚落，可以替联络班做交接。」",
+      "req": {
+        "any": [
+          "chapter_first_field",
+          "commune_trusted",
+          "sech_trusted"
+        ]
+      },
+      "flags": {
+        "cross_contact_ready": true
+      },
+      "reply": "联络班给你写了具名担保，把这一趟需要交接的封件记在你名下。你的武器要在门口登记，口令不能带出。访问途中算一班联络工作，不能据此加入另一方的议事或守备。",
+      "once": false
+    },
+    "memory_finish": {
+      "text": "「这些记录我替你收好。以后还会来坐坐。」",
+      "reply": "巴拉诺娃将抄页夹进工牌袋。\n「来吧。下次不必带消息，带你自己来就行。」\n玛尔法送来两份热食，将核对记录的工时补给放在桌边。巴拉诺娃自己收好了工牌和抄页，抬头问起你来公社以后的日子。",
+      "once": true,
+      "req": {
+        "all": [
+          "memory_read"
+        ]
+      },
+      "flags": {
+        "memory_done": true
+      },
+      "reward": {
+        "military": 6
+      },
+      "goods": {
+        "bread": 2,
+        "medkit": 1
+      },
+      "travel": "memory_after_visit"
+    },
+    "moro_thanks": {
+      "text": "「第一场唱完了，你还想继续吗？」",
+      "reply": "「想啊。今天有人说鼓太快，也有人说那段话该再唱慢一点。能有人当面说这些，我就觉得这支乐队真有点样子了。」\n莫罗将手抄歌页折好递给你。\n「这份留着，上面有你帮着画的那一笔。工时补给我也替你领了，下次你愿意来，直接坐，不用再帮一遍忙。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_played"
+        ]
+      },
+      "flags": {
+        "moro_done": true
+      },
+      "give": [
+        "moro_card"
+      ],
+      "reward": {
+        "military": 6,
+        "handmade": 8
+      },
+      "goods": {
+        "bandage": 1
+      },
+      "travel": "moro_after_shift"
+    },
+    "aleksei_after": {
+      "text": "「这几天休息得怎么样？」",
+      "req": {
+        "floor": [
+          "commune"
+        ],
+        "all": [
+          "anna_outcome_done"
+        ]
+      },
+      "flags": {},
+      "reply": "阿列克谢：「腿比刚来时稳一点，夜里还是会醒。我想找点坐着能做的活，先帮他们把铅笔盒修一修。医护说不能急，我就每天少做一点。」"
+    },
+    "anna_surface": {
+      "text": "「等你休息好，我带你去看一次地表。」",
+      "req": {
+        "all": [
+          "anna_alive",
+          "anna_aftermath_done",
+          "north_story_ready"
+        ],
+        "items": [
+          "mask",
+          "filter"
+        ]
+      },
+      "flags": {},
+      "reply": "安娜先安排好哥哥的复查，又请人接了下午的课。你们借齐面具和备用滤罐，约好只到熟悉的检修出口，不带孩子同行。",
+      "travel": "anna_surface_visit"
+    }
+  },
+  "quests": [
+    {
+      "id": "field_c1",
+      "name": "药箱经过的地方",
+      "kind": "主线",
+      "facility": "commune",
+      "accepted": "field_c1_accepted",
+      "done": "field_c1_done",
+      "background": "把交换队的药箱从联络站带回。中央的封锁截断了原通路，先查可用支路，再清理沿线威胁。",
+      "lead": "守备和运输轮值中有一项需要出站完成的工作。",
+      "actions": [
+        "field_c1_accept",
+        "field_c1_depart",
+        "field_c1_report"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "target": "commune_leave",
+          "step": "检查面具和武器，从出发登记处启程。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_c1_in_progress"
+            ]
+          },
+          "target": "front_routes",
+          "place": "railfront",
+          "step": "先查南侧控制间的线路图，再穿过侧廊检查转移点。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_c1_evidence"
+            ]
+          },
+          "target": "front_signal",
+          "place": "railfront",
+          "step": "清理北口威胁后恢复接送信号，再回南侧出口。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_c1_ready"
+            ]
+          },
+          "target": "commune_guard",
+          "step": "返回聚落，向派工者交回记录并汇报。"
+        }
+      ]
+    },
+    {
+      "id": "field_c2",
+      "name": "被截住的回信",
+      "kind": "主线",
+      "facility": "commune",
+      "accepted": "field_c2_accepted",
+      "done": "field_c2_done",
+      "background": "寻找被迫撤离的联络员，找回投递存根。核对名单的用途，再决定哪些内容可以带回。",
+      "lead": "守备和运输轮值中有一项需要出站完成的工作。",
+      "actions": [
+        "field_c2_accept",
+        "field_c2_depart",
+        "field_c2_report"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "target": "commune_leave",
+          "step": "检查面具和武器，从出发登记处启程。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_c2_in_progress"
+            ]
+          },
+          "target": "front_routes",
+          "place": "railfront",
+          "step": "先查南侧控制间的线路图，再穿过侧廊检查转移点。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_c2_evidence"
+            ]
+          },
+          "target": "front_signal",
+          "place": "railfront",
+          "step": "清理北口威胁后恢复接送信号，再回南侧出口。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_c2_ready"
+            ]
+          },
+          "target": "commune_guard",
+          "step": "返回聚落，向派工者交回记录并汇报。"
+        }
+      ]
+    },
+    {
+      "id": "field_c3",
+      "name": "最后一班撤离车",
+      "kind": "主线",
+      "facility": "commune",
+      "accepted": "field_c3_accepted",
+      "done": "field_c3_done",
+      "background": "中央封锁队逼近换乘口。恢复撤离信号、守住接送通道，把居民送走后撤回，不追击。",
+      "lead": "守备和运输轮值中有一项需要出站完成的工作。",
+      "actions": [
+        "field_c3_accept",
+        "field_c3_depart",
+        "field_c3_report"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "target": "commune_leave",
+          "step": "检查面具和武器，从出发登记处启程。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_c3_in_progress"
+            ]
+          },
+          "target": "front_routes",
+          "place": "railfront",
+          "step": "先查南侧控制间的线路图，再穿过侧廊检查转移点。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_c3_evidence"
+            ]
+          },
+          "target": "front_signal",
+          "place": "railfront",
+          "step": "清理北口威胁后恢复接送信号，再回南侧出口。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_c3_ready"
+            ]
+          },
+          "target": "commune_guard",
+          "step": "返回聚落，向派工者交回记录并汇报。"
+        }
+      ]
+    },
+    {
+      "id": "field_s1",
+      "name": "空车也要回家",
+      "kind": "主线",
+      "facility": "sech",
+      "accepted": "field_s1_accepted",
+      "done": "field_s1_done",
+      "background": "替迟归的交换车队查路，找回回程登记。运货之后还要接人，核实停车点再放行。",
+      "lead": "守备和运输轮值中有一项需要出站完成的工作。",
+      "actions": [
+        "field_s1_accept",
+        "field_s1_depart",
+        "field_s1_report"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "target": "sech_leave",
+          "step": "检查面具和武器，从出发登记处启程。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_s1_in_progress"
+            ]
+          },
+          "target": "front_routes",
+          "place": "railfront",
+          "step": "先查南侧控制间的线路图，再穿过侧廊检查转移点。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_s1_evidence"
+            ]
+          },
+          "target": "front_signal",
+          "place": "railfront",
+          "step": "清理北口威胁后恢复接送信号，再回南侧出口。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_s1_ready"
+            ]
+          },
+          "target": "sech_quartermaster",
+          "step": "返回聚落，向派工者交回记录并汇报。"
+        }
+      ]
+    },
+    {
+      "id": "field_s2",
+      "name": "没有旗子的车队",
+      "kind": "主线",
+      "facility": "sech",
+      "accepted": "field_s2_accepted",
+      "done": "field_s2_done",
+      "background": "调查一辆私下交易后失联的货车。核对它带走和换回的东西，把事实带回议事会。",
+      "lead": "守备和运输轮值中有一项需要出站完成的工作。",
+      "actions": [
+        "field_s2_accept",
+        "field_s2_depart",
+        "field_s2_report"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "target": "sech_leave",
+          "step": "检查面具和武器，从出发登记处启程。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_s2_in_progress"
+            ]
+          },
+          "target": "front_routes",
+          "place": "railfront",
+          "step": "先查南侧控制间的线路图，再穿过侧廊检查转移点。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_s2_evidence"
+            ]
+          },
+          "target": "front_signal",
+          "place": "railfront",
+          "step": "清理北口威胁后恢复接送信号，再回南侧出口。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_s2_ready"
+            ]
+          },
+          "target": "sech_quartermaster",
+          "step": "返回聚落，向派工者交回记录并汇报。"
+        }
+      ]
+    },
+    {
+      "id": "field_s3",
+      "name": "报复到哪里为止",
+      "kind": "主线",
+      "facility": "sech",
+      "accepted": "field_s3_accepted",
+      "done": "field_s3_done",
+      "background": "北线哨队遭袭后，奉命确认交火位置并接回滞留居民。先找到目击记录，再处理仍封锁通道的武装。",
+      "lead": "守备和运输轮值中有一项需要出站完成的工作。",
+      "actions": [
+        "field_s3_accept",
+        "field_s3_depart",
+        "field_s3_report"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "target": "sech_leave",
+          "step": "检查面具和武器，从出发登记处启程。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_s3_in_progress"
+            ]
+          },
+          "target": "front_routes",
+          "place": "railfront",
+          "step": "先查南侧控制间的线路图，再穿过侧廊检查转移点。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_s3_evidence"
+            ]
+          },
+          "target": "front_signal",
+          "place": "railfront",
+          "step": "清理北口威胁后恢复接送信号，再回南侧出口。"
+        },
+        {
+          "when": {
+            "all": [
+              "field_s3_ready"
+            ]
+          },
+          "target": "sech_quartermaster",
+          "step": "返回聚落，向派工者交回记录并汇报。"
+        }
+      ]
+    },
+    {
+      "id": "anna_rescue",
+      "name": "带她回家",
+      "facility": "commune",
+      "accepted": "anna_warning_seen",
+      "done": "anna_aftermath_done",
+      "kind": "支线",
+      "background": "安娜准备返回 D-6，协助哥哥和其他伤病者转移。医护、接送和备用出口决定撤离时能否保留余地。",
+      "lead": "安娜收到矿区的新信，正在医务室等你。",
+      "actions": [
+        "anna_warning",
+        "anna_medic_plan",
+        "anna_shelter",
+        "anna_rescue_depart",
+        "rescue_air_map",
+        "rescue_air_open",
+        "rescue_onsite_medic",
+        "rescue_onsite_transport",
+        "rescue_review",
+        "anna_return_life",
+        "anna_memorial"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "target": "commune_anna",
+          "step": "和安娜落实医护与休养安排，再请本阵营的轮值员安排接送。"
+        },
+        {
+          "when": {
+            "all": [
+              "anna_rescue_started"
+            ]
+          },
+          "target": "coal_archive",
+          "place": "coal",
+          "step": "到档案柜查原始回风图，打开西侧旧支巷的备用出口。矿区仍能补办医护和接送。"
+        },
+        {
+          "when": {
+            "all": [
+              "rescue_route_ready"
+            ]
+          },
+          "target": "coal_medic",
+          "place": "coal",
+          "step": "到医护值班处核对三项撤离条件，再决定是否开始；尚未开始时可以继续准备。"
+        },
+        {
+          "when": {
+            "all": [
+              "anna_alive"
+            ]
+          },
+          "target": "commune_anna",
+          "step": "回公社看望安娜与哥哥，帮他们重新安排日常生活。"
+        },
+        {
+          "when": {
+            "all": [
+              "anna_dead"
+            ]
+          },
+          "target": "commune_class",
+          "step": "回公社整理课本，向家属交代完整经过，再商量记录如何保存。"
+        }
+      ]
+    },
+    {
+      "id": "north_late",
+      "name": "很远的那个呼号",
+      "kind": "主线",
+      "facility": "commune",
+      "accepted": "north_story_ready",
+      "done": "star_inquiry_filed",
+      "background": "几轮出站任务建立了北线的接送与担保。现在可以亲自核实东方-7，并向星城外围提交询问信。",
+      "lead": "轮值员愿意替你安排北线联络。",
+      "actions": [
+        "north_inquiry"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "target": "commune_guard",
+          "step": "向本阵营轮值员核对短波窗口，取得具名询问信。"
+        },
+        {
+          "when": {
+            "all": [
+              "north_inquiry_ready"
+            ]
+          },
+          "target": "commune_leave",
+          "step": "准备妥当后前往星城外围；内部仍未开放。"
+        }
+      ]
+    }
+  ],
+  "missions": {
+    "c1": {
+      "faction": "commune",
+      "name": "药箱经过的地方",
+      "title": "公社 · 第一轮护送",
+      "summary": "把交换队的药箱从联络站带回。中央的封锁截断了原通路，先查可用支路，再清理沿线威胁。",
+      "object": "医护队遗留的封签药箱",
+      "evidence": "封签还在，外箱用粉笔写着送往平民病房。旁边有封锁队撕下的通行条，批准日期比封锁命令早了一天。",
+      "report": "药箱交回医务室后，有人立刻来领敷料。亚历山德拉没有先问你消灭了几只兽，只让你指出哪段路还能走。",
+      "intro": "c1_intro",
+      "after": "c1_after"
+    },
+    "c2": {
+      "faction": "commune",
+      "name": "被截住的回信",
+      "title": "公社 · 失联窗口",
+      "summary": "寻找被迫撤离的联络员，找回投递存根。核对名单的用途，再决定哪些内容可以带回。",
+      "object": "转移点留下的邮袋与存根",
+      "evidence": "有人在存根上画掉了住址，只留下编号。纸条写着：来不及烧的信在袋底，读过以后请替我问家属，他们还愿不愿意再收。",
+      "report": "娜佳收下封好的邮袋，先安排向家属核实。亚历山德拉把暴露的窗口从地图上遮住，新的接应地点暂时只口头通知。",
+      "intro": "c2_intro",
+      "after": "c2_after"
+    },
+    "c3": {
+      "faction": "commune",
+      "name": "最后一班撤离车",
+      "title": "公社 · 联络线防御",
+      "summary": "中央封锁队逼近换乘口。恢复撤离信号、守住接送通道，把居民送走后撤回，不追击。",
+      "object": "撤离站的乘车与留守记录",
+      "evidence": "最后一页列着行动不便的居民和担架位置。守备班留了两盏灯：一盏照向列车，一盏照着还没走完的人。",
+      "report": "撤离名单由接收人员当面复点，留守班随后也回到公社。墙上的通行图少了一条线，食堂里多了几张临时床位登记。",
+      "intro": "c3_intro",
+      "after": "c3_after"
+    },
+    "s1": {
+      "faction": "sech",
+      "name": "空车也要回家",
+      "title": "谢契 · 第一轮接运",
+      "summary": "替迟归的交换车队查路，找回回程登记。运货之后还要接人，核实停车点再放行。",
+      "object": "交换车队的回程单",
+      "evidence": "回程单背面全是姓名。车队运完煤以后，原本还要去接三个家庭，轮值员给每个人都画了一个座位。",
+      "report": "彼得重排了座位，先让等车的家属认清车队标记。你这次带回来的货不多，饭桌旁却终于坐齐了几个人。",
+      "intro": "s1_intro",
+      "after": "s1_after"
+    },
+    "s2": {
+      "faction": "sech",
+      "name": "没有旗子的车队",
+      "title": "谢契 · 失踪的货车",
+      "summary": "调查一辆私下交易后失联的货车。核对它带走和换回的东西，把事实带回议事会。",
+      "object": "车队司机藏在工具箱里的交易账",
+      "evidence": "卖掉的货里有阿塔曼点验过的零件，换回的却是儿童退烧药和两个加厚滤罐。账上没有写是谁批准，也没有替司机免除擅自交易的责任。",
+      "report": "长老让司机家属和军需员都坐下，把短缺、私卖和换回药物分别说明。有人要求处罚，有人问当时为什么领不到药。",
+      "intro": "s2_intro",
+      "after": "s2_after"
+    },
+    "s3": {
+      "faction": "sech",
+      "name": "报复到哪里为止",
+      "title": "谢契 · 北线守望",
+      "summary": "北线哨队遭袭后，奉命确认交火位置并接回滞留居民。先找到目击记录，再处理仍封锁通道的武装。",
+      "object": "交火点的巡轨牌与目击记录",
+      "evidence": "弹壳、车轮印和哨兵记录对不上最初的传言。中央封锁队在此截过人，普通交换者却从另一条路离开，不能把所有经过的人都算成袭击者。",
+      "report": "阿塔曼听完交火经过，撤回了扩大报复范围的命令，仍要求补回守备轮值。有人觉得你太谨慎，失踪者的家属则来问一个确切的名字。",
+      "intro": "s3_intro",
+      "after": "s3_after"
+    }
+  }
+}

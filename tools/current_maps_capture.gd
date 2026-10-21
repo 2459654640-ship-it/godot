@@ -3,7 +3,7 @@ func _initialize():
  folder="res://docs/maps";call_deferred("run")
 func run():
  DirAccess.make_dir_recursive_absolute(folder)
- for id in (OS.get_cmdline_user_args() if not OS.get_cmdline_user_args().is_empty() else ["d6","labor","waterworks","commune","sech","coal","starcity","surface"]):
+ for id in (OS.get_cmdline_user_args() if not OS.get_cmdline_user_args().is_empty() else ["d6","labor","waterworks","commune","sech","coal","starcity","surface","railfront"]):
   await open_level(id)
   var bounds:Rect2=w.zones[0].rect
   for room in w.zones:bounds=bounds.merge(room.rect)

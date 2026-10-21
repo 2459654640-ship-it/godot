@@ -26,7 +26,7 @@ func run():
 		footprints.append(JSON.stringify(shape))
 		var day=int(s.flags.get("story_day",17));s.Comic.start(s,"arrive_"+id)
 		check(s.flags.story_day==day and s.Comic.panel(s).get("end","")=="map:"+id,"location introduction neither skips a day nor changes destination: "+id)
-	check(footprints.size()==6 and footprints.all(func(shape):return footprints.count(shape)==1),"six facilities have separately authored footprints")
+	check(footprints.size()==7 and footprints.all(func(shape):return footprints.count(shape)==1),"seven campaign facilities have separately authored footprints")
 	var save="user://presentation_menu_test.json";DirAccess.remove_absolute(save)
 	var menu=load("res://scenes/main_menu.tscn").instantiate();menu.save_path=save;root.add_child(menu);current_scene=menu;await frames()
 	check(menu.continue_button.disabled,"main menu handles a missing save without entering a broken game")

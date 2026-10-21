@@ -126,7 +126,7 @@ func setup(w):
 	brand.add_theme_font_override("font",mono)
 	line.add_child(brand)
 	line.add_spacer(false)
-	line.add_child(label({"life":"D–6","labor":"D–6","waterworks":"水厂","commune":"公社","sech":"谢契","coal":"D–6","starcity":"星城外围","surface":"地表"}.get(world.floor_id,""),17,amber))
+	line.add_child(label({"life":"D–6","labor":"D–6","waterworks":"水厂","commune":"公社","sech":"谢契","coal":"D–6","starcity":"星城外围","surface":"地表","railfront":"联络线"}.get(world.floor_id,""),17,amber))
 	var title=label("地铁 1982",27,text_color)
 	title.add_theme_font_override("font",serif)
 	b.add_child(title)
@@ -938,7 +938,7 @@ func confirm_slot(path:String,saving:bool,data:Dictionary):
 	modal_box.add_child(button("返回列表",func():show_saves(saving)))
 
 func show_combat_defeat():
-	start_modal("你倒在了"+("地表废墟里" if world.floor_id=="surface" else "水厂里"),"本场战斗前已保留检查点 · 重试恢复当时的资源",true)
+	start_modal("你倒在了"+({"surface":"地表废墟里","railfront":"联络线战区"}.get(world.floor_id,"水厂里")),"本场战斗前已保留检查点 · 重试恢复当时的资源",true)
 	body("面罩内的呼吸声渐渐远去。"+("远处传来老兵叫你的名字。" if is_instance_valid(world.combat.veteran) else "寒风还在废墟之间回响。"),23)
 	modal_box.add_child(button("从交火前重试",func():world.combat.retry()))
 	modal_box.add_child(button("读取其它手记",func():show_saves(false)))

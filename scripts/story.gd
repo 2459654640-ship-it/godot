@@ -162,6 +162,7 @@ func view(id: String) -> Dictionary:
 			v.name="东侧维修坡道"
 			v.options=[opt("leave_east","整理背包，准备离开 D-6",route!="" and has("mask") and has("filter"), "先通过维修门、侧门或检修管线")]
 	v=Progression.decorate(Economy.decorate(Campaign.decorate(Chapter.decorate(Life.decorate(Narrative.decorate(v,self),self),self),self),self),self)
+	if id=="medical":v.options.append(opt("c_lower_broadcast","停在门边，听完伤员病房的这一段广播",Campaign.available(self,"lower_broadcast")))
 	v=FirstMeetings.decorate(v,self)
 	if id=="radio":v.options.append(opt("room_radio_music","打开音乐频道",context.get("floor","")=="life"))
 	if id=="mikhail":v.options=v.options.filter(func(o):return o.key!="give_vitamins")
@@ -323,7 +324,7 @@ static func once_topic(key:String)->bool:
 	return Narrative.CHAT.has(key) or key in ["father","vera_heat","semyon_advice","semyon_radio","briefing","igor_talk","armory_check","gate_daily","coal_ask","resident_shift","resident_igor","vera_day","vera_nina","knock_rooms","nina_reckless"]
 
 func serialize() -> Dictionary:
-	return {"version":1,"content_revision":19,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
+	return {"version":1,"content_revision":22,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
 func restore(data: Dictionary):
 	flags=data.get("flags",{}).duplicate(true)
 	preload("res://scripts/publications.gd").normalize(self)
@@ -396,4 +397,5 @@ func restore(data: Dictionary):
 		ending=false
 		flags.v4_departure_carried=true
 		Comic.start(self,"official" if route=="official" else "solo")
+	Campaign.Update.migrate(self,int(data.get("content_revision",0)))
 	changed.emit()

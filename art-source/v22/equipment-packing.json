@@ -1,0 +1,578 @@
+{
+  "ivan_masked/01-front/standing": {
+    "uniform_scale": 0.6708074534161491,
+    "translation": [
+      -9,
+      -16
+    ],
+    "source_sha256": "aae105932dfdaf0c6eada954230455c4f1e175c4efcbe6cf7aa526c9539b42d9"
+  },
+  "ivan_masked/01-front/A": {
+    "uniform_scale": 0.6708074534161491,
+    "translation": [
+      -9,
+      -16
+    ],
+    "source_sha256": "d605e3bc76d71b89a9ea56dbcfd6723e765e073830d5a4bf6273f9eebf7123d4"
+  },
+  "ivan_masked/01-front/B": {
+    "uniform_scale": 0.6708074534161491,
+    "translation": [
+      -9,
+      -16
+    ],
+    "source_sha256": "b8b0f080f0d21360a9edafb09d2798f9085a0872e449d64d465a5d7a7780d45a"
+  },
+  "ivan_masked/02-front-right/standing": {
+    "uniform_scale": 0.6694214876033058,
+    "translation": [
+      -2,
+      -16
+    ],
+    "source_sha256": "38eb1ad98a6c232837af0c7b280f65e7ba95711bd0174c858dd55384dec5b123"
+  },
+  "ivan_masked/02-front-right/A": {
+    "uniform_scale": 0.6694214876033058,
+    "translation": [
+      -2,
+      -16
+    ],
+    "source_sha256": "601f33e24b3ba325e6e66d8b8918c62486cafdd81941d53dbc44f08d570dcd2e"
+  },
+  "ivan_masked/02-front-right/B": {
+    "uniform_scale": 0.6694214876033058,
+    "translation": [
+      -2,
+      -16
+    ],
+    "source_sha256": "cd338000250d2de8d07082575082cd35233c5cab1fa80ce92bc2c9663f463b5f"
+  },
+  "ivan_masked/03-right/standing": {
+    "uniform_scale": 0.6652977412731006,
+    "translation": [
+      6,
+      -14
+    ],
+    "source_sha256": "c09bb44942327fe8d10e50f2504217828f143dbee9dc6de811d022bdb20d21f5"
+  },
+  "ivan_masked/03-right/A": {
+    "uniform_scale": 0.6652977412731006,
+    "translation": [
+      6,
+      -14
+    ],
+    "source_sha256": "893fb56c2e14a879a42e9add440e9bd66a84420cc3edb2e8849d19922d4c7537"
+  },
+  "ivan_masked/03-right/B": {
+    "uniform_scale": 0.6652977412731006,
+    "translation": [
+      6,
+      -14
+    ],
+    "source_sha256": "75b478c30fd2044896d4087c7fc2e9e5c7a4d43a49dc0decdc970100d784f57f"
+  },
+  "ivan_masked/04-back-right/standing": {
+    "uniform_scale": 0.6764091858037579,
+    "translation": [
+      -2,
+      -17
+    ],
+    "source_sha256": "ffd7ca99578c96a901946d9bda9824ab4524068f1c42c772fe6a2d095007cee7"
+  },
+  "ivan_masked/04-back-right/A": {
+    "uniform_scale": 0.6764091858037579,
+    "translation": [
+      -2,
+      -17
+    ],
+    "source_sha256": "449b01ac5e37e836a1c66c05295dc11bed9440e941befd543bd9ebf2d1d7c0fc"
+  },
+  "ivan_masked/04-back-right/B": {
+    "uniform_scale": 0.6764091858037579,
+    "translation": [
+      -2,
+      -17
+    ],
+    "source_sha256": "247d02c72613ae583be04e3c0d686356087d70d2daf866c6ca14c631f8ef3769"
+  },
+  "ivan_masked/05-back/standing": {
+    "uniform_scale": 0.6893617021276596,
+    "translation": [
+      -14,
+      -14
+    ],
+    "source_sha256": "b37cb6034c78df8bc62db4305c23417a772cf0b28e2f0cf2e99bff0830c4bbdc"
+  },
+  "ivan_masked/05-back/A": {
+    "uniform_scale": 0.6893617021276596,
+    "translation": [
+      -14,
+      -14
+    ],
+    "source_sha256": "53a03862ec78fed4810897711ddf5372bdf634e236ed08818a0c32b779192fc5"
+  },
+  "ivan_masked/05-back/B": {
+    "uniform_scale": 0.6893617021276596,
+    "translation": [
+      -14,
+      -14
+    ],
+    "source_sha256": "1ea44fefccce8f6b3a95fe29adb2859565352484c474b2bdaeb256227ed1aec7"
+  },
+  "ivan_masked/06-back-left/standing": {
+    "uniform_scale": 0.6835443037974683,
+    "translation": [
+      -24,
+      -10
+    ],
+    "source_sha256": "fda7b5d5d4fbd3aa180168105628fd2f0090b84790882329ffb5782030ccb40e"
+  },
+  "ivan_masked/06-back-left/A": {
+    "uniform_scale": 0.6835443037974683,
+    "translation": [
+      -24,
+      -10
+    ],
+    "source_sha256": "c2c76271efc89a51ad92c3502ab3354e5aeee0d8da02950f6061d006d8f4446d"
+  },
+  "ivan_masked/06-back-left/B": {
+    "uniform_scale": 0.6835443037974683,
+    "translation": [
+      -24,
+      -10
+    ],
+    "source_sha256": "f4be3c34da9b9e7bb690a2a0868c499dd5d350955274e0f6c2883046e90f3470"
+  },
+  "ivan_masked/07-left/standing": {
+    "uniform_scale": 0.6778242677824268,
+    "translation": [
+      -26,
+      -10
+    ],
+    "source_sha256": "e7be30d0cb36c36520ce1aee6f400e90ebd7337b806ccffececb797ff3f48c2f"
+  },
+  "ivan_masked/07-left/A": {
+    "uniform_scale": 0.6778242677824268,
+    "translation": [
+      -26,
+      -10
+    ],
+    "source_sha256": "f0c2d4cd46b3c574600c8be39c589ca37f31d4069bdd1af7d42fa61fdb1a6a1c"
+  },
+  "ivan_masked/07-left/B": {
+    "uniform_scale": 0.6778242677824268,
+    "translation": [
+      -26,
+      -10
+    ],
+    "source_sha256": "1ca8fb709496cfae4e189ab2c82d74b2c7a167fb260491db2e77b5a3c002f409"
+  },
+  "ivan_masked/08-front-left/standing": {
+    "uniform_scale": 0.6708074534161491,
+    "translation": [
+      -19,
+      -11
+    ],
+    "source_sha256": "121f13df73b6061caf770f4897c6ae1e60adb83c2b90999c5806956bd743624e"
+  },
+  "ivan_masked/08-front-left/A": {
+    "uniform_scale": 0.6708074534161491,
+    "translation": [
+      -19,
+      -11
+    ],
+    "source_sha256": "1f4e2be1f01e54d8f2a44a1a34e8801464c99c6bbe836f997c591abd4267d418"
+  },
+  "ivan_masked/08-front-left/B": {
+    "uniform_scale": 0.6708074534161491,
+    "translation": [
+      -19,
+      -11
+    ],
+    "source_sha256": "b9d6578d2db2ade6adeeef8b6cb3864094ed4c534f3e8adb1b791cd1358945ba"
+  },
+  "ivan_combat/01-front/standing": {
+    "uniform_scale": 0.6864406779661016,
+    "translation": [
+      39,
+      -16
+    ],
+    "source_sha256": "066714103e3a0b02ac97841fff4ef4c5df694a9a1bae48d45a645f549b5b8b5b"
+  },
+  "ivan_combat/01-front/A": {
+    "uniform_scale": 0.6864406779661016,
+    "translation": [
+      39,
+      -16
+    ],
+    "source_sha256": "3d09dfad596992a6283b15f1122c1628625e83a1683d2636a3480a75c1eba7b2"
+  },
+  "ivan_combat/01-front/B": {
+    "uniform_scale": 0.6864406779661016,
+    "translation": [
+      39,
+      -16
+    ],
+    "source_sha256": "14b013fa6a7c6e8f15c7610a6d3447e5c881d63d3f1f2f426ddfbc60f27cdc12"
+  },
+  "ivan_combat/02-front-right/standing": {
+    "uniform_scale": 0.6835443037974683,
+    "translation": [
+      18,
+      -16
+    ],
+    "source_sha256": "9b191b652dc0fd892bbbef0756e2e43201fdaf4e318ec5092488b347e34f8d27"
+  },
+  "ivan_combat/02-front-right/A": {
+    "uniform_scale": 0.6835443037974683,
+    "translation": [
+      18,
+      -16
+    ],
+    "source_sha256": "12931cb47042a7e6ab533dff12a47f733914381608bdae426704287353f1820a"
+  },
+  "ivan_combat/02-front-right/B": {
+    "uniform_scale": 0.6835443037974683,
+    "translation": [
+      18,
+      -16
+    ],
+    "source_sha256": "69866dd17d129a360996ee72504a1d773f66386b2e51a5df401a33cd6c0a77e9"
+  },
+  "ivan_combat/03-right/standing": {
+    "uniform_scale": 0.668041237113402,
+    "translation": [
+      16,
+      -15
+    ],
+    "source_sha256": "15e50f94649b022f9e2f1d2e11058a1bb78650181d5b4a428064b8981cf0bd6f"
+  },
+  "ivan_combat/03-right/A": {
+    "uniform_scale": 0.668041237113402,
+    "translation": [
+      16,
+      -15
+    ],
+    "source_sha256": "b13bba7bbb6b197d66d2cd2fd708f8a611e8f3903438b608ac3dcdc22a612ec6"
+  },
+  "ivan_combat/03-right/B": {
+    "uniform_scale": 0.668041237113402,
+    "translation": [
+      16,
+      -15
+    ],
+    "source_sha256": "9979c6b8f24aef87a762a492e83981a76c506c703d527b6ad8acb1da53910616"
+  },
+  "ivan_combat/04-back-right/standing": {
+    "uniform_scale": 0.675,
+    "translation": [
+      17,
+      -16
+    ],
+    "source_sha256": "6265ac9f2cb3001beb5ee584b0cd2e66bb42441fbbc9d3235f418d81e8d5687c"
+  },
+  "ivan_combat/04-back-right/A": {
+    "uniform_scale": 0.675,
+    "translation": [
+      17,
+      -16
+    ],
+    "source_sha256": "0bc1419537b56d680b26a1f6868c5a75ab0ceffaffc1fe3112f9048da938976d"
+  },
+  "ivan_combat/04-back-right/B": {
+    "uniform_scale": 0.675,
+    "translation": [
+      17,
+      -16
+    ],
+    "source_sha256": "512c6b6b9bc1aa4098538e8e72a4e234e221c1b4bc2040ee7e2fac2081ad9dc9"
+  },
+  "ivan_combat/05-back/standing": {
+    "uniform_scale": 0.6908315565031983,
+    "translation": [
+      42,
+      -15
+    ],
+    "source_sha256": "5ade2598c9970ed599108d09c3ff7722595bf091ecd7d6e588ccfa08dfeaa023"
+  },
+  "ivan_combat/05-back/A": {
+    "uniform_scale": 0.6908315565031983,
+    "translation": [
+      42,
+      -15
+    ],
+    "source_sha256": "6482b1a689139957a69a368e04789d93d23e0f2109d587c02869a998e8938910"
+  },
+  "ivan_combat/05-back/B": {
+    "uniform_scale": 0.6908315565031983,
+    "translation": [
+      42,
+      -15
+    ],
+    "source_sha256": "8e3893dd7f82f833f93972b046ab49e4d94b2dcfadb0d3dfbfbd26508582cc5c"
+  },
+  "ivan_combat/06-back-left/standing": {
+    "uniform_scale": 0.6849894291754757,
+    "translation": [
+      52,
+      -14
+    ],
+    "source_sha256": "81e29b80a1650d7e3f52bd3242b5b7bf499c1cf15f167e701cb8df7690c506cd"
+  },
+  "ivan_combat/06-back-left/A": {
+    "uniform_scale": 0.6849894291754757,
+    "translation": [
+      52,
+      -14
+    ],
+    "source_sha256": "e50faa8eb1e13a9c6507dc29aabe4b2fc55facc415533e1d7005144488250ec3"
+  },
+  "ivan_combat/06-back-left/B": {
+    "uniform_scale": 0.6849894291754757,
+    "translation": [
+      52,
+      -14
+    ],
+    "source_sha256": "8eed480c5e5e634bb3f7cbf539a4fdf8a40eeb077c0fbaf0e0412925ec2ed764"
+  },
+  "ivan_combat/07-left/standing": {
+    "uniform_scale": 0.6792452830188679,
+    "translation": [
+      54,
+      -11
+    ],
+    "source_sha256": "269d4d368365e74e26586d200cc9ad7d41552f3d6fb0e64a8f054cb3f726b824"
+  },
+  "ivan_combat/07-left/A": {
+    "uniform_scale": 0.6792452830188679,
+    "translation": [
+      54,
+      -11
+    ],
+    "source_sha256": "e48dcd3435b065796bcf2d261d462695fce04dcfd6b26fbfa2c56ac8ee7af77f"
+  },
+  "ivan_combat/07-left/B": {
+    "uniform_scale": 0.6792452830188679,
+    "translation": [
+      54,
+      -11
+    ],
+    "source_sha256": "97ba6aa796ac8a585396a755a6fbddb828b556ebd404f087f05e3cb1ea244aba"
+  },
+  "ivan_combat/08-front-left/standing": {
+    "uniform_scale": 0.6666666666666666,
+    "translation": [
+      61,
+      -8
+    ],
+    "source_sha256": "39ccb0a746e6b1594125286605b246a82c8e9a3832802dd83b8f1b693bd72acd"
+  },
+  "ivan_combat/08-front-left/A": {
+    "uniform_scale": 0.6666666666666666,
+    "translation": [
+      61,
+      -8
+    ],
+    "source_sha256": "2660c970a59200c00ea6cf08fce0b03caf412b7a139f585ba824cc2fa5ea61a3"
+  },
+  "ivan_combat/08-front-left/B": {
+    "uniform_scale": 0.6666666666666666,
+    "translation": [
+      61,
+      -8
+    ],
+    "source_sha256": "e4c0ca5c28f5e05ffe92f22ff7828c4df938807d581520a6c39578a37d903179"
+  },
+  "ivan_masked_combat/01-front/standing": {
+    "uniform_scale": 0.6708074534161491,
+    "translation": [
+      46,
+      -16
+    ],
+    "source_sha256": "6cef4c7d1fbdb7423a5a5a2bb22ccf45552a168011db136aa759ca936c9a318f"
+  },
+  "ivan_masked_combat/01-front/A": {
+    "uniform_scale": 0.6708074534161491,
+    "translation": [
+      46,
+      -16
+    ],
+    "source_sha256": "ee091b4a01a5667228643da2ffe93f8e70d71b942ff3b587bb3bc89a1683ea01"
+  },
+  "ivan_masked_combat/01-front/B": {
+    "uniform_scale": 0.6708074534161491,
+    "translation": [
+      46,
+      -16
+    ],
+    "source_sha256": "b212f7ccda30e99418f9036684f5753354486a2758f79b4b50959092af16569a"
+  },
+  "ivan_masked_combat/02-front-right/standing": {
+    "uniform_scale": 0.668041237113402,
+    "translation": [
+      25,
+      -16
+    ],
+    "source_sha256": "c6c39a156f355100b73079731cc0fc40cce8fd443502a4db57aa641722d36681"
+  },
+  "ivan_masked_combat/02-front-right/A": {
+    "uniform_scale": 0.668041237113402,
+    "translation": [
+      25,
+      -16
+    ],
+    "source_sha256": "0216fa0e00cc8c72d5d2f9aa04971f131c2db10c8a6f83a2e0a072a33235bf3b"
+  },
+  "ivan_masked_combat/02-front-right/B": {
+    "uniform_scale": 0.668041237113402,
+    "translation": [
+      25,
+      -16
+    ],
+    "source_sha256": "a86cba56c76f108596598f63b924c69b76118721e73c73de8b8afdc9f6553ccc"
+  },
+  "ivan_masked_combat/03-right/standing": {
+    "uniform_scale": 0.6666666666666666,
+    "translation": [
+      22,
+      -14
+    ],
+    "source_sha256": "066e23b07348e8d6edac8c6deef754bea03fdf4e8fd91cadb7e934814ab0b8b0"
+  },
+  "ivan_masked_combat/03-right/A": {
+    "uniform_scale": 0.6666666666666666,
+    "translation": [
+      22,
+      -14
+    ],
+    "source_sha256": "1a974741044576fd93f69610081e351ca9170c6adad8521a9437fffc953e9853"
+  },
+  "ivan_masked_combat/03-right/B": {
+    "uniform_scale": 0.6666666666666666,
+    "translation": [
+      22,
+      -14
+    ],
+    "source_sha256": "b586f240a0087988e20bc8ca6e6ad7972d628b888d73ac058246a621f97641de"
+  },
+  "ivan_masked_combat/04-back-right/standing": {
+    "uniform_scale": 0.6764091858037579,
+    "translation": [
+      27,
+      -17
+    ],
+    "source_sha256": "e7ccc1c80e3dbff7010f2ae91ade3cd92ccf4d9162fe061f3a01f65d3e1de23d"
+  },
+  "ivan_masked_combat/04-back-right/A": {
+    "uniform_scale": 0.6764091858037579,
+    "translation": [
+      27,
+      -17
+    ],
+    "source_sha256": "df7750e835ae85cdb8e6e827a05bc3a9ac63c9962db792e5b36320960ac434f3"
+  },
+  "ivan_masked_combat/04-back-right/B": {
+    "uniform_scale": 0.6764091858037579,
+    "translation": [
+      27,
+      -17
+    ],
+    "source_sha256": "aee9493665a07089c8248f391ab9099c55c6651991bee5c0dc6b862196feb98e"
+  },
+  "ivan_masked_combat/05-back/standing": {
+    "uniform_scale": 0.6849894291754757,
+    "translation": [
+      38,
+      -12
+    ],
+    "source_sha256": "b45e032aa070956bb5e420f66491963eaf1fcd8f7b60220c5b1875f1e01fd2b1"
+  },
+  "ivan_masked_combat/05-back/A": {
+    "uniform_scale": 0.6849894291754757,
+    "translation": [
+      38,
+      -12
+    ],
+    "source_sha256": "0282e5bb8f36328cd174d989610a939ec219577f05896c07609ba5659b4e7083"
+  },
+  "ivan_masked_combat/05-back/B": {
+    "uniform_scale": 0.6849894291754757,
+    "translation": [
+      38,
+      -12
+    ],
+    "source_sha256": "7efd8c6cdde02a8cb38e56c1a37e972eecadf0b04f109eb6508b380661796d7f"
+  },
+  "ivan_masked_combat/06-back-left/standing": {
+    "uniform_scale": 0.6878980891719745,
+    "translation": [
+      56,
+      -12
+    ],
+    "source_sha256": "0bd8bf740a82f9fe040e41de5a5f15545cb9bc551cf643f9e606b5430515abbd"
+  },
+  "ivan_masked_combat/06-back-left/A": {
+    "uniform_scale": 0.6878980891719745,
+    "translation": [
+      56,
+      -12
+    ],
+    "source_sha256": "4d897fa296b3117491d25bdb826ac9fc345b4257519928a856f319a8e93638cc"
+  },
+  "ivan_masked_combat/06-back-left/B": {
+    "uniform_scale": 0.6878980891719745,
+    "translation": [
+      56,
+      -12
+    ],
+    "source_sha256": "8dc9bb1b4ec5c56c47d62a9aaf995625e1a9a09ebed065404dc308883873b86b"
+  },
+  "ivan_masked_combat/07-left/standing": {
+    "uniform_scale": 0.6821052631578948,
+    "translation": [
+      60,
+      -13
+    ],
+    "source_sha256": "9c7c7f6e1d740daf7267d7bc7bf4527768bc8ab656ddb4372ab25b224d4da821"
+  },
+  "ivan_masked_combat/07-left/A": {
+    "uniform_scale": 0.6821052631578948,
+    "translation": [
+      60,
+      -13
+    ],
+    "source_sha256": "54949c030376a8963170c779f8ca9e0ea94f4a18799031ba6c5e244be2930f41"
+  },
+  "ivan_masked_combat/07-left/B": {
+    "uniform_scale": 0.6821052631578948,
+    "translation": [
+      60,
+      -13
+    ],
+    "source_sha256": "6bbc0c27e7955e30f67a6854f8bc3173ef699918171e661018d715189c937315"
+  },
+  "ivan_masked_combat/08-front-left/standing": {
+    "uniform_scale": 0.6694214876033058,
+    "translation": [
+      58,
+      -9
+    ],
+    "source_sha256": "b4d1c20ee9e0d78715ff3bbd009192c8ac0a8b0d5a402ffd21b369faaf8a4283"
+  },
+  "ivan_masked_combat/08-front-left/A": {
+    "uniform_scale": 0.6694214876033058,
+    "translation": [
+      58,
+      -9
+    ],
+    "source_sha256": "10932c41676f1b4993171459f619bd83e582a30c223bbb4f7c3e886a8f038c8c"
+  },
+  "ivan_masked_combat/08-front-left/B": {
+    "uniform_scale": 0.6694214876033058,
+    "translation": [
+      58,
+      -9
+    ],
+    "source_sha256": "3d504111725e12b91d32d1c2a70d73f1bce7606fd7bfda32dce5dfe1d29b42b6"
+  }
+}

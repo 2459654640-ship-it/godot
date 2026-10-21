@@ -1,0 +1,38 @@
+[
+  {
+    "id": "letters_theme",
+    "title": "来信以后",
+    "bpm": 72,
+    "seconds": 57.33,
+    "peak": 0.17948200292495858,
+    "source": "original MIDI composition, rendered from identical note events",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "dawn_theme",
+    "title": "还可以安排明天",
+    "bpm": 76,
+    "seconds": 54.53,
+    "peak": 0.18072897997421003,
+    "source": "original MIDI composition, rendered from identical note events",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "anna_elegy",
+    "title": "留给下一班的课",
+    "bpm": 60,
+    "seconds": 68.0,
+    "peak": 0.17748760146005696,
+    "source": "original MIDI composition, rendered from identical note events",
+    "license": "CC0-1.0"
+  },
+  {
+    "id": "frontline_theme",
+    "title": "南口识别灯",
+    "bpm": 66,
+    "seconds": 62.18,
+    "peak": 0.17661665499083265,
+    "source": "original MIDI composition, rendered from identical note events",
+    "license": "CC0-1.0"
+  }
+]

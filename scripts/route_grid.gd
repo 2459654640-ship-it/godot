@@ -17,7 +17,10 @@ func setup(world):
 	var obstacles:Array=[]
 	for solid in world.kit.solids:
 		if solid.name=="CampaignInnerGate" and world.story.f(world.campaign_gate_flag):continue
-		if solid.top>0.24 and solid.bottom<1.75:obstacles.append(solid.rect.grow(CLEARANCE))
+		if solid.top>0.24 and solid.bottom<1.75:
+			var rect:Rect2=solid.rect
+			if solid.name=="MineEscapeGrille" and world.story.f("rescue_route_ready"):rect.position.x+=2.8
+			obstacles.append(rect.grow(CLEARANCE))
 	var index=0
 	for x in range(floori(bounds.position.x/STEP),ceili(bounds.end.x/STEP)+1):
 		for z in range(floori(bounds.position.y/STEP),ceili(bounds.end.y/STEP)+1):

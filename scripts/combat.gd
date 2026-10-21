@@ -30,7 +30,8 @@ const ENCOUNTERS={
  "workshop":{"rect":Rect2(-6,-10,11,10),"need":"plant_bled","skip":"plant_fuse","name":"修配间的巢穴","spawns":[Vector3(-3,.04,-8),Vector3(3,.04,-8),Vector3(2,.04,-2)]},
  "warehouse":{"rect":Rect2(5,-14,14,14),"need":"plant_power","skip":"water_secured","name":"封存仓库","spawns":[Vector3(8,.04,-5),Vector3(15,.04,-5),Vector3(12,.04,-11),Vector3(17,.04,-2)]}}
 func setup(world):
- w=world;enabled=w.floor_id in ["waterworks","surface"];encounters=preload("res://scripts/surface_site.gd").ENCOUNTERS if w.floor_id=="surface" else ENCOUNTERS
+ w=world;enabled=w.floor_id in ["waterworks","surface","railfront"];encounters=preload("res://scripts/surface_site.gd").ENCOUNTERS if w.floor_id=="surface" else ENCOUNTERS
+ if w.floor_id=="railfront":encounters=preload("res://scripts/frontline.gd").encounters(w.story)
  if not enabled:return
  veteran=w.npcs.get("plant_veteran")
  if is_instance_valid(veteran):veteran.combat_controlled=true
@@ -97,11 +98,12 @@ func begin(id:String):
  encounter=id
  # Visible field ammunition left by the squad prevents resource softlocks.
  var missing=maxi(0,encounters[id].spawns.size()*4-int(w.story.economy.handmade)-clip)
- if missing>0 and w.floor_id=="waterworks":w.story.economy.handmade+=missing;w.hud.toast("从小队随身弹袋补入 %d 发土制弹。"%missing,5)
+ if missing>0 and w.floor_id in ["waterworks","railfront"]:w.story.economy.handmade+=missing;w.hud.toast("从小队随身弹袋补入 %d 发土制弹。"%missing,5)
  sync();checkpoint=w.save_snapshot().duplicate(true);w.autosave()
  active=true
+ if w.floor_id=="railfront":w.sync_event_music("frontline_theme")
  for p in encounters[id].spawns:
-  var enemy=Enemy.new();w.add_child(enemy);enemy.setup(self,w.clear_arrival(p));enemy.set_meta("loot_key",id+"_"+str(enemies.size()));enemy.set_meta("loot_index",enemies.size());enemies.append(enemy)
+  var enemy=Enemy.new();w.add_child(enemy);enemy.setup(self,w.clear_arrival(p),encounters[id].get("enemy_kind","mutant"));enemy.set_meta("loot_key",id+"_"+str(enemies.size()));enemy.set_meta("loot_index",enemies.size());enemies.append(enemy)
  w.hud.toast(encounters[id].name+" · "+("1 拔枪 · " if not w.story.weapon_drawn() else "")+"左键射击 / R 换弹；先清理威胁，再操作设备。",7)
 func reload_weapon():
  if reload_time>0 or clip>=6:return
@@ -177,6 +179,7 @@ func enemy_fell(enemy):
  enemies.erase(enemy)
  if enemies.is_empty():
   active=false;w.story.flags["battle_"+encounter]=true;sync();w.autosave()
+  if w.floor_id=="railfront":w.sync_event_music("")
   w.hud.toast("周围安静下来。可以检查设备、包扎伤口，再继续前进。",5)
 func retry():
  if checkpoint.is_empty():return

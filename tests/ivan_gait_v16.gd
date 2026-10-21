@@ -25,13 +25,13 @@ func run():
     for phase in [0,.25,.5,.75]:
      p.cycle=phase;p._process(0);poses.append(p.current_pose)
      if angle in [3,5]:check(bool(p.material.get_shader_parameter("mirror"))==false,"rear-diagonal drawing faces the actual travel side in this source atlas: "+art+mode+str(angle)+str(phase))
-    var expected=[1,0,2,0] if mode=="unarmed" else ([5,2,6,2] if mode=="reload" else [3,0,4,0])
+    var expected=[1,0,2,0] if p.pose_count==3 else ([5,2,6,2] if mode=="reload" else [3,0,4,0])
     check(poses==expected,"both strides and planted middle pose render in order: "+art+mode+str(angle))
    # Reproduce a low-frame-rate spike: consecutive screen frames must not
    # jump directly from one stride to the other, bypassing the planted pose.
    p.cycle=0;var actual=[]
    for i in 9:p._process(.7);actual.append(p.current_pose)
-   var center=2 if mode=="reload" else 0
+   var center=2 if mode=="reload" and p.pose_count>=7 else 0
    var legal=true
    for i in range(1,actual.size()):
     if actual[i]!=actual[i-1] and actual[i]!=center and actual[i-1]!=center:legal=false

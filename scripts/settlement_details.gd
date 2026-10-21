@@ -97,6 +97,9 @@ static func commune(w):
   k.box("MedicalScreenFoot",Vector3(-5.3,.07,z),Vector3(.65,.1,.14),"metal",true)
  for y in [.4,1.94]:k.pipe(Vector3(-5.3,y,20.3),Vector3(-5.3,y,22.7),.025,"metal")
  k.box("MedicalPrivacyLinen",Vector3(-5.3,1.16,21.5),Vector3(.035,1.5,2.32),"medical_linen")
+ # The existing clinic side table doubles as Anna's classroom desk; no new bed or partition.
+ for dx in [-.28,.15]:k.box("AnnaExerciseBook",Vector3(-8+dx,.855,18),Vector3(.29,.035,.40),"paper")
+ k.box("AnnaPencil",Vector3(-8.3,.88,18.23),Vector3(.20,.018,.018),"wood")
  commune_homes(w);commune_production(w);commune_defence(w)
  for x in [16,19,22]:k.box("ArchiveCabinet",Vector3(x,1,-12.3),Vector3(1.6,2,.7),"wood",true)
  for z in [-10,-8]:k.table(Vector3(19,0,z),3)

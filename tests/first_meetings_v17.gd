@@ -60,7 +60,12 @@ func run():
   if b.text==option.text:b.pressed.emit();break
  w.hud.finish_typing()
  check(not w.story.f("anna_request"),"learning about brother does not autoaccept quest")
- check(w.story.view("commune_anna").options.any(func(o):return o.key=="c_anna_accept" and o.enabled),"Anna can offer her normal quest after meeting")
+ check(w.story.view("commune_anna").options.any(func(o):return o.key=="c_anna_lesson" and o.enabled),"Anna first invites Ivan to understand the classroom")
+ w.perform("c_anna_lesson","commune_anna")
+ var steps=0
+ while w.story.flags.get("comic",{}).get("active",false) and steps<10:
+  var panel=w.story.Comic.panel(w.story);w.hud.comic_choose(0 if panel.has("choices") else -1);steps+=1
+ check(w.story.f("anna_lesson_seen") and not w.story.f("anna_request"),"classroom does not silently accept the request")
  w.perform("c_anna_accept","commune_anna")
  check(w.story.f("anna_request"),"original quest acceptance still works")
  w.queue_free()

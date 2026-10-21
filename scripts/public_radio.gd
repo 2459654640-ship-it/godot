@@ -2,6 +2,7 @@ extends Node3D
 ## A quiet, opt-in receiver. Distance follows Ivan, not the overhead camera.
 const UI=preload("res://scripts/ui_public_radio.gd")
 const SITES={
+ "railfront":{"p":Vector3(19.6,0,19.8),"heading":PI,"place":"南控制间等候角"},
  "life":{"p":Vector3(1.6,0,-1.8),"heading":PI/2,"place":"公共食堂西侧"},
  "labor":{"p":Vector3(-22.8,0,4.65),"heading":0.0,"place":"工人歇脚棚西北角"},
  "waterworks":{"p":Vector3(17.6,0,4.6),"heading":0.0,"place":"入口气闸东北侧值班休息角"},
@@ -26,6 +27,7 @@ var clock=0.0
 
 func setup(w):
  world=w;name="PublicRadioController"
+ catalog=with_optional_channels(catalog,func(file):return ResourceLoader.exists("res://assets/audio/radio/"+file))
  var saved=world.get_node("/root/Session").settings.get_value("radio",world.floor_id,{})
  if saved is Dictionary:
   station=clampi(int(saved.get("station",0)),0,catalog.stations.size()-1)
@@ -37,6 +39,18 @@ func setup(w):
  if not session.radio_transfer.is_empty():
   var saved_portable=session.radio_transfer.duplicate(true);session.radio_transfer={}
   call_deferred("restore_portable",saved_portable)
+
+static func with_optional_channels(source:Dictionary,exists:Callable)->Dictionary:
+ var result=source.duplicate(true)
+ for station in source.get("optional_stations",[]):
+  var complete=true
+  for id in station.tracks:
+   var song:Dictionary=source.get("optional_tracks",{}).get(id,{})
+   if song.is_empty() or not exists.call(song.get("file","")):complete=false
+  if not complete:continue
+  if not result.stations.any(func(s):return s.id==station.id):result.stations.append(station.duplicate(true))
+  for id in station.tracks:result.tracks[id]=source.optional_tracks[id].duplicate(true)
+ return result
 
 func current_station()->Dictionary:return catalog.stations[station]
 func current_track()->Dictionary:return catalog.tracks[current_station().tracks[track]]

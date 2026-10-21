@@ -550,13 +550,13 @@
     "body_pixels": 324,
     "clips": [
       "idle",
-      "walk_left",
-      "walk_right"
+      "walk_A",
+      "walk_B"
     ],
-    "packing_revision": 20,
+    "packing_revision": 22,
     "reference_commit": "057fff3",
     "approved_motion_review": "98c86c37e5b2e6d9825365ee3f10d71efb90acd1",
-    "equipment_layered": true,
+    "equipment_layered": false,
     "frame_mirror": [
       [
         false,
@@ -620,7 +620,9 @@
         1.0,
         1.0
       ]
-    ]
+    ],
+    "full_figure_ai": true,
+    "review_commit": "eb98b27715c1c56ff3b73a91474c6cd9fe35759b"
   },
   "commander_masked": {
     "file": "commander_masked.png",
@@ -819,7 +821,7 @@
     "file": "ivan_masked_combat.png",
     "directions": 8,
     "source_angles": 8,
-    "poses": 7,
+    "poses": 3,
     "cell": [
       384,
       352
@@ -828,58 +830,14 @@
     "body_pixels": 324,
     "clips": [
       "ready",
-      "recoil",
-      "reload",
-      "walk_left",
-      "walk_right",
-      "reload_walk_left",
-      "reload_walk_right"
+      "walk_A",
+      "walk_B"
     ],
-    "packing_revision": 20,
+    "packing_revision": 22,
     "reference_commit": "057fff3",
     "approved_motion_review": "98c86c37e5b2e6d9825365ee3f10d71efb90acd1",
-    "equipment_layered": true,
+    "equipment_layered": false,
     "frame_mirror": [
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
       [
         false,
         false,
@@ -941,48 +899,10 @@
         1.0,
         1.0,
         1.0
-      ],
-      [
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0
-      ],
-      [
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0
-      ],
-      [
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0
-      ],
-      [
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0
       ]
-    ]
+    ],
+    "full_figure_ai": true,
+    "review_commit": "eb98b27715c1c56ff3b73a91474c6cd9fe35759b"
   },
   "veteran_masked_combat": {
     "file": "veteran_masked_combat.png",
@@ -1269,7 +1189,7 @@
     "file": "ivan_combat.png",
     "directions": 8,
     "source_angles": 8,
-    "poses": 7,
+    "poses": 3,
     "cell": [
       384,
       352
@@ -1278,58 +1198,14 @@
     "body_pixels": 324,
     "clips": [
       "ready",
-      "recoil",
-      "reload",
-      "walk_left",
-      "walk_right",
-      "reload_walk_left",
-      "reload_walk_right"
+      "walk_A",
+      "walk_B"
     ],
-    "packing_revision": 20,
+    "packing_revision": 22,
     "reference_commit": "057fff3",
     "approved_motion_review": "98c86c37e5b2e6d9825365ee3f10d71efb90acd1",
-    "equipment_layered": true,
+    "equipment_layered": false,
     "frame_mirror": [
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
-      [
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      ],
       [
         false,
         false,
@@ -1391,47 +1267,9 @@
         1.0,
         1.0,
         1.0
-      ],
-      [
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0
-      ],
-      [
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0
-      ],
-      [
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0
-      ],
-      [
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0
       ]
-    ]
+    ],
+    "full_figure_ai": true,
+    "review_commit": "eb98b27715c1c56ff3b73a91474c6cd9fe35759b"
   }
 }

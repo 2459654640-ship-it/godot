@@ -1,0 +1,1582 @@
+{
+  "lower_ward": {
+    "title": "广播没有念出的名字",
+    "art": "d6_ward",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "扬声器先响了两声，男播音员开始宣读北线战报。医务间的门没有关严，一张新抬来的担架横在里面。有人把伤员的靴子脱下，抖出一小堆细碎的石屑。"
+      },
+      {
+        "speaker": "广播员",
+        "text": "我军已肃清联络线沿途的叛乱据点。地下秩序正在恢复。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "伤员忽然抬起头，问后面那副担架到了没有。护士没有回答，先替他重新压好绷带。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "lower_ration"
+  },
+  "lower_ration": {
+    "title": "领用表上的一栏",
+    "art": "d6_ward",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "床尾夹着一张物资领用表。伤员的工作状态已经被划成“暂离岗位”，饭票数却还按昨天的班次填写。"
+      },
+      {
+        "speaker": "护士",
+        "text": "把这张退回去。他今天搬不了煤，也得吃饭。"
+      },
+      {
+        "speaker": "值班员",
+        "text": "我退过一次了。上面说伤员的加餐要另批。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "护士翻到背面，在担保人一栏写下自己的名字。扬声器已经开始播报明天的劳动安排。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "choices": [
+      {
+        "text": "「需要我替你把表送过去吗？」",
+        "next": "lower_offer",
+        "flag": "ward_offered_help"
+      },
+      {
+        "text": "先退开，让担架进门。",
+        "next": "lower_silence"
+      }
+    ]
+  },
+  "lower_offer": {
+    "title": "一个签名能做的事",
+    "art": "d6_ward",
+    "lines": [
+      {
+        "speaker": "护士",
+        "text": "谢谢。今天这张我来办。你出任务前，把自己的血型记清楚，别等抬到这里才找人问。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "她把表折进外衣口袋，又去扶那只不断滑落的输液瓶。你让开门口，担架轮子擦着门框过去。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "end": "resume:medical",
+    "finish_flags": [
+      "lower_war_seen"
+    ]
+  },
+  "lower_silence": {
+    "title": "门口",
+    "art": "d6_ward",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你侧身贴到墙边。抬担架的人说了声借过，声音低得几乎听不见。医务间床头还挂着一块“慰问前线”的红布，布角被人掀起来，夹住了漏风的窗缝。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "end": "resume:medical",
+    "finish_flags": [
+      "lower_war_seen"
+    ]
+  },
+  "anna_class": {
+    "title": "课本里的天气",
+    "art": "anna_class",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "安娜正在医务室边桌上削铅笔。两个孩子围着桌子，米沙趴在另一端，把一张旧地图描得满手铅灰。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "这条是河。夏天的时候，人可以站在岸上，看见水往很远的地方流。"
+      },
+      {
+        "speaker": "米沙",
+        "text": "那它为什么不结冰？"
+      },
+      {
+        "speaker": "旁白",
+        "text": "安娜翻回书前的月份表，指给他看。纸上的七月，画着一棵枝叶茂盛的树。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "choices": [
+      {
+        "text": "「有些河冬天会冻住，天气暖了又会化开。」",
+        "next": "anna_weather",
+        "flag": "anna_shared_surface_story"
+      },
+      {
+        "text": "「我也只见过结冰的水。我们得找一本写得更清楚的书。」",
+        "next": "anna_book",
+        "flag": "anna_honest_about_surface"
+      }
+    ]
+  },
+  "anna_weather": {
+    "title": "她没有见过的东西",
+    "art": "anna_class",
+    "lines": [
+      {
+        "speaker": "安娜",
+        "text": "你亲眼见过化开的河吗？"
+      },
+      {
+        "speaker": "伊万",
+        "text": "没有。老爹以前跟我说过。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "她点点头，把课本合上一半，给你留出桌边的位置。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "我小时候进了地下。这里有几个孩子连雨都没见过，我教着教着，也分不清自己记住的是小时候的事，还是书里的图。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "anna_after_class"
+  },
+  "anna_book": {
+    "title": "留出空白",
+    "art": "anna_class",
+    "lines": [
+      {
+        "speaker": "安娜",
+        "text": "那这一页先不讲完。等找到书，咱们一起看。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "她在树旁画了一个小小的问号。米沙学着她的样子，把自己的地图也留出一块空白。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "我白天帮医务室换洗、记物资，下工了教他们认字。讲错了他们记得可牢，第二天还要拿来问我。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "anna_after_class"
+  },
+  "anna_after_class": {
+    "title": "下课以后",
+    "art": "anna_class",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "孩子们去领饭了，安娜收起桌上没有帽的铅笔。她看了看你的袖口。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "你是从 D-6 来的，对吗？我在那里还有亲人。我想问你几件事，不过你刚到，先坐一会儿也行。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "她把唯一一张没有摇晃的凳子推给你，自己坐在桌边的旧木箱上。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "end": "resume:commune_anna",
+    "finish_flags": [
+      "anna_lesson_seen"
+    ]
+  },
+  "anna_first_letter": {
+    "title": "一封终于有去处的信",
+    "art": "anna_class",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "安娜把纸铺平，写了两行又停住。她想告诉哥哥的事情太多，第一句反而迟迟写不下去。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "我原来一直想着，见到他就要问，为什么不早点走。现在我只想让他先把病看好。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "她把那句涂掉，在新的一行写下：“哥哥，我现在教几个孩子认字。你不用担心我。”"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "letters_theme",
+    "end": "resume:commune_anna"
+  },
+  "anna_warning_letter": {
+    "title": "这一次写得很急",
+    "art": "anna_class",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "来信由煤运医护夹在敷料回执里带来。阿列克谢住的休养间即将撤并，尚不能自行行走的人要转到旧支巷旁的临时铺位。巡检单上，那里的通风记录连续两班完全相同。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "他上次说自己好多了，让我不用来。我差一点就信了。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "重复的记录还不能证明出事。我要查原始巡检，也要找能接人的车。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "我跟你准备。先把需要谁、缺什么，都写清楚。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "anna_prepare_brief"
+  },
+  "anna_prepare_brief": {
+    "title": "出发之前能做的事",
+    "art": "anna_class",
+    "lines": [
+      {
+        "speaker": "伊万",
+        "text": "医护得准备好接人，运输的人要知道从哪个矿口出来。旧支巷的回风图也得查，不能只靠主提升机。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "我去找医务室，也给转出来的人腾铺位。你帮我落实接送，再到矿区查检修图。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "她在纸上写下医护、运输、第二条出口，分别留了一格。医护同意等这三项核实之后再安排撤离，准备期间先维持原来的照护班次。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "end": "resume:commune_anna",
+    "note": "准备阶段没有倒计时；阅读、交谈或暂时离开不会触发事故。"
+  },
+  "anna_rescue_road": {
+    "title": "隔着一扇门",
+    "art": "mine_rescue",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "安娜站在检票口外，报出哥哥的名字。守卫翻了一会儿表格，问她离开 D-6 后住在哪里。她回答公社，笔尖便停住了。"
+      },
+      {
+        "speaker": "守卫",
+        "text": "同行栏只写了医护和搬运，谁批准你过来的？"
+      },
+      {
+        "speaker": "伊万",
+        "text": "她是家属，也在转移照护名单上。请接医护值班，不要只查居民名册。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你们在门外等到值班医护亲自来签字。守卫把存根撕下一角，要求出去时一个不少地交回。安娜一直攥着背包带，过门以后才松开。"
+      }
+    ],
+    "same_moment": false,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "anna_mine_entry"
+  },
+  "anna_mine_entry": {
+    "title": "她听见哥哥的声音",
+    "art": "mine_rescue",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "阿列克谢隔着帘子先问是谁。安娜应了一声，声音比平时轻。走到床边，她准备好的话一句也没有说，只把厚袜子放到他膝上。"
+      },
+      {
+        "speaker": "阿列克谢",
+        "text": "你怎么还是穿这么薄。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "你也没比我好到哪里去。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "他笑了一下，又咳起来。医护让他们先坐着，转身把旧支巷的图递给你：主提升机还在运煤，转移要另找一条能抬担架的路。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "end": "map:coal"
+  },
+  "rescue_review": {
+    "title": "把人数再数一遍",
+    "art": "mine_rescue",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "安娜把孩子领到医护身边，让每个人记住前一个人的衣服。她看着你手上的清单，等你说完准备情况。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "我跟最后一组走。哥哥有人抬了，这几个孩子还不认识路。先别急着发信号，把医护、车和备用出口都核好。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "choices": [
+      {
+        "text": "医护、接送、备用出口均已落实。按双路撤离方案开始。",
+        "next": "rescue_safe_start",
+        "when": {
+          "all": [
+            "rescue_medic_ready",
+            "rescue_transport_ready",
+            "rescue_route_ready"
+          ]
+        }
+      },
+      {
+        "text": "先回去补齐准备，暂不开始撤离。",
+        "next": "rescue_wait"
+      },
+      {
+        "text": "只靠主提升机开始转移，承担准备不足的风险。",
+        "next": "rescue_risk_confirm",
+        "when": {
+          "not_all": [
+            "rescue_medic_ready",
+            "rescue_transport_ready",
+            "rescue_route_ready"
+          ]
+        }
+      }
+    ],
+    "note": "三项准备均可在矿区补齐。选择暂缓不会导致任务失败。"
+  },
+  "rescue_wait": {
+    "title": "还能补上的一班",
+    "art": "mine_rescue",
+    "lines": [
+      {
+        "speaker": "安娜",
+        "text": "好。我在这里陪他们，你去办。看清楚再回来，不用赶着给我一个好消息。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "她把清单折回原来的位置，去帮医护照看下一位病人。值班员还没有发出转移通知，缺少的安排仍然可以逐项补办。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "end": "resume:coal_medic"
+  },
+  "rescue_risk_confirm": {
+    "title": "尚未落实的事",
+    "art": "mine_rescue",
+    "lines": [
+      {
+        "speaker": "值班医护",
+        "text": "主提升机今天已经停过两次。缺医护会拖慢转移，车不到就会堵在出口，第二条路不开，一旦再停机我们就只能在巷子里等。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "你听清了？还有时间准备。我不想让哥哥再受罪，也不想让谁替我去赌。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "choices": [
+      {
+        "text": "撤回刚才的决定，把准备补齐。",
+        "next": "rescue_wait"
+      },
+      {
+        "text": "确认仍按现有条件开始撤离。",
+        "next": "rescue_bad_start",
+        "flag": "rescue_risk_confirmed",
+        "when": {
+          "not_all": [
+            "rescue_medic_ready",
+            "rescue_transport_ready",
+            "rescue_route_ready"
+          ]
+        }
+      }
+    ]
+  },
+  "rescue_safe_start": {
+    "title": "备用灯亮着",
+    "art": "mine_rescue",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "第一组担架到达矿口后，提升机停了。等候的人先是抬头，接着有人去拍信号箱。安娜把往回挤的孩子拢到墙边，朝你留灯的方向指去。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "走检修口，跟着灯！前面的人慢一点，后面还有担架。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "备用出口的人接上了最后一副担架。你和安娜留下来复点人数，直到纸上每一个名字都有回应。她叫到哥哥时，对讲机里隔了几秒才传来一句“在车上”。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "anna_survival",
+    "finish_flags": [
+      "anna_alive",
+      "anna_outcome_done",
+      "anna_reunited"
+    ]
+  },
+  "anna_survival": {
+    "title": "手还在发抖",
+    "art": "anna_class",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "交换队医护在 D-6 下层交回全班存根，按转移名单逐项销号。矿口那辆车等到最后一副担架上车，才沿交换路线驶回公社。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "回到公社时，安娜始终解不开背包扣。你替她按开，她才发现自己的手还在抖。哥哥在隔壁接受检查，她坐在门外，一遍遍数刚才的名字。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "有一小会儿我以为，他已经上去了，我又要留在下面。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "她把背包抱到膝上，过了很久才继续说。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "明天先不上课了。我得睡一觉。你也去。等我缓过来，再跟你算把课本弄湿的账。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "dawn_theme",
+    "end": "map:commune"
+  },
+  "rescue_bad_start": {
+    "title": "停在半路的铃声",
+    "art": "mine_aftermath",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "主提升机停在两次铃响之间。前面的担架已经挤满等候区，后面的人还不知道发生了什么。安娜把孩子移到墙边，跟医护一起重新分组。煤尘从旧支护的缝里簌簌落下。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "伊万，先把这两副担架接过去！我带最后几个人跟着来。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你折返时，一根受压的横梁落了下来。有人把孩子从缝里推给你。你接住他，再回头，只能看见矿灯照着不断落灰的空隙。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "anna_loss_search"
+  },
+  "anna_loss_search": {
+    "title": "反复叫她的名字",
+    "art": "mine_aftermath",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你们没有立即离开。矿工换了工具，医护把伤者送出去又返回，所有人轮着清理塌落物。喊话声一遍遍传进缝里，后来只剩铁器刮过石头的声音。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "重新打开通路时，安娜已经没有呼吸。阿列克谢在出口等到天黑，只问为什么担架上的人盖着外衣。医护蹲下来告诉他，你站在旁边，没有替她换一种说法。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "医护把生还者与死者分别写入转移记录，在 D-6 下层办理销号。没有人替安娜在领用栏签收，她的存根和个人物品一起交回家属。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "anna_loss_home",
+    "finish_flags": [
+      "anna_dead",
+      "anna_outcome_done"
+    ]
+  },
+  "anna_loss_home": {
+    "title": "带回来的东西",
+    "art": "anna_empty_class",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "孩子们的本子由安娜收在包里，最外面一本被水浸透了。你把它们一册册摊在桌上。米沙走过来，想拿自己的，又把手缩了回去。"
+      },
+      {
+        "speaker": "米沙",
+        "text": "她明天还教吗？"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你搬来一张凳子，坐到他面前，把井下发生的事慢慢告诉他。你没有说她去了一个更好的地方。门外传来晚班的脚步声，有人停住，随后替你们把门轻轻带上。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "anna_elegy",
+    "end": "map:commune"
+  },
+  "anna_memorial": {
+    "title": "没有写完的一课",
+    "art": "anna_empty_class",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "课本里的树旁留着一个小问号。米沙说，安娜答应找到新书以后再讲。他不肯让别人擦掉那一笔。"
+      },
+      {
+        "speaker": "阿列克谢",
+        "text": "她小时候学不会一个字，就要在桌边坐到睡着。后来轮到她教别人，倒学会让人明天再来了。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "他把本子推给你，没有请求你原谅自己，也没有说你已经尽力。你们一起把还能用的纸页分开，等它们晾干。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "anna_elegy",
+    "choices": [
+      {
+        "text": "把已核实的巡检失误交给公社记录，家属姓名由本人决定是否公开。",
+        "next": "anna_account_public",
+        "flag": "anna_record_public"
+      },
+      {
+        "text": "先把完整经过留给家属，等他们决定是否公开。",
+        "next": "anna_account_family",
+        "flag": "anna_record_family"
+      }
+    ]
+  },
+  "anna_account_public": {
+    "title": "把原因写清楚",
+    "art": "anna_empty_class",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "报告记下了重复誊抄的巡检、提升机停运、当时未落实的准备，也记下你确认开始撤离的决定。娜佳逐项向家属核实，允许他们删去自己的姓名，却没有删去事故经过。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "几天后，课堂重新开门。一位轮休工人先教孩子认工具上的字。他讲得慢，孩子们也肯等。安娜留下的铅笔没有被收进展柜，它很快又短了一截。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "anna_elegy",
+    "end": "resume:commune_class",
+    "finish_flags": [
+      "anna_aftermath_done"
+    ]
+  },
+  "anna_account_family": {
+    "title": "暂时由家里保存",
+    "art": "anna_empty_class",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你把记录装进纸袋，交给阿列克谢。他希望先让家里的人知道完整经过，等大家能坐下来谈，再决定如何向外面说明。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "课堂后来还是开了门。值班的人轮流来教，米沙替每个人留着空白的课表。他让安娜那一格空着，说暂时还不想改。你点点头，坐下来陪他把今天的字写完。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "anna_elegy",
+    "end": "resume:commune_class",
+    "finish_flags": [
+      "anna_aftermath_done"
+    ]
+  },
+  "anna_living_lesson": {
+    "title": "又过了几天",
+    "art": "anna_class",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "阿列克谢的床位搬到了暖气旁边，转身时仍需要有人扶。安娜每晚记一次用药，白天重新上课。有人问她以后还想不想去地表，她先看了看窗边的面具。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "想。但得等他能自己走稳，也得有人替我上这一班课。那天我想带一本空本子，见着什么就画下来。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "她给你一支重新削好的铅笔，叫你别再拿刀把书角划破。事情远没有恢复原样，你们却终于可以开始安排下一个星期。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "dawn_theme",
+    "end": "resume:commune_anna",
+    "finish_flags": [
+      "anna_aftermath_done"
+    ]
+  },
+  "c1_intro": {
+    "title": "公社 · 第一轮护送",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "亚历山德拉",
+        "text": "交换队在旧换乘站丢下一箱药。中央把通行许可收回了，送药的人只好绕路。我们查到箱子还在西侧转移点。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "有人被留在那里吗？"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "目前没有可靠回话。看见人先问清楚，药箱拿得回来再拿，别为了完成清单把自己留在那里。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你核对了派工单、弹袋和回程识别灯，沿旧联络线前往同一个换乘站。每次来到这里，封锁的位置和等候的人都在变化。"
+      }
+    ],
+    "same_moment": false,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "front_arrive_c1"
+  },
+  "front_arrive_c1": {
+    "title": "联络线 / 药箱经过的地方",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "列车停在安全线以南。前面是两股停用轨道，一条穿过烧黑的旧站台，另一条通向检修侧廊。控制间里还留着手写图。"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "从南口回来，先在控制间核对北口信号，别踩进断轨。新派工的补给放在南边工具箱里。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "end": "map:railfront"
+  },
+  "c1_after": {
+    "title": "药箱经过的地方 / 归来",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "药箱交回医务室后，有人立刻来领敷料。亚历山德拉没有先问你消灭了几只兽，只让你指出哪段路还能走。"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "这一次算你跟我们走过路了。以后安排联络，会给你写具名担保；它只管一趟访问，不等于你能替我们向谁许诺。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "这张担保让你能够申请访问另一处聚落。每次跨阵营联络仍要交接封好的回执，不能把口令和路线当成闲谈带过去。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "莉季娅的证词按她同意的范围登记，家属被安排在医护等候区。接待处仍有人质疑她的 D-6 身份，亚历山德拉让他们先问清她做过的事。",
+        "when": {
+          "all": [
+            "c1_witness_named"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "双方医护开始逐项核对命令日期。公报只写收到多少物资、尚有多少人失联，家属的名字没有出现在墙上。",
+        "when": {
+          "all": [
+            "c1_witness_sealed"
+          ]
+        }
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "letters_theme",
+    "end": "resume:commune_guard"
+  },
+  "c2_intro": {
+    "title": "公社 · 失联窗口",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "亚历山德拉",
+        "text": "回信窗口暴露了。有个联络员撤走前，把邮袋藏进转移间。找到后先别拆私人信件。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "如果有住址和接应人的名字呢？"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "封起来交给联络组。公开一份名单很容易，替名单上的人找安全住处就难了。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你核对了派工单、弹袋和回程识别灯，沿旧联络线前往同一个换乘站。每次来到这里，封锁的位置和等候的人都在变化。"
+      }
+    ],
+    "same_moment": false,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "front_arrive_c2"
+  },
+  "front_arrive_c2": {
+    "title": "联络线 / 被截住的回信",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "列车停在安全线以南。前面是两股停用轨道，一条穿过烧黑的旧站台，另一条通向检修侧廊。控制间里还留着手写图。"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "从南口回来，先在控制间核对北口信号，别踩进断轨。新派工的补给放在南边工具箱里。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "end": "map:railfront"
+  },
+  "c2_after": {
+    "title": "被截住的回信 / 归来",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "娜佳收下封好的邮袋，先安排向家属核实。亚历山德拉把暴露的窗口从地图上遮住，新的接应地点暂时只口头通知。"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "我们还需要人做下一班。但今晚先吃饭，等明天把名单核清楚再谈。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "新公报列出被截邮件的日期与件数，没有公开住址。有人第一次知道，家里一直没有回信，并不等于对方不愿再写。",
+        "when": {
+          "all": [
+            "c2_public_counts"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "娜佳把征询信先交给医护窗口。回复慢了几班，但家属能亲自决定自己的经历要被谁读到。",
+        "when": {
+          "all": [
+            "c2_family_first"
+          ]
+        }
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "letters_theme",
+    "end": "resume:commune_guard"
+  },
+  "c3_intro": {
+    "title": "公社 · 联络线防御",
+    "art": "rail_evacuation",
+    "lines": [
+      {
+        "speaker": "亚历山德拉",
+        "text": "中央的封锁队已经进了北口。我们撤的是平民和伤员，信号灯亮以后，司机才会把车开进接送线。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "我要守到什么时候？"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "最后一班通过。清出眼前通道就回来，别追过隔离口。我们没有人手再去找一个失联的英雄。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你核对了派工单、弹袋和回程识别灯，沿旧联络线前往同一个换乘站。每次来到这里，封锁的位置和等候的人都在变化。"
+      }
+    ],
+    "same_moment": false,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "front_arrive_c3"
+  },
+  "front_arrive_c3": {
+    "title": "联络线 / 最后一班撤离车",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "列车停在安全线以南。前面是两股停用轨道，一条穿过烧黑的旧站台，另一条通向检修侧廊。控制间里还留着手写图。"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "从南口回来，先在控制间核对北口信号，别踩进断轨。新派工的补给放在南边工具箱里。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "end": "map:railfront"
+  },
+  "c3_after": {
+    "title": "最后一班撤离车 / 归来",
+    "art": "rail_evacuation",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "撤离名单由接收人员当面复点，留守班随后也回到公社。墙上的通行图少了一条线，食堂里多了几张临时床位登记。"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "北线这几段路终于能串起来。我们可以把你送到星城外围，递一封询问信。门里的人愿不愿意接待，要由他们回答。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "联络员接通北线接收机，让你亲自听完一轮值班广播。东方-7 的呼号在短暂静默后重复了一次，对方只报了观测窗口，没有公布人员和地址。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "走到这里之前，你已经学会区分广播、传言和自己真正见过的事。那扇远处的门终于有了可以询问的方向，但门后仍有太多事无法确认。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "放弃的供暖泵仍留在战区。安置人员只能先挤住一间暖房，医护却很庆幸多了一辆能放担架的车。",
+        "when": {
+          "all": [
+            "c3_people_first"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "轮休守备接下了拆泵的下一班，今晚少了一组能回家吃饭的人。供暖班先按没有新泵的情况安排过夜，没有把尚未运回的设备算进承诺。",
+        "when": {
+          "all": [
+            "c3_rearguard_shift"
+          ]
+        }
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "dawn_theme",
+    "end": "resume:commune_guard",
+    "finish_flags": [
+      "signal_heard",
+      "signal_identified",
+      "star_known"
+    ]
+  },
+  "s1_intro": {
+    "title": "谢契 · 第一轮接运",
+    "art": "sech_approach",
+    "lines": [
+      {
+        "speaker": "彼得",
+        "text": "车队迟了两个窗口。先去查回程单和停车位置，客人里有人等着转移孩子。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "如果车已经坏了呢？"
+      },
+      {
+        "speaker": "彼得",
+        "text": "把人和确切消息带回来。空车能修，没人知道去哪找的家属等不起。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你核对了派工单、弹袋和回程识别灯，沿旧联络线前往同一个换乘站。每次来到这里，封锁的位置和等候的人都在变化。"
+      }
+    ],
+    "same_moment": false,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "front_arrive_s1"
+  },
+  "front_arrive_s1": {
+    "title": "联络线 / 空车也要回家",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "列车停在安全线以南。前面是两股停用轨道，一条穿过烧黑的旧站台，另一条通向检修侧廊。控制间里还留着手写图。"
+      },
+      {
+        "speaker": "彼得",
+        "text": "从南口回来，先在控制间核对北口信号，别踩进断轨。新派工的补给放在南边工具箱里。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "end": "map:railfront"
+  },
+  "s1_after": {
+    "title": "空车也要回家 / 归来",
+    "art": "sech_approach",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "彼得重排了座位，先让等车的家属认清车队标记。你这次带回来的货不多，饭桌旁却终于坐齐了几个人。"
+      },
+      {
+        "speaker": "彼得",
+        "text": "这一次算你跟我们走过路了。以后安排联络，会给你写具名担保；它只管一趟访问，不等于你能替我们向谁许诺。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "这张担保让你能够申请访问另一处聚落。每次跨阵营联络仍要交接封好的回执，不能把口令和路线当成闲谈带过去。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "彼得在临时名单上加了名字。空出的货架让给了担架，未能带回的零件记作下一班补运。",
+        "when": {
+          "all": [
+            "s1_guest_named"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "孩子先去了诊疗间，长老随后来核对家属的去向。临时接送不等于自动入伙，这一家仍得为以后住在哪里慢慢商量。",
+        "when": {
+          "all": [
+            "s1_medical_first"
+          ]
+        }
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "letters_theme",
+    "end": "resume:sech_quartermaster"
+  },
+  "s2_intro": {
+    "title": "谢契 · 失踪的货车",
+    "art": "sech_approach",
+    "lines": [
+      {
+        "speaker": "彼得",
+        "text": "有人说失踪司机偷卖了零件。家属说他去换药，阿塔曼要看账。你替我们找原始单据。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "我找到以后，是交给你还是交给议事会？"
+      },
+      {
+        "speaker": "彼得",
+        "text": "带回来当面讲。我的领用章也在上头，不能由我一个人收着。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你核对了派工单、弹袋和回程识别灯，沿旧联络线前往同一个换乘站。每次来到这里，封锁的位置和等候的人都在变化。"
+      }
+    ],
+    "same_moment": false,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "front_arrive_s2"
+  },
+  "front_arrive_s2": {
+    "title": "联络线 / 没有旗子的车队",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "列车停在安全线以南。前面是两股停用轨道，一条穿过烧黑的旧站台，另一条通向检修侧廊。控制间里还留着手写图。"
+      },
+      {
+        "speaker": "彼得",
+        "text": "从南口回来，先在控制间核对北口信号，别踩进断轨。新派工的补给放在南边工具箱里。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "end": "map:railfront"
+  },
+  "s2_after": {
+    "title": "没有旗子的车队 / 归来",
+    "art": "sech_approach",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "长老让司机家属和军需员都坐下，把短缺、私卖和换回药物分别说明。有人要求处罚，有人问当时为什么领不到药。"
+      },
+      {
+        "speaker": "彼得",
+        "text": "我们还需要人做下一班。但今晚先吃饭，等明天把名单核清楚再谈。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "领用章的使用范围被公开复核。司机家属的病情没有贴出去，阿塔曼亲属的领用也没有从表里消失。",
+        "when": {
+          "all": [
+            "s2_open_audit"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "闭门核对后的处理依据贴到了轮值板上。有人质疑为什么不能旁听，长老答应下次把涉及权限的部分公开讨论，家属的病情仍然保密。",
+        "when": {
+          "all": [
+            "s2_small_hearing"
+          ]
+        }
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "letters_theme",
+    "end": "resume:sech_quartermaster"
+  },
+  "s3_intro": {
+    "title": "谢契 · 北线守望",
+    "art": "rail_evacuation",
+    "lines": [
+      {
+        "speaker": "彼得",
+        "text": "北线遇袭，库里有人要求把沿途交换者全赶走。阿塔曼还没下令，要你先查清交火位置。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "如果封锁队还在那里？"
+      },
+      {
+        "speaker": "彼得",
+        "text": "先接出滞留的人，给他们留撤路。拿枪挡着通道的再处理，别只凭一块袖章找人报仇。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你核对了派工单、弹袋和回程识别灯，沿旧联络线前往同一个换乘站。每次来到这里，封锁的位置和等候的人都在变化。"
+      }
+    ],
+    "same_moment": false,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "next": "front_arrive_s3"
+  },
+  "front_arrive_s3": {
+    "title": "联络线 / 报复到哪里为止",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "列车停在安全线以南。前面是两股停用轨道，一条穿过烧黑的旧站台，另一条通向检修侧廊。控制间里还留着手写图。"
+      },
+      {
+        "speaker": "彼得",
+        "text": "从南口回来，先在控制间核对北口信号，别踩进断轨。新派工的补给放在南边工具箱里。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "",
+    "end": "map:railfront"
+  },
+  "s3_after": {
+    "title": "报复到哪里为止 / 归来",
+    "art": "rail_evacuation",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "阿塔曼听完交火经过，撤回了扩大报复范围的命令，仍要求补回守备轮值。有人觉得你太谨慎，失踪者的家属则来问一个确切的名字。"
+      },
+      {
+        "speaker": "彼得",
+        "text": "北线这几段路终于能串起来。我们可以把你送到星城外围，递一封询问信。门里的人愿不愿意接待，要由他们回答。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "联络员接通北线接收机，让你亲自听完一轮值班广播。东方-7 的呼号在短暂静默后重复了一次，对方只报了观测窗口，没有公布人员和地址。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "走到这里之前，你已经学会区分广播、传言和自己真正见过的事。那扇远处的门终于有了可以询问的方向，但门后仍有太多事无法确认。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "目击者在军需处把时间重新说了一遍，彼得记下仍不能核实的空白，没有替他补齐。",
+        "when": {
+          "all": [
+            "s3_witness_returns"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "议事会收到保留原签名的证词，外面的通报隐去了身份。有人因此不信，彼得答应承担保管原件、接受复核的责任。",
+        "when": {
+          "all": [
+            "s3_witness_protected"
+          ]
+        }
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "dawn_theme",
+    "end": "resume:sech_quartermaster",
+    "finish_flags": [
+      "signal_heard",
+      "signal_identified",
+      "star_known"
+    ]
+  },
+  "memory_after_visit": {
+    "title": "饭凉以前",
+    "art": "memory_alcove",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "巴拉诺娃把家庭抄本放进抽屉，没有一直捧在手里。她问你吃过没有，又责怪米沙把汤碗放在纸边。"
+      },
+      {
+        "speaker": "巴拉诺娃",
+        "text": "我想知道他那天做了什么，也想让人记得，他平时是怎么过日子的。他补袜子很差，补两针就扎自己的手。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "米沙笑了，她也笑了一下。你们把桌面腾出来，热饭终于有了落脚的地方。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "letters_theme",
+    "end": "resume:commune_baranova"
+  },
+  "moro_after_shift": {
+    "title": "最后一盏工作灯",
+    "art": "moro_boiler",
+    "lines": [
+      {
+        "speaker": "莫罗",
+        "text": "明天还得添煤，嗓子哑了也得上班。你有空帮我看一眼海报，我总觉得那个人的手画歪了。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "散场的人给他留了一碗汤。有人说歌词太直，有人问下次能不能教自己弹。莫罗一边收线一边听，没有把谁赶走。"
+      },
+      {
+        "speaker": "莫罗",
+        "text": "他们愿意坐下来听完，我就还想写。写好了再唱，不急着每一句都替别人说话。"
+      }
+    ],
+    "same_moment": true,
+    "location": "地铁1982 / 第二章",
+    "music": "moro_first_song",
+    "end": "resume:commune_moro"
+  },
+  "front_back_commune": {
+    "title": "沿安全线返回",
+    "art": "frontline_station",
+    "body": "你把本班见到的事和带回的记录分开收好。路上的战斗已经结束，回去以后还要向等候的人说明情况。",
+    "end": "map:commune",
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "front_back_sech": {
+    "title": "沿安全线返回",
+    "art": "frontline_station",
+    "body": "你把本班见到的事和带回的记录分开收好。路上的战斗已经结束，回去以后还要向等候的人说明情况。",
+    "end": "map:sech",
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "anna_surface_visit": {
+    "title": "她终于带上一本空本子",
+    "art": "anna_surface",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你们在熟悉的检修出口停下。安娜隔着面罩抬起头，过了好一会儿，才把手从门框上放开。风把地上的细雪推成一道浅浅的纹。"
+      },
+      {
+        "speaker": "安娜",
+        "text": "比我想的亮。我一直以为，天会离人很近。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "她指着路边一棵光秃的树，问你那是不是桦树。你也拿不准，于是她把树干的纹路画下来，留了一小块地方，准备回去查书。"
+      }
+    ],
+    "choices": [
+      {
+        "text": "陪她站一会儿，等她把这一页画完。",
+        "next": "anna_surface_return"
+      },
+      {
+        "text": "提醒她检查时间和滤罐，再看看回去的路。",
+        "next": "anna_surface_return",
+        "flag": "anna_surface_cautious"
+      }
+    ],
+    "same_moment": false,
+    "music": "dawn_theme"
+  },
+  "anna_surface_return": {
+    "title": "回去以后要讲的事",
+    "art": "anna_surface",
+    "lines": [
+      {
+        "speaker": "安娜",
+        "text": "这次先讲天空和那棵树。河的那一页，等以后再说。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "她把本子装进你带来的防水袋，重新扣好外套。你们沿着绳标走回地下。门关上以前，她又回头看了一眼。第二天上课时，她先把那幅还没画完的树放到桌上，告诉孩子们哪些是自己看见的，哪些还不知道。"
+      }
+    ],
+    "end": "resume:commune_anna",
+    "finish_flags": [
+      "anna_surface_seen"
+    ],
+    "same_moment": true,
+    "music": "dawn_theme"
+  },
+  "field_c1_interlude": {
+    "title": "药箱旁的人",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "转移点还有一个穿 D-6 旧外衣的女人。她把双手伸到灯下，先说明自己已经放下武器。袖口是医护做的临时标记。"
+      },
+      {
+        "speaker": "女人",
+        "text": "我押着这批药出来，封锁命令先到，撤回许可后到。抬担架的人被赶进侧廊，我没法带他们走。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "你叫什么？回去以后，总得有人说清楚这箱药为什么留在这里。"
+      },
+      {
+        "speaker": "女人",
+        "text": "莉季娅。名字可以记。别把跟我出来的家属也写上，他们不知道命令是怎么回事。"
+      }
+    ],
+    "choices": [
+      {
+        "text": "记下她愿意公开的证词，护送家属去南口等车。",
+        "next": "field_c1_interlude_end",
+        "flag": "c1_witness_named"
+      },
+      {
+        "text": "先只记录日期和物资，把完整证词封给双方医护核对。",
+        "next": "field_c1_interlude_end",
+        "flag": "c1_witness_sealed"
+      }
+    ],
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "field_c1_interlude_end": {
+    "title": "继续往北口",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "她先问你能不能让家属上车，最后才问自己能不能一起走。你把南口的识别灯指给她看，告诉她回程必须当面登记，不能保证接待处不会继续盘问。她点点头，叫上了等在阴影里的人。"
+      }
+    ],
+    "end": "resume:front_cache",
+    "finish_flags": [
+      "field_c1_scene_seen"
+    ],
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "field_c2_interlude": {
+    "title": "信件没有寄到的地方",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "邮袋后面有一个临时落脚点，墙上的轮班表已经被撕掉。一封尚未封口的信压着存根，写信的人想问父亲伤口好了没有，又怕寄信会暴露自己的住处。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "这份存根能证明中央在拦截家信，也能让下一批搜查的人找到他们。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你可以带回用于公开核对的日期与件数，也可以完整封存，先让联络组询问收信人的意愿。两种做法都要保存原件，不能把不方便的部分撕掉。"
+      }
+    ],
+    "choices": [
+      {
+        "text": "另抄不含住址的日期与件数，交公社公开追问邮件去向。",
+        "next": "field_c2_interlude_end",
+        "flag": "c2_public_counts"
+      },
+      {
+        "text": "把原件完整封存，先通过医护窗口征询家属。",
+        "next": "field_c2_interlude_end",
+        "flag": "c2_family_first"
+      }
+    ],
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "field_c2_interlude_end": {
+    "title": "继续往北口",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你把私信重新放回袋底，按原来的折痕合好。临走前，落脚点里的人请你先告诉南口的守备：他们需要搬运一个不能独自行走的老人。"
+      }
+    ],
+    "end": "resume:front_cache",
+    "finish_flags": [
+      "field_c2_scene_seen"
+    ],
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "field_c3_interlude": {
+    "title": "信号亮起以前",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "接送线留着一辆空货车，车后是一台还能拆走的供暖泵。守备班问能否等一等，把泵也装上。门边的医护正在清点担架，后面的通道已经开始落灰。"
+      },
+      {
+        "speaker": "亚历山德拉 / 电台",
+        "text": "伤员先走。货车要是留下运泵，后续得多占一个接送窗口。别让司机和病人各自等一个没人说清楚的安排。"
+      }
+    ],
+    "choices": [
+      {
+        "text": "把货车也用于转移居民，放弃这次拆运供暖泵。",
+        "next": "field_c3_interlude_end",
+        "flag": "c3_people_first"
+      },
+      {
+        "text": "划出单独搬运组，把供暖泵留下给轮休守备拆运，先放行伤员。",
+        "next": "field_c3_interlude_end",
+        "flag": "c3_rearguard_shift"
+      }
+    ],
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "field_c3_interlude_end": {
+    "title": "继续往北口",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你把安排向司机和医护分别复述了一遍。北口的直接威胁还没有清除，司机让乘客继续待在掩蔽处，等确认信号以后才进站。"
+      }
+    ],
+    "end": "resume:front_cache",
+    "finish_flags": [
+      "field_c3_scene_seen"
+    ],
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "field_s1_interlude": {
+    "title": "回程单背面",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "回程单上写着三个家庭，等候处却多了一个抱着孩子的男人。他没有谢契的领用牌，孩子的鞋包在一块布里。"
+      },
+      {
+        "speaker": "男人",
+        "text": "我不跟你们争铺位。送到能换药的地方就行，我可以跟车搬东西。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "车上的人都得登记。你愿意报名字，我就把你实际需要的事一起写进去。"
+      }
+    ],
+    "choices": [
+      {
+        "text": "记下他的姓名与用药需要，向彼得申请临时接送。",
+        "next": "field_s1_interlude_end",
+        "flag": "s1_guest_named"
+      },
+      {
+        "text": "先由医护登记孩子的病情，家属身份另交长老核对。",
+        "next": "field_s1_interlude_end",
+        "flag": "s1_medical_first"
+      }
+    ],
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "field_s1_interlude_end": {
+    "title": "继续往北口",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "他把孩子换到另一边抱着，慢慢把姓名念给你听。你没有替谢契许诺一张长期铺位，只明确告诉他，南口的车会有人来核对这次接送。"
+      }
+    ],
+    "end": "resume:front_cache",
+    "finish_flags": [
+      "field_s1_scene_seen"
+    ],
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "field_s2_interlude": {
+    "title": "两种账都要算",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "工具箱里还有一张求药纸条。司机的女儿发烧时，军需处两次拒绝了领药申请。司机私卖零件的那一天，阿塔曼的亲属刚领走一盒同批药。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "少掉的零件会影响巡轨，领药的人也确实在等救治。这两件事都得说清楚。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "账页带回以后，家属需要决定愿意在多少人面前说明病情。原始领用记录必须交给议事会核验。"
+      }
+    ],
+    "choices": [
+      {
+        "text": "要求公开核查领用权限，病情和家属姓名先作遮盖。",
+        "next": "field_s2_interlude_end",
+        "flag": "s2_open_audit"
+      },
+      {
+        "text": "先请家属、军需员和长老闭门核对，再公布处理依据。",
+        "next": "field_s2_interlude_end",
+        "flag": "s2_small_hearing"
+      }
+    ],
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "field_s2_interlude_end": {
+    "title": "继续往北口",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你把原账和纸条分开收好。司机的工具还在车上，接送的人仍然没有找到他。账能够解释他为什么出发，不能替你写出他后来去了哪里。"
+      }
+    ],
+    "end": "resume:front_cache",
+    "finish_flags": [
+      "field_s2_scene_seen"
+    ],
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "field_s3_interlude": {
+    "title": "传言指向的人",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "躲在转移点的交换者把交火时刻写在纸背。他说中央封锁队先扣了巡轨员，随后发生枪响。另一个路过的车队在更早的时候就已经离开。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "你亲眼看见的是哪一段？哪些是后来听说的？"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你把两部分分开记录。北口仍有武装，回程需要清出眼前通道；议事会里关于扩大报复的争论，还要带着这些证词回去面对。"
+      }
+    ],
+    "choices": [
+      {
+        "text": "请目击者随车回去，在安全条件下亲自作证。",
+        "next": "field_s3_interlude_end",
+        "flag": "s3_witness_returns"
+      },
+      {
+        "text": "封存具名证词，替不愿露面的目击者隐去公开身份。",
+        "next": "field_s3_interlude_end",
+        "flag": "s3_witness_protected"
+      }
+    ],
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "field_s3_interlude_end": {
+    "title": "继续往北口",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "他问你阿塔曼会不会听。你回答，会把亲眼见到的事当面讲清楚，也会说明哪些地方仍然没有证据。你没有替还没听到这些话的人作保证。"
+      }
+    ],
+    "end": "resume:front_cache",
+    "finish_flags": [
+      "field_s3_scene_seen"
+    ],
+    "same_moment": true,
+    "music": "letters_theme"
+  },
+  "arrive_railfront": {
+    "title": "旧联络线换乘站",
+    "art": "frontline_station",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "接送车停在南口。控制间在东南侧，西边的检修侧廊通往转移点，北口信号还没有亮。你先记下回程方向，再走进站台。"
+      }
+    ],
+    "end": "map:railfront",
+    "same_moment": true
+  }
+}

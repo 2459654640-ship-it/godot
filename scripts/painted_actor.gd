@@ -131,10 +131,12 @@ func _process(delta):
 	var pose=0
 	if armed:
 		var reloading=is_instance_valid(director) and ((actor.is_player and director.reload_time>0) or (actor_id=="veteran_masked" and director.veteran_reload>0))
-		if reloading:pose=[5,2,6,2][beat] if walking and pose_count>=7 else 2
+		if reloading:
+			if pose_count>=7:pose=[5,2,6,2][beat] if walking else 2
+			else:pose=[1,0,2,0][beat] if walking else 0
 		elif walking:
 			if pose_count>=5:pose=[3,0,4,0][beat]
-			elif actor_id=="ivan":pose=[1,0,2,0][beat]
+			elif pose_count>=3:pose=[1,0,2,0][beat]
 		elif reaction=="shot" and reaction_time>0:pose=1
 	elif walking and pose_count>=3:
 		pose=[1,0,2,0][beat]

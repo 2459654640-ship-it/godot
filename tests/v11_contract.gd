@@ -55,11 +55,11 @@ func run():
  check(s.f("commune_heat_done") and s.f("meal_done") and s.economy.military==28,"domestic quests have actual steps and single rewards")
  var money=s.economy.military;s.act("c_meal_return");check(not s.last_action_valid and money==s.economy.military,"cannot farm delivered meal reward")
  s.flags.greenhouse_fixed=true;s.flags.workers_done=true;action(s,"c_commune_trust")
- check(s.f("commune_trusted") and Campaign.available(s,"commune_star"),"earned commune route opens supported onward travel")
+ check(s.f("commune_trusted") and not Campaign.available(s,"commune_star"),"local trust is retained, but onward travel now waits for the field chapters")
  s=Story.new();s.context.floor="sech";action(s,"c_sech_stay");finish_comic(s,"sech_settle");action(s,"c_sech_oath")
  check(not s.ending and s.f("north_job"),"Sech commitment starts practical chapter")
  for key in ["sech_water","radio_manual","radio_power","radio_tune","north_record","north_chock","north_axle","north_verify","sech_trust"]:action(s,"c_"+key)
- check(s.f("sech_trusted") and Campaign.available(s,"sech_star"),"Sech trust earned via three actual systems")
+ check(s.f("sech_trusted") and not Campaign.available(s,"sech_star"),"Sech trust earned via local work, north travel waits for field experience")
  for key in ["stove_accept","stove_clear","stove_brush","stove_return","blanket_accept","blanket_find","blanket_return"]:action(s,"c_"+key)
  check(s.f("stove_done") and s.f("blanket_done"),"Sech domestic side quests complete")
  for route in ["official","hatch"]:

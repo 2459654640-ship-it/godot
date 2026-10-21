@@ -1,13 +1,17 @@
 extends RefCounted
 ## Authored continuation. Content is local JSON; no remote services or generated dialogue at runtime.
 static var _data:Dictionary={}
-const NAMES={"waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区","surface":"地表旧泵站"}
+const Update=preload("res://scripts/chapter_update.gd")
+const NAMES={"waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区","surface":"地表旧泵站","railfront":"旧联络线换乘站"}
 const ITEM_ART={"pool_sample":"mutant_sample","moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
 static func data()->Dictionary:
-	if _data.is_empty():_data=JSON.parse_string(FileAccess.get_file_as_string("res://data/campaign.json"))
+	if _data.is_empty():
+		_data=JSON.parse_string(FileAccess.get_file_as_string("res://data/campaign.json"))
+		Update.extend(_data)
 	return _data
 static func permits(s,req:Dictionary)->bool:
 	if req.has("any") and not req.any.any(func(flag):return s.f(flag)):return false
+	if req.has("not_all") and req.not_all.all(func(flag):return s.f(flag)):return false
 	if req.has("floor") and s.context.get("floor","") not in req.floor:return false
 	for flag in req.get("all",[]):
 		if not s.f(flag):return false
@@ -20,6 +24,7 @@ static func permits(s,req:Dictionary)->bool:
 	return true
 static func available(s,key:String)->bool:
 	if key in data().get("unreleased_star_actions",[]):return false
+	if not Update.allowed(s,key):return false
 	if key.begins_with("star_return_") and key!="star_return_"+String(s.flags.get("star_return_home","sech" if s.f("sech_member") else "commune")):return false
 	if not data().actions.has(key):return false
 	var a:Dictionary=data().actions[key]
@@ -44,7 +49,7 @@ static func decorate(v:Dictionary,s)->Dictionary:
 		if key=="coal_return" and not s.f("brother_found"):words="沿原探访通路返回公社，稍后再来"
 
 		v.options.append(s.opt("c_"+key,words,s.context.get("floor","")==d.facility and available(s,key)))
-	return v
+	return Update.decorate(v,s)
 static func act(s,key:String)->String:
 	var a:Dictionary=data().actions[key]
 	if not available(s,key):return "这件事已经做过，或还没有准备好。"
@@ -78,6 +83,8 @@ static func act(s,key:String)->String:
 	if a.has("ending"):finish(s,a.ending)
 	if a.get("reply","")!="":s.know(data().actions[key].text+"："+a.reply)
 	var reply:String=a.get("reply","")
+	var updated=Update.act(s,key)
+	if updated!="":reply=updated
 	var receipts=[]
 	for kind in reward:
 		if int(reward[kind])>0:receipts.append(("制式子弹" if kind=="military" else "土制子弹")+" ×"+str(reward[kind]))
@@ -96,6 +103,8 @@ static func side_tasks(s)->Array:
 		for stage in q.stages:
 			if permits(s,stage.when):current=stage
 		var target:String=current.target
+		if q.id=="north_late" and s.f("sech_member"):
+			current=current.duplicate();current.place="sech";current.target="sech_leave" if s.f("north_inquiry_ready") else "sech_quartermaster";target=current.target
 		if q.facility=="starcity":current={"target":"star_perimeter_call","place":"starcity","step":"暂缓：星城内区封闭，先保留已取得的记录。"};target="star_perimeter_call"
 		if q.id=="surface_survey" and s.f("surface_sample_sealed") and s.f("surface_from_sech"):current=current.duplicate();current.target="sech_quartermaster";current.place="sech";target="sech_quartermaster"
 		rows.append({"kind":q.get("kind","支线"),"id":q.id,"name":q.name,"done":s.f(q.done),"place":current.get("place",q.facility),"background":q.background,"step":"已交付，报酬与经过记入手记。" if s.f(q.done) else current.step,"target":target,"area":data().interactions[target].name})
@@ -109,6 +118,8 @@ static func finish(s,id:String):
 	if id not in unlocked:unlocked.append(id)
 	s.flags.endings_seen=unlocked
 static func objective(s)->String:
+	var updated=Update.objective(s)
+	if updated!="" and not s.ending:return updated
 	if s.ending:return data().endings.get(s.flags.get("campaign_ending",""),{}).get("title","这段旅程已记入手记")
 	match s.context.get("floor",""):
 		"waterworks":
@@ -118,7 +129,7 @@ static func objective(s)->String:
 			if s.f("plant_diagram"):return "按值班图卸压，并到修配台取备用件"
 			return "查阅水厂值班图，再检查泵房"
 		"commune":
-			if s.f("brother_found") and not s.f("anna_reunited"):return "回医务室，把核实结果交给安娜"
+			if s.f("brother_found") and not s.f("anna_first_news"):return "回医务室，把核实结果交给安娜"
 			if s.f("anna_records") and not s.f("brother_found"):return "到联络气闸，持探访函返回 D-6"
 			if s.f("anna_request") and not s.f("anna_records"):return "到联络室核对安娜哥哥的班组记录"
 			return "与公社居民交谈 · 选择留在这里或继续旅程"

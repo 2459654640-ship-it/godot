@@ -1,0 +1,31 @@
+{
+  "base_frames_unchanged": 24,
+  "normal_runtime_atlas_unchanged": true,
+  "sha256": {
+    "01-front-A.png": "dc59ee8695f8c3d2ae254f67cd5b19e80375fbfab450f1db5ce82aa9ed165925",
+    "01-front-B.png": "0cb68656209ae5a1c155ee34bceafe563ea8fb5dbabeb0d363eb023522e2ec38",
+    "01-front-standing.png": "cfabe44ce2e7008c7d2e11ca2db046e2b29574d6b7325a285daa004753e09e0f",
+    "02-front-right-A.png": "bafb138eabb73c2cc52ad3f71fb96c114c8d94794def649edcb14a191d11865e",
+    "02-front-right-B.png": "103c16b3c62bee025c2e40eecc4b3178b40ba19b63fc9cbc2bd4415dc3964522",
+    "02-front-right-standing.png": "4bf5206d9669679b7e79f1d0bedf88ecd02e1b866c7b2ed79ee34ab4542e50ef",
+    "03-right-A.png": "0fa5b25eb831c8c45d84745b5c0948ad1bc002082064dd50b8f1a4334bc4ea98",
+    "03-right-B.png": "b473a6ec171474f917b8405c8dbcd5451f88ef176fd66b86b598ece9634ae386",
+    "03-right-standing.png": "787e3a5fa213229c18865e9c2accb8c1b17e9050ad44d1ff13872d4dc553baaa",
+    "04-back-right-A.png": "3569eb1fe4fd1789c260f891f9e376e9e32fde45a0fdfcec603739419d1b0965",
+    "04-back-right-B.png": "2a711a1301f53778fd50ad8aa27754647db5b7171212562f4328dcf752274fbc",
+    "04-back-right-standing.png": "b4fad41abf889ba0168b9680e6e170bc5ffaa075d8b7743eb9652751f7dd26cd",
+    "05-back-A.png": "3c84398b90c992068630b3b45c626e75a757400cf40448bbc8581b8646ea5326",
+    "05-back-B.png": "2fd0da51bfaad7f2dad7b2496acacf8c1f0aa11cdb3ad7c2f7ef9b52116d31e6",
+    "05-back-standing.png": "59375d37820e95f9cfac2cd14c825cb0a6aa2c398f6bbb1f5e97b0c2baf2ad51",
+    "06-back-left-A.png": "1ce17ad9ffdbdcf5c3791e41d42a4a25f2e3b7c6bbdc96f4bf8f5f3b3d4ee274",
+    "06-back-left-B.png": "c5780831eb0bd0eb1f30c342edca8d0a9a855f2c63bab85fb3d835c07a5a0c84",
+    "06-back-left-standing.png": "62472f22f479882866314e764b23a8793a2629c1190e041c3cffe20c833340bd",
+    "07-left-A.png": "c36bad0b45a846a54fcd044e1a75ccde51246a879d477ffab99b99d5e77005d6",
+    "07-left-B.png": "127832638800b20ee904eb3a59d927e20747a6396105e2f9e0b160d517abf994",
+    "07-left-standing.png": "101a507d2c8027c554d4e231e0e4ba32ca6aaddadc136f3396a1034de3642cc1",
+    "08-front-left-A.png": "8d6ca4ea35ed34db6a02eecf504528a59645f6041fcff3d0c144ed3245bbdb98",
+    "08-front-left-B.png": "c59ec6840c4d314e5f9ceff64dd46bdbb493927ebcdb4e0109158be99de4388f",
+    "08-front-left-standing.png": "5aee207550841afb16f0983b4dba9976e49844ac0ba9b985adf34cbdbbbbe605",
+    "runtime/ivan.png": "33db24356dea4e2f80ac33de91de73fcac51b37e109bcc261b0627d821656f86"
+  }
+}

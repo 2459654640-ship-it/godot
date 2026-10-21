@@ -63,7 +63,7 @@ func run():
   s=Story.new();s.context.floor=chain[0];s.flags["anna_reunited" if chain[1]=="medicine_seal" else "names_done"]=true
   for suffix in ["_accept","_inspect","_compare","_return"]:act(s,chain[1]+suffix)
   check(Journal.tasks(s).any(func(t):return t.id==chain[1] and t.done),"new optional chain reaches real completion")
- s=Story.new();s.context.floor="commune"
+ s=Story.new();s.context.floor="commune";s.flags.anna_lesson_seen=true
  act(s,"anna_accept");act(s,"anna_records");s.flags.brother_found=true
  act(s,"commune_coal");s.context.floor="coal";act(s,"coal_return");s.context.floor="commune";act(s,"commune_coal")
  check(s.last_action_valid,"completed main investigation does not strand unfinished coal side tasks")

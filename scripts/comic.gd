@@ -3,7 +3,9 @@ extends RefCounted
 const Campaign=preload("res://scripts/campaign.gd")
 static var _authored:Dictionary={}
 static func authored()->Dictionary:
-	if _authored.is_empty():_authored=JSON.parse_string(FileAccess.get_file_as_string("res://data/story_panels.json"))
+	if _authored.is_empty():
+		_authored=JSON.parse_string(FileAccess.get_file_as_string("res://data/story_panels.json"))
+		_authored.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_panels.json")),true)
 	return _authored
 const PANELS={
 "intro_wake":{"art":"wake","title":"醒来 / 16 XI 1982","body":"通风机的低鸣先于闹铃把你叫醒。墙里流过一阵水声，很快又停了。\n二十年前，战争把莫斯科的人赶进地下。你在这里长大，直到现在，晨光对你仍只是一个词。\n你叫伊万，是 D-6 武装小队的一员。老爹谢苗诺夫在门边敲了两下。","next":"intro_semyon"},
@@ -38,8 +40,9 @@ static func panel(s)->Dictionary:
 	if override.has("next") or override.has("choices"):p.erase("end")
 	p.merge(override,true)
 	if p.has("choices"):
-		p.choices=p.choices.filter(func(choice):return not s.f(choice.get("hide_if","")) and (not choice.has("requires") or s.f(choice.requires)))
+		p.choices=p.choices.filter(func(choice):return not s.f(choice.get("hide_if","")) and (not choice.has("requires") or s.f(choice.requires)) and Campaign.permits(s,choice.get("when",{})))
 	if p.has("lines"):
+		p.lines=p.lines.filter(func(line):return Campaign.permits(s,line.get("when",{})))
 		var paragraphs:Array[String]=[]
 		for line in p.lines:paragraphs.append(line.text if line.speaker=="旁白" else line.speaker+"：「"+line.text+"」")
 		p.body="\n".join(paragraphs)
@@ -57,9 +60,11 @@ static func choose(s,index:int=-1):
 		var records:Array=s.flags.get("comic_records",[])
 		records.append({"title":p.title,"body":p.body,"choice":p.choices[index].text if p.has("choices") else ""})
 		s.flags.comic_records=records
+	for flag in p.get("finish_flags",[]):s.flags[flag]=true
+	if "anna_dead" in p.get("finish_flags",[]) and s.f("parcel_job") and not s.f("parcel_done"):
+		var failed:Dictionary=s.flags.get("failed_quests",{}).duplicate(true);failed.medicine_seal="安娜在撤离事故中牺牲，原委托无法交回。物资仍由公社医护接管。";s.flags.failed_quests=failed
 	if p.has("end"):
 		state.active=false
-		for flag in p.get("finish_flags",[]):s.flags[flag]=true
 		if p.end=="intro":
 			s.flags.intro_done=true
 			if not s.f("rations_issued"):

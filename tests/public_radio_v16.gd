@@ -22,6 +22,12 @@ func freeze(w):
  if is_instance_valid(w.combat):w.combat.set_physics_process(false)
  w.story.flags.intro_done=true;w.story.flags.comic={"active":false};w.hud.comic_active=false;w.hud.close()
 func run():
+ var sample:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/radio.json"))
+ var absent=Radio.with_optional_channels(sample,func(_f):return false)
+ var partial=Radio.with_optional_channels(sample,func(f):return f=="moon_heart.mp3")
+ var complete=Radio.with_optional_channels(sample,func(_f):return true)
+ check(absent.stations.size()==3 and partial.stations.size()==3,"optional channel never exposes missing or partial audio")
+ check(complete.stations.size()==4 and complete.tracks.moon_heart.file.ends_with(".mp3") and complete.tracks.only_you.zh=="我只在乎你","both supplied MP3s enable the configured Ocean Watch channel")
  var all_tracks={}
  var old_story
  for floor_id in Radio.SITES:
@@ -50,13 +56,13 @@ func run():
   check(w.hud.typing.is_empty(),"radio menu does not enter NPC dialogue typing: "+floor_id)
   if floor_id=="life":
    old_story=w.story.serialize().duplicate(true)
-   check(r.catalog.stations.size()==3 and r.catalog.tracks.size()==7,"three named stations cover seven supplied songs")
+   check(r.catalog.stations.size()==3 and r.catalog.tracks.size()==7,"three complete stations remain playable while optional large attachments are unavailable")
    for station in r.catalog.stations:
     check(station.ru!="" and station.name!="","bilingual station identity")
     for id in station.tracks:
      all_tracks[id]=true
      var song:Dictionary=r.catalog.tracks[id];var stream=load("res://assets/audio/radio/"+song.file)
-     check(song.zh!="" and song.ru!="" and stream is AudioStreamOggVorbis and stream.get_length()>100 and not stream.loop,"bilingual, decodable full-length song with finite playback: "+id)
+     check(song.zh!="" and song.ru!="" and (stream is AudioStreamOggVorbis or stream is AudioStreamMP3) and stream.get_length()>100 and not stream.loop,"bilingual, decodable full-length song with finite playback: "+id)
    check(all_tracks.size()==7,"every supplied song appears in the programme")
    # Trigger actual UI callbacks, including channel buttons and playlist rows.
    var buttons=w.hud.modal.find_children("*","Button",true,false)

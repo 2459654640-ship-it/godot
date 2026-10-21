@@ -82,14 +82,14 @@ func run():
  check(poses==[1,0,2,0],"walk uses opposite authored stride poses separated by neutral stance")
  w.story.flags.first_meeting_commune_anna=2;w.hud.show_dialogue("commune_anna");w.hud.finish_typing()
  for i in 8:await process_frame
- var spoken=w.hud.modal.find_children("*","RichTextLabel",true,false).filter(func(n):return n.get_parsed_text().contains("听说你从 D-6 来"))
+ var spoken=w.hud.modal.find_children("*","RichTextLabel",true,false).filter(func(n):return n.get_parsed_text().contains("安娜把几本练习册"))
  check(spoken.size()==1 and spoken[0].size.x>390,"long natural dialogue uses the available transcript width")
  w.hud.close()
  var data=Campaign.data();var story=Story.new();story.context.floor="waterworks"
  var reply=story.act("c_veteran_road")
  check(reply.contains("家属") and reply.contains("工牌") and not reply.contains("按住 E"),"question about family receives an answer about family rather than controls")
  check(data.interactions.plant_diagram.body.contains("主泵继续隔离") and not data.interactions.plant_diagram.body.contains("恢复泵电"),"diagram guidance agrees with isolated main pump")
- check(data.interactions.commune_anna.body.contains("阿列克谢") and not data.interactions.commune_anna.body.contains("敌方工牌"),"Anna clearly identifies missing brother and request")
+ check(str(data.interactions.commune_anna.after).contains("阿列克谢") and not str(data.interactions.commune_anna).contains("敌方工牌"),"Anna clearly identifies missing brother and request")
  for q in data.quests:check(not q.background.contains("写成宏大计划"),"quest description stays within world: "+q.id)
  w.queue_free();await frames(3)
  print("VISUAL_FIXES_V11_1_RESULT checks=",checks," failures=",failures);quit(0 if failures==0 else 1)

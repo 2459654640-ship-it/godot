@@ -40,14 +40,14 @@ static func tasks(s)->Array:
 			if s.f("brother_care"):target="coal_brother";area="井下休养间";step="去东北侧休养间，坐下来慢慢征询本人的意愿。"
 			if s.f("brother_found"):target="coal_exit";area="探视出口";step="带着核实结果从东南侧探视出口回公社。"
 		elif s.f("brother_found"):target="commune_anna";area="医务与探访";step="回公社南侧医务室，把核实结果交给安娜。"
-		out.append(row("anna","一个确切的名字",s.f("anna_reunited"),place,"安娜请你核实哥哥的下落，纸条上有班组编号和旧伤。",step,target,area))
+		out.append(row("anna","一个确切的名字",s.f("anna_first_news"),place,"安娜请你核实哥哥的下落，纸条上有班组编号和旧伤。",step,target,area))
 	if s.f("signal_heard") or s.has("frequency"):
 		var current_floor:String=s.context.get("floor","life")
 		var target="semyon" if current_floor in ["life","labor"] else ("commune_receiver" if current_floor=="commune" else "sech_radio")
 		var step="询问见过短波值班记录的人，或在公社联络室、谢契电台继续收听。"
 		if s.f("signal_identified"):
 			target="star_perimeter_call" if current_floor=="starcity" else ("commune_leave" if current_floor=="commune" else "sech_leave")
-			step="广播可能来自星城。先核实北线路况，在外围尝试提交询问信；没有入内许可。"
+			step="广播可能来自星城。先完成阵营的北线任务、建立接送与担保，之后才能前往外围询问。"
 		out.append(row("signal_trace","调查东方-7",s.f("signal_source_verified"),current_floor,"你实际听见了东方-7，记下了频率；还要查清电台在哪里。",step,target,"短波联络"))
 	if s.f("sech_joined") or s.f("radio_manual"):
 		out.append(row("radio","东方-7" if s.f("signal_heard") else "修复北线电台",s.f("radio_fixed"),"sech","谢契的电台坏了，居民想恢复与北线的日常联络。","西北调度台有接线图；确认接地后，再去左侧调度车厢南段的电台。" if not s.f("radio_power") else "接收机已通电，按纸上刻度慢慢调谐。","sech_manual" if not s.f("radio_manual") else "sech_radio","旧军列调度" if not s.f("radio_manual") else "电台维修室"))
@@ -57,8 +57,8 @@ static func tasks(s)->Array:
 		out.append(row("return_entry","返站身份审核",s.f("return_reviewed"),"labor","离站方式会影响返站手续，探访函仍需核验。","到集合区的科瓦廖夫面前说明离站经过，核对记录后申请限区通行。","commander","征召集合区"))
 	out.append_array(preload("res://scripts/campaign.gd").side_tasks(s))
 	if s.f("igor_debt_known") or s.f("igor_chore") or s.f("igor_settled"):out.append(row("igor_debt","岗哨的一笔旧账",s.f("igor_settled"),"life","伊戈尔替你隐瞒了侧门的事，要求财物补偿或清理岗灯。","清理压力监测箱旁岗灯后找伊戈尔验看；也可用三发制式弹或非任务物资结清。","igor" if s.f("igor_lamp_clean") else "relay","东侧维修岗"))
-	if s.f("workers_done"):out.append(row("workers_choice","回信的下一班",s.ending,"commune","工人的征询稿已交付，回信窗口需要有人长期维护。","回议事处找叶莲娜，决定留下联络或继续旅程。","commune_leader","人民议事厅"))
-	if s.f("north_done"):out.append(row("train_choice","第一班列车",s.ending,"sech","彼得已复核静态检修。","到东南接送车厢决定巡轨或联络；修复电台后可组织车队。","sech_leave","北线接送车厢"))
+	if s.f("workers_done") and not s.f("commune_member"):out.append(row("workers_choice","回信的下一班",s.ending,"commune","工人的征询稿已交付，回信窗口需要有人长期维护。","回议事处找叶莲娜，决定留下联络或继续旅程。","commune_leader","人民议事厅"))
+	if s.f("north_done") and not s.f("sech_member"):out.append(row("train_choice","第一班列车",s.ending,"sech","彼得已复核静态检修。","到东南接送车厢决定巡轨或联络；修复电台后可组织车队。","sech_leave","北线接送车厢"))
 	if s.f("weather_done"):out.append(row("weather_choice","观测网的值守",s.ending,"starcity","北线中继测试完成。","旧版观测记录已保留。星城内区暂时封闭，可在外围留信后返回聚落。","star_perimeter_call","外围询问台"))
 	return preload("res://scripts/progression.gd").annotate(s,out)
 static func active(s)->Dictionary:
@@ -88,6 +88,7 @@ static func leads(s)->Array:
 		if s.has("photo") and not s.f("quest_photo") and not s.f("father"):out.append("那张旧合影一直在衣袋里。老爹可能还记得照片上的事。")
 	elif floor=="waterworks" and not s.f("plant_briefed") and not s.f("plant_diagram"):out.append("科瓦廖夫在入口附近等着。桌上的旧值班图或许能省些弯路。")
 	elif floor=="commune":
+		if s.f("anna_first_news") and s.f("chapter_first_field") and not s.f("anna_warning_seen"):out.append("安娜收到矿区的新信，托人请你到医务室坐一会儿。")
 		if not s.f("anna_request"):out.append("南侧医务室的年轻女人听见 D-6 的名字时，似乎想问点什么。")
 		if not s.f("commune_joined"):out.append("叶莲娜正在排轮班表，也许知道公社哪里缺人帮忙。")
 	elif floor=="sech" and not s.f("sech_joined"):out.append("长老还在调度台附近，那台没亮灯的电台似乎让他很挂心。")

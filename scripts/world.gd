@@ -172,6 +172,7 @@ func _ready():
 	previous_position=player.position
 	if story.flags.get("comic",{}).get("active",false):hud.call_deferred("show_comic")
 	elif story.ending:hud.call_deferred("show_chapter_end")
+	elif DisplayServer.get_name()!="headless" and floor_id=="labor" and story.f("intro_done") and not story.f("lower_war_seen"):hud.call_deferred("show_comic","lower_ward")
 	elif DisplayServer.get_name()!="headless" and "--skip-intro" not in OS.get_cmdline_user_args() and floor_id=="life" and not story.f("intro_done"):hud.call_deferred("show_comic","intro")
 	if "--capture" in OS.get_cmdline_user_args():
 		capture_mode=true
@@ -796,6 +797,14 @@ func perform(key: String, id: String):
 	hud.show_reply(id,reply)
 
 func on_story_changed():
+	if floor_id=="coal":
+		var grille=get_node_or_null("MineEscapeGrille")
+		if is_instance_valid(grille) and story.f("rescue_route_ready") and not grille.get_meta("opened",false):
+			grille.set_meta("opened",true)
+			var motion=create_tween()
+			motion.tween_property(grille,"position:x",-20.2,1.0).set_trans(Tween.TRANS_SINE)
+			motion.finished.connect(func():if is_instance_valid(navigation):navigation.setup(self))
+
 	story.context.floor=floor_id
 	PublicationPlaces.refresh(self)
 	if floor_id=="surface":
@@ -836,7 +845,16 @@ func animate_d6_door(mesh:MeshInstance3D,opened:bool):
 
 func clear_arrival(p:Vector3)->Vector3:
 	# New decorative fixtures must not imprison an earlier saved position.
-	if floor_id not in ["commune","waterworks","surface","starcity"]:return p
+	if floor_id not in ["commune","waterworks","surface","starcity","coal","railfront"]:return p
+	# Legacy mine saves could place Ivan exactly on the registrar's spawn.
+	if npcs.values().any(func(a):return Vector2(a.position.x-p.x,a.position.z-p.z).length()<.65):
+		var best=Vector3.INF;var distance=INF
+		for id in navigation.graph.get_point_ids():
+			var point:Vector2=navigation.graph.get_point_position(id)
+			var delta=point.distance_to(Vector2(p.x,p.z))
+			if delta>=distance or npcs.values().any(func(a):return point.distance_to(Vector2(a.position.x,a.position.z))<.7):continue
+			distance=delta;best=Vector3(point.x,.04,point.y)
+		if best.is_finite():p=best
 	for solid in kit.solids:
 		if solid.name=="CampaignInnerGate" and story.f(campaign_gate_flag):continue
 		if solid.top<=.24 and solid.top>.025 and solid.bottom<.12 and solid.rect.has_point(Vector2(p.x,p.z)):
@@ -851,7 +869,7 @@ func clear_arrival(p:Vector3)->Vector3:
 func save_snapshot()->Dictionary:
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z];data.floor=floor_id
-	data.layout_revision=19;data.played_seconds=played_seconds
+	data.layout_revision=22;data.played_seconds=played_seconds
 	data.camera_size=camera_size;data.facing=player.visual.rotation.y
 	data.world_state={"phase":phase,"guard_away_time":guard_away_time,"waiting_shift":waiting_shift,"pending_route":pending_route}
 	data.npc_positions={}
@@ -1008,6 +1026,8 @@ func facility_doors(id:String)->Array:
 
 func travel_campaign(destination:String):
 	if destination=="starcity":
+		if not story.f("north_inquiry_ready") and not story.f("visited_starcity"):
+			story.flags.erase("next_facility");hud.toast("北线尚未具备接送与担保条件。先完成本阵营的几轮出站工作。",6);return
 		if floor_id in ["commune","sech"]:story.flags.star_return_home=floor_id
 		story.ending=false
 
@@ -1056,7 +1076,11 @@ func sync_event_music(id:String):
 	event_music.stop()
 	if is_instance_valid(ambience):ambience.stream_paused=id!=""
 	if id!="":
-		event_music.stream=load("res://assets/audio/"+id+".wav")
+		var score_path="res://assets/audio/"+id+".wav"
+		if id=="anna_elegy" and ResourceLoader.exists("res://assets/audio/licensed/heres_to_you.ogg"):score_path="res://assets/audio/licensed/heres_to_you.ogg"
+		event_music.stream=load(score_path)
+		event_music.volume_db=-28
+		create_tween().tween_property(event_music,"volume_db",-7.0,1.2)
 		if DisplayServer.get_name()!="headless":event_music.play()
 	else:event_music.stream=null
 

@@ -52,8 +52,8 @@
       "file": "moon_serenade.ogg"
     },
     "i_want_you": {
-      "zh": "我要你",
-      "ru": "Я хочу быть с тобой",
+      "zh": "我要你（俄语版）",
+      "ru": "Я хочу быть с тобой (русская версия)",
       "file": "i_want_you.ogg"
     },
     "end_of_world": {
@@ -71,6 +71,34 @@
       "zh": "雨后清风有香",
       "ru": "Аромат ветра после дождя",
       "file": "after_rain.ogg"
+    }
+  },
+  "optional_stations": [
+    {
+      "id": "ocean_watch",
+      "frequency": "75.8",
+      "name": "远洋值守",
+      "en": "Ocean Watch",
+      "ru": "Океанская вахта",
+      "description": "居民短波台接到一段自称美国海上值守组的英语广播，由本地转播网在此频段重播。节目保留歌曲与整点天气，不报船位，来源尚待核实。",
+      "tracks": [
+        "moon_heart",
+        "only_you"
+      ]
+    }
+  ],
+  "optional_tracks": {
+    "moon_heart": {
+      "zh": "月亮代表我的心",
+      "ru": "Луна выражает моё сердце",
+      "original": "The Moon Represents My Heart",
+      "file": "moon_heart.mp3"
+    },
+    "only_you": {
+      "zh": "我只在乎你",
+      "ru": "Мне дорог только ты",
+      "original": "I Only Care About You",
+      "file": "only_care_about_you.mp3"
     }
   }
 }
