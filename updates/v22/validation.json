@@ -1,0 +1,303 @@
+{
+  "passed_suites": 36,
+  "failed_suites": 0,
+  "assertions": 16485,
+  "results": [
+    {
+      "suite": "run",
+      "exit_code": 0,
+      "seconds": 96.12,
+      "script_errors": 0,
+      "assertions": 1888
+    },
+    {
+      "suite": "visual_contract",
+      "exit_code": 0,
+      "seconds": 2.22,
+      "script_errors": 0,
+      "assertions": 1106
+    },
+    {
+      "suite": "narrative_contract",
+      "exit_code": 0,
+      "seconds": 4.63,
+      "script_errors": 0,
+      "assertions": 1942
+    },
+    {
+      "suite": "resident_contract",
+      "exit_code": 0,
+      "seconds": 6.23,
+      "script_errors": 0,
+      "assertions": 114
+    },
+    {
+      "suite": "chapter_contract",
+      "exit_code": 0,
+      "seconds": 3.17,
+      "script_errors": 0,
+      "assertions": 141
+    },
+    {
+      "suite": "floor_contract",
+      "exit_code": 0,
+      "seconds": 6.89,
+      "script_errors": 0,
+      "assertions": 40
+    },
+    {
+      "suite": "campaign_contract",
+      "exit_code": 0,
+      "seconds": 23.8,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 403
+    },
+    {
+      "suite": "campaign_ui",
+      "exit_code": 0,
+      "seconds": 6.63,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 17
+    },
+    {
+      "suite": "refinement_contract",
+      "exit_code": 0,
+      "seconds": 3.37,
+      "script_errors": 0,
+      "assertions": 39
+    },
+    {
+      "suite": "presentation_contract",
+      "exit_code": 0,
+      "seconds": 6.74,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 36
+    },
+    {
+      "suite": "exploration_contract",
+      "exit_code": 0,
+      "seconds": 3.17,
+      "script_errors": 0,
+      "assertions": 186
+    },
+    {
+      "suite": "v9_contract",
+      "exit_code": 0,
+      "seconds": 2.9,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 119
+    },
+    {
+      "suite": "v10_contract",
+      "exit_code": 0,
+      "seconds": 3.07,
+      "script_errors": 0,
+      "assertions": 119
+    },
+    {
+      "suite": "v11_contract",
+      "exit_code": 0,
+      "seconds": 3.82,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 182
+    },
+    {
+      "suite": "v11_combat",
+      "exit_code": 0,
+      "seconds": 4.03,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 22
+    },
+    {
+      "suite": "occlusion_v11",
+      "exit_code": 0,
+      "seconds": 2.07,
+      "script_errors": 0,
+      "assertions": 9
+    },
+    {
+      "suite": "visual_fixes_v11_1",
+      "exit_code": 0,
+      "seconds": 2.72,
+      "script_errors": 0,
+      "assertions": 99
+    },
+    {
+      "suite": "commune_v12",
+      "exit_code": 0,
+      "seconds": 4.67,
+      "script_errors": 0,
+      "assertions": 139
+    },
+    {
+      "suite": "factory_v12",
+      "exit_code": 0,
+      "seconds": 1.77,
+      "script_errors": 0,
+      "assertions": 49
+    },
+    {
+      "suite": "equipment_v12",
+      "exit_code": 0,
+      "seconds": 1.77,
+      "script_errors": 0,
+      "assertions": 16
+    },
+    {
+      "suite": "platform_v12",
+      "exit_code": 0,
+      "seconds": 2.97,
+      "script_errors": 0,
+      "assertions": 12
+    },
+    {
+      "suite": "actors_v13",
+      "exit_code": 0,
+      "seconds": 2.82,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 61
+    },
+    {
+      "suite": "publications_v13",
+      "exit_code": 0,
+      "seconds": 6.73,
+      "script_errors": 0,
+      "assertions": 122
+    },
+    {
+      "suite": "public_radio_v16",
+      "exit_code": 0,
+      "seconds": 9.89,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 115
+    },
+    {
+      "suite": "ivan_gait_v16",
+      "exit_code": 0,
+      "seconds": 1.67,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 102
+    },
+    {
+      "suite": "furnishings_v16",
+      "exit_code": 0,
+      "seconds": 6.33,
+      "script_errors": 0,
+      "assertions": 40
+    },
+    {
+      "suite": "first_meetings_v17",
+      "exit_code": 0,
+      "seconds": 3.52,
+      "script_errors": 0,
+      "assertions": 294
+    },
+    {
+      "suite": "starcity_v17",
+      "exit_code": 0,
+      "seconds": 1.98,
+      "script_errors": 0,
+      "assertions": 7
+    },
+    {
+      "suite": "ivan_gait_v17",
+      "exit_code": 0,
+      "seconds": 1.67,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 7254
+    },
+    {
+      "suite": "motion_v18",
+      "exit_code": 0,
+      "seconds": 6.93,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 1002
+    },
+    {
+      "suite": "expedition_v19",
+      "exit_code": 0,
+      "seconds": 4.48,
+      "script_errors": 0,
+      "assertions": 101
+    },
+    {
+      "suite": "narrative_v19",
+      "exit_code": 0,
+      "seconds": 0.27,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 122
+    },
+    {
+      "suite": "crowds_v19",
+      "exit_code": 0,
+      "seconds": 1.87,
+      "script_errors": 0,
+      "assertions": 16
+    },
+    {
+      "suite": "chapter_v22",
+      "exit_code": 0,
+      "seconds": 1.42,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 524
+    },
+    {
+      "suite": "chapter_world_v22",
+      "exit_code": 0,
+      "seconds": 5.58,
+      "script_errors": 0,
+      "rerun": true,
+      "assertions": 25
+    },
+    {
+      "suite": "chapter_flow_v22",
+      "exit_code": 0,
+      "script_errors": 0,
+      "assertions": 22
+    }
+  ],
+  "asset_checks": {
+    "locked_base_frames": 24,
+    "normal_runtime_sha256": "33db24356dea4e2f80ac33de91de73fcac51b37e109bcc261b0627d821656f86",
+    "new_panels": 62,
+    "new_illustrations": 8,
+    "missions": 6,
+    "missing_cjk": {
+      "MetroSans.otf": [],
+      "MetroSerif.otf": []
+    },
+    "equipment_frames_checked": 72,
+    "solid_edge_clipping": []
+  },
+  "graphical_validation": {
+    "renderer": "Godot 4.6.3 OpenGL, Mesa llvmpipe via Xvfb",
+    "captured_screens": 13,
+    "script_errors": 0,
+    "review_screenshots": 17
+  },
+  "audio": {
+    "russian_replacement": {
+      "duration_seconds": 179.5,
+      "codec": "Vorbis",
+      "station": "night_letters",
+      "index": 3
+    },
+    "original_scores": 4,
+    "listening_review": "not performed on hardware",
+    "ocean_channel": "configured; both source WAVs exceed 32 MiB transfer limit; audio not downloaded, converted or included"
+  },
+  "game_commit": "5954d02c117e22c61bccba7b93680f8e50c87d5c"
+}

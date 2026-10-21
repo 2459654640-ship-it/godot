@@ -1,0 +1,7 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+CONNECTIVITY: 1765 reachable half-metre cells; east exit open=false
+CONNECTIVITY: 1899 reachable half-metre cells; east exit open=true
+CORNER_COVERAGE: 386 accessible corners tested
+FIXTURE_COVERAGE: 146 fixtures/wall sections; 322 exposed-face movement probes
+D6_TEST_RESULT checks=1888 failures=0
