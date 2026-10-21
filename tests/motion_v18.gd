@@ -12,28 +12,27 @@ func freeze(w):
  w.set_physics_process(false);w.player.set_physics_process(false)
  for npc in w.npcs.values():npc.set_physics_process(false)
  if is_instance_valid(w.combat):w.combat.enabled=false;w.combat.set_physics_process(false)
-func contact_boot_center(image:Image) -> float:
- # The two corrected strides deliberately alternate the lower contact boot.
- # This catches distinct files that still depict the same anatomical step.
- var bottom=-1
- for y in range(image.get_height()-1,-1,-1):
-  for x in image.get_width():
-   if image.get_pixel(x,y).a>.47:bottom=y;break
-  if bottom>=0:break
- var sum_x=0.0;var count=0
- for y in range(maxi(0,bottom-7),bottom+1):
-  for x in image.get_width():
-   if image.get_pixel(x,y).a>.47:sum_x+=x;count+=1
- return sum_x/maxi(1,count)-image.get_width()*.5
+func gait_alpha_hash(image:Image)->String:
+ image.convert(Image.FORMAT_RGBA8)
+ var rgba=image.get_data();var alpha=PackedByteArray();alpha.resize(image.get_width()*image.get_height())
+ for i in alpha.size():alpha[i]=rgba[i*4+3]
+ var context=HashingContext.new();context.start(HashingContext.HASH_SHA256);context.update(alpha)
+ return context.finish().hex_encode()
 func opposite_stride_tests():
+ # Foot screen-left/right alone does not identify its anatomical leg in a
+ # rear three-quarter view. Freeze the actual approved silhouettes instead.
+ var accepted:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/ivan_approved_gait_v20.json"))
+ var m:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/atlas.json"))
  for id in ["ivan","ivan_masked","ivan_combat","ivan_masked_combat"]:
-  var image=Image.load_from_file("res://assets/characters/"+id+".png")
-  var m:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/atlas.json"));var width:int=m[id].cell[0]
+  var texture:Texture2D=load("res://assets/characters/"+id+".png");var image=texture.get_image()
+  if image.is_compressed():image.decompress()
+  var width:int=m[id].cell[0]
   for poses in ([[3,4],[5,6]] if id.ends_with("combat") else [[1,2]]):
-   for angle in [1,2,3,5,7]:
-    var a=contact_boot_center(image.get_region(Rect2i(angle*width,poses[0]*352,width,352)))
-    var b=contact_boot_center(image.get_region(Rect2i(angle*width,poses[1]*352,width,352)))
-    check(a*b<0 and absf(a-b)>25,"contact boots alternate sides in the reviewed faulty view: "+id+str(poses)+str(angle))
+   for angle in 8:
+    var hashes=[]
+    for pose in poses:
+     var region=image.get_region(Rect2i(angle*width+(width-280)/2,pose*352+250,280,102));hashes.append(gait_alpha_hash(region))
+    check(hashes[0]==accepted.alpha_sha256[angle][1] and hashes[1]==accepted.alpha_sha256[angle][2] and hashes[0]!=hashes[1],"both actual strides retain the approved independent foot silhouettes: "+id+str(poses)+str(angle))
 func run():
  opposite_stride_tests()
  var w=load("res://scenes/waterworks.tscn").instantiate();root.add_child(w);current_scene=w;await frames();freeze(w)

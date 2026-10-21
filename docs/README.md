@@ -6,6 +6,8 @@
 - [39 套角色／装扮示意图](characters/all-characters.png)
 - [伊万八方向与三种步态姿势](characters/ivan-eight-directions.png)
 - [伊万戴面具八方向](characters/ivan_masked-eight-directions.png)
+- [伊万持枪、行走与换弹](characters/ivan_combat-eight-directions.png)
+- [伊万戴面具持枪、行走与换弹](characters/ivan_masked_combat-eight-directions.png)
 
 ## 当前地图全景
 
@@ -20,4 +22,4 @@
 | 星城外围（内区未开放） | [全景](maps/starcity.png) |
 | 地表旧泵站 | [全景](maps/surface.png) |
 
-地图和人物图均由当前 Godot 工程实际渲染；素材索引指向 assets 中的原文件。
+人物示意图由当前实际使用的角色图集排版，包含普通、面具、持枪及换弹姿势，不是游戏实景截图。地图全景沿用此前 Godot 实际渲染结果，本轮没有修改地图。素材索引指向 assets 中的原文件。

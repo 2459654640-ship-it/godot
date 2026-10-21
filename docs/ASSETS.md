@@ -4,7 +4,7 @@
 
 ## 人物与动作贴图
 
-[全部角色示意图](characters/all-characters.png) · [伊万八方向](characters/ivan-eight-directions.png) · [伊万戴面具八方向](characters/ivan_masked-eight-directions.png)
+[全部角色示意图](characters/all-characters.png) · [伊万八方向](characters/ivan-eight-directions.png) · [伊万戴面具八方向](characters/ivan_masked-eight-directions.png) · [持枪与换弹](characters/ivan_combat-eight-directions.png) · [面具持枪与换弹](characters/ivan_masked_combat-eight-directions.png)
 
 | 编号 | 人物 / 装扮 | 完整贴图 | 方向 | 姿态数 |
 | --- | --- | --- | --- | --- |
