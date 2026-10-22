@@ -135,7 +135,7 @@ func setup(w):
 	b.add_child(title)
 	var top=panel(Vector2(298,28),Vector2(516,56))
 	var topbox=margin_box(top,17,11)
-	location_label=label("生活层 / 伊万的卧室",19,text_color)
+	location_label=label("D-6生活层 / 伊万的卧室",19,text_color)
 	topbox.add_child(location_label)
 	var tag=panel(Vector2(1240,28),Vector2(328,56))
 	var tb=margin_box(tag,17,11)
@@ -575,7 +575,7 @@ func show_journal(tab:String="tasks",shown_floor:String=""):
 	elif tab=="map":
 		var requested=world.floor_id if shown_floor=="" else shown_floor
 		var floors=GridContainer.new();floors.columns=3;floors.add_theme_constant_override("h_separation",10);modal_box.add_child(floors)
-		for pair in [["life","生活层"],["labor","作业层"]]+world.story.Campaign.NAMES.keys().filter(func(id):return world.story.f("visited_"+id) or world.floor_id==id).map(func(id):return [id,world.story.Campaign.NAMES[id]]):floors.add_child(button(pair[1],func():show_journal("map",pair[0]),true,true))
+		for pair in [["life","D-6生活层"],["labor","D-6作业层"]]+world.story.Campaign.NAMES.keys().filter(func(id):return world.story.f("visited_"+id) or world.floor_id==id).map(func(id):return [id,world.story.Campaign.NAMES[id]]):floors.add_child(button(pair[1],func():show_journal("map",pair[0]),true,true))
 		var focus=Journal.active(s)
 		if not focus.is_empty() and focus.place==requested:body("手记里圈过的一带："+focus.area,19,amber)
 		body("当前位置："+world.floor_name()+" · 旅程中的设施通过图文路线相连",18,amber)

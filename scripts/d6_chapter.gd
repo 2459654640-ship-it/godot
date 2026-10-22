@@ -1,5 +1,7 @@
 extends RefCounted
 const IDS=["armory","medical","coal_door","main_gate","labor_notice","stairs_up","other_life"]
+static func home_access(s)->bool:
+	return not s.f("d6_returned") or (s.route=="official" and not s.f("sided_veteran") and s.f("departure_official") and s.f("d6_cargo_returned"))
 static func decorate(v:Dictionary,s)->Dictionary:
 	match v.id:
 		"supply":
@@ -14,7 +16,7 @@ static func decorate(v:Dictionary,s)->Dictionary:
 		"stairs_up":
 			v.name="楼梯 / 返回生活层"
 			v.body="上方有食堂的热气和断断续续的说话声。顺着楼梯可以回生活层。"
-			v.options=[s.opt("travel_up","返回生活层")]
+			v.options=[s.opt("travel_up","返回生活层",home_access(s))]
 		"armory":
 			v.name="装备库 / 值班军需员";v.role="作业层 · 装备领用"
 			v.body="「登记单给我。密封圈自己再试一遍，别等出了门才发现松了。」\n军需员把防毒面具和滤毒罐放在柜台后。\n「生活物资去上面的第七供应点，我这里不做买卖。」"

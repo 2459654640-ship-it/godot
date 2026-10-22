@@ -27,6 +27,8 @@ func sync():
   var absent=w.story.f("anna_dead") or (w.story.f("anna_rescue_started") and not w.story.f("anna_outcome_done"))
   reconcile("commune_anna",not absent,Vector3(-4,0,20),"anna")
   reconcile("commune_aleksei",w.story.f("anna_outcome_done"),Vector3(-2.9,0,20),"coal_brother")
+ if w.floor_id=="coal":
+  reconcile("coal_brother",w.CampaignMaps.coal_patient_available(w.story),Vector3(10,0,-6),"coal_brother")
  if w.floor_id=="railfront" and w.story.f("veteran_defense_started"):
   for i in evac_ids.size():
    var id:String=evac_ids[i]

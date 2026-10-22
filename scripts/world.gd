@@ -730,7 +730,7 @@ func interact(id: String):
 	refresh_guard_context()
 	if id=="commander" and story.f("d6_returned"):hud.show_dialogue("d6_return_desk");return
 	if id in ["coal_door","main_gate"] and story.f("d6_returned"):hud.show_dialogue("coal_gate_entry");return
-	if id=="stairs_up" and story.f("d6_returned"):
+	if id=="stairs_up" and not story.Chapter.home_access(story):
 		hud.toast("返站通行仅限作业层与煤矿。先在审核窗口办理手续。",5);return
 	if id=="igor" and story.f("igor_suspicious") and not story.f("igor_debt_known"):
 		story.flags.igor_debt_known=true;story.changed.emit()
@@ -1022,7 +1022,7 @@ func build_labor_people():
 		player.position=CampaignMaps.LAYOUTS[floor_id].spawn
 		CampaignMaps.people(self)
 
-func floor_name()->String:return {"life":"生活层","labor":"作业层"}.get(floor_id,story.Campaign.NAMES.get(floor_id,"设施"))
+func floor_name()->String:return {"life":"D-6生活层","labor":"D-6作业层"}.get(floor_id,story.Campaign.NAMES.get(floor_id,"设施"))
 
 func facility_zones(id:String)->Array:
 	if id=="life":return LIFE_ZONES+Wing.ZONES

@@ -314,6 +314,8 @@ static func rack(k,p:Vector3,width:float,material:String):
 	for y in [.2,.85,1.5]:
 		k.box("ShelfBoard",p+Vector3(0,y,0),Vector3(width,.08,.55),material)
 		for x in [-.3,.3]:k.box("ShelfParcel",p+Vector3(x*width,y+.18,0),Vector3(width*.32,.28,.4),"paper" if y>1 else "wood")
+static func coal_patient_available(s)->bool:
+	return not s.f("anna_outcome_done") and ((s.f("brother_identity") and s.f("brother_care")) or s.f("brother_found") or s.f("anna_rescue_started"))
 static func people(w):
 	if w.floor_id=="commune" and w.story.f("anna_outcome_done"):
 		w.person("commune_aleksei",Vector3(-2.9,0,20),"cloth",true,"coal_brother");w.npcs.commune_aleksei.stationary=true
@@ -325,7 +327,7 @@ static func people(w):
 	arts.merge({"commune_cook":"commune_cook","commune_child":"commune_child","commune_moro":"commune_moro","commune_guard":"commune_guard","commune_baranova":"ambient_elder","sech_cook":"sech_cook"})
 	for e in LAYOUTS[w.floor_id].objects:
 		if e[0]=="commune_anna" and (w.story.f("anna_dead") or (w.story.f("anna_rescue_started") and not w.story.f("anna_outcome_done"))):continue
-		if e[0]=="coal_brother" and w.story.f("anna_outcome_done"):continue
+		if e[0]=="coal_brother" and not coal_patient_available(w.story):continue
 		if e[3]=="npc":w.person(e[0],Vector3(e[1],0,e[2]),"green",true,arts[e[0]])
 	for id in ["commune_moro","commune_guard","commune_baranova"]:
 		if w.npcs.has(id):w.npcs[id].stationary=true
@@ -338,7 +340,7 @@ static func targets(w):
 	for extra in ["commune_aleksei","mine_anna"]:
 		if w.npcs.has(extra):w.target(extra,w.npcs[extra].position,Campaign.data().interactions[extra].name,"talk")
 	for e in LAYOUTS[w.floor_id].objects:
-		if (e[0]=="commune_anna" and (w.story.f("anna_dead") or (w.story.f("anna_rescue_started") and not w.story.f("anna_outcome_done")))) or (e[0]=="coal_brother" and w.story.f("anna_outcome_done")):continue
+		if (e[0]=="commune_anna" and (w.story.f("anna_dead") or (w.story.f("anna_rescue_started") and not w.story.f("anna_outcome_done")))) or (e[0]=="coal_brother" and not coal_patient_available(w.story)):continue
 		var d:Dictionary=Campaign.data().interactions[e[0]]
 		w.target(e[0],Vector3(e[1],0,e[2]),d.name,"talk" if e[3]=="npc" else "inspect")
 	if w.floor_id=="surface":preload("res://scripts/surface_site.gd").restore_drops(w)
@@ -346,10 +348,11 @@ static func targets(w):
 		w.target("plant_guide",w.npcs.plant_guide.position,"科瓦廖夫","talk")
 		w.target("plant_veteran",w.npcs.plant_veteran.position,"老兵","talk")
 static func residents(w):
-	var layouts={"commune":[["ambient_worker",6,4],["ambient_woman",-4.1,11.1],["ambient_woman",-7,21],["ambient_worker",9,-5.2],["ambient_child",15,9]],"sech":[["ambient_worker",0,3],["ambient_child",-10,14],["ambient_elder",-7,17.6],["ambient_woman",-8,2],["ambient_worker",16,-10]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4]],"starcity":[]}
+	var layouts={"commune":[["ambient_worker",6,4],["ambient_woman",-4.1,11.1],["ambient_woman",-7,21],["ambient_worker",9,-5.2],["ambient_child",15,9]],"sech":[["ambient_worker",0,3],["ambient_child",-10,14],["ambient_elder",-7,17.6],["ambient_woman",-8,2],["ambient_worker",16,-10]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4],["ambient_worker",-16.2,11.4],["resident",-10,12.3],["ambient_worker",-21.5,-4],["ambient_worker",-20.3,-10.5],["queue",-22.3,4.9],["ambient_woman",.5,-16.5],["ambient_worker",-6,-4]],"starcity":[]}
 	for index in layouts.get(w.floor_id,[]).size():
 		var entry=layouts[w.floor_id][index]
 		w.person("resident_%s_%d"%[entry[0],index],Vector3(entry[1],0,entry[2]),"cloth",false,entry[0])
+		if w.floor_id=="coal":w.npcs["resident_%s_%d"%[entry[0],index]].stationary=true
 
 static func routines(w):
 	for id in w.npcs:w.npcs[id].navigation=w.navigation
