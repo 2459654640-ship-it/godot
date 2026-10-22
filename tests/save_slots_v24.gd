@@ -27,6 +27,7 @@ func loaded(old):
    return w
  return null
 func run():
+ preserve_slots()
  check(Store.manual_paths().size()==6 and Store.automatic_paths().size()==3,"six fixed manual slots and three separate rotating autos")
  var s=Story.new();s.flags.intro_done=true;s.flags.signal_heard=true;s.flags.anna_request=true;s.flags.first_meeting_commune_anna=2
  s.items.assign(["photo","mask","filter"]);s.economy.handmade=31;s.economy.goods.bandage=2;s.read_topics.assign(["semyon_child"])
@@ -88,3 +89,17 @@ func run():
  menu.show_saves("auto");check(menu.dialog.find_children("*","Button",true,false).any(func(b):return b.text.contains("旧版快速存档")),"main menu retains legacy quick save access")
  menu.queue_free();await frames()
  print("SAVE_SLOTS_V24_RESULT checks=",checks," failures=",failures);quit(0 if failures==0 else 1)
+
+var slot_backup:Dictionary={}
+func preserve_slots():
+ for path in preload("res://scripts/save_store.gd").paths():
+  for suffix in ["",".bak",".tmp"]:
+   var file:String=path+suffix
+   slot_backup[file]=FileAccess.get_file_as_bytes(file) if FileAccess.file_exists(file) else null
+func _finalize():
+ # These fixtures exercise the real fixed paths, then put the user's files back.
+ for path in slot_backup:
+  if slot_backup[path]==null:DirAccess.remove_absolute(path)
+  else:
+   var file=FileAccess.open(path,FileAccess.WRITE)
+   if file:file.store_buffer(slot_backup[path]);file.close()

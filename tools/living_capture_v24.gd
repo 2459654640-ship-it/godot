@@ -5,6 +5,7 @@ func freeze():
  super.freeze()
  if is_instance_valid(w.combat):w.combat.set_physics_process(false)
 func run():
+ preserve_slots()
  DirAccess.make_dir_recursive_absolute(folder)
  await open_level("commune")
  for node in ["anna_supper","anna_supper_class","moro_council","moro_rehearsal","veteran_shelter"]:
@@ -34,3 +35,17 @@ func run():
  w.hud.visible=false;camera_at(Vector3(-15,.6,13),24);await shot("passage-evacuation-layout")
  await dispose()
  print("LIVING_CAPTURE_V24 complete");quit()
+
+var slot_backup:Dictionary={}
+func preserve_slots():
+ for path in preload("res://scripts/save_store.gd").paths():
+  for suffix in ["",".bak",".tmp"]:
+   var file:String=path+suffix
+   slot_backup[file]=FileAccess.get_file_as_bytes(file) if FileAccess.file_exists(file) else null
+func _finalize():
+ # These fixtures exercise the real fixed paths, then put the user's files back.
+ for path in slot_backup:
+  if slot_backup[path]==null:DirAccess.remove_absolute(path)
+  else:
+   var file=FileAccess.open(path,FileAccess.WRITE)
+   if file:file.store_buffer(slot_backup[path]);file.close()
