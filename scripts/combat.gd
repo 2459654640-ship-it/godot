@@ -154,6 +154,9 @@ func follow_veteran(delta:float):
    if candidate.length()>.1 and not veteran.test_move(veteran.global_transform,candidate*.7):
     veteran.yield_direction=candidate;veteran.yield_time=.5;break
  var point=w.player.position-w.camera.global_basis.x.normalized()*1.5
+ if is_instance_valid(w.living):
+  var guard:Vector3=w.living.veteran_guard_point()
+  if guard.is_finite():point=guard
  if veteran.yield_time>0:
   veteran.yield_time=maxf(0,veteran.yield_time-delta);veteran.combat_velocity=veteran.yield_direction*1.4
  elif veteran.position.distance_to(point)>1.8:

@@ -2,7 +2,7 @@ extends RefCounted
 ## Quest outcomes only change at explicit irreversible choices; walking away is harmless.
 const IDS=["inner_latch"]
 static func annotate(s,rows:Array)->Array:
-	var main=["journey","report","kit","water","anna","radio","father","workers_network","north_train","weather_link","workers_choice","train_choice","weather_choice","signal_trace","return_entry","commune_chapter","sech_chapter","final_handover"]
+	var main=["journey","report","kit","water","radio","father","workers_network","north_train","weather_link","workers_choice","train_choice","weather_choice","signal_trace","return_entry","commune_chapter","sech_chapter","final_handover"]
 	var failed:Dictionary=s.flags.get("failed_quests",{})
 	for t in rows:
 		t.kind=t.get("kind","主线" if t.id in main else "支线")

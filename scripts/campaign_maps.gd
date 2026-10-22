@@ -324,7 +324,7 @@ static func people(w):
 	for person_id in ["commune_printer","commune_grower","sech_quartermaster","star_technician"]:arts[person_id]=person_id
 	arts.merge({"commune_cook":"commune_cook","commune_child":"commune_child","commune_moro":"commune_moro","commune_guard":"commune_guard","commune_baranova":"ambient_elder","sech_cook":"sech_cook"})
 	for e in LAYOUTS[w.floor_id].objects:
-		if e[0]=="commune_anna" and w.story.f("anna_dead"):continue
+		if e[0]=="commune_anna" and (w.story.f("anna_dead") or (w.story.f("anna_rescue_started") and not w.story.f("anna_outcome_done"))):continue
 		if e[0]=="coal_brother" and w.story.f("anna_outcome_done"):continue
 		if e[3]=="npc":w.person(e[0],Vector3(e[1],0,e[2]),"green",true,arts[e[0]])
 	for id in ["commune_moro","commune_guard","commune_baranova"]:
@@ -338,7 +338,7 @@ static func targets(w):
 	for extra in ["commune_aleksei","mine_anna"]:
 		if w.npcs.has(extra):w.target(extra,w.npcs[extra].position,Campaign.data().interactions[extra].name,"talk")
 	for e in LAYOUTS[w.floor_id].objects:
-		if (e[0]=="commune_anna" and w.story.f("anna_dead")) or (e[0]=="coal_brother" and w.story.f("anna_outcome_done")):continue
+		if (e[0]=="commune_anna" and (w.story.f("anna_dead") or (w.story.f("anna_rescue_started") and not w.story.f("anna_outcome_done")))) or (e[0]=="coal_brother" and w.story.f("anna_outcome_done")):continue
 		var d:Dictionary=Campaign.data().interactions[e[0]]
 		w.target(e[0],Vector3(e[1],0,e[2]),d.name,"talk" if e[3]=="npc" else "inspect")
 	if w.floor_id=="surface":preload("res://scripts/surface_site.gd").restore_drops(w)

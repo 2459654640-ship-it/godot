@@ -52,7 +52,7 @@ func run():
 		var t=comic(restore(plant),"return_crossing",branch)
 		check((t.flags.get("next_facility","")==("commune" if branch==1 else "labor") and not t.ending),"each return choice reaches an ending or playable facility")
 	# Anna's chain never skips proof or the patient's consent.
-	s=Story.new();s.context.floor="commune";s.flags.anna_lesson_seen=true
+	s=Story.new();s.context.floor="commune";s.flags.anna_lesson_seen=true;s.flags.anna_conversation_ready=true
 	for key in ["commune_join","anna_accept","anna_records","greenhouse_inspect","greenhouse_restart"]:action(s,key)
 	s=restore(s);s.context.floor="coal";s.flags.coal_access=true
 	s.act("c_coal_brother");check(not s.last_action_valid and not s.f("brother_found"),"patient encounter requires confirmed identity and care")

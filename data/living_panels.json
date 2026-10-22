@@ -1,0 +1,258 @@
+{
+  "anna_supper": {
+    "title": "饭盒里的晚饭",
+    "art": "anna_supper",
+    "body": "安娜走到食堂门边，先把借来的课本送给值班阿姨。她在长桌旁坐下，打开饭盒，里面的土豆汤还温着。\n安娜：「刚才那个孩子把地图画反了，我冲他说得重了点。他其实只是想把他妈妈住的车站画得近一些。」\n她把勺子放下。\n安娜：「我明天得跟他道个歉。自己心里着急，就以为谁都该听懂，这样教不好人。」",
+    "same_moment": true,
+    "choices": [
+      {
+        "text": "「你着急，是因为你哥哥？」",
+        "next": "anna_supper_brother"
+      },
+      {
+        "text": "「为什么想给孩子上课？这里又没有学校。」",
+        "next": "anna_supper_class"
+      }
+    ],
+    "location": "莫斯科公社",
+    "music": "letters_theme"
+  },
+  "anna_supper_class": {
+    "title": "地图上的地方",
+    "art": "anna_supper",
+    "body": "安娜：「我小时候遇到过一位老师。停电了，她就让我们轮流举着灯，继续讲莫斯科的河流。那时候我才知道，原来城里有那么多桥。」\n安娜看向桌边晾着的画。\n安娜：「我想去地表看看，哪怕只看一次。但我更想有一天能带孩子出去，让他们认得天空是什么颜色。得先教会他们看地图，也得让他们能平安回来。」\n她沉默了一会儿。\n安娜：「我哥哥以前答应过，要带我去看河。现在我想先知道他在哪儿。」",
+    "same_moment": true,
+    "next": "anna_supper_brother",
+    "location": "莫斯科公社",
+    "music": "letters_theme"
+  },
+  "anna_supper_brother": {
+    "title": "写在纸背的名字",
+    "art": "anna_supper",
+    "body": "安娜从口袋里拿出一张磨软的纸，工牌编号旁边写着阿列克谢·索科洛夫。\n安娜：「他以前在 D-6 二号施工班。我只收到过一次转运消息，后来就联系不上了。我想请你查清他在哪儿、身体怎么样。」\n她把纸压在饭盒旁，没有马上递过来。\n安娜：「你先吃饭。愿不愿意去，你自己决定。要是你答应，查不到也回来告诉我，我不想再靠猜测过日子。」",
+    "same_moment": true,
+    "end": "resume:commune_anna",
+    "finish_flags": [
+      "anna_conversation_ready"
+    ],
+    "location": "莫斯科公社",
+    "music": "letters_theme"
+  },
+  "anna_new_lesson": {
+    "title": "可以慢慢补上的课",
+    "art": "anna_supper",
+    "body": "安娜把明天用的地图铺在桌上，空白处贴着孩子们画的小房子。哥哥坐在旁边，将一根折断的铅笔削好，放进铅笔盒。\n安娜：「我以前总想尽快把缺的课补完。现在先教半天，下午带哥哥走几步。走不动就回来，没必要每次都撑到最后。」\n阿列克谢：「我还能给他们讲讲井下的灯，知道什么时候该停工。」\n安娜笑了一下，把他的名字写在明天的课表上。",
+    "same_moment": true,
+    "end": "resume:commune_anna",
+    "finish_flags": [
+      "anna_new_lesson_seen"
+    ],
+    "location": "莫斯科公社",
+    "music": "dawn_theme"
+  },
+  "moro_council": {
+    "title": "谁能安静地睡一觉",
+    "art": "moro_council",
+    "body": "亚历山德拉把排班表摊开，住户代表指着东侧隔间的位置。\n住户代表：「我丈夫刚下夜班，隔着两道墙都能听见。你们想演出，我不反对，可他也得睡觉。」\n莫罗：「那就把音箱调小，七点以前结束。临时停电，我们自己停，不接供暖那一路。」\n亚历山德拉：「议事厅今晚有空，但通道要留出来。要定下来，就把这些都写进借用单。」",
+    "same_moment": true,
+    "choices": [
+      {
+        "text": "「定在饭后半小时，关掉扩音，只用原声。让夜班的人先休息。」",
+        "next": "moro_terms_acoustic",
+        "flag": "moro_acoustic_terms"
+      },
+      {
+        "text": "「晚班交接后再演，音箱只开最低档。由我们收拾场地，保证通道畅通。」",
+        "next": "moro_terms_late",
+        "flag": "moro_late_terms"
+      }
+    ],
+    "location": "莫斯科公社"
+  },
+  "moro_terms_acoustic": {
+    "title": "一张共同签下的借用单",
+    "art": "moro_council",
+    "body": "莫罗在借用单上写下：饭后半小时，原声演奏。\n莫罗：「先这样。能让人听清，就够了。想要更大的声音，得等我们真有条件的时候。」\n住户代表看完签下名字。亚历山德拉留了一联给守备班，另一联交给你们。",
+    "same_moment": true,
+    "end": "resume:commune_guard",
+    "finish_flags": [
+      "moro_schedule",
+      "moro_terms_agreed"
+    ],
+    "location": "莫斯科公社"
+  },
+  "moro_terms_late": {
+    "title": "一张共同签下的借用单",
+    "art": "moro_council",
+    "body": "莫罗在借用单上写下交班时刻，又补上负责收拾场地的名字。\n莫罗：「多等一会儿，想听的人也不用翘班。我去跟乐手说，别让他们白跑。」\n住户代表看完签下名字。亚历山德拉留了一联给守备班，另一联交给你们。",
+    "same_moment": true,
+    "end": "resume:commune_guard",
+    "finish_flags": [
+      "moro_schedule",
+      "moro_terms_agreed"
+    ],
+    "location": "莫斯科公社"
+  },
+  "moro_rehearsal": {
+    "title": "先把声音放轻",
+    "art": "moro_rehearsal",
+    "body": "几名下工的居民帮忙搬好椅子，通往门口的一侧留着空。莫罗弹到第二段，吉他弦发出一声杂响，他停下来重新调弦。\n机修工：「你写的那段锅炉声，我听懂了。后面说大家都会改变，我有点不明白。我们明早还得上工呢。」\n莫罗摸着琴颈，没有马上回答。\n莫罗：「我也得上工。那一段我写得太容易了。」",
+    "same_moment": true,
+    "choices": [
+      {
+        "text": "「就唱你亲眼见过的事。改变可以从他们自己的声音开始。」",
+        "next": "moro_rehearsal_people",
+        "flag": "moro_song_everyday"
+      },
+      {
+        "text": "「保留你的愿望，也把现在有多难唱出来。别替大家保证结果。」",
+        "next": "moro_rehearsal_hope",
+        "flag": "moro_song_uncertain"
+      }
+    ],
+    "location": "莫斯科公社",
+    "music": "moro_first_song"
+  },
+  "moro_rehearsal_people": {
+    "title": "大家自己的歌",
+    "art": "moro_rehearsal",
+    "body": "莫罗把那两句划掉，问机修工愿不愿意说一说夜班的事。对方想了很久，最后说起孩子已经连续几天没有等到他下班。莫罗慢慢记下来。\n莫罗：「今晚先这样。正式演的时候，愿意唱的就一起唱，不愿意的听一会儿也行。」\n你们记下椅子的位置和结束时间。演出还没有开始，几个人却已经约好了下次练习。",
+    "same_moment": true,
+    "end": "resume:commune_moro",
+    "finish_flags": [
+      "moro_rehearsed"
+    ],
+    "location": "莫斯科公社",
+    "music": "moro_first_song"
+  },
+  "moro_rehearsal_hope": {
+    "title": "大家自己的歌",
+    "art": "moro_rehearsal",
+    "body": "莫罗没有删掉那段旋律，只把歌词改成了一个问题。有人跟着哼了几声，另一个人说太难唱，大家笑着重新试了一遍。\n莫罗：「今晚先这样。正式演的时候，愿意唱的就一起唱，不愿意的听一会儿也行。」\n你们记下椅子的位置和结束时间。演出还没有开始，几个人却已经约好了下次练习。",
+    "same_moment": true,
+    "end": "resume:commune_moro",
+    "finish_flags": [
+      "moro_rehearsed"
+    ],
+    "location": "莫斯科公社",
+    "music": "moro_first_song"
+  },
+  "veteran_shelter": {
+    "title": "等最后一个人",
+    "art": "veteran_shelter",
+    "body": "第三名转移者终于在候车区坐下，接应人递给他一杯水。老兵听完人数，在你身旁坐下，把手放在膝上。过了很久才开口。\n老兵：「以前撤退，有个小伙子回去拉伤员。我只顾着催大家上车，等车开了，才发现他没回来。」\n他看向侧廊，过了好一会儿才继续。\n老兵：「我后来总跟别人说，那时候没有办法。可我没再回去看过，也不知道究竟有没有办法。」\n伊万：「所以今天您要等他们都过去。」\n老兵点头。\n老兵：「今天能等。以后也不能只听一句必须撤，就不数人了。」",
+    "same_moment": true,
+    "end": "resume:front_veteran",
+    "finish_flags": [
+      "veteran_defense_story_seen"
+    ],
+    "location": "旧联络线换乘站",
+    "music": "letters_theme"
+  },
+  "moro_public_night": {
+    "title": "轮班之后的歌",
+    "art": "moro_hall",
+    "location": "莫斯科公社",
+    "same_moment": true,
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你们按照借用单约定，关掉扩音设备，只用原声演奏。靠近休养隔间的门关好，夜班住户可以安静休息。",
+        "when": {
+          "all": [
+            "moro_acoustic_terms"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "晚班完成交接后，最后一名乐手才赶来。音箱开在最低档，门口留着通道，你和莫罗答应散场后一起收拾。",
+        "when": {
+          "all": [
+            "moro_late_terms"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "议事结束后，最后一排椅子往旁边挪了挪。有人洗过手，衣袖仍带着机油味；有人抱着孩子坐在靠门的位置。亚历山德拉确认一侧通道留空，又回到门边值守。"
+      },
+      {
+        "speaker": "莫罗",
+        "text": "我是锅炉班的莫罗。这两位是机修班和缝补班的朋友。我们先试一首自己写的，声音不合适就告诉我。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "莫罗把排练时听到的那段话写进了歌里：机修工下夜班回家，孩子已经睡着；第二天醒来，父亲又去上班。后排一个男人低下头，身边的人轻轻碰了碰他的手。",
+        "when": {
+          "all": [
+            "moro_song_everyday"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "莫罗唱起想在地表推开窗的愿望，也唱起明天仍然缺煤、有人还没回来。他没有替任何人保证将来，唱到最后，几个人低声接上了那句问话。",
+        "when": {
+          "all": [
+            "moro_song_uncertain"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "鼓点起初快了一拍，贝斯手笑着重数。你听见几声零散的笑，随后屋子安静下来。莫罗唱添煤的手、长夜里等人的灯，也唱将来有人能在地上推开窗，不必先问自己有没有那份配给。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "掌声不整齐。后排有人说，下一次别让小鼓盖住歌声。莫罗认真点头，在歌页边上记下。巴拉诺娃走到门口，又回头听完了最后一个和弦。"
+      }
+    ],
+    "music": "moro_first_song",
+    "next": "moro_after"
+  },
+  "moro_quiet_night": {
+    "title": "炉火旁的第一遍",
+    "art": "moro_boiler",
+    "location": "莫斯科公社",
+    "same_moment": true,
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你们按照借用单约定，关掉扩音设备，只用原声演奏。靠近休养隔间的门关好，夜班住户可以安静休息。",
+        "when": {
+          "all": [
+            "moro_acoustic_terms"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "晚班完成交接后，最后一名乐手才赶来。音箱开在最低档，门口留着通道，你和莫罗答应散场后一起收拾。",
+        "when": {
+          "all": [
+            "moro_late_terms"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "交班之后，工具线外摆了几只木箱。接班工对过水位和压力，继续照看炉子。乐器的线沿墙收好，没人把它接到供暖柜里。"
+      },
+      {
+        "speaker": "莫罗",
+        "text": "今天先唱给坐得下的这几个人。你要回去睡，就先回去，明天我们还见得到。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "第一遍唱得很轻。缝补班的姑娘在膝上数拍，贝斯手等莫罗换和弦，门口的孩子用手指学着拨。歌唱到那些没有回家的人时，没有人替沉默接话。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "第二遍，门口又多了两个人。炉火在铁门里稳稳地亮着，莫罗的画本压在工具箱上。以前他总是独自练琴；今天，身边终于有了能一起合奏的人。"
+      }
+    ],
+    "music": "moro_first_song",
+    "next": "moro_after"
+  }
+}

@@ -901,7 +901,7 @@ func audio_controls():
 		var bus_name:String=pair[0]
 		slider.value_changed.connect(func(value):session.set_volume(bus_name,value);readout.text=str(roundi(value*100))+"%")
 
-func dialogue_actor()->String:return {"armory":"armorer","main_gate":"main_guard","d6_return_desk":"commander"}.get(dialogue_id,dialogue_id)
+func dialogue_actor()->String:return {"armory":"armorer","main_gate":"main_guard","d6_return_desk":"commander","front_veteran":"plant_veteran"}.get(dialogue_id,dialogue_id)
 
 func shop_buy(id:String):
 	var s=world.story

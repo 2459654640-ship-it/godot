@@ -58,3 +58,21 @@ func path(start:Vector3,end:Vector3) -> PackedVector3Array:
 	for p in graph.get_point_path(from,to):out.append(Vector3(p.x,0,p.y))
 	if not out.is_empty() and out[0].distance_to(Vector3(start.x,0,start.z))<0.25:out.remove_at(0)
 	return out
+
+func path_avoiding(start:Vector3,end:Vector3,bodies:Array,traveller)->PackedVector3Array:
+	# Temporary occupancy is local to this query. Restore every graph node even
+	# when there is no route, so one character never corrupts another's grid.
+	var disabled:Dictionary={}
+	for body in bodies:
+		if not is_instance_valid(body) or body==traveller or body.collision_layer==0:continue
+		var centre=Vector2(body.position.x,body.position.z)
+		var cell=Vector2i(roundi(centre.x/STEP),roundi(centre.y/STEP))
+		for dx in range(-2,3):
+			for dz in range(-2,3):
+				var key=cell+Vector2i(dx,dz)
+				if cells.has(key) and points[cells[key]].distance_to(centre)<.70 and points[cells[key]].distance_to(Vector2(start.x,start.z))>.25:
+					var id=cells[key]
+					if not graph.is_point_disabled(id):graph.set_point_disabled(id,true);disabled[id]=true
+	var route=path(start,end)
+	for id in disabled:graph.set_point_disabled(id,false)
+	return route

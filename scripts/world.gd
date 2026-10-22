@@ -48,6 +48,7 @@ var pending_route=""
 var previous_position=Vector3.ZERO
 var overview = false
 var camera_size = 17.0
+var living
 var initialized = false
 var save_path="user://d6_save.json"
 var debug_camera_target=Vector3.ZERO
@@ -164,6 +165,7 @@ func _ready():
 	on_story_changed()
 	set_camera(0,true)
 	combat=preload("res://scripts/combat.gd").new();add_child(combat);combat.setup(self)
+	living=preload("res://scripts/living_world.gd").new();add_child(living);living.setup(self)
 	initialized=true
 	call_deferred("autosave")
 	wall_veil=preload("res://scripts/wall_veil.gd").new()
@@ -569,6 +571,7 @@ func _physics_process(delta):
 				story.route="shift"
 				story.changed.emit()
 	previous_position=player.position
+	if is_instance_valid(living):living.tick(delta)
 	set_camera(delta)
 	if floor_id!="waterworks" and story.weapon_drawn() and not hud.modal_visible():
 		var cursor=get_viewport().get_mouse_position()
@@ -585,7 +588,7 @@ func _physics_process(delta):
 	hud.tick(delta)
 
 func target_actor(id:String):
-	return npcs.get({"armory":"armorer","main_gate":"main_guard","d6_return_desk":"commander"}.get(id,id))
+	return npcs.get({"armory":"armorer","main_gate":"main_guard","d6_return_desk":"commander","front_veteran":"plant_veteran"}.get(id,id))
 
 func find_nearest():
 	nearest=""
@@ -611,7 +614,7 @@ func find_nearest():
 	var cue=nearest if not hud.modal_visible() else ""
 	if cue=="gate" and story.f("gate"):cue=""
 	if cue=="side" and (story.f("side_crossed") or story.f("side_pass")):cue=""
-	kit.highlight({"armory":"armorer","main_gate":"main_guard"}.get(cue,cue),npcs)
+	kit.highlight({"armory":"armorer","main_gate":"main_guard","front_veteran":"plant_veteran"}.get(cue,cue),npcs)
 	if not waiting_shift:hud.set_prompt(nearest)
 
 func cycle_interaction(direction:int)->bool:
@@ -828,6 +831,7 @@ func on_story_changed():
 				get_node("/root/Session").sound("interact")
 	if gate_mesh:animate_d6_door(gate_mesh,story.f("gate"))
 	if side_mesh:animate_d6_door(side_mesh,story.f("side_pass"))
+	if is_instance_valid(living):living.sync()
 	if hud:hud.refresh_status()
 
 func animate_d6_door(mesh:MeshInstance3D,opened:bool):
@@ -867,9 +871,10 @@ func clear_arrival(p:Vector3)->Vector3:
 	return p
 
 func save_snapshot()->Dictionary:
+	if is_instance_valid(living):living.capture()
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z];data.floor=floor_id
-	data.layout_revision=22;data.played_seconds=played_seconds
+	data.layout_revision=24;data.played_seconds=played_seconds
 	data.camera_size=camera_size;data.facing=player.visual.rotation.y
 	data.world_state={"phase":phase,"guard_away_time":guard_away_time,"waiting_shift":waiting_shift,"pending_route":pending_route}
 	data.npc_positions={}
@@ -890,13 +895,14 @@ func load_game(path:String=""):
 	var data=SaveStore.read(source)
 	if data.is_empty():hud.toast("没有可读取的手记，或该存档及备份均已损坏。",6);return
 	var p=data.get("position",[-10.5,.04,-3.4])
-	if data.get("floor","life")!=floor_id or floor_id in ["waterworks","surface","starcity"]:
+	if data.get("floor","life")!=floor_id or floor_id in ["waterworks","surface","starcity","coal","railfront"]:
 		get_node("/root/Session").enter(data,data.get("floor","life"),Vector3(p[0],maxf(p[1],.04),p[2]));return
 	hud.observing=false;story.restore(data)
 	player.position=clear_arrival(Vector3(p[0],maxf(p[1],.04),p[2]))
 	if (floor_id=="commune" and int(data.get("layout_revision",0))<12) or (floor_id=="sech" and int(data.get("layout_revision",0))<11) or (floor_id=="starcity" and int(data.get("layout_revision",0))<19):player.position=CampaignMaps.LAYOUTS[floor_id].spawn
 	played_seconds=float(data.get("played_seconds",0));camera_size=clampf(float(data.get("camera_size",17)),10,28)
 	waiting_shift=false;guard_away_time=0;restore_placement(data);player.velocity=Vector3.ZERO
+	if is_instance_valid(living):living.reset_for_load()
 	hud.comic_active=false;hud.close()
 	if story.flags.get("comic",{}).get("active",false):hud.show_comic()
 	elif story.ending:hud.show_chapter_end()

@@ -21,7 +21,7 @@ static func render(h,sequence:String=""):
 	for entry in lines:
 		var group=VBoxContainer.new();words.add_child(group)
 		var narration=entry.speaker in ["narrator","旁白"]
-		if not narration:group.add_child(h.label(entry.speaker,16,h.amber))
+		if not narration:group.add_child(h.label(entry.get("name",String(entry.speaker).trim_prefix("voice_")),16,h.amber))
 		var rich=h.prose(entry.text if narration else "「"+entry.text+"」",23,group)
 		rich.add_theme_color_override("default_color",Color("e4d1a8") if not narration else Color("bac3b7"))
 		var total=rich.get_total_character_count();rich.visible_characters=0

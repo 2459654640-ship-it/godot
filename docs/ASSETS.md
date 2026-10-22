@@ -12,7 +12,7 @@
 | 02 | 普通老人 | [ambient_elder](../assets/characters/ambient_elder.png) | 8 | 1 |
 | 03 | 普通妇女 | [ambient_woman](../assets/characters/ambient_woman.png) | 8 | 1 |
 | 04 | 普通工人 | [ambient_worker](../assets/characters/ambient_worker.png) | 8 | 1 |
-| 05 | 安娜 | [anna](../assets/characters/anna.png) | 8.0 | 1.0 |
+| 05 | 安娜 | [anna](../assets/characters/anna.png) | 8 | 3 |
 | 06 | 安娜的哥哥 | [coal_brother](../assets/characters/coal_brother.png) | 8 | 1 |
 | 07 | 煤运登记员 | [coal_clerk](../assets/characters/coal_clerk.png) | 8 | 1 |
 | 08 | 煤运医护 | [coal_medic](../assets/characters/coal_medic.png) | 8 | 1 |
@@ -23,7 +23,7 @@
 | 13 | 卓娅 | [commune_grower](../assets/characters/commune_grower.png) | 8 | 1 |
 | 14 | 公社守备 | [commune_guard](../assets/characters/commune_guard.png) | 8 | 1 |
 | 15 | 叶莲娜 | [commune_leader](../assets/characters/commune_leader.png) | 8 | 1 |
-| 16 | 莫罗 | [commune_moro](../assets/characters/commune_moro.png) | 8 | 1 |
+| 16 | 莫罗 | [commune_moro](../assets/characters/commune_moro.png) | 8 | 3 |
 | 17 | 娜佳 | [commune_printer](../assets/characters/commune_printer.png) | 8 | 1 |
 | 18 | 维拉 | [cook](../assets/characters/cook.png) | 8.0 | 4.0 |
 | 19 | 食堂居民 | [diner](../assets/characters/diner.png) | 8.0 | 4.0 |
@@ -269,3 +269,12 @@
 - [rail_evacuation](../assets/cinematics/rail_evacuation.png)
 
 原创剧情 [MIDI 原谱](../assets/audio/scores)及[署名说明](../assets/audio/licenses/original_story_scores.txt)。
+
+## v24 同行剧情插画与动作参考
+
+- [安娜下课后与伊万去食堂](../assets/cinematics/anna_supper.png)
+- [莫罗与守备班、住户协商](../assets/cinematics/moro_council.png)
+- [第一次试演与住户反馈](../assets/cinematics/moro_rehearsal.png)
+- [撤离后的候车区](../assets/cinematics/veteran_shelter.png)
+- [安娜站姿和两种迈步](characters/anna-walks.jpg)
+- [莫罗站姿和两种迈步](characters/moro-walks.jpg)

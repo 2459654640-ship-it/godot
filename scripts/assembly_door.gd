@@ -26,6 +26,11 @@ func setup(w):
    panel(k,pivot,"AssemblyDoorHandlePlate",Vector3(-side*1.31,1.02,z),Vector3(.065,.29,.025),"brass")
    panel(k,pivot,"AssemblyDoorPull",Vector3(-side*1.31,1.02,z*1.5),Vector3(.035,.20,.035),"brass")
   pivot.rotation.y=-side*ANGLE
+  # Route through the centre of the open double door, not through an open leaf.
+  # The leaves swing inward; their conservative open footprint remains reserved
+  # while closed so an approaching NPC never plans a route through the hinge.
+  var x_center:float=position.x+side*1.43
+  k.solids.append({"name":"AssemblyOpenLeaf","rect":Rect2(x_center-.13,position.z-1.50,.26,1.56),"bottom":0.0,"top":2.35})
  k.box("AssemblyDoorThreshold",position+Vector3(0,.027,0),Vector3(2.9,.018,.12),"brass")
 func panel(k,parent,id,p,size,material,solid=false):
  var mesh=k.box(id,p,size,material,solid,parent);mesh.set_meta("dynamic",true)

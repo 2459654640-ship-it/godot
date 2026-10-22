@@ -328,13 +328,62 @@
       352.0
     ],
     "clips": [
-      "idle"
+      "idle",
+      "walk_a",
+      "walk_b"
     ],
     "directions": 8.0,
     "file": "anna.png",
-    "poses": 1.0,
+    "poses": 3,
     "rear_diagonal_normalized": true,
-    "source_angles": 5.0
+    "source_angles": 5.0,
+    "packing_revision": 24,
+    "exposure": [
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    ],
+    "frame_mirror": [
+      [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    ]
   },
   "father": {
     "baseline": 342.0,
@@ -1138,7 +1187,7 @@
     "file": "commune_moro.png",
     "directions": 8,
     "source_angles": 5,
-    "poses": 1,
+    "poses": 3,
     "cell": [
       280,
       352
@@ -1147,19 +1196,49 @@
     "body_pixels": 324,
     "rear_diagonal_normalized": true,
     "clips": [
-      "idle"
+      "idle",
+      "walk_a",
+      "walk_b"
     ],
-    "packing_revision": 13,
+    "packing_revision": 24,
     "exposure": [
       [
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1
       ]
     ],
     "frame_mirror": [
+      [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
       [
         false,
         false,

@@ -8,6 +8,8 @@
 - [伊万戴面具八方向](characters/ivan_masked-eight-directions.png)
 - [伊万持枪三姿态](characters/ivan_combat-eight-directions.png)
 - [伊万戴面具持枪三姿态](characters/ivan_masked_combat-eight-directions.png)
+- [安娜：保留站姿与新迈步图](characters/anna-walks.jpg)
+- [莫罗：保留站姿与新迈步图](characters/moro-walks.jpg)
 
 ## 当前地图全景
 

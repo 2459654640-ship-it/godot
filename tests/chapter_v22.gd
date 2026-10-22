@@ -35,7 +35,7 @@ func run():
  s.act("c_anna_accept");check(not s.last_action_valid,"Anna does not begin with an unsolicited rescue commission")
  act(s,"anna_lesson");s=walk(s,"anna_class")
  check(s.f("anna_lesson_seen") and not s.f("anna_request"),"classroom acquaints player without autoaccepting quest")
- act(s,"anna_accept");act(s,"anna_records")
+ act(s,"anna_walk_later");act(s,"anna_accept");act(s,"anna_records")
  check(not Campaign.available(s,"anna_warning"),"mine crisis waits for first visit and real field experience")
  s.context.floor="coal";s.flags.coal_access=true
  for key in ["coal_register","coal_archive","coal_medic","coal_brother"]:act(s,key)

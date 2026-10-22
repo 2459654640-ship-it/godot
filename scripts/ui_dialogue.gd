@@ -1,7 +1,7 @@
 extends RefCounted
 ## A persistent transcript above a separate, pinned reply list.
 static func portrait(h,id:String)->String:
-	var art={"armory":"queue","main_gate":"commander","d6_return_desk":"commander","coal_gate_entry":"queue"}.get(id,id)
+	var art={"armory":"queue","main_gate":"commander","d6_return_desk":"commander","coal_gate_entry":"queue","front_veteran":"veteran_masked"}.get(id,id)
 	if id=="ivan" and h.world.player.art_id!="":art=h.world.player.art_id
 	if h.world.npcs.has(id) and h.world.npcs[id].art_id!="":art=h.world.npcs[id].art_id
 	return "res://assets/portraits/"+art+".png"

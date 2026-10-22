@@ -14,7 +14,7 @@ func reload(s):
 func comic(s):
  s.Comic.start(s,s.flags.next_sequence);s.flags.erase("next_sequence")
  var count=0
- while s.flags.comic.active and count<10:s.Comic.choose(s);count+=1
+ while s.flags.comic.active and count<10:s.Comic.choose(s,0 if s.Comic.panel(s).has("choices") else -1);count+=1
  check(count<10 and not s.flags.comic.active,"side sequence resumes exploration, not an ending")
 func frames(n:int):
  for i in n:await physics_frame
@@ -27,7 +27,12 @@ func run():
  action(s,"moro_reconsider");check(Campaign.available(s,"moro_accept"),"player can explicitly reconsider later")
  for mode in ["public","private"]:
   var t=reload(s)
-  for key in ["moro_accept","moro_parts","moro_power_plan","moro_repair","moro_permission","moro_listeners","moro_paper","moro_poster_people","moro_"+mode]:action(t,key);t=reload(t)
+  t.flags.moro_at_workshop=true;t.flags.moro_at_boiler=true;t.flags.moro_at_guard=true;t.flags.moro_at_stage=true
+  # These state-unit fixtures stand in for arrivals; living_world_v24 physically walks every leg.
+  for key in ["moro_accept","moro_parts","moro_power_plan","moro_repair","moro_permission","moro_listeners","moro_paper","moro_poster_people","moro_rehearse","moro_"+mode]:
+   action(t,key)
+   if key in ["moro_permission","moro_rehearse"]:comic(t)
+   t=reload(t)
   check(not t.f("moro_played") and not t.f("moro_done"),"booking alone does not complete performance")
   comic(t);check(t.f("moro_played") and not t.ending,"music event finishes and continues playing")
   action(t,"moro_thanks");var money=t.economy.military;action(t,"moro_work") if Campaign.available(t,"moro_work") else null

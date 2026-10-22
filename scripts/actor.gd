@@ -3,6 +3,7 @@ extends CharacterBody3D
 var art_id=""
 var combat_controlled=false
 var stationary=false
+var story_waiting=false
 var combat_velocity=Vector3.ZERO
 var aim_direction=Vector3.ZERO
 var is_player = false
@@ -81,13 +82,16 @@ func setup(kit, player: bool, coat: String = "green", hat: bool = false):
 func travel_to(destination:Vector3):
 	if destination.distance_to(goal)<0.05:return
 	goal=destination
-	path_points=navigation.path(position,destination) if navigation else PackedVector3Array([destination])
+	if navigation and purposeful:
+		var world=get_parent()
+		path_points=navigation.path_avoiding(position,destination,world.npcs.values()+[world.player],self)
+	else:path_points=navigation.path(position,destination) if navigation else PackedVector3Array([destination])
 	reached_anchor=false
 
 func npc_motion(delta:float) -> Vector3:
 	var world=get_parent()
 	var player=get_tree().get_first_node_in_group("player")
-	if not player:return Vector3.ZERO
+	if not player or story_waiting:return Vector3.ZERO
 	var talking=is_instance_valid(world.hud) and world.hud.modal_visible() and world.hud.dialogue_actor()==String(name)
 	look_target=player if talking else null
 	if talking:
@@ -99,7 +103,7 @@ func npc_motion(delta:float) -> Vector3:
 		if anchor.distance_to(home_anchor)>.05 or path_points.is_empty():
 			anchor=home_anchor;goal=Vector3.INF;reached_anchor=false;yield_time=0
 			travel_to(home_anchor)
-	elif stationary:return Vector3.ZERO
+	elif stationary and not purposeful:return Vector3.ZERO
 	var away=position-player.position
 	away.y=0.0
 	# Yield using tested sweeps. Do not select a direction that enters a wall,

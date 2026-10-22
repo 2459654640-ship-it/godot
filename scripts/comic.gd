@@ -6,6 +6,7 @@ static func authored()->Dictionary:
 	if _authored.is_empty():
 		_authored=JSON.parse_string(FileAccess.get_file_as_string("res://data/story_panels.json"))
 		_authored.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_panels.json")),true)
+		_authored.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/living_panels.json")),true)
 	return _authored
 const PANELS={
 "intro_wake":{"art":"wake","title":"醒来 / 16 XI 1982","body":"通风机的低鸣先于闹铃把你叫醒。墙里流过一阵水声，很快又停了。\n二十年前，战争把莫斯科的人赶进地下。你在这里长大，直到现在，晨光对你仍只是一个词。\n你叫伊万，是 D-6 武装小队的一员。老爹谢苗诺夫在门边敲了两下。","next":"intro_semyon"},

@@ -66,6 +66,7 @@ func run():
  while w.story.flags.get("comic",{}).get("active",false) and steps<10:
   var panel=w.story.Comic.panel(w.story);w.hud.comic_choose(0 if panel.has("choices") else -1);steps+=1
  check(w.story.f("anna_lesson_seen") and not w.story.f("anna_request"),"classroom does not silently accept the request")
+ w.perform("c_anna_walk_later","commune_anna")
  w.perform("c_anna_accept","commune_anna")
  check(w.story.f("anna_request"),"original quest acceptance still works")
  w.queue_free()

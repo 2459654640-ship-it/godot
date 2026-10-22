@@ -1,0 +1,505 @@
+{
+  "actions": {
+    "anna_walk_invite": {
+      "text": "「收拾好了？我陪你去食堂，路上聊聊。」",
+      "reply": "安娜把课本放回抽屉，拿起饭盒。\n安娜：「好。我走医务室西侧那道门，你跟我一起。要是还有事，晚些来食堂找我也行。」",
+      "once": true,
+      "category": "任务",
+      "req": {
+        "all": [
+          "anna_lesson_seen"
+        ],
+        "not": [
+          "anna_conversation_ready",
+          "anna_request"
+        ]
+      },
+      "flags": {
+        "anna_walk_started": true
+      }
+    },
+    "anna_walk_later": {
+      "text": "「我现在还有事。你要是有话，可以先告诉我。」",
+      "reply": "安娜放下饭盒，把哥哥留下的工牌编号写给你。\n安娜：「我想请你查一个人。你先听完，再决定愿不愿意帮忙。」",
+      "once": true,
+      "category": "任务",
+      "req": {
+        "all": [
+          "anna_lesson_seen"
+        ],
+        "not": [
+          "anna_walk_started",
+          "anna_conversation_ready",
+          "anna_request"
+        ]
+      },
+      "flags": {
+        "anna_conversation_ready": true
+      }
+    },
+    "anna_walk_talk": {
+      "text": "「饭菜还热着。刚才在课堂上，你好像有些心事？」",
+      "reply": "",
+      "once": true,
+      "category": "任务",
+      "req": {
+        "all": [
+          "anna_walk_arrived"
+        ],
+        "not": [
+          "anna_conversation_ready"
+        ]
+      },
+      "flags": {},
+      "travel": "anna_supper"
+    },
+    "anna_visit_class": {
+      "text": "「今天的课准备讲什么？」",
+      "reply": "",
+      "once": true,
+      "category": "任务",
+      "req": {
+        "all": [
+          "anna_alive"
+        ],
+        "not": [
+          "anna_new_lesson_seen"
+        ]
+      },
+      "flags": {},
+      "travel": "anna_new_lesson"
+    },
+    "anna_accept": {
+      "text": "「把名字和当年的班组写给我，我去问。」",
+      "reply": "安娜写下阿列克谢的姓名、班组编号和左手烫伤的位置，又加了一行自己的名字。\n安娜：「如果见到他，先说我在公社做事，有地方住，也有饭吃。其它的话，让他愿意说的时候再说。」",
+      "once": true,
+      "flags": {
+        "anna_request": true
+      },
+      "give": [
+        "anna_note"
+      ],
+      "req": {
+        "all": [
+          "anna_lesson_seen",
+          "anna_conversation_ready"
+        ]
+      }
+    },
+    "moro_accept": {
+      "text": "「我愿意帮你筹备这次排练，从音箱查起。」",
+      "reply": "莫罗把本班读数交给接班工，提起工具袋。\n莫罗：「我跟你一起去机修间。先看报废扬声器，再回来试电。你有事可以先忙，我会在这两处等你，不用急着赶路。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_known"
+        ],
+        "not": [
+          "moro_job",
+          "moro_declined"
+        ]
+      },
+      "flags": {
+        "moro_job": true
+      },
+      "category": "任务",
+      "offer_for": "moro_job",
+      "offer_unlock": {
+        "all": [
+          "moro_known"
+        ]
+      }
+    },
+    "moro_parts": {
+      "text": "核对报废领用卡，检查纸盆、接头和线圈",
+      "reply": "你扶住音箱，莫罗拆下后盖。纸盆破了一角，接线已经松脱，磁铁还完好。领用卡注明它属于报废件。\n莫罗：「能修。我拿烙铁，你帮我把接头压稳。修好后还得去锅炉房核一下照明支路，供暖的电不能动。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_job",
+          "moro_at_workshop"
+        ]
+      },
+      "flags": {
+        "moro_parts_found": true
+      }
+    },
+    "moro_power_plan": {
+      "text": "按设备铭牌核对独立照明支路的余量",
+      "reply": "莫罗先核对接班工的读数，再和你量照明支路。你们把供暖回路的封签原样保留，只接上带熔断器的小插座。\n莫罗：「这个音量够了。再大就会影响照明，先这样。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_parts_found",
+          "moro_at_boiler"
+        ]
+      },
+      "flags": {
+        "moro_power_checked": true
+      }
+    },
+    "moro_permission": {
+      "text": "「莫罗也来了。我们一起商量排练的时间和场地。」",
+      "reply": "莫罗把耗电记录放到值班桌上。亚历山德拉请来住户代表，先听她说夜班休息的安排。",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_amp_fixed",
+          "moro_at_guard"
+        ]
+      },
+      "flags": {
+        "moro_negotiation_started": true
+      },
+      "travel": "moro_council"
+    },
+    "moro_repair": {
+      "text": "断开音箱电源，修接头和纸盆，低档试音",
+      "reply": "你确认音箱未接电，重新焊牢接头，套好绝缘，再将开胶的纸盆压合。莫罗按准备单接入独立支路，慢慢抬起音量。第一声和弦很轻，但没有破音。\n「够了，先别再拧。让人听清，比把整条走廊都震醒强。」",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_power_checked",
+          "moro_at_workshop"
+        ]
+      },
+      "flags": {
+        "moro_amp_fixed": true
+      }
+    },
+    "moro_listeners": {
+      "text": "「我们想办一场小排练，住户会介意吗？」",
+      "reply": "玛尔法答应帮忙留几张椅子。\n玛尔法：「让夜班的人坐靠门的地方，想走就能走。孩子们饭后有空，我去问他们，愿意来的自己来。」\n你们把愿意帮忙的人记在纸上，没有把缺席者的名字列进去。",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_schedule",
+          "moro_terms_agreed"
+        ]
+      },
+      "flags": {
+        "moro_audience": true
+      }
+    },
+    "moro_rehearse": {
+      "text": "「大家都到齐了，先试一次，再决定正式怎么演。」",
+      "reply": "",
+      "once": true,
+      "category": "任务",
+      "req": {
+        "all": [
+          "moro_ready",
+          "moro_at_stage"
+        ],
+        "not": [
+          "moro_rehearsed",
+          "moro_booked"
+        ]
+      },
+      "flags": {},
+      "travel": "moro_rehearsal"
+    },
+    "moro_public": {
+      "text": "「在议事厅演吧，让愿意来的人坐一坐。」",
+      "reply": "你们等议事结束后摆好椅子，将一侧通道空出来。下工的居民陆续进门，莫罗站在讲台前，先试了一个很轻的和弦。",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_ready",
+          "moro_rehearsed"
+        ],
+        "not": [
+          "moro_booked"
+        ]
+      },
+      "flags": {
+        "moro_booked": true,
+        "moro_public": true
+      },
+      "travel": "moro_public_night",
+      "category": "决定"
+    },
+    "moro_private": {
+      "text": "「先在锅炉房小声练一次，别急着上台。」",
+      "reply": "你们约在交班以后试琴。接班工守着炉，吉他和音箱放在工具线外；门口的人听见和弦，探头问能不能坐一会儿。",
+      "once": true,
+      "req": {
+        "all": [
+          "moro_ready",
+          "moro_rehearsed"
+        ],
+        "not": [
+          "moro_booked"
+        ]
+      },
+      "flags": {
+        "moro_booked": true,
+        "moro_private": true
+      },
+      "travel": "moro_quiet_night",
+      "category": "决定"
+    },
+    "veteran_defense_accept": {
+      "text": "「我守住交叉口，您接应他们。等都走过去再撤。」",
+      "reply": "老兵看过侧廊的拐角，点了点头。\n老兵：「三个人，沿西侧墙往南走。我守在通道口，你看东边。别追出去，等最后一个人进了安全区再说。」",
+      "once": true,
+      "category": "任务",
+      "req": {
+        "floor": [
+          "railfront"
+        ],
+        "all": [
+          "sided_veteran"
+        ],
+        "not": [
+          "veteran_defense_started"
+        ]
+      },
+      "flags": {
+        "veteran_defense_started": true
+      }
+    },
+    "veteran_defense_finish": {
+      "text": "「人都到了。刚才您为什么坚持等他们？」",
+      "reply": "",
+      "once": true,
+      "category": "任务",
+      "req": {
+        "floor": [
+          "railfront"
+        ],
+        "all": [
+          "veteran_defense_safe"
+        ],
+        "not": [
+          "veteran_defense_done"
+        ]
+      },
+      "flags": {
+        "veteran_defense_done": true
+      },
+      "reward": {
+        "handmade": 12
+      },
+      "travel": "veteran_shelter"
+    }
+  },
+  "interactions": {
+    "commune_anna": {
+      "facility": "commune",
+      "name": "安娜 / 医务室",
+      "role": "公社 / 医务",
+      "body": "安娜把几本练习册挪到桌角，给换药盆腾出地方。一本课本摊在讲四季的那页，纸边已经磨得发软。\n安娜：「先别碰那杯水，米沙刚拿来洗过画笔。我给你换一杯。」",
+      "options": [
+        "anna_lesson",
+        "anna_walk_invite",
+        "anna_walk_later",
+        "anna_walk_talk",
+        "anna_dream",
+        "anna_separation",
+        "anna_accept",
+        "anna_talk",
+        "anna_result",
+        "anna_warning",
+        "anna_medic_plan",
+        "anna_shelter",
+        "anna_rescue_depart",
+        "anna_prepare_status",
+        "anna_surface",
+        "anna_return_life",
+        "anna_home",
+        "medicine_seal_accept",
+        "medicine_seal_return",
+        "anna_visit_class"
+      ],
+      "spoken": true,
+      "after": [
+        [
+          {
+            "all": [
+              "anna_lesson_seen"
+            ],
+            "not": [
+              "anna_request"
+            ]
+          },
+          "安娜等孩子们走远，才从抽屉里拿出一张折过很多次的纸。\n安娜：「我哥哥叫阿列克谢·索科洛夫，以前在 D-6 二号施工班干活，左手有一处烫伤。我想知道他现在怎么样。联络室保存着交换记录，你愿意帮我核对一下吗？」"
+        ],
+        [
+          {
+            "all": [
+              "anna_request"
+            ],
+            "not": [
+              "anna_first_news"
+            ]
+          },
+          "安娜正在另一张纸上抄哥哥的工牌编号。\n安娜：「查到什么都告诉我，没查到也没关系。我想知道实情，你不用怕我难受就瞒着。」"
+        ],
+        [
+          {
+            "all": [
+              "anna_first_news"
+            ],
+            "not": [
+              "anna_warning_seen"
+            ]
+          },
+          "哥哥的探视记录压在课本下面。安娜已经读过好几遍，仍会偶尔抽出来看他的签字。\n安娜：「他说暂时走不了，我明白。你能坐下来听他说话，已经很好了。下次我想托人给他带一双厚袜子。」"
+        ],
+        [
+          {
+            "all": [
+              "anna_warning_seen"
+            ],
+            "not": [
+              "anna_rescue_started",
+              "anna_outcome_done"
+            ]
+          },
+          "安娜把矿区来信、医护清单和一张孩子画的地图分别装进袋子。\n安娜：「我也去。我认得哥哥，转移名单里有家属的孩子跟着，也需要有人照看。医护和路线得先落实，我不会催你现在就出发。」"
+        ],
+        [
+          "anna_alive",
+          "安娜把休养安排贴在哥哥床边，扶着杯子让他喝了口水。\n安娜：「我明天下午再给孩子们上课，今天先陪哥哥吃饭。米沙说，晚些时候要拿地图考考你。」"
+        ],
+        [
+          "anna_dead",
+          "课桌上留着半截铅笔和几本收齐的练习册。没有人坐在安娜惯常坐的木箱上。"
+        ]
+      ]
+    },
+    "commune_moro": {
+      "facility": "commune",
+      "name": "莫罗 / 锅炉班",
+      "role": "公社居民",
+      "body": "锅炉房里，一个黑头发的青年正把压力表读数抄进本子。桌角压着炭笔画，旧吉他靠在工具箱旁。\n「先站在白线外，炉门刚关。」\n他放下铅笔，朝你点头。\n「我叫莫罗。要找锅炉班的人，就是我。要找会弹吉他的，也碰巧是我。」",
+      "spoken": true,
+      "options": [
+        "moro_work",
+        "moro_music",
+        "moro_roots",
+        "moro_accept",
+        "moro_decline",
+        "moro_reconsider",
+        "moro_poster_people",
+        "moro_poster_slogan",
+        "moro_rehearse",
+        "moro_public",
+        "moro_private",
+        "moro_thanks"
+      ],
+      "after": [
+        [
+          "moro_job",
+          "莫罗将工具和吉他分开放好。\n「你先去机修间看那只报废扬声器。我把这班炉看完，咱们再核照明余量。别把供暖用的零件拆给我。」"
+        ],
+        [
+          "moro_amp_fixed",
+          "修好的小音箱摆在锅炉房门内。\n「声音够一间屋子听了。还得和守备班说时间，再问问玛尔法，住户愿不愿意来。有人嫌吵，我们就换地方。」"
+        ],
+        [
+          "moro_ready",
+          "莫罗试过吉他，将画好的小纸张晾在桌上。\n「时间和地方都问过了。议事厅可以借，锅炉房值班后也能坐几个人。你愿意热闹一点，还是先小声试一次？」"
+        ],
+        [
+          "moro_played",
+          "莫罗擦去琴弦上的汗，重新系好工作围裙。\n「明早还得添煤。不过以后下了工，总算有件可以一起盼的事了。」"
+        ],
+        [
+          "moro_done",
+          "墙边多了两张练习用的歌单，字迹各不相同。\n「鼓手刚来问下次什么时候练。我说先把轮班表对好，别又只剩锅炉工一个人等。」"
+        ]
+      ]
+    },
+    "front_veteran": {
+      "facility": "railfront",
+      "name": "老兵 / 西侧接应口",
+      "role": "同行者",
+      "body": "老兵看向西侧侧廊。几名转移者停在拐角后，不敢穿过通往南口的开阔地。\n老兵：「他们得走到南边的候车区。我们留两个人看住交叉口，就能让他们过去。」",
+      "options": [
+        "veteran_defense_accept",
+        "veteran_defense_finish"
+      ],
+      "spoken": true,
+      "after": [
+        [
+          "veteran_defense_started",
+          "老兵守在西侧通道口。\n老兵：「你看东面。我接应他们，别离得太远。」"
+        ],
+        [
+          "veteran_defense_safe",
+          "南口传来了人数核对的回应。老兵等最后一个人坐下，才把步枪放低。"
+        ],
+        [
+          "veteran_defense_done",
+          "老兵检查过弹匣，将剩下的子弹重新压好。\n老兵：「接着办你的事吧。回去以后，记得告诉派工的人，这条线还有居民在走。」"
+        ]
+      ]
+    }
+  },
+  "quests": [
+    {
+      "id": "veteran_passage",
+      "name": "等最后一个人",
+      "facility": "railfront",
+      "kind": "支线",
+      "accepted": "veteran_defense_started",
+      "done": "veteran_defense_done",
+      "background": "老兵请求你协助守住换乘站西侧通道，让三名转移者抵达南口候车区。留在交叉口附近防守，等最后一人撤离；失败可从交火前无损重试。",
+      "lead": "老兵留意到有居民被困在侧廊拐角后。",
+      "actions": [
+        "veteran_defense_accept",
+        "veteran_defense_finish"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "place": "railfront",
+          "target": "front_veteran",
+          "step": "到西侧接应口与老兵会合，守住通道，让三名转移者走到南口。按 1 拔枪；不必追击远处敌人。"
+        },
+        {
+          "when": {
+            "all": [
+              "veteran_defense_safe"
+            ]
+          },
+          "place": "railfront",
+          "target": "front_veteran",
+          "step": "三人已进入候车区。和老兵核对人数，听听他对这次撤离的看法。"
+        }
+      ]
+    },
+    {
+      "id": "anna_evening",
+      "name": "下课以后",
+      "facility": "commune",
+      "kind": "支线",
+      "accepted": "anna_walk_started",
+      "done": "anna_conversation_ready",
+      "background": "陪安娜去食堂，听她说一说课堂和家人的事。你可以先忙自己的事，她会停下等你，不会因为等待而失败。",
+      "lead": "安娜收好课本，想在去食堂的路上和你聊聊。",
+      "actions": [
+        "anna_walk_invite",
+        "anna_walk_talk"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "target": "commune_anna",
+          "step": "陪安娜走医务室西门去食堂；靠近她就会继续走。地图显示她的实际位置。"
+        },
+        {
+          "when": {
+            "all": [
+              "anna_walk_arrived"
+            ]
+          },
+          "target": "commune_anna",
+          "step": "安娜已在食堂等你，过去坐一会儿，聊聊今天的课。"
+        }
+      ]
+    }
+  ]
+}
