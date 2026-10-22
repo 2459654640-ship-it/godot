@@ -76,6 +76,7 @@ func _ready():
 	var arrival=Vector3.INF
 	if transfer and not transfer.pending.is_empty():
 		arrival_data=transfer.pending.story.duplicate(true)
+		if arrival_data.get("save_slot","") in SaveStore.manual_paths():save_path=arrival_data.save_slot
 		story.restore(transfer.pending.story)
 		played_seconds=float(transfer.pending.story.get("played_seconds",0))
 		camera_size=clampf(float(transfer.pending.story.get("camera_size",17)),10,28)
@@ -166,6 +167,7 @@ func _ready():
 	set_camera(0,true)
 	combat=preload("res://scripts/combat.gd").new();add_child(combat);combat.setup(self)
 	living=preload("res://scripts/living_world.gd").new();add_child(living);living.setup(self)
+	combat.restore_state(arrival_data.get("combat_state",{}))
 	initialized=true
 	call_deferred("autosave")
 	wall_veil=preload("res://scripts/wall_veil.gd").new()
@@ -694,12 +696,8 @@ func _unhandled_input(event):
 		else:hud.show_pause()
 		get_viewport().set_input_as_handled()
 		return
-	if event.is_action_pressed("save"):save_game();return
-	if event.is_action_pressed("load"):
-		var data=SaveStore.read(save_path)
-		if data.is_empty():hud.toast("没有可读取的快速手记。")
-		else:hud.confirm_slot(save_path,false,data)
-		return
+	if event.is_action_pressed("save"):hud.show_saves(true);return
+	if event.is_action_pressed("load"):hud.show_saves(false);return
 	if hud.modal_visible():return
 	if event.is_action_pressed("draw_weapon"):
 		if not (event is InputEventKey and event.echo):toggle_weapon()
@@ -877,15 +875,21 @@ func save_snapshot()->Dictionary:
 	data.layout_revision=24;data.played_seconds=played_seconds
 	data.camera_size=camera_size;data.facing=player.visual.rotation.y
 	data.world_state={"phase":phase,"guard_away_time":guard_away_time,"waiting_shift":waiting_shift,"pending_route":pending_route}
+	var saved_room=floor_name()
+	for zone in zones:
+		if zone.rect.has_point(Vector2(player.position.x,player.position.z)):saved_room=zone.name;break
+	data.save_summary={"room":saved_room,"quest":preload("res://scripts/journal.gd").active(story).get("name","")}
+	data.combat_state=combat.serialize_state() if is_instance_valid(combat) else {}
 	data.npc_positions={}
 	for id in npcs:data.npc_positions[id]={"position":[npcs[id].position.x,npcs[id].position.y,npcs[id].position.z],"facing":npcs[id].visual.rotation.y}
 	return data
-func save_game(path:String=""):
-	if is_instance_valid(combat) and combat.active:
-		hud.toast("交火中不能手动保存；本场战斗开始前已有检查点。",5);return
-	var result=SaveStore.write(path if path!="" else save_path,save_snapshot(),"manual")
-	if result==OK:get_node("/root/Session").sound("save");hud.toast("手记已保存 · 可从读取列表选择")
-	else:hud.toast("保存失败，原手记仍保留："+error_string(result),7)
+func save_game(path:String="")->bool:
+	var destination=path if path!="" else save_path
+	var data=save_snapshot();data.save_slot=destination
+	var result=SaveStore.write(destination,data,"manual")
+	if result==OK:
+		save_path=destination;get_node("/root/Session").sound("save");hud.toast("已保存 · "+SaveStore.title(destination));return true
+	hud.toast("保存失败，原存档仍保留："+error_string(result),7);return false
 func autosave():
 	if not initialized or story.ending:return
 	var result=SaveStore.write(SaveStore.auto_path(),save_snapshot(),"auto")

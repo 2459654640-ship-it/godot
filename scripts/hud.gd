@@ -53,6 +53,7 @@ var leads_button:Button
 var last_guidance=""
 var shop_tab="buy"
 var radio_open=false
+var saves_return_menu=false
 
 func _process(delta:float):
 	advance_typing(delta)
@@ -71,7 +72,9 @@ func advance_typing(delta:float):
 		if entry.label.visible_characters>=entry.total:typing.pop_front()
 	for b in speech_buttons:
 		if is_instance_valid(b):b.disabled=not typing.is_empty()
-	for entry in receipt_timers:entry.time-=delta
+	if is_instance_valid(receipt_box):receipt_box.visible=not modal_visible()
+	if not modal_visible():
+		for entry in receipt_timers:entry.time-=delta
 	for entry in receipt_timers:
 		if entry.time<=0 and is_instance_valid(entry.node):entry.node.queue_free()
 	receipt_timers=receipt_timers.filter(func(entry):return entry.time>0)
@@ -768,8 +771,8 @@ func confirm_sale(id:String="vodka"):
 func show_pause():
 	start_modal("暂停 / 现场记录","D–6   /   现场记录",true)
 	modal_box.add_child(button("继续探索",func():close()))
-	modal_box.add_child(button("保存手记…  [F5 快速保存]",func():show_saves(true)))
-	modal_box.add_child(button("读取手记…  [F9 快速读取]",func():show_saves(false)))
+	modal_box.add_child(button("保存游戏…  [F5]",func():show_saves(true)))
+	modal_box.add_child(button("读取存档…  [F9]",func():show_saves(false)))
 	modal_box.add_child(button("重新开始（保留已有存档）",func():show_restart_confirm()))
 	modal_box.add_child(button("返回主界面…",func():show_menu_confirm()))
 	if is_instance_valid(world.combat) and world.combat.active:modal_box.add_child(button("重试本场战斗（恢复战前资源）",func():world.combat.retry()))
@@ -784,7 +787,7 @@ func show_restart_confirm():
 
 func show_menu_confirm():
 	start_modal("收起这段旅程？","先保存手记，下次就能从主界面继续",true)
-	modal_box.add_child(button("保存并返回主界面",func():world.save_game();world.return_menu()))
+	modal_box.add_child(button("保存并返回主界面",func():show_saves(true,true)))
 	modal_box.add_child(button("直接返回（放弃未保存进度）",func():world.return_menu()))
 	modal_box.add_child(button("继续旅程",func():show_comic_pause() if comic_active else show_pause()))
 
@@ -834,8 +837,8 @@ func show_comic_pause():
 	start_modal("旅程暂停","已读的面板和选择会随存档保存",true)
 	modal_box.add_child(button("继续剧情",func():show_comic()))
 	modal_box.add_child(button("查看背包 / 使用物资",func():show_inventory()))
-	modal_box.add_child(button("保存当前进度",func():world.save_game()))
-	modal_box.add_child(button("读取存档",func():world.load_game()))
+	modal_box.add_child(button("保存当前进度",func():show_saves(true)))
+	modal_box.add_child(button("读取存档",func():show_saves(false)))
 	modal_box.add_child(button("重新开始",func():show_restart_confirm()))
 	modal_box.add_child(button("返回主界面…",func():show_menu_confirm()))
 	audio_controls()
@@ -860,7 +863,7 @@ func show_chapter_end():
 		body("你的选择",19,amber)
 		for pair in [["water_secured","给 D-6 找到了两箱净水滤芯"],["greenhouse_fixed","修好了公社温室的回水"],["anna_reunited","核实了安娜哥哥的身份与探视安排"],["radio_fixed","恢复了谢契的短波电台"],["books_saved","替谢尔盖救下受潮的书"],["father_semyon","问清了父亲与老爹当年的往事"],["cautious_signal","没有把所有人的坐标交给陌生呼叫"]]:
 			if s.f(pair[0]):body("· "+pair[1],20,muted)
-		modal_box.add_child(button("保存这段旅程",func():world.save_game()))
+		modal_box.add_child(button("保存这段旅程",func():show_saves(true)))
 		modal_box.add_child(button("查看手记与已读旅程",func():show_journal()))
 		if not s.departure_checkpoint.is_empty():modal_box.add_child(button("回到离站前，尝试另一条路",func():world.return_checkpoint()))
 		modal_box.add_child(button("重新开始",func():show_restart_confirm()))
@@ -871,7 +874,7 @@ func show_chapter_end():
 	is_departure=true
 	body("队伍在水厂气闸前停下。接下来的设施里，可以自由探索、交谈和检查设备。" if plant else "谢尔盖还在等你的回答。可以跟他走，也可以问清公社的路。",25)
 	modal_box.add_child(button("进入水处理厂" if plant else "与谢尔盖继续交谈",func():world.travel_campaign("waterworks") if plant else show_comic("companions")))
-	modal_box.add_child(button("保存进度",func():world.save_game()))
+	modal_box.add_child(button("保存进度",func():show_saves(true)))
 	if not s.departure_checkpoint.is_empty():modal_box.add_child(button("回到离站前",func():world.return_checkpoint()))
 
 func make_cinematic():
@@ -917,25 +920,39 @@ func shop_sell(id:String="vodka"):
 	if s.economy.ledger.size()>before:s.Conversation.reply(s,shop_actor,"「这件东西，按你说的价收吧。」",result)
 	show_shop(result)
 
-func show_saves(saving:bool):
-	start_modal("保存手记" if saving else "读取手记","三个手动位置 · 快速记录 · 三个轮换自动记录",true)
+func show_saves(saving:bool,return_to_menu:bool=false,group:String="manual"):
+	saves_return_menu=return_to_menu
+	start_modal("保存游戏" if saving else "读取存档","6 个手动档位 · 自动存档单独保留 · 不同档位互不覆盖",true)
+	modal_hint.text="滚轮浏览档位    ·    Esc 返回"
 	var store=world.SaveStore
-	for i in store.paths().size():
-		var path:String=store.paths()[i];var data=store.read(path)
-		if saving and i>=4:continue
-		var title=["快速手记","手动一","手动二","手动三","自动一","自动二","自动三"][i]
-		var row=HBoxContainer.new();modal_box.add_child(row)
-		var words=label(title+"  /  "+store.summary(data),17,text_color);words.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(words)
-		row.add_child(button("保存" if saving else "读取",func():confirm_slot(path,saving,data),saving or not data.is_empty(),true))
+	if not saving:
+		var tabs=HBoxContainer.new();modal_box.add_child(tabs)
+		tabs.add_child(button("手动存档",func():show_saves(false,false,"manual"),true,true))
+		tabs.add_child(button("自动与旧版存档",func():show_saves(false,false,"auto"),true,true))
+	var paths:Array=store.manual_paths() if saving or group=="manual" else store.automatic_paths()+[store.QUICK]
+	for path in paths:
+		var data=store.read(path)
+		var card=PanelContainer.new();card.add_theme_stylebox_override("panel",style(Color("192824"),Color("5e614a"),1,6));modal_box.add_child(card)
+		var content=margin_box(card,14,12);var row=HBoxContainer.new();content.add_child(row)
+		var words=VBoxContainer.new();words.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(words)
+		words.add_child(label(store.title(path),22,amber))
+		var details=label(store.description(path),16,muted if data.is_empty() else text_color);details.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;words.add_child(details)
+		var slot:String=path;var metadata:Dictionary=data
+		row.add_child(button("保存到此档位" if saving else "读取",func():confirm_slot(slot,saving,metadata),saving or not data.is_empty(),true))
 	modal_box.add_child(button("返回",func():show_comic_pause() if comic_active else show_pause()))
+func saved_slot(path:String):
+	if not world.save_game(path):return
+	if saves_return_menu:world.return_menu()
+	else:show_saves(true)
 func confirm_slot(path:String,saving:bool,data:Dictionary):
-	if saving and data.is_empty():world.save_game(path);show_saves(true);return
-	start_modal("覆盖这份手记？" if saving else "读取这份手记？","读取会放弃当前未保存的进度；上一次有效记录保留为备份。",true)
-	body(world.SaveStore.summary(data),20,amber)
-	modal_box.add_child(button("确认保存" if saving else "确认读取",func():
-		if saving:world.save_game(path);show_saves(true)
+	if saving and data.is_empty() and not FileAccess.file_exists(path):saved_slot(path);return
+	start_modal("覆盖这个存档？" if saving else "读取这个存档？","覆盖只影响所选档位；读取会放弃当前未保存的进度。",true)
+	body(world.SaveStore.title(path),24,amber)
+	body(world.SaveStore.description(path),19,text_color)
+	modal_box.add_child(button("确认覆盖" if saving else "确认读取",func():
+		if saving:saved_slot(path)
 		else:world.load_game(path)))
-	modal_box.add_child(button("返回列表",func():show_saves(saving)))
+	modal_box.add_child(button("返回列表",func():show_saves(saving,saves_return_menu)))
 
 func show_combat_defeat():
 	start_modal("你倒在了"+({"surface":"地表废墟里","railfront":"联络线战区"}.get(world.floor_id,"水厂里")),"本场战斗前已保留检查点 · 重试恢复当时的资源",true)

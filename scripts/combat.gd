@@ -202,3 +202,31 @@ func enemy_warning(p:Vector3):
 func tracer(from:Vector3,to:Vector3,rifle:bool):
  var beam=MeshInstance3D.new();var mesh=ImmediateMesh.new();beam.mesh=mesh;var mat=StandardMaterial3D.new();mat.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;mat.albedo_color=Color("d0ab6b") if rifle else Color("ead4a0");beam.material_override=mat
  mesh.surface_begin(Mesh.PRIMITIVE_LINES);mesh.surface_add_vertex(from);mesh.surface_add_vertex(to);mesh.surface_end();w.add_child(beam);get_tree().create_timer(.06).timeout.connect(beam.queue_free)
+
+func serialize_state()->Dictionary:
+ if not enabled or not active:return {}
+ var saved=[]
+ for e in enemies:
+  if not is_instance_valid(e) or e.hp<=0:continue
+  saved.append({"position":[e.position.x,e.position.y,e.position.z],"kind":e.enemy_kind,"hp":e.hp,"cooldown":e.cooldown,"windup":e.windup,"arrival_time":e.arrival_time,"move_speed":e.move_speed,"animation":e.animation,"loot_key":e.get_meta("loot_key",""),"loot_index":e.get_meta("loot_index",0)})
+ return {"active":true,"encounter":encounter,"enemies":saved,"clip":clip,"cooldown":cooldown,"reload_time":reload_time,"veteran_health":veteran_health,"veteran_down":veteran_down,"veteran_clip":veteran_clip,"veteran_reload":veteran_reload,"veteran_cooldown":veteran_cooldown,"rescue":rescue,"checkpoint":checkpoint.duplicate(true)}
+func restore_state(state:Dictionary):
+ if not enabled or not state.get("active",false):return
+ var id:String=state.get("encounter","")
+ if not encounters.has(id):return
+ for e in enemies:
+  if is_instance_valid(e):e.queue_free()
+ enemies.clear();encounter=id;active=true
+ clip=clampi(int(state.get("clip",6)),0,6);cooldown=maxf(0,state.get("cooldown",0));reload_time=maxf(0,state.get("reload_time",0))
+ veteran_health=clampi(int(state.get("veteran_health",100)),0,100);veteran_down=veteran_health<=0;veteran_clip=clampi(int(state.get("veteran_clip",5)),0,5)
+ veteran_reload=maxf(0,state.get("veteran_reload",0));veteran_cooldown=maxf(0,state.get("veteran_cooldown",0));rescue=maxf(0,state.get("rescue",0))
+ checkpoint=state.get("checkpoint",{}).duplicate(true)
+ for saved in state.get("enemies",[]):
+  var pos=saved.position;var e=Enemy.new();w.add_child(e);e.setup(self,Vector3(pos[0],pos[1],pos[2]),saved.kind)
+  e.hp=maxi(1,int(saved.get("hp",62)));e.cooldown=maxf(0,saved.get("cooldown",0));e.windup=maxf(0,saved.get("windup",0))
+  e.arrival_time=maxf(0,saved.get("arrival_time",0));e.move_speed=clampf(saved.get("move_speed",1.65),.1,6);e.animation=maxf(0,saved.get("animation",0))
+  e.set_meta("loot_key",saved.get("loot_key",""));e.set_meta("loot_index",int(saved.get("loot_index",0)));enemies.append(e)
+ if enemies.is_empty():active=false
+ defeated=w.story.economy.health<=0
+ w.story.flags.weapon_clip=clip;w.story.flags.veteran_health=veteran_health
+ if w.floor_id=="railfront" and active:w.sync_event_music("frontline_theme")

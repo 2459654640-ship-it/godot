@@ -29,7 +29,7 @@ func _ready():
 	status=words(box,save_summary(),16,Color("9da99e"));status.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	choice(box,"新的旅程",new_game)
 	choice(box,"设置",show_settings)
-	choice(box,"读取手记",show_saves)
+	choice(box,"读取存档",show_saves)
 	choice(box,"操作与制作信息",show_about)
 	choice(box,"退出游戏",func():get_tree().quit())
 	var footer=words(self,"一九八二年十一月  ·  莫斯科地下",16,Color("a3ac9e"));footer.position=Vector2(100,930)
@@ -51,13 +51,17 @@ func read_save():
 		var recent=SaveStore.newest()
 		if not recent.is_empty():save_data=recent.data;save_path=recent.path
 func save_summary()->String:return SaveStore.summary(save_data)
-func show_saves():
-	var box=open_dialog("读取手记")
-	for i in SaveStore.paths().size():
-		var path:String=SaveStore.paths()[i];var data=SaveStore.read(path)
-		var title=["快速手记","手动一","手动二","手动三","自动一","自动二","自动三"][i]
-		var b=choice(box,title+"  /  "+SaveStore.summary(data),func():save_path=path;continue_game())
-		b.add_theme_font_size_override("font_size",16);b.disabled=data.is_empty()
+func show_saves(group:String="manual"):
+	var box=open_dialog("读取存档")
+	var tabs=HBoxContainer.new();box.add_child(tabs)
+	choice(tabs,"手动存档",func():show_saves("manual"));choice(tabs,"自动与旧版存档",func():show_saves("auto"))
+	var scroll=ScrollContainer.new();scroll.custom_minimum_size=Vector2(0,390);scroll.size_flags_horizontal=Control.SIZE_EXPAND_FILL;scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;box.add_child(scroll)
+	var list=VBoxContainer.new();list.size_flags_horizontal=Control.SIZE_EXPAND_FILL;list.add_theme_constant_override("separation",12);scroll.add_child(list)
+	var paths:Array=SaveStore.manual_paths() if group=="manual" else SaveStore.automatic_paths()+[SaveStore.QUICK]
+	for path in paths:
+		var data=SaveStore.read(path);var slot:String=path
+		var b=choice(list,SaveStore.title(path)+"\n"+SaveStore.description(path),func():save_path=slot;continue_game())
+		b.add_theme_font_size_override("font_size",16);b.custom_minimum_size.y=94;b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;b.disabled=data.is_empty()
 	choice(box,"返回",close_dialog)
 func continue_game():
 	save_data=SaveStore.read(save_path)
@@ -67,7 +71,7 @@ func continue_game():
 func new_game():
 	if save_data.is_empty():start_new();return
 	var box=open_dialog("开始新的旅程")
-	words(box,"手动与快速手记会保留。新旅程只会轮换三个自动记录；可先把旧旅程存入手动位。",21,Color("d6d5c0"))
+	words(box,"六个手动档位和旧版快速存档都会保留。新旅程只会轮换三个自动存档；开始前可将旧旅程保存在手动档位。",21,Color("d6d5c0"))
 	choice(box,"从战争序章开始",start_new);choice(box,"返回",close_dialog)
 func start_new():
 	get_node("/root/Session").clear();get_tree().change_scene_to_file("res://scenes/d6.tscn")
@@ -86,7 +90,7 @@ func show_settings():
 	choice(box,"返回主界面",close_dialog)
 func show_about():
 	var box=open_dialog("旅程之前")
-	for line in ["WASD / 方向键移动，E 调查或交谈。","交火时鼠标瞄准、左键射击，R 装填土制弹。","老兵倒地后靠近并按住 E 两秒救援。","J 打开手记，M 翻到地图，I 打开背包。","空格补全文字，Esc 暂停，F5 保存，F9 读取。","请留意人物说的话、墙上的标牌与现场留下的纸条。","中文字体：Noto。脚步素材：Kenney（CC0）。"]:words(box,line,20,Color("c2c9b9"))
+	for line in ["WASD / 方向键移动，E 调查或交谈。","交火时鼠标瞄准、左键射击，R 装填土制弹。","老兵倒地后靠近并按住 E 两秒救援。","J 打开手记，M 翻到地图，I 打开背包。","空格补全文字，Esc 暂停，F5 选择存档位，F9 选择回档。","请留意人物说的话、墙上的标牌与现场留下的纸条。","中文字体：Noto。脚步素材：Kenney（CC0）。"]:words(box,line,20,Color("c2c9b9"))
 	choice(box,"返回主界面",close_dialog)
 func _unhandled_input(event:InputEvent):
 	if event is InputEventKey and event.pressed and event.keycode==KEY_ESCAPE:close_dialog()

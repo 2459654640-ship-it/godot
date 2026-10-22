@@ -17,6 +17,12 @@ func run():
  for i in 175:w.living.tick(1.0/60);await physics_frame
  w.npcs.commune_anna.set_physics_process(false);camera_at(Vector3(-5,1,14),13);await shot("anna-canteen-walk")
  w.hud.show_journal();await shot("anna-walk-journal");w.hud.close()
+ w.hud.close()
+ for i in 3:
+  w.played_seconds=1234+i*534;w.save_game(w.SaveStore.manual_paths()[i])
+ w.hud.show_saves(true);await shot("manual-save-slots")
+ w.hud.show_saves(false);await shot("load-save-slots")
+ w.hud.show_saves(false,false,"auto");await shot("automatic-save-slots")
  await dispose()
  await open_level("railfront")
  w.story.flags.sided_veteran=true;w.story.flags.veteran_defense_started=true;w.living.sync()

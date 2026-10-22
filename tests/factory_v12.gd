@@ -48,7 +48,7 @@ func run():
  e._physics_process(.2);check(w.story.economy.health==hp,"telegraph gives time to move")
  w.player.position+=Vector3(2,0,0);e._physics_process(.3);check(w.story.economy.health==hp,"moving out of bite range actually avoids damage")
  var file="user://factory_v12_active.json";w.save_path=file;w.save_game()
- check(not FileAccess.file_exists(file),"active encounter cannot write a misleading partial manual save")
+ check(FileAccess.file_exists(file) and w.SaveStore.read(file).get("combat_state",{}).get("enemies",[]).size()==3,"active encounter saves the actual three enemies instead of a partial room state")
  for foe in c.enemies.duplicate():foe.damage(200)
  w.save_game();check(FileAccess.file_exists(file),"cleared encounter can be manually saved")
  DirAccess.remove_absolute(file)
