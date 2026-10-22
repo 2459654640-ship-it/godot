@@ -1,0 +1,23 @@
+{
+  "generator": "OpenAI image generation",
+  "date": "2026-10-22",
+  "purpose": "Purpose-made walking return illustrations for the old surface pump station and the two settlement checkpoints.",
+  "reference": "Existing assets/cinematics/commune.png for protagonist identity and painting style. Hatch return edited once to ensure gas mask is worn outside.",
+  "images": [
+    {
+      "file": "assets/cinematics/pump_hatch_return.png",
+      "source_file": "exec-fd659271-0958-4b7f-aac6-eedfd7a9d4d4.png",
+      "sha256": "0bfcb09f65e461c6759b9657d6dac5d1ef27529cfad8224b7b8afc7c59520696"
+    },
+    {
+      "file": "assets/cinematics/pump_return_commune.png",
+      "source_file": "exec-aa180ace-a24b-403b-b732-8688753bb417.png",
+      "sha256": "6600f6ed7e4647a14c69d10fdf3345ab1b65f8edb0216474e6fcbd626a330c6c"
+    },
+    {
+      "file": "assets/cinematics/pump_return_sech.png",
+      "source_file": "exec-3c96e0af-0558-4853-9ae7-680b4ee2b79e.png",
+      "sha256": "c86333865171f03e78651e91971e467735e0b153e2ceb21bf1ecb8560dd65f67"
+    }
+  ]
+}

@@ -71,6 +71,7 @@ static func act(s,key:String)->String:
 		var home:String=s.context.get("floor","commune")
 		s.flags.surface_from_commune=home=="commune";s.flags.surface_from_sech=home=="sech";s.flags.surface_trip_active=true
 		s.flags.surface_trip_id=int(s.flags.get("surface_trip_id",0))+1;s.flags.surface_loot={}
+		if not s.f("surface_done"):s.flags.tracked_quest="surface_survey"
 		for reset in ["battle_surface_yard","battle_surface_pool","surface_drain_open","surface_notes","c_done_surface_notes","c_done_surface_drain"]:s.flags.erase(reset)
 		s.economy.stock.ammo_pouch=maxi(4,int(s.economy.stock.get("ammo_pouch",0)))
 	if key=="star_perimeter_name":s.flags.signal_source_verified=true
@@ -106,7 +107,16 @@ static func side_tasks(s)->Array:
 		if q.id=="north_late" and s.f("sech_member"):
 			current=current.duplicate();current.place="sech";current.target="sech_leave" if s.f("north_inquiry_ready") else "sech_quartermaster";target=current.target
 		if q.facility=="starcity":current={"target":"star_perimeter_call","place":"starcity","step":"暂缓：星城内区封闭，先保留已取得的记录。"};target="star_perimeter_call"
-		if q.id=="surface_survey" and s.f("surface_sample_sealed") and s.f("surface_from_sech"):current=current.duplicate();current.target="sech_quartermaster";current.place="sech";target="sech_quartermaster"
+		if q.id=="surface_survey":
+			current=current.duplicate()
+			var home="sech" if s.f("surface_from_sech") else "commune"
+			if s.context.get("floor","") in ["commune","sech"]:home=s.context.floor
+			if s.context.get("floor","")=="surface" and s.f("surface_sample_sealed"):
+				current.target="surface_exit";current.place="surface";current.step="样本已经封存。回西南侧检修梯，沿来路返回"+("谢契" if home=="sech" else "公社")+"交付。"
+			elif s.context.get("floor","")!="surface":
+				current.target="sech_quartermaster" if home=="sech" else "commune_guard";current.place=home
+				current.step="将封存样本和记录交给派工人。" if s.f("surface_sample_sealed") else "在聚落守备处备好面具、滤毒罐与武器，再出发前往地表旧泵站。"
+			target=current.target
 		rows.append({"kind":q.get("kind","支线"),"id":q.id,"name":q.name,"done":s.f(q.done),"place":current.get("place",q.facility),"background":q.background,"step":"已交付，报酬与经过记入手记。" if s.f(q.done) else current.step,"target":target,"area":data().interactions[target].name})
 	return rows
 static func finish(s,id:String):

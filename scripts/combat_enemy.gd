@@ -12,6 +12,7 @@ var move_speed=1.65
 var material:StandardMaterial3D
 var sprite:Sprite3D
 var enemy_kind="mutant"
+var blocked_time=0.0
 func setup(owner_node,p:Vector3,kind:String="mutant"):
  enemy_kind=kind
  director=owner_node;position=p;collision_layer=8;collision_mask=1|2|4|8
@@ -43,25 +44,18 @@ func _physics_process(delta):
   windup-=delta
   if windup<=0 and offset.length()<1.15 and director.sight(position+Vector3.UP*.55,target_body.position+Vector3.UP*.55):director.bite(target_body,10)
   velocity.x=move_toward(velocity.x,0,delta*12);velocity.z=move_toward(velocity.z,0,delta*12)
- elif offset.length()<.85:
+ elif offset.length()<.85 and director.sight(position+Vector3.UP*.55,target_body.position+Vector3.UP*.55):
   velocity.x=0;velocity.z=0
   if cooldown<=0:windup=.42;cooldown=1.6;director.enemy_warning(position)
  else:
-  if repath<=0:path=director.w.navigation.path(position,target_body.position);repath=.55
-  var direction=offset.normalized()
-  while not path.is_empty() and Vector2(path[0].x-position.x,path[0].z-position.z).length()<.3:path.remove_at(0)
-  if not path.is_empty():direction=(path[0]-position).normalized()
-  # Separation avoids a stack of creatures becoming one unavoidable bite.
-  for other in director.enemies:
-   if other==self or not is_instance_valid(other):continue
-   var apart=position-other.position;apart.y=0
-   if apart.length()<.8:direction+=apart.normalized()*.5
+  var direction=chase_direction(offset)
   velocity.x=direction.x*move_speed;velocity.z=direction.z*move_speed
  velocity.y=-.2;move_and_slide()
+ track_progress(delta)
  var camera=director.w.camera;var forward=offset.normalized();var view=camera.global_basis.z;view.y=0
  var angle=atan2(forward.dot(camera.global_basis.x),forward.dot(view.normalized()));var slot=posmod(roundi(angle/(PI/4)),8);var column=mini(slot,8-slot)
  sprite.flip_h=slot>4
- var row=3 if windup>0 else (1+int(animation*7)%2 if Vector2(velocity.x,velocity.z).length()>.1 else 0)
+ var row=3 if windup>0 else (1+int(animation*7)%2 if get_position_delta().length()>.001 else 0)
  sprite.frame=row*5+column
 
 func soldier_tick(delta:float,offset:Vector3):
@@ -78,13 +72,51 @@ func soldier_tick(delta:float,offset:Vector3):
   velocity=Vector3.ZERO
   if cooldown<=0:windup=.85;cooldown=2.7;director.enemy_warning(position)
  else:
-  if repath<=0:path=director.w.navigation.path(position,target_body.position);repath=.65
-  while not path.is_empty() and position.distance_to(path[0])<.35:path.remove_at(0)
-  var direction=(path[0]-position).normalized() if not path.is_empty() else offset.normalized()
+  var direction=chase_direction(offset)
   velocity=direction*move_speed
  velocity.y=-.2;move_and_slide()
+ track_progress(delta)
  var camera=director.w.camera;var view=camera.global_basis.z;view.y=0
  var angle=atan2(offset.dot(camera.global_basis.x),offset.dot(view.normalized()));var slot=posmod(roundi(angle/(PI/4)),8)
  sprite.flip_h=slot>4
  var walk_row=[3,0,4,0][int(animation*6)%4] if Vector2(velocity.x,velocity.z).length()>.1 else 0
  sprite.frame=walk_row*5+mini(slot,8-slot)
+
+func clear_motion(motion:Vector3)->bool:
+ motion.y=0
+ return not test_move(global_transform,motion)
+
+func chase_direction(offset:Vector3)->Vector3:
+ if repath<=0:
+  path=director.enemy_path(position,target_body.position);repath=.65
+ # Only skip a waypoint if the actual capsule can reach the next one. A large
+ # arrival radius cut across corners and sent creatures into their cover.
+ while not path.is_empty():
+  var step=path[0]-position;step.y=0
+  if step.length()<.08:path.remove_at(0)
+  elif path.size()>1 and clear_motion(path[1]-position):path.remove_at(0)
+  else:break
+ var direction=Vector3.ZERO
+ if not path.is_empty():direction=path[0]-position;direction.y=0;direction=direction.normalized()
+ elif offset.length()>.7 and clear_motion(offset.normalized()*maxf(0,offset.length()-.7)):direction=offset.normalized()
+ if direction==Vector3.ZERO:return direction
+ # Keep separation inside walkable space. Pushing away from another creature
+ # must not push this one into a wall or override the route around a corner.
+ var separated=direction
+ for other in director.enemies:
+  if other==self or not is_instance_valid(other) or other.hp<=0:continue
+  var apart=position-other.position;apart.y=0
+  if apart.length()<.75:separated+=apart.normalized()*.35
+ if separated.length()>.1 and clear_motion(separated.normalized()*.5):return separated.normalized()
+ if clear_motion(direction*.25):return direction
+ # Temporary body congestion: slide aside, then rejoin the route. Never warp
+ # through scenery, and never fall back to charging through an unreachable wall.
+ for angle in [PI/4,-PI/4,PI/2,-PI/2]:
+  var aside=direction.rotated(Vector3.UP,angle)
+  if clear_motion(aside*.45):return aside
+ return Vector3.ZERO
+
+func track_progress(delta:float):
+ if windup<=0 and Vector2(velocity.x,velocity.z).length()>.1 and get_position_delta().length()<move_speed*delta*.15:blocked_time+=delta
+ else:blocked_time=0
+ if blocked_time>.4:repath=0;path.clear();blocked_time=0

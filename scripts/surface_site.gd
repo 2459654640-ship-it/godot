@@ -18,14 +18,8 @@ static func ground(w,bounds:Rect2):
  k.box("FloorOutdoor",Vector3(bounds.get_center().x,-.10,bounds.get_center().y),Vector3(bounds.size.x,.20,bounds.size.y),"surface_snow",true)
  var surrounding=k.box("DistantSnow",Vector3(0,-.28,0),Vector3(150,.12,130),"surface_snow")
  surrounding.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
- var ruins=[Vector3(-34,0,-26),Vector3(-22,0,-31),Vector3(-6,0,-28),Vector3(19,0,-27),Vector3(31,0,-21),Vector3(-32,0,23),Vector3(-15,0,30),Vector3(8,0,29),Vector3(28,0,22)]
- for n in ruins.size():
-  var p=ruins[n];var h=3.0+posmod(n*7,5);var wide=5.0+posmod(n*7,6)
-  k.box("DistantBrokenFacade",p+Vector3(0,h/2-.2,0),Vector3(wide,h,.5),"surface_brick")
-  k.box("DistantSideReturn",p+Vector3(wide/2,h*.40,1.5),Vector3(.5,h*.8,3.5),"surface_brick")
-  for y in range(1,int(h),2):
-   for dx in [-1.6,1.3]:k.box("DistantWindowVoid",p+Vector3(dx,y+.2,.27),Vector3(1.1,1.4,.04),"dark")
-  k.ellipsoid("DistantSnowDrift",p+Vector3(0,-.05,1),Vector3(wide*.7,.3,2),"snowbank")
+ preload("res://scripts/outdoor_architecture.gd").materials(k)
+ preload("res://scripts/outdoor_architecture.gd").skyline(k)
  var snow=CPUParticles3D.new();snow.name="WindblownSnow";snow.position=Vector3(0,6,0);snow.amount=150;snow.lifetime=7;snow.preprocess=7;snow.emission_shape=CPUParticles3D.EMISSION_SHAPE_BOX;snow.emission_box_extents=Vector3(bounds.size.x/2,.1,bounds.size.y/2);snow.direction=Vector3(-.18,-1,.08);snow.gravity=Vector3(.1,-.12,.02);snow.initial_velocity_min=1.0;snow.initial_velocity_max=1.8
  var flake=QuadMesh.new();flake.size=Vector2(.035,.035);var ink=StandardMaterial3D.new();ink.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;ink.albedo_color=Color(.82,.88,.89,.45);ink.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;ink.billboard_mode=BaseMaterial3D.BILLBOARD_ENABLED;flake.material=ink;snow.mesh=flake;w.add_child(snow)
  for x in [bounds.position.x,bounds.end.x]:k.box("SiteBoundary",Vector3(x,.8,bounds.get_center().y),Vector3(.30,1.6,bounds.size.y),"concrete",true)

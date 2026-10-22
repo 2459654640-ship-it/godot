@@ -252,6 +252,9 @@
 - [土制弹药包](../assets/visual/item_ammo_pouch.png)
 
 - [旧泵站过场](../assets/cinematics/surface_pumpyard.png)
+- [泵站检修井返程](../assets/cinematics/pump_hatch_return.png)
+- [返回公社值守台](../assets/cinematics/pump_return_commune.png)
+- [返回谢契车厢入口](../assets/cinematics/pump_return_sech.png)
 - [电车站伏击过场](../assets/cinematics/road_ambush.png)
 
 ## v22 剧情插图与音乐

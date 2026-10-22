@@ -43,12 +43,19 @@ static func tasks(s)->Array:
 		out.append(row("anna","一个确切的名字",s.f("anna_first_news"),place,"安娜请你核实哥哥的下落，纸条上有班组编号和旧伤。",step,target,area))
 	if s.f("signal_heard") or s.has("frequency"):
 		var current_floor:String=s.context.get("floor","life")
-		var target="semyon" if current_floor in ["life","labor"] else ("commune_receiver" if current_floor=="commune" else "sech_radio")
+		# A remembered radio clue is not actionable in every room/map. Its
+		# destination must agree with the NPC/receiver that actually exists there.
+		var signal_place=current_floor
+		if current_floor not in ["life","labor","commune","sech","starcity"]:signal_place="sech" if s.f("surface_from_sech") or s.f("sech_member") else "commune"
+		elif current_floor=="labor":signal_place="life"
+		if signal_place=="starcity" and not s.f("signal_identified"):signal_place="commune"
+		if signal_place=="life" and s.f("signal_identified"):signal_place="sech" if s.f("sech_member") else "commune"
+		var target="semyon" if signal_place=="life" else ("commune_receiver" if signal_place=="commune" else "sech_radio")
 		var step="询问见过短波值班记录的人，或在公社联络室、谢契电台继续收听。"
 		if s.f("signal_identified"):
-			target="star_perimeter_call" if current_floor=="starcity" else ("commune_leave" if current_floor=="commune" else "sech_leave")
+			target="star_perimeter_call" if signal_place=="starcity" else ("commune_leave" if signal_place=="commune" else "sech_leave")
 			step="广播可能来自星城。先完成阵营的北线任务、建立接送与担保，之后才能前往外围询问。"
-		out.append(row("signal_trace","调查东方-7",s.f("signal_source_verified"),current_floor,"你实际听见了东方-7，记下了频率；还要查清电台在哪里。",step,target,"短波联络"))
+		out.append(row("signal_trace","调查东方-7",s.f("signal_source_verified"),signal_place,"你实际听见了东方-7，记下了频率；还要查清电台在哪里。",step,target,"短波联络"))
 	if s.f("sech_joined") or s.f("radio_manual"):
 		out.append(row("radio","东方-7" if s.f("signal_heard") else "修复北线电台",s.f("radio_fixed"),"sech","谢契的电台坏了，居民想恢复与北线的日常联络。","西北调度台有接线图；确认接地后，再去左侧调度车厢南段的电台。" if not s.f("radio_power") else "接收机已通电，按纸上刻度慢慢调谐。","sech_manual" if not s.f("radio_manual") else "sech_radio","旧军列调度" if not s.f("radio_manual") else "电台维修室"))
 	if s.f("star_registered") or s.f("star_inquiry_filed"):

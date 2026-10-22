@@ -4,10 +4,12 @@ extends RefCounted
 var graph=AStar2D.new()
 var cells:Dictionary={}
 var points:Dictionary={}
+var revision=0
 const STEP=0.5
 const CLEARANCE=0.32
 
-func setup(world):
+func setup(world,minimum_obstacle_height:float=0.24):
+	revision+=1
 	graph.clear();cells.clear();points.clear()
 	var regions:Array=[]
 	var bounds:Rect2=world.zones[0].rect
@@ -17,7 +19,7 @@ func setup(world):
 	var obstacles:Array=[]
 	for solid in world.kit.solids:
 		if solid.name=="CampaignInnerGate" and world.story.f(world.campaign_gate_flag):continue
-		if solid.top>0.24 and solid.bottom<1.75:
+		if solid.top>minimum_obstacle_height and solid.bottom<1.75:
 			var rect:Rect2=solid.rect
 			if solid.name=="MineEscapeGrille" and world.story.f("rescue_route_ready"):rect.position.x+=2.8
 			obstacles.append(rect.grow(CLEARANCE))

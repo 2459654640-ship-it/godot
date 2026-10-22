@@ -193,15 +193,15 @@ func build_environment():
 	var we=WorldEnvironment.new()
 	var e=Environment.new()
 	e.background_mode=Environment.BG_COLOR
-	e.background_color=Color("a8bac4") if floor_id=="surface" else Color("090b0b")
+	e.background_color=Color("a8bac4") if floor_id in ["surface","starcity"] else Color("090b0b")
 	e.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR
 	e.ambient_light_color=Color("9bada6")
 	e.ambient_light_energy=0.29
 	if floor_id not in ["life","labor"]:
 		var atmosphere:Dictionary=CampaignMaps.LAYOUTS[floor_id]
 		e.ambient_light_color=Color(atmosphere.ambient)
-		e.ambient_light_energy=.45 if floor_id=="surface" else atmosphere.energy
-		if floor_id=="surface":e.fog_enabled=true;e.fog_density=.0008;e.fog_light_color=Color("bac8cf")
+		e.ambient_light_energy=.45 if floor_id in ["surface","starcity"] else atmosphere.energy
+		if floor_id in ["surface","starcity"]:e.fog_enabled=true;e.fog_density=.0008;e.fog_light_color=Color("bac8cf")
 	e.tonemap_mode=Environment.TONE_MAPPER_FILMIC
 	we.environment=e
 	add_child(we)
@@ -212,7 +212,7 @@ func build_environment():
 	light.light_energy=0.32
 	if floor_id not in ["life","labor"]:
 		light.light_color=Color("b9ccd2") if floor_id=="waterworks" else Color("8d9fa8")
-		light.light_energy=.45 if floor_id=="surface" else (.21 if floor_id=="waterworks" else .12)
+		light.light_energy=.45 if floor_id in ["surface","starcity"] else (.21 if floor_id=="waterworks" else .12)
 	light.shadow_enabled=true
 	light.directional_shadow_max_distance=65
 	light.shadow_bias=0.04

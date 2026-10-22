@@ -541,7 +541,7 @@ func show_journal(tab:String="tasks",shown_floor:String=""):
 		body("正在跟进",16,amber)
 		if current.is_empty():body("还没决定下一件事。留意身边的人，或翻翻旁边的线索。",21)
 		else:quest_card(current,true)
-		rule();body("已接取 · 暂未跟进",16,amber)
+		rule();body("其它进行中的任务 · 可切换追踪",16,amber)
 		var count=0
 		for task in Journal.tasks(s):
 			if task.done or task.failed or task.id==current.get("id",""):continue

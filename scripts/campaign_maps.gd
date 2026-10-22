@@ -67,20 +67,11 @@ static func waterworks(w):
 	var snow=k.mats.concrete.duplicate();snow.albedo_color=Color("e1e2de");snow.roughness=1;snow.normal_enabled=false;snow.roughness_texture=null
 	if ResourceLoader.exists("res://assets/visual/ash_snow.png"):snow.albedo_texture=load("res://assets/visual/ash_snow.png");snow.uv1_scale=Vector3(.15,.15,.15)
 	var ground=k.box("ExteriorSnow",Vector3(0,-.35,0),Vector3(100,.12,85),"concrete");ground.material_override=snow
-	for x in [-37,-29,29,39]:
-		for z in [-29,24]:
-			var height=4+posmod(int(x+z),5)
-			k.box("CityRuin",Vector3(x,height/2-.5,z),Vector3(6,height,5),"concrete")
-			for level in range(1,height,2):
-				for dx in [-1.7,0,1.7]:k.box("BrokenWindow",Vector3(x+dx,level,z+2.52),Vector3(.9,1.1,.025),"dark")
-	# Visible northern skyline: only broken façades, away from the playable shell.
-	for x in [-16,-3,12,24]:
-		var height=3.4+posmod(int(x),3)*.8
-		k.box("DistantBrokenFacade",Vector3(x,height/2-.35,-20),Vector3(4,height,.5),"concrete")
-		for dx in [-1.1,1.1]:
-			k.box("RuinWindowVoid",Vector3(x+dx,1.8,-19.72),Vector3(.8,1.1,.035),"dark")
-			k.box("RuinSnowCap",Vector3(x+dx,height-.28,-20),Vector3(1.5,.16,.9),"cream")
-		k.box("CollapsedFacadePiece",Vector3(x+2,.03,-18.6),Vector3(2.1,.4,1.2),"concrete").rotation.y=.35
+	# The factory exterior shares the same volumetric, textured city ruins as
+	# the two outdoor maps; scenery stays outside the plant's collision shell.
+	k.mats.surface_snow=snow; k.mats.snowbank=snow
+	preload("res://scripts/outdoor_architecture.gd").materials(k)
+	preload("res://scripts/outdoor_architecture.gd").skyline(k)
 	for x in [-16,-10]:
 		k.box("PumpCollision",Vector3(x+.35,.75,-10),Vector3(2.6,1.5,1.8),"metal",true).visible=false
 		k.cyl("PumpHousing",Vector3(x,.75,-10),.9,1.5,"metal")

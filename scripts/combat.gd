@@ -25,6 +25,8 @@ var label:Label
 var reticle:Control
 var next_path=0.0
 var veteran_path=PackedVector3Array()
+var enemy_navigation=preload("res://scripts/route_grid.gd").new()
+var enemy_navigation_revision=-1
 const ENCOUNTERS={
  "pump":{"rect":Rect2(-19,-14,13,14),"need":"plant_diagram","skip":"plant_bled","name":"泵房的动静","spawns":[Vector3(-17,.04,-6),Vector3(-8,.04,-9),Vector3(-8,.04,-3)]},
  "workshop":{"rect":Rect2(-6,-10,11,10),"need":"plant_bled","skip":"plant_fuse","name":"修配间的巢穴","spawns":[Vector3(-3,.04,-8),Vector3(3,.04,-8),Vector3(2,.04,-2)]},
@@ -47,6 +49,13 @@ func setup(world):
  for offset in [Vector2(-9,0),Vector2(4,0),Vector2(0,-9),Vector2(0,4)]:
   var line=ColorRect.new();line.color=Color("dbc7a0");line.position=offset;line.size=Vector2(5,1) if offset.y==0 else Vector2(1,5);line.mouse_filter=Control.MOUSE_FILTER_IGNORE;reticle.add_child(line)
 func paused()->bool:return not enabled or w.hud.modal_visible() or w.departure_animating
+func enemy_path(from:Vector3,to:Vector3)->PackedVector3Array:
+ # Creatures cannot use the player's small-step controller. Curbs, pool rims
+ # and low cargo therefore need a route around them, not one over them.
+ # Door animations rebuild the world grid; refresh this grid at that revision.
+ if enemy_navigation_revision!=w.navigation.revision:
+  enemy_navigation.setup(w,.06);enemy_navigation_revision=w.navigation.revision
+ return enemy_navigation.path(from,to)
 func _physics_process(delta):
  if not enabled:return
  if defeated:
