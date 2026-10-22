@@ -1,0 +1,68 @@
+[
+  {
+    "suite": "campaign_contract",
+    "exit_code": 0,
+    "seconds": 26.74,
+    "script_errors": 0
+  },
+  {
+    "suite": "presentation_contract",
+    "exit_code": 0,
+    "seconds": 4.77,
+    "script_errors": 0
+  },
+  {
+    "suite": "campaign_ui",
+    "exit_code": 0,
+    "seconds": 6.98,
+    "script_errors": 0
+  },
+  {
+    "suite": "commune_v12",
+    "exit_code": 0,
+    "seconds": 4.68,
+    "script_errors": 0
+  },
+  {
+    "suite": "actors_v13",
+    "exit_code": 0,
+    "seconds": 2.87,
+    "script_errors": 0
+  },
+  {
+    "suite": "first_meetings_v17",
+    "exit_code": 0,
+    "seconds": 3.82,
+    "script_errors": 0
+  },
+  {
+    "suite": "chapter_v22",
+    "exit_code": 0,
+    "seconds": 1.62,
+    "script_errors": 0
+  },
+  {
+    "suite": "chapter_world_v22",
+    "exit_code": 0,
+    "seconds": 5.68,
+    "script_errors": 0
+  },
+  {
+    "suite": "chapter_flow_v22",
+    "exit_code": 0,
+    "seconds": 4.83,
+    "script_errors": 0
+  },
+  {
+    "suite": "living_story_v24",
+    "exit_code": 0,
+    "seconds": 0.77,
+    "script_errors": 0
+  },
+  {
+    "suite": "living_world_v24",
+    "exit_code": 0,
+    "seconds": 19.46,
+    "script_errors": 0
+  }
+]

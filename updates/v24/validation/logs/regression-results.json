@@ -1,0 +1,230 @@
+[
+  {
+    "suite": "run",
+    "exit_code": 0,
+    "seconds": 113.7,
+    "script_errors": 0
+  },
+  {
+    "suite": "visual_contract",
+    "exit_code": 0,
+    "seconds": 2.12,
+    "script_errors": 0
+  },
+  {
+    "suite": "narrative_contract",
+    "exit_code": 0,
+    "seconds": 4.93,
+    "script_errors": 0
+  },
+  {
+    "suite": "resident_contract",
+    "exit_code": 0,
+    "seconds": 6.63,
+    "script_errors": 0
+  },
+  {
+    "suite": "chapter_contract",
+    "exit_code": 0,
+    "seconds": 2.97,
+    "script_errors": 0
+  },
+  {
+    "suite": "floor_contract",
+    "exit_code": 0,
+    "seconds": 6.43,
+    "script_errors": 0
+  },
+  {
+    "suite": "campaign_contract",
+    "exit_code": 0,
+    "seconds": 25.67,
+    "script_errors": 0
+  },
+  {
+    "suite": "campaign_ui",
+    "exit_code": 0,
+    "seconds": 6.78,
+    "script_errors": 0
+  },
+  {
+    "suite": "refinement_contract",
+    "exit_code": 0,
+    "seconds": 3.73,
+    "script_errors": 0
+  },
+  {
+    "suite": "presentation_contract",
+    "exit_code": 0,
+    "seconds": 4.83,
+    "script_errors": 0
+  },
+  {
+    "suite": "exploration_contract",
+    "exit_code": 0,
+    "seconds": 3.37,
+    "script_errors": 0
+  },
+  {
+    "suite": "v9_contract",
+    "exit_code": 0,
+    "seconds": 2.77,
+    "script_errors": 0
+  },
+  {
+    "suite": "v10_contract",
+    "exit_code": 0,
+    "seconds": 3.17,
+    "script_errors": 0
+  },
+  {
+    "suite": "v11_contract",
+    "exit_code": 0,
+    "seconds": 4.03,
+    "script_errors": 0
+  },
+  {
+    "suite": "v11_combat",
+    "exit_code": 0,
+    "seconds": 4.18,
+    "script_errors": 0
+  },
+  {
+    "suite": "occlusion_v11",
+    "exit_code": 0,
+    "seconds": 1.87,
+    "script_errors": 0
+  },
+  {
+    "suite": "visual_fixes_v11_1",
+    "exit_code": 0,
+    "seconds": 2.77,
+    "script_errors": 0
+  },
+  {
+    "suite": "commune_v12",
+    "exit_code": 0,
+    "seconds": 4.68,
+    "script_errors": 0
+  },
+  {
+    "suite": "factory_v12",
+    "exit_code": 0,
+    "seconds": 1.87,
+    "script_errors": 0
+  },
+  {
+    "suite": "equipment_v12",
+    "exit_code": 0,
+    "seconds": 2.07,
+    "script_errors": 0
+  },
+  {
+    "suite": "platform_v12",
+    "exit_code": 0,
+    "seconds": 2.97,
+    "script_errors": 0
+  },
+  {
+    "suite": "actors_v13",
+    "exit_code": 0,
+    "seconds": 2.87,
+    "script_errors": 0
+  },
+  {
+    "suite": "publications_v13",
+    "exit_code": 0,
+    "seconds": 6.33,
+    "script_errors": 0
+  },
+  {
+    "suite": "public_radio_v16",
+    "exit_code": 0,
+    "seconds": 9.89,
+    "script_errors": 0
+  },
+  {
+    "suite": "ivan_gait_v16",
+    "exit_code": 0,
+    "seconds": 1.87,
+    "script_errors": 0
+  },
+  {
+    "suite": "furnishings_v16",
+    "exit_code": 0,
+    "seconds": 6.33,
+    "script_errors": 0
+  },
+  {
+    "suite": "first_meetings_v17",
+    "exit_code": 0,
+    "seconds": 3.52,
+    "script_errors": 0
+  },
+  {
+    "suite": "starcity_v17",
+    "exit_code": 0,
+    "seconds": 2.07,
+    "script_errors": 0
+  },
+  {
+    "suite": "ivan_gait_v17",
+    "exit_code": 0,
+    "seconds": 1.77,
+    "script_errors": 0
+  },
+  {
+    "suite": "motion_v18",
+    "exit_code": 0,
+    "seconds": 6.43,
+    "script_errors": 0
+  },
+  {
+    "suite": "expedition_v19",
+    "exit_code": 0,
+    "seconds": 4.93,
+    "script_errors": 0
+  },
+  {
+    "suite": "narrative_v19",
+    "exit_code": 0,
+    "seconds": 0.27,
+    "script_errors": 0
+  },
+  {
+    "suite": "crowds_v19",
+    "exit_code": 0,
+    "seconds": 1.87,
+    "script_errors": 0
+  },
+  {
+    "suite": "chapter_v22",
+    "exit_code": 0,
+    "seconds": 1.47,
+    "script_errors": 0
+  },
+  {
+    "suite": "chapter_world_v22",
+    "exit_code": 0,
+    "seconds": 5.53,
+    "script_errors": 0
+  },
+  {
+    "suite": "chapter_flow_v22",
+    "exit_code": 0,
+    "seconds": 4.88,
+    "script_errors": 0
+  },
+  {
+    "suite": "exterior_v23",
+    "exit_code": 0,
+    "seconds": 3.18,
+    "script_errors": 0
+  },
+  {
+    "suite": "enemy_routes_v23",
+    "exit_code": 0,
+    "seconds": 2.22,
+    "script_errors": 0
+  }
+]
