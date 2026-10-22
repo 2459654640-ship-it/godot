@@ -1,0 +1,56 @@
+[
+  {
+    "suite": "narrative_contract",
+    "exit_code": 0,
+    "seconds": 4.67,
+    "script_errors": 0
+  },
+  {
+    "suite": "refinement_contract",
+    "exit_code": 0,
+    "seconds": 3.37,
+    "script_errors": 0
+  },
+  {
+    "suite": "first_meetings_v17",
+    "exit_code": 0,
+    "seconds": 3.37,
+    "script_errors": 0
+  },
+  {
+    "suite": "chapter_v22",
+    "exit_code": 0,
+    "seconds": 1.37,
+    "script_errors": 0
+  },
+  {
+    "suite": "chapter_flow_v22",
+    "exit_code": 0,
+    "seconds": 4.83,
+    "script_errors": 0
+  },
+  {
+    "suite": "expedition_v19",
+    "exit_code": 0,
+    "seconds": 6.04,
+    "script_errors": 0
+  },
+  {
+    "suite": "campaign_contract",
+    "exit_code": 0,
+    "seconds": 25.09,
+    "script_errors": 0
+  },
+  {
+    "suite": "v9_contract",
+    "exit_code": 0,
+    "seconds": 2.82,
+    "script_errors": 0
+  },
+  {
+    "suite": "exterior_v23",
+    "exit_code": 0,
+    "seconds": 3.27,
+    "script_errors": 0
+  }
+]

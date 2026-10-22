@@ -1,14 +1,14 @@
 {
   "version": 23,
-  "game_commit": "f655dd8312920c44f1a5701321650ddd63bafa99",
+  "game_commit": "245d9306c506acb3062826c3f82a3edc91c4da7d",
   "source_files": {
-    "data/campaign.json": "84731532e1b76561a781cf826cd80f7445dae18fb38af926ddc3558cc83bef14",
-    "data/chapter_panels.json": "46f854ebcfb995561879c5ca1fc9a3100be99cc47682f4f0fa6f2d929ee6b283",
-    "data/chapter_update.json": "8fb88ad889d3c83c2f276d1b1fd1599353d73e82632814b729d804648acffd17",
+    "data/campaign.json": "a859a6cce6964200ec7c91ab51ec287b771379e2135f46e1ed1d2fbea1eb548a",
+    "data/chapter_panels.json": "d7f97287ed904ad7800348226a54789be2f5cacf0cc22f55802d8ad69393b075",
+    "data/chapter_update.json": "e8bd051c31f1b58bcf65ebd04890ba8655c2171d3d1d43d4ed4e7bd4f5190f8f",
     "data/first_meetings.json": "c298e37ab0f51ab9f42cbcb4ae615fe84516484f9ac20985619525923986b7bf",
     "data/publications.json": "e5a8507882c9d149e1f098b8eac996e50e08bc099a8dc3354b60b7d4474cab43",
     "data/radio.json": "ce43ebed7223fb692734b56888c052cf68cf178b19a55f014199677fc28954b0",
-    "data/story_panels.json": "ecc3ef856eb7c8a813b799d31a05c6629768e32f93763682bd4e5d79b56bc18f",
+    "data/story_panels.json": "3fd67db2413ff61dc6fa47870e64edd9a5ccafa67b0e3e4c805a54c8a1d00913",
     "project.godot": "b507cabbc5a9ce8b1e80c0f2199da8c64d14beb0ecd57fe1d58c9d1a30fa2f3b",
     "scripts/blocks_game.gd": "44202345d496059efcfea22332345b03ad19bfc3f65195743713a414e4daf2df",
     "scripts/campaign.gd": "fe8c656af03bb877f0a5e903ff5030dddee282b143f1a6aa722d6bdea3b755c4",
@@ -17,7 +17,7 @@
     "scripts/combat.gd": "a46bff1952fb0c37e1c5b37d7e79b01c3e9cd4c1c59326a216724566bd3b2a3d",
     "scripts/comic.gd": "2ec61974588c8a63ecb3c86d3bc78bf73a93d818c1fd41e8996f1f83e774a265",
     "scripts/conversation.gd": "d6aacca5713bdb598f33ae44317b682e86af76fb74fd3a4596e2ada5600d1b26",
-    "scripts/d6_chapter.gd": "63a02822d684d51a03fb67a57a89f39a23426c0557b2818c7181d68bbc66a29f",
+    "scripts/d6_chapter.gd": "71f1784ddcd0cdb3d99df4c4b5443c695b81b43a95bd4dd85c03d29375fdff0c",
     "scripts/economy.gd": "63e95ebb08f2bbf715a31571be8c89ca7498d9080bd82c862ded4ed2c344fa67",
     "scripts/facility_detail.gd": "ff460e16895a7ffadb010ffd7ca7fe76128da79726424beab378c645241916c3",
     "scripts/facility_layouts.gd": "2fa20db863477fc0f8d56ec27257d9bf8eea01927a0e694c85c31a1a72c1531e",
@@ -29,11 +29,11 @@
     "scripts/labor_floor.gd": "8235c0b7fc7bae801d4678a4a9707d8152bad1b0e297f6ff96a165d4f9fa0c76",
     "scripts/main_menu.gd": "870565aba357034c5b67b0b0a4086dc2ac03c9bda1b037b3ac49085ff136d51e",
     "scripts/minimap.gd": "597703faef90f7af62df2165d608acae2c0a522051d243d4f96a7de3716b7115",
-    "scripts/narrative.gd": "1e34267a03ce620eff714b0ec02ab7aa34c890d3f897e0f0d379dd8e7e034a21",
+    "scripts/narrative.gd": "068928b2a329f847f8e471064eba956127fe605b3c8f1be1283cf8b1cdf45031",
     "scripts/progression.gd": "f6fbcca5faa23a0638296862fe9de0e5ea8d9b051ad0b6743b9d0a29c0f7b3cc",
     "scripts/public_radio.gd": "3d3062093525a82fc3998d5120c43e5865199c33a94f109b0521890654c245a0",
     "scripts/publication_places.gd": "e7b2952b2aea28f521ceb0fb3a8ad520bcf1e1a0aadf8f4adf66031c3a472125",
-    "scripts/resident_dialogue.gd": "743126b7e85284be7405b84d2b227dc79a24c1ddb6aa7d577b86379078ca5e68",
+    "scripts/resident_dialogue.gd": "fa91f44b67275f7d8c975e4db50f03855c1449ac50e92b5c52017b721c169594",
     "scripts/residential_wing.gd": "02f514397fb145f51b44b9c47b8c9ae890aaf87b852440c277b651e35ff91286",
     "scripts/save_store.gd": "5ddd96d80e7d9bdc9d624d53bd98facf3d92c4a33454cdb0c1fcd20050e357ec",
     "scripts/story.gd": "fa7bffd9ed8c956394a7e2a00644595a933f26fd3df25bfc4256d9ce460d88e2",
@@ -2479,14 +2479,14 @@
       "id": "d6_chapter:41:11",
       "source": "scripts/d6_chapter.gd",
       "line": 41,
-      "text": "门后的走廊还向远处延伸，灯泡隔很长一段才亮着一盏。这里不是生活层的尽头，只是你平日活动的这一片。今天这道门暂时关着。",
+      "text": "门后还有其他生活区，走廊两侧亮着稀疏的灯。今天这道门暂时关闭，过不去。",
       "function": "decorate",
       "conditions": [
         "static func decorate(v:Dictionary,s)->Dictionary",
         "match v.id",
         "\"other_life\""
       ],
-      "expression": "v.body=\"门后的走廊还向远处延伸，灯泡隔很长一段才亮着一盏。这里不是生活层的尽头，只是你平日活动的这一片。今天这道门暂时关着。\""
+      "expression": "v.body=\"门后还有其他生活区，走廊两侧亮着稀疏的灯。今天这道门暂时关闭，过不去。\""
     },
     {
       "id": "d6_chapter:44:11",
@@ -2505,14 +2505,14 @@
       "id": "d6_chapter:45:11",
       "source": "scripts/d6_chapter.gd",
       "line": 45,
-      "text": "木板和铁皮勉强拦住坡道两侧。往下没有灯，冷风从废弃轨道区灌上来。这里不是正门，也没有人替你点名。\n再往前，就要离开 D-6 的灯光了。",
+      "text": "坡道两侧围着旧木板和铁皮，下方是没有照明的废弃轨道区。冷风沿坡道灌上来。\n这条检修路没有卫兵登记。从这里走出去，就等于擅自离开 D-6。",
       "function": "decorate",
       "conditions": [
         "static func decorate(v:Dictionary,s)->Dictionary",
         "match v.id",
         "\"exit\""
       ],
-      "expression": "v.body=\"木板和铁皮勉强拦住坡道两侧。往下没有灯，冷风从废弃轨道区灌上来。这里不是正门，也没有人替你点名。\\n再往前，就要离开 D-6 的灯光了。\""
+      "expression": "v.body=\"坡道两侧围着旧木板和铁皮，下方是没有照明的废弃轨道区。冷风沿坡道灌上来。\\n这条检修路没有卫兵登记。从这里走出去，就等于擅自离开 D-6。\""
     },
     {
       "id": "d6_chapter:47:11",
@@ -10042,10 +10042,10 @@
       "id": "narrative:16:10",
       "source": "scripts/narrative.gd",
       "line": 16,
-      "text": "「伊万，来领早饭？今天还是老份额。」\n柳德米拉从账簿里抬起头，手指夹着两页纸。\n「维生素可以先领。出发用的面具和滤毒罐得有中尉签字，我才能从库里拿。不是故意卡你，每件都要对账。」",
+      "text": "「伊万，来领早饭？今天还是老份额。」\n柳德米拉从账簿里抬起头。\n「维生素可以先领。随队出发的防护装备，要凭中尉的登记单去作业层装备库领。领用的人和数量都要记清楚。」",
       "function": "常量 BODIES",
       "conditions": [],
-      "expression": "\"supply\":\"「伊万，来领早饭？今天还是老份额。」\\n柳德米拉从账簿里抬起头，手指夹着两页纸。\\n「维生素可以先领。出发用的面具和滤毒罐得有中尉签字，我才能从库里拿。不是故意卡你，每件都要对账。」\","
+      "expression": "\"supply\":\"「伊万，来领早饭？今天还是老份额。」\\n柳德米拉从账簿里抬起头。\\n「维生素可以先领。随队出发的防护装备，要凭中尉的登记单去作业层装备库领。领用的人和数量都要记清楚。」\","
     },
     {
       "id": "narrative:17:13",
@@ -10657,16 +10657,16 @@
       "text": "「你昨晚没睡？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"nina_rest\":[\"nina\",\"「你昨晚没睡？」\",\"「睡了，两个钟头也叫睡。」\\n妮娜用袖子蹭掉手腕上的油。\\n「东边催读数，厨房催漏水。一早想喝杯热的，杯子里都落满铁屑。你说我这班什么时候算完？」\"],"
+      "expression": "\"nina_rest\":[\"nina\",\"「你昨晚没睡？」\",\"「昨晚只睡了两个钟头。东边的监测箱没修好，厨房的水管又漏了，忙到现在才坐下。」\\n妮娜用袖子擦掉手腕上的油。\"],"
     },
     {
       "id": "narrative:77:32",
       "source": "scripts/narrative.gd",
       "line": 77,
-      "text": "「睡了，两个钟头也叫睡。」\n妮娜用袖子蹭掉手腕上的油。\n「东边催读数，厨房催漏水。一早想喝杯热的，杯子里都落满铁屑。你说我这班什么时候算完？」",
+      "text": "「昨晚只睡了两个钟头。东边的监测箱没修好，厨房的水管又漏了，忙到现在才坐下。」\n妮娜用袖子擦掉手腕上的油。",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"nina_rest\":[\"nina\",\"「你昨晚没睡？」\",\"「睡了，两个钟头也叫睡。」\\n妮娜用袖子蹭掉手腕上的油。\\n「东边催读数，厨房催漏水。一早想喝杯热的，杯子里都落满铁屑。你说我这班什么时候算完？」\"],"
+      "expression": "\"nina_rest\":[\"nina\",\"「你昨晚没睡？」\",\"「昨晚只睡了两个钟头。东边的监测箱没修好，厨房的水管又漏了，忙到现在才坐下。」\\n妮娜用袖子擦掉手腕上的油。\"],"
     },
     {
       "id": "narrative:78:23",
@@ -10693,16 +10693,16 @@
       "text": "「厨房的维修，也得找你？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"nina_kitchen\":[\"nina\",\"「厨房的维修，也得找你？」\",\"「加琳娜说是小毛病，我去了才知道得忙半天。」\\n妮娜忍不住笑了。\\n「但她总给晚班留汤。去吧，别拿错规格，把螺母咬圆了又得叫我。」\"],"
+      "expression": "\"nina_kitchen\":[\"nina\",\"「厨房的维修，也得找你？」\",\"「厨房的管道也是我修。加琳娜一开始说只是渗水，拆开才发现接头都锈了。」\\n妮娜笑了一下。\\n「她总替晚班的人留汤，我过去干活，再晚也有热饭吃。」\"],"
     },
     {
       "id": "narrative:79:40",
       "source": "scripts/narrative.gd",
       "line": 79,
-      "text": "「加琳娜说是小毛病，我去了才知道得忙半天。」\n妮娜忍不住笑了。\n「但她总给晚班留汤。去吧，别拿错规格，把螺母咬圆了又得叫我。」",
+      "text": "「厨房的管道也是我修。加琳娜一开始说只是渗水，拆开才发现接头都锈了。」\n妮娜笑了一下。\n「她总替晚班的人留汤，我过去干活，再晚也有热饭吃。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"nina_kitchen\":[\"nina\",\"「厨房的维修，也得找你？」\",\"「加琳娜说是小毛病，我去了才知道得忙半天。」\\n妮娜忍不住笑了。\\n「但她总给晚班留汤。去吧，别拿错规格，把螺母咬圆了又得叫我。」\"],"
+      "expression": "\"nina_kitchen\":[\"nina\",\"「厨房的维修，也得找你？」\",\"「厨房的管道也是我修。加琳娜一开始说只是渗水，拆开才发现接头都锈了。」\\n妮娜笑了一下。\\n「她总替晚班的人留汤，我过去干活，再晚也有热饭吃。」\"],"
     },
     {
       "id": "narrative:80:28",
@@ -10711,16 +10711,16 @@
       "text": "「昨晚又轮到你盘库？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"mikhail_sleep\":[\"mikhail\",\"「昨晚又轮到你盘库？」\",\"「盘到后半夜。账上多一只搪瓷碗，库里少两双袜子。」\\n他把面包屑拢在手心。\\n「都不是大事，可总得找出来。不然下个月还是我赔。」\"],"
+      "expression": "\"mikhail_sleep\":[\"mikhail\",\"「昨晚又轮到你盘库？」\",\"「盘到后半夜。账本上多记了一只搪瓷碗，库里又少了两双袜子。」\\n他把面包屑拢进手心。\\n「数量对不上就得继续查，找不出差额，下个月还得从我的配给里扣。」\"],"
     },
     {
       "id": "narrative:80:42",
       "source": "scripts/narrative.gd",
       "line": 80,
-      "text": "「盘到后半夜。账上多一只搪瓷碗，库里少两双袜子。」\n他把面包屑拢在手心。\n「都不是大事，可总得找出来。不然下个月还是我赔。」",
+      "text": "「盘到后半夜。账本上多记了一只搪瓷碗，库里又少了两双袜子。」\n他把面包屑拢进手心。\n「数量对不上就得继续查，找不出差额，下个月还得从我的配给里扣。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"mikhail_sleep\":[\"mikhail\",\"「昨晚又轮到你盘库？」\",\"「盘到后半夜。账上多一只搪瓷碗，库里少两双袜子。」\\n他把面包屑拢在手心。\\n「都不是大事，可总得找出来。不然下个月还是我赔。」\"],"
+      "expression": "\"mikhail_sleep\":[\"mikhail\",\"「昨晚又轮到你盘库？」\",\"「盘到后半夜。账本上多记了一只搪瓷碗，库里又少了两双袜子。」\\n他把面包屑拢进手心。\\n「数量对不上就得继续查，找不出差额，下个月还得从我的配给里扣。」\"],"
     },
     {
       "id": "narrative:81:27",
@@ -10729,16 +10729,16 @@
       "text": "「你和伊戈尔挺熟？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"mikhail_igor\":[\"mikhail\",\"「你和伊戈尔挺熟？」\",\"「以前一块搬过煤。他腰伤就是那时候落下的。」\\n米哈伊尔朝东边看了一眼。\\n「别看他嗓门大，真摊上事，先想的还是家里那口饭。你也别逼他太急。」\"],"
+      "expression": "\"mikhail_igor\":[\"mikhail\",\"「你和伊戈尔挺熟？」\",\"「以前一起搬过煤，他的腰就是那时候伤的。」\\n米哈伊尔朝东边看了一眼。\\n「他脾气急，也怕丢了这份差事，家里人还靠他的配给过日子。跟他说话，别把他逼得太紧。」\"],"
     },
     {
       "id": "narrative:81:40",
       "source": "scripts/narrative.gd",
       "line": 81,
-      "text": "「以前一块搬过煤。他腰伤就是那时候落下的。」\n米哈伊尔朝东边看了一眼。\n「别看他嗓门大，真摊上事，先想的还是家里那口饭。你也别逼他太急。」",
+      "text": "「以前一起搬过煤，他的腰就是那时候伤的。」\n米哈伊尔朝东边看了一眼。\n「他脾气急，也怕丢了这份差事，家里人还靠他的配给过日子。跟他说话，别把他逼得太紧。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"mikhail_igor\":[\"mikhail\",\"「你和伊戈尔挺熟？」\",\"「以前一块搬过煤。他腰伤就是那时候落下的。」\\n米哈伊尔朝东边看了一眼。\\n「别看他嗓门大，真摊上事，先想的还是家里那口饭。你也别逼他太急。」\"],"
+      "expression": "\"mikhail_igor\":[\"mikhail\",\"「你和伊戈尔挺熟？」\",\"「以前一起搬过煤，他的腰就是那时候伤的。」\\n米哈伊尔朝东边看了一眼。\\n「他脾气急，也怕丢了这份差事，家里人还靠他的配给过日子。跟他说话，别把他逼得太紧。」\"],"
     },
     {
       "id": "narrative:82:28",
@@ -10747,16 +10747,16 @@
       "text": "「这面包，还咬得动吗？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"mikhail_bread\":[\"mikhail\",\"「这面包，还咬得动吗？」\",\"「泡泡就行。可这杯水凉透了。」\\n他低头看了看，索性又掰下一小块。\\n「加琳娜要是看见，又要说我占着位置不吃饭。她嘴上凶，真有热的总先给老人。」\"],"
+      "expression": "\"mikhail_bread\":[\"mikhail\",\"「这面包，还咬得动吗？」\",\"「得拿热水泡一泡，可我又把水放凉了。」\\n他低头看了看杯子。\\n「加琳娜给我留了汤，一直催我趁热吃。她一见我顾着算账，就怕我又把吃饭的事忘了。」\"],"
     },
     {
       "id": "narrative:82:43",
       "source": "scripts/narrative.gd",
       "line": 82,
-      "text": "「泡泡就行。可这杯水凉透了。」\n他低头看了看，索性又掰下一小块。\n「加琳娜要是看见，又要说我占着位置不吃饭。她嘴上凶，真有热的总先给老人。」",
+      "text": "「得拿热水泡一泡，可我又把水放凉了。」\n他低头看了看杯子。\n「加琳娜给我留了汤，一直催我趁热吃。她一见我顾着算账，就怕我又把吃饭的事忘了。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"mikhail_bread\":[\"mikhail\",\"「这面包，还咬得动吗？」\",\"「泡泡就行。可这杯水凉透了。」\\n他低头看了看，索性又掰下一小块。\\n「加琳娜要是看见，又要说我占着位置不吃饭。她嘴上凶，真有热的总先给老人。」\"],"
+      "expression": "\"mikhail_bread\":[\"mikhail\",\"「这面包，还咬得动吗？」\",\"「得拿热水泡一泡，可我又把水放凉了。」\\n他低头看了看杯子。\\n「加琳娜给我留了汤，一直催我趁热吃。她一见我顾着算账，就怕我又把吃饭的事忘了。」\"],"
     },
     {
       "id": "narrative:83:26",
@@ -10765,16 +10765,16 @@
       "text": "「今天锅里是什么？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"cook_breakfast\":[\"cook\",\"「今天锅里是什么？」\",\"「白菜、土豆，昨晚还剩点大麦。你闻着有肉味，那是锅记性好。」\\n她揭开锅盖看了一眼。\\n「别嫌淡。先吃热的，比空着肚子强。」\"],"
+      "expression": "\"cook_breakfast\":[\"cook\",\"「今天锅里是什么？」\",\"「白菜、土豆，加了点昨晚剩下的大麦。今天没有肉。」\\n加琳娜揭开锅盖，舀起一勺汤。\\n「还热着，要吃就给你盛一碗。」\"],"
     },
     {
       "id": "narrative:83:39",
       "source": "scripts/narrative.gd",
       "line": 83,
-      "text": "「白菜、土豆，昨晚还剩点大麦。你闻着有肉味，那是锅记性好。」\n她揭开锅盖看了一眼。\n「别嫌淡。先吃热的，比空着肚子强。」",
+      "text": "「白菜、土豆，加了点昨晚剩下的大麦。今天没有肉。」\n加琳娜揭开锅盖，舀起一勺汤。\n「还热着，要吃就给你盛一碗。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"cook_breakfast\":[\"cook\",\"「今天锅里是什么？」\",\"「白菜、土豆，昨晚还剩点大麦。你闻着有肉味，那是锅记性好。」\\n她揭开锅盖看了一眼。\\n「别嫌淡。先吃热的，比空着肚子强。」\"],"
+      "expression": "\"cook_breakfast\":[\"cook\",\"「今天锅里是什么？」\",\"「白菜、土豆，加了点昨晚剩下的大麦。今天没有肉。」\\n加琳娜揭开锅盖，舀起一勺汤。\\n「还热着，要吃就给你盛一碗。」\"],"
     },
     {
       "id": "narrative:84:21",
@@ -10783,16 +10783,16 @@
       "text": "「妮娜平时总这么忙？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"cook_nina\":[\"cook\",\"「妮娜平时总这么忙？」\",\"「她哪天不这样？上回汤凉了三回，人还趴在配电柜边。」\\n加琳娜拿勺子敲了敲锅沿。\\n「你再过去，叫她带着杯子来。修不好整层，也得先把饭吃了。」\"],"
+      "expression": "\"cook_nina\":[\"cook\",\"「妮娜平时总这么忙？」\",\"「她一忙起来就顾不上吃饭。之前有一次，汤都凉了三回了，她却还趴在配电柜边忙活。」\\n加琳娜往碗里添了些热汤。\\n「等她手头那件事忙完，叫她过来吃饭吧。早上给她留的那份还在。」\"],"
     },
     {
       "id": "narrative:84:35",
       "source": "scripts/narrative.gd",
       "line": 84,
-      "text": "「她哪天不这样？上回汤凉了三回，人还趴在配电柜边。」\n加琳娜拿勺子敲了敲锅沿。\n「你再过去，叫她带着杯子来。修不好整层，也得先把饭吃了。」",
+      "text": "「她一忙起来就顾不上吃饭。之前有一次，汤都凉了三回了，她却还趴在配电柜边忙活。」\n加琳娜往碗里添了些热汤。\n「等她手头那件事忙完，叫她过来吃饭吧。早上给她留的那份还在。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"cook_nina\":[\"cook\",\"「妮娜平时总这么忙？」\",\"「她哪天不这样？上回汤凉了三回，人还趴在配电柜边。」\\n加琳娜拿勺子敲了敲锅沿。\\n「你再过去，叫她带着杯子来。修不好整层，也得先把饭吃了。」\"],"
+      "expression": "\"cook_nina\":[\"cook\",\"「妮娜平时总这么忙？」\",\"「她一忙起来就顾不上吃饭。之前有一次，汤都凉了三回了，她却还趴在配电柜边忙活。」\\n加琳娜往碗里添了些热汤。\\n「等她手头那件事忙完，叫她过来吃饭吧。早上给她留的那份还在。」\"],"
     },
     {
       "id": "narrative:85:24",
@@ -10801,16 +10801,16 @@
       "text": "「米哈伊尔这两天不大精神。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"cook_mikhail\":[\"cook\",\"「米哈伊尔这两天不大精神。」\",\"「夜班熬的，饭也不好好吃。给他留着，他又说别人更需要。」\\n她朝食堂那边看去。\\n「你跟他说两句。他拿你当小辈，有时候肯听。」\"],"
+      "expression": "\"cook_mikhail\":[\"cook\",\"「米哈伊尔这两天不大精神。」\",\"「上夜班熬的，他平常也不好好吃饭。每次给他留着饭，他都说不如留给更需要的人。」\\n加琳娜看向食堂。\\n「他自己也熬不住了。你有空劝劝他，他有时候肯听你的。」\"],"
     },
     {
       "id": "narrative:85:41",
       "source": "scripts/narrative.gd",
       "line": 85,
-      "text": "「夜班熬的，饭也不好好吃。给他留着，他又说别人更需要。」\n她朝食堂那边看去。\n「你跟他说两句。他拿你当小辈，有时候肯听。」",
+      "text": "「上夜班熬的，他平常也不好好吃饭。每次给他留着饭，他都说不如留给更需要的人。」\n加琳娜看向食堂。\n「他自己也熬不住了。你有空劝劝他，他有时候肯听你的。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"cook_mikhail\":[\"cook\",\"「米哈伊尔这两天不大精神。」\",\"「夜班熬的，饭也不好好吃。给他留着，他又说别人更需要。」\\n她朝食堂那边看去。\\n「你跟他说两句。他拿你当小辈，有时候肯听。」\"],"
+      "expression": "\"cook_mikhail\":[\"cook\",\"「米哈伊尔这两天不大精神。」\",\"「上夜班熬的，他平常也不好好吃饭。每次给他留着饭，他都说不如留给更需要的人。」\\n加琳娜看向食堂。\\n「他自己也熬不住了。你有空劝劝他，他有时候肯听你的。」\"],"
     },
     {
       "id": "narrative:86:26",
@@ -10819,16 +10819,16 @@
       "text": "「今天排队的人比平时多？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"supply_queue\":[\"supply\",\"「今天排队的人比平时多？」\",\"「通知一贴，人人都怕明天少发一份。我解释了一个早上。」\\n柳德米拉把夹乱的纸页理平。\\n「怕也有道理。只是粮食不在我笔下，改个数字，柜里也多不出来。」\"],"
+      "expression": "\"supply_queue\":[\"supply\",\"「今天排队的人比平时多？」\",\"「征召通知一贴出来，大家都担心以后的配给会变少。我解释了一早上，还是有人不放心。」\\n柳德米拉理了理账页。\\n「人们担心也有道理。只可惜粮食不在我笔下，改个数字，柜里也多不出来粮食。」\"],"
     },
     {
       "id": "narrative:86:42",
       "source": "scripts/narrative.gd",
       "line": 86,
-      "text": "「通知一贴，人人都怕明天少发一份。我解释了一个早上。」\n柳德米拉把夹乱的纸页理平。\n「怕也有道理。只是粮食不在我笔下，改个数字，柜里也多不出来。」",
+      "text": "「征召通知一贴出来，大家都担心以后的配给会变少。我解释了一早上，还是有人不放心。」\n柳德米拉理了理账页。\n「人们担心也有道理。只可惜粮食不在我笔下，改个数字，柜里也多不出来粮食。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"supply_queue\":[\"supply\",\"「今天排队的人比平时多？」\",\"「通知一贴，人人都怕明天少发一份。我解释了一个早上。」\\n柳德米拉把夹乱的纸页理平。\\n「怕也有道理。只是粮食不在我笔下，改个数字，柜里也多不出来。」\"],"
+      "expression": "\"supply_queue\":[\"supply\",\"「今天排队的人比平时多？」\",\"「征召通知一贴出来，大家都担心以后的配给会变少。我解释了一早上，还是有人不放心。」\\n柳德米拉理了理账页。\\n「人们担心也有道理。只可惜粮食不在我笔下，改个数字，柜里也多不出来粮食。」\"],"
     },
     {
       "id": "narrative:87:30",
@@ -10837,16 +10837,16 @@
       "text": "「中尉来领过东西了吗？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"supply_commander\":[\"supply\",\"「中尉来领过东西了吗？」\",\"「天没亮就来了，问备用绷带够不够。我让他别在窗口挡路。」\\n她低下声音。\\n「人凶是凶，东西倒是一件一件查，不光替自己领。」\"],"
+      "expression": "\"supply_commander\":[\"supply\",\"「中尉来领过东西了吗？」\",\"「天没亮就来了，问备用绷带够不够。」\\n柳德米拉放低声音。\\n「他这个人性子急，说话也冲，不过领东西时很仔细，整队人的装备都要一件件查过，不光顾着自己。」\"],"
     },
     {
       "id": "narrative:87:45",
       "source": "scripts/narrative.gd",
       "line": 87,
-      "text": "「天没亮就来了，问备用绷带够不够。我让他别在窗口挡路。」\n她低下声音。\n「人凶是凶，东西倒是一件一件查，不光替自己领。」",
+      "text": "「天没亮就来了，问备用绷带够不够。」\n柳德米拉放低声音。\n「他这个人性子急，说话也冲，不过领东西时很仔细，整队人的装备都要一件件查过，不光顾着自己。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"supply_commander\":[\"supply\",\"「中尉来领过东西了吗？」\",\"「天没亮就来了，问备用绷带够不够。我让他别在窗口挡路。」\\n她低下声音。\\n「人凶是凶，东西倒是一件一件查，不光替自己领。」\"],"
+      "expression": "\"supply_commander\":[\"supply\",\"「中尉来领过东西了吗？」\",\"「天没亮就来了，问备用绷带够不够。」\\n柳德米拉放低声音。\\n「他这个人性子急，说话也冲，不过领东西时很仔细，整队人的装备都要一件件查过，不光顾着自己。」\"],"
     },
     {
       "id": "narrative:88:27",
@@ -10855,16 +10855,16 @@
       "text": "「老爹这月的配给领了吗？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"supply_semyon\":[\"supply\",\"「老爹这月的配给领了吗？」\",\"「领了。面包还没走出门，就分给那个值夜的小伙子一半。」\\n她看着你。\\n「你回去看看他柜里。别听他说什么都有，他怕你操心。」\"],"
+      "expression": "\"supply_semyon\":[\"supply\",\"「老爹这月的配给领了吗？」\",\"「领了。走的时候还分给那个值夜班的小伙子一点面包。」\\n她看着你。\\n「有空回去看看他还剩多少吃的。他怕你操心，缺东西也不肯说。」\"],"
     },
     {
       "id": "narrative:88:43",
       "source": "scripts/narrative.gd",
       "line": 88,
-      "text": "「领了。面包还没走出门，就分给那个值夜的小伙子一半。」\n她看着你。\n「你回去看看他柜里。别听他说什么都有，他怕你操心。」",
+      "text": "「领了。走的时候还分给那个值夜班的小伙子一点面包。」\n她看着你。\n「有空回去看看他还剩多少吃的。他怕你操心，缺东西也不肯说。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"supply_semyon\":[\"supply\",\"「老爹这月的配给领了吗？」\",\"「领了。面包还没走出门，就分给那个值夜的小伙子一半。」\\n她看着你。\\n「你回去看看他柜里。别听他说什么都有，他怕你操心。」\"],"
+      "expression": "\"supply_semyon\":[\"supply\",\"「老爹这月的配给领了吗？」\",\"「领了。走的时候还分给那个值夜班的小伙子一点面包。」\\n她看着你。\\n「有空回去看看他还剩多少吃的。他怕你操心，缺东西也不肯说。」\"],"
     },
     {
       "id": "narrative:89:32",
@@ -10873,52 +10873,52 @@
       "text": "「你昨晚也在这里？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"commander_sleep\":[\"commander\",\"「你昨晚也在这里？」\",\"「名单换了两遍，睡不踏实。」\\n他揉了揉眼角。\\n「别学我。你今晚得睡足，地表上犯困，比少带一顿饭还要命。」\"],"
+      "expression": "\"commander_sleep\":[\"commander\",\"「你昨晚也在这里？」\",\"「昨晚一直在核对出发名单，没睡好。」\\n科瓦廖夫揉了揉眼角。\\n「你今晚早点休息。到了地表，听漏一声提醒、慢半步，都可能出事。」\"],"
     },
     {
       "id": "narrative:89:45",
       "source": "scripts/narrative.gd",
       "line": 89,
-      "text": "「名单换了两遍，睡不踏实。」\n他揉了揉眼角。\n「别学我。你今晚得睡足，地表上犯困，比少带一顿饭还要命。」",
+      "text": "「昨晚一直在核对出发名单，没睡好。」\n科瓦廖夫揉了揉眼角。\n「你今晚早点休息。到了地表，听漏一声提醒、慢半步，都可能出事。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"commander_sleep\":[\"commander\",\"「你昨晚也在这里？」\",\"「名单换了两遍，睡不踏实。」\\n他揉了揉眼角。\\n「别学我。你今晚得睡足，地表上犯困，比少带一顿饭还要命。」\"],"
+      "expression": "\"commander_sleep\":[\"commander\",\"「你昨晚也在这里？」\",\"「昨晚一直在核对出发名单，没睡好。」\\n科瓦廖夫揉了揉眼角。\\n「你今晚早点休息。到了地表，听漏一声提醒、慢半步，都可能出事。」\"],"
     },
     {
       "id": "narrative:90:33",
       "source": "scripts/narrative.gd",
       "line": 90,
-      "text": "「老爹教的那些，出去了管用吗？」",
+      "text": "「老爹教过我机械知识，等出去了用得上吗？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"commander_semyon\":[\"commander\",\"「老爹教的那些，出去了管用吗？」\",\"「他教你检查绳结、收好工具，这些就管用。」\\n科瓦廖夫把清单折起来。\\n「别觉得都是小事。出了地下，丢颗螺丝也没地方补。你跟他好好说一声。」\"],"
+      "expression": "\"commander_semyon\":[\"commander\",\"「老爹教过我机械知识，等出去了用得上吗？」\",\"「用得上。检查线路、看懂压力表，到了水厂都要用。」\\n科瓦廖夫收起清单。\\n「不过那里的设备多年没人维护，先看值班图，拿不准就问我们，别直接动手。」\"],"
     },
     {
-      "id": "narrative:90:52",
+      "id": "narrative:90:57",
       "source": "scripts/narrative.gd",
       "line": 90,
-      "text": "「他教你检查绳结、收好工具，这些就管用。」\n科瓦廖夫把清单折起来。\n「别觉得都是小事。出了地下，丢颗螺丝也没地方补。你跟他好好说一声。」",
+      "text": "「用得上。检查线路、看懂压力表，到了水厂都要用。」\n科瓦廖夫收起清单。\n「不过那里的设备多年没人维护，先看值班图，拿不准就问我们，别直接动手。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"commander_semyon\":[\"commander\",\"「老爹教的那些，出去了管用吗？」\",\"「他教你检查绳结、收好工具，这些就管用。」\\n科瓦廖夫把清单折起来。\\n「别觉得都是小事。出了地下，丢颗螺丝也没地方补。你跟他好好说一声。」\"],"
+      "expression": "\"commander_semyon\":[\"commander\",\"「老爹教过我机械知识，等出去了用得上吗？」\",\"「用得上。检查线路、看懂压力表，到了水厂都要用。」\\n科瓦廖夫收起清单。\\n「不过那里的设备多年没人维护，先看值班图，拿不准就问我们，别直接动手。」\"],"
     },
     {
       "id": "narrative:91:32",
       "source": "scripts/narrative.gd",
       "line": 91,
-      "text": "「大家都在问，真的只够两周？」",
+      "text": "「大家都在问，我们的储水真的只够两周了吗？」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"commander_water\":[\"commander\",\"「大家都在问，真的只够两周？」\",\"「那是按现在的配给算。还得算上病房和厨房。」\\n他停了停。\\n「我不想让人拿不准的数字吓唬自己，所以才让他们把通知贴出来。你听见别的，先来问我。」\"],"
+      "expression": "\"commander_water\":[\"commander\",\"「大家都在问，我们的储水真的只够两周了吗？」\",\"「是按现在的配给量算，最多两周，病房和食堂的用水也算在内。」\\n科瓦廖夫看了看桌上的清单。\\n「库存核过了，才贴的通知。听到什么拿不准的消息，可以来问我。」\"],"
     },
     {
-      "id": "narrative:91:50",
+      "id": "narrative:91:57",
       "source": "scripts/narrative.gd",
       "line": 91,
-      "text": "「那是按现在的配给算。还得算上病房和厨房。」\n他停了停。\n「我不想让人拿不准的数字吓唬自己，所以才让他们把通知贴出来。你听见别的，先来问我。」",
+      "text": "「是按现在的配给量算，最多两周，病房和食堂的用水也算在内。」\n科瓦廖夫看了看桌上的清单。\n「库存核过了，才贴的通知。听到什么拿不准的消息，可以来问我。」",
       "function": "常量 CHAT",
       "conditions": [],
-      "expression": "\"commander_water\":[\"commander\",\"「大家都在问，真的只够两周？」\",\"「那是按现在的配给算。还得算上病房和厨房。」\\n他停了停。\\n「我不想让人拿不准的数字吓唬自己，所以才让他们把通知贴出来。你听见别的，先来问我。」\"],"
+      "expression": "\"commander_water\":[\"commander\",\"「大家都在问，我们的储水真的只够两周了吗？」\",\"「是按现在的配给量算，最多两周，病房和食堂的用水也算在内。」\\n科瓦廖夫看了看桌上的清单。\\n「库存核过了，才贴的通知。听到什么拿不准的消息，可以来问我。」\"],"
     },
     {
       "id": "narrative:92:21",
@@ -11064,13 +11064,13 @@
       "id": "narrative:108:10",
       "source": "scripts/narrative.gd",
       "line": 108,
-      "text": "加琳娜弯腰摸了摸接头，又看了看桶底。\n「干的。你这一下，可比在下面摆个桶管用。」\n她直起身，往锅里添了一勺热水。",
+      "text": "加琳娜摸过接头，确认已经不漏水，便把接漏桶挪到一旁。\n「修好了，谢谢你。要领汤就拿个碗来。」",
       "function": "decorate",
       "conditions": [
         "static func decorate(v:Dictionary,s) -> Dictionary",
         "if v.id==\"cook\" and s.f(\"valve\")"
       ],
-      "expression": "v.body=\"加琳娜弯腰摸了摸接头，又看了看桶底。\\n「干的。你这一下，可比在下面摆个桶管用。」\\n她直起身，往锅里添了一勺热水。\""
+      "expression": "v.body=\"加琳娜摸过接头，确认已经不漏水，便把接漏桶挪到一旁。\\n「修好了，谢谢你。要领汤就拿个碗来。」\""
     },
     {
       "id": "narrative:109:33",
@@ -11837,10 +11837,10 @@
       "id": "resident_dialogue:5:12",
       "source": "scripts/resident_dialogue.gd",
       "line": 5,
-      "text": "「不是整层都冷，就我们这根支管，夜里咕噜咕噜响。」\n帕维尔在纸上画了个阀门的位置。\n「妮娜忙不开。你要能帮着排排气，我替你把维修记录签了。干布在洗衣间，别拿晾着的那几件衣服。」",
+      "text": "「家属房这根暖气支管不热，夜里管子一直咕噜响，其他地方倒还好。」\n帕维尔在纸上画出排气阀的位置。\n「妮娜忙不过来。你要能帮忙排排气，我就给你签维修记录。干布放在洗衣间的公用篮里。」",
       "function": "常量 REPLIES",
       "conditions": [],
-      "expression": "\"heat_job\":\"「不是整层都冷，就我们这根支管，夜里咕噜咕噜响。」\\n帕维尔在纸上画了个阀门的位置。\\n「妮娜忙不开。你要能帮着排排气，我替你把维修记录签了。干布在洗衣间，别拿晾着的那几件衣服。」\","
+      "expression": "\"heat_job\":\"「家属房这根暖气支管不热，夜里管子一直咕噜响，其他地方倒还好。」\\n帕维尔在纸上画出排气阀的位置。\\n「妮娜忙不过来。你要能帮忙排排气，我就给你签维修记录。干布放在洗衣间的公用篮里。」\","
     },
     {
       "id": "resident_dialogue:6:12",
@@ -11864,28 +11864,28 @@
       "id": "resident_dialogue:8:16",
       "source": "scripts/resident_dialogue.gd",
       "line": 8,
-      "text": "帕维尔摸过暖气片，把纸压在柜顶，写好支管号和时间。\n「拿给伊戈尔吧。当班的人还得去走廊总表复核一遍。你帮了忙，也省得他隔着门挨骂。」",
+      "text": "帕维尔摸过暖气片，写好支管号和维修时间。\n「拿给伊戈尔吧。他当班，还得去主走廊的总压力表复核一次，确认其他支管也没受影响。」",
       "function": "常量 REPLIES",
       "conditions": [],
-      "expression": "\"claim_report\":\"帕维尔摸过暖气片，把纸压在柜顶，写好支管号和时间。\\n「拿给伊戈尔吧。当班的人还得去走廊总表复核一遍。你帮了忙，也省得他隔着门挨骂。」\","
+      "expression": "\"claim_report\":\"帕维尔摸过暖气片，写好支管号和维修时间。\\n「拿给伊戈尔吧。他当班，还得去主走廊的总压力表复核一次，确认其他支管也没受影响。」\","
     },
     {
       "id": "resident_dialogue:9:18",
       "source": "scripts/resident_dialogue.gd",
       "line": 9,
-      "text": "「四张床，不是四个人从早睡到晚。白班走了，夜班才回来。」\n帕维尔把一双袜子塞进柜里。\n「东边那几间也是住户。门关着，不是没人，是刚睡下。你们那两间原来是工程兵值守房，老谢才住得清静些。」",
+      "text": "「大家按班次轮着睡。白班的人起床去干活，夜班的人回来休息，所以这四张床能多住几个人。」\n帕维尔把袜子收进柜里。\n「东边几间也住着人，这会儿都在补觉。你和老谢住的那两间原来是工程兵值守房，比这里清静些。」",
       "function": "常量 REPLIES",
       "conditions": [],
-      "expression": "\"resident_shift\":\"「四张床，不是四个人从早睡到晚。白班走了，夜班才回来。」\\n帕维尔把一双袜子塞进柜里。\\n「东边那几间也是住户。门关着，不是没人，是刚睡下。你们那两间原来是工程兵值守房，老谢才住得清静些。」\","
+      "expression": "\"resident_shift\":\"「大家按班次轮着睡。白班的人起床去干活，夜班的人回来休息，所以这四张床能多住几个人。」\\n帕维尔把袜子收进柜里。\\n「东边几间也住着人，这会儿都在补觉。你和老谢住的那两间原来是工程兵值守房，比这里清静些。」\","
     },
     {
       "id": "resident_dialogue:10:17",
       "source": "scripts/resident_dialogue.gd",
       "line": 10,
-      "text": "「伊戈尔？腰坏了，嘴没坏。」\n帕维尔笑了一声。\n「这根管子归他当班看总表，不归他修。真有维修记录，他会来；空口说坏了，他怕又白跑一趟。」",
+      "text": "「他当班要核对压力表，修管子还是得找妮娜。」\n帕维尔指了指维修记录。\n「拿这份记录给他，支管号和故障都写着，他才知道要查哪里。」",
       "function": "常量 REPLIES",
       "conditions": [],
-      "expression": "\"resident_igor\":\"「伊戈尔？腰坏了，嘴没坏。」\\n帕维尔笑了一声。\\n「这根管子归他当班看总表，不归他修。真有维修记录，他会来；空口说坏了，他怕又白跑一趟。」\","
+      "expression": "\"resident_igor\":\"「他当班要核对压力表，修管子还是得找妮娜。」\\n帕维尔指了指维修记录。\\n「拿这份记录给他，支管号和故障都写着，他才知道要查哪里。」\","
     },
     {
       "id": "resident_dialogue:11:13",
@@ -11900,10 +11900,10 @@
       "id": "resident_dialogue:12:12",
       "source": "scripts/resident_dialogue.gd",
       "line": 12,
-      "text": "「他上白班，我上晚班。能一起吃顿饭，就算这一天过得不错。」\n维拉把桌上的书合起来。\n「不是人人都有单间。隔壁床按班轮着睡，我们算运气好的。」",
+      "text": "「帕维尔上白班，我上晚班，能一起吃顿饭就挺难得了。」\n维拉合上桌上的书。\n「好在家里能留张床。隔壁宿舍还要按班次轮着睡。」",
       "function": "常量 REPLIES",
       "conditions": [],
-      "expression": "\"vera_day\":\"「他上白班，我上晚班。能一起吃顿饭，就算这一天过得不错。」\\n维拉把桌上的书合起来。\\n「不是人人都有单间。隔壁床按班轮着睡，我们算运气好的。」\","
+      "expression": "\"vera_day\":\"「帕维尔上白班，我上晚班，能一起吃顿饭就挺难得了。」\\n维拉合上桌上的书。\\n「好在家里能留张床。隔壁宿舍还要按班次轮着睡。」\","
     },
     {
       "id": "resident_dialogue:13:13",
@@ -11981,19 +11981,19 @@
       "id": "resident_dialogue:21:15",
       "source": "scripts/resident_dialogue.gd",
       "line": 21,
-      "text": "「怕很正常。」\n老爹看着你，没有急着往下说。\n「你父亲出任务前也会把扣子扣错。别逞着说不怕，把该查的都查了，心里会稳一点。」",
+      "text": "「第一次去地表，害怕很正常。你父亲以前出任务，紧张得连扣子都扣错过。」\n老爹看着你。\n「把装备仔细检查好，路上跟紧队伍。有危险就退回来，别硬撑。」",
       "function": "常量 REPLIES",
       "conditions": [],
-      "expression": "\"semyon_fear\":\"「怕很正常。」\\n老爹看着你，没有急着往下说。\\n「你父亲出任务前也会把扣子扣错。别逞着说不怕，把该查的都查了，心里会稳一点。」\","
+      "expression": "\"semyon_fear\":\"「第一次去地表，害怕很正常。你父亲以前出任务，紧张得连扣子都扣错过。」\\n老爹看着你。\\n「把装备仔细检查好，路上跟紧队伍。有危险就退回来，别硬撑。」\","
     },
     {
       "id": "resident_dialogue:22:18",
       "source": "scripts/resident_dialogue.gd",
       "line": 22,
-      "text": "「有把握是好事，别把有把握当成不会出事。」\n他轻轻敲了敲你的背包。\n「先试面具，再看行李。嘴上再硬，也堵不住一条漏气的边。」",
+      "text": "「我知道你学会了不少本事。可地表的情况，咱们都不能光凭想象。」\n老爹替你理好背带。\n「面具要试好，行李再查一遍。遇到拿不准的事，就问中尉和老兵。」",
       "function": "常量 REPLIES",
       "conditions": [],
-      "expression": "\"semyon_bravado\":\"「有把握是好事，别把有把握当成不会出事。」\\n他轻轻敲了敲你的背包。\\n「先试面具，再看行李。嘴上再硬，也堵不住一条漏气的边。」\""
+      "expression": "\"semyon_bravado\":\"「我知道你学会了不少本事。可地表的情况，咱们都不能光凭想象。」\\n老爹替你理好背带。\\n「面具要试好，行李再查一遍。遇到拿不准的事，就问中尉和老兵。」\""
     },
     {
       "id": "resident_dialogue:27:68",
@@ -17583,7 +17583,7 @@
       "id": "campaign.json:interactions.commune_records.body",
       "source": "data/campaign.json",
       "path": "interactions.commune_records.body",
-      "text": "北线维修回执和公社内部联络名单分柜锁放，公开柜只留工牌编号。另一摞纸是公社与 D-6 煤运区的伤病探访交换单：双方医护担保、限区通行，不是普通通行证。"
+      "text": "北线维修回执和公社内部联络名单分柜存放，公开柜里的记录只列工牌编号。另一摞是公社与 D-6 煤运区的伤病探访交换单，须由双方医护担保，只能用于指定区域的探访。"
     },
     {
       "id": "campaign.json:interactions.commune_well.name",
@@ -17601,7 +17601,7 @@
       "id": "campaign.json:interactions.commune_well.body",
       "source": "data/campaign.json",
       "path": "interactions.commune_well.body",
-      "text": "墙边的配水总管接着几只带盖的储水罐。柜台上的本子逐户记录领用量，病房代领单夹在另一页。这里给食堂和居民供水，并不向地面取水。"
+      "text": "墙边的配水总管连着几只带盖的储水罐，为食堂和居民供水。柜台上的本子逐户记录领水量，病房的代领单另夹在一页。"
     },
     {
       "id": "campaign.json:interactions.commune_leave.name",
@@ -17835,7 +17835,7 @@
       "id": "campaign.json:interactions.star_archive.body",
       "source": "data/campaign.json",
       "path": "interactions.star_archive.body",
-      "text": "档案柜里有 1962 年技术人员转移名册、设备移交单和早期邮袋记录。父亲的姓名后写着「测控设备技术保障」，不是军官任命。护送组里有谢苗诺夫的签名。"
+      "text": "档案柜里保存着 1962 年技术人员转移名册、设备移交单和早期邮袋记录。父亲的工作登记为「测控设备技术保障」，护送组里有谢苗诺夫的签名。"
     },
     {
       "id": "campaign.json:interactions.star_father.name",
@@ -18651,13 +18651,13 @@
       "id": "campaign.json:interactions.commune_baranova.after.0.1",
       "source": "data/campaign.json",
       "path": "interactions.commune_baranova.after.0.1",
-      "text": "巴拉诺娃把工牌交给你看，没有让你带走。\n「尼古拉·巴拉诺夫。先查他当班的维修记录，再问当年在场的人。查到什么就告诉我，我不想靠猜的把他再活一遍。」"
+      "text": "巴拉诺娃把工牌翻过来，指给你看。\n「尼古拉·巴拉诺夫。你先查他当班的维修记录，再问问当年在场的人。查到什么都告诉我，我想知道他最后经历了什么。」"
     },
     {
       "id": "campaign.json:interactions.commune_baranova.after.1.1",
       "source": "data/campaign.json",
       "path": "interactions.commune_baranova.after.1.1",
-      "text": "老妇人听完泵房记录和两位见证人的话，摸了摸工牌。\n「当年的事，我终于能说得确切一些了。你先问我怎么留下这些话，我也想一想。」"
+      "text": "巴拉诺娃听完泵房记录和两位见证人的话，摸了摸工牌。\n「原来他那天是这样没回来的……谢谢你查清楚。至于要不要把他的事公开，让我再想想。」"
     },
     {
       "id": "campaign.json:interactions.commune_baranova.after.2.1",
@@ -19089,7 +19089,7 @@
       "id": "campaign.json:actions.sech_father.reply",
       "source": "data/campaign.json",
       "path": "actions.sech_father.reply",
-      "text": "「我不知道星城里有没有你父亲，也没有人员名册。我认识的运货人，最远只到过外侧隔离口。」\n谢尔盖想了想。\n「你可以留下姓名，请他们核查。别把这当成已经有了线索的证明。能不能问到人，要等他们答复。」"
+      "text": "「我不知道你父亲在不在星城，也没见过里面的人员名册。我认识的运货人，最远只到过外侧隔离口。」\n谢尔盖想了一会儿。\n「你可以留下姓名，请他们核查。不过他们很少回复外人，能不能找到消息，我也说不准。」"
     },
     {
       "id": "campaign.json:actions.sech_water.text",
@@ -19653,7 +19653,7 @@
       "id": "campaign.json:actions.mail_clue.reply",
       "source": "data/campaign.json",
       "path": "actions.mail_clue.reply",
-      "text": "便笺写的是夜班 4 号柜，白班 2 号柜。工牌编号和班次不是一回事。你在手记上把 4 圈出来。"
+      "text": "便笺注明：夜班使用 4 号更衣柜，白班使用 2 号柜。你在手记上圈出 4，准备去修配间查看夜班柜。"
     },
     {
       "id": "campaign.json:actions.mail_wrong.text",
@@ -19785,7 +19785,7 @@
       "id": "campaign.json:actions.press_ledger.reply",
       "source": "data/campaign.json",
       "path": "actions.press_ledger.reply",
-      "text": "居民 18 罐，病房代领 6 罐，总数 24。旧稿把病房栏漏了，才像少了水。你抄下总数，没有抄走家属姓名。"
+      "text": "底账记着居民领水 18 罐，病房代领 6 罐，合计 24 罐。公报旧稿漏算了病房这一栏。你记下正确总数，家属姓名留在原账里。"
     },
     {
       "id": "campaign.json:actions.press_private.text",
@@ -19905,7 +19905,7 @@
       "id": "campaign.json:actions.watch_custom.reply",
       "source": "data/campaign.json",
       "path": "actions.watch_custom.reply",
-      "text": "「还叫那些老名字。不过我这个轮值员是大家推的，管巡轨和记账，不是世袭。」\n彼得翻过一块写满名字的木牌。\n「谁守门、谁领粮，都摆在桌上。要是我排错了班，议事会就换个人。」"
+      "text": "「阿塔曼、轮值员，这些称呼沿用老习惯。不过我这个轮值员是大家推选的，负责安排巡轨和记账。」\n彼得翻过写着排班的木牌。\n「谁守门、谁领粮，住户都能查。我要是做不好，议事会可以换人。」"
     },
     {
       "id": "campaign.json:actions.watch_accept.text",
@@ -19977,7 +19977,7 @@
       "id": "campaign.json:actions.watch_return.reply",
       "source": "data/campaign.json",
       "path": "actions.watch_return.reply",
-      "text": "彼得照你的记录重排轮值，没有再把人派向东线。\n「这四发从巡轨队的修缮份额里出。少走一段死路，比会喊冲锋强。」"
+      "text": "彼得照你的记录重排轮值，划掉了通往塌方区的路线。\n「多亏你核清楚了，今晚出门的人不会再走错。这四发子弹是巡轨队给维修帮工的报酬。」"
     },
     {
       "id": "campaign.json:actions.books_read.text",
@@ -20133,7 +20133,7 @@
       "id": "campaign.json:actions.names_return.reply",
       "source": "data/campaign.json",
       "path": "actions.names_return.reply",
-      "text": "登记员把更正表夹在上报页最前面，签上自己的名字。\n「上面愿不愿改，是另一回事。至少这次别从我这里就写错了。」\n他按档案整理工时付给你三发制式弹，留了一份副本。"
+      "text": "登记员把更正表放在上报材料的最前面，签下自己的名字。\n「配给办会不会改，我还说不准。但我交上去的记录，得先写对。」\n他按整理档案的工时付给你三发制式弹，自己留了一份副本。"
     },
     {
       "id": "campaign.json:actions.tech_scale.text",
@@ -20145,7 +20145,7 @@
       "id": "campaign.json:actions.tech_scale.reply",
       "source": "data/campaign.json",
       "path": "actions.tech_scale.reply",
-      "text": "「你现在能进的是外侧检修区和测控区。再往下还有材料实验室、低温库、生活舱和供电舱，有些仍在用，有些因为缺人缺电封闭了。」\n列夫指着剖面图，划出几条分区线。\n「各区有各区的门禁，不是每条路都能穿过去。我们尽量只给在用的部分供电，所以从这里看，灯亮着的房间不多。」"
+      "text": "「这里往下还有材料实验室、低温库、生活舱和供电舱，有些仍在用，有些因为缺人缺电封闭了。」\n列夫指着剖面图。\n「目前你只能去外侧检修区和测控区，其他区域有门禁。供电也优先保障正在使用的房间。」"
     },
     {
       "id": "campaign.json:actions.tape_accept.text",
@@ -20793,7 +20793,7 @@
       "id": "campaign.json:actions.commune_heat_accept.reply",
       "source": "data/campaign.json",
       "path": "actions.commune_heat_accept.reply",
-      "text": "「家属区最里面那两户，暖气片一直有积气。沿中间走道进去，东南隔间的暖气就在后墙，不在走道中央。工具盘放在旁边。」\n玛尔法递给你一块干布。\n「先关支管、慢慢排气，确认不漏，再开回水。修完来告诉我，老人们今天就能睡个暖和觉。」"
+      "text": "「家属区最里面那两户的暖气一直不热。沿中间走道进东南隔间，暖气片装在后墙，工具盘就在旁边。」\n玛尔法递给你一块干布。\n「先关支管，慢慢排气，确认不漏水，再开回水。修好以后来告诉我。」"
     },
     {
       "id": "campaign.json:actions.commune_heat_bleed.text",
@@ -21249,7 +21249,7 @@
       "id": "campaign.json:actions.moro_work.reply",
       "source": "data/campaign.json",
       "path": "actions.moro_work.reply",
-      "text": "「锅炉工。添煤、清灰、盯水位，交班之前把表抄齐。大家屋里暖不暖，先看我们这边有没有把活干好。」\n莫罗指了指桌角的画本。\n「画画和弹琴是下班后的事。小时候我想画城里的人，后来只剩地下这些脸能画了。」"
+      "text": "「我是锅炉工，负责添煤、清灰、看水位，交班前还要抄好读数。暖气出了问题，住户就来找我们。」\n莫罗指向桌角的画本。\n「下班以后我喜欢画画、弹琴。小时候想画莫斯科的大街，现在画得最多的，还是住在这里的人。」"
     },
     {
       "id": "campaign.json:actions.moro_work.category",
@@ -21285,7 +21285,7 @@
       "id": "campaign.json:actions.moro_music.reply",
       "source": "data/campaign.json",
       "path": "actions.moro_music.reply",
-      "text": "「想。机修间有人会弹贝斯，缝补班有个姑娘打节拍比机器还准，就是都没多少空。」\n莫罗轻轻拨了两下琴弦。\n「我想唱轮班、冬天、等人回家的那些事，也唱我们想让日子变成什么样。公社说人人都能开口，我想试试，唱出来的时候是不是也一样。」\n他看向报废件领用单。\n「音箱坏着，场地也得先问好。你要有兴趣，等手里的事告一段落，咱们可以一起弄。」"
+      "text": "「想。机修间有人会弹贝斯，缝补班有个姑娘会打鼓，不过大家都得先干完活。」\n莫罗轻轻拨了两下琴弦。\n「我想唱地下的生活，唱人们每天干的活，也唱他们希望改变的事。平常开会时不敢说的话，也许唱出来就容易些。」\n他看了看坏音箱。\n「得先把它修好，再问问哪里能排练。你要有兴趣，等忙完手头的事，可以一起帮忙。」"
     },
     {
       "id": "campaign.json:actions.moro_music.category",
@@ -21417,7 +21417,7 @@
       "id": "campaign.json:actions.moro_listeners.reply",
       "source": "data/campaign.json",
       "path": "actions.moro_listeners.reply",
-      "text": "玛尔法放下勺子想了想。\n「饭后那会儿合适，孩子还没睡。可别把它排进轮值，说大家都得去。巴拉诺娃愿意来就给她留张靠门的椅子，不愿意来也别催。」\n「还有，别只唱胜仗。我们也想听有人把累、害怕和想家唱出来。这样明早端着锅走过来，还知道昨晚唱的是自己。」"
+      "text": "玛尔法想了想。\n「饭后合适，孩子们还没睡。巴拉诺娃愿意来，就给她留张靠门的椅子；有人想休息，也别去打扰。」\n她放下勺子。\n「唱点大家的事吧。天天干活有多累，惦记着谁，害怕什么……这些我们都听得懂。」"
     },
     {
       "id": "campaign.json:actions.moro_paper.text",
@@ -21429,7 +21429,7 @@
       "id": "campaign.json:actions.moro_paper.reply",
       "source": "data/campaign.json",
       "path": "actions.moro_paper.reply",
-      "text": "值班工人从废纸篮里挑出背面干净的包装纸，借你一支炭笔和一点余下的颜料。\n「别拿裁样图。用完把笔还回这个杯子里。莫罗以前给我们画过全班合影，脸画得比名单好认。」\n你在借用页签字，带着材料回锅炉房。"
+      "text": "值班工人从废纸篮里挑出背面干净的包装纸，借给你炭笔和一点颜料。\n「裁样图得留着干活，其他这些纸你们可以拿。用完把笔还回来。莫罗以前给我们班画过合影，画得挺像。」\n你签好借用记录，带着材料回锅炉房。"
     },
     {
       "id": "campaign.json:actions.moro_poster_people.text",
@@ -21711,7 +21711,7 @@
       "id": "campaign.json:actions.memory_finish.reply",
       "source": "data/campaign.json",
       "path": "actions.memory_finish.reply",
-      "text": "巴拉诺娃将抄页夹进工牌袋。\n「来吧。下次不必带消息，带你自己来就行。」\n玛尔法送来两份热食，将核对记录的工时补给放在桌边。巴拉诺娃自己收好了工牌和抄页，抬头问起你来公社以后的日子。"
+      "text": "巴拉诺娃将抄页夹进工牌袋。\n「下次路过就进来坐坐，陪我说说话。」\n玛尔法送来两份热食，把整理记录的报酬放在桌边。巴拉诺娃收好工牌和抄页，问起你最近在公社过得怎么样。"
     },
     {
       "id": "campaign.json:actions.guard_custom.text",
@@ -22059,7 +22059,7 @@
       "id": "campaign.json:panels.sech_arrival.body",
       "source": "data/campaign.json",
       "path": "panels.sech_arrival.body",
-      "text": "清晨，谢尔盖敲了三下铁门。里面的人先问名字，才把门打开。\n旧车厢停在封闭的检修库里。有人修炉子，有人把湿书摊在灯下。\n「谢契。别把门口的自由二字当成不用干活。」"
+      "text": "清晨，谢尔盖敲了三下铁门。里面的人问过姓名，才将门打开。\n旧车厢停在封闭的检修库里。有人修炉子，有人把湿书摊在灯下。\n「到谢契了。里面会给你登记客铺。住在这里的人都要分担一些活，具体怎么安排，长老会跟你说。」"
     },
     {
       "id": "campaign.json:panels.solo_commune.title",
@@ -22119,7 +22119,7 @@
       "id": "campaign.json:panels.return_standoff.body",
       "source": "data/campaign.json",
       "path": "panels.return_standoff.body",
-      "text": "老兵突然停住，枪口对着中尉的背。\n「把物资带回去。我走另一条路，别报我的名字。」\n中尉没有拔枪。他先看那两箱滤芯，又看你。\n「名单少一个人，不是我说一句没看见就能过去。」\n老兵的手很稳。雪落在三个人之间。"
+      "text": "老兵突然停住，举枪对着中尉的背。\n「把滤芯带回去。我走另一条路，别报我的名字。」\n中尉没有拔枪，先看了看运输架，又转向你。\n「我们出站有六个人，现在只剩三个。你再走了，我回去怎么跟你家里人交代？」\n老兵没有放下枪。雪不断落在两人之间。"
     },
     {
       "id": "campaign.json:panels.return_standoff.choices.0.text",
@@ -22329,7 +22329,7 @@
       "id": "campaign.json:endings.sech.body",
       "source": "data/campaign.json",
       "path": "endings.sech.body",
-      "text": "你留在谢契，学会了轮值牌上的记号，也听懂了炉边那首唱不齐的顿河旧歌。阿塔曼换选时，你在议事桌边说了自己的意见。\n谢尔盖又带回几本湿书，彼得问明晚谁愿意巡轨。电台继续值守，水箱也还得修。\n祖辈留下的是名字。你们每天重新商量的，是怎样不再替别人活。"
+      "text": "你留在谢契，逐渐熟悉了这里的轮值安排，也学会了炉边那首总唱不齐的顿河旧歌。阿塔曼换选时，你在议事会上说了自己的意见。\n谢尔盖又带回几本湿书，彼得在问明晚谁愿意巡轨。电台需要值守，水箱也还得修。\n你开始和这里的人一起商量，该怎么把以后的日子过好。"
     },
     {
       "id": "campaign.json:endings.starcity.title",
@@ -22389,7 +22389,7 @@
       "id": "campaign.json:endings.tea.body",
       "source": "data/campaign.json",
       "path": "endings.tea.body",
-      "text": "你被调去做更体面的值守。每天能领到干净的水，也能在灯亮着的地方读完一页纸。\n你问过老兵的去向。记录上只写了转移。后来，你渐渐不再问。\n一次换班，你在玻璃里看见自己的制服。那天雪地里的枪口，早已不在别人手里。"
+      "text": "你被调去条件更好的值守岗位，每天能领到干净的水，住处也有稳定的照明。\n你问过老兵的去向，记录上只写着「转移」。后来，你渐渐不再问。\n一次换班时，你在窗玻璃里看见自己的新制服，想起雪地里被押走的老兵。你们当时一起出发，他却没能像你一样回家。"
     },
     {
       "id": "campaign.json:endings.workers.title",
@@ -25815,7 +25815,7 @@
       "id": "story_panels.json:solo_honest.lines.0.text",
       "source": "data/story_panels.json",
       "path": "solo_honest.lines.0.text",
-      "text": "D-6？我在换货的时候听人提过。那里不是随便放人出来的地方。"
+      "text": "D-6？我换货时听人提过。你们那边出入查得很严，你是怎么出来的？"
     },
     {
       "id": "story_panels.json:solo_honest.lines.1.speaker",
@@ -27699,7 +27699,7 @@
       "id": "story_panels.json:memory_reading.lines.1.text",
       "source": "data/story_panels.json",
       "path": "memory_reading.lines.1.text",
-      "text": "这些年，有人只记得他以前替谁站岗，有人劝我干脆忘了。你们把那一天查清，我就能知道自己在记着什么。"
+      "text": "这些年，有人一提起他，就只说他当过中央的卫兵；也有人劝我别再打听了。你们查清了经过，我终于知道他那天做了什么。"
     },
     {
       "id": "story_panels.json:memory_reading.lines.2.speaker",
@@ -28299,7 +28299,7 @@
       "id": "story_panels.json:official_rollcall.lines.5.text",
       "source": "data/story_panels.json",
       "path": "official_rollcall.lines.5.text",
-      "text": "伊万，先把气喘匀。我们还得走完这段路。不是叫你忘掉他们。"
+      "text": "伊万，先喘口气。他们的工牌和信，我们会带回去交给家属。眼下得继续走，其他人还在 D-6 等滤芯。"
     },
     {
       "id": "story_panels.json:official_rollcall.choices.0.text",
@@ -28407,13 +28407,13 @@
       "id": "chapter_update.json:interactions.commune_anna.after.0.1",
       "source": "data/chapter_update.json",
       "path": "interactions.commune_anna.after.0.1",
-      "text": "安娜等孩子们走远，才从抽屉里拿出一张折旧的纸。\n安娜：「我哥哥叫阿列克谢·索科洛夫，在 D-6 二号施工班干过活，左手有烫伤。我想先确认他在哪里。这里的联络室存着交换记录，你愿意帮我核对一下吗？」"
+      "text": "安娜等孩子们走远，才从抽屉里拿出一张折过很多次的纸。\n安娜：「我哥哥叫阿列克谢·索科洛夫，以前在 D-6 二号施工班干活，左手有一处烫伤。我想知道他现在怎么样。联络室保存着交换记录，你愿意帮我核对一下吗？」"
     },
     {
       "id": "chapter_update.json:interactions.commune_anna.after.1.1",
       "source": "data/chapter_update.json",
       "path": "interactions.commune_anna.after.1.1",
-      "text": "安娜正在把工牌编号抄到另一张纸上。\n安娜：「有结果就来告诉我。查不到也告诉我，好吗？别为了让我安心，替他编一句平安。」"
+      "text": "安娜正在另一张纸上抄哥哥的工牌编号。\n安娜：「查到什么都告诉我，没查到也没关系。我想知道实情，你不用怕我难受就瞒着。」"
     },
     {
       "id": "chapter_update.json:interactions.commune_anna.after.2.1",
@@ -28431,7 +28431,7 @@
       "id": "chapter_update.json:interactions.commune_anna.after.4.1",
       "source": "data/chapter_update.json",
       "path": "interactions.commune_anna.after.4.1",
-      "text": "安娜把休养安排贴在哥哥床边，另一只手还扶着他的杯子。\n安娜：「明天下午我再上课，今天先陪他把饭吃完。你要过来就晚一点，米沙说要考考你地图。」"
+      "text": "安娜把休养安排贴在哥哥床边，扶着杯子让他喝了口水。\n安娜：「我明天下午再给孩子们上课，今天先陪哥哥吃饭。米沙说，晚些时候要拿地图考考你。」"
     },
     {
       "id": "chapter_update.json:interactions.commune_anna.after.5.1",
@@ -28509,7 +28509,7 @@
       "id": "chapter_update.json:interactions.front_cache.body",
       "source": "data/chapter_update.json",
       "path": "interactions.front_cache.body",
-      "text": "地上放着不同班次留下的物资和回执。先核对本次派工的封签，不替私人信件作主。"
+      "text": "地上放着不同班次留下的物资和回执。按封签核对本次委托要找的东西，私人信件须经本人或家属同意才能公开。"
     },
     {
       "id": "chapter_update.json:interactions.front_signal.name",
@@ -28761,7 +28761,7 @@
       "id": "chapter_update.json:interactions.commune_aleksei.after.0.1",
       "source": "data/chapter_update.json",
       "path": "interactions.commune_aleksei.after.0.1",
-      "text": "阿列克谢看着安娜留下的药表。\n阿列克谢：「她怕我忘，一栏写给我看，一栏留给自己。我说我认得字，她说那也得照着来。」"
+      "text": "阿列克谢看着安娜留下的服药表。\n阿列克谢：「她把时间抄了两份，给我一份，自己留一份。我说我记得住，她还是每天过来，亲眼看我把药吃了才放心。」"
     },
     {
       "id": "chapter_update.json:interactions.commune_aleksei.after.1.1",
@@ -28803,7 +28803,7 @@
       "id": "chapter_update.json:actions.anna_separation.reply",
       "source": "data/chapter_update.json",
       "path": "actions.anna_separation.reply",
-      "text": "安娜：「我跟医护交换队出来帮过工。后来公社收留了我们，交换线又停了，我没能回去。哥哥那时在二号施工班，信里总说一切都好。最后一张纸上只写了让我别回来，连落款都是匆匆划的。」\n她拿起抽屉里的纸，又放下。\n安娜：「我怕他真出了事，也怕他还在等，而我已经在这里过了三年。」"
+      "text": "安娜：「以前我跟医护交换队出来帮工，后来住进了公社。两边的交换路线停了，我就再也没能回去。哥哥当时还在二号施工班，寄来的信总说一切都好。最后一封信只匆匆写了几句，叫我别回去。」\n她拿起抽屉里的纸，又放回去。\n安娜：「我怕他出了事，也怕他一直在等我。可我在这里已经过了三年，连他的近况都不知道。」"
     },
     {
       "id": "chapter_update.json:actions.anna_accept.text",
@@ -28917,7 +28917,7 @@
       "id": "chapter_update.json:actions.anna_shelter.reply",
       "source": "data/chapter_update.json",
       "path": "actions.anna_shelter.reply",
-      "text": "两户居民愿意挪出靠暖气的下铺，安娜答应轮流做饭、洗床单。她没有替别人保证多久能腾回去，只把医护约定的复查日期写在床头。"
+      "text": "两户居民愿意腾出靠暖气的下铺，让安娜的哥哥休养。安娜提出帮大家做饭、洗床单。医护把复查日期写在床头，大家约好先照顾到那时，再根据他的身体情况商量后面的安排。"
     },
     {
       "id": "chapter_update.json:actions.anna_prepare_status.text",
@@ -29031,7 +29031,7 @@
       "id": "chapter_update.json:actions.field_c1_report.reply",
       "source": "data/chapter_update.json",
       "path": "actions.field_c1_report.reply",
-      "text": "药箱交回医务室后，有人立刻来领敷料。亚历山德拉没有先问你消灭了几只兽，只让你指出哪段路还能走。"
+      "text": "药箱送到医务室，很快就有人来领敷料。亚历山德拉先问你沿途的情况，尤其是哪段路仍然能走，好安排下一班医护出发。"
     },
     {
       "id": "chapter_update.json:actions.field_c2_accept.text",
@@ -29043,7 +29043,7 @@
       "id": "chapter_update.json:actions.field_c2_accept.reply",
       "source": "data/chapter_update.json",
       "path": "actions.field_c2_accept.reply",
-      "text": "寻找被迫撤离的联络员，找回投递存根。核对名单的用途，再决定哪些内容可以带回。"
+      "text": "寻找被迫撤离的联络员，取回邮袋和投递存根。核对记录时，留意居民住址和接应人的信息，确认哪些内容可以公开。"
     },
     {
       "id": "chapter_update.json:actions.field_c2_depart.text",
@@ -29091,7 +29091,7 @@
       "id": "chapter_update.json:actions.field_c3_report.reply",
       "source": "data/chapter_update.json",
       "path": "actions.field_c3_report.reply",
-      "text": "撤离名单由接收人员当面复点，留守班随后也回到公社。墙上的通行图少了一条线，食堂里多了几张临时床位登记。"
+      "text": "接收人员按撤离名单复点人数，留守的守备班随后也回到了公社。原来的撤离路线已经封死，接回的居民暂时安置在食堂。"
     },
     {
       "id": "chapter_update.json:actions.field_s1_accept.text",
@@ -29121,7 +29121,7 @@
       "id": "chapter_update.json:actions.field_s1_report.reply",
       "source": "data/chapter_update.json",
       "path": "actions.field_s1_report.reply",
-      "text": "彼得重排了座位，先让等车的家属认清车队标记。你这次带回来的货不多，饭桌旁却终于坐齐了几个人。"
+      "text": "彼得重新安排车上的座位，让等车的家属认清接送标记。这趟带回的货不多，几个等着团聚的家庭却终于见到了亲人。"
     },
     {
       "id": "chapter_update.json:actions.field_s2_accept.text",
@@ -29181,7 +29181,7 @@
       "id": "chapter_update.json:actions.field_s3_report.reply",
       "source": "data/chapter_update.json",
       "path": "actions.field_s3_report.reply",
-      "text": "阿塔曼听完交火经过，撤回了扩大报复范围的命令，仍要求补回守备轮值。有人觉得你太谨慎，失踪者的家属则来问一个确切的名字。"
+      "text": "阿塔曼听完交火经过，撤回了扩大报复范围的命令，要求补齐守备轮班。有人觉得你处理得太谨慎，失踪者的家属则来问，你有没有见到他们的亲人。"
     },
     {
       "id": "chapter_update.json:actions.front_read_routes.text",
@@ -29337,7 +29337,7 @@
       "id": "chapter_update.json:actions.memory_finish.reply",
       "source": "data/chapter_update.json",
       "path": "actions.memory_finish.reply",
-      "text": "巴拉诺娃将抄页夹进工牌袋。\n「来吧。下次不必带消息，带你自己来就行。」\n玛尔法送来两份热食，将核对记录的工时补给放在桌边。巴拉诺娃自己收好了工牌和抄页，抬头问起你来公社以后的日子。"
+      "text": "巴拉诺娃将抄页夹进工牌袋。\n「下次路过就进来坐坐，陪我说说话。」\n玛尔法送来两份热食，把整理记录的报酬放在桌边。巴拉诺娃收好工牌和抄页，问起你最近在公社过得怎么样。"
     },
     {
       "id": "chapter_update.json:actions.moro_thanks.text",
@@ -29439,7 +29439,7 @@
       "id": "chapter_update.json:quests.1.background",
       "source": "data/chapter_update.json",
       "path": "quests.1.background",
-      "text": "寻找被迫撤离的联络员，找回投递存根。核对名单的用途，再决定哪些内容可以带回。"
+      "text": "寻找被迫撤离的联络员，取回邮袋和投递存根。核对记录时，留意居民住址和接应人的信息，确认哪些内容可以公开。"
     },
     {
       "id": "chapter_update.json:quests.1.lead",
@@ -29787,7 +29787,7 @@
       "id": "chapter_update.json:missions.c1.report",
       "source": "data/chapter_update.json",
       "path": "missions.c1.report",
-      "text": "药箱交回医务室后，有人立刻来领敷料。亚历山德拉没有先问你消灭了几只兽，只让你指出哪段路还能走。"
+      "text": "药箱送到医务室，很快就有人来领敷料。亚历山德拉先问你沿途的情况，尤其是哪段路仍然能走，好安排下一班医护出发。"
     },
     {
       "id": "chapter_update.json:missions.c2.name",
@@ -29805,7 +29805,7 @@
       "id": "chapter_update.json:missions.c2.summary",
       "source": "data/chapter_update.json",
       "path": "missions.c2.summary",
-      "text": "寻找被迫撤离的联络员，找回投递存根。核对名单的用途，再决定哪些内容可以带回。"
+      "text": "寻找被迫撤离的联络员，取回邮袋和投递存根。核对记录时，留意居民住址和接应人的信息，确认哪些内容可以公开。"
     },
     {
       "id": "chapter_update.json:missions.c2.object",
@@ -29859,7 +29859,7 @@
       "id": "chapter_update.json:missions.c3.report",
       "source": "data/chapter_update.json",
       "path": "missions.c3.report",
-      "text": "撤离名单由接收人员当面复点，留守班随后也回到公社。墙上的通行图少了一条线，食堂里多了几张临时床位登记。"
+      "text": "接收人员按撤离名单复点人数，留守的守备班随后也回到了公社。原来的撤离路线已经封死，接回的居民暂时安置在食堂。"
     },
     {
       "id": "chapter_update.json:missions.s1.name",
@@ -29895,7 +29895,7 @@
       "id": "chapter_update.json:missions.s1.report",
       "source": "data/chapter_update.json",
       "path": "missions.s1.report",
-      "text": "彼得重排了座位，先让等车的家属认清车队标记。你这次带回来的货不多，饭桌旁却终于坐齐了几个人。"
+      "text": "彼得重新安排车上的座位，让等车的家属认清接送标记。这趟带回的货不多，几个等着团聚的家庭却终于见到了亲人。"
     },
     {
       "id": "chapter_update.json:missions.s2.name",
@@ -29967,7 +29967,7 @@
       "id": "chapter_update.json:missions.s3.report",
       "source": "data/chapter_update.json",
       "path": "missions.s3.report",
-      "text": "阿塔曼听完交火经过，撤回了扩大报复范围的命令，仍要求补回守备轮值。有人觉得你太谨慎，失踪者的家属则来问一个确切的名字。"
+      "text": "阿塔曼听完交火经过，撤回了扩大报复范围的命令，要求补齐守备轮班。有人觉得你处理得太谨慎，失踪者的家属则来问，你有没有见到他们的亲人。"
     },
     {
       "id": "chapter_panels.json:lower_ward.title",
@@ -30405,7 +30405,7 @@
       "id": "chapter_panels.json:anna_first_letter.lines.1.text",
       "source": "data/chapter_panels.json",
       "path": "anna_first_letter.lines.1.text",
-      "text": "我原来一直想着，见到他就要问，为什么不早点走。现在我只想让他先把病看好。"
+      "text": "以前我总想，见到哥哥以后，一定要问他当初为什么不早点离开 D-6。现在知道他病着，我只想先让他得到照顾。"
     },
     {
       "id": "chapter_panels.json:anna_first_letter.lines.2.speaker",
@@ -30843,7 +30843,7 @@
       "id": "chapter_panels.json:rescue_safe_start.lines.2.text",
       "source": "data/chapter_panels.json",
       "path": "rescue_safe_start.lines.2.text",
-      "text": "备用出口的人接上了最后一副担架。你和安娜留下来复点人数，直到纸上每一个名字都有回应。她叫到哥哥时，对讲机里隔了几秒才传来一句“在车上”。"
+      "text": "备用出口的人接走了最后一副担架。你和安娜留下来，按名单逐个确认是否有人落下。问到哥哥时，对讲机里隔了一会儿才传来回答：“已经上车了。”"
     },
     {
       "id": "chapter_panels.json:rescue_safe_start.location",
@@ -30879,7 +30879,7 @@
       "id": "chapter_panels.json:anna_survival.lines.1.text",
       "source": "data/chapter_panels.json",
       "path": "anna_survival.lines.1.text",
-      "text": "回到公社时，安娜始终解不开背包扣。你替她按开，她才发现自己的手还在抖。哥哥在隔壁接受检查，她坐在门外，一遍遍数刚才的名字。"
+      "text": "回到公社，安娜解了几次背包扣都没解开。你伸手帮忙，她才看见自己的手还在发抖。哥哥正在隔壁接受检查，她坐在门外，又拿出名单核了一遍撤出来的人数。"
     },
     {
       "id": "chapter_panels.json:anna_survival.lines.2.speaker",
@@ -31359,7 +31359,7 @@
       "id": "chapter_panels.json:c1_after.lines.0.text",
       "source": "data/chapter_panels.json",
       "path": "c1_after.lines.0.text",
-      "text": "药箱交回医务室后，有人立刻来领敷料。亚历山德拉没有先问你消灭了几只兽，只让你指出哪段路还能走。"
+      "text": "药箱送到医务室，很快就有人来领敷料。亚历山德拉先问你沿途的情况，尤其是哪段路仍然能走，好安排下一班医护出发。"
     },
     {
       "id": "chapter_panels.json:c1_after.lines.1.speaker",
@@ -31683,7 +31683,7 @@
       "id": "chapter_panels.json:c3_after.lines.0.text",
       "source": "data/chapter_panels.json",
       "path": "c3_after.lines.0.text",
-      "text": "撤离名单由接收人员当面复点，留守班随后也回到公社。墙上的通行图少了一条线，食堂里多了几张临时床位登记。"
+      "text": "接收人员按撤离名单复点人数，留守的守备班随后也回到了公社。原来的撤离路线已经封死，接回的居民暂时安置在食堂。"
     },
     {
       "id": "chapter_panels.json:c3_after.lines.1.speaker",
@@ -31863,7 +31863,7 @@
       "id": "chapter_panels.json:s1_after.lines.0.text",
       "source": "data/chapter_panels.json",
       "path": "s1_after.lines.0.text",
-      "text": "彼得重排了座位，先让等车的家属认清车队标记。你这次带回来的货不多，饭桌旁却终于坐齐了几个人。"
+      "text": "彼得重新安排车上的座位，让等车的家属认清接送标记。这趟带回的货不多，几个等着团聚的家庭却终于见到了亲人。"
     },
     {
       "id": "chapter_panels.json:s1_after.lines.1.speaker",
@@ -32187,7 +32187,7 @@
       "id": "chapter_panels.json:s3_after.lines.0.text",
       "source": "data/chapter_panels.json",
       "path": "s3_after.lines.0.text",
-      "text": "阿塔曼听完交火经过，撤回了扩大报复范围的命令，仍要求补回守备轮值。有人觉得你太谨慎，失踪者的家属则来问一个确切的名字。"
+      "text": "阿塔曼听完交火经过，撤回了扩大报复范围的命令，要求补齐守备轮班。有人觉得你处理得太谨慎，失踪者的家属则来问，你有没有见到他们的亲人。"
     },
     {
       "id": "chapter_panels.json:s3_after.lines.1.speaker",
@@ -33105,7 +33105,7 @@
       "id": "chapter_panels.json:surface_return_sech.lines.1.text",
       "source": "data/chapter_panels.json",
       "path": "surface_return_sech.lines.1.text",
-      "text": "伊万？看清了，是你。先把名字划回来，免得晚班的人还在等。"
+      "text": "伊万，你回来了。先在回站簿上记一下，晚班接手时就知道你已经平安到站。"
     },
     {
       "id": "chapter_panels.json:surface_return_sech.lines.2.speaker",

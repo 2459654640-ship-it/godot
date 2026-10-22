@@ -1,18 +1,17 @@
 {
-  "game_commit": "f655dd8312920c44f1a5701321650ddd63bafa99",
+  "game_commit": "245d9306c506acb3062826c3f82a3edc91c4da7d",
   "document": "metro1982-v23-copy.docx",
-  "bytes": 319848,
-  "sha256": "aeae7e3d59745ef2064636400a2738d56b50e765f6114a1621832d084204b295",
+  "original_document_name": "地铁1982-v23-全文案与分支校订本.docx",
+  "bytes": 320180,
+  "sha256": "3ecc8389a14e14307333bede9f3753d38594d407638dd43b14cac00707d7ff72",
   "source_records": 4186,
   "missing_texts": 0,
   "panels": 134,
   "interactions": 86,
   "actions": 303,
   "quests": 37,
-  "conditional_lines": 16,
-  "conditional_choices": 7,
   "d6_view_examples": 179,
+  "revised_text_locations": 79,
   "docx_zip_valid": true,
-  "runtime_source_hashes_verified": true,
-  "original_document_name": "地铁1982-v23-全文案与分支校订本.docx"
+  "runtime_source_hashes_verified": true
 }
