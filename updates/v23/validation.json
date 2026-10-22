@@ -1,0 +1,274 @@
+{
+  "version": 23,
+  "game_branch": "metro-v23-exterior-routing",
+  "game_commit": "f655dd8312920c44f1a5701321650ddd63bafa99",
+  "godot": "4.6.3",
+  "suite_count": 38,
+  "reported_checks": 16607,
+  "all_passed": true,
+  "suites": [
+    {
+      "suite": "run",
+      "exit_code": 0,
+      "seconds": 105.19,
+      "script_errors": 0
+    },
+    {
+      "suite": "visual_contract",
+      "exit_code": 0,
+      "seconds": 2.22,
+      "script_errors": 0
+    },
+    {
+      "suite": "narrative_contract",
+      "exit_code": 0,
+      "seconds": 4.83,
+      "script_errors": 0
+    },
+    {
+      "suite": "resident_contract",
+      "exit_code": 0,
+      "seconds": 6.53,
+      "script_errors": 0
+    },
+    {
+      "suite": "chapter_contract",
+      "exit_code": 0,
+      "seconds": 3.48,
+      "script_errors": 0
+    },
+    {
+      "suite": "floor_contract",
+      "exit_code": 0,
+      "seconds": 6.53,
+      "script_errors": 0
+    },
+    {
+      "suite": "campaign_contract",
+      "exit_code": 0,
+      "seconds": 31.72,
+      "script_errors": 0
+    },
+    {
+      "suite": "campaign_ui",
+      "exit_code": 0,
+      "seconds": 10.11,
+      "script_errors": 0
+    },
+    {
+      "suite": "refinement_contract",
+      "exit_code": 0,
+      "seconds": 4.35,
+      "script_errors": 0
+    },
+    {
+      "suite": "presentation_contract",
+      "exit_code": 0,
+      "seconds": 6.63,
+      "script_errors": 0
+    },
+    {
+      "suite": "exploration_contract",
+      "exit_code": 0,
+      "seconds": 4.58,
+      "script_errors": 0
+    },
+    {
+      "suite": "v9_contract",
+      "exit_code": 0,
+      "seconds": 3.72,
+      "script_errors": 0
+    },
+    {
+      "suite": "v10_contract",
+      "exit_code": 0,
+      "seconds": 4.5,
+      "script_errors": 0
+    },
+    {
+      "suite": "v11_contract",
+      "exit_code": 0,
+      "seconds": 4.81,
+      "script_errors": 0
+    },
+    {
+      "suite": "v11_combat",
+      "exit_code": 0,
+      "seconds": 4.02,
+      "script_errors": 0
+    },
+    {
+      "suite": "occlusion_v11",
+      "exit_code": 0,
+      "seconds": 1.77,
+      "script_errors": 0
+    },
+    {
+      "suite": "visual_fixes_v11_1",
+      "exit_code": 0,
+      "seconds": 2.72,
+      "script_errors": 0
+    },
+    {
+      "suite": "commune_v12",
+      "exit_code": 0,
+      "seconds": 4.48,
+      "script_errors": 0
+    },
+    {
+      "suite": "factory_v12",
+      "exit_code": 0,
+      "seconds": 1.87,
+      "script_errors": 0
+    },
+    {
+      "suite": "equipment_v12",
+      "exit_code": 0,
+      "seconds": 1.87,
+      "script_errors": 0
+    },
+    {
+      "suite": "platform_v12",
+      "exit_code": 0,
+      "seconds": 2.87,
+      "script_errors": 0
+    },
+    {
+      "suite": "actors_v13",
+      "exit_code": 0,
+      "seconds": 2.82,
+      "script_errors": 0
+    },
+    {
+      "suite": "publications_v13",
+      "exit_code": 0,
+      "seconds": 6.23,
+      "script_errors": 0
+    },
+    {
+      "suite": "public_radio_v16",
+      "exit_code": 0,
+      "seconds": 13.29,
+      "script_errors": 0
+    },
+    {
+      "suite": "ivan_gait_v16",
+      "exit_code": 0,
+      "seconds": 2.75,
+      "script_errors": 0
+    },
+    {
+      "suite": "furnishings_v16",
+      "exit_code": 0,
+      "seconds": 8.55,
+      "script_errors": 0
+    },
+    {
+      "suite": "first_meetings_v17",
+      "exit_code": 0,
+      "seconds": 3.4,
+      "script_errors": 0
+    },
+    {
+      "suite": "starcity_v17",
+      "exit_code": 0,
+      "seconds": 1.97,
+      "script_errors": 0
+    },
+    {
+      "suite": "ivan_gait_v17",
+      "exit_code": 0,
+      "seconds": 1.77,
+      "script_errors": 0
+    },
+    {
+      "suite": "motion_v18",
+      "exit_code": 0,
+      "seconds": 6.13,
+      "script_errors": 0
+    },
+    {
+      "suite": "expedition_v19",
+      "exit_code": 0,
+      "seconds": 7.16,
+      "script_errors": 0
+    },
+    {
+      "suite": "narrative_v19",
+      "exit_code": 0,
+      "seconds": 0.26,
+      "script_errors": 0
+    },
+    {
+      "suite": "crowds_v19",
+      "exit_code": 0,
+      "seconds": 1.87,
+      "script_errors": 0
+    },
+    {
+      "suite": "chapter_v22",
+      "exit_code": 0,
+      "seconds": 1.37,
+      "script_errors": 0
+    },
+    {
+      "suite": "chapter_world_v22",
+      "exit_code": 0,
+      "seconds": 5.38,
+      "script_errors": 0
+    },
+    {
+      "suite": "chapter_flow_v22",
+      "exit_code": 0,
+      "seconds": 4.58,
+      "script_errors": 0
+    },
+    {
+      "suite": "exterior_v23",
+      "exit_code": 0,
+      "seconds": 3.27,
+      "script_errors": 0
+    },
+    {
+      "suite": "enemy_routes_v23",
+      "exit_code": 0,
+      "seconds": 2.12,
+      "script_errors": 0
+    }
+  ],
+  "focused_recheck": [
+    "exterior_v23",
+    "narrative_contract",
+    "expedition_v19",
+    "campaign_contract",
+    "refinement_contract"
+  ],
+  "specialized_checks": {
+    "exterior_v23": 85,
+    "enemy_routes_v23": 37
+  },
+  "renderer": "X11 / OpenGL Compatibility / Mesa llvmpipe",
+  "screenshots": [
+    "pumpstation-journal.png",
+    "pumpstation-overview.png",
+    "pumpstation-ruin.png",
+    "ruined-building.png",
+    "starcity-overview.png",
+    "starcity-shelter.png",
+    "surface_back_commune-checkpoint.png",
+    "surface_back_commune.png",
+    "surface_back_sech-checkpoint.png",
+    "surface_back_sech.png"
+  ],
+  "ivan_normal_preserved_sha256": "33db24356dea4e2f80ac33de91de73fcac51b37e109bcc261b0627d821656f86",
+  "new_illustrations": [
+    "pump_hatch_return",
+    "pump_return_commune",
+    "pump_return_sech"
+  ],
+  "map_scenes_remain_separate": [
+    "surface",
+    "starcity"
+  ],
+  "starcity_interior_open": false
+}
