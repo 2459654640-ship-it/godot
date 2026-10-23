@@ -1,0 +1,83 @@
+[
+  {
+    "suite": "watch_dialogue_v26",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 2.05,
+    "results": [
+      "WATCH_DIALOGUE_V26_RESULT checks=26 failures=0"
+    ]
+  },
+  {
+    "suite": "exploration_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 3.61,
+    "results": [
+      "EXPLORATION_RESULT checks=187 failures=0"
+    ]
+  },
+  {
+    "suite": "first_meetings_v17",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 5.11,
+    "results": [
+      "FIRST_MEETINGS_V17_RESULT checks=294 failures=0"
+    ]
+  },
+  {
+    "suite": "chapter_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 4.66,
+    "results": [
+      "CHAPTER_CONTRACT_RESULT checks=141 failures=0"
+    ]
+  },
+  {
+    "suite": "narrative_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 8.93,
+    "results": [
+      "NARRATIVE_CONTRACT_RESULT checks=1942 failures=0"
+    ]
+  },
+  {
+    "suite": "campaign_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 56.08,
+    "results": [
+      "CAMPAIGN_CONTRACT_RESULT checks=402 failures=0"
+    ]
+  },
+  {
+    "suite": "chapter_flow_v22",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 7.61,
+    "results": [
+      "CHAPTER_FLOW_V22_RESULT checks=22 failures=0"
+    ]
+  },
+  {
+    "suite": "save_slots_v24",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 14.53,
+    "results": [
+      "SAVE_SLOTS_V24_RESULT checks=54 failures=0"
+    ]
+  },
+  {
+    "suite": "journey_ui_v25",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 9.07,
+    "results": [
+      "JOURNEY_UI_V25_RESULT checks=116 failures=0"
+    ]
+  }
+]
