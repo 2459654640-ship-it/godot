@@ -1,0 +1,15 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+WARNING: Loaded resource as image file, this will not work on export: 'res://assets/characters/ambient_worker.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+     at: load_from_file (core/io/image.cpp:2766)
+     GDScript backtrace (most recent call first):
+         [0] run (res://tests/npc_gait_v25.gd:13)
+WARNING: Loaded resource as image file, this will not work on export: 'res://assets/characters/ambient_woman.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+     at: load_from_file (core/io/image.cpp:2766)
+     GDScript backtrace (most recent call first):
+         [0] run (res://tests/npc_gait_v25.gd:13)
+WARNING: Loaded resource as image file, this will not work on export: 'res://assets/characters/ambient_child.png'. Instead, import the image file as an Image resource and load it normally as a resource.
+     at: load_from_file (core/io/image.cpp:2766)
+     GDScript backtrace (most recent call first):
+         [0] run (res://tests/npc_gait_v25.gd:13)
+NPC_GAIT_V25_RESULT checks=1731 failures=0

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "home_lamp",
+    "title": "门还为你留着",
+    "bpm": 74,
+    "seconds": 53.51,
+    "peak": 0.48000000000000004,
+    "license": "CC0-1.0",
+    "source": "Original composition; matching MIDI and procedural piano / string rendering, no samples."
+  },
+  {
+    "id": "shift_below",
+    "title": "地下的晚班",
+    "bpm": 68,
+    "seconds": 58.24,
+    "peak": 0.48,
+    "license": "CC0-1.0",
+    "source": "Original composition; matching MIDI and procedural piano / string rendering, no samples."
+  }
+]

@@ -1,0 +1,413 @@
+{
+  "code_commit": "603ef1007efdc937d3a2b2ef1c04579ca5bd82fc",
+  "suites": 44,
+  "checks": 18770,
+  "failures": 0,
+  "results": [
+    {
+      "suite": "run",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 97.33,
+      "results": [
+        "D6_TEST_RESULT checks=1888 failures=0"
+      ]
+    },
+    {
+      "suite": "visual_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 2.31,
+      "results": [
+        "VISUAL_CONTRACT_RESULT checks=1106 failures=0"
+      ]
+    },
+    {
+      "suite": "narrative_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 6.4,
+      "results": [
+        "NARRATIVE_CONTRACT_RESULT checks=1942 failures=0"
+      ]
+    },
+    {
+      "suite": "resident_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 6.97,
+      "results": [
+        "RESIDENT_CONTRACT_RESULT checks=114 failures=0"
+      ]
+    },
+    {
+      "suite": "chapter_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 3.14,
+      "results": [
+        "CHAPTER_CONTRACT_RESULT checks=141 failures=0"
+      ]
+    },
+    {
+      "suite": "floor_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 6.86,
+      "results": [
+        "FLOOR_CONTRACT_RESULT checks=40 failures=0 connected_cells=4127"
+      ]
+    },
+    {
+      "suite": "campaign_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 27.7,
+      "results": [
+        "CAMPAIGN_CONTRACT_RESULT checks=402 failures=0"
+      ]
+    },
+    {
+      "suite": "campaign_ui",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 7.05,
+      "results": [
+        "CAMPAIGN_UI_RESULT checks=17 failures=0"
+      ]
+    },
+    {
+      "suite": "refinement_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 3.42,
+      "results": [
+        "REFINEMENT_RESULT checks=39 failures=0"
+      ]
+    },
+    {
+      "suite": "presentation_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 4.91,
+      "results": [
+        "PRESENTATION_RESULT checks=36 failures=0"
+      ]
+    },
+    {
+      "suite": "exploration_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 3.33,
+      "results": [
+        "EXPLORATION_RESULT checks=186 failures=0"
+      ]
+    },
+    {
+      "suite": "v9_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 3.07,
+      "results": [
+        "V9_RESULT checks=119 failures=0"
+      ]
+    },
+    {
+      "suite": "v10_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 3.23,
+      "results": [
+        "V10_RESULT checks=119 failures=0"
+      ]
+    },
+    {
+      "suite": "v11_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 4.16,
+      "results": [
+        "V11_RESULT checks=181 failures=0"
+      ]
+    },
+    {
+      "suite": "v11_combat",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 4.16,
+      "results": [
+        "V11_COMBAT_RESULT checks=22 failures=0"
+      ]
+    },
+    {
+      "suite": "occlusion_v11",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 1.84,
+      "results": [
+        "OCCLUSION_V11_RESULT checks=9 failures=0"
+      ]
+    },
+    {
+      "suite": "visual_fixes_v11_1",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 2.87,
+      "results": [
+        "VISUAL_FIXES_V11_1_RESULT checks=103 failures=0"
+      ]
+    },
+    {
+      "suite": "commune_v12",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 4.91,
+      "results": [
+        "COMMUNE_V12_RESULT checks=145 failures=0"
+      ]
+    },
+    {
+      "suite": "factory_v12",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 1.93,
+      "results": [
+        "FACTORY_V12_RESULT checks=49 failures=0"
+      ]
+    },
+    {
+      "suite": "equipment_v12",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 2.02,
+      "results": [
+        "EQUIPMENT_V12_RESULT checks=17 failures=0"
+      ]
+    },
+    {
+      "suite": "platform_v12",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 2.96,
+      "results": [
+        "PLATFORM_V12_RESULT checks=12 failures=0"
+      ]
+    },
+    {
+      "suite": "actors_v13",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 3.06,
+      "results": [
+        "ACTORS_V13_RESULT checks=61 failures=0"
+      ]
+    },
+    {
+      "suite": "publications_v13",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 8.09,
+      "results": [
+        "PUBLICATIONS_V13_RESULT checks=122 failures=0"
+      ]
+    },
+    {
+      "suite": "public_radio_v16",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 12.6,
+      "results": [
+        "PUBLIC_RADIO_V16_RESULT checks=116 failures=0"
+      ]
+    },
+    {
+      "suite": "ivan_gait_v16",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 1.84,
+      "results": [
+        "IVAN_GAIT_V16_RESULT checks=102 failures=0"
+      ]
+    },
+    {
+      "suite": "furnishings_v16",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 6.5,
+      "results": [
+        "FURNISHINGS_V16_RESULT checks=40 failures=0"
+      ]
+    },
+    {
+      "suite": "first_meetings_v17",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 3.8,
+      "results": [
+        "FIRST_MEETINGS_V17_RESULT checks=294 failures=0"
+      ]
+    },
+    {
+      "suite": "starcity_v17",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 2.03,
+      "results": [
+        "STARCITY_V19_RESULT checks=7 failures=0"
+      ]
+    },
+    {
+      "suite": "ivan_gait_v17",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 1.84,
+      "results": [
+        "IVAN_GAIT_V17_RESULT checks=7254 failures=0"
+      ]
+    },
+    {
+      "suite": "motion_v18",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 6.4,
+      "results": [
+        "MOTION_V18_RESULT checks=966 failures=0"
+      ]
+    },
+    {
+      "suite": "expedition_v19",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 5.64,
+      "results": [
+        "EXPEDITION_V19_RESULT checks=101 failures=0"
+      ]
+    },
+    {
+      "suite": "narrative_v19",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 0.25,
+      "results": [
+        "NARRATIVE_V19_RESULT checks=136 failures=0"
+      ]
+    },
+    {
+      "suite": "crowds_v19",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 2.49,
+      "results": [
+        "CROWDS_V19_RESULT checks=16 failures=0"
+      ]
+    },
+    {
+      "suite": "chapter_v22",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 1.84,
+      "results": [
+        "CHAPTER_V22_RESULT checks=537 failures=0"
+      ]
+    },
+    {
+      "suite": "chapter_world_v22",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 7.33,
+      "results": [
+        "CHAPTER_WORLD_V22_RESULT checks=25 failures=0"
+      ]
+    },
+    {
+      "suite": "chapter_flow_v22",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 4.82,
+      "results": [
+        "CHAPTER_FLOW_V22_RESULT checks=22 failures=0"
+      ]
+    },
+    {
+      "suite": "exterior_v23",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 3.14,
+      "results": [
+        "EXTERIOR_V23_RESULT checks=85 failures=0"
+      ]
+    },
+    {
+      "suite": "enemy_routes_v23",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 2.11,
+      "results": [
+        "ENEMY_ROUTES_V23_RESULT checks=37 failures=0"
+      ]
+    },
+    {
+      "suite": "living_story_v24",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 0.72,
+      "results": [
+        "LIVING_STORY_V24_RESULT checks=180 failures=0"
+      ]
+    },
+    {
+      "suite": "living_world_v24",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 18.4,
+      "results": [
+        "LIVING_WORLD_V24_RESULT checks=32 failures=0"
+      ]
+    },
+    {
+      "suite": "save_slots_v24",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 6.41,
+      "results": [
+        "SAVE_SLOTS_V24_RESULT checks=54 failures=0"
+      ]
+    },
+    {
+      "suite": "coal_identity_v24",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 2.77,
+      "results": [
+        "COAL_IDENTITY_V24_RESULT checks=51 failures=0"
+      ]
+    },
+    {
+      "suite": "journey_ui_v25",
+      "exit": 0,
+      "script_errors": 0,
+      "results": [
+        "JOURNEY_UI_V25_RESULT checks=114 failures=0"
+      ]
+    },
+    {
+      "suite": "npc_gait_v25",
+      "exit": 0,
+      "script_errors": 0,
+      "results": [
+        "NPC_GAIT_V25_RESULT checks=1731 failures=0"
+      ]
+    }
+  ],
+  "visual_checks": [
+    "1440×900 settings and inventory layout",
+    "1280×720 native window confirmed via Window.size assertion",
+    "keep aspect / fill modes",
+    "interactive homecoming and bedside cinematic",
+    "resident gait phase screenshots"
+  ],
+  "limits": [
+    "Stealth and long D-6 faction mainline are not implemented.",
+    "Resident side views retain procedural animation; only accepted front/back walks use new drawings."
+  ]
+}
