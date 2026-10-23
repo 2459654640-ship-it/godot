@@ -193,6 +193,8 @@ func act(key: String) -> String:
 	if not valid:return "条件尚未满足，或这件事已经做过了。"
 	last_action_valid=true
 	if key=="room_radio_music":return "你把旋钮转到居民音乐转播的频段。"
+	if key.begins_with("decontam_"):
+		last_reply=Economy.Radiation.treat(self);changed.emit();return last_reply
 	if key.begins_with("meet_"):
 		last_reply=FirstMeetings.act(self,key);changed.emit();return last_reply
 	if once_topic(key):read_topics.append(key)

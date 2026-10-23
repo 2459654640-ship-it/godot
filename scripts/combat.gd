@@ -97,7 +97,7 @@ func _physics_process(delta):
  if w.floor_id=="waterworks" and Rect2(-18,-13,5,5).has_point(Vector2(w.player.position.x,w.player.position.z)) and Vector2(w.player.velocity.x,w.player.velocity.z).length()>.2:
   var exposure=float(w.story.flags.get("radiation_clock",0))+delta
   if exposure>=5:
-   exposure-=5;w.story.economy.radiation=mini(60,w.story.economy.radiation+2)
+   exposure-=5;w.story.economy.radiation=mini(100,w.story.economy.radiation+2)
    if not w.story.f("radiation_warned"):w.story.flags.radiation_warned=true;w.hud.toast("脚边是带放射性沉积物的积水。离开这片区域；抗辐射药可在背包使用。",7)
   w.story.flags.radiation_clock=exposure
 func sync():

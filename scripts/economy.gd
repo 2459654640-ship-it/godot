@@ -1,4 +1,5 @@
 extends RefCounted
+const Radiation=preload("res://scripts/radiation.gd")
 ## Standard ammunition is money; handmade ammunition is a separate reserve.
 const GOODS={
 "mutant_bone":{"name":"变异兽骨片","price":3,"stock":0,"icon":"mutant_bone","detail":"从兽群遗骸中收集、清理后包好的骨片。聚落收购处可用于制胶和研究，不是任务必需品。","effect":"","amount":0,"purchase":false},
@@ -8,7 +9,7 @@ const GOODS={
 "bread":{"name":"黑面包","price":4,"stock":8,"icon":"bread","detail":"一份当天的黑面包。恢复 30 点饱食。","effect":"food","amount":30},
 "bandage":{"name":"洁净绷带","price":5,"stock":5,"icon":"bandage","detail":"洗净煮过的布与包扎材料。恢复 15 点生命。","effect":"health","amount":15},
 "medkit":{"name":"急救包","price":12,"stock":2,"icon":"medkit","detail":"密封药品和敷料。恢复 40 点生命。","effect":"health","amount":40},
-"antirad":{"name":"抗辐射药","price":10,"stock":2,"icon":"antirad","detail":"减少 20 点已受辐射。辐射达到 20 后，自行恢复会变慢；面具无法阻挡全部外照射。","effect":"radiation","amount":20},
+"antirad":{"name":"抗辐射药","price":10,"stock":2,"icon":"antirad","detail":"减少 20 点辐射，立即按降低后的档位解除或减轻负面状态。各档效果可在背包的辐射状态页查看；面具不能阻挡全部外照射。","effect":"radiation","amount":20},
 "battery":{"name":"干电池","price":7,"stock":3,"icon":"battery","detail":"防潮包内的电池，留给照明和小型设备使用。","effect":"","amount":0},
 "cord":{"name":"细绳与布胶带","price":3,"stock":4,"icon":"cord","detail":"捆扎行李、固定松动物件的常用耗材。","effect":"","amount":0}}
 const AMMO={"military":{"name":"制式子弹","damage":1.4,"tradable":true},"handmade":{"name":"土制子弹","damage":1.0,"tradable":false}}
@@ -70,7 +71,8 @@ static func consume(s,id:String)->String:
 	if stat not in ["radiation","handmade"] and s.economy[stat]>=100:return "现在用会浪费，先留着。"
 	s.economy.goods[id]-=1
 	if s.economy.goods[id]==0:s.economy.goods.erase(id)
-	s.economy[stat]=maxi(0,s.economy[stat]-g.amount) if stat=="radiation" else (s.economy[stat]+g.amount if stat=="handmade" else mini(100,s.economy[stat]+g.amount))
+	var amount=Radiation.heal_amount(s,int(g.amount)) if stat=="health" else int(g.amount)
+	s.economy[stat]=maxi(0,s.economy[stat]-amount) if stat=="radiation" else (s.economy[stat]+amount if stat=="handmade" else mini(100,s.economy[stat]+amount))
 	s.changed.emit()
 	return "你使用了%s。"%g.name
 static func spend_ammo(s,kind:String,count:int)->bool:
@@ -86,7 +88,7 @@ static func meal_key(s,id:String)->String:
 static func decorate(v:Dictionary,s)->Dictionary:
 	if MEALS.get(v.id,"")==s.context.get("floor","?") and not s.f(meal_key(s,v.id)) and s.economy.food<75:
 		v.options.append(s.opt("meal_"+v.id,"「还有居民的热饭吗？我想坐下吃一点。」"))
-	return v
+	return Radiation.decorate(v,s)
 static func meal(s,id:String)->String:
 	if MEALS.get(id,"")!=s.context.get("floor","?") or s.f(meal_key(s,id)):return "今天这份饭已经吃过了。"
 	s.flags[meal_key(s,id)]=true
@@ -101,9 +103,11 @@ static func advance(s,delta:float,moving:bool):
 	s.economy.activity_clock=fmod(clock,120.0)
 	if ticks>0:s.economy.food=maxi(0,int(s.economy.food)-ticks)
 	# Hunger affects comfort, never causes passive damage or a death spiral.
-	if s.economy.food>=40 and s.economy.health<100:
+	var reaction=Radiation.state(s)
+	if float(reaction.interval)>0 and s.economy.food>=int(reaction.food) and s.economy.health<100:
 		var recovery:float=float(s.economy.get("recovery_clock",0))+maxf(delta,0)
-		var interval=180.0 if int(s.economy.radiation)>=20 else 90.0
+		var interval=float(reaction.interval)
 		var recovered=floori(recovery/interval)
 		s.economy.recovery_clock=fmod(recovery,interval)
 		if recovered>0:s.economy.health=mini(100,int(s.economy.health)+recovered)
+	else:s.economy.recovery_clock=0.0

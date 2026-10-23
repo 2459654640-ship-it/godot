@@ -22,6 +22,7 @@ static func render(h,tab:String="all",selected:String=""):
 	if weapon!="":top.add_child(h.button("卸下",func():s.equip_weapon("");render(h,tab,weapon),true,true))
 	top.add_spacer(false);top.add_child(h.label("制式弹 %d   /   土制弹 %d"%[s.economy.military,s.economy.handmade],18,h.amber))
 	h.body("生命 %d / 100    饱食 %d / 100    辐射 %d / 100"%[s.economy.health,s.economy.food,s.economy.radiation],17,h.muted)
+	var reaction=h.button("辐射状态："+s.Economy.Radiation.state(s).name+" · 查看影响与处理方法",func():h.show_radiation(),true,true);reaction.tooltip_text=s.Economy.Radiation.describe(s);h.modal_box.add_child(reaction)
 	var tabs=HBoxContainer.new();tabs.add_theme_constant_override("separation",10);h.modal_box.add_child(tabs)
 	for pair in TABS:
 		var key:String=pair[0];var b=h.button(pair[1],func():render(h,key),true,true);tabs.add_child(b)
@@ -49,6 +50,8 @@ static func render(h,tab:String="all",selected:String=""):
 		var title=h.label(e.name,26,h.text_color);title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;details.add_child(title)
 		var text=h.label(e.detail,19,h.text_color);text.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;details.add_child(text)
 		var id:String=selected
+		if e.good and s.Economy.GOODS[id].effect=="health" and s.economy.radiation>=80:
+			var actual=h.label("当前状态下恢复 %d 点生命。"%s.Economy.Radiation.heal_amount(s,int(s.Economy.GOODS[id].amount)),17,h.amber);details.add_child(actual)
 		if e.kind=="武器":details.add_child(h.button("卸下武器" if id==weapon else "装备到武器栏",func():s.equip_weapon("" if id==weapon else id);render(h,tab,id)))
 		elif e.good and s.Economy.GOODS[id].effect!="":details.add_child(h.button("使用一份",func():h.toast(s.Economy.consume(s,id));render(h,tab,id)))
 		elif id=="portable_radio":details.add_child(h.button("收听随身收音机",func():h.world.public_radio.open_controls(true)))

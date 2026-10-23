@@ -49,6 +49,7 @@ var last_choice=""
 var health_bar:ProgressBar
 var food_bar:ProgressBar
 var vitals_label:Label
+var radiation_tier=-1
 var leads_button:Button
 var last_guidance=""
 var shop_tab="buy"
@@ -443,6 +444,8 @@ func refresh_status():
 	if health_bar:
 		health_bar.value=world.story.economy.health;food_bar.value=world.story.economy.food
 		vitals_label.text="生命 %d   /   饱食 %d"%[world.story.economy.health,world.story.economy.food]
+		if world.story.economy.radiation>0:vitals_label.text+="\n辐射 %d · %s"%[world.story.economy.radiation,world.story.Economy.Radiation.state(world.story).name]
+		vitals_label.tooltip_text=world.story.Economy.Radiation.describe(world.story)
 		leads_button.text="留意的事 · "+str(Journal.leads(world.story).size())
 	inventory_count.text="%d 制式弹 · %d 土制弹" % [world.story.economy.military,world.story.economy.handmade]
 	if world.story.equipped_weapon()!="":inventory_count.text+="\n1  "+("收枪" if world.story.weapon_drawn() else "拔枪")+" · "+world.story.ITEMS[world.story.equipped_weapon()][0]
@@ -462,11 +465,15 @@ func refresh_status():
 			quick_items.add_child(icon)
 		quick_signature=signature
 func tick(delta:float):
+	var tier=world.story.Economy.Radiation.index(int(world.story.economy.radiation))
+	if tier!=radiation_tier:
+		if radiation_tier>=0:toast("辐射状态："+world.story.Economy.Radiation.state(world.story).name+"。"+world.story.Economy.Radiation.state(world.story).detail,8)
+		radiation_tier=tier
 	prompt.visible=not modal_visible()
 	if not modal_visible() and world.nearest!="" and not world.waiting_shift:set_prompt(world.nearest)
 	location_label.text=world.floor_name()+"  /  "+world.room_name
 	status_label.text=str(world.story.flags.get("story_day",16))+" XI 1982  /  "+str(world.story.flags.get("story_time","07:42"))+" · "+("旅程" if comic_active or world.story.ending else (("换班" if world.phase>=8 else "早班") if world.floor_id in ["life","labor"] else "探索"))
-	var guidance=JSON.stringify([Journal.active(world.story),world.story.economy.health,world.story.economy.food,Journal.leads(world.story).size()])
+	var guidance=JSON.stringify([Journal.active(world.story),world.story.economy.health,world.story.economy.food,world.story.economy.radiation,Journal.leads(world.story).size()])
 	if guidance!=last_guidance:last_guidance=guidance;refresh_status()
 	map_small.queue_redraw()
 	if is_instance_valid(map_large):map_large.queue_redraw()
@@ -481,6 +488,18 @@ func toast(text:String,duration:float=4.0):
 
 func show_inventory():
 	preload("res://scripts/ui_inventory.gd").render(self)
+
+func show_radiation():
+	start_modal("辐射与身体状态","状态说明",true)
+	modal.position=Vector2(270,70);modal.size=Vector2(1060,860)
+	prose(world.story.Economy.Radiation.describe(world.story),21)
+	rule()
+	var tiers=world.story.Economy.Radiation.TIERS
+	for i in tiers.size():
+		body("%d–%d · %s"%[tiers[i].min,tiers[i+1].min-1 if i+1<tiers.size() else 100,tiers[i].name],21,amber)
+		body(tiers[i].detail,18)
+	body("降低辐射后立即按新档位生效，不留下永久惩罚。已抵达聚落的医护或负责人可以安排免费处置。",17,muted)
+	modal_box.add_child(button("返回背包",show_inventory))
 
 func show_journal(tab:String="tasks",shown_floor:String=""):
 	start_modal("伊万的手记","随身卷宗   /   任务、地图与见闻",true)
