@@ -1,0 +1,17 @@
+[
+  {
+    "source": "/workspace/ivan-motion-review/eight-single-views/01-front.png",
+    "file": "01-front-approved-original.png",
+    "sha256": "cfabe44ce2e7008c7d2e11ca2db046e2b29574d6b7325a285daa004753e09e0f"
+  },
+  {
+    "source": "/workspace/ivan-motion-review/eight-single-views/03-right.png",
+    "file": "03-right-approved-original.png",
+    "sha256": "787e3a5fa213229c18865e9c2accb8c1b17e9050ad44d1ff13872d4dc553baaa"
+  },
+  {
+    "source": "/workspace/ivan-motion-review/eight-single-views/05-back.png",
+    "file": "05-back-approved-original.png",
+    "sha256": "59375d37820e95f9cfac2cd14c825cb0a6aa2c398f6bbb1f5e97b0c2baf2ad51"
+  }
+]

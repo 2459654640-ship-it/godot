@@ -1,0 +1,61 @@
+{
+  "candidate": "candidate-A",
+  "source_sha256": "b5cbf4f8242de196e51f080c7c45f62491793df0c7b43514933900cf8b401b62",
+  "source_size": [
+    1536,
+    1024
+  ],
+  "views": [
+    {
+      "name": "front",
+      "source_bounds": [
+        55,
+        17,
+        545,
+        984
+      ],
+      "height": 967,
+      "scale": 0.9287925696594427,
+      "canvas": [
+        1024,
+        1024
+      ],
+      "output_sha256": "b37d662781c6ce7b05c3a02f6914c596ef8825ab2f1f3604449c00fba2f803b9"
+    },
+    {
+      "name": "side",
+      "source_bounds": [
+        601,
+        18,
+        884,
+        986
+      ],
+      "height": 968,
+      "scale": 0.9287925696594427,
+      "canvas": [
+        1024,
+        1024
+      ],
+      "output_sha256": "3867a32642a3fdce3919d8bd0a4d3c0917aff63f9f98c82f3eae1d795b5fffbb"
+    },
+    {
+      "name": "back",
+      "source_bounds": [
+        991,
+        18,
+        1479,
+        980
+      ],
+      "height": 962,
+      "scale": 0.9287925696594427,
+      "canvas": [
+        1024,
+        1024
+      ],
+      "output_sha256": "01e0aa54452a25e457232fd89cb849e76add24e7b4b95a5715ef0d236196947c"
+    }
+  ],
+  "height_spread_percent": 0.62,
+  "method": "Whole-figure extraction and common uniform scale only; no per-view scaling or anatomy edits.",
+  "status": "Generated modeling reference candidate; requires appearance approval before model generation."
+}
