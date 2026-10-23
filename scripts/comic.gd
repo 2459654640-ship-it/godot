@@ -28,7 +28,7 @@ static func start(s,sequence:String):
 	s.ending=false
 	if sequence=="solo":s.flags.d6_wanted=true
 	# An illustrated conversation remains in the same moment and facility.
-	if not authored().get(sequence,{}).get("same_moment",false) and not Campaign.data().panels.get(sequence,{}).get("end","").begins_with("resume:"):
+	if not authored().get(sequence,{}).get("same_moment",false) and not Campaign.data().panels.get(sequence,{}).get("same_moment",false) and not Campaign.data().panels.get(sequence,{}).get("end","").begins_with("resume:"):
 		s.flags.story_day=17 if sequence=="official" else (16 if sequence in ["solo","intro"] else int(s.flags.get("story_day",17))+1)
 		s.flags.story_time="05:40" if sequence=="official" else ("08:10" if sequence=="solo" else "07:42")
 	if sequence=="solo" and (not s.has("mask") or not s.has("filter")) and not s.f("unprotected_departure"):
@@ -42,6 +42,7 @@ static func panel(s)->Dictionary:
 	var override:Dictionary=authored().get(node,{})
 	if override.has("next") or override.has("choices"):p.erase("end")
 	p.merge(override,true)
+	if node=="east_mine_inside" and s.f("workers_draft"):p.finish_flags.append("workers_transit")
 	# Old saves can resume a previously queued public-return cinematic. Its
 	# old map destination must not bypass the current identity check.
 	if not Campaign.Access.public_entry(s):

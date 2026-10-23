@@ -5,11 +5,12 @@ var graph=AStar2D.new()
 var cells:Dictionary={}
 var points:Dictionary={}
 var revision=0
-const STEP=0.5
+var STEP=0.5
 const CLEARANCE=0.32
 
 func setup(world,minimum_obstacle_height:float=0.24):
 	revision+=1
+	STEP=1.0 if world.floor_id=="east_district" else .5
 	graph.clear();cells.clear();points.clear()
 	var regions:Array=[]
 	var bounds:Rect2=world.zones[0].rect
@@ -23,6 +24,15 @@ func setup(world,minimum_obstacle_height:float=0.24):
 			var rect:Rect2=solid.rect
 			if solid.name=="MineEscapeGrille" and world.story.f("rescue_route_ready"):rect.position.x+=2.8
 			obstacles.append(rect.grow(CLEARANCE))
+	# Spatial buckets keep the district's wider ground from multiplying every
+	# grid point by every facade, kerb and piece of furniture.
+	var buckets:Dictionary={}
+	for rect in obstacles:
+		for bx in range(floori(rect.position.x/4),floori(rect.end.x/4)+1):
+			for bz in range(floori(rect.position.y/4),floori(rect.end.y/4)+1):
+				var bucket=Vector2i(bx,bz)
+				if not buckets.has(bucket):buckets[bucket]=[]
+				buckets[bucket].append(rect)
 	var index=0
 	for x in range(floori(bounds.position.x/STEP),ceili(bounds.end.x/STEP)+1):
 		for z in range(floori(bounds.position.y/STEP),ceili(bounds.end.y/STEP)+1):
@@ -34,7 +44,7 @@ func setup(world,minimum_obstacle_height:float=0.24):
 					if region.has_point(p+offset):on_floor=true;break
 				if not on_floor:valid=false;break
 			if not valid:continue
-			for rect in obstacles:
+			for rect in buckets.get(Vector2i(floori(p.x/4),floori(p.y/4)),[]):
 				if rect.has_point(p):valid=false;break
 			if not valid:continue
 			var key=Vector2i(x,z)

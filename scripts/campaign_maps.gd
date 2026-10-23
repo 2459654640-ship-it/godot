@@ -13,6 +13,8 @@ static func doors(id:String)->Array:
 	return out
 static func build(w):
 	var k=w.kit;var id:String=w.floor_id;var plan:Dictionary=LAYOUTS[id]
+	if id=="east_district":
+		Detail.materials(k);preload("res://scripts/east_district_map.gd").build(w);return
 	if id in ["commune","waterworks","sech","starcity","surface","railfront"]:Detail.materials(k)
 	if id=="railfront":
 		preload("res://scripts/frontline.gd").build(w);return
@@ -334,8 +336,9 @@ static func people(w):
 	if w.floor_id=="surface" and w.story.f("sided_veteran"):
 		w.person("plant_veteran",Vector3(-16.5,0,13),"green",true,"veteran_masked")
 	if w.floor_id=="waterworks":
-		w.person("plant_guide",Vector3(10,0,7.5),"green",true,"commander_masked")
-		w.person("plant_veteran",Vector3(13,0,7),"green",true,"veteran_masked")
+		if not w.story.f("c_done_plant_leave"):
+			w.person("plant_guide",Vector3(10,0,7.5),"green",true,"commander_masked")
+			w.person("plant_veteran",Vector3(13,0,7),"green",true,"veteran_masked")
 static func targets(w):
 	for extra in ["commune_aleksei","mine_anna"]:
 		if w.npcs.has(extra):w.target(extra,w.npcs[extra].position,Campaign.data().interactions[extra].name,"talk")
@@ -344,9 +347,10 @@ static func targets(w):
 		var d:Dictionary=Campaign.data().interactions[e[0]]
 		w.target(e[0],Vector3(e[1],0,e[2]),d.name,"talk" if e[3]=="npc" else "inspect")
 	if w.floor_id=="surface":preload("res://scripts/surface_site.gd").restore_drops(w)
+	if w.floor_id=="east_district":Campaign.District.restore_loot(w)
 	if w.floor_id=="waterworks":
-		w.target("plant_guide",w.npcs.plant_guide.position,"科瓦廖夫","talk")
-		w.target("plant_veteran",w.npcs.plant_veteran.position,"老兵","talk")
+		if w.npcs.has("plant_guide"):w.target("plant_guide",w.npcs.plant_guide.position,"科瓦廖夫","talk")
+		if w.npcs.has("plant_veteran"):w.target("plant_veteran",w.npcs.plant_veteran.position,"老兵","talk")
 static func residents(w):
 	var layouts={"commune":[["ambient_worker",6,4],["ambient_woman",-4.1,11.1],["ambient_woman",-7,21],["ambient_worker",9,-5.2],["ambient_child",15,9]],"sech":[["ambient_worker",0,3],["ambient_child",-10,14],["ambient_elder",-7,17.6],["ambient_woman",-8,2],["ambient_worker",16,-10]],"coal":[["ambient_worker",-5,11],["ambient_woman",12,-4],["ambient_worker",-16.2,11.4],["resident",-10,12.3],["ambient_worker",-21.5,-4],["ambient_worker",-20.3,-10.5],["queue",-22.3,4.9],["ambient_woman",.5,-16.5],["ambient_worker",-6,-4]],"starcity":[]}
 	for index in layouts.get(w.floor_id,[]).size():

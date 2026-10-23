@@ -1,0 +1,788 @@
+{
+  "actions": {
+    "east_read_routes": {
+      "text": "对照道路和铁路，记下入口与供电线路。",
+      "reply": "你认出旧货运路与工人街的交叉口，把几条支路抄进手记。货场横穿门需要恢复供电，才能从主路安全穿过。",
+      "once": true,
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {
+        "east_routes_known": true,
+        "east_power_job": true
+      }
+    },
+    "east_power_inspect": {
+      "text": "检查断路位置，核对所需备件。",
+      "reply": "你确认供电干线没有接地短路，损坏的是柜内的保护组件。备用件登记在工人街西侧交通维修间，沿旧货运路回到路口，再向西南走。",
+      "once": true,
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {
+        "east_power_job": true
+      }
+    },
+    "east_take_spares": {
+      "text": "核对铭牌，取走匹配的保护组件与可用材料。",
+      "reply": "你对上型号，把保护组件装进工具袋，又将松散的金属件和铜线分开包好。",
+      "once": true,
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "east_power_job"
+        ]
+      },
+      "flags": {
+        "east_spares_found": true
+      },
+      "goods": {
+        "scrap_metal": 3,
+        "copper_wire": 2,
+        "salvage_cloth": 3
+      }
+    },
+    "east_power_restore": {
+      "text": "安装保护组件，测通回路后合闸。",
+      "reply": "你接好组件，测量回路，再合上隔离开关。货场方向传来电机启动的声音，横穿门缓缓退开，路口灯先闪了两次，随后稳定亮起。\n修配间的插座也恢复了供电。东侧检修库和北线出站路已经能从旧货运路抵达。你还在检修员的抽屉里找到三发保存完好的制式子弹。",
+      "once": true,
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "east_spares_found"
+        ]
+      },
+      "flags": {
+        "east_power_restored": true,
+        "east_crossing_open": true
+      },
+      "reward": {
+        "military": 3
+      }
+    },
+    "east_manual_release": {
+      "text": "打开护盖，脱开门机，推开横穿门。",
+      "reply": "你拉住释放柄，把门机与门体脱开，沿轨道缓缓推开钢门。西侧道路通了，变配电所仍需要修复。",
+      "once": true,
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {
+        "east_crossing_open": true
+      }
+    },
+    "east_take_supply": {
+      "text": "取用一份应急补给。",
+      "reply": "你取出一包土制子弹、两卷绷带、一块面包和一小捆修补布，在领用页上记下数量。箱盖内侧提醒：补给有限，还要留给后来的出站者。",
+      "once": true,
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {
+        "east_supply_taken": true
+      },
+      "goods": {
+        "bandage": 2,
+        "bread": 1,
+        "salvage_cloth": 2
+      },
+      "reward": {
+        "handmade": 24
+      }
+    },
+    "east_make_bandage": {
+      "text": "处理修补布，制作洁净绷带 ×1（修补布 ×2）。",
+      "reply": "你在通电的修配间烧开水，处理布料，待它晾凉后包成一份洁净绷带。",
+      "once": false,
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "east_power_restored"
+        ],
+        "goods": {
+          "salvage_cloth": 2
+        }
+      },
+      "flags": {},
+      "goods": {
+        "salvage_cloth": -2,
+        "bandage": 1
+      }
+    },
+    "east_make_cord": {
+      "text": "制作捆扎用品 ×1（修补布 ×1、废金属 ×1）。",
+      "reply": "你把金属边条磨钝，配上结实的布带，做成一份可固定行李和松动物件的捆扎用品。",
+      "once": false,
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "east_power_restored"
+        ],
+        "goods": {
+          "salvage_cloth": 1,
+          "scrap_metal": 1
+        }
+      },
+      "flags": {},
+      "goods": {
+        "salvage_cloth": -1,
+        "scrap_metal": -1,
+        "cord": 1
+      }
+    },
+    "east_open_cache": {
+      "text": "打开运输箱，取走仍可使用的物资。",
+      "reply": "你收起箱中的铜线、金属件和包扎用品，把盖子轻轻合上。物资箱上保留着北线货场的编号。院内的床铺、炉子和食物表明，灰狗一直把这里当作据点。",
+      "once": true,
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {
+        "east_cache_taken": true
+      },
+      "goods": {
+        "scrap_metal": 4,
+        "copper_wire": 3,
+        "bandage": 1
+      },
+      "reward": {
+        "military": 4
+      }
+    },
+    "east_enter_commune": {
+      "text": "沿地铁联络支线前往公社。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {},
+      "travel": "east_enter_commune"
+    },
+    "east_enter_sech": {
+      "text": "沿检修库联络线前往谢契。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {},
+      "travel": "east_enter_sech"
+    },
+    "east_enter_labor": {
+      "text": "向外侧值守出示本人 D-6 返站记录。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {},
+      "travel": "east_enter_labor"
+    },
+    "east_enter_waterworks": {
+      "text": "打开厂区铁门，进入水处理厂。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "c_done_plant_leave"
+        ]
+      },
+      "flags": {},
+      "travel": "east_enter_waterworks"
+    },
+    "east_enter_surface": {
+      "text": "沿检修井进入旧泵站。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {},
+      "travel": "east_enter_surface"
+    },
+    "east_enter_railfront": {
+      "text": "沿已登记的任务线路下行。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {},
+      "travel": "east_enter_railfront"
+    },
+    "east_take_north": {
+      "text": "核对已确认的班次，沿北线前往星城外围。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "east_power_restored",
+          "north_inquiry_ready",
+          "star_known"
+        ]
+      },
+      "flags": {},
+      "travel": "east_north_road"
+    },
+    "east_depart_commune": {
+      "text": "检查防护装备，前往地表工业片区。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "commune"
+        ],
+        "items": [
+          "mask",
+          "filter"
+        ]
+      },
+      "flags": {},
+      "travel": "east_depart_commune"
+    },
+    "east_depart_sech": {
+      "text": "检查防护装备，前往地表工业片区。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "sech"
+        ],
+        "items": [
+          "mask",
+          "filter"
+        ]
+      },
+      "flags": {},
+      "travel": "east_depart_sech"
+    },
+    "east_depart_labor": {
+      "text": "检查防护装备，前往地表工业片区。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "labor"
+        ],
+        "items": [
+          "mask",
+          "filter"
+        ]
+      },
+      "flags": {},
+      "travel": "east_depart_labor"
+    },
+    "east_exit_factory": {
+      "text": "离开水厂，返回地表旧货运路。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "waterworks"
+        ],
+        "all": [
+          "c_done_plant_leave"
+        ]
+      },
+      "flags": {},
+      "travel": "east_return_waterworks"
+    },
+    "east_mine_contact": {
+      "text": "「我不能走 D-6 正门，还有谁能帮我核实矿区情况？」",
+      "reply": "娜佳把寻人抄页收进抽屉。\n「运输线上有人认识煤运班的副主管，叫瓦西里。我会托人先问，他肯不肯冒这个风险，得由他自己决定。」\n几次内线转接后，回话只留下一个约定：先把班组编号和来意说清，不带公社的组织名单，更不能把接应当成返站许可。",
+      "once": true,
+      "req": {
+        "floor": [
+          "commune"
+        ],
+        "any": [
+          "anna_records",
+          "workers_draft"
+        ]
+      },
+      "flags": {
+        "east_mine_contact_known": true
+      }
+    },
+    "east_mine_prepare": {
+      "text": "按接应人的回话核对班组编号、检修入口与撤离办法。",
+      "reply": "你只抄下寻亲所需的班组编号，把带公社署名的原稿留在联络室。娜佳和你核对水厂西侧的旧检修巷，以及返回旧货运路的办法。\n「到门外先等约定的两次敲击。接应没到就回来，别去正门碰碰运气。进去只到煤运区，出来也走原路。」\n你把入口位置记在地图上。擅离记录仍然存在。",
+      "once": true,
+      "req": {
+        "floor": [
+          "commune"
+        ],
+        "all": [
+          "east_mine_contact_known"
+        ]
+      },
+      "flags": {
+        "east_mine_prepared": true
+      }
+    },
+    "east_enter_mine": {
+      "text": "按约定停在检修口外，等待内部接应。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "east_mine_prepared"
+        ],
+        "any": [
+          "anna_records",
+          "workers_draft"
+        ]
+      },
+      "flags": {},
+      "travel": "east_mine_approach"
+    }
+  },
+  "interactions": {
+    "east_board": {
+      "facility": "east_district",
+      "name": "货运路导向图",
+      "body": "褪色的道路图固定在支线口的矮墙上。旧货运路横穿铁路货场，工人街向北通往变配电所；水厂和泵站都在铁路西侧。东南是检修库，东北道路通往北线接送站。\n图上标的是地下联络入口，真正的聚落还在隧道深处。货场横穿门停在落锁位置，电缆沿围栏通向西北的变配电所。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_read_routes"
+      ]
+    },
+    "east_relay": {
+      "facility": "east_district",
+      "name": "变配电所 / 检修柜",
+      "body": "铁门外侧留有一面检修柜，铭牌上写着：货场横穿门、路口指示灯、住宅街修配间。开关停在断开位置，烧毁的保险组件已经拆下。\n维修登记提示：同型号备件存放在工人街西侧的交通维修间。电缆接头没有泡水，装好备件后仍要先测回路再合闸。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_power_inspect",
+        "east_power_restore"
+      ]
+    },
+    "east_spares": {
+      "facility": "east_district",
+      "name": "交通维修间 / 封存备件",
+      "body": "屋顶塌了一角，工作台仍在墙根。油纸包里有一套与检修柜相同规格的保护组件，旁边是可以回收的金属件和铜线。这里不是随机刷新的补给箱。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_take_spares"
+      ]
+    },
+    "east_gate": {
+      "facility": "east_district",
+      "name": "货场横穿门 / 西侧",
+      "body": "两条货运铁轨沿围栏伸向北方，旧货运路在这里横穿。停电后的机电锁把整扇钢门留在道路上，接线管沿西侧围栏通往变配电所。门下没有能钻过的缺口。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": []
+    },
+    "east_gate_east": {
+      "facility": "east_district",
+      "name": "货场横穿门 / 东侧应急柄",
+      "body": "东侧检修人员留下一个带护盖的机械释放柄。拉动后可脱开门机，让人从内侧推开横穿门。它不能恢复照明，也不能给北线接送设备送电。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_manual_release"
+      ]
+    },
+    "east_supply": {
+      "facility": "east_district",
+      "name": "支线口 / 公用应急箱",
+      "body": "箱子固定在背风的混凝土平台上，标明每位外勤人员只领一份。里面有包好的土制弹、绷带、面包，以及一小捆修补布。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_take_supply"
+      ]
+    },
+    "east_shelter": {
+      "facility": "east_district",
+      "name": "住宅街 / 避风修配间",
+      "body": "街边的修配间只剩半截窗墙和裸露的梁，后墙上还挂着几把工具。工作台上有夹具、旧电炉和金属水壶，桌边留着可以操作的位置。\n通电后可以烧水处理修补布，制作绷带；金属边条和布带也能做成捆扎用品。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_make_bandage",
+        "east_make_cord"
+      ]
+    },
+    "east_camp_cache": {
+      "facility": "east_district",
+      "name": "灰狗营地 / 运输箱",
+      "body": "修配棚被灰狗改成了住处，屋后能看见床铺和烟囱。院内有人持枪巡逻，运输箱就放在棚门外。\n可以利用围栏西侧的检修缺口和堆料遮挡，趁守卫背过身时取走物资；也可以拔枪交战。按住 Ctrl 可以放轻脚步。守卫看到你后需要一点时间确认，但开枪会惊动附近的人。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_open_cache"
+      ]
+    },
+    "east_commune_entry": {
+      "facility": "east_district",
+      "name": "通往公社的地铁支线",
+      "body": "台阶下通往公社的联络支线。这里的入口并不意味着你获得了加入公社或自由出入另一阵营的资格。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_enter_commune"
+      ]
+    },
+    "east_d6_entry": {
+      "facility": "east_district",
+      "name": "D-6 外侧登记口",
+      "body": "外侧登记口仍由 D-6 值守。本人随队与归队记录决定准入，公社寻人抄页没有通行效力。通缉或擅离者不能从这里进入。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_enter_labor"
+      ]
+    },
+    "east_sech_entry": {
+      "facility": "east_district",
+      "name": "通往谢契的检修库联络线",
+      "body": "检修库下方接通谢契的联络线路。轨道保留在货场专用带内，门口的通道没有堆放货物。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_enter_sech"
+      ]
+    },
+    "east_waterworks_entry": {
+      "facility": "east_district",
+      "name": "东郊水处理厂铁门",
+      "body": "水厂的厂区铁门仍在原位。熟悉的阀门和仓库位于建筑内部，这次进入不会重新生成已经拿走的滤芯或奖励。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_enter_waterworks"
+      ]
+    },
+    "east_pump_entry": {
+      "facility": "east_district",
+      "name": "旧泵站检修井",
+      "body": "带护栏的检修井通往旧泵站场地。进入后仍可从原检修梯返回这条支路。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_enter_surface"
+      ]
+    },
+    "east_transfer_entry": {
+      "facility": "east_district",
+      "name": "旧联络线下行口",
+      "body": "下行通道接入旧联络线。只有已经登记的外勤任务才能沿这一段线路继续，先在派工聚落确认任务。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_enter_railfront"
+      ]
+    },
+    "east_north_entry": {
+      "facility": "east_district",
+      "name": "北线接送站",
+      "body": "道路继续伸向北线。接送设备需要供电，司机也只按已确认的班次和介绍安排出发；这里不是星城本体。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_take_north"
+      ]
+    },
+    "east_mine_entry": {
+      "facility": "east_district",
+      "name": "矿区封停检修口",
+      "body": "封停的检修口藏在水厂西侧的旧检修巷深处。它通向煤运区域，门后的情况无法从外面判断。没有接应时应当保持关闭。",
+      "role": "东郊地表 / 探索",
+      "spoken": false,
+      "options": [
+        "east_enter_mine"
+      ]
+    }
+  },
+  "panels": {
+    "east_enter_commune": {
+      "title": "走进公社的灯光",
+      "art": "commune_threshold",
+      "body": "你沿支线台阶下行，越过风门后，地表的风声渐渐被通风机盖住。联络口的人先核对来路，再让你进入公社。",
+      "end": "map:commune",
+      "same_moment": true
+    },
+    "east_enter_sech": {
+      "title": "检修库下面",
+      "art": "sech_threshold",
+      "body": "你从检修库的下行通路进入北线联络段。铁轨旁有新近清理的脚印，远处传来轮值人员交接的声音。",
+      "end": "map:sech",
+      "same_moment": true
+    },
+    "east_enter_labor": {
+      "title": "本人名册",
+      "art": "gate",
+      "body": "你在外侧停下，按 D-6 自己的记录核对身份。获准后进入作业层，煤矿与生活层仍按各自权限管理。",
+      "end": "map:labor",
+      "same_moment": true
+    },
+    "east_enter_waterworks": {
+      "title": "再回水厂",
+      "art": "plant_arrival",
+      "body": "你穿过厂区铁门，再次看见旧值班桌和已经处理过的设备。小队已离开，已搬走的物资不会重新出现。",
+      "end": "map:waterworks",
+      "same_moment": true
+    },
+    "east_enter_surface": {
+      "title": "检修井下的旧场地",
+      "art": "surface_pumpyard",
+      "body": "你顺着带护栏的检修梯下行，穿过旧泵站的低矮入口。水声和兽群留下的气味提醒你，场地里仍有危险。",
+      "end": "map:surface",
+      "same_moment": true
+    },
+    "east_enter_railfront": {
+      "title": "下到联络线",
+      "art": "frontline_station",
+      "body": "你沿任务登记的联络线下行。前方的换乘站仍按本次外勤的进度保留设备和接送安排。",
+      "end": "map:railfront",
+      "same_moment": true
+    },
+    "east_north_road": {
+      "title": "北线接送站",
+      "art": "winter_crossroads",
+      "body": "恢复供电的信号灯亮着。司机核对你已确认的介绍与本班线路，等你坐稳后才发车。工业区的楼影渐渐退到身后，列车沿北线前往更远处的星城外围。\n这趟接送只到隔离线外，能否进入内部仍由星城值班人员核实。",
+      "end": "map:starcity",
+      "same_moment": true
+    },
+    "east_depart_commune": {
+      "title": "走上旧货运路",
+      "art": "east_district_arrival",
+      "body": "你沿联络通路走向地表。出口外的积雪被风刮到墙脚，裂开的旧货运路在路口分成几条支线。远处的铁路围栏挡住了东侧货场，门机没有声音。\n先对照路口导向图辨认方向，支线口旁的公用应急箱留有少量补给。真正的公社、D-6 和谢契仍在各自的地下线路上；眼前只是通往它们的地表联络入口。",
+      "end": "map:east_district",
+      "finish_flags": [
+        "arrival_v8_east_district"
+      ],
+      "same_moment": true
+    },
+    "east_depart_sech": {
+      "title": "走上旧货运路",
+      "art": "east_district_arrival",
+      "body": "你沿联络通路走向地表。出口外的积雪被风刮到墙脚，裂开的旧货运路在路口分成几条支线。远处的铁路围栏挡住了东侧货场，门机没有声音。\n先对照路口导向图辨认方向，支线口旁的公用应急箱留有少量补给。真正的公社、D-6 和谢契仍在各自的地下线路上；眼前只是通往它们的地表联络入口。",
+      "end": "map:east_district",
+      "finish_flags": [
+        "arrival_v8_east_district"
+      ],
+      "same_moment": true
+    },
+    "east_depart_labor": {
+      "title": "走上旧货运路",
+      "art": "east_district_arrival",
+      "body": "你沿联络通路走向地表。出口外的积雪被风刮到墙脚，裂开的旧货运路在路口分成几条支线。远处的铁路围栏挡住了东侧货场，门机没有声音。\n先对照路口导向图辨认方向，支线口旁的公用应急箱留有少量补给。真正的公社、D-6 和谢契仍在各自的地下线路上；眼前只是通往它们的地表联络入口。",
+      "end": "map:east_district",
+      "finish_flags": [
+        "arrival_v8_east_district"
+      ],
+      "same_moment": true
+    },
+    "east_return_surface": {
+      "title": "回到泵站外的支路",
+      "art": "pump_hatch_return",
+      "body": "你重新站在检修井外，确认背包和封存样本都还在。旧货运路仍在前方，接下来可以返回派工聚落，也可以在补给允许时继续探索。",
+      "end": "map:east_district",
+      "finish_flags": [
+        "arrival_v8_east_district"
+      ],
+      "same_moment": true
+    },
+    "east_return_waterworks": {
+      "title": "水厂铁门之外",
+      "art": "plant_arrival",
+      "body": "你走出厂区铁门，停在避风的墙角检查装备。已经取走的物资和处理过的设备都留在记录里，旧货运路通往其它设施。",
+      "end": "map:east_district",
+      "finish_flags": [
+        "arrival_v8_east_district"
+      ],
+      "same_moment": true
+    },
+    "east_return_starcity": {
+      "title": "离开隔离线",
+      "art": "star_threshold",
+      "body": "你沿北线的原接送安排返回工业片区。星城没有因你来过一次就开放内区，询问与介绍仍按已核实的记录保留。",
+      "end": "map:east_district",
+      "finish_flags": [
+        "arrival_v8_east_district"
+      ],
+      "same_moment": true
+    },
+    "east_return_coal": {
+      "title": "从检修支巷离矿",
+      "art": "east_mine_service",
+      "body": "瓦西里确认外侧没有值守人员经过，带你沿原来的检修支巷离开煤运区。你没有经过 D-6 的正门，也没有进入作业层。\n班组记录与本人意愿都还在你的衣袋里。回到旧货运路后，可以沿西南支线将消息带回公社。",
+      "end": "map:east_district",
+      "finish_flags": [
+        "arrival_v8_east_district"
+      ],
+      "same_moment": true
+    },
+    "east_mine_approach": {
+      "title": "门后的两次敲击",
+      "art": "east_mine_service",
+      "body": "你离开旧货运路，沿水厂西侧的检修巷走到封停入口。这里没有公开登记窗，门框旁也没有公社的标记。\n你按约定停在门外，没有碰门闩。过了一会儿，门内传来两次轻敲，一个男人低声问班组编号。",
+      "choices": [
+        {
+          "text": "报出核实过的班组编号，等待瓦西里开门。",
+          "next": "east_mine_inside"
+        },
+        {
+          "text": "这次先不进去，按原路退回地表。",
+          "next": "east_mine_withdraw"
+        }
+      ],
+      "same_moment": true
+    },
+    "east_mine_inside": {
+      "title": "只到煤运区",
+      "art": "coal_entry",
+      "body": "瓦西里开门后先看了一眼巷道，才让你跟上。\n瓦西里：「接你进来，是我个人的决定。外面没有撤掉你的名字，别从矿口去作业层。你要核实谁，我先找班组页；医护怎么安排、工人愿不愿意回话，都得当面问。」\n你跟着他走过封停的检修段，从矿区内部进入煤运登记与休养区域。",
+      "end": "map:coal",
+      "finish_flags": [
+        "east_private_mine_entry",
+        "coal_access",
+        "east_mine_visited",
+        "arrival_v8_coal"
+      ],
+      "same_moment": true
+    },
+    "east_mine_withdraw": {
+      "title": "先退回去",
+      "art": "east_mine_service",
+      "body": "你没有进入矿区，也没有留下新的登记。沿来时的检修巷返回旧货运路后，接应约定与已查到的线索仍保留，下次可以准备好再来。",
+      "end": "map:east_district",
+      "finish_flags": [
+        "arrival_v8_east_district"
+      ],
+      "same_moment": true
+    },
+    "arrive_east_district": {
+      "title": "旧货运路上的岔口",
+      "art": "east_district_arrival",
+      "body": "你沿地下联络梯登上地表。旧货运路从铁路货场中间穿过，积雪盖住了路肩，工人住宅和停工的厂房仍能辨认。\n西南支线口留着一张道路图，能先帮你确认泵站、水厂和各条地下入口的位置。远处的货场门停在落锁处，沿围栏可以找到供电线路。",
+      "end": "map:east_district",
+      "finish_flags": [
+        "arrival_v8_east_district"
+      ],
+      "same_moment": true
+    }
+  },
+  "quests": [
+    {
+      "id": "east_power",
+      "name": "旧货场的通路",
+      "facility": "east_district",
+      "accepted": "east_power_job",
+      "done": "east_power_restored",
+      "kind": "主线",
+      "background": "旧货运路被停电的货场横穿门挡住。变配电所同时供给门机、路口灯和住宅街修配间。",
+      "lead": "沿铁路围栏能看见通往变配电所的接线管。",
+      "stages": [
+        {
+          "when": {},
+          "target": "east_spares",
+          "step": "到工人街西侧交通维修间，核对并取走匹配的保护组件。"
+        },
+        {
+          "when": {
+            "all": [
+              "east_spares_found"
+            ]
+          },
+          "target": "east_relay",
+          "step": "回西北变配电所外侧检修柜，装好组件，测通回路后合闸。"
+        }
+      ],
+      "actions": [
+        "east_read_routes",
+        "east_power_inspect",
+        "east_take_spares",
+        "east_power_restore"
+      ]
+    },
+    {
+      "id": "east_mine_route",
+      "name": "正门以外的路",
+      "facility": "commune",
+      "accepted": "east_mine_contact_known",
+      "done": "east_mine_visited",
+      "kind": "支线",
+      "background": "瓦西里愿意通过私人检修通路接应，不能撤销伊万的擅离记录。",
+      "lead": "向熟悉运输线的联络员说明矿区寻人的困难。",
+      "stages": [
+        {
+          "when": {},
+          "target": "commune_records",
+          "step": "在联络档案室核对接应回话，确认班组编号、入口和撤离办法。"
+        },
+        {
+          "when": {
+            "all": [
+              "east_mine_prepared"
+            ]
+          },
+          "target": "commune_leave",
+          "step": "从公社支线出站，到工业片区西北的旧检修巷寻找封停入口。"
+        },
+        {
+          "when": {
+            "all": [
+              "east_mine_prepared"
+            ],
+            "floor": [
+              "east_district"
+            ]
+          },
+          "place": "east_district",
+          "target": "east_mine_entry",
+          "step": "沿水厂西侧旧检修巷到封停入口；先等内部接应，随时可以退回。"
+        }
+      ],
+      "actions": [
+        "east_mine_contact",
+        "east_mine_prepare",
+        "east_enter_mine"
+      ]
+    }
+  ]
+}

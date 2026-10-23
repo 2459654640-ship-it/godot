@@ -36,7 +36,8 @@ const ENCOUNTERS={
  "workshop":{"rect":Rect2(-6,-10,11,10),"need":"plant_bled","skip":"plant_fuse","name":"修配间的巢穴","spawns":[Vector3(-3,.04,-8),Vector3(3,.04,-8),Vector3(2,.04,-2)]},
  "warehouse":{"rect":Rect2(5,-14,14,14),"need":"plant_power","skip":"water_secured","name":"封存仓库","spawns":[Vector3(8,.04,-5),Vector3(15,.04,-5),Vector3(12,.04,-11),Vector3(17,.04,-2)]}}
 func setup(world):
- w=world;enabled=w.floor_id in ["waterworks","surface","railfront"];encounters=preload("res://scripts/surface_site.gd").ENCOUNTERS if w.floor_id=="surface" else ENCOUNTERS
+ w=world;enabled=w.floor_id in ["waterworks","surface","railfront","east_district"];encounters=preload("res://scripts/surface_site.gd").ENCOUNTERS if w.floor_id=="surface" else ENCOUNTERS
+ if w.floor_id=="east_district":encounters=w.story.Campaign.District.encounters(w.story)
  if w.floor_id=="railfront":encounters=preload("res://scripts/frontline.gd").encounters(w.story)
  if not enabled:return
  veteran=w.npcs.get("plant_veteran")
@@ -67,7 +68,7 @@ func _physics_process(delta):
   label.hide();reticle.hide()
   if not w.hud.modal_visible():w.hud.show_combat_defeat()
   return
- label.visible=not w.hud.modal_visible();reticle.visible=label.visible and active and w.story.weapon_drawn()
+ label.visible=not w.hud.modal_visible();reticle.visible=label.visible and (active or w.floor_id=="east_district") and w.story.weapon_drawn()
  if paused():
   if is_instance_valid(veteran):veteran.combat_velocity=Vector3.ZERO
   return
@@ -81,6 +82,7 @@ func _physics_process(delta):
  if active:
   if Input.is_action_pressed("shoot") and cooldown<=0 and reload_time<=0:shoot()
  else:
+  if w.floor_id=="east_district" and Input.is_action_pressed("shoot") and cooldown<=0 and reload_time<=0:shoot()
   for id in encounters:
    var e:Dictionary=encounters[id]
    if (w.floor_id!="waterworks" or not w.story.f("water_secured")) and not w.story.f("battle_"+id) and not w.story.f(e.skip) and w.story.f(e.need) and e.rect.has_point(Vector2(w.player.position.x,w.player.position.z)):begin(id);break
@@ -124,13 +126,15 @@ func begin(id:String):
  w.hud.toast(encounters[id].name+" · "+("1 拔枪 · " if not w.story.weapon_drawn() else "")+"左键射击 / R 换弹；先清理威胁，再操作设备。",7)
 func reload_weapon():
  if reload_time>0 or clip>=6:return
- if int(w.story.economy.handmade)<=0:w.hud.toast("土制弹已用完。可救起老兵，或从暂停页重试本场战斗。",5);return
+ if int(w.story.economy.handmade)<=0:
+  w.hud.toast("土制弹已用完。先在背包使用弹药包，或设法撤回聚落补给。"+("老兵仍能掩护你。" if is_instance_valid(veteran) and veteran_health>0 else ""),5);return
  reload_time=1.55;w.get_node("/root/Session").sound("reload")
 func shoot()->bool:
- if paused() or not active or cooldown>0 or reload_time>0:return false
+ if paused() or (not active and w.floor_id!="east_district") or cooldown>0 or reload_time>0:return false
  if not w.story.weapon_drawn():
   cooldown=.8;w.hud.toast("武器栏为空，先在背包装备左轮。" if w.story.equipped_weapon()=="" else "武器已收起，按 1 拔枪。可在背包中查看武器栏。",3);return false
  if clip<=0:reload_weapon();return false
+ if is_instance_valid(w.grey_camp):w.grey_camp.on_shot()
  clip-=1;cooldown=.36 if w.story.f("weapon_serviced") else .42;sync()
  var origin=w.player.position+Vector3.UP*.72
  var direction=aim-origin;direction.y=clampf(direction.y,-.08,.08)
@@ -199,11 +203,14 @@ func bite(body,amount:int,cause:String="撕咬"):
    defeated=true;w.player.blocked=true;w.hud.show_combat_defeat()
 func enemy_fell(enemy):
  if w.floor_id=="surface":preload("res://scripts/surface_site.gd").drop(w,enemy)
+ if w.floor_id=="east_district":w.story.Campaign.District.drop(w,enemy)
  enemies.erase(enemy)
  if enemies.is_empty():
   for projectile in projectiles.duplicate():
    if is_instance_valid(projectile):projectile.queue_free()
-  active=false;w.story.flags["battle_"+encounter]=true;sync();w.autosave()
+  active=false;w.story.flags["battle_"+encounter]=true
+  if w.floor_id=="east_district":w.story.Campaign.District.cleared(w,encounter)
+  sync();w.autosave()
   if w.floor_id=="railfront":w.sync_event_music("")
   w.hud.toast("周围安静下来。可以检查设备、包扎伤口，再继续前进。",5)
 func retry():

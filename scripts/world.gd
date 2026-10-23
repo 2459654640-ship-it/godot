@@ -10,6 +10,7 @@ var chosen_interaction=""
 var played_seconds=0.0
 var arrival_data:Dictionary={}
 var combat
+var grey_camp
 const Kit = preload("res://scripts/kit.gd")
 const Actor = preload("res://scripts/actor.gd")
 const Story = preload("res://scripts/story.gd")
@@ -85,6 +86,7 @@ func _ready():
 		arrival=transfer.pending.position
 		if ((floor_id=="commune" and transfer.pending.story.get("layout_revision",0)<12) or (floor_id=="sech" and transfer.pending.story.get("layout_revision",0)<11) or (floor_id=="starcity" and transfer.pending.story.get("layout_revision",0)<19) or (floor_id not in ["life","labor","sech"] and transfer.pending.story.get("layout_revision",0)<8)):arrival=CampaignMaps.LAYOUTS[floor_id].spawn
 		transfer.pending={}
+	story.Campaign.District.prepare(self)
 	kit=Kit.new(self)
 	build_environment()
 	if floor_id=="life":
@@ -145,7 +147,7 @@ func _ready():
 	camera.projection=Camera3D.PROJECTION_ORTHOGONAL
 	camera.size=camera_size
 	camera.near=0.4
-	camera.far=90
+	camera.far=260 if floor_id=="east_district" else 90
 	camera.current=true
 	player.camera=camera
 	var c=CanvasLayer.new()
@@ -171,6 +173,9 @@ func _ready():
 	combat=preload("res://scripts/combat.gd").new();add_child(combat);combat.setup(self)
 	living=preload("res://scripts/living_world.gd").new();add_child(living);living.setup(self)
 	combat.restore_state(arrival_data.get("combat_state",{}))
+	story.Campaign.District.restore_combat(self)
+	if floor_id=="east_district":
+		grey_camp=preload("res://scripts/greyhound_camp.gd").new();add_child(grey_camp);grey_camp.setup(self)
 	initialized=true
 	call_deferred("autosave")
 	wall_veil=preload("res://scripts/wall_veil.gd").new()
@@ -186,7 +191,7 @@ func _ready():
 		capture_later()
 
 func inputs():
-	var actions={"move_left":[KEY_A,KEY_LEFT],"move_right":[KEY_D,KEY_RIGHT],"move_up":[KEY_W,KEY_UP],"move_down":[KEY_S,KEY_DOWN],"interact":[KEY_E],"inventory":[KEY_I],"journal":[KEY_J],"map":[KEY_M],"overview":[KEY_TAB],"save":[KEY_F5],"load":[KEY_F9],"reload":[KEY_R],"draw_weapon":[KEY_1]}
+	var actions={"move_left":[KEY_A,KEY_LEFT],"move_right":[KEY_D,KEY_RIGHT],"move_up":[KEY_W,KEY_UP],"move_down":[KEY_S,KEY_DOWN],"interact":[KEY_E],"inventory":[KEY_I],"journal":[KEY_J],"map":[KEY_M],"overview":[KEY_TAB],"save":[KEY_F5],"load":[KEY_F9],"reload":[KEY_R],"draw_weapon":[KEY_1],"sneak":[KEY_CTRL]}
 	for action in actions:
 		if not InputMap.has_action(action):InputMap.add_action(action)
 		for key in actions[action]:
@@ -200,15 +205,15 @@ func build_environment():
 	var we=WorldEnvironment.new()
 	var e=Environment.new()
 	e.background_mode=Environment.BG_COLOR
-	e.background_color=Color("a8bac4") if floor_id in ["surface","starcity"] else Color("090b0b")
+	e.background_color=Color("a8bac4") if floor_id in ["surface","starcity","east_district"] else Color("090b0b")
 	e.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR
 	e.ambient_light_color=Color("9bada6")
 	e.ambient_light_energy=0.29
 	if floor_id not in ["life","labor"]:
 		var atmosphere:Dictionary=CampaignMaps.LAYOUTS[floor_id]
 		e.ambient_light_color=Color(atmosphere.ambient)
-		e.ambient_light_energy=.45 if floor_id in ["surface","starcity"] else atmosphere.energy
-		if floor_id in ["surface","starcity"]:e.fog_enabled=true;e.fog_density=.0008;e.fog_light_color=Color("bac8cf")
+		e.ambient_light_energy=.45 if floor_id in ["surface","starcity","east_district"] else atmosphere.energy
+		if floor_id in ["surface","starcity","east_district"]:e.fog_enabled=true;e.fog_density=.0008;e.fog_light_color=Color("bac8cf")
 	e.tonemap_mode=Environment.TONE_MAPPER_FILMIC
 	we.environment=e
 	add_child(we)
@@ -219,7 +224,7 @@ func build_environment():
 	light.light_energy=0.32
 	if floor_id not in ["life","labor"]:
 		light.light_color=Color("b9ccd2") if floor_id=="waterworks" else Color("8d9fa8")
-		light.light_energy=.45 if floor_id in ["surface","starcity"] else (.21 if floor_id=="waterworks" else .12)
+		light.light_energy=.45 if floor_id in ["surface","starcity","east_district"] else (.21 if floor_id=="waterworks" else .12)
 	light.shadow_enabled=true
 	light.directional_shadow_max_distance=65
 	light.shadow_bias=0.04
@@ -554,6 +559,7 @@ func _physics_process(delta):
 			step_clock=fmod(step_clock,1.05)
 			step_variant=(step_variant+1)%step_samples.size()
 			step_audio.stream=step_samples[step_variant]
+			step_audio.volume_db=-23 if player.sneaking else -12
 			step_audio.pitch_scale=[.98,1.02,1.0,.97][step_variant]
 			if DisplayServer.get_name()!="headless":step_audio.play()
 	else:step_clock=0
@@ -596,6 +602,7 @@ func target_actor(id:String):
 	return npcs.get({"armory":"armorer","main_gate":"main_guard","d6_return_desk":"commander","front_veteran":"plant_veteran"}.get(id,id))
 
 func find_nearest():
+	story.context.east_side=player.position.x>24.5 if floor_id=="east_district" else false
 	nearest=""
 	interaction_candidates.clear()
 	var distances:Dictionary={}
@@ -665,6 +672,7 @@ func update_guard(delta:float):
 	refresh_guard_context()
 
 func refresh_guard_context():
+	if is_instance_valid(grey_camp):story.context.camp_loot_safe=grey_camp.can_loot()
 	if not npcs.has("igor"):
 		story.context.hatch_clear=false
 		return
@@ -683,12 +691,14 @@ func refresh_guard_context():
 
 func set_camera(delta: float, instant: bool = false):
 	var focus=(Vector3(-6,0,-1.5) if floor_id=="life" else Vector3(1,0,.5)) if overview else Vector3(player.position.x*.90,.4,player.position.z*.85)
+	if floor_id=="east_district":focus=Vector3.ZERO if overview else player.position+Vector3.UP*.4
 	if capture_mode:focus=debug_camera_target
 	var desired=focus+Vector3(23,30,27)
 	if instant:camera.position=desired
 	else:camera.position=camera.position.lerp(desired,1-exp(-delta*3.5))
 	camera.look_at(camera.position-Vector3(23,30,27),Vector3.UP)
 	var desired_size=(39.0 if floor_id=="life" else 44.0) if overview else camera_size
+	if floor_id=="east_district" and overview:desired_size=175.0
 	camera.size=lerpf(camera.size,desired_size,1-exp(-delta*5)) if not instant else desired_size
 
 func _unhandled_input(event):
@@ -724,9 +734,13 @@ func _unhandled_input(event):
 		if event.button_index==MOUSE_BUTTON_WHEEL_DOWN:camera_size=clampf(camera_size+1,10,28)
 
 func interact(id: String):
-	if is_instance_valid(combat) and combat.active and not (floor_id=="surface" and id=="surface_exit"):
-		hud.toast("先清理眼前的威胁。老兵倒地时靠近并按住 E 救援。",3);return
+	refresh_guard_context()
+	if is_instance_valid(combat) and combat.active and not (floor_id=="surface" and id=="surface_exit") and not story.Campaign.District.can_retreat(self,id) and not story.Campaign.District.safe_interaction(self,id):
+		var warning="先离开眼前的交火，或清理威胁后再操作。"
+		if is_instance_valid(combat.veteran):warning+="老兵倒地时靠近并按住 E 救援。"
+		hud.toast(warning,3);return
 	if id.begins_with("surface_loot_"):preload("res://scripts/surface_site.gd").collect(self,id);return
+	if id.begins_with("east_loot_"):story.Campaign.District.collect(self,id);return
 	if id=="common_blocks":hud.show_blocks();return
 	if id=="public_radio":public_radio.open_controls();return
 	if id.begins_with("pub_"):
@@ -738,7 +752,8 @@ func interact(id: String):
 		return
 	refresh_guard_context()
 	if id=="commander" and story.f("d6_returned"):hud.show_dialogue("d6_return_desk");return
-	if id in ["coal_door","main_gate"] and story.f("d6_returned"):hud.show_dialogue("coal_gate_entry");return
+	if id=="main_gate" and story.f("d6_returned"):hud.show_dialogue("d6_surface_gate" if story.Campaign.Access.public_entry(story) else "coal_gate_entry");return
+	if id=="coal_door" and story.f("d6_returned"):hud.show_dialogue("coal_gate_entry");return
 	if id=="stairs_up" and not story.Chapter.home_access(story):
 		hud.toast("返站通行仅限作业层与煤矿。先在审核窗口办理手续。",5);return
 	if id=="igor" and story.f("igor_suspicious") and not story.f("igor_debt_known"):
@@ -751,7 +766,8 @@ func interact(id: String):
 	hud.show_dialogue(id)
 
 func perform(key: String, id: String):
-	if is_instance_valid(combat) and combat.active and not key.begins_with("c_surface_back_"):return
+	refresh_guard_context()
+	if is_instance_valid(combat) and combat.active and not key.begins_with("c_surface_back_") and not story.Campaign.District.can_retreat(self,id) and not story.Campaign.District.safe_interaction(self,id):return
 	if departure_animating:return
 	refresh_guard_context()
 	var reply=story.act(key)
@@ -816,6 +832,7 @@ func on_story_changed():
 			motion.finished.connect(func():if is_instance_valid(navigation):navigation.setup(self))
 
 	story.context.floor=floor_id
+	story.Campaign.District.sync(self)
 	PublicationPlaces.refresh(self)
 	if floor_id=="surface":
 		var water=get_node_or_null("SurfaceStandingWater")
@@ -828,7 +845,7 @@ func on_story_changed():
 		if state!=campaign_gate_state:
 			campaign_gate_state=state
 			var closed:Vector3=campaign_gate.get_meta("closed_position",campaign_gate.position)
-			var destination=closed+Vector3(2.35*state,0,0)
+			var destination=closed+campaign_gate.get_meta("opening_offset",Vector3(2.35,0,0))*state
 			if is_instance_valid(gate_tween):gate_tween.kill()
 			if not initialized:campaign_gate.position=destination
 			else:
@@ -856,7 +873,7 @@ func animate_d6_door(mesh:MeshInstance3D,opened:bool):
 
 func clear_arrival(p:Vector3)->Vector3:
 	# New decorative fixtures must not imprison an earlier saved position.
-	if floor_id not in ["commune","waterworks","surface","starcity","coal","railfront"]:return p
+	if floor_id not in ["commune","waterworks","surface","starcity","coal","railfront","east_district"]:return p
 	# Legacy mine saves could place Ivan exactly on the registrar's spawn.
 	if npcs.values().any(func(a):return Vector2(a.position.x-p.x,a.position.z-p.z).length()<.65):
 		var best=Vector3.INF;var distance=INF
@@ -879,6 +896,8 @@ func clear_arrival(p:Vector3)->Vector3:
 
 func save_snapshot()->Dictionary:
 	if is_instance_valid(living):living.capture()
+	if is_instance_valid(grey_camp):grey_camp.capture()
+	if is_instance_valid(combat) and combat.enabled:story.flags.weapon_clip=combat.clip
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z];data.floor=floor_id
 	data.layout_revision=24;data.played_seconds=played_seconds
@@ -908,7 +927,7 @@ func load_game(path:String=""):
 	var data=SaveStore.read(source)
 	if data.is_empty():hud.toast("没有可读取的手记，或该存档及备份均已损坏。",6);return
 	var p=data.get("position",[-10.5,.04,-3.4])
-	if data.get("floor","life")!=floor_id or floor_id in ["waterworks","surface","starcity","coal","railfront"]:
+	if data.get("floor","life")!=floor_id or floor_id in ["waterworks","surface","starcity","coal","railfront","east_district"]:
 		get_node("/root/Session").enter(data,data.get("floor","life"),Vector3(p[0],maxf(p[1],.04),p[2]));return
 	hud.observing=false;story.restore(data)
 	player.position=clear_arrival(Vector3(p[0],maxf(p[1],.04),p[2]))
@@ -1024,7 +1043,7 @@ func build_labor_people():
 	player=Actor.new()
 	player.name="Ivan";add_child(player)
 	player.position=Vector3(-10,.04,1.8)
-	if floor_id in ["waterworks","surface","starcity"]:player.art_id="ivan_masked"
+	if floor_id in ["waterworks","surface","starcity","east_district"]:player.art_id="ivan_masked"
 	player.add_to_group("player");player.setup(kit,true,"green")
 	if floor_id=="labor":Labor.people(self)
 	else:
@@ -1044,7 +1063,14 @@ func facility_doors(id:String)->Array:
 	return CampaignMaps.doors(id)
 
 func travel_campaign(destination:String):
-	if destination=="coal" and (not story.Campaign.Access.public_entry(story) or not story.f("coal_access")):
+	if destination=="east_district":
+		story.Campaign.District.remember_combat(self)
+		story.flags.erase("next_facility");story.flags.arrival_v8_east_district=true
+		story.flags.campaign_location=destination;story.flags.visited_east_district=true
+		get_node("/root/Session").enter(save_snapshot(),destination,story.Campaign.District.spawn(story,floor_id));return
+	if floor_id=="east_district":story.Campaign.District.remember_combat(self)
+	var private_mine=destination=="coal" and floor_id=="east_district" and story.Campaign.District.private_mine(story)
+	if destination=="coal" and not private_mine and (not story.Campaign.Access.public_entry(story) or not story.f("coal_access")):
 		story.flags.erase("next_facility")
 		hud.show_comic("d6_return_blocked")
 		return

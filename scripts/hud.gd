@@ -130,7 +130,7 @@ func setup(w):
 	brand.add_theme_font_override("font",mono)
 	line.add_child(brand)
 	line.add_spacer(false)
-	line.add_child(label({"life":"D–6","labor":"D–6","waterworks":"水厂","commune":"公社","sech":"谢契","coal":"D–6","starcity":"星城外围","surface":"地表","railfront":"联络线"}.get(world.floor_id,""),17,amber))
+	line.add_child(label({"life":"D–6","labor":"D–6","waterworks":"水厂","commune":"公社","sech":"谢契","coal":"D–6","starcity":"星城外围","surface":"地表","east_district":"东郊","railfront":"联络线"}.get(world.floor_id,""),17,amber))
 	var title=label("地铁 1982",27,text_color)
 	title.add_theme_font_override("font",serif)
 	b.add_child(title)
@@ -713,6 +713,7 @@ func highlight_items(text:String)->String:
 func show_map():show_journal("map")
 
 func item_icon(id:String)->String:
+	if id in ["scrap_metal","copper_wire","salvage_cloth"]:return "res://assets/visual/item_"+{"scrap_metal":"fuse","copper_wire":"cord","salvage_cloth":"rag"}[id]+".png"
 	if id=="portable_radio":return "res://assets/visual/item_portable_radio.svg"
 	return "res://assets/visual/item_"+world.story.Campaign.ITEM_ART.get(id,id)+".png"
 
@@ -961,7 +962,7 @@ func confirm_slot(path:String,saving:bool,data:Dictionary):
 	modal_box.add_child(button("返回列表",func():show_saves(saving,saves_return_menu)))
 
 func show_combat_defeat():
-	start_modal("你倒在了"+({"surface":"地表废墟里","railfront":"联络线战区"}.get(world.floor_id,"水厂里")),"本场战斗前已保留检查点 · 重试恢复当时的资源",true)
+	start_modal("你倒在了"+({"east_district":"东郊工业区","surface":"地表废墟里","railfront":"联络线战区"}.get(world.floor_id,"水厂里")),"本场战斗前已保留检查点 · 重试恢复当时的资源",true)
 	body("面罩内的呼吸声渐渐远去。"+("远处传来老兵叫你的名字。" if is_instance_valid(world.combat.veteran) else "寒风还在废墟之间回响。"),23)
 	modal_box.add_child(button("从交火前重试",func():world.combat.retry()))
 	modal_box.add_child(button("读取其它手记",func():show_saves(false)))

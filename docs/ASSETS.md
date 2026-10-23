@@ -48,6 +48,10 @@
 | 38 | 老兵·面具 | [veteran_masked](../assets/characters/veteran_masked.png) | 8 | 1 |
 | 39 | 老兵·面具持枪 | [veteran_masked_combat](../assets/characters/veteran_masked_combat.png) | 8 | 7 |
 
+## 敌对人类
+
+[灰狗守卫完整图集](../assets/characters/greyhound_guard.png)：五视角配镜像覆盖八方向，站立、两种相反迈步、瞄准四行，共二十帧。持枪走路保留装备，使用实际场景光照。
+
 ## 静止群体人物
 
 | 组合 | 原始贴图 | 人数 |
@@ -293,3 +297,12 @@
 - [囊喉兽七种姿态](monsters/spitter-actions.jpg) · [运行图集](../assets/characters/tunnel_spitter.png)
 - 每张图集按行依次为站立、迈步 A、迈步 B、蓄势、攻击、受击、倒地。五个绘制视角加镜像覆盖八方向。
 - [命中、击杀、墙体撞击与蓄势音效来源](../assets/audio/licenses/combat_v26.txt)
+
+## 东郊工业片区新增材质与过场
+
+- [风化混凝土](../assets/visual/district_concrete.png)
+- [旧赭色灰泥](../assets/visual/district_ochre.png)
+- [工业砖墙](../assets/visual/district_brick.png)
+- [开裂沥青](../assets/visual/district_asphalt.png)
+- [工业区地表建立镜头](../assets/cinematics/east_district_arrival.png)
+- [矿区检修通路](../assets/cinematics/east_mine_service.png)

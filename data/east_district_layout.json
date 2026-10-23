@@ -1,0 +1,506 @@
+{
+  "name": "莫斯科东郊工业片区",
+  "bounds": [
+    -80,
+    -60,
+    160,
+    120
+  ],
+  "geography": "虚构的莫斯科东郊局部，距离经过游玩尺度压缩。地表入口连接地下联络线路，聚落本体不等于入口所在建筑；星城位于北线远处。",
+  "roads": [
+    {
+      "id": "freight_road",
+      "name": "旧货运路",
+      "points": [
+        [
+          -76,
+          8
+        ],
+        [
+          -12,
+          8
+        ],
+        [
+          24,
+          8
+        ],
+        [
+          75,
+          8
+        ]
+      ],
+      "width": 6.4
+    },
+    {
+      "id": "workers_avenue",
+      "name": "工人街",
+      "points": [
+        [
+          -12,
+          54
+        ],
+        [
+          -12,
+          8
+        ],
+        [
+          -12,
+          -54
+        ]
+      ],
+      "width": 5.2
+    },
+    {
+      "id": "plant_service",
+      "name": "水厂检修路",
+      "points": [
+        [
+          -70,
+          8
+        ],
+        [
+          -64,
+          -8
+        ],
+        [
+          -60,
+          -20
+        ]
+      ],
+      "width": 3.4
+    },
+    {
+      "id": "pump_service",
+      "name": "泵站支路",
+      "points": [
+        [
+          -36,
+          8
+        ],
+        [
+          -31,
+          -3
+        ],
+        [
+          -31,
+          -15
+        ]
+      ],
+      "width": 3.0
+    },
+    {
+      "id": "relay_service",
+      "name": "变配电所支路",
+      "points": [
+        [
+          -12,
+          -22
+        ],
+        [
+          5,
+          -22
+        ]
+      ],
+      "width": 3.0
+    },
+    {
+      "id": "commune_link",
+      "name": "西南地铁支线",
+      "points": [
+        [
+          -64,
+          8
+        ],
+        [
+          -64,
+          43
+        ]
+      ],
+      "width": 2.8
+    },
+    {
+      "id": "depot_access",
+      "name": "东货场检修道",
+      "points": [
+        [
+          65,
+          8
+        ],
+        [
+          65,
+          39
+        ]
+      ],
+      "width": 3.6
+    },
+    {
+      "id": "north_access",
+      "name": "北线出站路",
+      "points": [
+        [
+          65,
+          8
+        ],
+        [
+          65,
+          -49
+        ]
+      ],
+      "width": 3.4
+    },
+    {
+      "id": "mine_approach",
+      "name": "西侧旧检修巷",
+      "points": [
+        [
+          -70,
+          -6
+        ],
+        [
+          -74,
+          -25
+        ],
+        [
+          -74,
+          -49
+        ],
+        [
+          -49,
+          -49
+        ]
+      ],
+      "width": 1.9
+    }
+  ],
+  "railway": {
+    "x": 24,
+    "z": [
+      -59,
+      59
+    ],
+    "gauge": 1.52,
+    "crossing_z": 8,
+    "crossing_width": 9,
+    "name": "北货运线与货场围栏"
+  },
+  "parcels": [
+    {
+      "id": "waterworks",
+      "name": "东郊水处理厂",
+      "rect": [
+        -77,
+        -46,
+        34,
+        27
+      ],
+      "building": [
+        -60,
+        -34,
+        14.7,
+        15,
+        2
+      ],
+      "entry": [
+        -60,
+        -24.5
+      ],
+      "target": "east_waterworks_entry"
+    },
+    {
+      "id": "pump",
+      "name": "旧泵站检修井",
+      "rect": [
+        -43,
+        -42,
+        25,
+        28
+      ],
+      "building": [
+        -31,
+        -27,
+        10.5,
+        16,
+        1
+      ],
+      "entry": [
+        -31,
+        -17
+      ],
+      "target": "east_pump_entry"
+    },
+    {
+      "id": "relay",
+      "name": "变配电所",
+      "rect": [
+        -7,
+        -43,
+        28,
+        24
+      ],
+      "building": [
+        5,
+        -33,
+        10.5,
+        14,
+        1
+      ],
+      "entry": [
+        5,
+        -24
+      ],
+      "target": "east_relay"
+    },
+    {
+      "id": "residential",
+      "name": "工人住宅街",
+      "rect": [
+        -4,
+        20,
+        40,
+        34
+      ],
+      "building": [
+        7,
+        42,
+        14.7,
+        16,
+        3
+      ],
+      "entry": [
+        14,
+        25
+      ],
+      "target": "east_shelter"
+    },
+    {
+      "id": "depot",
+      "name": "北线货场检修库",
+      "rect": [
+        48,
+        24,
+        29,
+        30
+      ],
+      "building": [
+        65,
+        44,
+        14.7,
+        14,
+        2
+      ],
+      "entry": [
+        65,
+        35
+      ],
+      "target": "east_sech_entry"
+    },
+    {
+      "id": "greyhound_camp",
+      "name": "灰狗营地",
+      "rect": [
+        30,
+        -29,
+        27,
+        27
+      ],
+      "building": [
+        42,
+        -17,
+        10.5,
+        10,
+        1
+      ],
+      "entry": [
+        42,
+        -10
+      ],
+      "target": "east_camp_cache"
+    }
+  ],
+  "entrances": [
+    {
+      "id": "east_commune_entry",
+      "name": "通往公社的地铁支线",
+      "point": [
+        -64,
+        43
+      ],
+      "destination": "commune",
+      "arrival": [
+        -64,
+        46
+      ]
+    },
+    {
+      "id": "east_d6_entry",
+      "name": "D-6 外侧登记口",
+      "point": [
+        -18,
+        49
+      ],
+      "destination": "labor",
+      "arrival": [
+        -18,
+        52
+      ]
+    },
+    {
+      "id": "east_sech_entry",
+      "name": "通往谢契的检修库联络线",
+      "point": [
+        65,
+        35
+      ],
+      "destination": "sech",
+      "arrival": [
+        65,
+        32
+      ]
+    },
+    {
+      "id": "east_waterworks_entry",
+      "name": "东郊水处理厂铁门",
+      "point": [
+        -60,
+        -24.5
+      ],
+      "destination": "waterworks",
+      "arrival": [
+        -60,
+        -21
+      ]
+    },
+    {
+      "id": "east_pump_entry",
+      "name": "旧泵站检修井",
+      "point": [
+        -31,
+        -17
+      ],
+      "destination": "surface",
+      "arrival": [
+        -31,
+        -14
+      ]
+    },
+    {
+      "id": "east_transfer_entry",
+      "name": "旧联络线下行口",
+      "point": [
+        -3,
+        15
+      ],
+      "destination": "railfront",
+      "arrival": [
+        -3,
+        18
+      ]
+    },
+    {
+      "id": "east_north_entry",
+      "name": "北线接送站",
+      "point": [
+        65,
+        -49
+      ],
+      "destination": "starcity",
+      "arrival": [
+        65,
+        -52
+      ]
+    },
+    {
+      "id": "east_mine_entry",
+      "name": "矿区封停检修口",
+      "point": [
+        -49,
+        -49
+      ],
+      "destination": "coal",
+      "arrival": [
+        -49,
+        -52
+      ]
+    }
+  ],
+  "sites": [
+    {
+      "id": "east_board",
+      "name": "旧货运路导向图",
+      "point": [
+        -59,
+        37
+      ]
+    },
+    {
+      "id": "east_spares",
+      "name": "交通维修间的封存备件",
+      "point": [
+        -43,
+        24
+      ]
+    },
+    {
+      "id": "east_relay",
+      "name": "变配电所检修柜",
+      "point": [
+        5,
+        -24
+      ]
+    },
+    {
+      "id": "east_gate",
+      "name": "货场横穿通道的电动门",
+      "point": [
+        21,
+        8
+      ]
+    },
+    {
+      "id": "east_shelter",
+      "name": "住宅街避风修配间",
+      "point": [
+        14,
+        25
+      ]
+    },
+    {
+      "id": "east_camp_cache",
+      "name": "灰狗遗留的运输箱",
+      "point": [
+        42,
+        -10
+      ]
+    },
+    {
+      "id": "east_supply",
+      "name": "支线口公用应急箱",
+      "point": [
+        -61,
+        40
+      ]
+    },
+    {
+      "id": "east_gate_east",
+      "name": "货场门东侧应急柄",
+      "point": [
+        27,
+        8
+      ]
+    }
+  ],
+  "gate": {
+    "flag": "east_crossing_open",
+    "position": [
+      24,
+      1.15,
+      8
+    ],
+    "size": [
+      0.2,
+      2.3,
+      9
+    ]
+  },
+  "phase": "首个可玩区域，后续北线与星城内部按剧情章节扩展；不宣称整条主线已经实装。"
+}

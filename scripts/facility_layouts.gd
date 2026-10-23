@@ -1,6 +1,8 @@
 extends RefCounted
 ## Authored footprints, open circulation and door normals in metres, independent of decoration.
 const PLANS={
+"east_district":{ "spawn":Vector3(-64,.04,46),"palette":"88948f","ambient":"b5c3c9","energy":.38,"warm":false,"rooms":[["01","东郊水处理厂",Rect2(-77,-46,34,27)],["02","旧泵站检修井",Rect2(-43,-42,25,28)],["03","变配电所",Rect2(-7,-43,28,24)],["04","工人住宅街",Rect2(-4,20,40,34)],["05","北线货场检修库",Rect2(48,24,29,30)],["06","灰狗营地",Rect2(30,-29,27,27)],["07","旧货运路与工人街",Rect2(-78,0,101,17)],["08","铁路横穿通道",Rect2(20,3,10,10)],["09","北线接送路",Rect2(57,-56,18,34)],["00","东郊工业片区",Rect2(-80,-60,160,120)]],"doors":[],"objects":[["east_commune_entry", -64, 43, "marker"], ["east_d6_entry", -18, 49, "marker"], ["east_sech_entry", 65, 35, "marker"], ["east_waterworks_entry", -60, -24.5, "marker"], ["east_pump_entry", -31, -17, "marker"], ["east_transfer_entry", -3, 15, "marker"], ["east_north_entry", 65, -49, "marker"], ["east_mine_entry", -49, -49, "marker"], ["east_board", -59, 37, "marker"], ["east_spares", -43, 24, "marker"], ["east_relay", 5, -24, "marker"], ["east_gate", 21, 8, "marker"], ["east_shelter", 14, 25, "marker"], ["east_camp_cache", 42, -10, "marker"], ["east_supply", -61, 40, "marker"], ["east_gate_east", 27, 8, "marker"]]},
+
 "railfront":{
  "spawn":Vector3(0,.04,18),"palette":"7d8680","ambient":"9da9a8","energy":.23,"warm":false,
  "rooms":[["01","南控制间",Rect2(10,8,12,14)],["02","西侧转移点",Rect2(-24,-24,15,24)],["03","南口等候处",Rect2(-24,8,15,16)],["04","北口接送信号",Rect2(-9,-24,18,17)],["00","旧联络线站台",Rect2(-24,-24,48,48)]],

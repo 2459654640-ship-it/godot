@@ -33,6 +33,8 @@ func setup(owner_node,p:Vector3,kind:String="mutant"):
   sprite.texture=load("res://assets/characters/"+spec.texture+".png");sprite.vframes=spec.rows;sprite.pixel_size=spec.pixel;sprite.position.y=spec.center
  if enemy_kind=="soldier":
   sprite.texture=load("res://assets/characters/veteran_masked_combat.png");sprite.hframes=5;sprite.vframes=7;sprite.pixel_size=1.77/324.0;sprite.scale.x=.762;sprite.position.y=1.77*166.0/324.0;shape.position.y=.85;capsule.height=1.70;move_speed=1.35
+ if enemy_kind=="greyhound":
+  sprite.texture=load("res://assets/characters/greyhound_guard.png");sprite.hframes=5;sprite.vframes=4;sprite.pixel_size=1.76/324.0;sprite.scale.x=.762;sprite.position.y=1.76*166.0/324.0;shape.position.y=.85;capsule.height=1.70;hp=80;move_speed=1.1
 
 func cancel_warning():
  if is_instance_valid(warning):warning.queue_free()

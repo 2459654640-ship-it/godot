@@ -79,6 +79,13 @@ func run():
  for retreat_frame in 8:
   if w.hud.comic_active:w.hud.comic_choose()
   await frames(10);w=current_scene
+  if w.floor_id in ["commune","east_district"]:break
+ check(w.floor_id=="east_district","pump retreat first returns to the physical surface route")
+ w.set_physics_process(false);w.player.set_physics_process(false);w.player.position=w.targets.east_commune_entry.pos
+ w.perform("c_east_enter_commune","east_commune_entry")
+ for retreat_frame in 8:
+  if w.hud.comic_active:w.hud.comic_choose()
+  await frames(10);w=current_scene
   if w.floor_id=="commune":break
  check(w.floor_id=="commune" and w.story.economy.handmade==retreat_ammo and w.story.f("surface_supply_taken"),"retreat actually reaches the originating settlement without inventing or removing ammunition")
  w.queue_free();await frames()

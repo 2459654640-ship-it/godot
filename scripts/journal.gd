@@ -4,6 +4,8 @@ static func row(id:String,name:String,done:bool,place:String,background:String,s
 	return {"id":id,"name":name,"done":done,"place":place,"background":background,"step":step,"target":target,"area":area}
 static func tasks(s)->Array:
 	var out=[]
+	if s.f("visited_east_district"):
+		out.append(row("east_orientation","旧货运路",s.f("east_routes_known"),"east_district","出口矮墙上留有货运路的旧图，可以先辨认道路、铁路和地下联络入口。","到西南支线口矮墙前查看导向图，图旁留有公用应急箱。","east_board","东郊工业片区"))
 	if s.f("intro_done") or s.f("vitamins_taken"):
 		out.append(row("journey","D-6 之外",s.f("departure_committed"),"life","接受D-6的征召加入小队并前往地表，或者想办法逃离D-6。","先下层了解征召；独自走可询问妮娜或米哈伊尔。离站必须备齐面具与滤毒罐。","commander","D-6 两层"))
 		out.append(row("vitamins","今天的维生素 D",s.f("vitamins_taken"),"life","老爹嘱咐先领今日配给，再去报到。","生活层东端，第七供应点的柳德米拉留着今天的一份。","supply","第 7 供应点"))
@@ -33,6 +35,9 @@ static func tasks(s)->Array:
 		if s.f("anna_records"):
 			target="commune_leave";area="联络气闸";step="班组材料已经备好。凭 D-6 自己的随队记录申请返站，再到煤运口核实休养记录。"
 			if not s.Campaign.Access.public_entry(s):target="commune_printer";area="联络档案室";step="你仍被 D-6 追查，寻亲材料不能用于通行。先留在公社；进入矿区需要另行落实内部接应。"
+			if s.f("east_mine_prepared") and not s.Campaign.Access.public_entry(s):
+				target="commune_leave";area="联络气闸";step="私人接应已经确认。从支线登上地表，再沿水厂西侧旧检修巷到封停入口等待接应。"
+				if s.context.get("floor","")=="east_district":place="east_district";target="east_mine_entry";area="水厂西侧检修巷"
 		if s.context.get("floor","")=="labor" and s.f("d6_returned"):
 			place="labor";target="commander" if not s.f("coal_access") else "coal_door";area="返站审核";step="先向科瓦廖夫办理返站身份审核，再从下层煤矿检票口进入。"
 			if not s.Campaign.Access.public_entry(s):target="commander";step="你的离站记录不允许公开返站。向中尉说明要退出，先退回公社；寻人材料和任务进度会保留。"
@@ -41,8 +46,12 @@ static func tasks(s)->Array:
 			if s.f("coal_registered"):target="coal_archive";area="班组档案";step="到西北侧班组档案柜，对照旧工伤与转移记录。"
 			if s.f("brother_identity"):target="coal_medic";area="医护值班";step="到北侧中间的医护值班室，问清照护和探视安排。"
 			if s.f("brother_care"):target="coal_brother";area="井下休养间";step="去东北侧休养间，坐下来慢慢征询本人的意愿。"
-			if s.f("brother_found"):target="coal_exit";area="探视出口";step="带着核实结果从东南侧探视出口回公社。"
-		elif s.f("brother_found"):target="commune_anna";area="医务与探访";step="回公社南侧医务室，把核实结果交给安娜。"
+			if s.f("brother_found"):
+				target="coal_exit";area="探视出口";step="带着核实结果从东南侧探视出口回公社。"
+				if s.Campaign.District.private_mine(s):area="内部撤离会合点";step="到东南侧会合点等瓦西里，沿检修支巷返回地表，再走公社支线。"
+		elif s.f("brother_found"):
+			place="commune";target="commune_anna";area="医务与探访";step="回公社南侧医务室，把核实结果交给安娜。"
+			if s.context.get("floor","")=="east_district":place="east_district";target="east_commune_entry";area="公社地铁支线";step="核实结果已经带出矿区。沿旧货运路返回西南的公社支线，再去见安娜。"
 		out.append(row("anna","一个确切的名字",s.f("anna_first_news"),place,"安娜请你核实哥哥的下落，纸条上有班组编号和旧伤。",step,target,area))
 	if s.f("signal_heard") or s.has("frequency"):
 		var current_floor:String=s.context.get("floor","life")

@@ -13,6 +13,8 @@
 - [普通工人：正背面验收动作](characters/ambient_worker-accepted-walks.jpg)
 - [普通妇女：正背面验收动作](characters/ambient_woman-accepted-walks.jpg)
 
+- [灰狗守卫：站姿、两种迈步与瞄准](../assets/characters/greyhound_guard.png)
+
 - [伏扑兽当前动作示意](monsters/pouncer-actions.jpg)
 - [囊喉兽当前动作示意](monsters/spitter-actions.jpg)
 
@@ -20,6 +22,7 @@
 
 | 地图 | 最新全景 |
 | --- | --- |
+| 东郊工业片区 | [全景](maps/east_district.png) |
 | D-6 生活层 | [全景](maps/d6.png) |
 | D-6 作业层 | [全景](maps/labor.png) |
 | 水处理厂 | [全景](maps/waterworks.png) |
@@ -33,3 +36,5 @@
 人物示意图由当前实际使用的角色图集排版；普通伊万保留认可基础动作，装备版为完整人物重绘三姿态。它们不是游戏实景截图。
 
 星城外围、地表旧泵站与水处理厂的全景已在 v23 使用 Godot 实际渲染更新；煤运设施在 v24 返站小修后更新；作业层、公社和联络线保留 v22 全景。历史截图与版本说明放在独立资料库，素材原图保留在 assets。
+
+东郊工业片区为 v27 实际全景。灰狗为独立敌对图集，不计入原有 39 套和平场景人物总览。

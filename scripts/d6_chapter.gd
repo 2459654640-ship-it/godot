@@ -1,7 +1,7 @@
 extends RefCounted
 const IDS=["armory","medical","coal_door","main_gate","labor_notice","stairs_up","other_life"]
 static func home_access(s)->bool:
-	return not s.f("d6_returned") or (preload("res://scripts/d6_access.gd").public_entry(s) and s.f("departure_official") and s.f("d6_cargo_returned"))
+	return (not s.f("d6_returned") and not s.f("departure_committed") and not s.f("d6_wanted")) or (preload("res://scripts/d6_access.gd").public_entry(s) and s.f("departure_official") and s.f("d6_cargo_returned"))
 static func decorate(v:Dictionary,s)->Dictionary:
 	match v.id:
 		"supply":

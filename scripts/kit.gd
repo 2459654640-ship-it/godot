@@ -422,7 +422,7 @@ func batch_static():
 		var source=child.mesh
 		var material=child.material_override
 		if not material:continue
-		var overhead=false
+		var overhead=bool(child.get_meta("view_occluder",false))
 		var design_id=String(child.get_meta("design_id",String(child.name)))
 		var high_bounds: AABB=child.global_transform*child.get_aabb()
 		if high_bounds.position.y>1.85:

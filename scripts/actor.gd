@@ -8,6 +8,7 @@ var combat_velocity=Vector3.ZERO
 var aim_direction=Vector3.ZERO
 var is_player = false
 var blocked = false
+var sneaking = false
 var camera: Camera3D
 var visual: Node3D
 var left_leg: Node3D
@@ -161,6 +162,7 @@ func _physics_process(delta):
 	clock += delta
 	var desired=Vector3.ZERO
 	if is_player:
+		sneaking = not blocked and Input.is_action_pressed("sneak")
 		if not blocked:
 			var input=motion_override if use_override else Input.get_vector("move_left","move_right","move_up","move_down")
 			if camera:
@@ -170,6 +172,7 @@ func _physics_process(delta):
 				f.y=0
 				desired=(r.normalized()*input.x+f.normalized()*input.y)*SPEED
 			else:desired=Vector3(input.x,0,input.y)*SPEED
+		if sneaking:desired *= .48
 	else:
 		desired=combat_velocity if combat_controlled else npc_motion(delta)
 	var rate=ACCEL if desired.length()>0.01 else DECEL

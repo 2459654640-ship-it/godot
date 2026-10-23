@@ -38,11 +38,14 @@ func run():
  s.act("c_mail_clue");check(not s.last_action_valid,"failed job cannot continue or farm rewards")
  # Three distinct resource-free main chains, five new conclusions.
  var paths=[
- ["commune",["workers_accept","workers_draft","workers_coal"],"coal",["workers_sign","workers_return"],"commune",["workers_deliver"],["ending_workers"]],
+ ["commune",["workers_accept","workers_draft","east_mine_contact","east_mine_prepare"],"coal",["workers_sign","workers_return"],"commune",["workers_deliver"],["ending_workers"]],
  ["sech",["north_accept","north_record","north_chock","north_axle","north_verify"],"sech",[],"sech",[],["ending_train","ending_caravan"]]]
  for path in paths:
   s=Story.new();s.economy.military=0;s.economy.goods={};s.context.floor=path[0];s.flags.star_registered=true;s.flags.father_met=true;s.flags.radio_fixed=true;s.flags.press_done=true
   for key in path[1]:act(s,key)
+  if path[0]=="commune":
+   s.context.floor="east_district";act(s,"east_enter_mine");s.Comic.start(s,"east_mine_approach");s.Comic.choose(s,0);s.Comic.choose(s)
+   check(s.f("workers_transit") and not s.Campaign.Access.public_entry(s),"worker contact uses private coal entry without a public pass")
   s.context.floor=path[2]
   for key in path[3]:act(s,key)
   s.context.floor=path[4]
@@ -65,8 +68,11 @@ func run():
   check(Journal.tasks(s).any(func(t):return t.id==chain[1] and t.done),"new optional chain reaches real completion")
  s=Story.new();s.context.floor="commune";s.flags.anna_lesson_seen=true;s.flags.anna_conversation_ready=true
  act(s,"anna_accept");act(s,"anna_records");s.flags.brother_found=true
- act(s,"commune_coal");s.context.floor="coal";act(s,"coal_return");s.context.floor="commune";act(s,"commune_coal")
- check(s.last_action_valid,"completed main investigation does not strand unfinished coal side tasks")
+ s.act("c_commune_coal");check(not s.last_action_valid,"completed investigation cannot make public entry valid for an outsider")
+ act(s,"east_mine_contact");act(s,"east_mine_prepare");s.context.floor="east_district";act(s,"east_enter_mine")
+ s.Comic.start(s,"east_mine_approach");s.Comic.choose(s,0);s.Comic.choose(s);s.context.floor="coal";act(s,"coal_return")
+ s.context.floor="east_district";act(s,"east_enter_mine")
+ check(s.last_action_valid,"prepared private return remains repeatable for unfinished coal side tasks")
  check(Campaign.data().endings.size()==14,"fourteen conclusions are authored")
  s=Story.new();s.context.floor="sech";s.flags.star_known=true
  check(not s.view("sech_sergey").options.any(func(o):return o.key=="c_sech_father" and o.enabled),"father-specific question is knowledge gated")

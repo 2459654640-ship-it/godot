@@ -8,6 +8,7 @@ const KINDS={
 static func get_kind(id:String)->Dictionary:return KINDS.get(id,KINDS.mutant)
 static func wave(encounter:String,fallback:String,count:int)->Array:
  if fallback=="soldier":return []
+ if encounter=="east_road":return ["mutant","pouncer"].slice(0,count)
  var compositions={"pump":["mutant","mutant","pouncer"],"workshop":["mutant","spitter","mutant"],"warehouse":["pouncer","mutant","spitter","mutant"],"surface_yard":["mutant","pouncer","mutant"],"surface_pool":["spitter","mutant","pouncer","mutant"]}
  if compositions.has(encounter):return compositions[encounter].slice(0,count)
  if encounter.ends_with("_west"):return ["mutant","pouncer","mutant"].slice(0,count)
