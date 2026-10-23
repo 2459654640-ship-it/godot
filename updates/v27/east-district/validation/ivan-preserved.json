@@ -1,0 +1,18 @@
+{
+  "ivan": {
+    "unchanged": true,
+    "sha256": "33db24356dea4e2f80ac33de91de73fcac51b37e109bcc261b0627d821656f86"
+  },
+  "ivan_masked": {
+    "unchanged": true,
+    "sha256": "10992c5ba342daab53fea65ee3e713a62d2284547c28f0a5df3315446c645f81"
+  },
+  "ivan_combat": {
+    "unchanged": true,
+    "sha256": "d90ea7d800492b86d2e301e778909ac910a8a453eaeeb400a184298c0209fbca"
+  },
+  "ivan_masked_combat": {
+    "unchanged": true,
+    "sha256": "c59b91f7b849f902a09bd3bb297e8ae3094782df3248f5a29a3b83224b981403"
+  }
+}
