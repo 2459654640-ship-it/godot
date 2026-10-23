@@ -1,0 +1,156 @@
+{
+  "code_commit": "3756ca75b303093f207c9a5a5a81fa67a9b7d1b3",
+  "code_branch": "metro-v26-creature-combat",
+  "suites": 16,
+  "checks": 4344,
+  "failures": 0,
+  "ivan_atlases": "All four approved atlases match baseline SHA-256.",
+  "new_story_chapter_implemented": false,
+  "inventory_economy_reworked": false,
+  "validation": [
+    {
+      "suite": "access_interactions_v26",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 5.2,
+      "results": [
+        "ACCESS_INTERACTIONS_V26_RESULT checks=165 failures=0"
+      ]
+    },
+    {
+      "suite": "v11_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 4.36,
+      "results": [
+        "V11_RESULT checks=178 failures=0"
+      ]
+    },
+    {
+      "suite": "campaign_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 29.2,
+      "results": [
+        "CAMPAIGN_CONTRACT_RESULT checks=402 failures=0"
+      ]
+    },
+    {
+      "suite": "chapter_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 3.33,
+      "results": [
+        "CHAPTER_CONTRACT_RESULT checks=141 failures=0"
+      ]
+    },
+    {
+      "suite": "narrative_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 5.37,
+      "results": [
+        "NARRATIVE_CONTRACT_RESULT checks=1942 failures=0"
+      ]
+    },
+    {
+      "suite": "chapter_v22",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 1.65,
+      "results": [
+        "CHAPTER_V22_RESULT checks=537 failures=0"
+      ]
+    },
+    {
+      "suite": "chapter_flow_v22",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 5.46,
+      "results": [
+        "CHAPTER_FLOW_V22_RESULT checks=22 failures=0"
+      ]
+    },
+    {
+      "suite": "living_story_v24",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 0.73,
+      "results": [
+        "LIVING_STORY_V24_RESULT checks=180 failures=0"
+      ]
+    },
+    {
+      "suite": "living_world_v24",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 19.9,
+      "results": [
+        "LIVING_WORLD_V24_RESULT checks=32 failures=0"
+      ]
+    },
+    {
+      "suite": "save_slots_v24",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 5.0,
+      "results": [
+        "SAVE_SLOTS_V24_RESULT checks=54 failures=0"
+      ]
+    },
+    {
+      "suite": "coal_identity_v24",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 2.96,
+      "results": [
+        "COAL_IDENTITY_V24_RESULT checks=51 failures=0"
+      ]
+    },
+    {
+      "suite": "journey_ui_v25",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 3.34,
+      "results": [
+        "JOURNEY_UI_V25_RESULT checks=116 failures=0"
+      ]
+    },
+    {
+      "suite": "exploration_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 4.46,
+      "results": [
+        "EXPLORATION_RESULT checks=187 failures=0"
+      ]
+    },
+    {
+      "suite": "first_meetings_v17",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 4.17,
+      "results": [
+        "FIRST_MEETINGS_V17_RESULT checks=294 failures=0"
+      ]
+    },
+    {
+      "suite": "watch_dialogue_v26",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 2.42,
+      "results": [
+        "WATCH_DIALOGUE_V26_RESULT checks=26 failures=0"
+      ]
+    },
+    {
+      "suite": "campaign_ui",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 7.05,
+      "results": [
+        "CAMPAIGN_UI_RESULT checks=17 failures=0"
+      ]
+    }
+  ]
+}
