@@ -2,6 +2,10 @@ extends Node
 ## Room-sized realtime encounters with exact, non-punitive pre-fight rollback.
 const Enemy=preload("res://scripts/combat_enemy.gd")
 var w
+const Catalog=preload("res://scripts/monster_catalog.gd")
+var projectiles:Array=[]
+var feedback
+var confirmed_hits=0
 var enabled=false
 var encounters:Dictionary={}
 var active=false
@@ -45,6 +49,7 @@ func setup(world):
  clip=int(w.story.flags.get("weapon_clip",6));veteran_health=int(w.story.flags.get("veteran_health",100))
  label=Label.new();label.position=Vector2(420,855);label.size=Vector2(800,35);label.add_theme_font_size_override("font_size",19);label.add_theme_color_override("font_color",Color("dec99d"));w.hud.add_child(label)
  var backing=StyleBoxFlat.new();backing.bg_color=Color(.025,.045,.04,.94);backing.border_color=Color("776b4f");backing.set_border_width_all(1);backing.set_corner_radius_all(3);backing.content_margin_left=10;backing.content_margin_right=10;backing.content_margin_top=5;backing.content_margin_bottom=5;label.add_theme_stylebox_override("normal",backing)
+ feedback=preload("res://scripts/combat_feedback.gd").new();w.hud.add_child(feedback);feedback.setup(self)
  reticle=Control.new();reticle.mouse_filter=Control.MOUSE_FILTER_IGNORE;w.hud.add_child(reticle)
  for offset in [Vector2(-9,0),Vector2(4,0),Vector2(0,-9),Vector2(0,4)]:
   var line=ColorRect.new();line.color=Color("dbc7a0");line.position=offset;line.size=Vector2(5,1) if offset.y==0 else Vector2(1,5);line.mouse_filter=Control.MOUSE_FILTER_IGNORE;reticle.add_child(line)
@@ -106,13 +111,16 @@ func begin(id:String):
  if active or w.story.f("battle_"+id):return
  encounter=id
  # Visible field ammunition left by the squad prevents resource softlocks.
- var missing=maxi(0,encounters[id].spawns.size()*4-int(w.story.economy.handmade)-clip)
+ var kinds=Catalog.wave(id,encounters[id].get("enemy_kind","mutant"),encounters[id].spawns.size())
+ var budget=0
+ for i in encounters[id].spawns.size():budget+=Catalog.budget(kinds[i] if i<kinds.size() else encounters[id].get("enemy_kind","mutant"))
+ var missing=maxi(0,budget-int(w.story.economy.handmade)-clip)
  if missing>0 and w.floor_id in ["waterworks","railfront"]:w.story.economy.handmade+=missing;w.hud.toast("从小队随身弹袋补入 %d 发土制弹。"%missing,5)
  sync();checkpoint=w.save_snapshot().duplicate(true);w.autosave()
  active=true
  if w.floor_id=="railfront":w.sync_event_music("frontline_theme")
  for p in encounters[id].spawns:
-  var enemy=Enemy.new();w.add_child(enemy);enemy.setup(self,w.clear_arrival(p),encounters[id].get("enemy_kind","mutant"));enemy.set_meta("loot_key",id+"_"+str(enemies.size()));enemy.set_meta("loot_index",enemies.size());enemies.append(enemy)
+  var enemy=Enemy.new();w.add_child(enemy);enemy.setup(self,w.clear_arrival(p),kinds[enemies.size()] if enemies.size()<kinds.size() else encounters[id].get("enemy_kind","mutant"));enemy.set_meta("loot_key",id+"_"+str(enemies.size()));enemy.set_meta("loot_index",enemies.size());enemies.append(enemy)
  w.hud.toast(encounters[id].name+" · "+("1 拔枪 · " if not w.story.weapon_drawn() else "")+"左键射击 / R 换弹；先清理威胁，再操作设备。",7)
 func reload_weapon():
  if reload_time>0 or clip>=6:return
@@ -129,7 +137,10 @@ func shoot()->bool:
  if direction.length()<.1:direction=-w.player.visual.global_basis.z;direction.y=0
  direction=direction.normalized()
  var result=cast(origin,origin+direction*25)
- if not result.is_empty() and result.collider.has_method("damage"):result.collider.damage(32)
+ if not result.is_empty():
+  if result.collider is Enemy:result.collider.damage(32,true)
+  elif result.collider.has_method("damage"):result.collider.damage(32)
+  else:impact_effect(result.position,true)
  tracer(origin,result.get("position",origin+direction*25),false)
  w.player.visual.get_node("Painter").react("shot")
  w.get_node("/root/Session").sound("shot");return true
@@ -179,17 +190,19 @@ func follow_veteran(delta:float):
    tracer(origin,result.get("position",closest.position+Vector3.UP*.5),true)
    veteran.visual.get_node("Painter").react("shot");w.get_node("/root/Session").sound("rifle")
  else:veteran.aim_direction=Vector3.ZERO
-func bite(body,amount:int):
+func bite(body,amount:int,cause:String="撕咬"):
  if body==veteran:
   veteran_health=maxi(0,veteran_health-amount);veteran_down=veteran_health<=0;sync()
  else:
-  w.story.economy.health=maxi(0,w.story.economy.health-amount);w.story.changed.emit();w.hud.toast("遭到撕咬 · -%d 生命"%amount,1.2)
+  w.story.economy.health=maxi(0,w.story.economy.health-amount);w.story.changed.emit();w.hud.toast("遭到%s · -%d 生命"%[cause,amount],1.2)
   if w.story.economy.health<=0:
    defeated=true;w.player.blocked=true;w.hud.show_combat_defeat()
 func enemy_fell(enemy):
  if w.floor_id=="surface":preload("res://scripts/surface_site.gd").drop(w,enemy)
  enemies.erase(enemy)
  if enemies.is_empty():
+  for projectile in projectiles.duplicate():
+   if is_instance_valid(projectile):projectile.queue_free()
   active=false;w.story.flags["battle_"+encounter]=true;sync();w.autosave()
   if w.floor_id=="railfront":w.sync_event_music("")
   w.hud.toast("周围安静下来。可以检查设备、包扎伤口，再继续前进。",5)
@@ -197,8 +210,25 @@ func retry():
  if checkpoint.is_empty():return
  var p=checkpoint.position
  w.get_node("/root/Session").enter(checkpoint,checkpoint.floor,Vector3(p[0],p[1],p[2]))
-func enemy_warning(p:Vector3):
- var light=OmniLight3D.new();light.position=p+Vector3.UP*.7;light.light_color=Color("bd6748");light.light_energy=.45;light.omni_range=1.4;w.add_child(light);get_tree().create_timer(.35).timeout.connect(light.queue_free)
+func enemy_warning(p:Vector3,seconds:float=.85,target:Vector3=Vector3.INF,kind:String="bite"):
+ var marker=preload("res://scripts/combat_warning.gd").new();w.add_child(marker);marker.setup(self,p,seconds,target,.6,kind);return marker
+func creature_cue(kind:String):
+ var flag="seen_"+kind
+ if not w.story.f(flag):
+  w.story.flags[flag]=true
+  w.hud.toast("伏扑兽伏低身体时会锁定扑击方向：侧移躲开，或开枪打断蓄势。" if kind=="pouncer" else "囊喉兽鼓起喉囊后会喷吐：保持移动，或利用掩体挡住弹道。",6)
+ w.get_node("/root/Session").sound("creature_warn")
+func launch_projectile(p:Vector3,direction:Vector3):
+ var shot=preload("res://scripts/combat_projectile.gd").new();w.add_child(shot);shot.setup(self,p,direction);projectiles.append(shot);return shot
+func confirm_hit(p:Vector3,killed:bool):
+ confirmed_hits+=1
+ if is_instance_valid(feedback):feedback.hit(p,killed)
+ w.get_node("/root/Session").sound("combat_kill" if killed else "combat_hit")
+func impact_effect(p:Vector3,audible:bool):
+ if audible:w.get_node("/root/Session").sound("combat_wall")
+ var mark=MeshInstance3D.new();var shape=SphereMesh.new();shape.radius=.065;shape.height=.13;shape.radial_segments=8;shape.rings=4;mark.mesh=shape;mark.position=p
+ var ink=StandardMaterial3D.new();ink.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;ink.albedo_color=Color("c6b398");mark.material_override=ink;mark.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;w.add_child(mark)
+ get_tree().create_timer(.10).timeout.connect(mark.queue_free)
 func tracer(from:Vector3,to:Vector3,rifle:bool):
  var beam=MeshInstance3D.new();var mesh=ImmediateMesh.new();beam.mesh=mesh;var mat=StandardMaterial3D.new();mat.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;mat.albedo_color=Color("d0ab6b") if rifle else Color("ead4a0");beam.material_override=mat
  mesh.surface_begin(Mesh.PRIMITIVE_LINES);mesh.surface_add_vertex(from);mesh.surface_add_vertex(to);mesh.surface_end();w.add_child(beam);get_tree().create_timer(.06).timeout.connect(beam.queue_free)
@@ -208,15 +238,20 @@ func serialize_state()->Dictionary:
  var saved=[]
  for e in enemies:
   if not is_instance_valid(e) or e.hp<=0:continue
-  saved.append({"position":[e.position.x,e.position.y,e.position.z],"kind":e.enemy_kind,"hp":e.hp,"cooldown":e.cooldown,"windup":e.windup,"arrival_time":e.arrival_time,"move_speed":e.move_speed,"animation":e.animation,"loot_key":e.get_meta("loot_key",""),"loot_index":e.get_meta("loot_index",0)})
- return {"active":true,"encounter":encounter,"enemies":saved,"clip":clip,"cooldown":cooldown,"reload_time":reload_time,"veteran_health":veteran_health,"veteran_down":veteran_down,"veteran_clip":veteran_clip,"veteran_reload":veteran_reload,"veteran_cooldown":veteran_cooldown,"rescue":rescue,"checkpoint":checkpoint.duplicate(true)}
+  saved.append({"position":[e.position.x,e.position.y,e.position.z],"kind":e.enemy_kind,"hp":e.hp,"cooldown":e.cooldown,"windup":e.windup,"arrival_time":e.arrival_time,"move_speed":e.move_speed,"animation":e.animation,"attack":e.attack_state(),"loot_key":e.get_meta("loot_key",""),"loot_index":e.get_meta("loot_index",0)})
+ var flying=[]
+ for shot in projectiles:
+  if is_instance_valid(shot) and not shot.is_queued_for_deletion():flying.append(shot.serialize())
+ return {"projectiles":flying,"active":true,"encounter":encounter,"enemies":saved,"clip":clip,"cooldown":cooldown,"reload_time":reload_time,"veteran_health":veteran_health,"veteran_down":veteran_down,"veteran_clip":veteran_clip,"veteran_reload":veteran_reload,"veteran_cooldown":veteran_cooldown,"rescue":rescue,"checkpoint":checkpoint.duplicate(true)}
 func restore_state(state:Dictionary):
  if not enabled or not state.get("active",false):return
  var id:String=state.get("encounter","")
  if not encounters.has(id):return
  for e in enemies:
   if is_instance_valid(e):e.queue_free()
- enemies.clear();encounter=id;active=true
+ for shot in projectiles.duplicate():
+  if is_instance_valid(shot):shot.queue_free()
+ projectiles.clear();enemies.clear();encounter=id;active=true
  clip=clampi(int(state.get("clip",6)),0,6);cooldown=maxf(0,state.get("cooldown",0));reload_time=maxf(0,state.get("reload_time",0))
  veteran_health=clampi(int(state.get("veteran_health",100)),0,100);veteran_down=veteran_health<=0;veteran_clip=clampi(int(state.get("veteran_clip",5)),0,5)
  veteran_reload=maxf(0,state.get("veteran_reload",0));veteran_cooldown=maxf(0,state.get("veteran_cooldown",0));rescue=maxf(0,state.get("rescue",0))
@@ -225,7 +260,11 @@ func restore_state(state:Dictionary):
   var pos=saved.position;var e=Enemy.new();w.add_child(e);e.setup(self,Vector3(pos[0],pos[1],pos[2]),saved.kind)
   e.hp=maxi(1,int(saved.get("hp",62)));e.cooldown=maxf(0,saved.get("cooldown",0));e.windup=maxf(0,saved.get("windup",0))
   e.arrival_time=maxf(0,saved.get("arrival_time",0));e.move_speed=clampf(saved.get("move_speed",1.65),.1,6);e.animation=maxf(0,saved.get("animation",0))
+  e.restore_attack(saved.get("attack",{}))
   e.set_meta("loot_key",saved.get("loot_key",""));e.set_meta("loot_index",int(saved.get("loot_index",0)));enemies.append(e)
+ for saved in state.get("projectiles",[]):
+  var p=saved.position;var d=saved.direction;var shot=launch_projectile(Vector3(p[0],p[1],p[2]),Vector3(d[0],d[1],d[2]))
+  shot.speed=clampf(float(saved.get("speed",4.6)),.1,10);shot.remaining=clampf(float(saved.get("remaining",2.5)),.01,3);shot.harm=clampi(int(saved.get("harm",10)),1,30)
  if enemies.is_empty():active=false
  defeated=w.story.economy.health<=0
  w.story.flags.weapon_clip=clip;w.story.flags.veteran_health=veteran_health

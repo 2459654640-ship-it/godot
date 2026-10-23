@@ -41,7 +41,7 @@ func run():
    check(frames_seen.size()==3 and frames_seen.has(0),"armed movement has two authored opposite strides and neutral transition: "+str(actor.name)+str(angle))
   actor.velocity=Vector3.ZERO;painter._process(0);check(painter.current_pose==0,"stopping returns to planted aiming stance")
  c.active=false;w.player.position=Vector3(-13,.04,-2);c.begin("pump");await frames()
- check(c.enemies.size()==3 and c.enemies.filter(func(e):return e.move_speed>1.8).size()==1,"first fight combines three enemies including one faster flanker")
+ check(c.enemies.size()==3 and c.enemies.filter(func(e):return e.enemy_kind=="pouncer").size()==1,"first fight combines three enemies including one telegraphed pouncer")
  for e in c.enemies:e.set_physics_process(false)
  var e=c.enemies[0];var hp=w.story.economy.health;e.position=w.player.position+Vector3(.6,0,0);e.arrival_time=0;e.cooldown=0;e.windup=0
  e._physics_process(.01);check(e.windup>=.4 and w.story.economy.health==hp,"bite is visibly telegraphed before damage")

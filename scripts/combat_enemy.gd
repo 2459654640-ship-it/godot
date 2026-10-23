@@ -13,6 +13,13 @@ var material:StandardMaterial3D
 var sprite:Sprite3D
 var enemy_kind="mutant"
 var blocked_time=0.0
+var attack_direction=Vector3.FORWARD
+var charge_time=0.0
+var recovery=0.0
+var hurt_time=0.0
+var charge_hit=false
+var warning
+const Catalog=preload("res://scripts/monster_catalog.gd")
 func setup(owner_node,p:Vector3,kind:String="mutant"):
  enemy_kind=kind
  director=owner_node;position=p;collision_layer=8;collision_mask=1|2|4|8
@@ -20,33 +27,53 @@ func setup(owner_node,p:Vector3,kind:String="mutant"):
  move_speed=1.95 if director.enemies.size()==2 else 1.65
  var shape=CollisionShape3D.new();var capsule=CapsuleShape3D.new();capsule.radius=.27;capsule.height=.75;shape.shape=capsule;shape.position.y=.375;add_child(shape)
  sprite=Sprite3D.new();sprite.name="MutantPainting";sprite.texture=load("res://assets/characters/tunnel_scavenger.png");sprite.hframes=5;sprite.vframes=4;sprite.pixel_size=.0040;sprite.position.y=.47;sprite.billboard=BaseMaterial3D.BILLBOARD_FIXED_Y;sprite.alpha_cut=SpriteBase3D.ALPHA_CUT_DISCARD;sprite.no_depth_test=false;sprite.shaded=true;add_child(sprite)
+ if enemy_kind in ["pouncer","spitter"]:
+  var spec=Catalog.get_kind(enemy_kind)
+  hp=spec.hp;move_speed=spec.speed;capsule.height=spec.height;capsule.radius=spec.radius;shape.position.y=spec.height/2
+  sprite.texture=load("res://assets/characters/"+spec.texture+".png");sprite.vframes=spec.rows;sprite.pixel_size=spec.pixel;sprite.position.y=spec.center
  if enemy_kind=="soldier":
   sprite.texture=load("res://assets/characters/veteran_masked_combat.png");sprite.hframes=5;sprite.vframes=7;sprite.pixel_size=1.77/324.0;sprite.scale.x=.762;sprite.position.y=1.77*166.0/324.0;shape.position.y=.85;capsule.height=1.70;move_speed=1.35
 
-func damage(amount:int):
+func cancel_warning():
+ if is_instance_valid(warning):warning.queue_free()
+ warning=null
+func damage(amount:int,from_player:bool=false):
  if hp<=0:return
- hp-=amount;sprite.modulate=Color("ffc1a0");get_tree().create_timer(.09).timeout.connect(func():if is_instance_valid(sprite):sprite.modulate=Color.WHITE)
+ hp-=amount;hurt_time=.13
+ if from_player:director.confirm_hit(position+Vector3.UP*.5,hp<=0)
  if hp<=0:
-  director.enemy_fell(self);collision_layer=0;collision_mask=0;sprite.rotation.z=.8;sprite.modulate=Color(.42,.4,.38)
-  set_physics_process(false);get_tree().create_timer(1.5).timeout.connect(queue_free)
+  cancel_warning();director.enemy_fell(self);collision_layer=0;collision_mask=0
+  if enemy_kind in ["pouncer","spitter"]:sprite.frame=30+sprite.frame%5
+  else:sprite.rotation.z=.8
+  sprite.modulate=Color(.62,.6,.57);set_physics_process(false);get_tree().create_timer(2.5).timeout.connect(queue_free)
+ elif enemy_kind in ["pouncer","spitter"] and windup>0:
+  cancel_warning();windup=0;recovery=.45;cooldown=maxf(cooldown,1.6)
+func _exit_tree():cancel_warning()
+func attack_state()->Dictionary:
+ return {"direction":[attack_direction.x,attack_direction.y,attack_direction.z],"charge":charge_time,"recovery":recovery,"hurt":hurt_time,"hit":charge_hit}
+func restore_attack(state:Dictionary):
+ var d=state.get("direction",[0,0,-1]);attack_direction=Vector3(d[0],d[1],d[2]);charge_time=float(state.get("charge",0));recovery=float(state.get("recovery",0));hurt_time=float(state.get("hurt",0));charge_hit=state.get("hit",false)
+ if windup>0:warning=director.enemy_warning(position,windup,position+attack_direction*2.45,"pounce" if enemy_kind=="pouncer" else "bite")
 func _physics_process(delta):
  if not is_instance_valid(director) or hp<=0:return
  if director.paused():velocity=Vector3.ZERO;return
  if arrival_time>0:
   arrival_time-=delta;velocity=Vector3.ZERO;return
- cooldown=maxf(0,cooldown-delta);repath-=delta;animation+=delta
+ cooldown=maxf(0,cooldown-delta);repath-=delta;animation+=delta;hurt_time=maxf(0,hurt_time-delta)
  target_body=director.w.player
  if director.veteran_health>0 and is_instance_valid(director.veteran) and position.distance_to(director.veteran.position)<position.distance_to(target_body.position)*.8:target_body=director.veteran
  var offset:Vector3=target_body.position-position;offset.y=0
  if enemy_kind=="soldier":
   soldier_tick(delta,offset);return
+ if enemy_kind in ["pouncer","spitter"]:
+  special_tick(delta,offset);return
  if windup>0:
   windup-=delta
   if windup<=0 and offset.length()<1.15 and director.sight(position+Vector3.UP*.55,target_body.position+Vector3.UP*.55):director.bite(target_body,10)
   velocity.x=move_toward(velocity.x,0,delta*12);velocity.z=move_toward(velocity.z,0,delta*12)
  elif offset.length()<.85 and director.sight(position+Vector3.UP*.55,target_body.position+Vector3.UP*.55):
   velocity.x=0;velocity.z=0
-  if cooldown<=0:windup=.42;cooldown=1.6;director.enemy_warning(position)
+  if cooldown<=0:windup=.55;cooldown=1.6;warning=director.enemy_warning(position,.55)
  else:
   var direction=chase_direction(offset)
   velocity.x=direction.x*move_speed;velocity.z=direction.z*move_speed
@@ -55,8 +82,61 @@ func _physics_process(delta):
  var camera=director.w.camera;var forward=offset.normalized();var view=camera.global_basis.z;view.y=0
  var angle=atan2(forward.dot(camera.global_basis.x),forward.dot(view.normalized()));var slot=posmod(roundi(angle/(PI/4)),8);var column=mini(slot,8-slot)
  sprite.flip_h=slot>4
- var row=3 if windup>0 else (1+int(animation*7)%2 if get_position_delta().length()>.001 else 0)
+ var row=3 if windup>0 else ([1,0,2,0][int(animation*8)%4] if get_position_delta().length()>.001 else 0)
  sprite.frame=row*5+column
+
+func special_tick(delta:float,offset:Vector3):
+ var visible_target=director.sight(position+Vector3.UP*.55,target_body.position+Vector3.UP*.55)
+ var facing=offset.normalized()
+ velocity=Vector3.ZERO
+ if recovery>0:recovery=maxf(0,recovery-delta)
+ elif charge_time>0:
+  facing=attack_direction
+  velocity=attack_direction*5.3
+  charge_time=maxf(0,charge_time-delta)
+  velocity.y=-.2;move_and_slide()
+  for i in get_slide_collision_count():
+   var collision=get_slide_collision(i)
+   if absf(collision.get_normal().y)>.7:continue
+   var body=collision.get_collider()
+   if not charge_hit and (body==director.w.player or body==director.veteran):director.bite(body,12,"扑击");charge_hit=true
+   charge_time=0
+  if not charge_hit and offset.length()<.9 and visible_target:director.bite(target_body,12,"扑击");charge_hit=true
+  if charge_time<=0:recovery=.7
+  paint(facing,4);return
+ elif windup>0:
+  facing=attack_direction;windup=maxf(0,windup-delta)
+  if windup<=0:
+   cancel_warning()
+   if enemy_kind=="pouncer":charge_time=.42;charge_hit=false
+   else:
+    director.launch_projectile(position+Vector3.UP*.55+attack_direction*.42,attack_direction);recovery=.38
+ elif cooldown<=0 and visible_target and offset.length()<(3.2 if enemy_kind=="pouncer" else 7.0):
+  attack_direction=offset.normalized();windup=.9 if enemy_kind=="pouncer" else .95;cooldown=2.6 if enemy_kind=="pouncer" else 3.0
+  warning=director.enemy_warning(position,windup,position+attack_direction*2.45,"pounce" if enemy_kind=="pouncer" else "bite")
+  director.creature_cue(enemy_kind)
+ else:
+  var direction=Vector3.ZERO
+  if enemy_kind=="spitter" and visible_target and offset.length()<3.5:
+   var away=-offset.normalized()
+   if clear_motion(away*.6):direction=away
+   else:
+    for angle in [PI/2,-PI/2]:
+     var side=away.rotated(Vector3.UP,angle)
+     if clear_motion(side*.6):direction=side;break
+  elif enemy_kind=="pouncer" or not visible_target or offset.length()>6:direction=chase_direction(offset)
+  velocity=direction*move_speed
+ velocity.y=-.2;move_and_slide();track_progress(delta)
+ var row=0
+ if get_position_delta().length()>.002:row=[1,0,2,0][int(animation*8)%4]
+ if windup>0:row=3
+ elif recovery>0:row=4 if recovery>.2 else 0
+ if hurt_time>0:row=5
+ paint(facing,row)
+func paint(forward:Vector3,row:int):
+ var camera=director.w.camera;var view=camera.global_basis.z;view.y=0
+ var angle=atan2(forward.dot(camera.global_basis.x),forward.dot(view.normalized()));var slot=posmod(roundi(angle/(PI/4)),8)
+ sprite.flip_h=slot>4;sprite.frame=row*5+mini(slot,8-slot)
 
 func soldier_tick(delta:float,offset:Vector3):
  var in_sight=offset.length()<13 and director.sight(position+Vector3.UP*.8,target_body.position+Vector3.UP*.8)
@@ -66,7 +146,7 @@ func soldier_tick(delta:float,offset:Vector3):
    var origin=position+Vector3.UP*.8;var target=target_body.position+Vector3.UP*.75
    var result=director.cast(origin,target)
    director.tracer(origin,result.get("position",target),true)
-   if result.is_empty() or result.get("collider")==target_body:director.bite(target_body,12)
+   if result.is_empty() or result.get("collider")==target_body:director.bite(target_body,12,"射击")
    director.w.get_node("/root/Session").sound("rifle")
  elif in_sight and offset.length()>2:
   velocity=Vector3.ZERO

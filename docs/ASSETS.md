@@ -286,3 +286,10 @@
 - [工人正背面验收动作](characters/ambient_worker-accepted-walks.jpg)
 - [妇女正背面验收动作](characters/ambient_woman-accepted-walks.jpg)
 - [新原创配乐与 MIDI 说明](../assets/audio/scores/journey_credits.json)
+
+## 当前怪物与战斗反馈
+
+- [伏扑兽七种姿态](monsters/pouncer-actions.jpg) · [运行图集](../assets/characters/tunnel_pouncer.png)
+- [囊喉兽七种姿态](monsters/spitter-actions.jpg) · [运行图集](../assets/characters/tunnel_spitter.png)
+- 每张图集按行依次为站立、迈步 A、迈步 B、蓄势、攻击、受击、倒地。五个绘制视角加镜像覆盖八方向。
+- [命中、击杀、墙体撞击与蓄势音效来源](../assets/audio/licenses/combat_v26.txt)

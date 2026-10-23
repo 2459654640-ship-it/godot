@@ -111,11 +111,27 @@ static func valid_combat(c:Variant)->bool:
 	if not c.get("enemies",[]) is Array or not c.get("checkpoint",{}) is Dictionary:return false
 	for enemy in c.get("enemies",[]):
 		if not enemy is Dictionary or not enemy.get("position",[]) is Array:return false
-		if enemy.position.size()!=3 or enemy.get("kind","") not in ["mutant","soldier"]:return false
+		if enemy.position.size()!=3 or enemy.get("kind","") not in ["mutant","soldier","pouncer","spitter"]:return false
 		for n in enemy.position:
 			if not (n is int or n is float) or not is_finite(float(n)) or absf(float(n))>10000:return false
 		for key in ["hp","cooldown","windup","arrival_time","move_speed","animation"]:
 			if enemy.has(key) and (not (enemy[key] is int or enemy[key] is float) or not is_finite(float(enemy[key]))):return false
+		var attack=enemy.get("attack",{})
+		if not attack is Dictionary:return false
+		if attack.has("direction") and not valid_vector(attack.direction):return false
+		for key in ["charge","recovery","hurt"]:
+			if attack.has(key) and (not (attack[key] is int or attack[key] is float) or not is_finite(float(attack[key])) or float(attack[key])<0):return false
+	if not c.get("projectiles",[]) is Array:return false
+	for shot in c.get("projectiles",[]):
+		if not shot is Dictionary or not valid_vector(shot.get("position",[])) or not valid_vector(shot.get("direction",[])):return false
+		for key in ["speed","remaining","harm"]:
+			if not (shot.get(key) is int or shot.get(key) is float) or not is_finite(float(shot[key])) or float(shot[key])<0:return false
 	for key in ["clip","cooldown","reload_time","veteran_health","veteran_clip","veteran_reload","veteran_cooldown","rescue"]:
 		if c.has(key) and (not (c[key] is int or c[key] is float) or not is_finite(float(c[key]))):return false
+	return true
+
+static func valid_vector(v:Variant)->bool:
+	if not v is Array or v.size()!=3:return false
+	for n in v:
+		if not (n is int or n is float) or not is_finite(float(n)) or absf(float(n))>10000:return false
 	return true

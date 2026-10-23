@@ -13,6 +13,7 @@ func enter(data:Dictionary,floor:String,position:Vector3):
 	get_tree().change_scene_to_file("res://scenes/"+scene+".tscn")
 
 var effect_players:Array[AudioStreamPlayer]=[]
+var combat_feedback_players:Array[AudioStreamPlayer]=[]
 var settings=ConfigFile.new()
 const Video=preload("res://scripts/video_settings.gd")
 signal video_changed
@@ -32,6 +33,8 @@ func _ready():
 		set_volume(pair[0],float(settings.get_value("audio",pair[0],pair[1])),false)
 	for i in 4:
 		var p=AudioStreamPlayer.new();p.bus="Effects";add_child(p);effect_players.append(p)
+	for i in 3:
+		var p=AudioStreamPlayer.new();p.bus="Effects";add_child(p);combat_feedback_players.append(p)
 func _process(delta):
 	if video_preview:
 		video_seconds-=delta
@@ -56,6 +59,7 @@ func set_volume(bus_name:String,value:float,persist:bool=true):
 		settings.set_value("audio",bus_name,value);settings.save("user://metro_settings.cfg")
 func sound(id:String):
 	if DisplayServer.get_name()=="headless":return
-	for p in effect_players:
+	var pool=combat_feedback_players if id in ["combat_hit","combat_kill","combat_wall"] else effect_players
+	for p in pool:
 		if not p.playing:
 			p.stream=load("res://assets/audio/"+id+".wav");p.play();return

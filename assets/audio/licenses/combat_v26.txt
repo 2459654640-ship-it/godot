@@ -1,0 +1,4 @@
+combat_hit.wav, combat_kill.wav, combat_wall.wav, creature_warn.wav
+Original synthesized sound effects for Metro 1982, 2026. CC0-1.0.
+Deterministic filtered noise and mathematical oscillators; no external recordings, samples or melodies.
+Short transient feedback only; no continuous ambient noise.

@@ -13,6 +13,9 @@
 - [普通工人：正背面验收动作](characters/ambient_worker-accepted-walks.jpg)
 - [普通妇女：正背面验收动作](characters/ambient_woman-accepted-walks.jpg)
 
+- [伏扑兽当前动作示意](monsters/pouncer-actions.jpg)
+- [囊喉兽当前动作示意](monsters/spitter-actions.jpg)
+
 ## 当前地图全景
 
 | 地图 | 最新全景 |
