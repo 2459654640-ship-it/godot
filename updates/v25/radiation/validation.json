@@ -1,0 +1,41 @@
+{
+  "commit": "4eff7ae4a3004c8e2fea5db603f65b026728c0b9",
+  "targeted_regression": [
+    {
+      "suite": "radiation_v25",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 0.54,
+      "results": [
+        "RADIATION_V25_RESULT checks=59 failures=0"
+      ]
+    },
+    {
+      "suite": "v11_contract",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 5.28,
+      "results": [
+        "V11_RESULT checks=181 failures=0"
+      ]
+    },
+    {
+      "suite": "journey_ui_v25",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 2.21,
+      "results": [
+        "JOURNEY_UI_V25_RESULT checks=116 failures=0"
+      ]
+    },
+    {
+      "suite": "save_slots_v24",
+      "exit": 0,
+      "script_errors": 0,
+      "seconds": 5.09,
+      "results": [
+        "SAVE_SLOTS_V24_RESULT checks=54 failures=0"
+      ]
+    }
+  ]
+}
