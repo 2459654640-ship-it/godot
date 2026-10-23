@@ -1,0 +1,19 @@
+{
+  "sources": "Existing project illustrations and original approved Ivan standing images. No external artworks used.",
+  "edits": [
+    {
+      "file": "mine_bedside.png",
+      "method": "AI edit using original scene and original approved Ivan front/profile references",
+      "correction": "Remove facial hair from Ivan only; retain the older patient and room",
+      "previous_sha256": "7d0ac2f094b6b5ec0de734626e2a5e13239e21e506541a9f22561f4b15bfe2a6",
+      "current_sha256": "dfa4f125e78dbf2737cdfa90cbfda258b116d54a9519c80bfbd26de55e7ae7e9"
+    },
+    {
+      "file": "coal_threshold.png",
+      "method": "AI edit using original scene and original approved Ivan front/profile references",
+      "correction": "Replace incorrect long tied hair with approved short wavy hair; preserve patient, nurse and room",
+      "previous_sha256": "9b52e7a7b348e2077a0053c1bb377d7716ad65d34746ae28de390828c48b5c73",
+      "current_sha256": "915de78cf429f569214a9ddaecfae6db1df0df93134a7f24071f21b3df749afe"
+    }
+  ]
+}

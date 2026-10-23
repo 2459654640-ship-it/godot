@@ -26,6 +26,7 @@ func run():
 		var prerequisites={"last_mail":"plant_diagram","spare_seals":"plant_bled","commune_press":"greenhouse_fixed","mushroom_light":"greenhouse_fixed","coal_linen":"brother_care","coal_names":"linen_done","father_letters":"father_answered"}
 		if prerequisites.has(flow[1]):s.flags[prerequisites[flow[1]]]=true
 		if flow[1]=="father_letters":s.flags.father_met=true;s.flags.star_access=true
+		if flow[1]=="sech_watch":s.act("c_watch_brief");check(s.last_action_valid and not s.f("watch_job"),"hear patrol problem before choosing whether to help")
 		check(not Journal.tasks(s).any(func(t):return t.id==flow[1]),"unaccepted quest hidden: "+flow[1])
 		s.act("c_"+flow[2][-1]);check(not s.last_action_valid,"cannot claim before completing work: "+flow[1])
 		for index in flow[2].size():
