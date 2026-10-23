@@ -880,7 +880,12 @@ func audio_controls():
 func show_settings():
 	start_modal("设置","画面 / 声音",true)
 	modal_hint.text="应用后确认保留更改 · Esc 返回"
-	modal.position=Vector2(230,70);modal.size=Vector2(1140,860)
+	modal.position=Vector2.ZERO;modal.size=get_viewport_rect().size
+	modal.add_theme_stylebox_override("panel",style(Color("101c1e"),Color("101c1e"),0))
+	scrim.color=Color("101c1e")
+	var outer=modal.get_child(0)
+	for side in ["left","right"]:outer.add_theme_constant_override("margin_"+side,140)
+	for side in ["top","bottom"]:outer.add_theme_constant_override("margin_"+side,50)
 	var controls=preload("res://scripts/ui_settings.gd").new();modal_box.add_child(controls);controls.setup(world.get_node("/root/Session"))
 	modal_box.add_child(button("返回",func():show_comic_pause() if comic_active else show_pause()))
 

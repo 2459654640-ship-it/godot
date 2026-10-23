@@ -82,7 +82,10 @@ func close_dialog():
 	if is_instance_valid(dialog):remove_child(dialog);dialog.queue_free()
 func show_settings():
 	var box=open_dialog("设置")
-	dialog.position.y=130;dialog.size.y=740
+	dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var page=skin();page.bg_color=Color("101c1e")
+	page.content_margin_left=140;page.content_margin_right=140;page.content_margin_top=60;page.content_margin_bottom=60
+	dialog.add_theme_stylebox_override("panel",page)
 	var controls=preload("res://scripts/ui_settings.gd").new();box.add_child(controls);controls.setup(get_node("/root/Session"))
 	choice(box,"返回主界面",close_dialog)
 func show_about():
