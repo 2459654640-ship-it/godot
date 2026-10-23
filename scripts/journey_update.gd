@@ -47,3 +47,12 @@ static func objective(s)->String:
 	for row in s.Campaign.side_tasks(s):
 		if row.id=="d6_first_duty":return row.step
 	return ""
+static func migrate(s,saved:Dictionary):
+	if int(saved.get("content_revision",0))>=25:return
+	# v24 removed the crates on leaving the factory, before D-6 could sign
+	# for them. Restore only that unfulfilled cargo, never transferred goods.
+	var node:String=s.flags.get("comic",{}).get("node","")
+	var returning=node in ["return_crossing","return_veteran","return_standoff","tea_return","home_water"]
+	var at_home=s.f("d6_returned") and saved.get("floor","") in ["","life","labor"]
+	if s.route=="official" and s.f("water_secured") and s.f("c_done_plant_leave") and (returning or at_home) and not s.f("sided_veteran") and not s.f("cargo_sent_with_lieutenant") and not s.f("d6_cargo_returned"):
+		s.give("water_core");s.flags.legacy_return_cargo_recovered=true

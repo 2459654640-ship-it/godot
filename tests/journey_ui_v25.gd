@@ -37,6 +37,13 @@ func run():
  session.preview_video({"quality":1,"fill":false});session.preview_video({"quality":0});session.revert_video();check(session.video==original,"repeated previews retain the original recovery snapshot")
  session.preview_video({"quality":1,"fill":false});session.confirm_video();var cfg=ConfigFile.new();cfg.load("user://metro_settings.cfg")
  check(int(cfg.get_value("video","quality"))==1 and not session.video_preview,"confirmed video settings persist in config")
+ var legacy=Story.new();legacy.route="official";legacy.flags.merge({"intro_done":true,"water_secured":true,"c_done_plant_leave":true,"d6_returned":true,"departure_official":true},true)
+ var saved=legacy.serialize().duplicate(true);saved.content_revision=24;saved.floor="labor"
+ var migrated=Story.new();migrated.restore(saved);check(migrated.has("water_core") and migrated.f("legacy_return_cargo_recovered"),"old returned save recovers crates consumed by v24 before handover")
+ migrated.context.floor="labor";act(migrated,"return_filters");check(migrated.f("d6_cargo_returned") and not migrated.has("water_core"),"recovered old cargo can actually be delivered")
+ var second=Story.new();second.restore(migrated.serialize());check(not second.has("water_core"),"reloading cannot duplicate already delivered cargo")
+ for flag in ["sided_veteran","cargo_sent_with_lieutenant","d6_cargo_returned"]:
+  var invalid_old=saved.duplicate(true);invalid_old.flags[flag]=true;var t=Story.new();t.restore(invalid_old);check(not t.has("water_core"),"migration cannot recreate transferred cargo: "+flag)
  var s=formal();act(s,"return_assignment");check(s.flags.next_sequence=="d6_briefing" and not s.Campaign.available(s,"return_commune"),"formal assignment no longer opens a diplomatic shortcut into enemy commune")
  scene(s,"d6_briefing");s.context.floor="life"
  check(s.view("semyon").options.any(func(o):return o.key=="c_d6_home_talk" and o.enabled),"homecoming is reachable from actual Semyon conversation")

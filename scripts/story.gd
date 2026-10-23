@@ -399,4 +399,5 @@ func restore(data: Dictionary):
 		Comic.start(self,"official" if route=="official" else "solo")
 	Campaign.Update.migrate(self,int(data.get("content_revision",0)))
 	Campaign.Living.migrate(self,int(data.get("content_revision",0)))
+	Campaign.Journey.migrate(self,data)
 	changed.emit()
