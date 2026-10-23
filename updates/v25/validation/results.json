@@ -1,7 +1,7 @@
 {
-  "code_commit": "603ef1007efdc937d3a2b2ef1c04579ca5bd82fc",
+  "code_commit": "67d19bb08ef907e263f18c655c1cd052bd8624cc",
   "suites": 44,
-  "checks": 18770,
+  "checks": 18772,
   "failures": 0,
   "results": [
     {
@@ -387,7 +387,7 @@
       "exit": 0,
       "script_errors": 0,
       "results": [
-        "JOURNEY_UI_V25_RESULT checks=114 failures=0"
+        "JOURNEY_UI_V25_RESULT checks=116 failures=0"
       ]
     },
     {
