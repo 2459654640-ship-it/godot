@@ -1,0 +1,11 @@
+{
+  "reference": "AI B-sheet: original front/side/back images embedded as orthographic guides and used for surface projections",
+  "method": "MPFB/MakeHuman detailed CC0 anatomical topology adjusted to adult proportions; tailored clothing, actual mesh equipment, wave strands and reference-based UV projections. Not automatic multi-view AI reconstruction.",
+  "blender": "4.3.2",
+  "visible_mesh_objects": 32,
+  "base_mesh_vertices": 159933,
+  "skeleton_bones": 53,
+  "animations_authored": false,
+  "in_game_replacement": false,
+  "status": "Static form/material study for review; side projections, fine face/hair likeness and clothing seams remain candidates for further refinement."
+}

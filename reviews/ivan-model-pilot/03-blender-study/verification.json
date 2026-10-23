@@ -1,0 +1,16 @@
+{
+  "blender_file_reopened_without_MakeHuman_addon": true,
+  "packed_images": [
+    "back.png",
+    "brown_eye.png",
+    "front.png",
+    "side.png"
+  ],
+  "missing_external_images": [],
+  "upper_arm_test_skin_centroid_shift_m": 0.03104351951642086,
+  "upper_arm_test_jacket_centroid_shift_m": 0.007296740484620932,
+  "pose_reset_before_save": true,
+  "finite_geometry": true,
+  "hidden_anatomical_helpers_excluded_from_render": true,
+  "full_walk_or_combat_animation_tested": false
+}

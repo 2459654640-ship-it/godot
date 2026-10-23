@@ -1,0 +1,13 @@
+{
+  "reference_files": {
+    "front": "a8a82b88ce4bd440c4cd13445cc260906571b10f798da26723241db917e3b194",
+    "side": "50b11b57e7ab38f08ce7e0732fb5067a2cf68da05fb62f6fc616a586596ceea0",
+    "back": "6ea967eb1b4d0df316531d789153bc45da9ce5371471795f8722664b9546f8ca"
+  },
+  "mpfb_repository": "https://github.com/makehumancommunity/mpfb2",
+  "mpfb_commit": "b1a2dc98776da9d1eea751b159d42cf61778fe2e",
+  "makehuman_repository": "https://github.com/makehumancommunity/makehuman",
+  "makehuman_commit": "a8bc2d54ff0ac92e78ff71431b1023eda42bf482",
+  "assets_license": "CC0; addon code itself remains under its upstream code license and is not bundled",
+  "model_sha256": "ebec932d51b2d45651d2da67a55539f8b25bcceb8e62012f16bc710afe5757ee"
+}
