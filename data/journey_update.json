@@ -1,0 +1,513 @@
+{
+  "actions": {
+    "return_assignment": {
+      "text": "「我休息过后，还需要做什么？」",
+      "reply": "科瓦廖夫把一张地表泵站的旧图推过来。\n「净水间在检测滤芯。我们得确认旧引水口有没有污染，免得换了滤芯还出问题。你先回去看看老谢，再到医务间听值班员说明。愿意接这一趟，再回来登记。」",
+      "once": true,
+      "req": {
+        "all": [
+          "d6_cargo_returned",
+          "departure_official"
+        ],
+        "not": [
+          "sided_veteran",
+          "commune_member",
+          "sech_member"
+        ]
+      },
+      "flags": {
+        "d6_duty_accepted": true
+      },
+      "travel": "d6_briefing"
+    },
+    "d6_duty_offer": {
+      "text": "「泵站的巡查还需要人吗？」",
+      "reply": "「需要。先回生活层和家里人见一面，再向医务间了解取样要求。你想清楚了再出站。」",
+      "once": true,
+      "req": {
+        "all": [
+          "d6_cargo_returned",
+          "departure_official"
+        ],
+        "not": [
+          "sided_veteran",
+          "commune_member",
+          "sech_member",
+          "d6_duty_accepted"
+        ]
+      },
+      "flags": {
+        "d6_duty_accepted": true
+      },
+      "travel": "d6_briefing"
+    },
+    "d6_home_talk": {
+      "text": "「老爹，我回来了。」",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "d6_cargo_returned"
+        ],
+        "not": [
+          "d6_home_seen"
+        ]
+      },
+      "flags": {},
+      "travel": "d6_home_evening"
+    },
+    "d6_medical_brief": {
+      "text": "「我要去旧泵站，取样需要注意什么？」",
+      "reply": "值班员拿出两个密封袋，示范如何在不碰到瓶口的情况下装入沉积物。\n「回来先交样本，再洗手。伤员的饮水也从同一条支管走，我们得确认它安全。」\n帘子后传来一阵咳嗽。她停了一会儿，等那边安静，才接着把操作步骤讲完。",
+      "once": true,
+      "req": {
+        "all": [
+          "d6_duty_accepted",
+          "d6_home_seen"
+        ],
+        "not": [
+          "d6_patrol_done"
+        ]
+      },
+      "flags": {
+        "d6_medical_briefed": true
+      },
+      "travel": "d6_ward_brief"
+    },
+    "d6_field_supply": {
+      "text": "领取泵站巡查的弹药与急救补给。",
+      "reply": "军需员核对登记单，把左轮、三十发土制弹和两卷绷带交给你。\n「这批登记过了。途中遇到危险可以撤回，检查点重试也不会额外扣你的补给。」",
+      "once": true,
+      "req": {
+        "all": [
+          "d6_medical_briefed"
+        ],
+        "not": [
+          "d6_patrol_done"
+        ]
+      },
+      "flags": {
+        "d6_field_supplied": true
+      },
+      "give": [
+        "revolver"
+      ],
+      "reward": {
+        "handmade": 30
+      },
+      "goods": {
+        "bandage": 2
+      }
+    },
+    "d6_patrol_depart": {
+      "text": "装备齐全，登记后前往地表旧泵站。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "d6_duty_accepted",
+          "d6_medical_briefed",
+          "d6_field_supplied"
+        ],
+        "not": [
+          "d6_patrol_done"
+        ],
+        "items": [
+          "mask",
+          "filter",
+          "revolver"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "d6_patrol_active": true
+      },
+      "travel": "d6_patrol_road"
+    },
+    "surface_back_d6": {
+      "text": "沿检修梯返回 D-6 作业层。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "surface_from_d6"
+        ],
+        "floor": [
+          "surface"
+        ]
+      },
+      "flags": {},
+      "travel": "d6_patrol_back"
+    },
+    "d6_patrol_turnin": {
+      "text": "交付封存样本，报告泵站现场的情况。",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "d6_patrol_active",
+          "surface_sample_sealed"
+        ],
+        "items": [
+          "pool_sample"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "d6_patrol_done": true,
+        "chapter_first_field": true
+      },
+      "take": [
+        "pool_sample"
+      ],
+      "reward": {
+        "military": 10
+      },
+      "travel": "d6_patrol_report"
+    },
+    "d6_followup": {
+      "text": "「这次巡查以后，我算正式外勤人员了吗？」",
+      "reply": "科瓦廖夫：「还得经过观察。你这次把情况讲清楚、把人和装备带回来，比在报告里写几句漂亮话管用。接下来有新的任务，我会先问你的意思。」\n他把你的名字留在候选名册里。生活层仍可以返回，矿区则需要另办当班手续。",
+      "once": true,
+      "req": {
+        "all": [
+          "d6_patrol_done"
+        ]
+      },
+      "flags": {
+        "d6_candidate": true
+      }
+    },
+    "mine_visit_story": {
+      "text": "「安娜让我带句话，可以坐一会儿吗？」",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "brother_care",
+          "brother_found"
+        ],
+        "not": [
+          "mine_visit_seen",
+          "anna_outcome_done"
+        ]
+      },
+      "flags": {},
+      "travel": "mine_bedside"
+    },
+    "mine_observe_offer": {
+      "text": "「我能替这一班的医护做点什么？」",
+      "reply": "医护翻到休养间的温度记录。\n「东北休养间夜里太冷，病人睡不稳。暖气支路的阀位要和机房记录对上，工班也得给我们留出一段低负荷时间。你愿意帮忙，就先在档案柜找本班供暖页，再去登记台商量。别自己碰矿井风机。」",
+      "once": true,
+      "req": {
+        "all": [
+          "brother_found",
+          "mine_visit_seen"
+        ],
+        "not": [
+          "anna_outcome_done"
+        ]
+      },
+      "flags": {
+        "mine_warm_job": true
+      },
+      "offer_for": "mine_warm_job"
+    },
+    "mine_heat_record": {
+      "text": "查找休养间暖气支路的本班记录。",
+      "reply": "供暖页记着：休养间和更衣室共用一条回水支路。更衣室的热水作业集中在交班前后，夜间可以留出一段供暖时间。你抄下了班次和支路号，没有改动设备。",
+      "once": true,
+      "req": {
+        "all": [
+          "mine_warm_job"
+        ]
+      },
+      "flags": {
+        "mine_heat_known": true
+      }
+    },
+    "mine_heat_negotiate": {
+      "text": "「能把清洗时间错开，让休养间夜里暖一点吗？」",
+      "reply": "登记员叫来当班工人，一起核对洗浴和清洗安排。\n矿工：「下井回来总得让我们洗干净。后半夜不用的那段可以让出来，别把交班这一段也停了。」\n你们将两项时间分开写进值班页，医护还需要核实病房能否稳定供暖。",
+      "once": true,
+      "req": {
+        "all": [
+          "mine_heat_known"
+        ]
+      },
+      "flags": {
+        "mine_heat_agreed": true
+      }
+    },
+    "mine_heat_finish": {
+      "text": "把班次安排交给医护，确认夜间照护。",
+      "reply": "医护亲自试过休养间的暖气，把新的时间写在床头交班卡上。\n「今晚先按这个来，夜班我会再看一次。替病人谢谢你。」\n她让你带走值班室备用的两卷绷带。你没有承诺能治好谁，但这一晚，他们至少可以睡得暖一点。",
+      "once": true,
+      "req": {
+        "all": [
+          "mine_heat_agreed"
+        ]
+      },
+      "flags": {
+        "mine_warm_done": true
+      },
+      "goods": {
+        "bandage": 2
+      },
+      "reward": {
+        "military": 3
+      },
+      "travel": "mine_warm_evening"
+    },
+    "d6_medical_followup": {
+      "text": "询问上次样本的检测安排。",
+      "reply": "值班医护把你的报告抄页放到样本盒上。\n「你在报告里写明了伤员用水的急迫情况，维修班已经把这一批列进优先检测。结果还没出，我们先按污染风险处理。」\n她交给你一个备用急救包，让你下次出站带上。",
+      "once": true,
+      "req": {
+        "all": [
+          "d6_report_complete",
+          "d6_report_medical"
+        ]
+      },
+      "flags": {
+        "d6_medical_followed": true
+      },
+      "goods": {
+        "medkit": 1
+      }
+    },
+    "d6_route_followup": {
+      "text": "向军需员核对下一班可用的路线抄页。",
+      "reply": "军需员拿着你画的通路，给下一班标出检修梯和退路。\n「这份能看明白。补你一小包土制弹，留着下次用；真遇到危险，还是先往回撤。」",
+      "once": true,
+      "req": {
+        "all": [
+          "d6_report_complete",
+          "d6_report_routes"
+        ]
+      },
+      "flags": {
+        "d6_routes_followed": true
+      },
+      "reward": {
+        "handmade": 12
+      }
+    },
+    "coal_back_d6": {
+      "text": "交回矿区存根，返回 D-6作业层。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "d6_cargo_returned"
+        ],
+        "floor": [
+          "coal"
+        ]
+      },
+      "flags": {},
+      "travel": "coal_return_d6"
+    }
+  },
+  "quests": [
+    {
+      "id": "d6_first_duty",
+      "name": "归队后的第一班",
+      "kind": "主线",
+      "facility": "labor",
+      "accepted": "d6_duty_accepted",
+      "done": "d6_patrol_done",
+      "background": "滤芯已经交回 D-6。中尉希望确认旧泵站的引水口安全，完成这次巡查后再讨论伊万的外勤资格。",
+      "actions": [
+        "return_assignment",
+        "d6_duty_offer",
+        "d6_home_talk",
+        "d6_medical_brief",
+        "d6_field_supply",
+        "d6_patrol_depart",
+        "d6_patrol_turnin"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "target": "semyon",
+          "place": "life",
+          "step": "回 D-6生活层，和谢苗诺夫见面。"
+        },
+        {
+          "when": {
+            "all": [
+              "d6_home_seen"
+            ]
+          },
+          "target": "medical",
+          "place": "labor",
+          "step": "到 D-6作业层北侧医务间，听取密封取样的要求。"
+        },
+        {
+          "when": {
+            "all": [
+              "d6_medical_briefed"
+            ]
+          },
+          "target": "armory",
+          "place": "labor",
+          "step": "到作业层装备库领取本次巡查补给。"
+        },
+        {
+          "when": {
+            "all": [
+              "d6_field_supplied"
+            ]
+          },
+          "target": "d6_return_desk",
+          "place": "labor",
+          "step": "备齐面具、滤毒罐和左轮，在科瓦廖夫处登记出站。"
+        },
+        {
+          "when": {
+            "all": [
+              "d6_patrol_active"
+            ],
+            "floor": [
+              "surface"
+            ]
+          },
+          "target": "surface_board",
+          "place": "surface",
+          "step": "先读西侧控制箱的排水记录，清理院内兽群，再开西侧泄水阀。"
+        },
+        {
+          "when": {
+            "all": [
+              "d6_patrol_active",
+              "surface_notes"
+            ],
+            "floor": [
+              "surface"
+            ]
+          },
+          "target": "surface_valve",
+          "place": "surface",
+          "step": "排水记录已核对。清理院内兽群，让西侧泄水阀周围可以安全操作。"
+        },
+        {
+          "when": {
+            "all": [
+              "d6_patrol_active",
+              "surface_notes",
+              "battle_surface_yard"
+            ],
+            "floor": [
+              "surface"
+            ]
+          },
+          "target": "surface_valve",
+          "place": "surface",
+          "step": "院内威胁已清除。转动西侧泄水阀，打开通往北侧沉淀池的通路。"
+        },
+        {
+          "when": {
+            "all": [
+              "d6_patrol_active",
+              "surface_drain_open"
+            ],
+            "floor": [
+              "surface"
+            ]
+          },
+          "target": "surface_sample",
+          "place": "surface",
+          "step": "清理北侧沉淀池威胁，封存一份样本；遇到危险可从西南检修梯撤回。"
+        },
+        {
+          "when": {
+            "all": [
+              "d6_patrol_active",
+              "surface_sample_sealed"
+            ],
+            "floor": [
+              "surface"
+            ]
+          },
+          "target": "surface_exit",
+          "place": "surface",
+          "step": "从西南检修梯沿原路返回 D-6，交付封存样本。"
+        },
+        {
+          "when": {
+            "all": [
+              "d6_patrol_active"
+            ],
+            "floor": [
+              "labor",
+              "life"
+            ]
+          },
+          "target": "d6_return_desk",
+          "place": "labor",
+          "step": "尚未取得样本可以再次出站；取样完成后向科瓦廖夫交付。"
+        },
+        {
+          "when": {
+            "all": [
+              "d6_patrol_active",
+              "surface_sample_sealed"
+            ],
+            "floor": [
+              "labor",
+              "life"
+            ]
+          },
+          "target": "d6_return_desk",
+          "place": "labor",
+          "step": "把封存样本交给科瓦廖夫，报告泵站的实际情况。"
+        }
+      ]
+    },
+    {
+      "id": "mine_warm_night",
+      "name": "休养间的夜班",
+      "kind": "支线",
+      "facility": "coal",
+      "accepted": "mine_warm_job",
+      "done": "mine_warm_done",
+      "background": "井下伤员需要安静、暖和的休养环境，工人也需要下班清洗。你答应帮助双方安排共用的暖气支路。",
+      "actions": [
+        "mine_observe_offer",
+        "mine_heat_record",
+        "mine_heat_negotiate",
+        "mine_heat_finish"
+      ],
+      "stages": [
+        {
+          "when": {},
+          "target": "coal_archive",
+          "step": "到西北班组档案柜查看本班供暖记录。"
+        },
+        {
+          "when": {
+            "all": [
+              "mine_heat_known"
+            ]
+          },
+          "target": "coal_clerk",
+          "step": "回西南登记台，与当班人员商量清洗和供暖的时间。"
+        },
+        {
+          "when": {
+            "all": [
+              "mine_heat_agreed"
+            ]
+          },
+          "target": "coal_medic",
+          "step": "将议定的班次交给北侧值班医护，确认休养间的夜间照护。"
+        }
+      ]
+    }
+  ]
+}

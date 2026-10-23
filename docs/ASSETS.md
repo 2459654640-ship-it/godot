@@ -10,8 +10,8 @@
 | --- | --- | --- | --- | --- |
 | 01 | 普通儿童 | [ambient_child](../assets/characters/ambient_child.png) | 8 | 1 |
 | 02 | 普通老人 | [ambient_elder](../assets/characters/ambient_elder.png) | 8 | 1 |
-| 03 | 普通妇女 | [ambient_woman](../assets/characters/ambient_woman.png) | 8 | 1 |
-| 04 | 普通工人 | [ambient_worker](../assets/characters/ambient_worker.png) | 8 | 1 |
+| 03 | 普通妇女 | [ambient_woman](../assets/characters/ambient_woman.png) | 8 | 3（正背绘制／其它程序辅助） |
+| 04 | 普通工人 | [ambient_worker](../assets/characters/ambient_worker.png) | 8 | 3（正背绘制／其它程序辅助） |
 | 05 | 安娜 | [anna](../assets/characters/anna.png) | 8 | 3 |
 | 06 | 安娜的哥哥 | [coal_brother](../assets/characters/coal_brother.png) | 8 | 1 |
 | 07 | 煤运登记员 | [coal_clerk](../assets/characters/coal_clerk.png) | 8 | 1 |
@@ -278,3 +278,11 @@
 - [撤离后的候车区](../assets/cinematics/veteran_shelter.png)
 - [安娜站姿和两种迈步](characters/anna-walks.jpg)
 - [莫罗站姿和两种迈步](characters/moro-walks.jpg)
+
+## v25 当前补充素材
+
+- [D-6 归队后与老爹喝茶](../assets/cinematics/d6_homecoming.png)
+- [矿区休养间床边探视](../assets/cinematics/mine_bedside.png)
+- [工人正背面验收动作](characters/ambient_worker-accepted-walks.jpg)
+- [妇女正背面验收动作](characters/ambient_woman-accepted-walks.jpg)
+- [新原创配乐与 MIDI 说明](../assets/audio/scores/journey_credits.json)

@@ -1,0 +1,371 @@
+{
+  "d6_briefing": {
+    "title": "归队之后",
+    "art": "coal_entry",
+    "lines": [
+      {
+        "speaker": "科瓦廖夫",
+        "text": "中央和公社之间还在交战。D-6 的证件到了那边，只会让他们更警惕。你现在接的是本站的巡查，别把两边的边界当成能随便走动的走廊。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "如果我愿意留下，以后还能出去吗？"
+      },
+      {
+        "speaker": "科瓦廖夫",
+        "text": "外勤要登记，也要经过观察。这次先把泵站的事办稳，回来如实汇报。现在先回家，老谢还在等你。"
+      }
+    ],
+    "same_moment": true,
+    "end": "resume:d6_return_desk",
+    "music": "home_lamp"
+  },
+  "d6_home_evening": {
+    "title": "门还为你留着",
+    "art": "d6_homecoming",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "老爹听见脚步就站了起来。看清是你，他伸手碰了碰你的肩膀，又转身去拿杯子。桌上的面包已经切好，杯底留着一圈冷掉的茶渍。"
+      },
+      {
+        "speaker": "谢苗诺夫",
+        "text": "先坐下。饿不饿？你的床没动过。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "回来的路上，我总想着这扇门。"
+      }
+    ],
+    "same_moment": true,
+    "choices": [
+      {
+        "text": "「小队有人没能回来。我想跟你说说。」",
+        "next": "d6_home_grief",
+        "flag": "d6_shared_grief"
+      },
+      {
+        "text": "「我现在还说不清。陪我坐一会儿吧。」",
+        "next": "d6_home_silence",
+        "flag": "d6_needed_quiet"
+      }
+    ],
+    "music": "home_lamp"
+  },
+  "d6_home_grief": {
+    "title": "把名字说出来",
+    "art": "d6_homecoming",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你把列昂尼德、格里沙和萨沙的名字一一说出来。说到一半，老爹把茶推近了一点，等你继续。他没有催你振作。"
+      },
+      {
+        "speaker": "谢苗诺夫",
+        "text": "你愿意说，我就听着。今天说不完，明天接着说。他们的家里人，也得有人把实情告诉他们。"
+      }
+    ],
+    "same_moment": true,
+    "end": "resume:semyon",
+    "finish_flags": [
+      "d6_home_seen"
+    ],
+    "music": "home_lamp"
+  },
+  "d6_home_silence": {
+    "title": "一杯慢慢凉下来的茶",
+    "art": "d6_homecoming",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "老爹在对面坐下，没有再问。水管里忽然传来一阵细响，两个人同时抬头去听。你终于把背包从腿上放到了地板上。"
+      },
+      {
+        "speaker": "谢苗诺夫",
+        "text": "今晚先睡一觉。以后要不要再出去，你缓过来再想。"
+      }
+    ],
+    "same_moment": true,
+    "end": "resume:semyon",
+    "finish_flags": [
+      "d6_home_seen"
+    ],
+    "music": "home_lamp"
+  },
+  "d6_ward_brief": {
+    "title": "同一条水管",
+    "art": "d6_ward",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "医务间的收音机正在播报前线胜利。值班员调低了音量，给刚送来的伤员换了一只水杯。杯子上有个缺口，她将缺口转到外侧。"
+      },
+      {
+        "speaker": "值班医护",
+        "text": "这是本周送来的第七个伤员。有些人从前线回来，有些人在矿区受伤，都在等同一批药。泵站取来的样本，请你直接送来，别让它在门口放上一夜。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "我会标清取样位置。报告里也会写明实际看到的情况。"
+      }
+    ],
+    "same_moment": true,
+    "end": "resume:medical",
+    "music": "shift_below"
+  },
+  "d6_patrol_road": {
+    "title": "又一次走向地表",
+    "art": "surface_pumpyard",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "卫兵把出站时刻写进簿子，与你约定返站识别灯。上次经过这里，你跟在小队后面。这回你要自己核对路线、弹药和面具接口。"
+      },
+      {
+        "speaker": "值班卫兵",
+        "text": "检修梯在泵站西南角。撤回来就按两次铃，我们会复核登记。天黑前回不来，也别为了赶时间走没看清的路。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "外门打开，冷光照到台阶上。你把手套拉紧，沿标记前往旧引水口。"
+      }
+    ],
+    "same_moment": true,
+    "end": "map:surface",
+    "music": "shift_below"
+  },
+  "d6_patrol_back": {
+    "title": "返站铃",
+    "art": "coal_entry",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "两声铃响之后，观察窗里才亮起灯。卫兵核对识别号，让你在隔离间刷去衣服上的灰雪。门后有推车经过，轮轴吱呀作响。"
+      },
+      {
+        "speaker": "值班卫兵",
+        "text": "回来了。样本交到值班处；没取到也先说清楚，别自己往危险的地方硬闯。"
+      }
+    ],
+    "same_moment": true,
+    "end": "map:labor",
+    "music": "home_lamp"
+  },
+  "d6_patrol_report": {
+    "title": "报告写给谁看",
+    "art": "coal_entry",
+    "lines": [
+      {
+        "speaker": "科瓦廖夫",
+        "text": "样本先送医务间。泵站的通路、兽群和污染情况，你按亲眼见到的说。至于下次出站，还要等值班组评估。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "他将一张空白现场记录放在你面前。你想起医务间的伤员，也记得值班员叮嘱过的话。"
+      }
+    ],
+    "same_moment": true,
+    "choices": [
+      {
+        "text": "详细写下污染位置，并注明医务间急需检测结果。",
+        "next": "d6_report_care",
+        "flag": "d6_report_medical"
+      },
+      {
+        "text": "详细写下通路和兽群，另附一页向医务间说明污染情况。",
+        "next": "d6_report_routes",
+        "flag": "d6_report_routes"
+      }
+    ],
+    "music": "shift_below"
+  },
+  "d6_report_care": {
+    "title": "把急需的事写清楚",
+    "art": "coal_entry",
+    "lines": [
+      {
+        "speaker": "科瓦廖夫",
+        "text": "医务间的要求我签收了。我会附在样本登记后面，请维修班先给出能不能继续取水的答复。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你留下了一份抄页。以后追问这批样本的去向，至少有日期、有签名。窗外有人叫下一班的名字，新的生活还得继续。"
+      }
+    ],
+    "same_moment": true,
+    "end": "resume:d6_return_desk",
+    "finish_flags": [
+      "d6_report_complete"
+    ],
+    "music": "home_lamp"
+  },
+  "d6_report_routes": {
+    "title": "留下两份记录",
+    "art": "coal_entry",
+    "lines": [
+      {
+        "speaker": "科瓦廖夫",
+        "text": "通路记得够细，下一班能用。给医务间那份我也签上，免得送过去又让你来回跑。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你看着他将两份记录分别装进档袋。这次任务让你留在外勤候选名册上，后面的命令会怎样，你还不知道。"
+      }
+    ],
+    "same_moment": true,
+    "end": "resume:d6_return_desk",
+    "finish_flags": [
+      "d6_report_complete"
+    ],
+    "music": "home_lamp"
+  },
+  "mine_bedside": {
+    "title": "一张没有寄出的画",
+    "art": "mine_bedside",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "医护先说明你的来意，阿列克谢点头以后，你才坐到床边。他把左手藏在被角下面，听见安娜的名字，又慢慢抬起头。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "她在公社教孩子认字，一直在找你。她说，你以前答应过，要替她看看地表的树。"
+      },
+      {
+        "speaker": "阿列克谢",
+        "text": "我那时以为很容易。出去一趟，画下来，带给她看……后来连信也没能送出去。"
+      }
+    ],
+    "same_moment": true,
+    "choices": [
+      {
+        "text": "「你愿意的话，我帮你把现在想说的话记下来。」",
+        "next": "mine_letter",
+        "flag": "mine_letter_chosen"
+      },
+      {
+        "text": "「先告诉我，你希望她现在知道什么？」",
+        "next": "mine_message",
+        "flag": "mine_message_chosen"
+      }
+    ],
+    "music": "shift_below"
+  },
+  "mine_letter": {
+    "title": "先写她能放心的事",
+    "art": "mine_bedside",
+    "lines": [
+      {
+        "speaker": "阿列克谢",
+        "text": "告诉她，我还记得她。她要是教孩子，就替我问问，他们喜欢画什么。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "他让你把这句话念回去，确认你没有写成“我很好”。你把纸折好，答应先将探视意愿交给医护，再带消息回去。"
+      }
+    ],
+    "same_moment": true,
+    "end": "resume:coal_brother",
+    "finish_flags": [
+      "mine_visit_seen"
+    ],
+    "music": "home_lamp"
+  },
+  "mine_message": {
+    "title": "可以慢慢说",
+    "art": "mine_bedside",
+    "lines": [
+      {
+        "speaker": "阿列克谢",
+        "text": "别让她一个人急着赶过来。这儿的手续多，路也不好走。你先跟医护商量，我能等。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你将他同意探视的话记下。他说了一会儿便有些疲惫，你没有再追问往事，把椅子往旁边移开，让医护过来看看。"
+      }
+    ],
+    "same_moment": true,
+    "end": "resume:coal_brother",
+    "finish_flags": [
+      "mine_visit_seen"
+    ],
+    "music": "home_lamp"
+  },
+  "mine_warm_evening": {
+    "title": "这一班有人记着",
+    "art": "mine_bedside",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "交班以后，医护回到休养间，摸了摸暖气管，又将床尾的薄毯拉平。阿列克谢的手终于从被角下面伸出来，压住你替他写好的纸。"
+      },
+      {
+        "speaker": "值班医护",
+        "text": "安排已经记进交班卡了。明天换人，也照这个来。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "走廊里传来下工人的脚步。你将病房门轻轻带上，准备把这次见面的经过告诉安娜。"
+      }
+    ],
+    "same_moment": true,
+    "end": "resume:coal_medic",
+    "music": "home_lamp"
+  },
+  "tea_return": {
+    "title": "回到 D-6",
+    "art": "coal_entry",
+    "same_moment": true,
+    "music": "shift_below",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "老兵放下了枪。中尉让你看住运输架，收走他的武器，将双手用备用绳系住。回到 D-6 的气闸时，守卫先接过滤芯，再把老兵带去值班室。"
+      },
+      {
+        "speaker": "科瓦廖夫",
+        "text": "伊万，你把这两箱的型号记录拿过来。交接办完才能送检。刚才发生的事，我会分别问你们，报告也会按你们各自说的写。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "门里的空气很暖，你却迟迟没能摘下手套。检修班推来一辆车，问你哪一箱放在上面。你扶住箱角，才发现手还在发抖。"
+      }
+    ],
+    "end": "map:labor"
+  },
+  "home_water": {
+    "title": "平安回到门里",
+    "art": "coal_entry",
+    "same_moment": true,
+    "location": "D-6 · 返站隔离间",
+    "music": "home_lamp",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "运输架的木轮停在隔离间里。老兵将枪背回肩上，中尉让守卫记下三个人的返站时刻。妮娜带着维修班过来，先核对木箱上的型号，等你们办完交接再送去检验。"
+      },
+      {
+        "speaker": "谢苗诺夫",
+        "text": "伊万！我在楼梯那边听见了。等这里办完，你就回屋，我把水烧上。"
+      },
+      {
+        "speaker": "旁白",
+        "text": "你应了一声，回头又看了看另外两个人。回程岔口的话还没有说完，但至少这一次，三个人都走进了门。"
+      }
+    ],
+    "end": "map:labor"
+  },
+  "coal_return_d6": {
+    "title": "沿煤运线回去",
+    "art": "coal_entry",
+    "same_moment": true,
+    "music": "shift_below",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你在矿口交回存根，等煤车通过，再沿侧道走上作业层。检票员核过当班人数，在你的记录旁划下一笔。楼上食堂已经开饭，走廊里有熟悉的碗勺声。"
+      }
+    ],
+    "end": "map:labor"
+  }
+}

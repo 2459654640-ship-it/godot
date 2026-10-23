@@ -118,6 +118,9 @@ func _process(delta):
 		for ink in [material]:
 			ink.set_shader_parameter("painted_map",texture);ink.set_shader_parameter("frame_size",Vector2(1.0/source_count,1.0/pose_count));ink.set_shader_parameter("texel_size",Vector2.ONE/Vector2(texture.get_size()))
 	var column=angle_slot if source_count==8 else mini(angle_slot,8-angle_slot)
+	# Some background sheets have accepted front/back contacts only. Keep
+	# the original standing silhouette and continuous rig in unapproved views.
+	var drawn_walk=pose_count>=3 and column in manifest[atlas_id].get("walk_views",range(source_count))
 	var speed=Vector2(actor.velocity.x,actor.velocity.z).length()
 	var phase_delta=delta*speed/actor.stride_length()
 	# Keep the planted pose visible even when a rendered frame takes longer
@@ -138,12 +141,12 @@ func _process(delta):
 			if pose_count>=5:pose=[3,0,4,0][beat]
 			elif pose_count>=3:pose=[1,0,2,0][beat]
 		elif reaction=="shot" and reaction_time>0:pose=1
-	elif walking and pose_count>=3:
+	elif walking and drawn_walk:
 		pose=[1,0,2,0][beat]
 	elif actor.animation_state=="talk" and pose_count>3:pose=3
 	current_pose=pose
 	current_column=column
-	material.set_shader_parameter("puppet_stride",cos(TAU*phase) if walking and pose_count<3 else 0.0)
+	material.set_shader_parameter("puppet_stride",cos(TAU*phase) if walking and not drawn_walk else 0.0)
 	material.set_shader_parameter("puppet_direction",Vector2(sin(angle),cos(angle)))
 	material.set_shader_parameter("idle_time",idle_clock+float(posmod(String(actor.name).hash(),1000))/80.0)
 	material.set_shader_parameter("idle_amount",0.0 if walking else 1.0)

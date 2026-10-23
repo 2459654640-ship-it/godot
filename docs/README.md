@@ -10,6 +10,8 @@
 - [伊万戴面具持枪三姿态](characters/ivan_masked_combat-eight-directions.png)
 - [安娜：保留站姿与新迈步图](characters/anna-walks.jpg)
 - [莫罗：保留站姿与新迈步图](characters/moro-walks.jpg)
+- [普通工人：正背面验收动作](characters/ambient_worker-accepted-walks.jpg)
+- [普通妇女：正背面验收动作](characters/ambient_woman-accepted-walks.jpg)
 
 ## 当前地图全景
 
@@ -27,4 +29,4 @@
 
 人物示意图由当前实际使用的角色图集排版；普通伊万保留认可基础动作，装备版为完整人物重绘三姿态。它们不是游戏实景截图。
 
-星城外围、地表旧泵站与水处理厂的全景已在 v23 使用 Godot 实际渲染更新；作业层、公社、煤运设施和联络线保留 v22 全景。历史截图与版本说明放在独立资料库，素材原图保留在 assets。
+星城外围、地表旧泵站与水处理厂的全景已在 v23 使用 Godot 实际渲染更新；煤运设施在 v24 返站小修后更新；作业层、公社和联络线保留 v22 全景。历史截图与版本说明放在独立资料库，素材原图保留在 assets。

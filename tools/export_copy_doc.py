@@ -27,7 +27,7 @@ CLI.add_argument('--out',type=Path,default=Path('/tmp/metro1982-copy'))
 CLI.add_argument('--runtime',type=Path)
 ARGS=CLI.parse_args()
 OUT=ARGS.out
-RUNTIME=ARGS.runtime or OUT/'runtime-v24.json'
+RUNTIME=ARGS.runtime or OUT/'runtime-v25.json'
 COMMIT=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
 HUMAN=re.compile(r'[\u3400-\u9fff\u0400-\u04ff]')
 FLOORS={'life':'D-6生活层','labor':'D-6作业层','waterworks':'东郊水处理厂','commune':'莫斯科公社','sech':'谢契','coal':'D-6煤运休养区','starcity':'星城外围（内部暂未开放）','surface':'地表旧泵站','railfront':'旧联络线换乘站'}
@@ -45,11 +45,11 @@ FLAG_LABELS={}
 for quest in CAMPAIGN.get('quests',[]):
     FLAG_LABELS[quest['accepted']]='已接取“'+quest['name']+'”'
     FLAG_LABELS[quest['done']]='已完成“'+quest['name']+'”'
-FLAG_LABELS.update({'accepted':'伊万已登记接受征召','kit':'已领取离站装备','father':'已向谢苗诺夫询问父亲','signal_heard':'已经听到东方-7信号','plant_diagram':'已查阅水厂值班图','plant_bled':'水厂旁通已经卸压','plant_fuse':'已找到仓门回路保险件','plant_power':'水厂仓门回路供电已恢复','water_secured':'已取得并装稳两箱净水滤芯','sided_veteran':'支持老兵离队，一同前往公社','commune_joined':'已选择加入公社','sech_joined':'已选择留在谢契','radio_fixed':'已恢复谢契短波电台','anna_reunited':'旧版探视完成记录；不是新版救援结果','father_met':'旧版曾与父亲见面；v24内部不开放','surface_job':'已接受旧泵站污染与兽群调查','surface_notes':'已阅读排水记录','surface_drain_open':'已打开泄水阀并排水','surface_sample_sealed':'已取得封存样本','anna_rescue_started':'已开始矿区救援准备','anna_outcome_done':'安娜救援结果已经确定','anna_alive':'安娜在救援后生还','anna_dead':'安娜在撤离中牺牲','rescue_medic_ready':'医护安排已落实','rescue_transport_ready':'矿口接送已落实','rescue_route_ready':'备用撤离通路已落实','signal_identified':'已辨认广播来源线索','signal_source_verified':'已到星城外围提交询问','commune_member':'已正式加入公社','sech_member':'已正式加入谢契'})
+FLAG_LABELS.update({'accepted':'伊万已登记接受征召','kit':'已领取离站装备','father':'已向谢苗诺夫询问父亲','signal_heard':'已经听到东方-7信号','plant_diagram':'已查阅水厂值班图','plant_bled':'水厂旁通已经卸压','plant_fuse':'已找到仓门回路保险件','plant_power':'水厂仓门回路供电已恢复','water_secured':'已取得并装稳两箱净水滤芯','sided_veteran':'支持老兵离队，一同前往公社','commune_joined':'已选择加入公社','sech_joined':'已选择留在谢契','radio_fixed':'已恢复谢契短波电台','anna_reunited':'旧版探视完成记录；不是新版救援结果','father_met':'旧版曾与父亲见面；v25内部不开放','surface_job':'已接受旧泵站污染与兽群调查','surface_notes':'已阅读排水记录','surface_drain_open':'已打开泄水阀并排水','surface_sample_sealed':'已取得封存样本','anna_rescue_started':'已开始矿区救援准备','anna_outcome_done':'安娜救援结果已经确定','anna_alive':'安娜在救援后生还','anna_dead':'安娜在撤离中牺牲','rescue_medic_ready':'医护安排已落实','rescue_transport_ready':'矿口接送已落实','rescue_route_ready':'备用撤离通路已落实','signal_identified':'已辨认广播来源线索','signal_source_verified':'已到星城外围提交询问','commune_member':'已正式加入公社','sech_member':'已正式加入谢契'})
 FLAG_LABELS.update({'anna_walk_started':'已明确答应陪安娜去食堂','anna_walk_arrived':'安娜已经实际走到食堂','anna_conversation_ready':'已完成食堂交谈，或选择先听她说明来意','anna_new_lesson_seen':'生还后已谈过下一次课堂','moro_at_workshop':'莫罗已实际到达机修间','moro_at_boiler':'莫罗已实际到达锅炉房','moro_at_guard':'莫罗已实际到达守备班','moro_at_stage':'莫罗已实际到达试演场地','moro_terms_agreed':'已完成住户和守备班的场地协商','moro_acoustic_terms':'协商选择饭后短时原声演出','moro_late_terms':'协商选择交班后的低音量演出','moro_rehearsed':'已经完成试演和住户反馈','moro_song_everyday':'试演后决定将居民亲历写进歌词','moro_song_uncertain':'试演后保留愿望，并写出前途的不确定','veteran_defense_started':'已明确接受协助老兵接应居民','veteran_defense_deployed':'老兵已实际就位西侧接应口','evac_first_safe':'第一名转移者已抵达候车区','evac_second_safe':'第二名转移者已抵达候车区','evac_third_safe':'第三名转移者已抵达候车区','battle_living_passage':'接应防守第一轮来袭已清除','battle_living_passage_rear':'接应防守第二轮来袭已清除','battle_living_passage_last':'接应防守最后一轮来袭已清除','veteran_defense_safe':'三人已抵达且三轮威胁均已清除','veteran_defense_done':'已与老兵核对人数并完成收尾'})
 def flag_name(key):return key+('【'+FLAG_LABELS[key]+'】' if key in FLAG_LABELS else '')
 def source_for(section,key):
-    filename=next((name for name in ['living_story.json','chapter_update.json'] if key in FILES.get(name,{}).get(section,{})), 'campaign.json')
+    filename=next((name for name in ['journey_update.json','living_story.json','chapter_update.json'] if key in FILES.get(name,{}).get(section,{})), 'campaign.json')
     return 'data/'+filename+' · '+section+'.'+key
 
 def dump(value):return json.dumps(value,ensure_ascii=False,sort_keys=True)
@@ -138,7 +138,7 @@ class Exporter:
         for name,size in [('Title',29),('Heading 1',19),('Heading 2',14),('Heading 3',11)]:
             style=self.doc.styles[name];style.font.name='Microsoft YaHei';style.font.size=Pt(size);style.font.color.rgb=RGBColor.from_string('37574A')
             style.element.get_or_add_rPr().rFonts.set(qn('w:eastAsia'),'微软雅黑')
-        self.doc.core_properties.title='地铁1982 v24 · 全文案与分支校订本'
+        self.doc.core_properties.title='地铁1982 v25 · 全文案与分支校订本'
         self.doc.core_properties.subject='实际工程文案、触发条件、选项与后果、源码索引'
         self.doc.core_properties.author='地铁1982项目'
         footer=section.footer.paragraphs[0];footer.alignment=2;footer.add_run('地铁1982 · 文案校订本　|　')
@@ -170,11 +170,11 @@ class Exporter:
             else:parts.append(key+'='+dump(value))
         return '；'.join(parts)
     def title_page(self):
-        self.doc.add_heading('地铁1982',0);self.h('v24 全文案与分支校订本',1)
-        self.p('导出日期：'+date.today().isoformat());self.meta('工程版本','v24 / '+COMMIT);self.meta('版本依据','metro-v24-living-stories；仅导出文字，未修改游戏内容')
+        self.doc.add_heading('地铁1982',0);self.h('v25 全文案与分支校订本',1)
+        self.p('导出日期：'+date.today().isoformat());self.meta('工程版本','v25 / '+COMMIT);self.meta('版本依据','metro-v25-journeys-ui；仅导出文字，未修改游戏内容')
         self.p('本文件从当前工程数据与运行脚本导出，供逐项校正文字。章节中的稳定ID和文件路径用于把修改对应回游戏。')
         self.p('重要：这是校订资料，不是游戏攻略。当前开放到星城外围；内区、与父亲重逢及旧结局虽然仍保存在工程中，不能据此理解为本版可触发。标注“保留／暂未开放”的段落可修改，但不会在本版正常流程中出现。')
-        self.p('本版剧情以 living_story.json 覆盖 chapter_update.json、campaign.json 的合并结果为准；同名过场由 living_panels.json 最后覆盖。文档保留全部条件行与选项，不会只导出某一个存档当时能看到的文字。')
+        self.p('本版剧情以 journey_update.json、living_story.json、chapter_update.json 依次覆盖 campaign.json 的结果为准；journey_update.gd 另有运行时改写。同名过场由 journey_panels.json 最后覆盖。文档保留全部条件行与选项，不会只导出某一个存档当时能看到的文字。')
         self.p('建议开启 Word 的“视图 → 导航窗格”，按章节、NPC、任务或ID定位。可用修订模式修改原文，或在其下添加批注；只修改本文档不会自动改变游戏。')
         self.h('怎样阅读触发条件',2)
         self.p('对话先显示对应交互对象的开场，再按条件替换为状态变化后的开场。替换规则按列出顺序执行，后满足的规则可以覆盖先前规则。只有有效条件下的选项能够执行。')
@@ -185,8 +185,8 @@ class Exporter:
         self.p('D-6及NPC的文本依次经过 Story → Narrative → ResidentDialogue → D6Chapter → Campaign（含 ChapterUpdate）→ Economy → Progression → FirstMeetings；后层可改写前层。首次自我介绍尚未结束时，正式任务选项会被替换。第五章保留脚本条件与原始拼接语句；例如米哈伊尔赠送维生素D的旧选项虽在底层存在，最终已被过滤。')
         self.p('覆盖范围：data 内全部JSON文字（包括当前覆盖稿与保留稿）；scripts 内除注释外的中文／西里尔文字符串及可识别的界面英文、符号、数字标签；场景文本与工程标题；广播中英俄歌名。图像内没有字符串资源的装饰印刷，另列示例图与素材位置供人工校对，不把图中的不可读装饰字当成正式设定。外部参考文档、测试断言、工具日志不混入文案。动态拼接片段保留原始语句，不伪装成一条独立台词。')
         self.h('故事路线定位',2)
-        for route,nodes in [('征召离站','D-6登记与领取装备 → 地表行军与减员 → 水厂解谜、战斗及取滤芯 → 归途岔路选择'),('独自离站','取得防护装备 → 检修许可／侧门／管线等离站方式 → 结识谢尔盖 → 选择公社或谢契路线'),('公社','抵达自我介绍 → 加入后完成三轮联络线任务 → 再安排星城外围；安娜线由课堂、寻亲进入矿区救援，含生还和悲剧两种后续'),('谢契','抵达并认识居民 → 加入后完成三轮联络线任务 → 通过担保接触公社和安娜 → 后期可去星城外围；地表旧泵站为可重复出站任务'),('星城','完成阵营三轮主线并核实广播 → 获得担保 → 抵达外围提交询问信 → 返回聚落；内部与父亲重逢保留文案未开放')]:self.meta(route,nodes)
-        self.p(f'索引共 {len(self.records)} 个文字来源；全部来源同时保存在 copy-index-v24.json，便于后续自动核对。')
+        for route,nodes in [('征召离站','D-6登记与领取装备 → 地表行军与减员 → 水厂解谜、战斗及取滤芯 → 归途岔路选择'),('独自离站','取得防护装备 → 检修许可／侧门／管线等离站方式 → 结识谢尔盖 → 选择公社或谢契路线'),('D-6归队','支持中尉或和平归队 → 交回滤芯 → 回家交谈 → 医务说明与领补给 → 地表旧泵站解谜、战斗、采样 → 返站汇报 → 根据报告重点领取医护或路线后续；尚未完成长期D-6阵营主线'),('公社','抵达自我介绍 → 加入后完成三轮联络线任务 → 再安排星城外围；安娜线由课堂、寻亲进入矿区救援，含生还和悲剧两种后续'),('谢契','抵达并认识居民 → 加入后完成三轮联络线任务 → 通过担保接触公社和安娜 → 后期可去星城外围；地表旧泵站为可重复出站任务'),('星城','完成阵营三轮主线并核实广播 → 获得担保 → 抵达外围提交询问信 → 返回聚落；内部与父亲重逢保留文案未开放')]:self.meta(route,nodes)
+        self.p(f'索引共 {len(self.records)} 个文字来源；全部来源同时保存在 copy-index-v25.json，便于后续自动核对。')
         self.doc.add_page_break();self.h('目录',1)
         p=self.doc.add_paragraph();field=OxmlElement('w:fldSimple');field.set(qn('w:instr'),'TOC \\o "1-2" \\h \\z \\u');p._p.append(field)
         self.p('Word打开后可右键目录选择“更新域”。导航窗格无需更新目录即可使用。')
@@ -205,7 +205,7 @@ class Exporter:
                     if match[1] in R['panels']:incoming[match[1]].append(f'{path.name}:{n}')
         for key,panel in R['panels'].items():
             self.h(panel.get('title',key)+' 〔'+key+'〕',2)
-            origin='data/living_panels.json' if key in FILES.get('living_panels.json',{}) else 'data/chapter_panels.json' if key in FILES.get('chapter_panels.json',{}) else ('data/story_panels.json' if key in FILES.get('story_panels.json',{}) else ('data/campaign.json · panels' if key in FILES['campaign.json'].get('panels',{}) else 'scripts/comic.gd · PANELS'))
+            origin='data/journey_panels.json' if key in FILES.get('journey_panels.json',{}) else 'data/living_panels.json' if key in FILES.get('living_panels.json',{}) else 'data/chapter_panels.json' if key in FILES.get('chapter_panels.json',{}) else ('data/story_panels.json' if key in FILES.get('story_panels.json',{}) else ('data/campaign.json · panels' if key in FILES['campaign.json'].get('panels',{}) else 'scripts/comic.gd · PANELS'))
             self.source('当前节点来源：'+origin+' · '+key)
             self.source('最终运行文本：Comic.panel；基础 Comic.PANELS / campaign.panels；覆盖 data/story_panels.json 与 data/chapter_panels.json')
             self.meta('到达方式','；'.join(triggers.get(key,[])+incoming[key]) or '未发现静态入口；可能由参数调用进入，或属于保留版本。可按该ID全文检索核对。')
@@ -319,7 +319,7 @@ class Exporter:
                 if k not in ['id','name','facility','kind','accepted','done','background','actions','stages']:self.meta(k,dump(v))
         self.h('D-6基础任务、主线跟进与轻度提醒',2)
         self.p('这些任务由 scripts/journal.gd 和 scripts/progression.gd 按状态生成。第五章按函数逐条列出标题、描述、目标和分支条件；状态名称均保留，便于核对。')
-        self.h('v24 任务目标的运行时改写',2)
+        self.h('v25 任务目标的运行时改写',2)
         self.p('旧泵站：surface_depart 出发时自动追踪 surface_survey。在地表已封存样本后，目标为 surface_exit（检修梯），返回聚落后再指向 commune_guard 或 sech_quartermaster。人在公社／谢契时可直接向当地收件人交付。广播线索的地点固定为实际可调查的收音机／联络点，不能把旧泵站标成广播调查现场。原始阶段中的回城目标不能覆盖这条运行规则。')
         self.source('scripts/campaign.gd · side_tasks / act；scripts/journal.gd · tasks / active / track')
         self.h('阵营六轮主线：调查物、现场描述与回报',2)
@@ -463,10 +463,10 @@ class Exporter:
         # Exact source coverage, independent of how duplicate sentences are laid out.
         missing=[r for r in self.records if r['text'] not in self.printed_text]
         assert not missing,[(r['id'],r['text'][:50]) for r in missing]
-        document=OUT/'地铁1982-v24-全文案与分支校订本.docx';self.doc.save(document)
+        document=OUT/'地铁1982-v25-全文案与分支校订本.docx';self.doc.save(document)
         index={'version':23,'game_commit':COMMIT,'source_files':{},'records':self.records,'coverage':{'total':len(self.records),'missing':len(missing)}}
         for source in sorted({r['source'] for r in self.records}):index['source_files'][source]=hashlib.sha256((ROOT/source).read_bytes()).hexdigest()
-        (OUT/'copy-index-v24.json').write_text(json.dumps(index,ensure_ascii=False,indent=2)+'\n')
+        (OUT/'copy-index-v25.json').write_text(json.dumps(index,ensure_ascii=False,indent=2)+'\n')
         print(json.dumps({'document':str(document),'bytes':document.stat().st_size,'source_records':len(self.records),'missing':0,'paragraphs':len(self.doc.paragraphs)},ensure_ascii=False))
 
 if __name__=='__main__':Exporter().finish()

@@ -30,7 +30,7 @@ func run():
 	var save="user://presentation_menu_test.json";DirAccess.remove_absolute(save)
 	var menu=load("res://scenes/main_menu.tscn").instantiate();menu.save_path=save;root.add_child(menu);current_scene=menu;await frames()
 	check(menu.continue_button.disabled,"main menu handles a missing save without entering a broken game")
-	menu.show_settings();await frames();check(menu.dialog.find_children("*","HSlider",true,false).size()==4,"main menu settings drive four real audio buses")
+	menu.show_settings();await frames();check(menu.dialog.find_children("*","HSlider",true,false).size()==5 and is_instance_valid(menu.dialog.find_child("Audio_Radio",true,false)),"shared settings expose five real buses, including independent radio volume")
 	menu.close_dialog()
 	s=Story.new();s.flags.intro_done=true;s.flags.plant_briefed=true
 	var data=s.serialize();data.floor="waterworks";data.position=[15,.04,9];data.layout_revision=8

@@ -153,9 +153,9 @@ func stride_length() -> float:
 	if is_player:return 1.7
 	var painter=visual.get_node_or_null("Painter") if is_instance_valid(visual) else null
 	var cutout=is_instance_valid(painter) and painter.pose_count<3
-	if art_id in ["ambient_child","commune_child"]:return .62 if cutout else .85
+	if art_id in ["ambient_child","commune_child"]:return .78 if cutout else .85
 	if art_id=="ambient_elder":return .94
-	return .82 if cutout else 1.15
+	return 1.08 if cutout else 1.15
 
 func _physics_process(delta):
 	clock += delta

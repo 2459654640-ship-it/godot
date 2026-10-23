@@ -97,8 +97,11 @@ func run():
    var legacy=w.story.Economy.restored({"stock":{"bread":4}})
    check(legacy.stock.portable_radio==1 and legacy.stock.bread==4,"older saves gain only the new receiver stock without replenishing old goods")
    w.hud.show_inventory()
+   var radio_cell=w.hud.modal.find_child("InventoryCell_portable_radio",true,false)
+   check(is_instance_valid(radio_cell),"owned receiver has a selectable inventory cell")
+   if is_instance_valid(radio_cell):radio_cell.pressed.emit()
    for b in w.hud.modal.find_children("*","Button",true,false):
-    if b.text=="收听音乐":b.pressed.emit();break
+    if b.text=="收听随身收音机":b.pressed.emit();break
    check(r.portable and w.hud.radio_open and w.hud.dialog_title.text=="随身收音机","inventory listen button opens the owned portable radio")
    r.play_track();w.player.position=r.global_position+Vector3(40,.04,0);r.update_mix(1)
    check(r.audible==1 and r.audio.playing,"portable receiver remains audible away from the public table")

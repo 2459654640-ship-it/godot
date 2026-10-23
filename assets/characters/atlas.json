@@ -806,7 +806,7 @@
     "file": "ambient_worker.png",
     "directions": 8,
     "source_angles": 5,
-    "poses": 1,
+    "poses": 3,
     "cell": [
       240,
       352
@@ -815,14 +815,67 @@
     "body_pixels": 324,
     "rear_diagonal_normalized": true,
     "clips": [
-      "idle"
+      "idle",
+      "walk_a",
+      "walk_b"
+    ],
+    "packing_revision": 25,
+    "exposure": [
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    ],
+    "frame_mirror": [
+      [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    ],
+    "walk_views": [
+      0,
+      4
     ]
   },
   "ambient_woman": {
     "file": "ambient_woman.png",
     "directions": 8,
     "source_angles": 5,
-    "poses": 1,
+    "poses": 3,
     "cell": [
       240,
       352
@@ -831,7 +884,60 @@
     "body_pixels": 324,
     "rear_diagonal_normalized": true,
     "clips": [
-      "idle"
+      "idle",
+      "walk_a",
+      "walk_b"
+    ],
+    "packing_revision": 25,
+    "exposure": [
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    ],
+    "frame_mirror": [
+      [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    ],
+    "walk_views": [
+      0,
+      4
     ]
   },
   "ambient_child": {

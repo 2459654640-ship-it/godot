@@ -82,11 +82,8 @@ func close_dialog():
 	if is_instance_valid(dialog):remove_child(dialog);dialog.queue_free()
 func show_settings():
 	var box=open_dialog("设置")
-	for pair in [["Master","总音量"],["Music","背景旋律"],["Effects","交互音效"],["Footsteps","脚步声"]]:
-		var row=HBoxContainer.new();box.add_child(row);var caption=words(row,pair[1],21,Color("d6d5c0"));caption.custom_minimum_size.x=160
-		var slider=HSlider.new();slider.min_value=0;slider.max_value=1;slider.step=.05;slider.value=get_node("/root/Session").volume(pair[0]);slider.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(slider)
-		var value=words(row,str(roundi(slider.value*100))+"%",18,Color("c3aa75"));value.custom_minimum_size.x=65;var bus:String=pair[0]
-		slider.value_changed.connect(func(v):get_node("/root/Session").set_volume(bus,v);value.text=str(roundi(v*100))+"%")
+	dialog.position.y=130;dialog.size.y=740
+	var controls=preload("res://scripts/ui_settings.gd").new();box.add_child(controls);controls.setup(get_node("/root/Session"))
 	choice(box,"返回主界面",close_dialog)
 func show_about():
 	var box=open_dialog("旅程之前")

@@ -3,6 +3,7 @@ extends RefCounted
 static var _data:Dictionary={}
 const Living=preload("res://scripts/living_story.gd")
 const Update=preload("res://scripts/chapter_update.gd")
+const Journey=preload("res://scripts/journey_update.gd")
 const NAMES={"waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区","surface":"地表旧泵站","railfront":"旧联络线换乘站"}
 const ITEM_ART={"pool_sample":"mutant_sample","moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
 static func data()->Dictionary:
@@ -10,6 +11,7 @@ static func data()->Dictionary:
 		_data=JSON.parse_string(FileAccess.get_file_as_string("res://data/campaign.json"))
 		Update.extend(_data)
 		Living.extend(_data)
+		Journey.extend(_data)
 	return _data
 static func permits(s,req:Dictionary)->bool:
 	if req.has("any") and not req.any.any(func(flag):return s.f(flag)):return false
@@ -25,6 +27,7 @@ static func permits(s,req:Dictionary)->bool:
 		if int(s.economy.goods.get(good,0))<int(req.goods[good]):return false
 	return true
 static func available(s,key:String)->bool:
+	if not Journey.allowed(s,key):return false
 	if key in data().get("unreleased_star_actions",[]):return false
 	if not Living.allowed(s,key):return false
 	if not Update.allowed(s,key):return false
@@ -42,7 +45,7 @@ static func quest_offered(s,q:Dictionary)->bool:
 		if data().actions[key].get("flags",{}).get(q.accepted,false) and available(s,key):return true
 	return false
 static func decorate(v:Dictionary,s)->Dictionary:
-	if not data().interactions.has(v.id):return v
+	if not data().interactions.has(v.id):return Journey.decorate(v,s)
 	var d:Dictionary=data().interactions[v.id]
 	v.name=d.name;v.role=d.role;v.body=d.body;v.options=[]
 	for variant in d.get("after",[]):
@@ -52,7 +55,7 @@ static func decorate(v:Dictionary,s)->Dictionary:
 		if key=="coal_return" and not s.f("brother_found"):words="沿原探访通路返回公社，稍后再来"
 
 		v.options.append(s.opt("c_"+key,words,s.context.get("floor","")==d.facility and available(s,key)))
-	return Living.decorate(Update.decorate(v,s),s)
+	return Journey.decorate(Living.decorate(Update.decorate(v,s),s),s)
 static func act(s,key:String)->String:
 	var a:Dictionary=data().actions[key]
 	if not available(s,key):return "这件事已经做过，或还没有准备好。"
@@ -90,6 +93,7 @@ static func act(s,key:String)->String:
 	Living.act(s,key)
 	var updated=Update.act(s,key)
 	if updated!="":reply=updated
+	Journey.act(s,key)
 	var receipts=[]
 	for kind in reward:
 		if int(reward[kind])>0:receipts.append(("制式子弹" if kind=="military" else "土制子弹")+" ×"+str(reward[kind]))
@@ -123,7 +127,8 @@ static func side_tasks(s)->Array:
 			target=current.target
 		current=Living.task_stage(s,q,current)
 		target=current.target
-		rows.append({"kind":q.get("kind","支线"),"id":q.id,"name":q.name,"done":s.f(q.done),"place":current.get("place",q.facility),"background":q.background,"step":"已交付，报酬与经过记入手记。" if s.f(q.done) else current.step,"target":target,"area":data().interactions[target].name})
+		var area:String=data().interactions.get(target,{}).get("name",{"semyon":"谢苗诺夫的房间","medical":"作业层医务间","armory":"作业层装备库"}.get(target,target))
+		rows.append({"kind":q.get("kind","支线"),"id":q.id,"name":q.name,"done":s.f(q.done),"place":current.get("place",q.facility),"background":q.background,"step":"已交付，报酬与经过记入手记。" if s.f(q.done) else current.step,"target":target,"area":area})
 	return rows
 static func finish(s,id:String):
 	s.Progression.fail(s,[],"旅程已经收束，这项委托未能完成。")
@@ -134,6 +139,8 @@ static func finish(s,id:String):
 	if id not in unlocked:unlocked.append(id)
 	s.flags.endings_seen=unlocked
 static func objective(s)->String:
+	var duty=Journey.objective(s)
+	if duty!="":return duty
 	var living=Living.objective(s)
 	if living!="":return living
 	var updated=Update.objective(s)

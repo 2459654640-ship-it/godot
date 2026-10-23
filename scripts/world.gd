@@ -43,6 +43,7 @@ var step_audio:AudioStreamPlayer
 var ambience:AudioStreamPlayer
 var event_music:AudioStreamPlayer
 var event_music_id=""
+var event_music_tween:Tween
 var waiting_shift = false
 var pending_route=""
 var previous_position=Vector3.ZERO
@@ -108,6 +109,7 @@ func _ready():
 	PublicationPlaces.build(self)
 	public_radio=PublicRadio.new();add_child(public_radio);public_radio.setup(self)
 	kit.batch_static()
+	get_node("/root/Session").Video.apply_lights(self,int(get_node("/root/Session").video.quality))
 	build_people() if floor_id=="life" else build_labor_people()
 	navigation=preload("res://scripts/route_grid.gd").new()
 	navigation.setup(self)
@@ -1080,17 +1082,26 @@ func return_checkpoint():
 
 func sync_event_music(id:String):
 	if id==event_music_id:return
+	if is_instance_valid(event_music_tween):event_music_tween.kill()
 	event_music_id=id
 	if not is_instance_valid(event_music):
 		event_music=AudioStreamPlayer.new();event_music.name="StoryMusic";event_music.bus="Music";event_music.volume_db=-5;add_child(event_music)
-	event_music.stop()
 	if is_instance_valid(ambience):ambience.stream_paused=id!=""
+	if id=="":
+		if event_music.playing:
+			event_music_tween=create_tween();event_music_tween.tween_property(event_music,"volume_db",-38.0,.65)
+			event_music_tween.tween_callback(func():event_music.stop();event_music.stream=null)
+		else:event_music.stop();event_music.stream=null
+		return
+	event_music.stop()
 	if id!="":
 		var score_path="res://assets/audio/"+id+".wav"
+		if ResourceLoader.exists("res://assets/audio/"+id+".ogg"):score_path="res://assets/audio/"+id+".ogg"
 		if id=="anna_elegy" and ResourceLoader.exists("res://assets/audio/licensed/heres_to_you.ogg"):score_path="res://assets/audio/licensed/heres_to_you.ogg"
 		event_music.stream=load(score_path)
+		if event_music.stream is AudioStreamOggVorbis:event_music.stream=event_music.stream.duplicate();event_music.stream.loop=true
 		event_music.volume_db=-28
-		create_tween().tween_property(event_music,"volume_db",-7.0,1.2)
+		event_music_tween=create_tween();event_music_tween.tween_property(event_music,"volume_db",-7.0,1.2)
 		if DisplayServer.get_name()!="headless":event_music.play()
 	else:event_music.stream=null
 

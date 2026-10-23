@@ -45,10 +45,11 @@ void vertex() {
 	float phase=puppet_stride*leg;
 	float lower=smoothstep(.61,.96,UV.y);
 	float knee=sin(clamp((UV.y-.61)/.35,0.0,1.0)*3.14159265);
-	// Side-view boots overlap the leg seam; cap lateral deformation there.
-	float lateral=.35+.65*abs(puppet_direction.y);
-	VERTEX.x+=phase*(puppet_direction.x*.095*lateral*lower+puppet_direction.y*.018*knee)*gait_scale;
-	VERTEX.y+=max(0.0,phase)*(.040*lower+.012*knee)*gait_scale;
+	// Step along the facing axis, including actual depth for front/back views.
+	// A lateral knee wave makes straight walking look bow-legged; never add it.
+	VERTEX.x+=phase*puppet_direction.x*.075*lower*gait_scale;
+	VERTEX.z+=phase*puppet_direction.y*.095*lower*gait_scale;
+	VERTEX.y+=max(0.0,phase)*(.030*lower+.008*knee)*gait_scale;
 	// Small independent breaths, with feet fixed. Subdivided crowd quads let
 	// neighbours move on different rhythms instead of swaying as one card.
 	float member=floor(min(UV.x,.999)*idle_members);

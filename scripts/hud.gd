@@ -158,7 +158,7 @@ func setup(w):
 	# Minimap has geometry, not a screenshot of the reference.
 	var mp=panel(Vector2(1302,106),Vector2(266,214))
 	var mb=margin_box(mp,6,5)
-	var mt=label(("D–6  /  " if world.floor_id in ["life","labor"] else "")+world.floor_name(),14,muted)
+	var mt=label(world.floor_name(),14,muted)
 	mt.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	mb.add_child(mt)
 	map_small=MapView.new()
@@ -464,7 +464,7 @@ func refresh_status():
 func tick(delta:float):
 	prompt.visible=not modal_visible()
 	if not modal_visible() and world.nearest!="" and not world.waiting_shift:set_prompt(world.nearest)
-	location_label.text=("D–6 " if world.floor_id in ["life","labor"] else "")+world.floor_name()+"  /  "+world.room_name
+	location_label.text=world.floor_name()+"  /  "+world.room_name
 	status_label.text=str(world.story.flags.get("story_day",16))+" XI 1982  /  "+str(world.story.flags.get("story_time","07:42"))+" · "+("旅程" if comic_active or world.story.ending else (("换班" if world.phase>=8 else "早班") if world.floor_id in ["life","labor"] else "探索"))
 	var guidance=JSON.stringify([Journal.active(world.story),world.story.economy.health,world.story.economy.food,Journal.leads(world.story).size()])
 	if guidance!=last_guidance:last_guidance=guidance;refresh_status()
@@ -480,54 +480,7 @@ func toast(text:String,duration:float=4.0):
 	toast_time=duration
 
 func show_inventory():
-	start_modal("随身装备与物品","INVENTORY   /   装备、补给与旅途中留下的东西",true)
-	var weapon=world.story.equipped_weapon()
-	body("武器栏",17,amber)
-	var slot=HBoxContainer.new();slot.add_theme_constant_override("separation",18);modal_box.add_child(slot)
-	if weapon!="":slot.add_child(icon_rect(item_icon(weapon),68))
-	slot.add_child(label("空置" if weapon=="" else world.story.ITEMS[weapon][0]+(" · 已拔出" if world.story.weapon_drawn() else " · 已收起"),22,text_color))
-	slot.add_spacer(false)
-	if weapon!="":slot.add_child(button("卸下",func():world.story.equip_weapon("");show_inventory(),true,true))
-	body("在下方选择武器装备。返回场景后按 1 拔枪 / 收枪；遇到敌人不会自动拔枪。",17,muted)
-	rule()
-	var ammo=HBoxContainer.new();ammo.add_theme_constant_override("separation",18);modal_box.add_child(ammo)
-	for kind in ["military","handmade"]:
-		ammo.add_child(icon_rect("res://assets/visual/item_"+kind+".png",52))
-		ammo.add_child(label(world.story.Economy.AMMO[kind].name+" × "+str(world.story.economy[kind]),19,amber))
-	if world.story.items.is_empty() and world.story.economy.goods.is_empty():body("物品袋里暂时没有其它东西。",17,muted)
-	for id in world.story.items:
-		var item=world.story.ITEMS[id]
-		var row=HBoxContainer.new()
-		row.add_theme_constant_override("separation",18)
-		modal_box.add_child(row)
-		var icon=TextureRect.new()
-		icon.texture=load(item_icon(id))
-		icon.custom_minimum_size=Vector2(92,92)
-		icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
-		icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		row.add_child(icon)
-		var description=VBoxContainer.new()
-		description.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-		row.add_child(description)
-		description.add_child(label(item[0]+"   /   "+item[2],22,amber))
-		var detail=label(item[1],18,text_color)
-		detail.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-		description.add_child(detail)
-		if item[2]=="武器":
-			var key:String=id
-			if key==weapon:row.add_child(label("已装备",18,amber))
-			else:row.add_child(button("装备",func():world.story.equip_weapon(key);show_inventory(),true,true))
-		rule()
-	var s=world.story
-	rule();body("生命 %d · 饱食 %d · 辐射 %d"%[s.economy.health,s.economy.food,s.economy.radiation],18,amber)
-	for id in s.economy.goods:
-		var good:Dictionary=s.Economy.GOODS[id]
-		var row=HBoxContainer.new();modal_box.add_child(row)
-		row.add_child(icon_rect(item_icon(id),64))
-		row.add_child(label(good.name+" × "+str(s.economy.goods[id]),20,text_color))
-		row.add_spacer(false)
-		if good.effect!="":row.add_child(button("使用",func():toast(s.Economy.consume(s,id));show_inventory(),true,true))
-		elif id=="portable_radio":row.add_child(button("收听音乐",func():world.public_radio.open_controls(true),true,true))
+	preload("res://scripts/ui_inventory.gd").render(self)
 
 func show_journal(tab:String="tasks",shown_floor:String=""):
 	start_modal("伊万的手记","随身卷宗   /   任务、地图与见闻",true)
@@ -593,14 +546,31 @@ func quest_card(task:Dictionary,tracked:bool):
 	var place={"life":"D-6 生活层","labor":"D-6 作业层"}.get(task.place,world.story.Campaign.NAMES.get(task.place,""))
 	box.add_child(label(task.kind+" / "+task.status+" / "+place+" · "+task.area,14,muted))
 	var title=label(task.name,25,amber);title.add_theme_font_override("font",serif);box.add_child(title)
-	var context=label(task.background,18,text_color);context.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;box.add_child(context)
 	if task.failed:box.add_child(label(task.step,17,Color("d4947d")))
 	if not task.done and not task.failed:
-		var step=label(task.step,19,Color("c7cdb7"));step.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;box.add_child(step)
+		box.add_child(label("当前目标",15,amber))
+		var step=label(task.step,21,Color("e4ddc4"));step.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;box.add_child(step)
 		var local=task.place==world.floor_id or (task.place in ["life","labor"] and world.floor_id in ["life","labor"])
-		if not local:box.add_child(label("到达对应设施后可继续跟进。",16,muted))
-		elif not tracked:box.add_child(button("接下来跟进这件事",func():Journal.track(world.story,task.id);show_journal(),true,true))
+		if not local:box.add_child(label("下一步所在设施："+place,16,muted))
+		if not tracked:box.add_child(button("接下来跟进这件事",func():Journal.track(world.story,task.id);show_journal(),true,true))
 		else:box.add_child(button("在地图上看看这一带",func():show_journal("map",task.place),true,true))
+	box.add_child(button("查看任务详情",func():show_task_detail(task.id),true,true))
+
+func show_task_detail(id:String):
+	var found=Journal.tasks(world.story).filter(func(t):return t.id==id)
+	if found.is_empty():show_journal();return
+	var task:Dictionary=found[0]
+	start_modal(task.name,task.kind+" / "+task.status,true)
+	var place={"life":"D-6生活层","labor":"D-6作业层"}.get(task.place,world.story.Campaign.NAMES.get(task.place,"设施"))
+	body("当前目标" if not task.done and not task.failed else "任务结果",18,amber)
+	prose(task.step,25)
+	if not task.done and not task.failed:
+		body("前往："+place+" · "+task.area,18,amber)
+		modal_box.add_child(button("在地图上查看",func():show_journal("map",task.place)))
+		modal_box.add_child(button("追踪这个任务",func():Journal.track(world.story,id);show_task_detail(id)))
+	rule();body("任务背景",18,amber);prose(task.background,20)
+	body("目标随实际进度更新；未经历的后续剧情不会提前显示。",16,muted)
+	modal_box.add_child(button("返回任务列表",func():show_journal()))
 
 func inventory_snapshot()->Dictionary:
 	var out={}
@@ -776,6 +746,7 @@ func show_pause():
 	modal_box.add_child(button("重新开始（保留已有存档）",func():show_restart_confirm()))
 	modal_box.add_child(button("返回主界面…",func():show_menu_confirm()))
 	if is_instance_valid(world.combat) and world.combat.active:modal_box.add_child(button("重试本场战斗（恢复战前资源）",func():world.combat.retry()))
+	modal_box.add_child(button("设置 · 画面与声音",show_settings))
 	audio_controls()
 	rule()
 	body("WASD / 方向键：8 方向移动\nE：与当前选中的目标交互\nI：背包　J：手记　M：地图\nTab：总览　滚轮：附近有多个目标时切换，否则缩放\nEsc：关闭界面 / 菜单",20)
@@ -839,6 +810,7 @@ func show_comic_pause():
 	modal_box.add_child(button("查看背包 / 使用物资",func():show_inventory()))
 	modal_box.add_child(button("保存当前进度",func():show_saves(true)))
 	modal_box.add_child(button("读取存档",func():show_saves(false)))
+	modal_box.add_child(button("设置 · 画面与声音",show_settings))
 	modal_box.add_child(button("重新开始",func():show_restart_confirm()))
 	modal_box.add_child(button("返回主界面…",func():show_menu_confirm()))
 	audio_controls()
@@ -903,6 +875,12 @@ func audio_controls():
 		var readout=label(str(roundi(slider.value*100))+"%",16,amber);readout.custom_minimum_size.x=55;row.add_child(readout)
 		var bus_name:String=pair[0]
 		slider.value_changed.connect(func(value):session.set_volume(bus_name,value);readout.text=str(roundi(value*100))+"%")
+
+func show_settings():
+	start_modal("设置","画面 / 声音",true)
+	modal.position=Vector2(230,70);modal.size=Vector2(1140,860)
+	var controls=preload("res://scripts/ui_settings.gd").new();modal_box.add_child(controls);controls.setup(world.get_node("/root/Session"))
+	modal_box.add_child(button("返回",func():show_comic_pause() if comic_active else show_pause()))
 
 func dialogue_actor()->String:return {"armory":"armorer","main_gate":"main_guard","d6_return_desk":"commander","front_veteran":"plant_veteran"}.get(dialogue_id,dialogue_id)
 

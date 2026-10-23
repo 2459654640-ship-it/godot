@@ -61,7 +61,7 @@ func _initialize():
 		panel.merge(override,true)
 		result.panels[key]=clean(panel)
 	var args=OS.get_cmdline_user_args()
-	var output=args[0] if not args.is_empty() else "/tmp/metro1982-copy/runtime-v24.json"
+	var output=args[0] if not args.is_empty() else "/tmp/metro1982-copy/runtime-v25.json"
 	DirAccess.make_dir_recursive_absolute(output.get_base_dir())
 	var file=FileAccess.open(output,FileAccess.WRITE)
 	if not file:push_error("Cannot write editorial runtime export");quit(1);return
