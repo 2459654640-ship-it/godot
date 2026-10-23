@@ -1,0 +1,44 @@
+{
+  "python": "3.12.14",
+  "inputs": [
+    {
+      "view": "front",
+      "file": "front.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "foreground_height": 900,
+      "sha256": "a8a82b88ce4bd440c4cd13445cc260906571b10f798da26723241db917e3b194"
+    },
+    {
+      "view": "right",
+      "file": "side.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "foreground_height": 896,
+      "sha256": "50b11b57e7ab38f08ce7e0732fb5067a2cf68da05fb62f6fc616a586596ceea0"
+    },
+    {
+      "view": "back",
+      "file": "back.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "foreground_height": 896,
+      "sha256": "6ea967eb1b4d0df316531d789153bc45da9ce5371471795f8722664b9546f8ca"
+    }
+  ],
+  "shape_model": "tencent/Hunyuan3D-2mv",
+  "shape_subfolder": "hunyuan3d-dit-v2-mv",
+  "paint_requested": false,
+  "seed": 1982,
+  "num_inference_steps": 50,
+  "octree_resolution": 380,
+  "gpu_inference_completed": false,
+  "torch_installed": false,
+  "cuda_available": false
+}

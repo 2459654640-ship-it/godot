@@ -1,0 +1,20 @@
+{
+  "repository": "https://github.com/Tencent-Hunyuan/Hunyuan3D-2",
+  "commit": "f8db63096c8282cb27354314d896feba5ba6ff8a",
+  "verified_examples": [
+    "examples/shape_gen_multiview.py",
+    "examples/fast_texture_gen_multiview.py"
+  ],
+  "view_mapping": {
+    "front": "front.png",
+    "right": "side.png",
+    "back": "back.png"
+  },
+  "inference_validation": "Not run: current environment has no CUDA GPU and cannot download model weights.",
+  "alternative": {
+    "repository": "https://github.com/VAST-AI-Research/TripoSR",
+    "commit": "107cefdc244c39106fa830359024f6a2f1c78871",
+    "license": "MIT",
+    "limitation": "Single-image reconstruction, not a joint three-view model."
+  }
+}
