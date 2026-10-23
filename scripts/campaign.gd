@@ -4,6 +4,7 @@ static var _data:Dictionary={}
 const Living=preload("res://scripts/living_story.gd")
 const Update=preload("res://scripts/chapter_update.gd")
 const Journey=preload("res://scripts/journey_update.gd")
+const Access=preload("res://scripts/d6_access.gd")
 const NAMES={"waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区","surface":"地表旧泵站","railfront":"旧联络线换乘站"}
 const ITEM_ART={"pool_sample":"mutant_sample","moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
 static func data()->Dictionary:
@@ -12,6 +13,7 @@ static func data()->Dictionary:
 		Update.extend(_data)
 		Living.extend(_data)
 		Journey.extend(_data)
+		Access.extend(_data)
 	return _data
 static func permits(s,req:Dictionary)->bool:
 	if req.has("any") and not req.any.any(func(flag):return s.f(flag)):return false
@@ -27,6 +29,7 @@ static func permits(s,req:Dictionary)->bool:
 		if int(s.economy.goods.get(good,0))<int(req.goods[good]):return false
 	return true
 static func available(s,key:String)->bool:
+	if not Access.allowed(s,key):return false
 	if not Journey.allowed(s,key):return false
 	if key in data().get("unreleased_star_actions",[]):return false
 	if not Living.allowed(s,key):return false
@@ -52,10 +55,10 @@ static func decorate(v:Dictionary,s)->Dictionary:
 		if permits(s,variant[0]) if variant[0] is Dictionary else s.f(variant[0]):v.body=variant[1]
 	for key in d.options:
 		var words:String=data().actions[key].text
-		if key=="coal_return" and not s.f("brother_found"):words="沿原探访通路返回公社，稍后再来"
+		if key=="coal_return" and not s.f("brother_found"):words="离开矿区，返回公社"
 
 		v.options.append(s.opt("c_"+key,words,s.context.get("floor","")==d.facility and available(s,key)))
-	return Journey.decorate(Living.decorate(Update.decorate(v,s),s),s)
+	return Access.decorate(Journey.decorate(Living.decorate(Update.decorate(v,s),s),s),s)
 static func act(s,key:String)->String:
 	var a:Dictionary=data().actions[key]
 	if not available(s,key):return "这件事已经做过，或还没有准备好。"
@@ -87,6 +90,7 @@ static func act(s,key:String)->String:
 	if key=="plant_leave":s.flags.filter_return_job=true
 	if key=="plant_leave":s.Progression.fail(s,["waterworks"],"小队已带物资离开水厂，无法再返回处理。")
 	if a.has("travel"):s.flags.next_sequence="coal_back" if key=="coal_return" and not s.f("brother_found") else a.travel
+	if key in ["coal_return","workers_return"] and not Access.public_entry(s):s.flags.next_sequence="d6_mine_withdraw"
 	if a.has("ending"):finish(s,a.ending)
 	if a.get("reply","")!="":s.know(data().actions[key].text+"："+a.reply)
 	var reply:String=a.get("reply","")
@@ -126,6 +130,8 @@ static func side_tasks(s)->Array:
 				current.step="将封存样本和记录交给派工人。" if s.f("surface_sample_sealed") else "在聚落守备处备好面具、滤毒罐与武器，再出发前往地表旧泵站。"
 			target=current.target
 		current=Living.task_stage(s,q,current)
+		if q.id in ["workers_network","commune_chapter"] and s.f("workers_draft") and not s.f("workers_signed") and s.context.get("floor","")!="coal":
+			current={"place":"commune","target":"commune_printer","step":"公开进入 D-6 的路线不可用。工人联络需先落实矿区内部接应；征询稿先保留，不要去正门递交。"}
 		target=current.target
 		var area:String=data().interactions.get(target,{}).get("name",{"semyon":"谢苗诺夫的房间","medical":"作业层医务间","armory":"作业层装备库"}.get(target,target))
 		rows.append({"kind":q.get("kind","支线"),"id":q.id,"name":q.name,"done":s.f(q.done),"place":current.get("place",q.facility),"background":q.background,"step":"已交付，报酬与经过记入手记。" if s.f(q.done) else current.step,"target":target,"area":area})
@@ -155,7 +161,7 @@ static func objective(s)->String:
 			return "查阅水厂值班图，再检查泵房"
 		"commune":
 			if s.f("brother_found") and not s.f("anna_first_news"):return "回医务室，把核实结果交给安娜"
-			if s.f("anna_records") and not s.f("brother_found"):return "到联络气闸，持探访函返回 D-6"
+			if s.f("anna_records") and not s.f("brother_found"):return "公开返站受阻 · 先与娜佳说明矿区接应的问题" if not Access.public_entry(s) else "凭 D-6 自己的随队记录申请返站，核实矿区伤病名册"
 			if s.f("anna_request") and not s.f("anna_records"):return "到联络室核对安娜哥哥的班组记录"
 			return "与公社居民交谈 · 选择留在这里或继续旅程"
 		"sech":

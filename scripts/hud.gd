@@ -428,6 +428,8 @@ func set_prompt(id:String):
 	var actor=world.target_actor(id)
 	var live_position:Vector3=actor.global_position if actor else t.pos
 	prompt.text="[ E ]   "+("交谈 · " if t.kind=="talk" else ("拾取 · " if t.kind=="collect" else "调查 · "))+t.label
+	if world.InteractionRegions.contains(world.story,id,world.player.position):
+		prompt.text="[ E ]   "+world.InteractionRegions.label(world.story,id)+" · 已进入参与区域"
 	if world.interaction_candidates.size()>1:
 		prompt.text+="   [ 滚轮切换 %d/%d ]"%[world.interaction_candidates.find(id)+1,world.interaction_candidates.size()]
 	target_label.text=("◇  " if t.kind=="talk" else "⌕  ")+t.label

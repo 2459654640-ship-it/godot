@@ -61,6 +61,19 @@ func _draw():
 	for p in world.facility_doors(floor):
 		var center=project(p)
 		draw_line(center-Vector2(3,1.5),center+Vector2(3,1.5),gold,2,true)
+	# A meeting is an area objective, not an invisible dot at the lectern.
+	if not focused.is_empty() and world.InteractionRegions.active(world.story,focused.target):
+		var spec:Dictionary=world.InteractionRegions.REGIONS[focused.target]
+		if spec.floor==floor:
+			var region=polygon(spec.rect)
+			draw_colored_polygon(region,Color(.78,.63,.33,.22))
+			draw_polyline(PackedVector2Array([region[0],region[1],region[2],region[3],region[0]]),gold,2,true)
+			if expanded:draw_string(world.kit.font,project(spec.rect.get_center())+Vector2(-36,18),"进入此区按 E",HORIZONTAL_ALIGNMENT_LEFT,-1,13,gold)
+	elif expanded and not focused.is_empty() and focused.place==floor and focus_point.is_finite():
+		var point=project(focus_point)
+		draw_arc(point,6,0,TAU,20,gold,2,true)
+		draw_circle(point,2,gold)
+		draw_string(world.kit.font,point+Vector2(9,-7),"当前目标",HORIZONTAL_ALIGNMENT_LEFT,-1,13,gold)
 	for id in ["lift","gate","side","hatch","main_gate","stairs_up","coal_door"]:
 		if not same or not world.targets.has(id):continue
 		var t=world.targets[id]

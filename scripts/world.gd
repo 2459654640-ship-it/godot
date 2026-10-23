@@ -3,6 +3,7 @@ const SaveStore=preload("res://scripts/save_store.gd")
 const Publications=preload("res://scripts/publications.gd")
 const PublicationPlaces=preload("res://scripts/publication_places.gd")
 const PublicRadio=preload("res://scripts/public_radio.gd")
+const InteractionRegions=preload("res://scripts/interaction_regions.gd")
 var public_radio
 var interaction_candidates:Array[String]=[]
 var chosen_interaction=""
@@ -604,6 +605,12 @@ func find_nearest():
 		var actor=target_actor(id)
 		if actor:t.pos=actor.global_position
 		var d=Vector2(player.position.x-t.pos.x,player.position.z-t.pos.z).length()
+		if InteractionRegions.contains(story,id,player.position):
+			# Room activity is available anywhere inside its authored participation
+			# area. Nearby people/books still win selection and wheel cycling works.
+			interaction_candidates.append(id)
+			distances[id]=1.69
+			continue
 		var reachable=true
 		if d<1.75:
 			var q=PhysicsRayQueryParameters3D.create(player.position+Vector3(0,1.2,0),t.pos+Vector3(0,1.2,0),1)
@@ -1037,6 +1044,10 @@ func facility_doors(id:String)->Array:
 	return CampaignMaps.doors(id)
 
 func travel_campaign(destination:String):
+	if destination=="coal" and (not story.Campaign.Access.public_entry(story) or not story.f("coal_access")):
+		story.flags.erase("next_facility")
+		hud.show_comic("d6_return_blocked")
+		return
 	if destination=="starcity":
 		if not story.f("north_inquiry_ready") and not story.f("visited_starcity"):
 			story.flags.erase("next_facility");hud.toast("北线尚未具备接送与担保条件。先完成本阵营的几轮出站工作。",6);return
@@ -1044,6 +1055,10 @@ func travel_campaign(destination:String):
 		story.ending=false
 
 	if destination in ["life","labor"]:
+		if not story.Campaign.Access.public_entry(story):
+			story.flags.erase("next_facility")
+			hud.show_comic("d6_return_blocked")
+			return
 		story.ending=false;story.flags.erase("next_facility")
 		story.flags.d6_returned=true;story.flags.departure_official=story.route=="official" and not story.f("sided_veteran")
 		var p=Vector3(23,.04,-9) if destination=="labor" else Vector3(-3.3,.04,8)

@@ -52,7 +52,7 @@ const ITEMS = {
  "water_core":["封存净水滤芯","核对过型号的两箱净水替换件，已经绑在小队的运输架上。","任务"],
  "relay_part":["控制回路保险件","水厂修配台取出的备用件，供仓门控制回路维修。","维修"],
  "anna_note":["安娜的寻亲纸条","姓名、班组编号和左手旧伤。核对身份，不能只靠同名。","任务"],
- "transit_pass":["公社探访函","煤运探访的正式联络文件，见到本人前仍须核实记录。","通行"],
+	"transit_pass":["寻亲与班组抄页","公社整理的班组编号、伤病记录及寻亲请求。仅供核实身份，不具备 D-6 的通行效力，也不能撤销擅离记录。","任务文件"],
  "archive":["转移名册抄页","星城档案中的姓名和护送记录，不足以替当事人回答二十年的事。","记忆"],
  "knife":["旧匕首","谢苗诺夫留下的工具。可以撬开卧室暗格与检修口；硬撬会损坏刃口。","工具"],
  "cigarettes":["半包香烟","受潮但仍可交换。米哈伊尔知道岗哨换班的空隙。","交换"],
@@ -402,4 +402,5 @@ func restore(data: Dictionary):
 	Campaign.Update.migrate(self,int(data.get("content_revision",0)))
 	Campaign.Living.migrate(self,int(data.get("content_revision",0)))
 	Campaign.Journey.migrate(self,data)
+	Campaign.Access.migrate(self,data)
 	changed.emit()

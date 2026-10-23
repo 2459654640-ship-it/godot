@@ -26,6 +26,7 @@ const PANELS={
 "solo_reserved":{"art":"sergey","title":"各留一点余地","body":"「行。不想说的先留着。」\n谢尔盖没有继续追问，朝火边的空地方偏了偏头。\n「隧道里别只顾着看前头，头顶也听着点。我找旧军列，你要找路，也许能互相省点事。」\n你站在离火几步远的地方。下一段路，还没有决定。","end":"sergey_meeting"}}
 static func start(s,sequence:String):
 	s.ending=false
+	if sequence=="solo":s.flags.d6_wanted=true
 	# An illustrated conversation remains in the same moment and facility.
 	if not authored().get(sequence,{}).get("same_moment",false) and not Campaign.data().panels.get(sequence,{}).get("end","").begins_with("resume:"):
 		s.flags.story_day=17 if sequence=="official" else (16 if sequence in ["solo","intro"] else int(s.flags.get("story_day",17))+1)
@@ -41,6 +42,11 @@ static func panel(s)->Dictionary:
 	var override:Dictionary=authored().get(node,{})
 	if override.has("next") or override.has("choices"):p.erase("end")
 	p.merge(override,true)
+	# Old saves can resume a previously queued public-return cinematic. Its
+	# old map destination must not bypass the current identity check.
+	if not Campaign.Access.public_entry(s):
+		if node in ["coal_road","coal_descent"] or s.flags.get("comic",{}).get("sequence","")=="anna_rescue_road":p=Campaign.data().panels.d6_return_blocked.duplicate(true)
+		elif node in ["coal_exit_to_d6","coal_return_d6"]:p=Campaign.data().panels.d6_mine_withdraw.duplicate(true)
 	if p.has("choices"):
 		p.choices=p.choices.filter(func(choice):return not s.f(choice.get("hide_if","")) and (not choice.has("requires") or s.f(choice.requires)) and Campaign.permits(s,choice.get("when",{})))
 	if p.has("lines"):
@@ -86,6 +92,7 @@ static func choose(s,index:int=-1):
 		if choice.has("flag"):
 			s.flags[choice.flag]=true
 			if choice.flag=="sided_veteran":
+				s.flags.d6_wanted=true
 				s.take("water_core");s.flags.filter_return_job=false;s.flags.cargo_sent_with_lieutenant=true
 		state.node=choice.next
 	else:state.node=p.next

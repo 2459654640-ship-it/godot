@@ -30,9 +30,12 @@ static func tasks(s)->Array:
 	if s.f("commune_joined") or s.f("greenhouse_clean"):out.append(row("garden","温室的回水",s.f("greenhouse_fixed"),"commune","委员会提到温室的循环水不畅。","公社西北侧温室。检查过滤篮，停泵清理后再灌水启动。","commune_greenhouse","地下温室"))
 	if s.f("anna_request"):
 		var place="commune";var target="commune_records";var area="联络档案室";var step="公社东北侧的联络档案室，先对照班组编号查记录。"
-		if s.f("anna_records"):target="commune_leave";area="联络气闸";step="联络函已经备好，到公社东南侧气闸安排探访。"
+		if s.f("anna_records"):
+			target="commune_leave";area="联络气闸";step="班组材料已经备好。凭 D-6 自己的随队记录申请返站，再到煤运口核实休养记录。"
+			if not s.Campaign.Access.public_entry(s):target="commune_printer";area="联络档案室";step="你仍被 D-6 追查，寻亲材料不能用于通行。先留在公社；进入矿区需要另行落实内部接应。"
 		if s.context.get("floor","")=="labor" and s.f("d6_returned"):
 			place="labor";target="commander" if not s.f("coal_access") else "coal_door";area="返站审核";step="先向科瓦廖夫办理返站身份审核，再从下层煤矿检票口进入。"
+			if not s.Campaign.Access.public_entry(s):target="commander";step="你的离站记录不允许公开返站。向中尉说明要退出，先退回公社；寻人材料和任务进度会保留。"
 		elif s.context.get("floor","")=="coal":
 			place="coal";target="coal_clerk";area="探访登记";step="先向西南侧登记员核实工牌，不要只按姓名找人。"
 			if s.f("coal_registered"):target="coal_archive";area="班组档案";step="到西北侧班组档案柜，对照旧工伤与转移记录。"
@@ -60,7 +63,9 @@ static func tasks(s)->Array:
 		out.append(row("radio","东方-7" if s.f("signal_heard") else "修复北线电台",s.f("radio_fixed"),"sech","谢契的电台坏了，居民想恢复与北线的日常联络。","西北调度台有接线图；确认接地后，再去左侧调度车厢南段的电台。" if not s.f("radio_power") else "接收机已通电，按纸上刻度慢慢调谐。","sech_manual" if not s.f("radio_manual") else "sech_radio","旧军列调度" if not s.f("radio_manual") else "电台维修室"))
 	if s.f("star_registered") or s.f("star_inquiry_filed"):
 		out.append(row("father","蓝门后的人",false,"starcity","星城内区封闭，外界没有人员名册。已提交询问信，尚无核查结果。","在隔离线外等候答复，可以先返回聚落继续调查。","star_perimeter_call","星城外围"))
-	if s.context.get("floor","")=="labor" and s.f("d6_returned") and not s.f("return_reviewed"):
+	if s.context.get("floor","")=="labor" and s.f("d6_returned") and not s.Campaign.Access.public_entry(s):
+		out.append(row("return_entry","返站受阻",false,"labor","你没有公开进入 D-6 的资格，公社材料不能改变这项限制。","到中尉或煤运检票口选择退回站外，先返回公社。","commander","征召集合区"))
+	elif s.context.get("floor","")=="labor" and s.f("d6_returned") and not s.f("return_reviewed"):
 		out.append(row("return_entry","返站身份审核",s.f("return_reviewed"),"labor","离站方式会影响返站手续，探访函仍需核验。","到集合区的科瓦廖夫面前说明离站经过，核对记录后申请限区通行。","commander","征召集合区"))
 	out.append_array(preload("res://scripts/campaign.gd").side_tasks(s))
 	if s.f("igor_debt_known") or s.f("igor_chore") or s.f("igor_settled"):out.append(row("igor_debt","岗哨的一笔旧账",s.f("igor_settled"),"life","伊戈尔替你隐瞒了侧门的事，要求财物补偿或清理岗灯。","清理压力监测箱旁岗灯后找伊戈尔验看；也可用三发制式弹或非任务物资结清。","igor" if s.f("igor_lamp_clean") else "relay","东侧维修岗"))
@@ -87,7 +92,8 @@ static func objective(s)->String:
 static func leads(s)->Array:
 	var out=[];var floor:String=s.context.get("floor","life")
 	if floor=="labor" and s.f("d6_returned"):
-		out.append("先找科瓦廖夫核对返站记录，再到下层煤矿检票口办理限区进入。" if not s.f("coal_access") else "煤矿医护知道探访与药物的安排。办完后仍从下层检票口销号。")
+		if not s.Campaign.Access.public_entry(s):out.append("你的离站记录不允许公开返站。先从中尉或煤运检票口退出，别往生活层走。")
+		else:out.append("先找科瓦廖夫核对返站记录，再到下层煤矿检票口办理限区进入。" if not s.f("coal_access") else "煤矿医护知道探访与药物的安排。办完后仍从下层检票口销号。")
 	elif floor in ["life","labor"]:
 		if not s.f("nina_job") and not s.f("relay"):out.append("妮娜整夜都在修东西。她那里也许有东侧通路的办法。")
 		if not s.f("cook_job") and not s.f("valve"):out.append("食堂里又传来接水的响声，加琳娜或许正缺一双手。")
@@ -110,7 +116,7 @@ static func encyclopedia(s)->Array:
 	if s.f("labor_read"):rows.append(["作业层","医务间和装备库在北侧，正门接轨道。生活层楼梯间在集合区西边。"])
 	if s.has("frequency"):rows.append(["东方-7","收音机里听到的呼号。知道更多之前，先留着频率。"])
 	var floor:String=s.context.get("floor","")
-	if floor=="commune" or s.f("commune_joined"):rows.append(["莫斯科公社","反对中央苏维埃特权的革命组织，依靠工人委员会、地下联络和武装守备维持独立。伤病交换窗口只允许有限的人道探访，并未结束敌对。"])
+	if floor=="commune" or s.f("commune_joined"):rows.append(["莫斯科公社","反对中央苏维埃特权的革命组织，依靠工人委员会、地下联络和武装守备维持独立。公社与 D-6 所属的中央苏维埃处于敌对状态，没有官方往来。公社整理的寻人材料不能用于 D-6 通行。"])
 	if floor=="sech" or s.f("sech_joined"):rows.append(["废土谢契","带有哥萨克传统的独立共同体，以旧军列检修库为落脚处；议事、阿塔曼与轮值并存，不服从中央，也未加入公社。"])
 	if floor=="starcity" or s.f("star_known"):rows.append(["星城-2","北线上仍有人值守的地下科研设施。外界只能收到少量广播和零星回信，对内部人员与现状所知很少。内区封闭，询问信与介绍信不代表入内许可。"])
 	if s.f("father_met"):rows.append(["父亲的工作","父亲在星城的测控技术班维护与校准设备，研究计划由各组共同维持。早期封闭管理和断路造成了失联，之后为何一直没有回去，需要与他当面谈清。"])

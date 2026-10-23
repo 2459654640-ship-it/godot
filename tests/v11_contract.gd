@@ -67,9 +67,11 @@ func run():
   check(not Campaign.available(s,"enter_coal"),"no unreviewed mine access: "+route)
   if route=="official":action(s,"c_return_official")
   else:
-   action(s,"c_return_explain");action(s,"c_return_audit");action(s,"c_return_limited")
+   for key in ["return_explain","return_audit","return_limited","enter_coal"]:
+    s.act("c_"+key);check(not s.last_action_valid and not s.f("coal_access"),"deserter cannot obtain access through paperwork: "+key)
+   continue
   action(s,"c_enter_coal");finish_comic(s,"coal_descent")
-  check(s.flags.next_facility=="coal" and s.f("coal_access"),"reviewed route enters a separate mine map: "+route)
+  check(s.flags.next_facility=="coal" and s.f("coal_access"),"reviewed formal route enters the separate mine map")
  s.context.floor="coal";s.flags.brother_care=true;s.give("vitamins");action(s,"c_vitamin_plan");action(s,"c_vitamin_leave")
  check(s.f("vitamin_care") and not s.has("vitamins"),"vitamin used in professional long-term care, not an instant cure")
  s=Story.new();s.context.floor="starcity";s.flags.star_access=true;s.give("photo")
