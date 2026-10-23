@@ -561,6 +561,7 @@ func show_task_detail(id:String):
 	if found.is_empty():show_journal();return
 	var task:Dictionary=found[0]
 	start_modal(task.name,task.kind+" / "+task.status,true)
+	modal_hint.text="目标随任务进度更新 · Esc 返回"
 	var place={"life":"D-6生活层","labor":"D-6作业层"}.get(task.place,world.story.Campaign.NAMES.get(task.place,"设施"))
 	body("当前目标" if not task.done and not task.failed else "任务结果",18,amber)
 	prose(task.step,25)
@@ -878,6 +879,7 @@ func audio_controls():
 
 func show_settings():
 	start_modal("设置","画面 / 声音",true)
+	modal_hint.text="应用后确认保留更改 · Esc 返回"
 	modal.position=Vector2(230,70);modal.size=Vector2(1140,860)
 	var controls=preload("res://scripts/ui_settings.gd").new();modal_box.add_child(controls);controls.setup(world.get_node("/root/Session"))
 	modal_box.add_child(button("返回",func():show_comic_pause() if comic_active else show_pause()))

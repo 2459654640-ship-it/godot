@@ -13,6 +13,7 @@ static func entries(s)->Array:
 static func render(h,tab:String="all",selected:String=""):
 	h.start_modal("随身背包","ИНВЕНТАРЬ   /   装备与补给",true)
 	h.modal.position=Vector2(220,75);h.modal.size=Vector2(1160,850)
+	h.modal_hint.text="鼠标选择物品 · 滚轮浏览 · Esc 返回"
 	var s=h.world.story;var weapon=s.equipped_weapon()
 	var top=HBoxContainer.new();top.add_theme_constant_override("separation",18);h.modal_box.add_child(top)
 	top.add_child(h.label("武器栏",18,h.amber))
