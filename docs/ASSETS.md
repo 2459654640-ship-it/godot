@@ -306,3 +306,16 @@
 - [开裂沥青](../assets/visual/district_asphalt.png)
 - [工业区地表建立镜头](../assets/cinematics/east_district_arrival.png)
 - [矿区检修通路](../assets/cinematics/east_mine_service.png)
+
+## v28 环境与材料图标
+
+| 素材 | 当前用途 |
+| --- | --- |
+| [水磨石](../assets/visual/art28_terrazzo.png) | 公社大厅与议事厅地面 |
+| [灰泥](../assets/visual/art28_plaster.png) | 公社墙面 |
+| [积雪](../assets/visual/art28_snow.png) | 室外积雪与雪堆 |
+| [沥青](../assets/visual/art28_asphalt.png) | 东郊道路 |
+| [劳动与教育马赛克](../assets/visual/commune_mural_v28.png) | 人民议事厅讲台背景 |
+| [废金属](../assets/visual/item_scrap_metal.png) | 材料图标 |
+| [铜线](../assets/visual/item_copper_wire.png) | 材料图标 |
+| [修补布](../assets/visual/item_salvage_cloth.png) | 材料图标 |

@@ -2,9 +2,9 @@ extends RefCounted
 const Radiation=preload("res://scripts/radiation.gd")
 ## Standard ammunition is money; handmade ammunition is a separate reserve.
 const GOODS={
-"scrap_metal":{"name":"可用废金属","price":2,"stock":0,"icon":"fuse","detail":"去掉尖锐边角的金属边条和小零件，可制作捆扎用品，或卖给聚落商人。","effect":"","amount":0,"purchase":false},
-"copper_wire":{"name":"回收铜线","price":3,"stock":0,"icon":"cord","detail":"清理过接头的旧铜线。电气维修人员需要这类材料，也可在聚落出售。","effect":"","amount":0,"purchase":false},
-"salvage_cloth":{"name":"修补布","price":1,"stock":0,"icon":"rag","detail":"结实但尚未处理的布料。通电的修配间可烧水处理后制作绷带，或配合金属件制作捆扎用品。","effect":"","amount":0,"purchase":false},
+"scrap_metal":{"name":"可用废金属","price":2,"stock":0,"icon":"scrap_metal","detail":"去掉尖锐边角的金属边条和小零件，可制作捆扎用品，或卖给聚落商人。","effect":"","amount":0,"purchase":false},
+"copper_wire":{"name":"回收铜线","price":3,"stock":0,"icon":"copper_wire","detail":"清理过接头的旧铜线。电气维修人员需要这类材料，也可在聚落出售。","effect":"","amount":0,"purchase":false},
+"salvage_cloth":{"name":"修补布","price":1,"stock":0,"icon":"salvage_cloth","detail":"结实但尚未处理的布料。通电的修配间可烧水处理后制作绷带，或配合金属件制作捆扎用品。","effect":"","amount":0,"purchase":false},
 "mutant_bone":{"name":"变异兽骨片","price":3,"stock":0,"icon":"mutant_bone","detail":"从兽群遗骸中收集、清理后包好的骨片。聚落收购处可用于制胶和研究，不是任务必需品。","effect":"","amount":0,"purchase":false},
 "mutant_sample":{"name":"封存的变异样本","price":6,"stock":0,"icon":"mutant_sample","detail":"密封容器内的少量组织样本。可交给聚落收购处，不同于委托中单独封存的沉淀池样本。","effect":"","amount":0,"purchase":false},
 "ammo_pouch":{"name":"土制弹药包","price":4,"stock":8,"icon":"ammo_pouch","detail":"12 发土制子弹。在背包使用，加入战斗弹药储备。","effect":"handmade","amount":12},
@@ -35,7 +35,7 @@ static func sell(s,id:String)->String:
 static func fresh()->Dictionary:
 	var stock={}
 	for id in GOODS:stock[id]=GOODS[id].stock
-	return {"military":18,"handmade":12,"goods":{},"stock":stock,"health":100,"food":60,"radiation":0,"ledger":[],"activity_clock":0.0,"recovery_clock":0.0}
+	return {"military":18,"handmade":12,"goods":{},"stock":stock,"health":100,"food":60,"radiation":0,"ledger":[],"stashes":{},"activity_clock":0.0,"recovery_clock":0.0}
 static func restored(saved:Dictionary)->Dictionary:
 	var data=fresh()
 	for key in data:

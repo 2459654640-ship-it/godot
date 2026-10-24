@@ -6,7 +6,7 @@ uniform vec2 frame_size = vec2(0.2,1.0);
 uniform vec2 texel_size = vec2(0.001);
 uniform bool mirror = false;
 uniform float focus : hint_range(0.0,1.0) = 0.0;
-uniform vec3 light_tint : source_color = vec3(0.91,0.89,0.82);
+uniform vec3 light_tint = vec3(0.91,0.89,0.82);
 uniform float reaction = 0.0;
 uniform float down_amount = 0.0;
 uniform float shot_recoil = 0.0;
@@ -87,6 +87,8 @@ void fragment() {
 		if (edge*focus < 0.42) discard;
 		ALBEDO=vec3(0.67,0.53,0.30);
 	} else {
-		ALBEDO=paint.rgb*light_tint;
+		// Script lighting samples use display-space values. Forward+ shades in linear light.
+		vec3 tint=OUTPUT_IS_SRGB ? light_tint : mix(light_tint/12.92,pow((light_tint+vec3(.055))/1.055,vec3(2.4)),step(vec3(.04045),light_tint));
+		ALBEDO=paint.rgb*tint;
 	}
 }

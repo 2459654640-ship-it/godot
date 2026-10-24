@@ -61,7 +61,8 @@ static func commune(w):
  k.box("AssemblyLowStage",Vector3(.5,.10,-10.9),Vector3(17,.20,1.5),"wood",true)
  k.box("LecternBase",Vector3(.5,.62,-10.65),Vector3(.9,.84,.62),"wood",true)
  k.box("LecternTop",Vector3(.5,1.08,-10.65),Vector3(1.05,.08,.72),"wood").rotation.x=-.12
- k.box("AssemblyRedDrape",Vector3(.5,2.3,-11.79),Vector3(12,.50,.08),"red")
+ # The central mosaic replaces the old continuous strip; side cloths frame it.
+ for x in [-3.5,4.5]:k.box("AssemblySideDrape",Vector3(x,1.75,-11.74),Vector3(.45,1.95,.055),"red")
  # Keep the entire west frame clear of the production-corridor doorway.
  for x in [-7.4,9]:Detail.art(k,"CommuneWorkersPoster",Vector3(x,1.6,-11.80),Vector2(1.15,1.7),"res://assets/visual/commune_poster_0.png")
  for z in [-8.2,-6.2]:

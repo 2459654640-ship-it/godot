@@ -120,62 +120,48 @@ func setup(w):
 	theme.default_font=font
 	theme.default_font_size=20
 	self.theme=theme
-	# Top masthead and separated location plaque.
-	var mast=panel(Vector2(32,28),Vector2(246,86))
-	var b=margin_box(mast,18,10)
-	b.add_theme_constant_override("separation",4)
-	var line=HBoxContainer.new()
-	b.add_child(line)
-	var brand=label("МЕТРО",14,muted)
-	brand.add_theme_font_override("font",mono)
-	line.add_child(brand)
-	line.add_spacer(false)
-	line.add_child(label({"life":"D–6","labor":"D–6","waterworks":"水厂","commune":"公社","sech":"谢契","coal":"D–6","starcity":"星城外围","surface":"地表","east_district":"东郊","railfront":"联络线"}.get(world.floor_id,""),17,amber))
-	var title=label("地铁 1982",27,text_color)
-	title.add_theme_font_override("font",serif)
-	b.add_child(title)
-	var top=panel(Vector2(298,28),Vector2(516,56))
-	var topbox=margin_box(top,17,11)
-	location_label=label("D-6生活层 / 伊万的卧室",19,text_color)
+	# Exploration HUD: location and objective share one quiet left column.
+	var top=panel(Vector2(28,26),Vector2(420,58))
+	var topbox=margin_box(top,16,10)
+	location_label=label("",18,text_color)
+	location_label.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS
 	topbox.add_child(location_label)
-	var tag=panel(Vector2(1240,28),Vector2(328,56))
-	var tb=margin_box(tag,17,11)
-	status_label=label("16 XI 1982   /   07:42",17,muted)
-	status_label.add_theme_font_override("font",mono)
-	tb.add_child(status_label)
+	status_label=label("",14,muted)
+	add_child(status_label);status_label.position=Vector2(1256,26);status_label.size=Vector2(310,28)
+	status_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
 	# Current goal is short; the detailed quest network belongs in the journal.
-	var goal=panel(Vector2(32,134),Vector2(264,220))
+	var goal=panel(Vector2(28,100),Vector2(290,196))
 	var gb=margin_box(goal,18,15)
 	objective_kind=label("正在跟进",13,muted);gb.add_child(objective_kind)
 	objective_title=label("",23,amber);objective_title.add_theme_font_override("font",serif);objective_title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;gb.add_child(objective_title)
 	objective=label("",17,Color("bac7c0"))
 	objective.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	gb.add_child(objective)
-	gb.add_child(label("线索与待办收在手记里",14,muted))
-	var key_panel=panel(Vector2(32,769),Vector2(250,93))
-	var kb=margin_box(key_panel,16,12)
+	gb.add_child(label("J  打开手记查看详情",13,muted))
+	var key_panel=panel(Vector2(28,818),Vector2(290,62))
+	var kb=margin_box(key_panel,12,6)
 	kb.add_child(label("W A S D    移动       E   互动",16,text_color))
-	kb.add_child(label("Tab  总览   /   滚轮  切换目标或缩放",15,muted))
+	kb.add_child(label("Tab 总览 · 滚轮切换附近目标",13,muted))
 	# Minimap has geometry, not a screenshot of the reference.
-	var mp=panel(Vector2(1302,106),Vector2(266,214))
+	var mp=panel(Vector2(1310,68),Vector2(258,202))
 	var mb=margin_box(mp,6,5)
 	var mt=label(world.floor_name(),14,muted)
 	mt.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	mb.add_child(mt)
 	map_small=MapView.new()
-	map_small.custom_minimum_size=Vector2(252,168)
+	map_small.custom_minimum_size=Vector2(244,156)
 	map_small.world=world
 	mb.add_child(map_small)
 	# Bottom command bar with a warmer identity block and a small route indicator.
-	var bar=panel(Vector2(32,890),Vector2(1536,86))
-	var row=HBoxContainer.new();row.add_theme_constant_override("separation",20)
+	var bar=panel(Vector2(28,900),Vector2(1540,76))
+	var row=HBoxContainer.new();row.add_theme_constant_override("separation",16)
 	var mar=MarginContainer.new()
 	for side in ["left","right"]:mar.add_theme_constant_override("margin_"+side,22)
-	for side in ["top","bottom"]:mar.add_theme_constant_override("margin_"+side,12)
+	for side in ["top","bottom"]:mar.add_theme_constant_override("margin_"+side,9)
 	bar.add_child(mar);mar.add_child(row)
 	var identity=VBoxContainer.new();identity.custom_minimum_size.x=145;row.add_child(identity)
 	identity.add_child(label("ИВАН / 伊万",21,amber))
-	identity.add_child(label("随身记录 · 1982",13,muted))
+	identity.add_child(label("1982 / ЛИЧНОЕ ДЕЛО",12,muted))
 	var vitals=VBoxContainer.new();vitals.custom_minimum_size.x=240;vitals.add_theme_constant_override("separation",5);row.add_child(vitals)
 	vitals_label=label("",14,text_color);vitals.add_child(vitals_label)
 	health_bar=vital_bar(vitals,Color("9aa98d"));health_bar.tooltip_text="生命 · 伤药用于恢复伤势"
@@ -190,7 +176,7 @@ func setup(w):
 	row.add_child(button("Esc  暂停",func():show_pause(),true,true))
 	prompt=label("",22,amber)
 	add_child(prompt)
-	prompt.position=Vector2(470,817)
+	prompt.position=Vector2(470,839)
 	prompt.size=Vector2(660,45)
 	prompt.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	prompt.add_theme_constant_override("outline_size",8)
@@ -442,11 +428,12 @@ func refresh_status():
 	objective_title.text=focus.name if not focus.is_empty() else "留意身边的人"
 	objective_kind.text=(focus.kind+" / 正在跟进") if not focus.is_empty() else "自由探索"
 	objective.text=focus.step if not focus.is_empty() else "看看手记旁的线索，或找周围的人聊聊。"
+	objective.tooltip_text=objective.text
 	observe_progress()
 	if health_bar:
 		health_bar.value=world.story.economy.health;food_bar.value=world.story.economy.food
 		vitals_label.text="生命 %d   /   饱食 %d"%[world.story.economy.health,world.story.economy.food]
-		if world.story.economy.radiation>0:vitals_label.text+="\n辐射 %d · %s"%[world.story.economy.radiation,world.story.Economy.Radiation.state(world.story).name]
+		if world.story.economy.radiation>0:vitals_label.text+="  / 辐射 %d"%world.story.economy.radiation
 		vitals_label.tooltip_text=world.story.Economy.Radiation.describe(world.story)
 		leads_button.text="留意的事 · "+str(Journal.leads(world.story).size())
 	inventory_count.text="%d 制式弹 · %d 土制弹" % [world.story.economy.military,world.story.economy.handmade]
@@ -713,7 +700,6 @@ func highlight_items(text:String)->String:
 func show_map():show_journal("map")
 
 func item_icon(id:String)->String:
-	if id in ["scrap_metal","copper_wire","salvage_cloth"]:return "res://assets/visual/item_"+{"scrap_metal":"fuse","copper_wire":"cord","salvage_cloth":"rag"}[id]+".png"
 	if id=="portable_radio":return "res://assets/visual/item_portable_radio.svg"
 	return "res://assets/visual/item_"+world.story.Campaign.ITEM_ART.get(id,id)+".png"
 
@@ -800,7 +786,7 @@ func show_departure(confirmed:bool):
 		snapshot.floor=world.floor_id;snapshot.position=[world.player.position.x,.04,world.player.position.z]
 		s.departure_checkpoint=snapshot
 		s.flags.departure_committed=true
-		s.Progression.fail(s,["life","labor"],"已离开 D-6，本次旅程无法返回完成这项委托。")
+		if world.pending_route!="official":s.Progression.fail(s,["life","labor"],"已擅自离开 D-6，无法公开返回完成这项站内委托。")
 		s.route=world.pending_route;s.ending=false
 		show_comic("official" if s.route=="official" else "solo")))
 	modal_box.add_child(button("再准备一下",func():close()))
@@ -813,6 +799,7 @@ func comic_choose(index:int=-1):
 	finish_typing()
 	world.get_node("/root/Session").sound("page")
 	var s=world.story
+	var sequence_before:String=s.flags.comic.get("sequence","")
 	var old_panel=s.Comic.panel(s)
 	if s.flags.comic.sequence=="intro":s.Conversation.append(s,"semyon",old_panel.body,"semyon")
 	s.Comic.choose(s,index)
@@ -824,7 +811,9 @@ func comic_choose(index:int=-1):
 			var id:String=s.flags.resume_dialogue;s.flags.erase("resume_dialogue");show_dialogue(id)
 		elif s.flags.has("next_facility"):
 			world.travel_campaign(s.flags.next_facility)
-		elif s.f("intro_done") and not s.ending:close();refresh_status();toast("第一件事：到第七供应点领取今日维生素 D",7)
+		elif s.f("intro_done") and not s.ending:
+			close();refresh_status()
+			if sequence_before=="intro":toast("第一件事：到第七供应点领取今日维生素 D",7)
 		else:show_chapter_end()
 
 func show_comic_pause():

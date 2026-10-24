@@ -300,7 +300,7 @@ func ui_tests():
 	Input.action_release("move_up")
 	check(w.player.position.distance_to(paused_pos)<0.08,"modal UI stops movement")
 	w.hud.close()
-	check(w.ambience.stream.loop_mode==AudioStreamWAV.LOOP_FORWARD,"machinery ambience uses actual loop playback")
+	check(w.ambience.stream is AudioStreamOggVorbis and not w.ambience.stream.loop,"location score leaves silence between musical passages")
 	# End-to-end official departure preflight does not overwrite an alternative route.
 	actions(w.story,["accept","get_kit"])
 	w.story.route="hatch"

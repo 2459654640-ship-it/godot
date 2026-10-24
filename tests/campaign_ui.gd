@@ -54,7 +54,7 @@ func run():
 	check(w.floor_id=="waterworks" and w.story.flags.comic.active,"cross-facility loader restores transit in the correct map")
 	DirAccess.remove_absolute(save)
 	check(AudioServer.get_bus_index("Music")>=0 and AudioServer.get_bus_index("Effects")>=0,"separate music and effect controls exist")
-	check(w.ambience.stream.resource_path.ends_with("shelter_theme.wav") and w.step_audio.stream.resource_path.ends_with("step.wav"),"music and footstep use intended assets, not ventilation noise")
+	check(w.ambience.get_meta("score_source","")=="shift_below.ogg" and w.step_audio.stream.resource_path.ends_with("step.wav"),"music and footstep use intended assets, not ventilation noise")
 	var session=root.get_node("Session");var old=session.volume("Effects");session.set_volume("Effects",.25,false)
 	check(is_equal_approx(session.volume("Effects"),.25),"volume slider changes the actual audio bus")
 	session.set_volume("Effects",old,false)

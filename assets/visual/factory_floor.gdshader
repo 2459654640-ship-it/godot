@@ -8,10 +8,11 @@ void vertex(){world_position=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;}
 vec3 surface(vec2 coordinates){
 	vec2 uv=fract(coordinates);
 	vec2 edge=smoothstep(vec2(.32),vec2(.49),abs(uv-vec2(.5)));
-	vec3 a=texture(albedo_map,uv).rgb;
-	vec3 b=texture(albedo_map,fract(uv+vec2(.5,0.0))).rgb;
-	vec3 c=texture(albedo_map,fract(uv+vec2(0.0,.5))).rgb;
-	vec3 d=texture(albedo_map,fract(uv+vec2(.5,.5))).rgb;
+	vec2 dx=dFdx(coordinates);vec2 dy=dFdy(coordinates);
+	vec3 a=textureGrad(albedo_map,uv,dx,dy).rgb;
+	vec3 b=textureGrad(albedo_map,fract(uv+vec2(.5,0.0)),dx,dy).rgb;
+	vec3 c=textureGrad(albedo_map,fract(uv+vec2(0.0,.5)),dx,dy).rgb;
+	vec3 d=textureGrad(albedo_map,fract(uv+vec2(.5,.5)),dx,dy).rgb;
 	return mix(mix(a,b,edge.x),mix(c,d,edge.x),edge.y);
 }
 vec2 offset_for(vec2 cell){

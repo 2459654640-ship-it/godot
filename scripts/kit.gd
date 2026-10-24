@@ -270,7 +270,7 @@ func finish_walls():
 				material.set_shader_parameter("normal_strength",0.0)
 			elif not wall_room_profiles.is_empty() and i==0:
 				material.set_shader_parameter("commune_finish",true)
-				material.set_shader_parameter("finish_plaster",load("res://assets/visual/commune_plaster.png"))
+				material.set_shader_parameter("finish_plaster",load("res://assets/visual/art28_plaster.png"))
 				material.set_shader_parameter("finish_tile",load("res://assets/visual/commune_ivory_tile.png"))
 				material.set_shader_parameter("finish_cement",load("res://assets/visual/cement.png"))
 				material.set_shader_parameter("normal_strength",.16)
@@ -501,6 +501,7 @@ func new_veil_material(base:StandardMaterial3D)->ShaderMaterial:
 	material.shader=load("res://assets/visual/masonry_veil.gdshader")
 	material.set_shader_parameter("normal_strength",0.0)
 	material.set_shader_parameter("base_color",base.albedo_color)
+	material.set_shader_parameter("snow_finish",bool(base.get_meta("roof_snow",false)))
 	material.set_shader_parameter("has_texture",base.albedo_texture!=null)
 	if base.albedo_texture:material.set_shader_parameter("albedo_map",base.albedo_texture)
 	material.set_shader_parameter("triplanar",base.uv1_triplanar)

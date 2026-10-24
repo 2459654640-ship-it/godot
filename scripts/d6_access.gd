@@ -8,7 +8,7 @@ static func blocked_return(s)->bool:
 static func extend(c:Dictionary):
 	c.actions.d6_withdraw={"text":"退回站外，返回公社。","reply":"","once":false,"req":{"floor":["labor"]},"travel":"d6_checkpoint_withdraw"}
 	for id in ["d6_return_desk","coal_gate_entry"]:c.interactions[id].options.append("d6_withdraw")
-	c.actions.d6_entry_question={"text":"「这些材料不能通行，那该怎么进入矿区？」","reply":"娜佳：「D-6 只认他们内部的准许记录。我们还在和中央交战，不能把你当成正式来访的人送进去。你若仍在追查名册上，递交姓名就可能被扣住。」\n她把班组抄页推回你面前。\n「目前还没有能保证你安全进出的接应安排。先把材料留好，别急着去正门。」","once":true,"req":{"floor":["commune"],"any":["anna_records","workers_draft","anna_warning_seen"]},"flags":{}}
+	c.actions.d6_entry_question={"text":"「这些材料不能通行，那该怎么进入矿区？」","reply":"娜佳：「D-6 只认他们内部的准许记录。我们还在和中央交战，不能把你当成正式来访的人送进去。你若仍在追查名册上，递交姓名就可能被扣住。」\n她把班组抄页推回你面前。\n「需要先找矿区里可信的人接应，确认检修通路和撤离办法。把班组编号留下，我试着通过运输线联系。安排好以前，别去正门。」","once":true,"req":{"floor":["commune"],"any":["anna_records","workers_draft","anna_warning_seen"]},"flags":{}}
 	c.interactions.commune_printer.options.append("d6_entry_question")
 	for q in c.quests:
 		if q.id=="commune_chapter":q.stages[0].step="到人民议事厅的座席区，按 E 参加居民议事；不必绕到讲台后找人。"
@@ -31,7 +31,7 @@ static func decorate(v:Dictionary,s)->Dictionary:
 	if v.id=="commune_leave" and blocked_return(s):
 		v.body+="\n你仍在 D-6 的追查名册上，手中的寻亲材料不能让你通过正门。安娜的委托仍记在手记里，公开返站这条路暂时走不通。"
 	if v.id=="commune_records" and blocked_return(s) and not s.f("east_mine_prepared"):
-		v.body+="\n抄页只能帮助核实矿工身份，没有通行效力。联络室尚未确认能避开正门检查的进入方式。"
+		v.body+="\n抄页只能帮助核实矿工身份，没有通行效力。要绕开正门，还得请联络员确认矿区接应、检修入口和退路。"
 	if v.id=="commune_anna" and s.f("anna_warning_seen") and not s.f("anna_outcome_done") and not public_entry(s):
 		v.body+="\n安娜：「你不能再从 D-6 正门进去，我知道。哥哥那边的消息我会继续打听。我们先把接应办法弄清楚，不能让你也被扣在那里。」"
 	return v

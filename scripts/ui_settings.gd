@@ -23,11 +23,12 @@ func setup(s):
 	if size not in sizes:sizes.append(size)
 	select(graphics,"窗口分辨率",sizes.map(func(p):return "%d × %d"%[p.x,p.y]),sizes.find(size),func(i):staged.width=sizes[i].x;staged.height=sizes[i].y)
 	select(graphics,"画面填充",["保持比例 · 两侧或上下留黑边","填满窗口 · 可能拉伸画面"],1 if staged.fill else 0,func(i):staged.fill=i==1)
-	select(graphics,"画质",["流畅 · 70% 渲染 / 关闭动态阴影","均衡 · 85% 渲染 / 主光源阴影","精细 · 原生渲染 / 完整阴影"],staged.quality,func(i):staged.quality=i)
+	select(graphics,"画质",["流畅 · 70% 渲染 / 无动态阴影","标准 · 85% 渲染 / 主光源阴影 / 柔和泛光","高 · 原生渲染 / 完整阴影 / 环境遮蔽 / 4× 抗锯齿","极致 · 原生渲染 / 间接光 / 8× 抗锯齿"],staged.quality,func(i):staged.quality=i)
 	select(graphics,"垂直同步",["关闭","开启"],1 if staged.vsync else 0,func(i):staged.vsync=i==1)
 	var caps=[30,60,120,144,0]
 	select(graphics,"帧率上限",["30 FPS","60 FPS","120 FPS","144 FPS","不限"],caps.find(staged.fps),func(i):staged.fps=caps[i])
-	words(graphics,"全屏使用显示器当前分辨率；窗口分辨率决定退出全屏后的尺寸。画质影响场景清晰度、抗锯齿和阴影，界面文字保持清晰。",16)
+	words(graphics,"全屏使用显示器当前分辨率；窗口分辨率决定退出全屏后的尺寸。画质影响场景清晰度、阴影、间接光与抗锯齿，界面文字保持清晰。",16)
+	if RenderingServer.get_current_rendering_method()!="forward_plus":words(graphics,"当前设备使用兼容显示：环境遮蔽、间接光和泛光不可用，其余画质设置仍然有效。",15)
 	var audio=VBoxContainer.new();audio.name="声音";audio.add_theme_constant_override("separation",20);tabs.add_child(audio)
 	for pair in [["Master","总音量"],["Music","剧情与背景音乐"],["Radio","收音机音乐"],["Effects","交互与战斗音效"],["Footsteps","脚步声"]]:
 		var row=HBoxContainer.new();audio.add_child(row);var caption=words(row,pair[1]);caption.custom_minimum_size.x=190

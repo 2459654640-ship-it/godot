@@ -13,6 +13,6 @@ void fragment(){
  vec3 b=texture(snow_map,mat2(vec2(.8,-.6),vec2(.6,.8))*p*.12+vec2(.31,.67)).rgb;
  vec3 grain=mix(a,b,.43);
  float drift=mix(.94,1.04,field(p*.11));
- ALBEDO=mix(vec3(.57,.62,.65),grain,.52)*drift;
+ ALBEDO=mix(vec3(.43,.46,.47),grain,.38)*drift;
  ROUGHNESS=.99;
 }

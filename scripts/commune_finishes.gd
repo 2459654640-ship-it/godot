@@ -4,6 +4,8 @@ const PROFILES={"00":1,"01":2,"02":1,"03":3,"04":1,"05":4,"06":2,"07":5,"08":4,"
 static func prepare(k,zones:Array):
  for spec in [["commune_terrazzo",.8],["commune_linoleum",.35],["commune_ivory_tile",.32],["commune_plaster",.45]]:
   var m=k.mats.concrete.duplicate();m.albedo_texture=load("res://assets/visual/"+spec[0]+".png")
+  if spec[0]=="commune_terrazzo":m.albedo_texture=load("res://assets/visual/art28_terrazzo.png")
+  if spec[0]=="commune_plaster":m.albedo_texture=load("res://assets/visual/art28_plaster.png")
   m.albedo_color=Color.WHITE;m.normal_enabled=false;m.roughness_texture=null;m.roughness=.92;m.uv1_scale=Vector3.ONE*spec[1]
   k.mats[spec[0]]=m
  k.wall_room_profiles.clear()

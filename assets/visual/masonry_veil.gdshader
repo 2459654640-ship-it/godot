@@ -13,6 +13,7 @@ uniform vec3 emission_color : source_color = vec3(0.0);
 uniform bool commune_finish = false;
 uniform bool factory_finish = false;
 uniform bool star_finish = false;
+uniform bool snow_finish = false;
 uniform sampler2D star_enamel : source_color, filter_linear_mipmap, repeat_enable;
 uniform sampler2D star_tile : source_color, filter_linear_mipmap, repeat_enable;
 uniform sampler2D factory_blue : source_color, filter_linear_mipmap, repeat_enable;
@@ -48,6 +49,13 @@ void fragment() {
 		} else {texel = texture(albedo_map,UV).rgb;}
 	}
 	ALBEDO = texel * base_color.rgb;
+	if (snow_finish) {
+		// Match the low-contrast ground snow while retaining roof occlusion.
+		vec2 p=world_position.xz;
+		vec3 a=texture(albedo_map,p*.075).rgb;
+		vec3 b=texture(albedo_map,mat2(vec2(.8,-.6),vec2(.6,.8))*p*.12+vec2(.31,.67)).rgb;
+		ALBEDO=mix(vec3(.43,.46,.47),mix(a,b,.43),.38);
+	}
 	if (commune_finish && finish_style>0.5) {
 		float style=floor(finish_style+0.5);
 		vec3 plaster=texture(finish_plaster,UV).rgb;

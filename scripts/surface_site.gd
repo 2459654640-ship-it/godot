@@ -9,8 +9,8 @@ static func material(k,name:String,file:String,color:Color):
  ink.uv1_scale=Vector3(.28,.28,.28);k.mats[name]=ink
 static func ground(w,bounds:Rect2,backdrop:bool=true):
  var k=w.kit
- material(k,"surface_snow","res://assets/visual/packed_snow.png",Color("aab5bd"))
- var snow_ink=ShaderMaterial.new();snow_ink.shader=load("res://assets/visual/surface_snow.gdshader");snow_ink.set_shader_parameter("snow_map",load("res://assets/visual/packed_snow.png"));k.mats.surface_snow=snow_ink
+ material(k,"surface_snow","res://assets/visual/art28_snow.png",Color("aab5bd"))
+ var snow_ink=ShaderMaterial.new();snow_ink.shader=load("res://assets/visual/surface_snow.gdshader");snow_ink.set_shader_parameter("snow_map",load("res://assets/visual/art28_snow.png"));k.mats.surface_snow=snow_ink
  k.mats.snowbank=snow_ink
  material(k,"surface_brick","res://assets/visual/ruined_brick.png",Color("c3b4aa"))
  k.mats.surface_brick.uv1_scale=Vector3(.32,.32,.32)

@@ -85,7 +85,7 @@ func run():
    check(not r.suppressed and not r.audio.stream_paused,"music resumes after narration")
    w.hud.close();check(not w.hud.radio_open and r.enabled,"closing controls leaves the receiver playing")
    r.stop();r.update_mix(1)
-   check(not r.audio.playing and r.audio.stream==null and w.ambience.volume_db> -8.1,"power off releases stream and restores ambience")
+   check(not r.audio.playing and r.audio.stream==null and absf(w.ambience.volume_db-preload("res://scripts/scene_score.gd").base_volume(w.floor_id))<.1,"power off releases stream and restores ambience")
    check(w.story.serialize()==old_story,"listening changes no inventory, quest or story state")
    var before=w.story.economy.military
    w.story.Economy.buy(w.story,"portable_radio")

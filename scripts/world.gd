@@ -11,6 +11,7 @@ var played_seconds=0.0
 var arrival_data:Dictionary={}
 var combat
 var grey_camp
+const ArtDirection=preload("res://scripts/art_direction.gd")
 const Kit = preload("res://scripts/kit.gd")
 const Actor = preload("res://scripts/actor.gd")
 const Story = preload("res://scripts/story.gd")
@@ -109,8 +110,10 @@ func _ready():
 	else:
 		zones=CampaignMaps.rooms(floor_id)
 		CampaignMaps.build(self)
+	preload("res://scripts/environment_details.gd").build(self)
 	PublicationPlaces.build(self)
 	public_radio=PublicRadio.new();add_child(public_radio);public_radio.setup(self)
+	ArtDirection.refine(self)
 	kit.batch_static()
 	get_node("/root/Session").Video.apply_lights(self,int(get_node("/root/Session").video.quality))
 	build_people() if floor_id=="life" else build_labor_people()
@@ -127,6 +130,7 @@ func _ready():
 		target("coal_gate_entry",targets.coal_door.pos,"煤矿限区检票")
 	else:CampaignMaps.targets(self)
 	if floor_id not in ["life","labor"]:CampaignMaps.residents(self)
+	preload("res://scripts/supply_storage.gd").setup(self)
 	setup_daily_routines()
 	preload("res://scripts/npc_workplace.gd").configure(self)
 	if arrival.is_finite():player.position=clear_arrival(arrival)
@@ -160,7 +164,7 @@ func _ready():
 	add_child(ambience)
 	ambience.stream=load("res://assets/audio/shelter_theme.wav")
 	ambience.bus="Music"
-	ambience.volume_db=-8
+	var score=preload("res://scripts/scene_score.gd").new();add_child(score);score.setup(self)
 	if DisplayServer.get_name()!="headless":ambience.play()
 	step_audio=AudioStreamPlayer.new()
 	add_child(step_audio)
@@ -228,6 +232,7 @@ func build_environment():
 	light.shadow_enabled=true
 	light.directional_shadow_max_distance=65
 	light.shadow_bias=0.04
+	ArtDirection.environment(self,e,light)
 	kit.box("UndergroundVoid",Vector3(0,-1.4 if floor_id=="sech" else -.65,0),Vector3(200,0.5,200),"black")
 
 func build_structure():
@@ -743,6 +748,7 @@ func interact(id: String):
 	if id.begins_with("east_loot_"):story.Campaign.District.collect(self,id);return
 	if id=="common_blocks":hud.show_blocks();return
 	if id=="public_radio":public_radio.open_controls();return
+	if id=="personal_storage":preload("res://scripts/supply_storage.gd").render(hud);return
 	if id.begins_with("pub_"):
 		if not targets.has(id):return
 		if Publications.acquire(story,id):
@@ -900,7 +906,7 @@ func save_snapshot()->Dictionary:
 	if is_instance_valid(combat) and combat.enabled:story.flags.weapon_clip=combat.clip
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z];data.floor=floor_id
-	data.layout_revision=24;data.played_seconds=played_seconds
+	data.layout_revision=28;data.played_seconds=played_seconds
 	data.camera_size=camera_size;data.facing=player.visual.rotation.y
 	data.world_state={"phase":phase,"guard_away_time":guard_away_time,"waiting_shift":waiting_shift,"pending_route":pending_route}
 	var saved_room=floor_name()

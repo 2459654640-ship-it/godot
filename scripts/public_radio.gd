@@ -110,7 +110,7 @@ func update_mix(delta:float):
  var distance=Vector2(world.player.position.x-origin.x,world.player.position.z-origin.z).length() if is_instance_valid(world.player) else 0.0
  audible=(1.0 if portable else 1.0-smoothstep(3.0,18.0,distance)) if enabled and not paused and not suppressed else 0.0
  audio.volume_db=linear_to_db(maxf(.0001,audible*.60))
- if is_instance_valid(world.ambience):world.ambience.volume_db=lerpf(world.ambience.volume_db,-8.0-13.0*audible,1.0-exp(-delta*6.0))
+ if is_instance_valid(world.ambience):world.ambience.volume_db=lerpf(world.ambience.volume_db,preload("res://scripts/scene_score.gd").base_volume(world.floor_id)-13.0*audible,1.0-exp(-delta*6.0))
 func status()->String:
  if not enabled:return "电源关闭 · 选择频道或歌曲开始收听"
  var state="过场 / 战斗期间暂时停播" if suppressed else ("已暂停" if paused else "正在播放")

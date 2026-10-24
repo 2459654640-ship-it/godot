@@ -3,12 +3,15 @@ extends RefCounted
 const Layout=preload("res://scripts/east_district.gd")
 const Site=preload("res://scripts/surface_site.gd")
 const Architecture=preload("res://scripts/outdoor_architecture.gd")
+const Urban=preload("res://scripts/district_urban.gd")
 static func position(a:Array,y:float=0)->Vector3:return Vector3(a[0],y,a[1])
-static func building(k,p:Vector3,size:Vector2,floors:int,seed:int,north_door:bool=false):
+static func building(k,p:Vector3,size:Vector2,floors:int,seed:int,north_door:bool=false,kind:String="residential"):
 	# Full facade modules have an actual door opening at ground level.
 	var root=Node3D.new();root.name="DistrictBuilding%d"%seed;root.position=p;k.root.add_child(root)
 	if north_door:root.rotation.y=PI
 	var height=floors*2.8;var finish="district_ochre" if seed%3==1 else ("district_brick" if seed%3==2 else "district_concrete")
+	if kind in ["waterworks","depot","pump"]:finish="district_brick"
+	root.set_meta("architecture_kind",kind)
 	root.set_meta("footprint",Rect2(p.x-size.x/2,p.z-size.y/2,size.x,size.y));root.set_meta("storeys",floors)
 	k.box("BuildingFoundation",Vector3(0,.04,0),Vector3(size.x+.25,.22,size.y+.25),"district_concrete",false,root)
 	for level in floors:
@@ -44,13 +47,8 @@ static func building(k,p:Vector3,size:Vector2,floors:int,seed:int,north_door:boo
 						k.box("WindowFrame",jamb,Vector3(.08,1.25,.06) if x_face else Vector3(.06,1.25,.08),"wood",false,root)
 					k.box("WindowSill",c+Vector3.UP*(y+.88)+out*.04,Vector3(.42,.10,window_width+.2) if x_face else Vector3(window_width+.2,.10,.42),"district_concrete",false,root)
 		k.box("FloorCourse",Vector3(0,y+2.78,0),Vector3(size.x+.12,.13,size.y+.12),"district_concrete",false,root)
-	for n in 3:
-		var z=-size.y/2+size.y/3*(n+.5);var span=size.x*(.62 if n==seed%3 else .91)
-		k.box("PartialRoof",Vector3((size.x-span)/2,height+.05,z),Vector3(span,.14,size.y/3-.06),"corrugated",false,root)
-		k.box("RoofSnow",Vector3((size.x-span)/2,height+.15,z),Vector3(span-.15,.06,size.y/3-.19),"surface_snow",false,root)
-		k.box("RoofJoist",Vector3(0,height-.05,z),Vector3(size.x,.16,.12),"old_iron",false,root)
-	for z in [-size.y/2,size.y/2]:k.box("RoofParapet",Vector3(0,height+.22,z),Vector3(size.x,.34,.25),finish,false,root)
-	for x in [-size.x/2,size.x/2]:k.box("RoofParapet",Vector3(x,height+.22,0),Vector3(.25,.34,size.y),finish,false,root)
+	Urban.roof(k,root,size,height,kind,seed)
+	Urban.facade(k,root,size,floors,kind)
 	# Shutters and exposed brick repairs break up the repeated window bays.
 	for n in 3:
 		var x=-size.x*.32+n*size.x*.28
@@ -61,6 +59,11 @@ static func building(k,p:Vector3,size:Vector2,floors:int,seed:int,north_door:boo
 	k.box("BuildingChimney",Vector3(-size.x*.25,height+.45,-size.y*.25),Vector3(.65,.9,.65),"district_brick",false,root)
 	k.box("ChimneyCap",Vector3(-size.x*.25,height+.95,-size.y*.25),Vector3(.82,.12,.82),"district_concrete",false,root)
 	for x in [-size.x/2+.25,size.x/2-.25]:k.box("RainPipe",Vector3(x,height/2,size.y/2+.18),Vector3(.08,height,.08),"rust",false,root)
+	# Foreground building fabric fades with actual body coverage, keeping the
+	# usable rear alleys visible without changing physical cover.
+	for mesh in root.find_children("*","MeshInstance3D",true,false):
+		if mesh.material_override is StandardMaterial3D and (mesh.global_transform*mesh.get_aabb()).end.y>.35:
+			mesh.set_meta("view_occluder",true)
 	var hull=k.box("DistrictBuildingHull",p+Vector3.UP*1.4,Vector3(size.x+.30,2.8,size.y+.30),"dark",true);hull.visible=false
 static func portal(k,p:Vector3,label:String,heading:float=0):
 	# Portal footprint stops behind the interaction/arrival space.
@@ -78,12 +81,16 @@ static func build(w):
 	var k=w.kit;var plan=Layout.layout();var a=plan.bounds
 	Site.ground(w,Rect2(a[0],a[1],a[2],a[3]),false)
 	w.get_node("DistantSnow").mesh.size=Vector3(340,.12,280)
-	k.mats.surface_road.set_shader_parameter("asphalt_map",load("res://assets/visual/district_asphalt.png"))
+	k.mats.surface_road.set_shader_parameter("asphalt_map",load("res://assets/visual/art28_asphalt.png"))
 	for entry in [["district_concrete","district_concrete"],["district_ochre","district_ochre"],["district_brick","district_brick"]]:
 		Site.material(k,entry[0],"res://assets/visual/"+entry[1]+".png",Color.WHITE)
 		k.mats[entry[0]].uv1_scale=Vector3.ONE*.38
 		k.mats[entry[0]].texture_filter=BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	Site.material(k,"shelter_snow","res://assets/visual/packed_snow.png",Color("aab5bd"))
+	# Roof snow uses the same source art but a standard material, so the roof
+	# visibility system can fade it together with its underlying steel sheets.
+	Site.material(k,"district_roof_snow","res://assets/visual/art28_snow.png",Color("aab5bd"))
+	k.mats.district_roof_snow.set_meta("roof_snow",true)
 	# Roads come first. Intersections are flush; no collision kerb crosses a junction.
 	for road in plan.roads:
 		for i in road.points.size()-1:Site.road(k,position(road.points[i]),position(road.points[i+1]),road.width)
@@ -91,7 +98,9 @@ static func build(w):
 	for i in plan.parcels.size():
 		var parcel:Dictionary=plan.parcels[i];var b=parcel.building
 		if parcel.id=="greyhound_camp":continue
-		building(k,Vector3(b[0],0,b[1]),Vector2(b[2],b[3]),int(b[4]),i+1,parcel.id=="depot")
+		building(k,Vector3(b[0],0,b[1]),Vector2(b[2],b[3]),int(b[4]),i+1,parcel.id=="depot",parcel.id)
+	for block in Urban.BLOCKS:
+		building(k,block.at,block.size,block.floors,block.seed,false,"relay" if block.id=="industrial_annex" else "residential")
 	# Additional residential volume and workshop ruins give the street a different silhouette.
 	building(k,Vector3(30,0,43),Vector2(7,13),2,14)
 	Site.ruin(k,Vector3(-43,0,21),Vector2(9,7),21,.014)
@@ -162,6 +171,7 @@ static func build(w):
 		Architecture.block(k,p,Vector2(7,8),2,31+int(abs(p.x)))
 		var collision=k.box("SceneryFootprint",p+Vector3.UP*1.5,Vector3(7.2,3,8.2),"dark",true);collision.visible=false
 	streetscape(k)
+	Urban.street_block(k)
 	bandit_shelter(k)
 	# Accessible workshops fade their roofs and foreground masonry visually;
 	# their physical cover and guard sight lines keep the original collisions.

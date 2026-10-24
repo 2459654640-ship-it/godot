@@ -15,15 +15,12 @@ func _draw():
 	if not is_instance_valid(host):return
 	var rect=Rect2(Vector2(2,2),host.size-Vector2(4,4))
 	if rect.size.x<8 or rect.size.y<8:return
-	if grain:draw_texture_rect(grain,rect,true,Color(1,1,1,.20 if kind!="button" else .10))
+	if grain:draw_texture_rect(grain,rect,true,Color(1,1,1,.055 if kind!="button" else .025))
 	var gold=Color(.72,.63,.44,.7)
 	var light=Color(.7,.74,.64,.12)
 	draw_line(Vector2(8,5),Vector2(host.size.x-8,5),light,1)
 	if kind=="button":
 		draw_line(Vector2(8,host.size.y-4),Vector2(host.size.x-8,host.size.y-4),Color(.55,.6,.5,.13),1)
 		return
-	for p in [Vector2(8,8),Vector2(host.size.x-8,8),Vector2(8,host.size.y-8),host.size-Vector2(8,8)]:
-		draw_circle(p,1.4,Color(.53,.54,.42,.7))
-		draw_line(p-Vector2(1,0),p+Vector2(1,0),Color(.08,.12,.1),1)
 	draw_line(Vector2(17,12),Vector2(48,12),gold,2)
 	draw_line(Vector2(host.size.x-48,host.size.y-12),Vector2(host.size.x-17,host.size.y-12),gold,1)

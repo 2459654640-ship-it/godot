@@ -1,5 +1,6 @@
 extends RefCounted
-const TABS=[["all","全部"],["equipment","装备"],["supplies","补给"],["quest","任务与文件"],["keepsakes","个人物品"]]
+const MATERIALS=["scrap_metal","copper_wire","salvage_cloth","mutant_bone","mutant_sample","battery","cord"]
+const TABS=[["all","全部"],["equipment","装备"],["supplies","补给"],["materials","材料"],["quest","任务与文件"],["keepsakes","个人物品"]]
 static func entries(s)->Array:
 	var out=[]
 	for id in s.items:
@@ -8,7 +9,8 @@ static func entries(s)->Array:
 	for id in s.economy.goods:
 		if int(s.economy.goods[id])<=0 or not s.Economy.GOODS.has(id):continue
 		var d=s.Economy.GOODS[id]
-		out.append({"id":id,"name":d.name,"detail":d.detail,"kind":"消耗品" if d.effect!="" else "物资","category":"supplies","count":int(s.economy.goods[id]),"good":true})
+		out.append({"id":id,"name":d.name,"detail":d.detail,"kind":"消耗品" if d.effect!="" else "物资","category":"materials" if id in MATERIALS else ("equipment" if id=="portable_radio" else "supplies"),"count":int(s.economy.goods[id]),"good":true})
+	out.sort_custom(func(a,b):return a.category<b.category if a.category!=b.category else a.id<b.id)
 	return out
 static func render(h,tab:String="all",selected:String=""):
 	h.start_modal("随身背包","ИНВЕНТАРЬ   /   装备与补给",true)
@@ -49,6 +51,16 @@ static func render(h,tab:String="all",selected:String=""):
 		details.add_child(h.label(e.kind+"  /  "+("× %d"%e.count),15,h.amber))
 		var title=h.label(e.name,26,h.text_color);title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;details.add_child(title)
 		var text=h.label(e.detail,19,h.text_color);text.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;details.add_child(text)
+		if e.good:
+			var price:int=s.Economy.RESALE.get(selected,0)
+			var value=h.label("商人收购：%d 发制式弹 / 份"%price if price>0 else ("个人装备 · 不出售" if selected=="portable_radio" else "商人暂不收购"),16,h.muted);value.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;details.add_child(value)
+			var g:Dictionary=s.Economy.GOODS[selected]
+			if g.effect!="":
+				var effects={"food":"恢复 %d 点饱食","health":"恢复 %d 点生命","radiation":"降低 %d 点辐射","handmade":"补充 %d 发土制弹"}
+				var amount=s.Economy.Radiation.heal_amount(s,int(g.amount)) if g.effect=="health" else int(g.amount)
+				details.add_child(h.label(effects[g.effect]%amount,19,h.amber))
+			if selected in ["salvage_cloth","scrap_metal"]:
+				var craft=h.label("制作地点：东郊工人街修配间。恢复供电后，可把布料制成绷带，或用布料与金属件制作捆扎用品。" if s.f("visited_east_district") else "可以留给有设备的修配工房，用来制作绷带与捆扎用品。",16,h.muted);craft.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;details.add_child(craft)
 		var id:String=selected
 		if e.good and s.Economy.GOODS[id].effect=="health" and s.economy.radiation>=80:
 			var actual=h.label("当前状态下恢复 %d 点生命。"%s.Economy.Radiation.heal_amount(s,int(s.Economy.GOODS[id].amount)),17,h.amber);details.add_child(actual)
@@ -56,6 +68,6 @@ static func render(h,tab:String="all",selected:String=""):
 		elif e.good and s.Economy.GOODS[id].effect!="":details.add_child(h.button("使用一份",func():h.toast(s.Economy.consume(s,id));render(h,tab,id)))
 		elif id=="portable_radio":details.add_child(h.button("收听随身收音机",func():h.world.public_radio.open_controls(true)))
 		else:
-			var note=h.label("在相关场景或人物对话中使用。任务文件和纪念物不会被自动出售。",16,h.muted);note.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;details.add_child(note)
+			var note=h.label("可交给商人收购，也可以存入聚落物资柜。" if e.category=="materials" else "在相关场景或人物对话中使用。任务文件和纪念物不会被自动出售。",16,h.muted);note.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;details.add_child(note)
 	else:details.add_child(h.label("这一栏暂时没有物品。",19,h.muted))
-	h.body("选择格子查看详情 · 不设背包格数上限 · 返回场景后按 1 拔枪 / 收枪",16,h.muted)
+	h.body("选择格子查看详情 · 聚落物资柜可寄存补给与材料 · 按 1 拔枪 / 收枪",16,h.muted)
