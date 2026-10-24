@@ -1,0 +1,17 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Vulkan 1.4.305 - Forward+ - Using Device #0: Unknown - llvmpipe (LLVM 19.1.7, 256 bits)
+
+CAPTURE commune-quality-0
+QUALITY_VERIFIED {"glow":false,"msaa":0,"quality":0,"renderer":"forward_plus","ssao":false,"ssil":false}
+CAPTURE commune-quality-1
+QUALITY_VERIFIED {"glow":true,"msaa":1,"quality":1,"renderer":"forward_plus","ssao":false,"ssil":false}
+CAPTURE commune-quality-2
+QUALITY_VERIFIED {"glow":true,"msaa":2,"quality":2,"renderer":"forward_plus","ssao":true,"ssil":false}
+CAPTURE commune-quality-3
+QUALITY_VERIFIED {"glow":true,"msaa":3,"quality":3,"renderer":"forward_plus","ssao":true,"ssil":true}
+CAPTURE settings-four-presets
+CAPTURE waterworks-high
+CAPTURE east_district-high
+CAPTURE sech-high
+CAPTURE d6-high
+CAPTURE inventory-high

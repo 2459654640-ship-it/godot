@@ -1,0 +1,41 @@
+{
+  "device": "Mesa Lavapipe / llvmpipe software Vulkan",
+  "renderer": "Forward+",
+  "hardware_fps_benchmark": false,
+  "quality_presets": [
+    {
+      "glow": false,
+      "msaa": 0,
+      "quality": 0,
+      "renderer": "forward_plus",
+      "ssao": false,
+      "ssil": false
+    },
+    {
+      "glow": true,
+      "msaa": 1,
+      "quality": 1,
+      "renderer": "forward_plus",
+      "ssao": false,
+      "ssil": false
+    },
+    {
+      "glow": true,
+      "msaa": 2,
+      "quality": 2,
+      "renderer": "forward_plus",
+      "ssao": true,
+      "ssil": false
+    },
+    {
+      "glow": true,
+      "msaa": 3,
+      "quality": 3,
+      "renderer": "forward_plus",
+      "ssao": true,
+      "ssil": true
+    }
+  ],
+  "note": "Headless tests check game logic. These captures separately exercised real Vulkan rendering; this is not a consumer-GPU performance measurement.",
+  "code_commit": "677cf921ff199926b9d82a3c68f6e42beaa968cc"
+}

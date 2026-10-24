@@ -1,0 +1,75 @@
+{
+  "new_images": [
+    {
+      "path": "assets/visual/art28_terrazzo.png",
+      "bytes": 877715,
+      "sha256": "8c06fe57104512c9ea89e1a9a6ce44feab4dc0071b41171b1371d4922024b4c6",
+      "source": "AI-generated original image; material tiles extracted from a four-tile sheet; item icons packed from a transparent three-item sheet without repainting"
+    },
+    {
+      "path": "assets/visual/art28_plaster.png",
+      "bytes": 718505,
+      "sha256": "4b9254d59fc8bcec8b8de08eb93ddf42e9f6b45e4ae4f98cda27ef42b0c623d2",
+      "source": "AI-generated original image; material tiles extracted from a four-tile sheet; item icons packed from a transparent three-item sheet without repainting"
+    },
+    {
+      "path": "assets/visual/art28_snow.png",
+      "bytes": 553227,
+      "sha256": "20b349368d6cb331a0d6db0c53669633e301cae7889edddca8e07a0380f40291",
+      "source": "AI-generated original image; material tiles extracted from a four-tile sheet; item icons packed from a transparent three-item sheet without repainting"
+    },
+    {
+      "path": "assets/visual/art28_asphalt.png",
+      "bytes": 937409,
+      "sha256": "5d0ceae39b7810408c5b8cfd2690f2465fbeb42693c5d7aadd9006f1e7f462ff",
+      "source": "AI-generated original image; material tiles extracted from a four-tile sheet; item icons packed from a transparent three-item sheet without repainting"
+    },
+    {
+      "path": "assets/visual/commune_mural_v28.png",
+      "bytes": 3437854,
+      "sha256": "2a31422f769bbebbf27895ffdb75ce532d01c46c7210bce6433d11901a9132b1",
+      "source": "AI-generated original image; material tiles extracted from a four-tile sheet; item icons packed from a transparent three-item sheet without repainting"
+    },
+    {
+      "path": "assets/visual/item_scrap_metal.png",
+      "bytes": 82819,
+      "sha256": "57e053b31e23125686ad4d5196cfd3191a6090bdc67a93589ae9c91823f80471",
+      "source": "AI-generated original image; material tiles extracted from a four-tile sheet; item icons packed from a transparent three-item sheet without repainting"
+    },
+    {
+      "path": "assets/visual/item_copper_wire.png",
+      "bytes": 59135,
+      "sha256": "0692592d204194ebbf2d69948f922d53163cc8546cd57c4477a4d98c381e37bc",
+      "source": "AI-generated original image; material tiles extracted from a four-tile sheet; item icons packed from a transparent three-item sheet without repainting"
+    },
+    {
+      "path": "assets/visual/item_salvage_cloth.png",
+      "bytes": 73760,
+      "sha256": "8f803832dd684c873c32ff2c51faba15d82734e4b10654092d8baa982429fbb2",
+      "source": "AI-generated original image; material tiles extracted from a four-tile sheet; item icons packed from a transparent three-item sheet without repainting"
+    }
+  ],
+  "approved_character_atlases": [
+    {
+      "path": "assets/characters/ivan.png",
+      "unchanged_from": "5254be6",
+      "sha256": "33db24356dea4e2f80ac33de91de73fcac51b37e109bcc261b0627d821656f86"
+    },
+    {
+      "path": "assets/characters/ivan_masked.png",
+      "unchanged_from": "5254be6",
+      "sha256": "10992c5ba342daab53fea65ee3e713a62d2284547c28f0a5df3315446c645f81"
+    },
+    {
+      "path": "assets/characters/ivan_combat.png",
+      "unchanged_from": "5254be6",
+      "sha256": "d90ea7d800492b86d2e301e778909ac910a8a453eaeeb400a184298c0209fbca"
+    },
+    {
+      "path": "assets/characters/ivan_masked_combat.png",
+      "unchanged_from": "5254be6",
+      "sha256": "c59b91f7b849f902a09bd3bb297e8ae3094782df3248f5a29a3b83224b981403"
+    }
+  ],
+  "code_commit": "677cf921ff199926b9d82a3c68f6e42beaa968cc"
+}
