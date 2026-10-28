@@ -70,6 +70,8 @@ static func act(s,key:String):
 	if key=="east_mine_contact":s.flags.tracked_quest="east_mine_route"
 	if key in ["east_read_routes","east_power_inspect"]:s.flags.tracked_quest="east_power"
 static func decorate(v:Dictionary,s)->Dictionary:
+	if v.id=="city_radio_panel" and s.f("city_radio_isolated") and not s.f("east_power_restored"):
+		v.body="室外天线已经隔离，但机架没有电。先沿工人街去变配电所检查检修柜；烧坏的保护组件存放在工人街西侧的交通维修间。修好供电后，再回来接通低压电源，播放本地录音。"
 	if v.id=="coal_clerk" and private_mine(s):
 		v.name="瓦西里 / 煤运班副主管";v.role="矿区内部接应"
 		v.body="瓦西里将办公室的门带上，先让你坐下。\n「你的来意，联络员说过了。班组和伤病记录由我经手，先把编号核对。医护怎么安排、本人愿不愿意见家属，还要分别问清。」\n「外面的追查没有撤，别从矿口往作业层走。办完到内部出口等我，咱们仍从检修支巷出去。」"
@@ -86,6 +88,12 @@ static func decorate(v:Dictionary,s)->Dictionary:
 	return v
 static func task_stage(s,q:Dictionary,current:Dictionary)->Dictionary:
 	var floor:String=s.context.get("floor","")
+	if q.id=="city_radio" and not s.f("city_radio_online"):
+		if not s.f("city_radio_isolated"):return {"target":"city_radio_panel","place":FLOOR,"step":"回到民防通信站，按照值班记录先拉下控制盘上的室外天线隔离刀闸。"}
+		if not s.f("east_power_restored"):
+			if not s.f("east_spares_found"):return {"target":"east_spares","place":FLOOR,"step":"通信机架没有电。先到工人街西侧的交通维修间取保护组件，再到变配电所检修柜恢复供电。"}
+			return {"target":"east_relay","place":FLOOR,"step":"带着保护组件到工人街的变配电所检修柜，测通回路并恢复供电。随后返回通信站。"}
+		return {"target":"city_radio_panel","place":FLOOR,"step":"供电已经恢复。返回民防通信站，接通低压机架，然后播放本地录音。"}
 	if q.id=="d6_first_duty" and (not s.f("d6_patrol_active") or s.f("d6_patrol_done")):return current
 	if floor==FLOOR and q.id in ["surface_survey","d6_first_duty"]:
 		return {"target":"east_pump_entry","place":FLOOR,"step":"沿旧货运路到铁路西侧的泵站支路，找到检修井再进入旧泵站。"} if not s.has("pool_sample") else {"target":"east_d6_entry" if s.f("surface_from_d6") else ("east_sech_entry" if s.flags.get("east_home","")=="sech" else "east_commune_entry"),"place":FLOOR,"step":"样本已经封好。沿地图上的本次出发支线返回，向派工人交付。"}

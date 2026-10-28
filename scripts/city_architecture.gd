@@ -42,8 +42,11 @@ static func room(k,p:Vector3,size:Vector2,id:String):
  for z in [-size.y*.3,0,size.y*.3]:
   k.box("CityRoofBeam",p+Vector3(0,3.5,z),Vector3(size.x,.20,.18),"old_iron")
  # Partially collapsed roof: the room still reads from the street, and fades on entry.
- k.box("CityInteriorRoof",p+Vector3(-size.x*.24,3.65,0),Vector3(size.x*.48,.18,size.y),"corrugated")
- k.box("CityInteriorRoofSnow",p+Vector3(-size.x*.24,3.79,0),Vector3(size.x*.46,.06,size.y-.2),"district_roof_snow")
+ var interior=Rect2(p.x-size.x*.5,p.z-size.y*.5,size.x,size.y)
+ var roof=k.box("CityInteriorRoof",p+Vector3(0,3.65,0),Vector3(size.x,.18,size.y),"corrugated")
+ roof.set_meta("interior_rect",interior)
+ var snow=k.box("CityInteriorRoofSnow",p+Vector3(0,3.79,0),Vector3(size.x-.2,.06,size.y-.2),"district_roof_snow")
+ snow.set_meta("interior_rect",interior)
  if id=="clinic":
   # Waiting room and treatment room; a 2.2m opening connects the two.
   for z in [-5.3,4.8]:k.box("ClinicPartition",p+Vector3(1.2,1.3,z),Vector3(.16,2.6,5.8 if z<0 else 6.8),"plaster",true)

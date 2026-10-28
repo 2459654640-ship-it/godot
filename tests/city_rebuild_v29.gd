@@ -30,6 +30,11 @@ func run():
  check(Raid.resolve_loss(s)==losses,"loss settlement is idempotent")
  w=load("res://scenes/east_district.tscn").instantiate();root.add_child(w);current_scene=w;await frames();freeze()
  check(w.get_node_or_null("SiteBoundary")==null,"city no longer enclosed by the generic square perimeter wall")
+ var plan=preload("res://scripts/east_district.gd").layout()
+ var map_builder=preload("res://scripts/east_district_map.gd")
+ for parcel in plan.parcels:
+  var b=parcel.building
+  check(not map_builder.road_conflict(plan,Vector3(b[0],0,b[1]),Vector2(b[2],b[3])),"authored building clears every road: "+parcel.id)
  check(w.navigation.points.size()>25000 and w.navigation.points.size()<48000,"city district graph covers rebuilt layout at bounded density")
  check(w.grey_camp.guards.size()==5,"camp sentries and separate street scavengers both exist")
  for target_id in ["city_clinic","city_medicine","city_radio_log","city_radio_panel","raid_container_clinic_drawer","east_mine_entry"]:
@@ -45,6 +50,9 @@ func run():
  var tab=InputEventAction.new();tab.action="overview";tab.pressed=true;w._unhandled_input(tab);check(w.hud.modal_visible() and not w.overview,"Tab opens journal map")
  w.hud.close();w.story.give("revolver");w.story.equip_weapon("revolver");w.story.economy.goods={"medkit":2,"bandage":4};w.hud.show_inventory();await frames()
  check(w.hud.modal.find_child("InventoryGrid",true,false).columns==8,"inventory exposes actual eight-column placement grid")
+ var scroll:ScrollContainer=w.hud.modal_box.get_parent();scroll.scroll_vertical=150
+ preload("res://scripts/ui_inventory.gd").render(w.hud,"all","revolver");await frames(2)
+ check(w.hud.modal_box.get_parent().scroll_vertical>0,"switching inventory section retains scroll position")
  w.hud.close()
  var seen=w.story.flags.get("city_seen",{});check(seen.size()>0 and seen.size()<30,"starting discovery only reveals local reachable sight cells")
  check(not preload("res://scripts/city_survey.gd").known(w.story,Vector2(95,-65)),"reservoir is unknown at station start")

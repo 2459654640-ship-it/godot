@@ -334,6 +334,9 @@ func character_prose(id:String,text:String):
 	words.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 
 func start_modal(title:String,subtitle:String,wide:bool=false):
+	var previous_scroll=0
+	if is_instance_valid(dialog_title) and dialog_title.text==title and is_instance_valid(modal_box) and modal_box.get_parent() is ScrollContainer:
+		previous_scroll=modal_box.get_parent().scroll_vertical
 	radio_open=false
 	typing.clear();speech_buttons.clear()
 	if wide:dialogue_id=""
@@ -367,12 +370,18 @@ func start_modal(title:String,subtitle:String,wide:bool=false):
 	modal_box.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	modal_box.add_theme_constant_override("separation",13)
 	scroller.add_child(modal_box)
+	if previous_scroll>0:call_deferred("restore_modal_scroll",scroller,previous_scroll)
 	modal_hint=label("空格 / 点击正文  显示全文    ·    ESC  返回",14,muted)
 	main.add_child(modal_hint)
 	modal.visible=true
 	scrim.visible=true
 	is_departure=false
 	target_label.visible=false
+
+func restore_modal_scroll(scroller:ScrollContainer,position:int):
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if is_instance_valid(scroller) and is_instance_valid(modal_box) and modal_box.get_parent()==scroller:scroller.scroll_vertical=position
 
 func show_dialogue(id:String):
 	world.story.FirstMeetings.begin(world.story,id)

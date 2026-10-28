@@ -23,8 +23,7 @@ static func render(h,tab:String="all",selected:String=""):
 	top.add_child(h.label("空置" if weapon=="" else s.ITEMS[weapon][0]+(" · 已拔出" if s.weapon_drawn() else " · 已收起"),19,h.text_color))
 	if weapon!="":top.add_child(h.button("卸下",func():s.equip_weapon("");render(h,tab,weapon),true,true))
 	top.add_spacer(false);top.add_child(h.label("制式弹 %d   /   土制弹 %d"%[s.economy.military,s.economy.handmade],18,h.amber))
-	h.body("生命 %d / 100    饱食 %d / 100    辐射 %d / 100"%[s.economy.health,s.economy.food,s.economy.radiation],17,h.muted)
-	var reaction=h.button("辐射状态："+s.Economy.Radiation.state(s).name+" · 查看影响与处理方法",func():h.show_radiation(),true,true);reaction.tooltip_text=s.Economy.Radiation.describe(s);h.modal_box.add_child(reaction)
+	var reaction=h.button("生命 %d  ·  饱食 %d  ·  辐射 %d（%s）  查看状态"%[s.economy.health,s.economy.food,s.economy.radiation,s.Economy.Radiation.state(s).name],func():h.show_radiation(),true,true);reaction.tooltip_text=s.Economy.Radiation.describe(s);h.modal_box.add_child(reaction)
 	var tabs=HBoxContainer.new();tabs.add_theme_constant_override("separation",10);h.modal_box.add_child(tabs)
 	for pair in TABS:
 		var key:String=pair[0];var b=h.button(pair[1],func():render(h,key),true,true);tabs.add_child(b)
@@ -80,4 +79,4 @@ static func render(h,tab:String="all",selected:String=""):
 		else:
 			var note=h.label("可交给商人收购，也可以存入聚落物资柜。" if e.category=="materials" else "在相关场景或人物对话中使用。任务文件和纪念物不会被自动出售。",16,h.muted);note.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;details.add_child(note)
 	else:details.add_child(h.label("这一栏暂时没有物品。",19,h.muted))
-	h.body("任务随身夹不占背包格，也不会因地表死亡丢失。普通物资与装备请在出发前整理寄存。",16,h.muted)
+	h.modal_hint.text="任务文件单独保管 · 拖动整理格子 · 滚轮浏览 · Esc 返回"

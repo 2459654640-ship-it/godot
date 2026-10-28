@@ -3,12 +3,21 @@ extends Node
 var world
 var states:Array[Dictionary]=[]
 var roof_samples:Array=[]
+var interior_roofs:Array=[]
+var focus_overlay:ColorRect
 const ACQUIRE=.09
 const HOLD=.38
 const FADED=.42
 const ROOF_FADED=.38
 func setup(owner_world):
  world=owner_world
+ for mesh in world.find_children("*","MeshInstance3D",true,false):
+  if mesh.has_meta("interior_rect"):interior_roofs.append(mesh)
+ focus_overlay=ColorRect.new();focus_overlay.name="InteriorFocus";focus_overlay.mouse_filter=Control.MOUSE_FILTER_IGNORE
+ focus_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ var shader=Shader.new();shader.code="shader_type canvas_item; uniform vec4 room_rect; void fragment(){ vec2 p=UV; float edge=max(max(room_rect.x-p.x,p.x-room_rect.z),max(room_rect.y-p.y,p.y-room_rect.w)); float shade=smoothstep(-0.015,0.045,edge); COLOR=vec4(0.015,0.025,0.035,shade*0.55); }"
+ var material=ShaderMaterial.new();material.shader=shader;focus_overlay.material=material;focus_overlay.visible=false
+ world.hud.add_child(focus_overlay);world.hud.move_child(focus_overlay,0)
  # Thin pipes can fall between the nine wall samples. A denser upper-body
  # grid keeps them detectable even when only the face/shoulders are covered.
  for height in range(12):
@@ -45,6 +54,23 @@ func coverage(bounds:AABB,padding:float=0.0,roof:bool=false)->float:
 func obstruction(bounds:AABB,padding:float=0.0)->bool:return coverage(bounds,padding)>0
 func _process(delta):
  if not is_instance_valid(world) or not world.initialized:return
+ var inside=Rect2()
+ var player=Vector2(world.player.position.x,world.player.position.z)
+ for roof in interior_roofs:
+  if not is_instance_valid(roof):continue
+  var footprint:Rect2=roof.get_meta("interior_rect")
+  var occupied=footprint.grow(-.25).has_point(player)
+  roof.visible=not occupied
+  if occupied:inside=footprint
+ focus_overlay.visible=inside.has_area()
+ if focus_overlay.visible:
+  var lo=Vector2(INF,INF);var hi=Vector2(-INF,-INF)
+  for x in [inside.position.x,inside.end.x]:
+   for z in [inside.position.y,inside.end.y]:
+    for y in [0.0,3.8]:
+     var screen=world.camera.unproject_position(Vector3(x,y,z));lo=lo.min(screen);hi=hi.max(screen)
+  var viewport=world.get_viewport().get_visible_rect().size
+  focus_overlay.material.set_shader_parameter("room_rect",Vector4(lo.x/viewport.x,lo.y/viewport.y,hi.x/viewport.x,hi.y/viewport.y))
  for state in states:
   if state.mesh.get_meta("dynamic",false) and state.mesh is MeshInstance3D:state.bounds=state.mesh.global_transform*state.mesh.get_aabb()
   var fraction=coverage(state.bounds,.06 if state.active else 0,state.roof)
@@ -58,6 +84,7 @@ func _process(delta):
    if state.hold<=0 and state.active:state.active=false;state.switches+=1
   state.coverage=move_toward(state.coverage,fraction,delta*3.8)
   var minimum=ROOF_FADED if state.roof else FADED
+  if state.mesh.name in ["CityInteriorRoof","CityInteriorRoofSnow"]:minimum=.08
   var goal=lerpf(.84,minimum,smoothstep(0,.30 if state.roof else .85,state.coverage)) if state.active else 1.0
   var opacity=move_toward(state.opacity,goal,delta*2.2)
   if not is_equal_approx(opacity,state.opacity):

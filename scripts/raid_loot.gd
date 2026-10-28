@@ -7,6 +7,10 @@ const CONTAINERS=[
  ["radio_store","通信站备件柜",Vector3(-36,0,-69),"technical"],
  ["workshop_box","修配间工具箱",Vector3(16.5,0,26),"technical"],
  ["freight_case","毁坏住宅的旅行箱",Vector3(-48,0,-12),"domestic"],
+ ["freight_cellar","货运路住宅外的地窖箱",Vector3(-81,0,2.3),"domestic"],
+ ["south_entry","南街住户门边的旧包",Vector3(-46,0,89),"domestic"],
+ ["south_supply","南街公用物资箱",Vector3(46,0,89),"medical"],
+ ["east_corner_tools","东侧街角修理箱",Vector3(87,0,41),"technical"],
  ["depot_crate","货场装卸箱",Vector3(56,0,36),"technical"],
  ["camp_food","岗哨旁的食品箱",Vector3(54,0,-9),"domestic"],
  ["camp_arms","灰狗地表哨所弹药箱",Vector3(44.5,0,-18),"arms"]]

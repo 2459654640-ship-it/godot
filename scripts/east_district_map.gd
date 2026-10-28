@@ -5,6 +5,14 @@ const Site=preload("res://scripts/surface_site.gd")
 const Architecture=preload("res://scripts/outdoor_architecture.gd")
 const Urban=preload("res://scripts/district_urban.gd")
 static func position(a:Array,y:float=0)->Vector3:return Vector3(a[0],y,a[1])
+static func road_conflict(plan:Dictionary,p:Vector3,size:Vector2)->bool:
+	for road in plan.roads:
+		var half=float(road.width)*.5+.65
+		for i in range(road.points.size()-1):
+			var a=Vector2(road.points[i][0],road.points[i][1]);var b=Vector2(road.points[i+1][0],road.points[i+1][1])
+			if is_equal_approx(a.x,b.x) and absf(p.x-a.x)<size.x*.5+half and p.z+size.y*.5>minf(a.y,b.y)-half and p.z-size.y*.5<maxf(a.y,b.y)+half:return true
+			if is_equal_approx(a.y,b.y) and absf(p.z-a.y)<size.y*.5+half and p.x+size.x*.5>minf(a.x,b.x)-half and p.x-size.x*.5<maxf(a.x,b.x)+half:return true
+	return false
 static func building(k,p:Vector3,size:Vector2,floors:int,seed:int,north_door:bool=false,kind:String="residential"):
 	# Full facade modules have an actual door opening at ground level.
 	var root=Node3D.new();root.name="DistrictBuilding%d"%seed;root.position=p;k.root.add_child(root)
@@ -93,9 +101,12 @@ static func build(w):
 	# Foreground windows, floor breaks and different heights continue beyond the slice.
 	for n in 8:
 		for sign in [-1,1]:
-			building(k,Vector3(-113+n*31,0,sign*(124+float(n%2)*7)),Vector2(21,17),2+n%3,100+n+10*sign,false,"residential")
+			var p=Vector3(-113+n*31,0,sign*(124+float(n%2)*7));var size=Vector2(21,17)
+			if not road_conflict(plan,p,size):building(k,p,size,2+n%3,100+n+10*sign,false,"residential")
 	for n in 5:
-		for sign in [-1,1]:building(k,Vector3(sign*143,0,-80+n*36),Vector2(18,26),3+n%2,140+n+sign,false,"residential")
+		for sign in [-1,1]:
+			var p=Vector3(sign*143,0,-80+n*36);var size=Vector2(18,26)
+			if not road_conflict(plan,p,size):building(k,p,size,3+n%2,140+n+sign,false,"residential")
 	City.factory(k);City.basin(k);City.edge(k)
 	# Freight rail is a raised dedicated reservation. Only the authored crossing is level.
 	Ground.apron(k,Vector2(24,0),Vector2(4.2,200))

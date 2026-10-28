@@ -35,6 +35,10 @@ static func draw_map(v):
  v.origin=v.size*.5-Vector2((center.x-center.y)*.86,(center.x+center.y)*.45)*v.drawing_scale
  v.clip_contents=true
  var records:Dictionary=s.flags.get("city_seen",{})
+ if v.expanded:
+  v.draw_colored_polygon(v.polygon(Rect2(-120,-100,240,200)),Color("1d2a28"))
+  for x in range(-120,121,24):v.draw_line(v.project(Vector2(x,-100)),v.project(Vector2(x,100)),Color("34423c"),1,true)
+  for z in range(-100,101,24):v.draw_line(v.project(Vector2(-120,z)),v.project(Vector2(120,z)),Color("34423c"),1,true)
  for k in records:
   var a=k.split(",");if a.size()!=2:continue
   var r=Rect2(float(a[0])*CELL,float(a[1])*CELL,CELL,CELL)
@@ -48,15 +52,16 @@ static func draw_map(v):
     var p=a.lerp(b,float(n)/count);var q=a.lerp(b,float(n+1)/count)
     if not v.expanded and p.distance_to(center)>32:continue
     var seen=known(s,p)
-    if seen or (v.expanded and s.f("east_routes_known")):v.draw_line(v.project(p),v.project(q),Color("8c8c72") if seen else Color("414a43"),maxf(1,road.width*v.drawing_scale*.6),true)
+    if seen or v.expanded:v.draw_line(v.project(p),v.project(q),Color("c6bc97") if seen else Color("56625b"),maxf(1,road.width*v.drawing_scale*.6),true)
  for parcel in layout.parcels:
   var b=parcel.building;var p=Vector2(b[0],b[1]);var r=Rect2(p-Vector2(b[2],b[3])/2,Vector2(b[2],b[3]))
-  if not known(s,p) or (not v.expanded and p.distance_to(center)>32):continue
-  var polygon=v.polygon(r);v.draw_colored_polygon(polygon,Color("505a4e"))
+  if not v.expanded and (not known(s,p) or p.distance_to(center)>32):continue
+  var polygon=v.polygon(r);v.draw_colored_polygon(polygon,Color("596859") if known(s,p) else Color("303d38"))
  for e in layout.entrances+layout.sites:
   var p=Vector2(e.point[0],e.point[1])
   if not known(s,p) or (not v.expanded and p.distance_to(center)>30):continue
   v.draw_circle(v.project(p),2.8 if v.expanded else 1.8,Color("b49c69"))
+  if v.expanded:v.draw_string(w.kit.font,v.project(p)+Vector2(5,-4),String(e.get("name",e.id)).left(11),HORIZONTAL_ALIGNMENT_LEFT,-1,11,Color("d2c7a6"))
  var quest=w.hud.Journal.active(s)
  if not quest.is_empty() and quest.place=="east_district":
   for e in layout.entrances+layout.sites:
@@ -69,4 +74,4 @@ static func draw_map(v):
   var p=v.project(Vector2(w.player.position.x,w.player.position.z));v.draw_circle(p,3,Color("f2d392"));v.draw_arc(p,7,0,TAU,24,Color("b49c69"),1,true)
  if v.expanded:
   v.draw_string(w.kit.font,Vector2(12,24),"东郊街区 · 探索记录",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("c7aa70"))
-  v.draw_string(w.kit.font,Vector2(12,v.size.y-8),"空白处尚未探索；路口旧图只补充主要道路。",HORIZONTAL_ALIGNMENT_LEFT,-1,13,Color("a7ac98"))
+  v.draw_string(w.kit.font,Vector2(12,v.size.y-8),"浅色：已踏查  ·  暗色：待探索  ·  金点：发现的入口或设施",HORIZONTAL_ALIGNMENT_LEFT,-1,13,Color("bac4ab"))

@@ -51,9 +51,9 @@ static func roof(k,root:Node3D,size:Vector2,height:float,kind:String,seed:int):
 		# Residential roofs retain a damaged corner, with framed skylights and
 		# parapet coping rather than identical flat lids on every facility.
 		for n in 3:
-			var z=-size.y/2+size.y/3*(n+.5);var span=size.x*(.72 if n==seed%3 else .98)
-			k.box("PartialRoof",Vector3((size.x-span)/2,height+.05,z),Vector3(span,.14,size.y/3-.06),"corrugated",false,root)
-			k.box("RoofSnow",Vector3((size.x-span)/2,height+.15,z),Vector3(span-.15,.06,size.y/3-.19),"district_roof_snow",false,root)
+			var z=-size.y/2+size.y/3*(n+.5);var span=size.x-.04
+			k.box("ResidentialRoof",Vector3(0,height+.05,z),Vector3(span,.14,size.y/3+.01),"corrugated",false,root)
+			k.box("RoofSnow",Vector3(0,height+.15,z),Vector3(span-.15,.06,size.y/3-.10),"district_roof_snow",false,root)
 			k.box("RoofJoist",Vector3(0,height-.05,z),Vector3(size.x,.16,.12),"old_iron",false,root)
 		for z in [-size.y/2,size.y/2]:
 			k.box("RoofParapet",Vector3(0,height+.22,z),Vector3(size.x,.34,.25),"district_concrete",false,root)
