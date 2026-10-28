@@ -45,6 +45,7 @@ func resolve_check(key:String,chance:int) -> bool:
 	last_outcome={"kind":"success" if success else "failure","chance":chance,"key":key}
 	return success
 const ITEMS = {
+ "grey_carbine":["灰狗旧式卡宾枪","从灰狗手中缴获的五发卡宾枪，使用土制弹。射击间隔较长，单发威力高；空仓时按 R 装填。","武器"],
  "pool_sample":["沉淀池封存样本","地表委托所需的污染样本，已单独封口。交给公社守备或谢契军需处，不能出售。","任务物品"],
  "moro_card":["莫罗的手抄歌页","下工之后第一次排练留下的歌页，页角有你参与的炭笔画。","纪念"],
  "memory_card":["巴拉诺夫的家庭记述","对照交接本、现场见证与家属授权制作的家庭抄本。","私人文件"],
@@ -86,9 +87,12 @@ func equipped_weapon()->String:
 	var slots=flags.get("equipment",{})
 	if not slots is Dictionary:return ""
 	var id=String(slots.get("weapon",""))
-	return id if has(id) and id=="revolver" else ""
+	return id if has(id) and id in ["revolver","grey_carbine"] else ""
 func equip_weapon(id:String)->bool:
-	if id!="" and (id!="revolver" or not has(id)):return false
+	if id!="" and (id not in ["revolver","grey_carbine"] or not has(id)):return false
+	var old=equipped_weapon();var magazines:Dictionary=flags.get("weapon_magazines",{})
+	if old!="":magazines[old]=int(flags.get("weapon_clip",0))
+	flags.weapon_magazines=magazines;flags.weapon_clip=int(magazines.get(id,6 if id=="revolver" and not flags.has("equipment") else 0))
 	flags.equipment={"weapon":id};flags.weapon_drawn=false;changed.emit();return true
 func weapon_drawn()->bool:return equipped_weapon()!="" and bool(flags.get("weapon_drawn",false))
 func know(text: String):

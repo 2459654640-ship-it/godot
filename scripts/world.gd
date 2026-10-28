@@ -83,7 +83,7 @@ func _ready():
 		if arrival_data.get("save_slot","") in SaveStore.manual_paths():save_path=arrival_data.save_slot
 		story.restore(transfer.pending.story)
 		played_seconds=float(transfer.pending.story.get("played_seconds",0))
-		camera_size=clampf(float(transfer.pending.story.get("camera_size",17)),10,28)
+		camera_size=clampf(float(transfer.pending.story.get("camera_size",17)),12,19)
 		arrival=transfer.pending.position
 		if ((floor_id=="commune" and transfer.pending.story.get("layout_revision",0)<12) or (floor_id=="sech" and transfer.pending.story.get("layout_revision",0)<11) or (floor_id=="starcity" and transfer.pending.story.get("layout_revision",0)<19) or (floor_id not in ["life","labor","sech"] and transfer.pending.story.get("layout_revision",0)<8)):arrival=CampaignMaps.LAYOUTS[floor_id].spawn
 		transfer.pending={}
@@ -118,7 +118,6 @@ func _ready():
 	get_node("/root/Session").Video.apply_lights(self,int(get_node("/root/Session").video.quality))
 	build_people() if floor_id=="life" else build_labor_people()
 	navigation=preload("res://scripts/route_grid.gd").new()
-	navigation.setup(self)
 	if floor_id=="life":
 		build_targets()
 		Wing.targets(self)
@@ -131,6 +130,8 @@ func _ready():
 	else:CampaignMaps.targets(self)
 	if floor_id not in ["life","labor"]:CampaignMaps.residents(self)
 	preload("res://scripts/supply_storage.gd").setup(self)
+	preload("res://scripts/raid_loot.gd").setup(self)
+	navigation.setup(self)
 	setup_daily_routines()
 	preload("res://scripts/npc_workplace.gd").configure(self)
 	if arrival.is_finite():player.position=clear_arrival(arrival)
@@ -178,8 +179,10 @@ func _ready():
 	living=preload("res://scripts/living_world.gd").new();add_child(living);living.setup(self)
 	combat.restore_state(arrival_data.get("combat_state",{}))
 	story.Campaign.District.restore_combat(self)
-	if floor_id=="east_district":
+	if floor_id in ["east_district","grey_shelter"]:
 		grey_camp=preload("res://scripts/greyhound_camp.gd").new();add_child(grey_camp);grey_camp.setup(self)
+		if floor_id=="east_district":
+			var survey=preload("res://scripts/city_survey.gd").new();add_child(survey);survey.setup(self)
 	initialized=true
 	call_deferred("autosave")
 	wall_veil=preload("res://scripts/wall_veil.gd").new()
@@ -695,6 +698,9 @@ func refresh_guard_context():
 	if previous!=clear and hud:hud.refresh_status()
 
 func set_camera(delta: float, instant: bool = false):
+	if not capture_mode:
+		overview=false
+		camera_size=clampf(camera_size,12,19)
 	var focus=(Vector3(-6,0,-1.5) if floor_id=="life" else Vector3(1,0,.5)) if overview else Vector3(player.position.x*.90,.4,player.position.z*.85)
 	if floor_id=="east_district":focus=Vector3.ZERO if overview else player.position+Vector3.UP*.4
 	if capture_mode:focus=debug_camera_target
@@ -731,12 +737,12 @@ func _unhandled_input(event):
 	if event.is_action_pressed("inventory"):hud.show_inventory()
 	if event.is_action_pressed("journal"):hud.show_journal()
 	if event.is_action_pressed("map"):hud.show_map()
-	if event.is_action_pressed("overview"):overview=not overview
+	if event.is_action_pressed("overview"):hud.show_map()
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN] and cycle_interaction(-1 if event.button_index==MOUSE_BUTTON_WHEEL_UP else 1):
 			get_viewport().set_input_as_handled();return
-		if event.button_index==MOUSE_BUTTON_WHEEL_UP:camera_size=clampf(camera_size-1,10,28)
-		if event.button_index==MOUSE_BUTTON_WHEEL_DOWN:camera_size=clampf(camera_size+1,10,28)
+		if event.button_index==MOUSE_BUTTON_WHEEL_UP:camera_size=clampf(camera_size-1,12,19)
+		if event.button_index==MOUSE_BUTTON_WHEEL_DOWN:camera_size=clampf(camera_size+1,12,19)
 
 func interact(id: String):
 	refresh_guard_context()
@@ -744,6 +750,9 @@ func interact(id: String):
 		var warning="先离开眼前的交火，或清理威胁后再操作。"
 		if is_instance_valid(combat.veteran):warning+="老兵倒地时靠近并按住 E 救援。"
 		hud.toast(warning,3);return
+	if id=="grey_shelter_entry":preload("res://scripts/grey_shelter.gd").enter(self);return
+	if id=="grey_shelter_exit":preload("res://scripts/grey_shelter.gd").leave(self);return
+	if id.begins_with("raid_container_"):preload("res://scripts/raid_loot.gd").open(self,id);return
 	if id.begins_with("surface_loot_"):preload("res://scripts/surface_site.gd").collect(self,id);return
 	if id.begins_with("east_loot_"):story.Campaign.District.collect(self,id);return
 	if id=="common_blocks":hud.show_blocks();return
@@ -879,7 +888,7 @@ func animate_d6_door(mesh:MeshInstance3D,opened:bool):
 
 func clear_arrival(p:Vector3)->Vector3:
 	# New decorative fixtures must not imprison an earlier saved position.
-	if floor_id not in ["commune","waterworks","surface","starcity","coal","railfront","east_district"]:return p
+	if floor_id not in ["commune","waterworks","surface","starcity","coal","railfront","east_district","grey_shelter"]:return p
 	# Legacy mine saves could place Ivan exactly on the registrar's spawn.
 	if npcs.values().any(func(a):return Vector2(a.position.x-p.x,a.position.z-p.z).length()<.65):
 		var best=Vector3.INF;var distance=INF
@@ -890,6 +899,7 @@ func clear_arrival(p:Vector3)->Vector3:
 			distance=delta;best=Vector3(point.x,.04,point.y)
 		if best.is_finite():p=best
 	for solid in kit.solids:
+		if solid.name=="BasinInspectionGate" and story.f("city_basin_open"):continue
 		if solid.name=="CampaignInnerGate" and story.f(campaign_gate_flag):continue
 		if solid.top<=.24 and solid.top>.025 and solid.bottom<.12 and solid.rect.has_point(Vector2(p.x,p.z)):
 			p.y=maxf(p.y,solid.top+.002);continue
@@ -906,7 +916,7 @@ func save_snapshot()->Dictionary:
 	if is_instance_valid(combat) and combat.enabled:story.flags.weapon_clip=combat.clip
 	var data=story.serialize()
 	data.position=[player.position.x,player.position.y,player.position.z];data.floor=floor_id
-	data.layout_revision=28;data.played_seconds=played_seconds
+	data.layout_revision=29;data.played_seconds=played_seconds
 	data.camera_size=camera_size;data.facing=player.visual.rotation.y
 	data.world_state={"phase":phase,"guard_away_time":guard_away_time,"waiting_shift":waiting_shift,"pending_route":pending_route}
 	var saved_room=floor_name()
@@ -938,7 +948,7 @@ func load_game(path:String=""):
 	hud.observing=false;story.restore(data)
 	player.position=clear_arrival(Vector3(p[0],maxf(p[1],.04),p[2]))
 	if (floor_id=="commune" and int(data.get("layout_revision",0))<12) or (floor_id=="sech" and int(data.get("layout_revision",0))<11) or (floor_id=="starcity" and int(data.get("layout_revision",0))<19):player.position=CampaignMaps.LAYOUTS[floor_id].spawn
-	played_seconds=float(data.get("played_seconds",0));camera_size=clampf(float(data.get("camera_size",17)),10,28)
+	played_seconds=float(data.get("played_seconds",0));camera_size=clampf(float(data.get("camera_size",17)),12,19)
 	waiting_shift=false;guard_away_time=0;restore_placement(data);player.velocity=Vector3.ZERO
 	if is_instance_valid(living):living.reset_for_load()
 	hud.comic_active=false;hud.close()

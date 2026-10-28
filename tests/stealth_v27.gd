@@ -19,6 +19,7 @@ func place_player(p:Vector3,sneak:bool=false):
  w.player.position=p;w.player.velocity=Vector3.ZERO;w.player.sneaking=sneak
 func journey():
  for i in 30:
+  while current_scene==null:await process_frame
   w=current_scene
   if not w.story.flags.get("comic",{}).get("active",false):break
   var panel=w.story.Comic.panel(w.story);w.hud.comic_choose(0 if panel.has("choices") else -1);await frames()
@@ -30,7 +31,7 @@ func run():
  w=load("res://scenes/east_district.tscn").instantiate();root.add_child(w);current_scene=w;await frames();freeze()
  w.story.give("mask");w.story.give("filter");w.story.give("revolver");w.story.equip_weapon("revolver");w.story.flags.weapon_drawn=true
  var camp=w.grey_camp;var g=camp.guards[0]
- check(camp.guards.size()==3 and not w.combat.active,"inhabited camp has three patrol guards without starting automatic combat")
+ check(camp.guards.size()==5 and not w.combat.active,"camp has three sentries and two roaming scavengers without starting automatic combat")
  check(g.enemy_kind=="greyhound" and g.sprite.texture.resource_path.ends_with("greyhound_guard.png") and g.sprite.shaded,"bandits use their own lit, equipped human art")
  check(g.sprite.hframes==5 and g.sprite.vframes==4 and is_equal_approx(g.sprite.pixel_size*324,1.76),"new animation has matching adult height, three gait poses and separate aim")
  place_player(Vector3(43.5,.04,-19))
@@ -91,15 +92,14 @@ func run():
  get_root().get_node("Session").enter(snapshot,"east_district",w.player.position);await frames(10);w=current_scene;freeze();camp=w.grey_camp
  check(camp.guards[0].hp<=0 and camp.guards[1].hp==39 and camp.guards[2].route_index==2,"loading preserves the dead guard slot, injured guard and patrol progress")
  check(camp.alarm and w.combat.active and w.combat.enemies.all(func(e):return e.has_method("sees_player")),"restored combat replaces every guard with a perception controller")
- var goods=w.story.flags.east_loot.values();check(goods.any(func(e):return e.good=="bandage") and not goods.any(func(e):return e.good.begins_with("mutant")),"human guards drop appropriate equipment instead of mutant body parts")
+ var goods=w.story.flags.raid_containers.values();check(goods.any(func(e):return e.loot.has("grey_carbine") and e.loot.has("mask")),"human guards leave searchable weapons and protective equipment")
  w.story.flags.east_home="commune";w.story.flags.east_trip_active=true;place_player(w.targets.east_commune_entry.pos)
  w.perform("c_east_enter_commune","east_commune_entry");await journey()
  check(w.floor_id=="commune" and not w.story.flags.get("east_retreat_encounter",{}).get("checkpoint",{}).is_empty(),"an actual indoor retreat retains the original pre-fight checkpoint")
  w.perform("c_east_depart_commune","commune_leave");await journey();camp=w.grey_camp
  check(w.floor_id=="east_district" and camp.alarm and camp.guards[0].hp<=0 and camp.guards[1].hp==39,"returning outdoors resumes the same partially resolved human encounter")
- w.combat.retry();await frames(10);w=current_scene;freeze();camp=w.grey_camp
- check(not camp.alarm and not w.combat.active and camp.guards.all(func(e):return e.hp==80),"retry restores the complete quiet pre-fight camp")
- check(w.combat.clip==rounds and w.story.economy.handmade==supplies,"retry restores spent ammunition without an extra resource penalty")
+ var count_before=w.combat.enemies.size();w.combat.retry();check(w.combat.enemies.size()==count_before and w.story.f("raid_active"),"raid combat cannot invoke the old lossless checkpoint retry")
+ camp.stand_down()
  w.combat.begin("east_road");camp.raise_alarm("测试混合遭遇")
  for enemy in w.combat.enemies.duplicate():
   if enemy.enemy_kind!="greyhound":enemy.damage(1000)

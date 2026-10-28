@@ -32,18 +32,18 @@ static func render(h,tab:String="all",selected:String=""):
 	var items=entries(s).filter(func(e):return tab=="all" or e.category==tab)
 	if not items.any(func(e):return e.id==selected):selected=items[0].id if not items.is_empty() else ""
 	var browser=HBoxContainer.new();browser.add_theme_constant_override("separation",22);h.modal_box.add_child(browser)
-	var scroll=ScrollContainer.new();scroll.custom_minimum_size=Vector2(680,420);scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;browser.add_child(scroll)
-	var grid=GridContainer.new();grid.name="InventoryGrid";grid.columns=5;grid.add_theme_constant_override("h_separation",9);grid.add_theme_constant_override("v_separation",9);scroll.add_child(grid)
+	var bag=preload("res://scripts/backpack.gd")
+	var left=VBoxContainer.new();left.custom_minimum_size.x=625;browser.add_child(left)
+	var packed=bag.pack(s)
+	left.add_child(h.label("背包  %d / 48 格 · 拖动整理"%packed.used,18,h.amber))
+	var grid=preload("res://scripts/inventory_grid.gd").new();left.add_child(grid);grid.setup(h,selected,tab)
+	if not packed.overflow.is_empty():
+		var warning=h.label("背包已满。旧存档或剧情奖励超出的物品暂时保留；整理或寄存后才能继续搜刮。",16,h.amber);warning.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;left.add_child(warning)
+	# Equipment slots and protected story pouch remain selectable outside the physical bag.
 	for e in items:
-		var id:String=e.id;var b=h.button("",func():render(h,tab,id),true,true);b.name="InventoryCell_"+id;b.custom_minimum_size=Vector2(126,126);b.tooltip_text=e.name+"\n"+e.detail
-		b.add_theme_stylebox_override("normal",h.style(Color("303c33") if id==selected else Color("142321"),h.amber if id==selected else Color("46544a"),2 if id==selected else 1,3));grid.add_child(b)
-		var content=VBoxContainer.new();content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);content.offset_left=7;content.offset_right=-7;content.offset_top=7;content.offset_bottom=-7;content.mouse_filter=Control.MOUSE_FILTER_IGNORE;b.add_child(content)
-		var icon=h.icon_rect(h.item_icon(id),70);icon.mouse_filter=Control.MOUSE_FILTER_IGNORE;content.add_child(icon)
-		var title=h.label(e.name,14,h.text_color);title.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;title.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS;title.mouse_filter=Control.MOUSE_FILTER_IGNORE;content.add_child(title)
-		var count=h.label("已装备" if id==weapon else ("× %d"%e.count if e.good else e.kind),13,h.amber if id==weapon else h.muted);count.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;count.mouse_filter=Control.MOUSE_FILTER_IGNORE;content.add_child(count)
-	# Empty cells show this is a grid without implying an inventory capacity limit.
-	for i in maxi(0,15-items.size()):
-		var empty=PanelContainer.new();empty.custom_minimum_size=Vector2(126,126);empty.add_theme_stylebox_override("panel",h.style(Color("101b1b"),Color("29382f"),1,3));empty.mouse_filter=Control.MOUSE_FILTER_IGNORE;grid.add_child(empty)
+		if packed.pieces.any(func(p):return p.id==e.id):continue
+		var id:String=e.id
+		var b=h.button(e.name+(" · 防护栏" if id in ["mask","filter"] else (" · 武器栏" if id==weapon else (" · 待整理" if e.good or not bag.protected_item(id) else " · 任务随身夹"))),func():render(h,tab,id),true,true);b.name="InventoryCell_"+id;left.add_child(b)
 	var card=PanelContainer.new();card.name="InventoryDetail";card.custom_minimum_size.x=350;card.size_flags_horizontal=Control.SIZE_EXPAND_FILL;card.add_theme_stylebox_override("panel",h.style(Color("192825"),Color("786b4f"),1,3));browser.add_child(card);h.UiSurface.attach(card)
 	var details=h.margin_box(card,20,20)
 	if selected!="":
@@ -62,6 +62,16 @@ static func render(h,tab:String="all",selected:String=""):
 			if selected in ["salvage_cloth","scrap_metal"]:
 				var craft=h.label("制作地点：东郊工人街修配间。恢复供电后，可把布料制成绷带，或用布料与金属件制作捆扎用品。" if s.f("visited_east_district") else "可以留给有设备的修配工房，用来制作绷带与捆扎用品。",16,h.muted);craft.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;details.add_child(craft)
 		var id:String=selected
+		var slots=bag.pack(s).pieces.filter(func(p):return p.id==id)
+		if not slots.is_empty():
+			var specific=slots.filter(func(p):return p.key==h.get_meta("bag_selected_key",""))
+			var piece=specific[0] if not specific.is_empty() else slots[0]
+			details.add_child(h.button("旋转占格",func():
+				if not bag.move_piece(s,piece.key,piece.at,true):h.toast("旋转后放不下，请先腾出相邻格子。")
+				render(h,tab,id),true,true))
+		if e.good or id in bag.ORDINARY_ITEMS:
+			details.add_child(h.button("丢弃一份",func():
+				preload("res://scripts/raid_loot.gd").discard(h.world,id);render(h,tab,id),true,true))
 		if e.good and s.Economy.GOODS[id].effect=="health" and s.economy.radiation>=80:
 			var actual=h.label("当前状态下恢复 %d 点生命。"%s.Economy.Radiation.heal_amount(s,int(s.Economy.GOODS[id].amount)),17,h.amber);details.add_child(actual)
 		if e.kind=="武器":details.add_child(h.button("卸下武器" if id==weapon else "装备到武器栏",func():s.equip_weapon("" if id==weapon else id);render(h,tab,id)))
@@ -70,4 +80,4 @@ static func render(h,tab:String="all",selected:String=""):
 		else:
 			var note=h.label("可交给商人收购，也可以存入聚落物资柜。" if e.category=="materials" else "在相关场景或人物对话中使用。任务文件和纪念物不会被自动出售。",16,h.muted);note.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;details.add_child(note)
 	else:details.add_child(h.label("这一栏暂时没有物品。",19,h.muted))
-	h.body("选择格子查看详情 · 聚落物资柜可寄存补给与材料 · 按 1 拔枪 / 收枪",16,h.muted)
+	h.body("任务随身夹不占背包格，也不会因地表死亡丢失。普通物资与装备请在出发前整理寄存。",16,h.muted)

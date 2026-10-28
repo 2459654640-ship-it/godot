@@ -1,0 +1,381 @@
+{
+  "actions": {
+    "city_clinic_read": {
+      "text": "翻看候诊桌上的疏散名册。",
+      "reply": "最后一页写着：\n「10 月 23 日，车没来。伤员已转入地下，留两包敷料给下一班。门不用锁，可能还有人回来。」\n名册边上有几行不同的字迹，有人替来不及写字的邻居报了名字。药柜的位置标在诊所平面图上。",
+      "once": true,
+      "flags": {
+        "city_clinic_read": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      }
+    },
+    "city_medicine_take": {
+      "text": "取走仍然密封的敷料。",
+      "reply": "包装纸已经发黄，内层防潮封口还完好。你把两份敷料收进背包，在登记页上写明了日期和取走的数量。",
+      "once": true,
+      "flags": {
+        "city_medicine_resolved": true,
+        "city_medicine_taken": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "city_clinic_read"
+        ],
+        "not": [
+          "city_medicine_resolved"
+        ]
+      },
+      "goods": {
+        "bandage": 2
+      }
+    },
+    "city_medicine_leave": {
+      "text": "留下敷料，重新包好药柜。",
+      "reply": "你擦掉柜门上的灰，把「内有敷料」几个字重新描清。下一位躲进诊所的人，至少不必在黑暗里翻遍每一只抽屉。",
+      "once": true,
+      "flags": {
+        "city_medicine_resolved": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "city_clinic_read"
+        ],
+        "not": [
+          "city_medicine_resolved"
+        ]
+      }
+    },
+    "city_radio_read": {
+      "text": "阅读民防值班员留下的操作记录。",
+      "reply": "「先隔离室外天线馈线，再接通低压机架，最后把接收开关转到本地测试。外面那根线受潮，别带电送上去。」\n记录下方另有一行：蓄水池巡视取消，西侧旁通阀仍可泄压。",
+      "once": true,
+      "flags": {
+        "city_radio_log_read": true,
+        "city_radio_job": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      }
+    },
+    "city_radio_isolate": {
+      "text": "断开室外天线馈线。",
+      "reply": "你拉下隔离刀闸。瓷座上留着一道烧黑的电弧痕迹。",
+      "once": true,
+      "flags": {
+        "city_radio_isolated": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "city_radio_log_read"
+        ],
+        "not": [
+          "city_radio_online"
+        ]
+      }
+    },
+    "city_radio_power": {
+      "text": "接通机架的低压电源。",
+      "reply": "机架里的指示灯依次亮起。电压稳定，扩音器里传来低沉的电流声。",
+      "once": true,
+      "flags": {
+        "city_radio_powered": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "city_radio_isolated",
+          "east_power_restored"
+        ],
+        "not": [
+          "city_radio_online"
+        ]
+      }
+    },
+    "city_radio_test": {
+      "text": "切到本地测试，播放最后一段值班录音。",
+      "reply": "录音里的女人停顿了很久才继续：\n「这里是工人街民防站。还没转移的人，去诊所后面的地下入口。请互相通知，别单独在路上等车。」\n背景里有人问她什么时候走。她说：「这遍播完就走。」\n磁带到这里结束。你记下这段声音，把机架里干燥的备用电池取出来。",
+      "once": true,
+      "flags": {
+        "city_radio_online": true,
+        "city_basin_known": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "city_radio_powered"
+        ]
+      },
+      "goods": {
+        "battery": 2
+      }
+    },
+    "city_basin_inspect": {
+      "text": "检查压力表和阀门标牌。",
+      "reply": "进水管已经变形，压力表仍顶在红区。检修牌写得很清楚：先开西侧旁通泄压，再关闭进水阀。池内的铁栅后传来沉重的撞击声。",
+      "once": true,
+      "flags": {
+        "city_basin_examined": true,
+        "city_basin_job": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      }
+    },
+    "city_basin_bypass": {
+      "text": "打开旁通，排掉管内余压。",
+      "reply": "锈水沿旁通管流进排污沟。指针慢慢退到零位，管道不再震动。",
+      "once": true,
+      "flags": {
+        "city_basin_bypassed": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "city_basin_examined"
+        ]
+      }
+    },
+    "city_basin_open": {
+      "text": "关闭进水阀，准备进入蓄水池。",
+      "reply": "你关紧进水阀。检查井的水声停了，池内一头体形庞大的兽类抬起头，前爪压碎了脚边的薄冰。\n西侧检修口仍可撤退。备好武器和药品，再越过池边。",
+      "once": true,
+      "flags": {
+        "city_basin_open": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ],
+        "all": [
+          "city_basin_bypassed"
+        ]
+      }
+    },
+    "city_basin_supplies": {
+      "text": "取走巡检员留下的应急用品。",
+      "reply": "你打开防潮箱，找到三包土制弹和两份包扎材料。箱底的便条写着：「值班补给，取用请登记。」",
+      "once": true,
+      "flags": {
+        "city_basin_supplied": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      },
+      "goods": {
+        "ammo_pouch": 3,
+        "bandage": 2
+      }
+    }
+  },
+  "interactions": {
+    "city_clinic": {
+      "facility": "east_district",
+      "name": "工人诊所 / 疏散名册",
+      "role": "东郊城市 / 探索",
+      "spoken": false,
+      "body": "诊所候诊室的长凳还靠着墙。值班桌上压着一本登记簿，末页夹着一张没有用上的转运单。",
+      "options": [
+        "city_clinic_read"
+      ],
+      "after": []
+    },
+    "city_medicine": {
+      "facility": "east_district",
+      "name": "诊所 / 密封药柜",
+      "role": "东郊城市 / 探索",
+      "spoken": false,
+      "body": "柜门上的红十字已经剥落。里面有两包密封敷料和一张领用记录。",
+      "options": [
+        "city_medicine_take",
+        "city_medicine_leave"
+      ],
+      "after": [
+        [
+          "city_medicine_taken",
+          "你取走了两包敷料，领用记录上留下了日期。"
+        ],
+        [
+          {
+            "all": [
+              "city_medicine_resolved"
+            ],
+            "not": [
+              "city_medicine_taken"
+            ]
+          },
+          "敷料留在柜内，外层重新包好，柜门上有你补写的标记。"
+        ]
+      ]
+    },
+    "city_radio_log": {
+      "facility": "east_district",
+      "name": "民防通信站 / 值班记录",
+      "role": "东郊城市 / 探索",
+      "spoken": false,
+      "body": "录音机旁的纸页被压在玻璃下。这里保存着接收设备的操作顺序和最后一次蓄水池巡检记录。",
+      "options": [
+        "city_radio_read"
+      ],
+      "after": []
+    },
+    "city_radio_panel": {
+      "facility": "east_district",
+      "name": "民防通信站 / 控制盘",
+      "role": "东郊城市 / 探索",
+      "spoken": false,
+      "body": "室外天线馈线已经受潮。控制盘上保留着隔离刀闸、低压电源和本地测试开关。先检查桌上的操作记录，再接通设备。",
+      "options": [
+        "city_radio_isolate",
+        "city_radio_power",
+        "city_radio_test"
+      ],
+      "after": [
+        [
+          "city_radio_online",
+          "本地录音已经播放完毕。你记下了最后一次转移通知，以及蓄水池西侧的泄压办法。"
+        ]
+      ]
+    },
+    "city_basin_controls": {
+      "facility": "east_district",
+      "name": "蓄水池西侧 / 检修控制台",
+      "role": "东郊城市 / 探索",
+      "spoken": false,
+      "body": "两只阀门分别控制进水和旁通。检修口旁留有应急箱，池内的墙后时不时传来重物摩擦的声响。",
+      "options": [
+        "city_basin_inspect",
+        "city_basin_bypass",
+        "city_basin_open"
+      ],
+      "after": [
+        [
+          "battle_city_basin",
+          "池内已经安静下来。取水格栅旁可以收集这头巨兽留下的样本。"
+        ]
+      ]
+    },
+    "city_basin_supplies": {
+      "facility": "east_district",
+      "name": "蓄水池 / 巡检应急箱",
+      "role": "东郊城市 / 探索",
+      "spoken": false,
+      "body": "箱子放在控制台旁的干燥平台上，封口有已经褪色的巡检班记号。",
+      "options": [
+        "city_basin_supplies"
+      ],
+      "after": []
+    }
+  },
+  "quests": [
+    {
+      "id": "city_clinic",
+      "name": "没有等到的车",
+      "facility": "east_district",
+      "accepted": "city_clinic_read",
+      "done": "city_medicine_resolved",
+      "kind": "支线",
+      "background": "工人诊所保存着最后一班伤员的转移记录。",
+      "lead": "街区探索",
+      "stages": [
+        {
+          "when": {},
+          "target": "city_medicine",
+          "step": "到诊所东侧治疗室检查药柜，决定如何处理留下的敷料。"
+        }
+      ],
+      "actions": [
+        "city_clinic_read",
+        "city_medicine_take",
+        "city_medicine_leave"
+      ]
+    },
+    {
+      "id": "city_radio",
+      "name": "最后一遍广播",
+      "facility": "east_district",
+      "accepted": "city_radio_job",
+      "done": "city_radio_online",
+      "kind": "支线",
+      "background": "民防站保存着核战争初期的一段疏散广播。",
+      "lead": "街区探索",
+      "stages": [
+        {
+          "when": {},
+          "target": "city_radio_panel",
+          "step": "依照桌上的记录，隔离天线、接通低压机架，再播放本地录音；机架用电来自变配电所。"
+        }
+      ],
+      "actions": [
+        "city_radio_read",
+        "city_radio_isolate",
+        "city_radio_power",
+        "city_radio_test"
+      ]
+    },
+    {
+      "id": "city_basin",
+      "name": "蓄水池里的撞击声",
+      "facility": "east_district",
+      "accepted": "city_basin_job",
+      "done": "battle_city_basin",
+      "kind": "支线",
+      "background": "旧蓄水池里有一头大型变异兽。检修口留着可用的泄压设备。",
+      "lead": "街区探索",
+      "stages": [
+        {
+          "when": {},
+          "target": "city_basin_controls",
+          "step": "检查压力表，先开旁通再关进水；到西侧应急箱准备弹药。"
+        },
+        {
+          "when": {
+            "all": [
+              "city_basin_open"
+            ]
+          },
+          "target": "city_basin_controls",
+          "step": "从西侧检修口进入蓄水池；躲开巨兽的直线冲锋，利用混凝土挡板让它撞停。"
+        }
+      ],
+      "actions": [
+        "city_basin_inspect",
+        "city_basin_bypass",
+        "city_basin_open"
+      ]
+    }
+  ],
+  "panels": {
+    "arrive_grey_shelter": {
+      "title": "货场地下的灯",
+      "art": "grey_shelter_entry",
+      "same_moment": true,
+      "body": "你拉开岗哨后的铁门，顺着楼梯往下。上方的风声很快被厚墙隔住，下面传来炉门开合的响声。\n灯泡照着一张铺了油布的公共桌。搪瓷杯旁摆着切开的面包，几件湿外套挂在热水管上。墙后有人咳嗽，另一个人催他把晚饭吃完。\n这群人会在路上抢走陌生人的物资，也在这里轮流守夜、修枪，等同伴回来。你停在最后一级台阶，留意着走廊里的脚步。",
+      "end": "map:grey_shelter"
+    }
+  }
+}

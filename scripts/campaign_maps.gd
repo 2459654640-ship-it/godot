@@ -4,7 +4,7 @@ const Plans=preload("res://scripts/facility_layouts.gd")
 const Detail=preload("res://scripts/facility_detail.gd")
 const Settlement=preload("res://scripts/settlement_details.gd")
 const Shell=preload("res://scripts/facility_shell.gd")
-const LAYOUTS=Plans.PLANS
+static var LAYOUTS=Plans.PLANS
 static func rooms(id:String)->Array:return Plans.rooms(id)
 static func door_specs(id:String)->Array:return Plans.door_specs(id)
 static func doors(id:String)->Array:
@@ -13,6 +13,8 @@ static func doors(id:String)->Array:
 	return out
 static func build(w):
 	var k=w.kit;var id:String=w.floor_id;var plan:Dictionary=LAYOUTS[id]
+	if id=="grey_shelter":
+		Detail.materials(k);preload("res://scripts/grey_shelter.gd").build(w);return
 	if id=="east_district":
 		Detail.materials(k);preload("res://scripts/east_district_map.gd").build(w);return
 	if id in ["commune","waterworks","sech","starcity","surface","railfront"]:Detail.materials(k)

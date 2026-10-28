@@ -78,38 +78,32 @@ static func portal(k,p:Vector3,label:String,heading:float=0):
 	var body=k.box("PortalBackHull",p+Vector3(0,0,-1.5).rotated(Vector3.UP,heading)+Vector3.UP,Vector3(2.5,2,.30),"dark",true);body.visible=false
 	k.lamp(p+Vector3(-.7,2,-.3),true,1.5,5)
 static func build(w):
-	var k=w.kit;var plan=Layout.layout();var a=plan.bounds
-	Site.ground(w,Rect2(a[0],a[1],a[2],a[3]),false)
-	w.get_node("DistantSnow").mesh.size=Vector3(340,.12,280)
-	k.mats.surface_road.set_shader_parameter("asphalt_map",load("res://assets/visual/art28_asphalt.png"))
-	for entry in [["district_concrete","district_concrete"],["district_ochre","district_ochre"],["district_brick","district_brick"]]:
-		Site.material(k,entry[0],"res://assets/visual/"+entry[1]+".png",Color.WHITE)
-		k.mats[entry[0]].uv1_scale=Vector3.ONE*.38
-		k.mats[entry[0]].texture_filter=BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-	Site.material(k,"shelter_snow","res://assets/visual/packed_snow.png",Color("aab5bd"))
-	# Roof snow uses the same source art but a standard material, so the roof
-	# visibility system can fade it together with its underlying steel sheets.
-	Site.material(k,"district_roof_snow","res://assets/visual/art28_snow.png",Color("aab5bd"))
-	k.mats.district_roof_snow.set_meta("roof_snow",true)
-	# Roads come first. Intersections are flush; no collision kerb crosses a junction.
-	for road in plan.roads:
-		for i in road.points.size()-1:Site.road(k,position(road.points[i]),position(road.points[i+1]),road.width)
-	# The original road helper has interrupted low kerbs, all below the player's step limit.
+	var k=w.kit;var plan=Layout.layout()
+	var City=preload("res://scripts/city_architecture.gd");var Ground=preload("res://scripts/city_ground.gd")
+	Ground.build(w,plan);City.materials(k)
 	for i in plan.parcels.size():
-		var parcel:Dictionary=plan.parcels[i];var b=parcel.building
-		if parcel.id=="greyhound_camp":continue
-		building(k,Vector3(b[0],0,b[1]),Vector2(b[2],b[3]),int(b[4]),i+1,parcel.id=="depot",parcel.id)
-	for block in Urban.BLOCKS:
-		building(k,block.at,block.size,block.floors,block.seed,false,"relay" if block.id=="industrial_annex" else "residential")
-	# Additional residential volume and workshop ruins give the street a different silhouette.
-	building(k,Vector3(30,0,43),Vector2(7,13),2,14)
-	Site.ruin(k,Vector3(-43,0,21),Vector2(9,7),21,.014)
-	Site.ruin(k,Vector3(14,0,25),Vector2(8,7),23,.014)
-	for x in [23.24,24.76]:k.box("FreightRail",Vector3(x,.045,0),Vector3(.07,.09,118),"old_iron")
-	for z in range(-58,59):
+		var parcel:Dictionary=plan.parcels[i];var b=parcel.building;var p=Vector3(b[0],0,b[1]);var size=Vector2(b[2],b[3])
+		if parcel.id in ["clinic","radio"]:City.room(k,p,size,parcel.id)
+		elif parcel.get("open",false):
+			Site.ruin(k,p,size,i+21,.028)
+			City.mound(k,p+Vector3(-size.x*.3,0,-size.y*.3),Vector3(size.x*.4,1.4,size.y*.36),i+20)
+			k.box("RuinRemainingUpperFloor",p+Vector3(-size.x*.25,3.1,0),Vector3(size.x*.48,.22,size.y),"district_concrete")
+			k.box("RuinUpperWall",p+Vector3(-size.x/2,4.3,0),Vector3(.35,2.4,size.y),"district_brick")
+		else:building(k,p,size,int(b[4]),i+1,parcel.id=="depot",parcel.id if parcel.id in ["depot","pump","relay"] else "residential")
+	# Foreground windows, floor breaks and different heights continue beyond the slice.
+	for n in 8:
+		for sign in [-1,1]:
+			building(k,Vector3(-113+n*31,0,sign*(124+float(n%2)*7)),Vector2(21,17),2+n%3,100+n+10*sign,false,"residential")
+	for n in 5:
+		for sign in [-1,1]:building(k,Vector3(sign*143,0,-80+n*36),Vector2(18,26),3+n%2,140+n+sign,false,"residential")
+	City.factory(k);City.basin(k);City.edge(k)
+	# Freight rail is a raised dedicated reservation. Only the authored crossing is level.
+	Ground.apron(k,Vector2(24,0),Vector2(4.2,200))
+	for x in [23.24,24.76]:k.box("FreightRail",Vector3(x,.06,0),Vector3(.07,.12,200),"old_iron")
+	for z in range(-99,100):
 		if absf(z-8)<4.6:continue
-		k.box("FreightSleeper",Vector3(24,.025,z),Vector3(2.6,.05,.18),"wood")
-	for span in [[-60,3.5],[12.5,60]]:Site.fence(k,Vector3(24,0,span[0]),Vector3(24,0,span[1]))
+		k.box("FreightSleeper",Vector3(24,.035,z),Vector3(2.6,.07,.18),"wood")
+	for span in [[-100,3.5],[12.5,100]]:Site.fence(k,Vector3(24,0,span[0]),Vector3(24,0,span[1]))
 	w.campaign_gate_flag="east_crossing_open";w.campaign_gate=k.box("CampaignInnerGate",Vector3(24,1.15,8),Vector3(.20,2.3,9),"corrugated",true)
 	w.campaign_gate.set_meta("dynamic",true);w.campaign_gate.set_meta("closed_position",w.campaign_gate.position);w.campaign_gate.set_meta("opening_offset",Vector3(0,0,10))
 	for z in [3.2,12.8]:k.box("CrossingGatePost",Vector3(24,1.35,z),Vector3(.40,2.7,.40),"old_iron",true)
@@ -119,64 +113,50 @@ static func build(w):
 		signal_head.set_meta("dynamic",true);signal_head.add_to_group("east_power_signals")
 	k.lamp(Vector3(24,3.4,8),true,1.8,8).name="EastCrossingLamp"
 	k.lamp(Vector3(14,2.8,22),true,1.5,6).name="EastWorkshopLamp"
-	# Entrances belong to structures/retaining walls; the arrival is in front of the door.
+	# Portals are setback access pavilions, with level approaches kept clear.
 	portal(k,Vector3(-64,0,43),"ЛИНИЯ · ЗАПАД")
 	portal(k,Vector3(-18,0,49),"Д–6 · ВХОД")
 	portal(k,Vector3(-3,0,15),"ПЕРЕХОД")
 	portal(k,Vector3(-49,0,-49),"РЕМОНТ",PI)
-	portal(k,Vector3(65,0,-49),"СЕВЕР",PI)
-	# Mapping table and supply chest sit beside the route, with clear approaches.
+	portal(k,Vector3(70,0,-43),"СЕВЕР",PI)
+	for x in [-67,-61]:k.box("WestAccessRetainingWall",Vector3(x,.65,44.5),Vector3(.32,1.3,5),"district_concrete",true)
+	for x in [-20.5,-15.5]:k.box("D6AccessRetainingWall",Vector3(x,.7,50),Vector3(.30,1.4,4),"district_concrete",true)
+	Ground.apron(k,Vector2(-60,38),Vector2(4,12))
 	k.box("RoadMapWall",Vector3(-59,1,36.2),Vector3(2.4,2,.25),"district_concrete",true)
 	k.box("RoadMapPanel",Vector3(-59,1.35,36.36),Vector3(1.55,.85,.025),"paper")
 	for x in [-59.5,-59,-58.5]:k.box("MapRouteInk",Vector3(x,1.36,36.38),Vector3(.04,.60,.01),"dark")
 	k.crate(Vector3(-61,0,39.3),Vector3(1.1,.65,.70))
+	Site.ruin(k,Vector3(-43,0,21),Vector2(9,7),21,.028)
+	Site.ruin(k,Vector3(14,0,25),Vector2(8,7),23,.028)
 	k.table(Vector3(-43,0,22.8),2.3);k.box("SpareProtectionModule",Vector3(-43,.92,22.8),Vector3(.52,.22,.40),"metal")
 	k.box("RelayServiceCabinet",Vector3(5,.8,-24.8),Vector3(1.1,1.6,.35),"old_iron",true)
 	for y in [.7,1.15]:k.box("RelaySwitch",Vector3(5,y,-24.59),Vector3(.28,.15,.05),"cream")
-	k.table(Vector3(14,0,24),2.4)
-	k.box("WorkshopHotplate",Vector3(14.7,.82,24),Vector3(.42,.05,.42),"old_iron")
-	k.cyl("WorkshopKettle",Vector3(14.7,1.02,24),.16,.35,"metal")
-	k.box("WorkshopToolRoll",Vector3(13.3,.835,24.1),Vector3(.55,.08,.40),"cloth")
-	k.box("WorkshopViceBase",Vector3(14,.825,24),Vector3(.45,.06,.30),"metal")
-	for x in [13.85,14.15]:k.box("WorkshopViceJaw",Vector3(x,.96,24),Vector3(.07,.22,.30),"old_iron")
-	k.pipe(Vector3(13.6,.92,24),Vector3(14.35,.92,24),.025,"metal")
-	k.box("WorkshopToolRail",Vector3(14,1.6,21.72),Vector3(2,.07,.07),"wood")
-	for x in [13.3,13.8,14.3,14.8]:k.box("HangingWorkshopTool",Vector3(x,1.38,21.79),Vector3(.05,.40,.06),"metal")
-	k.crate(Vector3(42,0,-10.8),Vector3(1.2,.85,.8))
-	# A decommissioned power yard reads as a power facility from several angles.
+	k.table(Vector3(14,0,24),2.4);k.box("WorkshopHotplate",Vector3(14.7,.82,24),Vector3(.42,.05,.42),"old_iron")
+	k.cyl("WorkshopKettle",Vector3(14.7,1.02,24),.16,.35,"metal");k.box("WorkshopToolRoll",Vector3(13.3,.835,24.1),Vector3(.55,.08,.40),"cloth")
 	for x in [13,17]:
-		k.box("TransformerPlinth",Vector3(x,.24,-34),Vector3(2.8,.48,4),"district_concrete",true)
-		k.box("TransformerBody",Vector3(x,1.15,-34),Vector3(1.8,1.3,2.6),"old_iron")
-		for z in [-35,-34,-33]:k.cyl("TransformerInsulator",Vector3(x,2,z),.12,.60,"cream")
-	for x in [-74,-41,-8,28,72]:
-		k.cyl("RoadUtilityPole",Vector3(x,2.4,12.2),.10,4.8,"old_iron")
-		k.pipe(Vector3(x,4.1,12.2),Vector3(x+1.5,4.1,12.2),.035,"rust")
-	for pair in [[-74,-41],[-41,-8],[-8,28],[28,72]]:k.pipe(Vector3(pair[0],4.1,12.2),Vector3(pair[1],4.1,12.2),.012,"dark")
-	# Service pipes follow the industrial wall, not diagonal shortcuts across streets.
-	for x in [-72,-56,-40,-24]:k.box("PipeRackFoot",Vector3(x,1.5,-53),Vector3(.18,3,.18),"old_iron",true)
-	k.pipe(Vector3(-75,2.9,-53),Vector3(-20,2.9,-53),.20,"rust")
-	k.cyl("WaterworksChimney",Vector3(-73,6,-38),.65,12,"district_brick")
-	for p in [Vector3(-72,0,26),Vector3(-53,0,-7),Vector3(-8,0,36),Vector3(48,0,47),Vector3(72,0,-31)]:
-		k.cyl("BareBirchTrunk",p+Vector3.UP*1.7,.11,3.4,"wood")
-		for v in [Vector3(-.7,2.6,.3),Vector3(.5,3.5,-.4)]:k.pipe(p+Vector3.UP*1.8,p+v,.035,"wood")
-	# Snow and loose rubble stay against facades; no decoration occupies a doorway.
-	for parcel in plan.parcels:
-		var b=parcel.building;var base=Vector3(b[0],0,b[1])
-		for side in [-1,1]:
-			k.ellipsoid("FacadeSnowDrift",base+Vector3(side*(b[2]/2+.6),.06,0),Vector3(.6,.20,b[3]*.40),"snowbank")
-			for n in 4:
-				var at=base+Vector3(side*(b[2]/2+.35),.08,-b[3]*.30+n*.8)
-				var brick=k.box("FacadeFootRubble",at,Vector3(.32,.16,.22),"district_brick");brick.rotation.y=n*.72
-	for p in [Vector3(-70,0,-53),Vector3(15,0,-52),Vector3(51,0,-38),Vector3(45,0,54)]:
-		Architecture.block(k,p,Vector2(7,8),2,31+int(abs(p.x)))
-		var collision=k.box("SceneryFootprint",p+Vector3.UP*1.5,Vector3(7.2,3,8.2),"dark",true);collision.visible=false
-	streetscape(k)
-	Urban.street_block(k)
-	bandit_shelter(k)
-	# Accessible workshops fade their roofs and foreground masonry visually;
-	# their physical cover and guard sight lines keep the original collisions.
+		k.box("TransformerPlinth",Vector3(x,.24,-36),Vector3(2.8,.48,4),"district_concrete",true)
+		k.box("TransformerBody",Vector3(x,1.15,-36),Vector3(1.8,1.3,2.6),"old_iron")
+		for z in [-37,-36,-35]:k.cyl("TransformerInsulator",Vector3(x,2,z),.12,.60,"cream")
+	for pair in [[Vector3(-5,0,-40),Vector3(20,0,-40)],[Vector3(20,0,-40),Vector3(20,0,-23)]]:Site.fence(k,pair[0],pair[1])
+	bandit_shelter(k);k.crate(Vector3(42,0,-10.8),Vector3(1.2,.85,.8))
+	# Street furniture and wrecks follow road edges. Clear 3m paths connect each yard.
+	for p in [Vector3(-80,0,13.5),Vector3(-26,0,13.5),Vector3(49,0,13.5),Vector3(71,0,-35),Vector3(-104,0,-14)]:wreck(k,p,PI/2 if absf(p.z-13.5)<1 else 0)
+	for x in [-110,-83,-55,-25,4,43,77,104]:
+		k.cyl("StreetLampStem",Vector3(x,3.1,14),.075,6.2,"old_iron")
+		k.pipe(Vector3(x,6.1,14),Vector3(x,6.1,12.3),.05,"old_iron")
+		k.box("StreetLampHead",Vector3(x,6.05,12.3),Vector3(.4,.13,.65),"metal")
+	for p in [Vector3(-56,0,27),Vector3(-25,0,25),Vector3(-88,0,54),Vector3(43,0,29),Vector3(83,0,51)]:
+		k.bench(p,2.7,true,PI);k.cyl("StreetRefuseDrum",p+Vector3(1.8,.35,0),.3,.7,"rust")
+	# Collapsed corners and snow-filled courtyards vary the local terrain without
+	# hiding ankle-high collision across a door or a marked route.
+	for spec in [[-56,25,5,1.6,4],[-37,-47,7,2.3,6],[12,-56,11,2.8,15],[85,0,7,1.4,4],[102,51,8,2.1,8],[-86,53,9,1.2,4],[-5,94,14,2.4,5]]:
+		City.mound(k,Vector3(spec[0],0,spec[1]),Vector3(spec[2],spec[3],spec[4]),int(spec[0]))
+	for p in [Vector3(-57,0,54),Vector3(-23,0,55),Vector3(11,0,30),Vector3(52,0,55),Vector3(-92,0,20)]:
+		k.cyl("BareBirchTrunk",p+Vector3.UP*2.1,.12,4.2,"wood")
+		for v in [Vector3(-.9,3.2,.3),Vector3(.7,4.6,-.5),Vector3(.2,3.6,.8)]:k.pipe(p+Vector3.UP*2,p+v,.04,"wood")
+	# Fade actual architecture over the player, including the newly enterable ruins.
 	for mesh in w.find_children("*","MeshInstance3D",true,false):
-		if mesh.get_meta("design_id","") in ["RuinWindowSill","BrokenMasonryPier","FracturedWindowLintel","RuinRearWall","RuinDoorCheek","BareRuinJoist","ShelterCeilingPanel","ShelterCeilingSnow"]:mesh.set_meta("view_occluder",true)
+		if mesh.material_override is StandardMaterial3D and (mesh.global_transform*mesh.get_aabb()).end.y>2.1 and mesh.get_meta("design_id","")!="CityEdgeBackstop":mesh.set_meta("view_occluder",true)
 	k.finish_walls()
 
 static func wreck(k,p:Vector3,heading:float=0):

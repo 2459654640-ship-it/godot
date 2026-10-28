@@ -81,7 +81,7 @@ func run():
  session.preview_video({"quality":2});check(w.find_children("*","DirectionalLight3D",true,false).any(func(l):return l.shadow_enabled),"high quality restores authored shadows")
  session.revert_video()
  w.story.economy.goods.medkit=2;w.story.economy.health=40;w.hud.show_inventory();await frames()
- var grid=w.hud.modal.find_child("InventoryGrid",true,false);check(is_instance_valid(grid) and grid.columns==5,"inventory is a five-column item grid")
+ var grid=w.hud.modal.find_child("InventoryGrid",true,false);check(is_instance_valid(grid) and grid.columns==8,"inventory is a eight-column spatial item grid")
  var cell=w.hud.modal.find_child("InventoryCell_medkit",true,false);check(is_instance_valid(cell),"stacked consumable has its own selectable cell")
  cell.pressed.emit();await frames();var use=w.hud.modal.find_children("*","Button",true,false).filter(func(b):return b.text=="使用一份")
  check(use.size()==1,"selected consumable exposes usable detail action")

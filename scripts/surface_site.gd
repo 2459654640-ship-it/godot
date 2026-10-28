@@ -7,7 +7,7 @@ static func material(k,name:String,file:String,color:Color):
  var ink=k.mats.concrete.duplicate();ink.albedo_color=color;ink.normal_enabled=false;ink.roughness_texture=null;ink.roughness=.96
  if ResourceLoader.exists(file):ink.albedo_texture=load(file)
  ink.uv1_scale=Vector3(.28,.28,.28);k.mats[name]=ink
-static func ground(w,bounds:Rect2,backdrop:bool=true):
+static func ground(w,bounds:Rect2,backdrop:bool=true,boundary:bool=true):
  var k=w.kit
  material(k,"surface_snow","res://assets/visual/art28_snow.png",Color("aab5bd"))
  var snow_ink=ShaderMaterial.new();snow_ink.shader=load("res://assets/visual/surface_snow.gdshader");snow_ink.set_shader_parameter("snow_map",load("res://assets/visual/art28_snow.png"));k.mats.surface_snow=snow_ink
@@ -22,6 +22,7 @@ static func ground(w,bounds:Rect2,backdrop:bool=true):
  if backdrop:preload("res://scripts/outdoor_architecture.gd").skyline(k)
  var snow=CPUParticles3D.new();snow.name="WindblownSnow";snow.position=Vector3(0,6,0);snow.amount=150;snow.lifetime=7;snow.preprocess=7;snow.emission_shape=CPUParticles3D.EMISSION_SHAPE_BOX;snow.emission_box_extents=Vector3(bounds.size.x/2,.1,bounds.size.y/2);snow.direction=Vector3(-.18,-1,.08);snow.gravity=Vector3(.1,-.12,.02);snow.initial_velocity_min=1.0;snow.initial_velocity_max=1.8
  var flake=QuadMesh.new();flake.size=Vector2(.035,.035);var ink=StandardMaterial3D.new();ink.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;ink.albedo_color=Color(.82,.88,.89,.45);ink.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;ink.billboard_mode=BaseMaterial3D.BILLBOARD_ENABLED;flake.material=ink;snow.mesh=flake;w.add_child(snow)
+ if not boundary:return
  for x in [bounds.position.x,bounds.end.x]:k.box("SiteBoundary",Vector3(x,.8,bounds.get_center().y),Vector3(.30,1.6,bounds.size.y),"concrete",true)
  for z in [bounds.position.y,bounds.end.y]:k.box("SiteBoundary",Vector3(bounds.get_center().x,.8,z),Vector3(bounds.size.x,1.6,.30),"concrete",true)
 static func road(k,a:Vector3,b:Vector3,width:float):
@@ -164,7 +165,9 @@ static func collect(w,id:String):
  var key=id.trim_prefix("surface_loot_");var records:Dictionary=w.story.flags.get("surface_loot",{})
  if not records.has(key) or records[key].taken or not w.targets.has(id):return
  if w.player.position.distance_to(w.targets[id].pos)>1.9:return
- var good:String=records[key].good;records[key].taken=true;w.story.flags.surface_loot=records
+ var good:String=records[key].good
+ if not preload("res://scripts/backpack.gd").can_add(w.story,good,1):w.hud.toast("背包装不下了，先整理一些空间。");return
+ records[key].taken=true;w.story.flags.surface_loot=records
  w.story.economy.goods[good]=int(w.story.economy.goods.get(good,0))+1
  var node=w.get_node_or_null(id)
  if node:node.queue_free()

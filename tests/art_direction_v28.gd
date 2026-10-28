@@ -14,7 +14,8 @@ func run():
 	check(not Storage.move(s,"commune","scrap_metal",3,true),"cannot overdraw")
 	check(not Storage.move(s,"commune","bandage",-1,true),"cannot mint negative transfers")
 	check(not Storage.move(s,"sech","bandage",1,true),"remote locker blocked")
-	check(not Storage.move(s,"commune","portable_radio",1,true),"radio remains with player")
+	check(Storage.move(s,"commune","portable_radio",1,true),"portable equipment can be stored before a raid")
+	check(Storage.move(s,"commune","portable_radio",1,false),"portable equipment can be withdrawn")
 	var saved=JSON.parse_string(JSON.stringify(s.serialize()));var restored=Story.new();restored.restore(saved);restored.context.floor="commune"
 	check(Storage.move(restored,"commune","scrap_metal",3,false),"withdraw after save/load")
 	check(restored.economy.goods.scrap_metal==5 and restored.economy.stashes.commune.is_empty(),"saved quantities conserved")
@@ -58,13 +59,13 @@ func run():
 	# Upgrade an old position that is now inside each rebuilt block. The normal
 	# load placement resolver must preserve the save and put Ivan on clear floor.
 	var capsule=CapsuleShape3D.new();capsule.radius=.30;capsule.height=1.7
-	for block in preload("res://scripts/district_urban.gd").BLOCKS:
-		var at:Vector3=block.at+Vector3.UP*.04;var clear:Vector3=w.clear_arrival(at)
+	for block in preload("res://scripts/east_district.gd").layout().parcels.filter(func(b):return not b.get("open",false)):
+		var at=Vector3(block.building[0],.04,block.building[1]);var clear:Vector3=w.clear_arrival(at)
 		var query=PhysicsShapeQueryParameters3D.new();query.shape=capsule;query.collision_mask=1
 		query.transform=Transform3D(Basis.IDENTITY,clear+Vector3.UP*.90)
 		check(clear.distance_to(at)>1.0 and w.get_world_3d().direct_space_state.intersect_shape(query).is_empty(),"old saved position safely moved out of rebuilt block: "+block.id)
 	var route:PackedVector3Array=w.navigation.path(Vector3(-64,.04,46),Vector3(-39,.04,35))
 	check(not route.is_empty() and route[-1].distance_to(Vector3(-39,0,35))<1.5,"new courtyard has a continuous route from the settlement exit")
-	check(w.save_snapshot().layout_revision==28,"new layout is explicitly versioned in saves")
+	check(w.save_snapshot().layout_revision==29,"new layout is explicitly versioned in saves")
 	w.queue_free();await process_frame
 	print("ART_DIRECTION_V28_RESULT ",count," checks passed");quit()

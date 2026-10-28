@@ -6,8 +6,8 @@ const Update=preload("res://scripts/chapter_update.gd")
 const Journey=preload("res://scripts/journey_update.gd")
 const Access=preload("res://scripts/d6_access.gd")
 const District=preload("res://scripts/east_district.gd")
-const NAMES={"east_district":"东郊工业片区","waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区","surface":"地表旧泵站","railfront":"旧联络线换乘站"}
-const ITEM_ART={"pool_sample":"mutant_sample","moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
+const NAMES={"grey_shelter":"灰狗货场避难所","east_district":"东郊工业片区","waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区","surface":"地表旧泵站","railfront":"旧联络线换乘站"}
+const ITEM_ART={"grey_carbine":"grey_carbine","pool_sample":"mutant_sample","moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
 static func data()->Dictionary:
 	if _data.is_empty():
 		_data=JSON.parse_string(FileAccess.get_file_as_string("res://data/campaign.json"))

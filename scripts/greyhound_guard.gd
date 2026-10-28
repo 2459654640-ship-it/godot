@@ -16,7 +16,7 @@ func configure(owner_camp,i:int,points:Array,saved:Dictionary={}):
  var p:Vector3=points[0]
  if saved.get("position",[]).size()==3:p=Vector3(saved.position[0],saved.position[1],saved.position[2])
  setup(camp.w.combat,p,"greyhound")
- set_meta("loot_key","grey_guard_"+str(i));set_meta("loot_index",i)
+ set_meta("loot_key",camp.w.floor_id+"_grey_guard_"+str(i));set_meta("loot_index",i)
  hp=int(saved.get("hp",80));route_index=int(saved.get("route_index",0))%route.size();suspicion=float(saved.get("suspicion",0));wait_time=float(saved.get("wait",1));bullets=int(saved.get("bullets",3));gun_reload=float(saved.get("reload",0));windup=float(saved.get("windup",0));cooldown=float(saved.get("cooldown",0));arrival_time=0
  var f=saved.get("facing",[0,0,1]);facing=Vector3(f[0],0,f[2])
  var last=saved.get("last_known",[])
@@ -60,7 +60,7 @@ func _physics_process(delta):
   last_known=target_body.position;camp.last_seen=last_known;suspicion=minf(.72,suspicion+delta*.50)
  else:suspicion=maxf(0,suspicion-delta*.23)
  if suspicion>=.95:camp.raise_alarm("守卫认出了入侵者")
- if camp.alarm:
+ if camp.alarm and self in director.enemies:
   alerted=true
   if seen:camp.lost_time=0
   if gun_reload>0:windup=0;cancel_warning()

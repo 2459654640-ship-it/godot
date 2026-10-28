@@ -51,6 +51,7 @@ static func buy(s,id:String)->String:
 	if id=="portable_radio" and int(s.economy.goods.get(id,0))>0:return "你已经有一台随身收音机了。"
 	if s.economy.stock.get(id,0)<=0:return "这批已经卖完了，等下一次补货。"
 	if s.economy.military<g.price:return "制式子弹不够。土制弹不能抵账。"
+	if not preload("res://scripts/backpack.gd").can_add(s,id):return "背包放不下这件物品，先整理或寄存物资。"
 	s.economy.military-=g.price
 	s.economy.goods[id]=int(s.economy.goods.get(id,0))+1
 	s.economy.stock[id]-=1

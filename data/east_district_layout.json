@@ -1,96 +1,159 @@
 {
   "name": "莫斯科东郊工业片区",
   "bounds": [
-    -80,
-    -60,
-    160,
-    120
+    -120,
+    -100,
+    240,
+    200
   ],
   "geography": "虚构的莫斯科东郊局部，距离经过游玩尺度压缩。地表入口连接地下联络线路，聚落本体不等于入口所在建筑；星城位于北线远处。",
   "roads": [
     {
-      "id": "freight_road",
-      "name": "旧货运路",
+      "id": "freight",
       "points": [
         [
-          -76,
+          -210,
           8
+        ],
+        [
+          210,
+          8
+        ]
+      ],
+      "width": 8
+    },
+    {
+      "id": "workers",
+      "points": [
+        [
+          -12,
+          -190
         ],
         [
           -12,
+          190
+        ]
+      ],
+      "width": 7.2
+    },
+    {
+      "id": "west_service",
+      "points": [
+        [
+          -98,
+          -190
+        ],
+        [
+          -98,
+          190
+        ]
+      ],
+      "width": 7
+    },
+    {
+      "id": "station",
+      "points": [
+        [
+          -69.5,
           8
         ],
         [
-          24,
-          8
+          -69.5,
+          190
+        ]
+      ],
+      "width": 6
+    },
+    {
+      "id": "residential_west",
+      "points": [
+        [
+          -210,
+          60
         ],
         [
-          75,
-          8
+          19,
+          60
         ]
       ],
       "width": 6.4
     },
     {
-      "id": "workers_avenue",
-      "name": "工人街",
+      "id": "residential_east",
       "points": [
         [
-          -12,
-          54
+          30,
+          60
         ],
         [
-          -12,
-          8
-        ],
-        [
-          -12,
-          -54
+          210,
+          60
         ]
       ],
-      "width": 5.2
+      "width": 6.4
     },
     {
-      "id": "plant_service",
-      "name": "水厂检修路",
+      "id": "factory_service",
       "points": [
         [
-          -70,
-          8
+          -210,
+          -82
         ],
         [
-          -64,
-          -8
+          19,
+          -82
+        ]
+      ],
+      "width": 6
+    },
+    {
+      "id": "north_link",
+      "points": [
+        [
+          65,
+          -190
+        ],
+        [
+          65,
+          35
+        ]
+      ],
+      "width": 6
+    },
+    {
+      "id": "factory_gate",
+      "points": [
+        [
+          -98,
+          -20
         ],
         [
           -60,
           -20
+        ],
+        [
+          -60,
+          -25
         ]
       ],
-      "width": 3.4
+      "width": 4
     },
     {
-      "id": "pump_service",
-      "name": "泵站支路",
+      "id": "pump_lane",
       "points": [
         [
-          -36,
+          -31,
           8
         ],
         [
           -31,
-          -3
-        ],
-        [
-          -31,
-          -15
+          -17
         ]
       ],
-      "width": 3.0
+      "width": 3.5
     },
     {
-      "id": "relay_service",
-      "name": "变配电所支路",
+      "id": "relay_lane",
       "points": [
         [
           -12,
@@ -101,75 +164,67 @@
           -22
         ]
       ],
-      "width": 3.0
+      "width": 3.5
     },
     {
-      "id": "commune_link",
-      "name": "西南地铁支线",
+      "id": "mine_lane",
       "points": [
         [
-          -64,
-          8
+          -46,
+          -82
         ],
         [
-          -64,
-          43
-        ]
-      ],
-      "width": 2.8
-    },
-    {
-      "id": "depot_access",
-      "name": "东货场检修道",
-      "points": [
-        [
-          65,
-          8
-        ],
-        [
-          65,
-          39
-        ]
-      ],
-      "width": 3.6
-    },
-    {
-      "id": "north_access",
-      "name": "北线出站路",
-      "points": [
-        [
-          65,
-          8
-        ],
-        [
-          65,
-          -49
-        ]
-      ],
-      "width": 3.4
-    },
-    {
-      "id": "mine_approach",
-      "name": "西侧旧检修巷",
-      "points": [
-        [
-          -70,
-          -6
-        ],
-        [
-          -74,
-          -25
-        ],
-        [
-          -74,
-          -49
+          -46,
+          -52
         ],
         [
           -49,
-          -49
+          -52
         ]
       ],
-      "width": 1.9
+      "width": 3
+    },
+    {
+      "id": "clinic_court",
+      "points": [
+        [
+          -98,
+          44
+        ],
+        [
+          -67,
+          44
+        ]
+      ],
+      "width": 3.5
+    },
+    {
+      "id": "radio_lane",
+      "points": [
+        [
+          -12,
+          -55
+        ],
+        [
+          -30,
+          -55
+        ]
+      ],
+      "width": 3.5
+    },
+    {
+      "id": "basin_lane",
+      "points": [
+        [
+          65,
+          -57
+        ],
+        [
+          76,
+          -57
+        ]
+      ],
+      "width": 4
     }
   ],
   "railway": {
@@ -185,136 +240,279 @@
   },
   "parcels": [
     {
-      "id": "waterworks",
-      "name": "东郊水处理厂",
-      "rect": [
-        -77,
-        -46,
-        34,
-        27
-      ],
+      "id": "pump",
       "building": [
-        -60,
-        -34,
-        14.7,
-        15,
+        -31,
+        -29,
+        13,
+        20,
         2
       ],
-      "entry": [
-        -60,
-        -24.5
-      ],
-      "target": "east_waterworks_entry"
-    },
-    {
-      "id": "pump",
-      "name": "旧泵站检修井",
-      "rect": [
-        -43,
-        -42,
-        25,
-        28
-      ],
-      "building": [
-        -31,
-        -27,
-        10.5,
-        16,
-        1
-      ],
-      "entry": [
-        -31,
-        -17
-      ],
-      "target": "east_pump_entry"
+      "open": false
     },
     {
       "id": "relay",
-      "name": "变配电所",
-      "rect": [
-        -7,
-        -43,
-        28,
-        24
-      ],
       "building": [
         5,
-        -33,
-        10.5,
-        14,
-        1
+        -31,
+        15,
+        10,
+        2
       ],
-      "entry": [
-        5,
-        -24
-      ],
-      "target": "east_relay"
-    },
-    {
-      "id": "residential",
-      "name": "工人住宅街",
-      "rect": [
-        -4,
-        20,
-        40,
-        34
-      ],
-      "building": [
-        7,
-        42,
-        14.7,
-        16,
-        3
-      ],
-      "entry": [
-        14,
-        25
-      ],
-      "target": "east_shelter"
+      "open": false
     },
     {
       "id": "depot",
-      "name": "北线货场检修库",
-      "rect": [
-        48,
-        24,
-        29,
-        30
-      ],
       "building": [
         65,
-        44,
-        14.7,
-        14,
+        43,
+        16,
+        12,
         2
       ],
-      "entry": [
-        65,
-        35
-      ],
-      "target": "east_sech_entry"
+      "open": false
     },
     {
-      "id": "greyhound_camp",
-      "name": "灰狗营地",
-      "rect": [
-        30,
-        -29,
-        27,
-        27
-      ],
+      "id": "south_station",
       "building": [
-        42,
-        -17,
-        10.5,
-        10,
+        -49,
+        41,
+        17,
+        20,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "south_corner",
+      "building": [
+        -30,
+        41,
+        14,
+        20,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "workers_house",
+      "building": [
+        7,
+        44,
+        15,
+        17,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "east_workers",
+      "building": [
+        43,
+        43,
+        16,
+        16,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "freight_tenement",
+      "building": [
+        -81,
+        -7,
+        20,
+        15,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "freight_ruin",
+      "building": [
+        -51,
+        -9,
+        21,
+        16,
+        2
+      ],
+      "open": true
+    },
+    {
+      "id": "clinic",
+      "building": [
+        -82,
+        32,
+        18,
+        18,
         1
       ],
-      "entry": [
-        42,
-        -10
+      "open": true
+    },
+    {
+      "id": "radio",
+      "building": [
+        -30,
+        -65,
+        18,
+        15,
+        1
       ],
-      "target": "east_camp_cache"
+      "open": true
+    },
+    {
+      "id": "south_a",
+      "building": [
+        -80,
+        79,
+        22,
+        17,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "south_b",
+      "building": [
+        -46,
+        79,
+        20,
+        17,
+        4
+      ],
+      "open": false
+    },
+    {
+      "id": "south_c",
+      "building": [
+        -27,
+        79,
+        13,
+        17,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "south_d",
+      "building": [
+        6,
+        79,
+        20,
+        17,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "south_e",
+      "building": [
+        46,
+        79,
+        26,
+        17,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "south_f",
+      "building": [
+        83,
+        79,
+        20,
+        17,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "east_corner",
+      "building": [
+        87,
+        27,
+        19,
+        24,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "east_north",
+      "building": [
+        88,
+        -11,
+        20,
+        18,
+        2
+      ],
+      "open": false
+    },
+    {
+      "id": "west_north",
+      "building": [
+        -111,
+        -45,
+        12,
+        34,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "west_south",
+      "building": [
+        -111,
+        32,
+        12,
+        31,
+        3
+      ],
+      "open": false
+    },
+    {
+      "id": "north_housing",
+      "building": [
+        -76,
+        -93,
+        28,
+        12,
+        2
+      ],
+      "open": false
+    },
+    {
+      "id": "north_ruin",
+      "building": [
+        -26,
+        -94,
+        20,
+        11,
+        2
+      ],
+      "open": true
+    },
+    {
+      "id": "depot_stores",
+      "building": [
+        44,
+        -44,
+        21,
+        13,
+        1
+      ],
+      "open": false
+    },
+    {
+      "id": "east_stores",
+      "building": [
+        111,
+        -38,
+        12,
+        24,
+        2
+      ],
+      "open": false
     }
   ],
   "entrances": [
@@ -400,13 +598,13 @@
       "id": "east_north_entry",
       "name": "北线接送站",
       "point": [
-        65,
-        -49
+        70,
+        -43
       ],
       "destination": "starcity",
       "arrival": [
-        65,
-        -52
+        70,
+        -46
       ]
     },
     {
@@ -487,6 +685,54 @@
         27,
         8
       ]
+    },
+    {
+      "id": "city_clinic",
+      "name": "诊所候诊室里的疏散名册",
+      "point": [
+        -85,
+        35
+      ]
+    },
+    {
+      "id": "city_medicine",
+      "name": "诊所药柜",
+      "point": [
+        -76,
+        27
+      ]
+    },
+    {
+      "id": "city_radio_log",
+      "name": "民防电台值班记录",
+      "point": [
+        -35,
+        -63
+      ]
+    },
+    {
+      "id": "city_radio_panel",
+      "name": "民防通信控制盘",
+      "point": [
+        -25,
+        -64.6
+      ]
+    },
+    {
+      "id": "city_basin_controls",
+      "name": "蓄水池旁通控制台",
+      "point": [
+        72,
+        -54
+      ]
+    },
+    {
+      "id": "city_basin_supplies",
+      "name": "巡检员应急箱",
+      "point": [
+        69,
+        -51
+      ]
     }
   ],
   "gate": {
@@ -502,5 +748,5 @@
       9
     ]
   },
-  "phase": "首个可玩区域，后续北线与星城内部按剧情章节扩展；不宣称整条主线已经实装。"
+  "phase": "城市废墟首区：街区探索、供电与通信谜题、灰狗营地、蓄水池首领；星城内部仍按后续章节开放。"
 }

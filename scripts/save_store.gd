@@ -1,7 +1,7 @@
 extends RefCounted
 ## Versioned local saves. A failed write never replaces the previous readable copy.
 const QUICK="user://d6_save.json"
-const FLOORS=["east_district","life","labor","waterworks","commune","sech","coal","starcity","surface","railfront"]
+const FLOORS=["grey_shelter","east_district","life","labor","waterworks","commune","sech","coal","starcity","surface","railfront"]
 const MANUAL_SLOTS=6
 static func manual_paths()->Array:
 	var out=[]
@@ -111,13 +111,14 @@ static func valid_combat(c:Variant)->bool:
 	if not c.get("enemies",[]) is Array or not c.get("checkpoint",{}) is Dictionary:return false
 	for enemy in c.get("enemies",[]):
 		if not enemy is Dictionary or not enemy.get("position",[]) is Array:return false
-		if enemy.position.size()!=3 or enemy.get("kind","") not in ["mutant","soldier","pouncer","spitter","greyhound"]:return false
+		if enemy.position.size()!=3 or enemy.get("kind","") not in ["mutant","soldier","pouncer","spitter","greyhound","behemoth"]:return false
 		for n in enemy.position:
 			if not (n is int or n is float) or not is_finite(float(n)) or absf(float(n))>10000:return false
 		for key in ["hp","cooldown","windup","arrival_time","move_speed","animation"]:
 			if enemy.has(key) and (not (enemy[key] is int or enemy[key] is float) or not is_finite(float(enemy[key]))):return false
 		var attack=enemy.get("attack",{})
 		if not attack is Dictionary:return false
+		if attack.get("boss_mode","charge") not in ["charge","spit","bite"]:return false
 		if attack.has("direction") and not valid_vector(attack.direction):return false
 		for key in ["charge","recovery","hurt"]:
 			if attack.has(key) and (not (attack[key] is int or attack[key] is float) or not is_finite(float(attack[key])) or float(attack[key])<0):return false

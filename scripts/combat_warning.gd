@@ -10,8 +10,8 @@ func setup(d,p:Vector3,seconds:float,target:Vector3=Vector3.INF,width:float=.6,k
  ink=StandardMaterial3D.new();ink.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;ink.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;ink.no_depth_test=false;ink.cull_mode=BaseMaterial3D.CULL_DISABLED;ink.albedo_color=Color(.83,.59,.28,.7);mesh.material_override=ink
  var geometry=ImmediateMesh.new();mesh.mesh=geometry;geometry.surface_begin(Mesh.PRIMITIVE_LINES)
  var offset=target-p if target.is_finite() else Vector3.ZERO;offset.y=0
- if kind=="pounce" and offset.length()>.01:
-  var end=offset.normalized()*minf(offset.length(),2.45);var side=Vector3(-end.z,0,end.x).normalized()*width
+ if kind in ["pounce","charge"] and offset.length()>.01:
+  var end=offset.normalized()*minf(offset.length(),7.6 if kind=="charge" else 2.45);var side=Vector3(-end.z,0,end.x).normalized()*(.9 if kind=="charge" else width)
   for edge in [-1,1]:line(geometry,side*edge,end+side*edge)
   line(geometry,end-side,end+side);line(geometry,end,end*.75+side*.5);line(geometry,end,end*.75-side*.5)
  else:

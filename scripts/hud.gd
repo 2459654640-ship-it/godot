@@ -141,7 +141,7 @@ func setup(w):
 	var key_panel=panel(Vector2(28,818),Vector2(290,62))
 	var kb=margin_box(key_panel,12,6)
 	kb.add_child(label("W A S D    移动       E   互动",16,text_color))
-	kb.add_child(label("Tab 总览 · 滚轮切换附近目标",13,muted))
+	kb.add_child(label("Tab 地图 · 滚轮切换附近目标",13,muted))
 	# Minimap has geometry, not a screenshot of the reference.
 	var mp=panel(Vector2(1310,68),Vector2(258,202))
 	var mb=margin_box(mp,6,5)
@@ -539,11 +539,12 @@ func show_journal(tab:String="tasks",shown_floor:String=""):
 		for pair in [["life","D-6生活层"],["labor","D-6作业层"]]+world.story.Campaign.NAMES.keys().filter(func(id):return world.story.f("visited_"+id) or world.floor_id==id).map(func(id):return [id,world.story.Campaign.NAMES[id]]):floors.add_child(button(pair[1],func():show_journal("map",pair[0]),true,true))
 		var focus=Journal.active(s)
 		if not focus.is_empty() and focus.place==requested:body("手记里圈过的一带："+focus.area,19,amber)
-		body("当前位置："+world.floor_name()+" · 旅程中的设施通过图文路线相连",18,amber)
+		body("当前位置："+world.floor_name()+" · 已探索的街区会记入地图",18,amber)
 		map_large=MapView.new();map_large.custom_minimum_size=Vector2(720,320)
 		map_large.world=world;map_large.expanded=true;map_large.display_floor=requested;modal_box.add_child(map_large)
 		var legend=GridContainer.new();legend.columns=3;legend.add_theme_constant_override("h_separation",18);modal_box.add_child(legend)
 		for zone in world.facility_zones(requested):
+			if requested=="east_district" and not preload("res://scripts/city_survey.gd").known_zone(s,zone):continue
 			if zone.code in ["00","L0"] or (requested=="life" and zone.code in ["09","10"]):continue
 			legend.add_child(label(zone.code+"  "+("伊万 / 老爹" if requested=="life" and zone.code=="01" else zone.name),15,text_color))
 		body("金色：通路与门口 · 蓝色：附近的人。地图只显示本层可探索的区域；门后还有其它生活或作业区。",16,muted)
@@ -700,6 +701,7 @@ func highlight_items(text:String)->String:
 func show_map():show_journal("map")
 
 func item_icon(id:String)->String:
+	if id in ["military","handmade"]:return "res://assets/visual/item_ammo_pouch.png"
 	if id=="portable_radio":return "res://assets/visual/item_portable_radio.svg"
 	return "res://assets/visual/item_"+world.story.Campaign.ITEM_ART.get(id,id)+".png"
 
@@ -754,11 +756,11 @@ func show_pause():
 	modal_box.add_child(button("读取存档…  [F9]",func():show_saves(false)))
 	modal_box.add_child(button("重新开始（保留已有存档）",func():show_restart_confirm()))
 	modal_box.add_child(button("返回主界面…",func():show_menu_confirm()))
-	if is_instance_valid(world.combat) and world.combat.active:modal_box.add_child(button("重试本场战斗（恢复战前资源）",func():world.combat.retry()))
+	if is_instance_valid(world.combat) and world.combat.active and not preload("res://scripts/raid_loot.gd").active(world):modal_box.add_child(button("重试本场战斗（恢复战前资源）",func():world.combat.retry()))
 	modal_box.add_child(button("设置 · 画面与声音",show_settings))
 	audio_controls()
 	rule()
-	body("WASD / 方向键：8 方向移动\nE：与当前选中的目标交互\nI：背包　J：手记　M：地图\nTab：总览　滚轮：附近有多个目标时切换，否则缩放\nEsc：关闭界面 / 菜单",20)
+	body("WASD / 方向键：8 方向移动\nE：与当前选中的目标交互\nI：背包　J：手记　M / Tab：地图\n滚轮：附近有多个目标时切换，否则调整近景缩放\nEsc：关闭界面 / 菜单",20)
 	body("靠近人物或物件时会出现互动提示。图文旅程可在暂停页保存，也能打开背包使用物资。",16,muted)
 func show_restart_confirm():
 	start_modal("重新开始？","当前未保存的进度将丢失",true)
@@ -951,6 +953,13 @@ func confirm_slot(path:String,saving:bool,data:Dictionary):
 	modal_box.add_child(button("返回列表",func():show_saves(saving,saves_return_menu)))
 
 func show_combat_defeat():
+	if preload("res://scripts/raid_loot.gd").active(world):
+		start_modal("地表行动失败","普通随身物资与装备丢失 · 任务随身夹、收藏与寄存物品保留",true)
+		body("你失去了意识。接应者把你送回了出发聚落，背包和武器没能带回来。",23)
+		body("本次携带的补给、材料、制式弹、土制弹和普通装备都会丢失。仓库中的物品、任务进度与关键物品保留。",18,muted)
+		modal_box.add_child(button("返回聚落，确认本次损失",func():preload("res://scripts/raid_loot.gd").return_after_loss(world)))
+		modal_box.add_child(button("读取其它手记",func():show_saves(false)))
+		return
 	start_modal("你倒在了"+({"east_district":"东郊工业区","surface":"地表废墟里","railfront":"联络线战区"}.get(world.floor_id,"水厂里")),"本场战斗前已保留检查点 · 重试恢复当时的资源",true)
 	body("面罩内的呼吸声渐渐远去。"+("远处传来老兵叫你的名字。" if is_instance_valid(world.combat.veteran) else "寒风还在废墟之间回响。"),23)
 	modal_box.add_child(button("从交火前重试",func():world.combat.retry()))

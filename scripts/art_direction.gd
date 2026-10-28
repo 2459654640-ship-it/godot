@@ -11,7 +11,7 @@ const PROFILES={
 	"railfront":["899b9c",.30,"a0b3b9",.18],
 	"surface":["a4b7c1",.35,"d1d7d5",.32],
 	"starcity":["a4b7c1",.35,"d1d7d5",.32],
-	"east_district":["a4b7c1",.35,"d1d7d5",.32]
+	"east_district":["9cabb2",.28,"d6d1bd",.62]
 }
 static func environment(w,e:Environment,sun:DirectionalLight3D):
 	var p:Array=PROFILES.get(w.floor_id,PROFILES.life)
@@ -22,6 +22,7 @@ static func environment(w,e:Environment,sun:DirectionalLight3D):
 		e.background_color=Color("a4b2b8")
 		e.fog_enabled=true;e.fog_density=.0018;e.fog_light_color=Color("a4b2b8")
 		e.fog_light_energy=.65
+		if w.floor_id=="east_district":e.fog_density=.0012
 	sun.directional_shadow_max_distance=75 if w.floor_id in OUTDOORS else 45
 	sun.shadow_blur=1.3
 

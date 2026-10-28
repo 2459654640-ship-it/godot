@@ -55,7 +55,9 @@ func run():
  var checkpoint=c.checkpoint.duplicate(true);w.story.economy.handmade=0;c.clip=0;w.story.economy.health=1;c.bite(w.player,10)
  check(c.defeated and w.hud.modal_visible(),"combat death opens retry")
  c.retry();await frames(15);w=current_scene;c=w.combat;w.hud.close();w.set_physics_process(false);w.player.set_physics_process(false);c.set_physics_process(false)
- check(w.story.economy.handmade==checkpoint.economy.handmade and w.story.economy.health==checkpoint.economy.health and c.clip==int(checkpoint.flags.weapon_clip),"retry restores exact pre-fight resources without a penalty")
+ check(w.story.f("raid_active") and c.defeated and w.story.economy.health==0 and w.story.economy.handmade==0,"surface failure cannot invoke a lossless story checkpoint")
+ # Continue exercising the independent puzzle and sample flow from the saved pre-fight state.
+ root.get_node("Session").enter(checkpoint,"surface",Vector3(-5,.04,-7));await frames(15);w=current_scene;c=w.combat;w.hud.close();w.set_physics_process(false);w.player.set_physics_process(false);c.set_physics_process(false)
  check(w.story.f("battle_surface_yard") and w.story.flags.surface_loot[key].taken,"retry preserves previous encounter progress and collected loot")
  check(not w.targets.has(id) and w.targets.keys().filter(func(t):return String(t).begins_with("surface_loot_")).size()==2,"scene reload restores uncollected drops without duplicating the collected one")
  c.begin("surface_pool")

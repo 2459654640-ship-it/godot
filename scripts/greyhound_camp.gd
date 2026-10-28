@@ -9,6 +9,9 @@ var last_seen=Vector3.INF
 var checkpoint:Dictionary={}
 var notice:Label
 var meter:ProgressBar
+var routes=[]
+var state_key="grey_camp"
+var cleared_key="grey_camp_cleared"
 const ROUTES=[
  [Vector3(34,.04,-8),Vector3(34,.04,-3.5),Vector3(39,.04,-3.5),Vector3(39,.04,-7)],
  [Vector3(52,.04,-8),Vector3(52,.04,-17),Vector3(54,.04,-23)],
@@ -16,7 +19,14 @@ const ROUTES=[
 ]
 func setup(world):
  w=world
- var saved:Dictionary=w.story.flags.get("grey_camp",{})
+ routes=ROUTES.duplicate(true)
+ if w.floor_id=="grey_shelter":
+  state_key="grey_shelter_guards";cleared_key="grey_shelter_cleared"
+  routes=[[Vector3(-4,.04,-4),Vector3(-3,.04,-1),Vector3(-2,.04,-4)],[Vector3(4,.04,2),Vector3(7,.04,1.5),Vector3(7,.04,-3)]]
+ else:
+  routes.append([Vector3(-26,.04,17),Vector3(-26,.04,27),Vector3(-21,.04,27),Vector3(-21,.04,17)])
+  routes.append([Vector3(-51,.04,1),Vector3(-51,.04,-9),Vector3(-44,.04,-11),Vector3(-44,.04,-3)])
+ var saved:Dictionary=w.story.flags.get(state_key,{})
  alarm=saved.get("alarm",false);lost_time=float(saved.get("lost_time",0))
  var last=saved.get("last_seen",[])
  if last.size()==3:last_seen=Vector3(last[0],last[1],last[2])
@@ -24,10 +34,10 @@ func setup(world):
  # Combat restore first recreates physics actors; replace only these new
  # guards with their perception controller, preserving exact gun timers/HP.
  var restored=w.combat.enemies.filter(func(e):return e.enemy_kind=="greyhound")
- for i in ROUTES.size():
+ for i in routes.size():
   var state:Dictionary=prior[i] if i<prior.size() else {}
-  if w.story.f("grey_camp_cleared") and state.is_empty():state={"hp":0}
-  var guard=Guard.new();w.add_child(guard);guard.configure(self,i,ROUTES[i],state);guards.append(guard)
+  if w.story.f(cleared_key) and state.is_empty():state={"hp":0}
+  var guard=Guard.new();w.add_child(guard);guard.configure(self,i,routes[i],state);guards.append(guard)
   var match_guard=restored.filter(func(e):return int(e.get_meta("loot_index",-1))==i)
   if not match_guard.is_empty():
    var old=match_guard[0];guard.position=old.position;guard.hp=old.hp;guard.windup=old.windup;guard.cooldown=old.cooldown
@@ -36,7 +46,7 @@ func setup(world):
   w.combat.active=true
   if w.combat.encounter=="":w.combat.encounter="grey_camp"
   for guard in guards:
-   if guard.hp>0 and guard not in w.combat.enemies:w.combat.enemies.append(guard)
+   if guard.hp>0 and guard.position.distance_to(w.player.position)<28 and guard not in w.combat.enemies:w.combat.enemies.append(guard)
  notice=Label.new();notice.position=Vector2(550,105);notice.size=Vector2(500,30);notice.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;notice.add_theme_font_size_override("font_size",18);notice.add_theme_color_override("font_color",Color("d9bd80"));w.hud.add_child(notice)
  meter=ProgressBar.new();meter.position=Vector2(650,139);meter.size=Vector2(300,8);meter.max_value=1;meter.show_percentage=false;w.hud.add_child(meter)
  meter.add_theme_stylebox_override("background",w.hud.style(Color("14201d"),Color("5b6657"),1,2));meter.add_theme_stylebox_override("fill",w.hud.style(Color("c6a16a"),Color("c6a16a"),0,2))
@@ -59,14 +69,17 @@ func _physics_process(delta):
   if lost_time>=10 and distance>10:stand_down()
  w.story.context.camp_loot_safe=can_loot()
 func raise_alarm(reason:String):
- if alarm:return
+ if alarm:
+  for guard in guards:
+   if guard.hp>0 and guard.position.distance_to(w.player.position)<25 and guard not in w.combat.enemies:w.combat.enemies.append(guard)
+  return
  if checkpoint.is_empty():checkpoint=w.save_snapshot().duplicate(true)
  alarm=true;lost_time=0;last_seen=w.player.position
  var c=w.combat
  if not c.active:
   c.checkpoint=checkpoint.duplicate(true);c.encounter="grey_camp";c.active=true
  for guard in guards:
-  if guard.hp>0 and guard not in c.enemies:c.enemies.append(guard)
+  if guard.hp>0 and guard.position.distance_to(w.player.position)<28 and guard not in c.enemies:c.enemies.append(guard)
  capture();w.hud.toast(reason+"。可以借掩体交战，或拉开距离藏好。",6)
 func on_shot():
  if guards.any(func(g):return is_instance_valid(g) and g.hp>0 and g.position.distance_to(w.player.position)<25):raise_alarm("营地的守卫听见了枪声")
@@ -86,7 +99,7 @@ func stand_down():
  capture();w.hud.toast("灰狗暂时停止追击，正在返回岗位。",4)
 func guard_fell(_guard):
  if guards.any(func(g):return is_instance_valid(g) and g.hp>0):capture();return
- w.story.flags.grey_camp_cleared=true;w.story.flags.battle_grey_camp=true;alarm=false;capture();w.story.changed.emit()
+ w.story.flags[cleared_key]=true;w.story.flags.battle_grey_camp=true;alarm=false;capture();w.story.changed.emit()
  w.autosave()
 func can_loot()->bool:
  for guard in guards:
@@ -98,4 +111,4 @@ func capture():
  for guard in guards:
   packet.guards.append(guard.packet() if is_instance_valid(guard) else {"hp":0})
  if last_seen.is_finite():packet.last_seen=[last_seen.x,last_seen.y,last_seen.z]
- w.story.flags.grey_camp=packet
+ w.story.flags[state_key]=packet

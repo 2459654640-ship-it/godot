@@ -18,6 +18,7 @@ var veteran_down=false
 var rescue=0.0
 var checkpoint:Dictionary={}
 var clip=6
+var last_weapon=""
 var cooldown=0.0
 var reload_time=0.0
 var veteran_cooldown=0.0
@@ -27,6 +28,8 @@ var aim=Vector3.ZERO
 var clock=0.0
 var label:Label
 var reticle:Control
+var boss_bar:ProgressBar
+var boss_title:Label
 var next_path=0.0
 var veteran_path=PackedVector3Array()
 var enemy_navigation=preload("res://scripts/route_grid.gd").new()
@@ -36,7 +39,8 @@ const ENCOUNTERS={
  "workshop":{"rect":Rect2(-6,-10,11,10),"need":"plant_bled","skip":"plant_fuse","name":"修配间的巢穴","spawns":[Vector3(-3,.04,-8),Vector3(3,.04,-8),Vector3(2,.04,-2)]},
  "warehouse":{"rect":Rect2(5,-14,14,14),"need":"plant_power","skip":"water_secured","name":"封存仓库","spawns":[Vector3(8,.04,-5),Vector3(15,.04,-5),Vector3(12,.04,-11),Vector3(17,.04,-2)]}}
 func setup(world):
- w=world;enabled=w.floor_id in ["waterworks","surface","railfront","east_district"];encounters=preload("res://scripts/surface_site.gd").ENCOUNTERS if w.floor_id=="surface" else ENCOUNTERS
+ w=world;enabled=w.floor_id in ["waterworks","surface","railfront","east_district","grey_shelter"];encounters=preload("res://scripts/surface_site.gd").ENCOUNTERS if w.floor_id=="surface" else ENCOUNTERS
+ if w.floor_id=="grey_shelter":encounters={}
  if w.floor_id=="east_district":encounters=w.story.Campaign.District.encounters(w.story)
  if w.floor_id=="railfront":encounters=preload("res://scripts/frontline.gd").encounters(w.story)
  if not enabled:return
@@ -47,6 +51,7 @@ func setup(world):
   w.story.economy.goods.bandage=int(w.story.economy.goods.get("bandage",0))+2
   w.story.economy.goods.antirad=int(w.story.economy.goods.get("antirad",0))+1
   w.hud.toast("老兵递来左轮、18 发土制弹与药品。左轮已放入武器栏：按 1 拔枪 / 收枪，I 可更换装备。",10)
+ last_weapon=w.story.equipped_weapon()
  clip=int(w.story.flags.get("weapon_clip",6));veteran_health=int(w.story.flags.get("veteran_health",100))
  label=Label.new();label.position=Vector2(420,855);label.size=Vector2(800,35);label.add_theme_font_size_override("font_size",19);label.add_theme_color_override("font_color",Color("dec99d"));w.hud.add_child(label)
  var backing=StyleBoxFlat.new();backing.bg_color=Color(.025,.045,.04,.94);backing.border_color=Color("776b4f");backing.set_border_width_all(1);backing.set_corner_radius_all(3);backing.content_margin_left=10;backing.content_margin_right=10;backing.content_margin_top=5;backing.content_margin_bottom=5;label.add_theme_stylebox_override("normal",backing)
@@ -54,6 +59,16 @@ func setup(world):
  reticle=Control.new();reticle.mouse_filter=Control.MOUSE_FILTER_IGNORE;w.hud.add_child(reticle)
  for offset in [Vector2(-9,0),Vector2(4,0),Vector2(0,-9),Vector2(0,4)]:
   var line=ColorRect.new();line.color=Color("dbc7a0");line.position=offset;line.size=Vector2(5,1) if offset.y==0 else Vector2(1,5);line.mouse_filter=Control.MOUSE_FILTER_IGNORE;reticle.add_child(line)
+func setup_boss_hud():
+ boss_title=Label.new();boss_title.position=Vector2(530,105);boss_title.size=Vector2(540,30);boss_title.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;boss_title.add_theme_font_size_override("font_size",21);w.hud.add_child(boss_title)
+ boss_bar=ProgressBar.new();boss_bar.position=Vector2(530,140);boss_bar.size=Vector2(540,12);boss_bar.show_percentage=false;boss_bar.max_value=460;boss_bar.add_theme_stylebox_override("background",w.hud.style(Color("18211f"),Color("746752"),1,2));boss_bar.add_theme_stylebox_override("fill",w.hud.style(Color("995b43"),Color("995b43"),0,2));w.hud.add_child(boss_bar)
+func update_boss_hud():
+ if not is_instance_valid(boss_bar):setup_boss_hud()
+ var bosses=enemies.filter(func(e):return is_instance_valid(e) and e.enemy_kind=="behemoth" and e.hp>0)
+ boss_bar.visible=active and not w.hud.modal_visible() and not bosses.is_empty();boss_title.visible=boss_bar.visible
+ if not boss_bar.visible:return
+ var b=bosses[0];boss_bar.value=b.hp
+ boss_title.text="蓄水池巨兽"+(" · 撞击后正在恢复" if b.recovery>1 else (" · 正在蓄力，避开正前方" if b.windup>0 else ""))
 func paused()->bool:return not enabled or w.hud.modal_visible() or w.departure_animating
 func enemy_path(from:Vector3,to:Vector3)->PackedVector3Array:
  # Creatures cannot use the player's small-step controller. Curbs, pool rims
@@ -64,14 +79,17 @@ func enemy_path(from:Vector3,to:Vector3)->PackedVector3Array:
  return enemy_navigation.path(from,to)
 func _physics_process(delta):
  if not enabled:return
+ update_boss_hud()
  if defeated:
   label.hide();reticle.hide()
   if not w.hud.modal_visible():w.hud.show_combat_defeat()
   return
- label.visible=not w.hud.modal_visible();reticle.visible=label.visible and (active or w.floor_id=="east_district") and w.story.weapon_drawn()
+ label.visible=not w.hud.modal_visible();reticle.visible=label.visible and (active or w.floor_id in ["east_district","grey_shelter"]) and w.story.weapon_drawn()
  if paused():
   if is_instance_valid(veteran):veteran.combat_velocity=Vector3.ZERO
   return
+ if last_weapon!=w.story.equipped_weapon():
+  last_weapon=w.story.equipped_weapon();clip=mini(magazine_size(),int(w.story.flags.get("weapon_clip",0)));reload_time=0
  clock+=delta;cooldown=maxf(0,cooldown-delta);veteran_cooldown=maxf(0,veteran_cooldown-delta)
  reticle.position=w.hud.get_local_mouse_position()
  var point=w.camera.project_ray_origin(w.get_viewport().get_mouse_position());var ray=w.camera.project_ray_normal(w.get_viewport().get_mouse_position())
@@ -82,21 +100,21 @@ func _physics_process(delta):
  if active:
   if Input.is_action_pressed("shoot") and cooldown<=0 and reload_time<=0:shoot()
  else:
-  if w.floor_id=="east_district" and Input.is_action_pressed("shoot") and cooldown<=0 and reload_time<=0:shoot()
+  if w.floor_id in ["east_district","grey_shelter"] and Input.is_action_pressed("shoot") and cooldown<=0 and reload_time<=0:shoot()
   for id in encounters:
    var e:Dictionary=encounters[id]
    if (w.floor_id!="waterworks" or not w.story.f("water_secured")) and not w.story.f("battle_"+id) and not w.story.f(e.skip) and w.story.f(e.need) and e.rect.has_point(Vector2(w.player.position.x,w.player.position.z)):begin(id);break
  if reload_time>0:
   reload_time=maxf(0,reload_time-delta)
   if reload_time<=0:
-   var rounds=mini(6-clip,int(w.story.economy.handmade));clip+=rounds;w.story.economy.handmade-=rounds;sync()
+   var rounds=mini(magazine_size()-clip,int(w.story.economy.handmade));clip+=rounds;w.story.economy.handmade-=rounds;sync()
  follow_veteran(delta)
  if veteran_health<=0 and is_instance_valid(veteran):
   var near=w.player.position.distance_to(veteran.position)<1.65
   rescue=rescue+delta if near and Input.is_action_pressed("interact") else 0
   if rescue>=2:veteran_health=45;veteran_down=false;rescue=0;w.hud.toast("老兵重新站起，握住了步枪。",4);sync()
  var radiation=" · 辐射 %d"%w.story.economy.radiation if w.story.economy.radiation>0 else ""
- label.text=("武器栏空置 · I 装备武器" if w.story.equipped_weapon()=="" else ("装填中… %.1f"%reload_time if reload_time>0 else (("左轮 %d / 6 · 土制弹 %d"%[clip,w.story.economy.handmade])+ (" · 1 收枪" if w.story.weapon_drawn() else " · 1 拔枪"))))+("  /  老兵 "+("倒地：靠近并按住 E 2 秒" if veteran_health<=0 else "%d"%veteran_health) if is_instance_valid(veteran) else "")+radiation
+ label.text=("武器栏空置 · I 装备武器" if w.story.equipped_weapon()=="" else ("装填中… %.1f"%reload_time if reload_time>0 else (("%s %d / %d · 土制弹 %d"%["卡宾枪" if w.story.equipped_weapon()=="grey_carbine" else "左轮",clip,magazine_size(),w.story.economy.handmade])+ (" · 1 收枪" if w.story.weapon_drawn() else " · 1 拔枪"))))+("  /  老兵 "+("倒地：靠近并按住 E 2 秒" if veteran_health<=0 else "%d"%veteran_health) if is_instance_valid(veteran) else "")+radiation
  if rescue>0:label.text+="  救援 %d%%"%int(rescue*50)
  if w.floor_id=="waterworks" and Rect2(-19,-14,7,7).has_point(Vector2(w.player.position.x,w.player.position.z)) and not w.story.f("radiation_warned"):
   w.story.flags.radiation_warned=true;w.hud.toast("旧沉积物带有辐射，尽量绕开西北角的污泥积水。抗辐射药可在背包使用。",7)
@@ -107,6 +125,7 @@ func _physics_process(delta):
    exposure-=5;w.story.economy.radiation=mini(100,w.story.economy.radiation+2)
    if not w.story.f("radiation_warned"):w.story.flags.radiation_warned=true;w.hud.toast("脚边是带放射性沉积物的积水。离开这片区域；抗辐射药可在背包使用。",7)
   w.story.flags.radiation_clock=exposure
+func magazine_size()->int:return 5 if w.story.equipped_weapon()=="grey_carbine" else 6
 func sync():
  w.story.flags.weapon_clip=clip;w.story.flags.veteran_health=veteran_health;w.story.changed.emit()
 func begin(id:String):
@@ -125,25 +144,25 @@ func begin(id:String):
   var enemy=Enemy.new();w.add_child(enemy);enemy.setup(self,w.clear_arrival(p),kinds[enemies.size()] if enemies.size()<kinds.size() else encounters[id].get("enemy_kind","mutant"));enemy.set_meta("loot_key",id+"_"+str(enemies.size()));enemy.set_meta("loot_index",enemies.size());enemies.append(enemy)
  w.hud.toast(encounters[id].name+" · "+("1 拔枪 · " if not w.story.weapon_drawn() else "")+"左键射击 / R 换弹；先清理威胁，再操作设备。",7)
 func reload_weapon():
- if reload_time>0 or clip>=6:return
+ if reload_time>0 or clip>=magazine_size():return
  if int(w.story.economy.handmade)<=0:
   w.hud.toast("土制弹已用完。先在背包使用弹药包，或设法撤回聚落补给。"+("老兵仍能掩护你。" if is_instance_valid(veteran) and veteran_health>0 else ""),5);return
  reload_time=1.55;w.get_node("/root/Session").sound("reload")
 func shoot()->bool:
- if paused() or (not active and w.floor_id!="east_district") or cooldown>0 or reload_time>0:return false
+ if paused() or (not active and w.floor_id not in ["east_district","grey_shelter"]) or cooldown>0 or reload_time>0:return false
  if not w.story.weapon_drawn():
   cooldown=.8;w.hud.toast("武器栏为空，先在背包装备左轮。" if w.story.equipped_weapon()=="" else "武器已收起，按 1 拔枪。可在背包中查看武器栏。",3);return false
  if clip<=0:reload_weapon();return false
  if is_instance_valid(w.grey_camp):w.grey_camp.on_shot()
- clip-=1;cooldown=.36 if w.story.f("weapon_serviced") else .42;sync()
+ clip-=1;cooldown=.82 if w.story.equipped_weapon()=="grey_carbine" else (.36 if w.story.f("weapon_serviced") else .42);sync()
  var origin=w.player.position+Vector3.UP*.72
  var direction=aim-origin;direction.y=clampf(direction.y,-.08,.08)
  if direction.length()<.1:direction=-w.player.visual.global_basis.z;direction.y=0
  direction=direction.normalized()
  var result=cast(origin,origin+direction*25)
  if not result.is_empty():
-  if result.collider is Enemy:result.collider.damage(32,true)
-  elif result.collider.has_method("damage"):result.collider.damage(32)
+  if result.collider is Enemy:result.collider.damage(46 if w.story.equipped_weapon()=="grey_carbine" else 32,true)
+  elif result.collider.has_method("damage"):result.collider.damage(46 if w.story.equipped_weapon()=="grey_carbine" else 32)
   else:impact_effect(result.position,true)
  tracer(origin,result.get("position",origin+direction*25),false)
  w.player.visual.get_node("Painter").react("shot")
@@ -203,7 +222,7 @@ func bite(body,amount:int,cause:String="撕咬"):
    defeated=true;w.player.blocked=true;w.hud.show_combat_defeat()
 func enemy_fell(enemy):
  if w.floor_id=="surface":preload("res://scripts/surface_site.gd").drop(w,enemy)
- if w.floor_id=="east_district":w.story.Campaign.District.drop(w,enemy)
+ if w.floor_id in ["east_district","grey_shelter"]:w.story.Campaign.District.drop(w,enemy)
  enemies.erase(enemy)
  if enemies.is_empty():
   for projectile in projectiles.duplicate():
@@ -214,6 +233,7 @@ func enemy_fell(enemy):
   if w.floor_id=="railfront":w.sync_event_music("")
   w.hud.toast("周围安静下来。可以检查设备、包扎伤口，再继续前进。",5)
 func retry():
+ if preload("res://scripts/raid_loot.gd").active(w):return
  if checkpoint.is_empty():return
  var p=checkpoint.position
  w.get_node("/root/Session").enter(checkpoint,checkpoint.floor,Vector3(p[0],p[1],p[2]))
@@ -259,7 +279,8 @@ func restore_state(state:Dictionary):
  for shot in projectiles.duplicate():
   if is_instance_valid(shot):shot.queue_free()
  projectiles.clear();enemies.clear();encounter=id;active=true
- clip=clampi(int(state.get("clip",6)),0,6);cooldown=maxf(0,state.get("cooldown",0));reload_time=maxf(0,state.get("reload_time",0))
+ last_weapon=w.story.equipped_weapon()
+ clip=clampi(int(state.get("clip",6)),0,magazine_size());cooldown=maxf(0,state.get("cooldown",0));reload_time=maxf(0,state.get("reload_time",0))
  veteran_health=clampi(int(state.get("veteran_health",100)),0,100);veteran_down=veteran_health<=0;veteran_clip=clampi(int(state.get("veteran_clip",5)),0,5)
  veteran_reload=maxf(0,state.get("veteran_reload",0));veteran_cooldown=maxf(0,state.get("veteran_cooldown",0));rescue=maxf(0,state.get("rescue",0))
  checkpoint=state.get("checkpoint",{}).duplicate(true)

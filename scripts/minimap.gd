@@ -17,6 +17,8 @@ func polygon(r:Rect2) -> PackedVector2Array:
 func _draw():
 	if not world:return
 	var floor=display_floor if display_floor!="" else world.floor_id
+	if floor=="east_district":
+		preload("res://scripts/city_survey.gd").draw_map(self);return
 	var same=floor==world.floor_id
 	var zones=world.facility_zones(floor)
 	var bounds=Rect2()

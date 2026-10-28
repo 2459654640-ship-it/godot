@@ -5,7 +5,7 @@ static func build(w):
 	match w.floor_id:
 		"commune":commune(w)
 		"waterworks":waterworks(w)
-		"east_district":district(w)
+		"east_district":pass # City composition is owned by east_district_map.
 
 static func commune(w):
 	var k=w.kit

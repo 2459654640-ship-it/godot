@@ -36,6 +36,7 @@ func target_reached(id:String,seen:Dictionary)->bool:
 func reader():
  var n=0
  while n<35:
+  while current_scene==null:await process_frame
   w=current_scene
   if not w.story.flags.get("comic",{}).get("active",false):break
   var p:Dictionary=w.story.Comic.panel(w.story);check(not p.is_empty() and ResourceLoader.exists("res://assets/cinematics/"+p.art+".png"),"physical travel has matching illustration")
@@ -44,7 +45,7 @@ func reader():
  w=current_scene;stop_world()
 func run():
  w=load("res://scenes/east_district.tscn").instantiate();root.add_child(w);current_scene=w;await frames();stop_world();w.story.route="hatch";w.story.flags.departure_committed=true;w.story.flags.d6_wanted=true;w.story.flags.east_home="commune";w.story.give("mask");w.story.give("filter");w.story.give("revolver")
- check(w.navigation.graph.get_point_count()>12000 and w.navigation.graph.get_point_count()<25000,"district navigation covers the authored area within bounded graph size")
+ check(w.navigation.graph.get_point_count()>12000 and w.navigation.graph.get_point_count()<48000,"district navigation covers the authored area within bounded graph size")
  check(w.targets.size()>=17 and w.public_radio!=null and w.combat.enabled,"district contains entrances, exploration targets, a receiver and working combat")
  check(w.player.art_id=="ivan_masked","outdoor Ivan uses the approved masked atlas")
  for entrance in District.layout().entrances:

@@ -13,6 +13,9 @@ static func data()->Dictionary:
 static func extend(c:Dictionary):
 	for section in ["actions","interactions","panels"]:c[section].merge(data()[section].duplicate(true),true)
 	c.quests.append_array(data().quests.duplicate(true))
+	var city:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/city_exploration.json"))
+	for section in ["actions","interactions","panels"]:c[section].merge(city[section],true)
+	c.quests.append_array(city.quests)
 	for home in HOMES:
 		var target={"commune":"commune_leave","sech":"sech_leave","labor":"d6_return_desk"}[home]
 		c.interactions[target].options.append("east_depart_"+home)
@@ -42,6 +45,7 @@ static func allowed(s,key:String)->bool:
 	if key=="east_mine_prepare":return not s.f("east_mine_prepared")
 	return true
 static func depart(s,home:String):
+	preload("res://scripts/raid_loot.gd").begin(s,home)
 	s.flags.east_trip_active=true;s.flags.east_home=home;s.flags.east_arrival=home
 	s.flags.next_sequence="east_depart_"+home
 static func act(s,key:String):
@@ -72,7 +76,7 @@ static func decorate(v:Dictionary,s)->Dictionary:
 	if v.id=="coal_exit" and private_mine(s):
 		v.name="矿区内部 / 撤离会合点";v.body="这里是与瓦西里约定的内部会合点。接应会带你沿封停检修支巷返回地表，不经过 D-6 正门或作业层。"
 	if v.id=="commune_leave" and s.f("east_mine_prepared"):
-		v.body+="\n矿区的私人接应已确认。先从支线登上地表，再沿水厂西侧检修巷到封停入口，不能去 D-6 正门。"
+		v.body+="\n矿区的私人接应已确认。先从支线登上地表，再沿厂区东侧检修巷到封停入口，不能去 D-6 正门。"
 	if v.id=="east_gate" and s.f("east_crossing_open"):v.body="横穿门已经退到围栏旁，旧货运路可以通过。铁轨保留在专用带内，通行处没有堆放货物。"
 	if v.id=="east_relay" and s.f("east_power_restored"):v.body="检修柜读数稳定。门机、路口指示灯与修配间已经通电，换下的旧组件留在标记过的废件盒里。"
 	if v.id=="east_camp_cache" and s.f("grey_camp_cleared"):v.body="院内的守卫已被击倒，棚屋里仍有未冷的炉子和整理过的床铺。门旁的运输箱可以打开检查。"
@@ -88,10 +92,17 @@ static func task_stage(s,q:Dictionary,current:Dictionary)->Dictionary:
 	if floor==FLOOR and q.id=="east_power" and not s.f("east_crossing_open") and s.context.get("east_side",false):
 		return {"target":"east_gate_east","place":FLOOR,"step":"先用货场门东侧应急柄脱开门机，步行到西侧核对供电备件。"}
 	if q.id in ["workers_network","commune_chapter"] and s.f("workers_draft") and not s.f("workers_signed") and s.f("east_mine_prepared") and floor!="coal":
-		return {"target":"east_mine_entry" if floor==FLOOR else "commune_leave","place":FLOOR if floor==FLOOR else "commune","step":"私人接应已经确认。登上地表，沿水厂西侧检修巷进入煤运区；征询原稿留在公社，工人是否回话由本人决定。"}
+		return {"target":"east_mine_entry" if floor==FLOOR else "commune_leave","place":FLOOR if floor==FLOOR else "commune","step":"私人接应已经确认。登上地表，沿厂区东侧检修巷进入煤运区；征询原稿留在公社，工人是否回话由本人决定。"}
 	return current
 static func sync(w):
 	if w.floor_id!=FLOOR:return
+	var gate=w.get_node_or_null("BasinInspectionGate")
+	if is_instance_valid(gate) and gate.get_meta("opened",false)!=w.story.f("city_basin_open"):
+		var opened=w.story.f("city_basin_open");gate.set_meta("opened",opened)
+		var destination=Vector3(74,1,-61 if opened else -57)
+		if not w.initialized:gate.position=destination
+		else:
+			var motion=w.create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS);motion.tween_property(gate,"position",destination,1.1).set_trans(Tween.TRANS_SINE);motion.finished.connect(func():if is_instance_valid(w.navigation):w.navigation.setup(w))
 	var powered=w.story.f("east_power_restored")
 	for name in ["EastCrossingLamp","EastWorkshopLamp"]:
 		var lamp=w.get_node_or_null(name)
@@ -107,12 +118,18 @@ static func spawn(s,previous_floor:String)->Vector3:
 	return Vector3(-64,.04,46)
 static func encounters(s)->Dictionary:
 	var sites={"east_road":{"rect":Rect2(-47,-5,14,13),"need":"east_region_ready","skip":"unused_east_skip","name":"货运路旁的游荡兽群","spawns":[Vector3(-43,.04,0),Vector3(-36,.04,2)]},"grey_camp":{"rect":Rect2(30,-29,27,27),"need":"unused_manual_camp_trigger","skip":"unused_east_skip","name":"灰狗营地","spawns":[]}}
+	sites.city_basin={"rect":Rect2(76,-75,30,28),"need":"city_basin_open","skip":"unused_city_skip","name":"蓄水池巨兽","enemy_kind":"behemoth","spawns":[Vector3(96,.04,-64)]}
+	sites.city_radio_nest={"rect":Rect2(-43,-77,26,24),"need":"east_region_ready","skip":"unused_city_skip","name":"民防站周围的兽群","spawns":[Vector3(-35,.04,-53),Vector3(-23,.04,-54),Vector3(-40,.04,-68)]}
+	sites.east_road.spawns.append_array([Vector3(-40,.04,7),Vector3(-35,.04,9)])
+	sites.city_radio_nest.spawns.append(Vector3(-41,.04,-58))
 	var batch:Dictionary=s.flags.get("east_spawn_batches",{})
 	for id in sites:
 		var rng=RandomNumberGenerator.new();rng.seed=hash(str(s.flags.get("social_seed",0))+id+str(batch.get(id,0)))
 		# Select among deliberately clear positions; never spawn inside arbitrary geometry.
 		for i in range(sites[id].spawns.size()-1,0,-1):
 			var j=rng.randi_range(0,i);var p:Vector3=sites[id].spawns[i];sites[id].spawns[i]=sites[id].spawns[j];sites[id].spawns[j]=p
+		if id=="east_road":sites[id].spawns.resize(2)
+		if id=="city_radio_nest":sites[id].spawns.resize(3)
 	return sites
 static func prepare(w):
 	if w.floor_id!=FLOOR:return
@@ -122,17 +139,21 @@ static func prepare(w):
 	var times:Dictionary=w.story.flags.get("east_cleared_at",{})
 	var batches:Dictionary=w.story.flags.get("east_spawn_batches",{}).duplicate(true)
 	for id in times:
-		if id!="east_road":continue
+		if id not in ["east_road","city_radio_nest"]:continue
 		if w.played_seconds-float(times[id])>=900 and w.story.f("battle_"+id):
 			w.story.flags.erase("battle_"+id);batches[id]=int(batches.get(id,0))+1
 	w.story.flags.east_spawn_batches=batches
 static func cleared(w,id:String):
+	if id=="city_basin" and not w.story.f("city_basin_rewarded"):
+		w.story.flags.city_basin_rewarded=true;w.story.economy.goods.mutant_sample=int(w.story.economy.goods.get("mutant_sample",0))+3
+		w.story.economy.military+=18;w.hud.toast("蓄水池已清理 · 获得封存样本 ×3、巡检箱中的制式弹 ×18。",7)
 	var times:Dictionary=w.story.flags.get("east_cleared_at",{}).duplicate(true);times[id]=w.played_seconds;w.story.flags.east_cleared_at=times
 static func can_retreat(w,id:String)->bool:
 	if w.floor_id!=FLOOR:return false
 	if not layout().entrances.any(func(e):return e.id==id):return false
 	return w.combat.enemies.all(func(e):return not is_instance_valid(e) or e.position.distance_to(w.player.position)>6)
 static func safe_interaction(w,id:String)->bool:
+	if id in ["grey_shelter_entry","grey_shelter_exit"] or id.begins_with("raid_container_"):return preload("res://scripts/raid_loot.gd").safe(w)
 	return w.floor_id==FLOOR and id=="east_camp_cache" and is_instance_valid(w.grey_camp) and w.grey_camp.can_loot()
 static func remember_combat(w):
 	if w.floor_id!=FLOOR or not w.combat.active:return
@@ -152,6 +173,7 @@ static func restore_combat(w):
 	if w.combat.checkpoint.is_empty():
 		var checkpoint:Dictionary=w.save_snapshot().duplicate(true);checkpoint.combat_state={};w.combat.checkpoint=checkpoint
 static func drop(w,enemy):
+	if enemy.enemy_kind=="greyhound":preload("res://scripts/raid_loot.gd").corpse(w,enemy);return
 	var batch=int(w.story.flags.get("east_spawn_batches",{}).get(w.combat.encounter,0))
 	var source:String=enemy.get_meta("loot_key","")
 	if source=="":return
@@ -173,7 +195,9 @@ static func collect(w,id:String):
 	var key=id.trim_prefix("east_loot_");var records:Dictionary=w.story.flags.get("east_loot",{})
 	if not records.has(key) or records[key].taken or not w.targets.has(id):return
 	if w.player.position.distance_to(w.targets[id].pos)>1.9:return
-	var good:String=records[key].good;records[key].taken=true
+	var good:String=records[key].good
+	if not preload("res://scripts/backpack.gd").can_add(w.story,good):w.hud.toast("背包已满，先整理或放下物资。");return
+	records[key].taken=true
 	w.story.economy.goods[good]=int(w.story.economy.goods.get(good,0))+1
 	var node=w.get_node_or_null(id)
 	if node:node.queue_free()

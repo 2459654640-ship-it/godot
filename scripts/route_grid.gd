@@ -19,6 +19,7 @@ func setup(world,minimum_obstacle_height:float=0.24):
 		bounds=bounds.merge(zone.rect)
 	var obstacles:Array=[]
 	for solid in world.kit.solids:
+		if solid.name=="BasinInspectionGate" and world.story.f("city_basin_open"):continue
 		if solid.name=="CampaignInnerGate" and world.story.f(world.campaign_gate_flag):continue
 		if solid.top>minimum_obstacle_height and solid.bottom<1.75:
 			var rect:Rect2=solid.rect
