@@ -1,0 +1,426 @@
+[
+  {
+    "suite": "run",
+    "result": [
+      "D6_TEST_RESULT checks=1891 failures=0"
+    ],
+    "errors": [],
+    "log": "run.log"
+  },
+  {
+    "suite": "visual_contract",
+    "result": [
+      "VISUAL_CONTRACT_RESULT checks=1108 failures=0"
+    ],
+    "errors": [],
+    "log": "visual_contract.log"
+  },
+  {
+    "suite": "narrative_contract",
+    "result": [
+      "NARRATIVE_CONTRACT_RESULT checks=1942 failures=0"
+    ],
+    "errors": [],
+    "log": "narrative_contract.log"
+  },
+  {
+    "suite": "resident_contract",
+    "result": [
+      "RESIDENT_CONTRACT_RESULT checks=114 failures=0"
+    ],
+    "errors": [],
+    "log": "resident_contract.log"
+  },
+  {
+    "suite": "chapter_contract",
+    "result": [
+      "CHAPTER_CONTRACT_RESULT checks=141 failures=0"
+    ],
+    "errors": [],
+    "log": "chapter_contract.log"
+  },
+  {
+    "suite": "floor_contract",
+    "result": [
+      "FLOOR_CONTRACT_RESULT checks=40 failures=0 connected_cells=4127"
+    ],
+    "errors": [],
+    "log": "floor_contract.log"
+  },
+  {
+    "suite": "campaign_contract",
+    "result": [
+      "CAMPAIGN_CONTRACT_RESULT checks=458 failures=0"
+    ],
+    "errors": [],
+    "log": "campaign_contract.log"
+  },
+  {
+    "suite": "campaign_ui",
+    "result": [
+      "CAMPAIGN_UI_RESULT checks=17 failures=0"
+    ],
+    "errors": [],
+    "log": "campaign_ui.log"
+  },
+  {
+    "suite": "refinement_contract",
+    "result": [
+      "REFINEMENT_RESULT checks=39 failures=0"
+    ],
+    "errors": [],
+    "log": "refinement_contract.log"
+  },
+  {
+    "suite": "presentation_contract",
+    "result": [
+      "PRESENTATION_RESULT checks=38 failures=0"
+    ],
+    "errors": [],
+    "log": "presentation_contract.log"
+  },
+  {
+    "suite": "exploration_contract",
+    "result": [
+      "EXPLORATION_RESULT checks=187 failures=0"
+    ],
+    "errors": [],
+    "log": "exploration_contract.log"
+  },
+  {
+    "suite": "v9_contract",
+    "result": [
+      "V9_RESULT checks=129 failures=0"
+    ],
+    "errors": [],
+    "log": "v9_contract.log"
+  },
+  {
+    "suite": "v10_contract",
+    "result": [
+      "V10_RESULT checks=121 failures=0"
+    ],
+    "errors": [],
+    "log": "v10_contract.log"
+  },
+  {
+    "suite": "v11_contract",
+    "result": [
+      "V11_RESULT checks=180 failures=0"
+    ],
+    "errors": [],
+    "log": "v11_contract.log"
+  },
+  {
+    "suite": "v11_combat",
+    "result": [
+      "V11_COMBAT_RESULT checks=22 failures=0"
+    ],
+    "errors": [],
+    "log": "v11_combat.log"
+  },
+  {
+    "suite": "occlusion_v11",
+    "result": [
+      "OCCLUSION_V11_RESULT checks=9 failures=0"
+    ],
+    "errors": [],
+    "log": "occlusion_v11.log"
+  },
+  {
+    "suite": "visual_fixes_v11_1",
+    "result": [
+      "VISUAL_FIXES_V11_1_RESULT checks=108 failures=0"
+    ],
+    "errors": [],
+    "log": "visual_fixes_v11_1.log"
+  },
+  {
+    "suite": "commune_v12",
+    "result": [
+      "COMMUNE_V12_RESULT checks=146 failures=0"
+    ],
+    "errors": [],
+    "log": "commune_v12.log"
+  },
+  {
+    "suite": "factory_v12",
+    "result": [
+      "FACTORY_V12_RESULT checks=49 failures=0"
+    ],
+    "errors": [],
+    "log": "factory_v12.log"
+  },
+  {
+    "suite": "equipment_v12",
+    "result": [
+      "EQUIPMENT_V12_RESULT checks=17 failures=0"
+    ],
+    "errors": [],
+    "log": "equipment_v12.log"
+  },
+  {
+    "suite": "platform_v12",
+    "result": [
+      "PLATFORM_V12_RESULT checks=12 failures=0"
+    ],
+    "errors": [],
+    "log": "platform_v12.log"
+  },
+  {
+    "suite": "actors_v13",
+    "result": [
+      "ACTORS_V13_RESULT checks=61 failures=0"
+    ],
+    "errors": [],
+    "log": "actors_v13.log"
+  },
+  {
+    "suite": "publications_v13",
+    "result": [
+      "PUBLICATIONS_V13_RESULT checks=126 failures=0"
+    ],
+    "errors": [],
+    "log": "publications_v13.log"
+  },
+  {
+    "suite": "public_radio_v16",
+    "result": [
+      "PUBLIC_RADIO_V16_RESULT checks=132 failures=0"
+    ],
+    "errors": [],
+    "log": "public_radio_v16.log"
+  },
+  {
+    "suite": "ivan_gait_v16",
+    "result": [
+      "IVAN_GAIT_V16_RESULT checks=102 failures=0"
+    ],
+    "errors": [],
+    "log": "ivan_gait_v16.log"
+  },
+  {
+    "suite": "furnishings_v16",
+    "result": [
+      "FURNISHINGS_V16_RESULT checks=40 failures=0"
+    ],
+    "errors": [],
+    "log": "furnishings_v16.log"
+  },
+  {
+    "suite": "first_meetings_v17",
+    "result": [
+      "FIRST_MEETINGS_V17_RESULT checks=294 failures=0"
+    ],
+    "errors": [],
+    "log": "first_meetings_v17.log"
+  },
+  {
+    "suite": "starcity_v17",
+    "result": [
+      "STARCITY_V19_RESULT checks=7 failures=0"
+    ],
+    "errors": [],
+    "log": "starcity_v17.log"
+  },
+  {
+    "suite": "ivan_gait_v17",
+    "result": [
+      "IVAN_GAIT_V17_RESULT checks=7254 failures=0"
+    ],
+    "errors": [],
+    "log": "ivan_gait_v17.log"
+  },
+  {
+    "suite": "motion_v18",
+    "result": [
+      "MOTION_V18_RESULT checks=966 failures=0"
+    ],
+    "errors": [],
+    "log": "motion_v18.log"
+  },
+  {
+    "suite": "expedition_v19",
+    "result": [
+      "EXPEDITION_V19_RESULT checks=102 failures=0"
+    ],
+    "errors": [],
+    "log": "expedition_v19.log"
+  },
+  {
+    "suite": "narrative_v19",
+    "result": [
+      "NARRATIVE_V19_RESULT checks=150 failures=0"
+    ],
+    "errors": [],
+    "log": "narrative_v19.log"
+  },
+  {
+    "suite": "crowds_v19",
+    "result": [
+      "CROWDS_V19_RESULT checks=16 failures=0"
+    ],
+    "errors": [],
+    "log": "crowds_v19.log"
+  },
+  {
+    "suite": "chapter_v22",
+    "result": [
+      "CHAPTER_V22_RESULT checks=537 failures=0"
+    ],
+    "errors": [],
+    "log": "chapter_v22.log"
+  },
+  {
+    "suite": "chapter_world_v22",
+    "result": [
+      "CHAPTER_WORLD_V22_RESULT checks=25 failures=0"
+    ],
+    "errors": [],
+    "log": "chapter_world_v22.log"
+  },
+  {
+    "suite": "chapter_flow_v22",
+    "result": [
+      "CHAPTER_FLOW_V22_RESULT checks=22 failures=0"
+    ],
+    "errors": [],
+    "log": "chapter_flow_v22.log"
+  },
+  {
+    "suite": "exterior_v23",
+    "result": [
+      "EXTERIOR_V23_RESULT checks=85 failures=0"
+    ],
+    "errors": [],
+    "log": "exterior_v23.log"
+  },
+  {
+    "suite": "enemy_routes_v23",
+    "result": [
+      "ENEMY_ROUTES_V23_RESULT checks=37 failures=0"
+    ],
+    "errors": [],
+    "log": "enemy_routes_v23.log"
+  },
+  {
+    "suite": "living_story_v24",
+    "result": [
+      "LIVING_STORY_V24_RESULT checks=204 failures=0"
+    ],
+    "errors": [],
+    "log": "living_story_v24.log"
+  },
+  {
+    "suite": "living_world_v24",
+    "result": [
+      "LIVING_WORLD_V24_RESULT checks=32 failures=0"
+    ],
+    "errors": [],
+    "log": "living_world_v24.log"
+  },
+  {
+    "suite": "save_slots_v24",
+    "result": [
+      "SAVE_SLOTS_V24_RESULT checks=54 failures=0"
+    ],
+    "errors": [],
+    "log": "save_slots_v24.log"
+  },
+  {
+    "suite": "coal_identity_v24",
+    "result": [
+      "COAL_IDENTITY_V24_RESULT checks=51 failures=0"
+    ],
+    "errors": [],
+    "log": "coal_identity_v24.log"
+  },
+  {
+    "suite": "journey_ui_v25",
+    "result": [
+      "JOURNEY_UI_V25_RESULT checks=116 failures=0"
+    ],
+    "errors": [],
+    "log": "journey_ui_v25.log"
+  },
+  {
+    "suite": "npc_gait_v25",
+    "result": [
+      "NPC_GAIT_V25_RESULT checks=1731 failures=0"
+    ],
+    "errors": [],
+    "log": "npc_gait_v25.log"
+  },
+  {
+    "suite": "radiation_v25",
+    "result": [
+      "RADIATION_V25_RESULT checks=59 failures=0"
+    ],
+    "errors": [],
+    "log": "radiation_v25.log"
+  },
+  {
+    "suite": "combat_species_v26",
+    "result": [
+      "COMBAT_SPECIES_V26_RESULT checks=23 failures=0"
+    ],
+    "errors": [],
+    "log": "combat_species_v26.log"
+  },
+  {
+    "suite": "watch_dialogue_v26",
+    "result": [
+      "WATCH_DIALOGUE_V26_RESULT checks=26 failures=0"
+    ],
+    "errors": [],
+    "log": "watch_dialogue_v26.log"
+  },
+  {
+    "suite": "access_interactions_v26",
+    "result": [
+      "ACCESS_INTERACTIONS_V26_RESULT checks=165 failures=0"
+    ],
+    "errors": [],
+    "log": "access_interactions_v26.log"
+  },
+  {
+    "suite": "east_district_v27",
+    "result": [
+      "EAST_DISTRICT_V27_RESULT checks=85 failures=0"
+    ],
+    "errors": [],
+    "log": "east_district_v27.log"
+  },
+  {
+    "suite": "stealth_v27",
+    "result": [
+      "STEALTH_V27_RESULT checks=51 failures=0"
+    ],
+    "errors": [],
+    "log": "stealth_v27.log"
+  },
+  {
+    "suite": "art_direction_v28",
+    "result": [
+      "ART_DIRECTION_V28_RESULT 51 checks passed"
+    ],
+    "errors": [],
+    "log": "art_direction_v28.log"
+  },
+  {
+    "suite": "city_rebuild_v29",
+    "result": [
+      "CITY_V29_RESULT 87 checks / 0 failures"
+    ],
+    "errors": [],
+    "log": "city_rebuild_v29.log"
+  },
+  {
+    "suite": "experience_v30",
+    "result": [
+      "EXPERIENCE_V30_RESULT 77 checks / 0 failures"
+    ],
+    "errors": [],
+    "log": "experience_v30.log"
+  }
+]
