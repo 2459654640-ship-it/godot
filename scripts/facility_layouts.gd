@@ -57,6 +57,13 @@ static func door_specs(id:String)->Array:
 static func district_plan()->Dictionary:
 	var d:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/east_district_layout.json"))
 	var rooms=[["01","东郊水处理厂",Rect2(-94,-76,52,58)],["02","旧泵站检修井",Rect2(-40,-40,20,24)],["03","变配电所",Rect2(-5,-40,25,20)],["04","工人住宅街",Rect2(-93,20,112,70)],["05","北线货场检修库",Rect2(31,30,48,24)],["06","灰狗营地",Rect2(30,-29,27,27)],["07","旧货运路",Rect2(-120,1,240,14)],["08","铁路横穿通道",Rect2(20,3,10,10)],["09","北线接送路",Rect2(60,-90,11,70)],["10","工人诊所",Rect2(-91,23,18,18)],["11","民防通信站",Rect2(-39,-72.5,18,15)],["12","旧蓄水池",Rect2(74,-76,34,30)],["00","东郊工业片区",Rect2(-120,-100,240,200)]]
+	for parcel in d.parcels:
+		if parcel.id not in ["clinic","radio","south_corner"]:continue
+		var b=parcel.building
+		var code={"clinic":"10","radio":"11","south_corner":"13"}[parcel.id]
+		rooms=rooms.filter(func(r):return r[0]!=code)
+		rooms.append([code,{"clinic":"工人诊所","radio":"民防通信站","south_corner":"工人街住宅"}[parcel.id],Rect2(b[0]-b[2]/2.0,b[1]-b[3]/2.0,b[2],b[3])])
+	rooms.sort_custom(func(a,b):return a[2].get_area()<b[2].get_area())
 	var objects=[]
 	for e in d.entrances+d.sites:
 		objects.append([e.id,e.point[0],e.point[1],"marker"])

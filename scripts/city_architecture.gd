@@ -7,24 +7,35 @@ static func materials(k):
   Site.material(k,pair[0],"res://assets/visual/"+pair[1]+".png",Color(pair[2]));k.mats[pair[0]].uv1_scale=Vector3.ONE*pair[3]
  k.mats.district_roof_snow.set_meta("roof_snow",true)
  k.mats.surface_brick=k.mats.district_brick
- var dirt=k.mats.concrete.duplicate();dirt.albedo_texture=load("res://assets/visual/city29_brick.png");dirt.albedo_color=Color("a7a196");dirt.cull_mode=BaseMaterial3D.CULL_DISABLED;dirt.normal_enabled=false;k.mats.city_rubble=dirt
+ var indoor=k.mats.district_concrete.duplicate();indoor.albedo_color=Color("c6beaa");k.mats.city_interior_plaster=indoor
+ var boards=k.mats.wood.duplicate();boards.albedo_color=Color("918a7b");k.mats.city_floorboards=boards
+ var dirt=k.mats.concrete.duplicate();dirt.albedo_texture=load("res://assets/visual/city30_rubble.png");dirt.albedo_color=Color("c6c8c5");dirt.uv1_scale=Vector3.ONE*.32;dirt.roughness_texture=null;dirt.cull_mode=BaseMaterial3D.CULL_DISABLED;dirt.normal_enabled=false;k.mats.city_rubble=dirt
 static func hull(k,p:Vector3,size:Vector3,id:String="CitySolid"):
  var h=k.box(id,p,size,"dark",true);h.visible=false;return h
 static func mound(k,p:Vector3,size:Vector3,seed:int,solid:bool=true):
  # Irregular triangular rubble, not a stretched sphere or a flat snow decal.
  var st=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
- var rim=[]
- for n in 10:
-  var a=TAU*n/10;rim.append(p+Vector3(cos(a)*size.x*(.44+.05*sin(n*7+seed)),.03,sin(a)*size.z*(.44+.05*cos(n*3+seed))))
- var peak=p+Vector3(size.x*.09,size.y,-size.z*.08)
- for n in 10:
-  var normal=(peak-rim[n]).cross(rim[(n+1)%10]-rim[n]).normalized()
-  if normal.y<0:normal=-normal
-  st.set_normal(normal)
-  for v in [rim[n],rim[(n+1)%10],peak]:st.add_vertex(v)
+ var rings=[]
+ for level in 4:
+  var ring=[];var radius=[.50,.34,.16,.035][level]
+  for n in 16:
+   var a=TAU*n/16;var variation=1.0+.12*sin(n*2.3+seed)+.07*cos(n*5.7-seed)
+   var height=.03 if level==0 else size.y*([0,.52,.83,.89][level]+.10*sin(n*1.9+seed))
+   ring.append(p+Vector3(cos(a)*size.x*radius*variation,height,sin(a)*size.z*radius*variation))
+  rings.append(ring)
+ for level in 3:
+  for n in 16:
+   var next=(n+1)%16
+   for triangle in [[rings[level][n],rings[level+1][n],rings[level][next]],[rings[level][next],rings[level+1][n],rings[level+1][next]]]:
+    # Godot front faces use clockwise winding. Keep winding and lighting
+    # normals consistent rather than showing the dark back of the slope.
+    var normal=(triangle[2]-triangle[0]).cross(triangle[1]-triangle[0]).normalized()
+    if normal.y<0:triangle.reverse();normal=-normal
+    st.set_normal(normal)
+    for v in triangle:st.add_vertex(v)
  var mesh=MeshInstance3D.new();mesh.name="CollapsedMasonrySlope";mesh.mesh=st.commit();mesh.material_override=k.mats.city_rubble;k.root.add_child(mesh)
  if solid:hull(k,p+Vector3.UP*size.y*.4,Vector3(size.x*.72,maxf(.5,size.y*.8),size.z*.72),"RubbleFootprint")
- for n in 14:
+ for n in 26:
   var angle=n*2.399+seed;var radius=.12+.30*float(n%5)/4;var at=p+Vector3(cos(angle)*size.x*radius,size.y*(.70-radius),sin(angle)*size.z*radius)
   var chunk=k.box("CollapsedMasonryBlock",at,Vector3(.7+.2*(n%3),.35,.55),"district_brick" if n%3 else "district_concrete");chunk.rotation=Vector3(.2*sin(n),angle,.15*cos(n))
   if n%3==0:k.pipe(at+Vector3.UP*.3,at+Vector3(.4,.7,.2),.016,"rust")
@@ -40,7 +51,8 @@ static func room(k,p:Vector3,size:Vector2,id:String):
  k.box("CityInteriorDoorLintel",p+Vector3(0,2.95,size.y/2),Vector3(size.x,.65,.4),mat)
  for x in [-1.3,1.3]:k.box("CityDoorFrame",p+Vector3(x,1.35,size.y/2+.2),Vector3(.12,2.7,.12),"old_iron")
  for z in [-size.y*.3,0,size.y*.3]:
-  k.box("CityRoofBeam",p+Vector3(0,3.5,z),Vector3(size.x,.20,.18),"old_iron")
+  var beam=k.box("CityRoofBeam",p+Vector3(0,3.5,z),Vector3(size.x,.20,.18),"old_iron")
+  beam.set_meta("interior_rect",Rect2(p.x-size.x*.5,p.z-size.y*.5,size.x,size.y))
  # Partially collapsed roof: the room still reads from the street, and fades on entry.
  var interior=Rect2(p.x-size.x*.5,p.z-size.y*.5,size.x,size.y)
  var roof=k.box("CityInteriorRoof",p+Vector3(0,3.65,0),Vector3(size.x,.18,size.y),"corrugated")
@@ -58,7 +70,7 @@ static func room(k,p:Vector3,size:Vector2,id:String):
   k.box("ClinicMedicineCross",p+Vector3(6,1.6,-5.35),Vector3(.5,.12,.02),"red")
   k.box("ClinicMedicineCrossVertical",p+Vector3(6,1.6,-5.33),Vector3(.12,.5,.02),"red")
   var label=k.label("МЕДПУНКТ",p+Vector3(0,3.03,size.y/2+.25),27,Color("bcb7a4"));label.rotation.y=0
- else:
+ elif id=="radio":
   k.table(p+Vector3(-5,0,1),2.6);k.box("CivilDefenceLog",p+Vector3(-5,.83,1),Vector3(.6,.035,.45),"paper")
   for x in [3,5,7]:
    k.box("RadioRack",p+Vector3(x,1.1,-1),Vector3(1.4,2.2,.7),"old_iron",true)
@@ -69,6 +81,37 @@ static func room(k,p:Vector3,size:Vector2,id:String):
   for x in [-1.2,1.2]:k.box("RoofAntennaMast",p+Vector3(x,5.5,-5),Vector3(.09,4,.09),"old_iron")
   for y in [4,5.5,7]:k.pipe(p+Vector3(-2,y,-5),p+Vector3(2,y,-5),.035,"old_iron")
   k.label("ГРАЖДАНСКАЯ ОБОРОНА",p+Vector3(0,3.03,size.y/2+.25),20,Color("bcb7a4"))
+ else:
+  # Four former household rooms share a narrow entrance corridor.
+  for side in [-1,1]:
+   var x=side*1.3
+   for span in [[-8.3,3.4],[0.0,7.6],[8.3,3.4]]:
+    k.box("ApartmentCorridorWall",p+Vector3(x,1.3,span[0]),Vector3(.18,2.6,span[1]),"city_interior_plaster",true)
+   for z in [-5,5]:
+    var lintel=k.box("ApartmentDoorLintel",p+Vector3(x,2.45,z),Vector3(.25,.3,2.4),"wood")
+    lintel.set_meta("interior_rect",interior)
+   k.box("ApartmentRoomDivider",p+Vector3(side*4.15,1.3,0),Vector3(5.7,2.6,.18),"city_interior_plaster",true)
+   for z in [-5,5]:
+    k.box("ApartmentRoomFloor",p+Vector3(side*4.15,.035,z),Vector3(5.45,.025,9.7),"tile" if side<0 and z>0 else "city_floorboards")
+  k.table(p+Vector3(-4,0,3),2.2)
+  k.box("ApartmentLetter",p+Vector3(-4,.83,3),Vector3(.5,.03,.36),"paper")
+  k.cyl("ApartmentCup",p+Vector3(-4.6,.90,3),.07,.15,"cream")
+  k.bench(p+Vector3(-5.8,0,3),1.6,true,PI/2)
+  for at in [Vector3(5.5,0,5),Vector3(-5.5,0,-6),Vector3(-3.5,0,-6)]:k.bed(p+at,"cloth")
+  k.locker(p+Vector3(5.5,0,8.5));k.locker(p+Vector3(-5.7,0,-9))
+  k.table(p+Vector3(4.3,0,-7.7),2.4)
+  for i in 7:k.box("ApartmentShelfBook",p+Vector3(3.4+i*.23,.98,-7.8),Vector3(.16,.28,.22),"red" if i%3==0 else "cloth")
+  for y in [.45,1.15,1.85]:k.box("ApartmentWallShelf",p+Vector3(6.5,y,-4),Vector3(.55,.08,2.5),"wood")
+  for z in [-5,-3]:k.box("ApartmentShelfUpright",p+Vector3(6.5,1.05,z),Vector3(.1,2.1,.1),"wood")
+  k.box("ApartmentKitchenCounter",p+Vector3(-6.3,.45,6.5),Vector3(.8,.9,2.5),"wood",true)
+  k.box("ApartmentCounterTop",p+Vector3(-6.3,.93,6.5),Vector3(.9,.08,2.6),"tile")
+  k.cyl("ApartmentPot",p+Vector3(-6.3,1.1,6.2),.20,.25,"metal")
+  k.box("ApartmentStove",p+Vector3(-5,.5,8.4),Vector3(.9,1,.8),"old_iron",true)
+  k.pipe(p+Vector3(-5,1,8.4),p+Vector3(-5,3.4,8.4),.09,"rust")
+  k.box("ApartmentStoveDoor",p+Vector3(-5,.55,8.83),Vector3(.55,.45,.04),"rust")
+  k.box("ApartmentWallPicture",p+Vector3(-3,1.8,-size.y/2+.2),Vector3(1.1,.8,.04),"wood")
+  k.box("ApartmentPicturePaper",p+Vector3(-3,1.8,-size.y/2+.23),Vector3(.9,.6,.015),"paper")
+
 static func factory(k):
  Ground.apron(k,Vector2(-67,-28),Vector2(48,16))
  # High pump hall with buttressed, arched industrial window bays; no residential facade.

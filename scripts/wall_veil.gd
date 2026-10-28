@@ -5,6 +5,9 @@ var states:Array[Dictionary]=[]
 var roof_samples:Array=[]
 var interior_roofs:Array=[]
 var focus_overlay:ColorRect
+var interior_active=false
+var active_interior=Rect2()
+var focus_amount=0.0
 const ACQUIRE=.09
 const HOLD=.38
 const FADED=.42
@@ -12,10 +15,33 @@ const ROOF_FADED=.38
 func setup(owner_world):
  world=owner_world
  for mesh in world.find_children("*","MeshInstance3D",true,false):
-  if mesh.has_meta("interior_rect"):interior_roofs.append(mesh)
+  if mesh.has_meta("interior_rect"):
+   interior_roofs.append(mesh)
+   var roof_material=world.kit.new_veil_material(mesh.material_override)
+   mesh.material_override=roof_material
+   add_state(mesh,mesh.global_transform*mesh.get_aabb(),[roof_material],true)
  focus_overlay=ColorRect.new();focus_overlay.name="InteriorFocus";focus_overlay.mouse_filter=Control.MOUSE_FILTER_IGNORE
  focus_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
- var shader=Shader.new();shader.code="shader_type canvas_item; uniform vec4 room_rect; void fragment(){ vec2 p=UV; float edge=max(max(room_rect.x-p.x,p.x-room_rect.z),max(room_rect.y-p.y,p.y-room_rect.w)); float shade=smoothstep(-0.015,0.045,edge); COLOR=vec4(0.015,0.025,0.035,shade*0.55); }"
+ var shader=Shader.new();shader.code="""shader_type canvas_item;
+uniform vec2 room_points[8];
+uniform int point_count = 0;
+uniform float shade_alpha = 0.0;
+void fragment() {
+ bool inside = false;
+ float distance_to_edge = 2.0;
+ for (int i=0; i<8; i++) {
+  if (i>=point_count) { break; }
+  vec2 a=room_points[i]; vec2 b=room_points[(i+1)%point_count];
+  vec2 edge=b-a;
+  float t=clamp(dot(UV-a,edge)/max(dot(edge,edge),0.000001),0.0,1.0);
+  distance_to_edge=min(distance_to_edge,length(UV-a-edge*t));
+  if ((a.y>UV.y)!=(b.y>UV.y)) {
+   if (UV.x<(b.x-a.x)*(UV.y-a.y)/(b.y-a.y)+a.x) { inside=!inside; }
+  }
+ }
+ float shade=inside ? 0.0 : smoothstep(0.0,0.025,distance_to_edge);
+ COLOR=vec4(0.012,0.022,0.026,shade*shade_alpha);
+}"""
  var material=ShaderMaterial.new();material.shader=shader;focus_overlay.material=material;focus_overlay.visible=false
  world.hud.add_child(focus_overlay);world.hud.move_child(focus_overlay,0)
  # Thin pipes can fall between the nine wall samples. A denser upper-body
@@ -59,18 +85,24 @@ func _process(delta):
  for roof in interior_roofs:
   if not is_instance_valid(roof):continue
   var footprint:Rect2=roof.get_meta("interior_rect")
-  var occupied=footprint.grow(-.25).has_point(player)
+  var occupied=footprint.grow(.15 if footprint==active_interior else -.30).has_point(player)
   roof.visible=not occupied
   if occupied:inside=footprint
- focus_overlay.visible=inside.has_area()
- if focus_overlay.visible:
-  var lo=Vector2(INF,INF);var hi=Vector2(-INF,-INF)
+ interior_active=inside.has_area();active_interior=inside
+ focus_amount=move_toward(focus_amount,.62 if interior_active else 0.0,delta*1.8)
+ focus_overlay.visible=focus_amount>.001
+ focus_overlay.material.set_shader_parameter("shade_alpha",focus_amount)
+ if interior_active:
+  var points=PackedVector2Array()
   for x in [inside.position.x,inside.end.x]:
    for z in [inside.position.y,inside.end.y]:
     for y in [0.0,3.8]:
-     var screen=world.camera.unproject_position(Vector3(x,y,z));lo=lo.min(screen);hi=hi.max(screen)
+     points.append(world.camera.unproject_position(Vector3(x,y,z)))
   var viewport=world.get_viewport().get_visible_rect().size
-  focus_overlay.material.set_shader_parameter("room_rect",Vector4(lo.x/viewport.x,lo.y/viewport.y,hi.x/viewport.x,hi.y/viewport.y))
+  var hull=Geometry2D.convex_hull(points);hull.remove_at(hull.size()-1)
+  focus_overlay.material.set_shader_parameter("point_count",hull.size())
+  for i in hull.size():hull[i]/=viewport
+  hull.resize(8);focus_overlay.material.set_shader_parameter("room_points",hull)
  for state in states:
   if state.mesh.get_meta("dynamic",false) and state.mesh is MeshInstance3D:state.bounds=state.mesh.global_transform*state.mesh.get_aabb()
   var fraction=coverage(state.bounds,.06 if state.active else 0,state.roof)

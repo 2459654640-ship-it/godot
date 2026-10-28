@@ -7,9 +7,35 @@ var drawing_scale=1.0
 var origin=Vector2.ZERO
 var ink=Color("7e8a7a")
 var gold=Color("c7aa70")
+var flat_projection=false
+var map_zoom=1.0
+var map_pan=Vector2.ZERO
 
 func project(p:Vector2) -> Vector2:
+	if flat_projection:return origin+p*drawing_scale
 	return origin+Vector2((p.x-p.y)*0.86,(p.x+p.y)*0.45)*drawing_scale
+
+func _gui_input(event):
+	var floor=display_floor if display_floor!="" else world.floor_id
+	if not expanded or floor!="east_district":return
+	if event is InputEventMouseMotion:
+		if event.button_mask&MOUSE_BUTTON_MASK_MIDDLE:
+			map_pan+=event.relative;queue_redraw();accept_event();return
+		tooltip_text="左键放置目的地标记；右键清除。"
+		for entry in world.story.Campaign.District.layout().entrances+world.story.Campaign.District.layout().sites:
+			var p=Vector2(entry.point[0],entry.point[1])
+			if preload("res://scripts/city_survey.gd").known(world.story,p) and project(p).distance_to(event.position)<14:tooltip_text=String(entry.get("name",entry.id));break
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:
+			var next_zoom=clampf(map_zoom*(1.2 if event.button_index==MOUSE_BUTTON_WHEEL_UP else 1.0/1.2),1,3)
+			map_pan=event.position-(event.position-origin)*(next_zoom/map_zoom)-size*.5
+			map_zoom=next_zoom;queue_redraw();accept_event();return
+		if event.button_index==MOUSE_BUTTON_LEFT:
+			var p=(event.position-origin)/drawing_scale
+			if Rect2(-120,-100,240,200).has_point(p):world.story.flags.city_waypoint=[p.x,p.y]
+		elif event.button_index==MOUSE_BUTTON_RIGHT:world.story.flags.erase("city_waypoint")
+		else:return
+		queue_redraw();accept_event();world.autosave()
 
 func polygon(r:Rect2) -> PackedVector2Array:
 	return PackedVector2Array([project(r.position),project(Vector2(r.end.x,r.position.y)),project(r.end),project(Vector2(r.position.x,r.end.y))])
@@ -17,6 +43,7 @@ func polygon(r:Rect2) -> PackedVector2Array:
 func _draw():
 	if not world:return
 	var floor=display_floor if display_floor!="" else world.floor_id
+	flat_projection=expanded and floor=="east_district"
 	if floor=="east_district":
 		preload("res://scripts/city_survey.gd").draw_map(self);return
 	var same=floor==world.floor_id

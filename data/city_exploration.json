@@ -57,7 +57,7 @@
     },
     "city_radio_read": {
       "text": "阅读民防值班员留下的操作记录。",
-      "reply": "「先隔离室外天线馈线，再接通低压机架，最后把接收开关转到本地测试。外面那根线受潮，别带电送上去。」\n记录下方另有一行：蓄水池巡视取消，西侧旁通阀仍可泄压。",
+      "reply": "值班员在操作记录里写得很仔细：\n「先断开室外天线的隔离刀闸，再接通低压机架，最后选择本地测试。天线馈线已经受潮，检查前不要通电。」\n另一行注明，这间通信站与货场门机共用工人街变配电所的支路。若机架没有电，要先修复那里的检修柜；保护组件放在路口西南的交通维修间。\n末页附着蓄水池巡检图，西侧旁通阀被红笔圈了出来。",
       "once": true,
       "flags": {
         "city_radio_log_read": true,
@@ -190,6 +190,19 @@
         "ammo_pouch": 3,
         "bandage": 2
       }
+    },
+    "city_family_read": {
+      "text": "读完留在餐桌上的信，把它收进手记。",
+      "reply": "你将纸从压着它的杯子下面抽出来。信写给还没下班的父亲，交代了一家人撤离的去向。末尾补写的几行字挤到了纸边。\n你读完后把信折回原样，收进随身夹。如果有人还记得这家人，至少可以告诉他们，家人离开时留下过消息。",
+      "once": true,
+      "flags": {
+        "city_family_read": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      }
     }
   },
   "interactions": {
@@ -256,8 +269,44 @@
       ],
       "after": [
         [
+          {
+            "all": [
+              "city_radio_isolated"
+            ],
+            "not": [
+              "east_power_restored"
+            ]
+          },
+          "室外天线已经隔离，机架上的电压表仍停在零位。记录上注明：这条支路由工人街北段的变配电所供电；需要的保护组件放在工人街路口西南的交通维修间。"
+        ],
+        [
+          {
+            "all": [
+              "city_radio_isolated",
+              "east_spares_found"
+            ],
+            "not": [
+              "east_power_restored"
+            ]
+          },
+          "室外天线已经隔离。你拿到了保护组件，还需要到工人街北段的变配电所外侧的检修柜安装，机架才会有电。"
+        ],
+        [
+          {
+            "all": [
+              "city_radio_isolated",
+              "east_power_restored"
+            ]
+          },
+          "电源指示灯亮了，室外天线也已隔离。现在可以接通机架的低压电源。"
+        ],
+        [
+          "city_radio_powered",
+          "机架电压稳定，磁带机的指示灯亮着。控制盘上标有“本地测试”，可以播放保存的录音。"
+        ],
+        [
           "city_radio_online",
-          "本地录音已经播放完毕。你记下了最后一次转移通知，以及蓄水池西侧的泄压办法。"
+          "值班录音已经播放完毕。磁带留在机器里，你将听到的疏散通知记进了手记。"
         ]
       ]
     },
@@ -289,6 +338,22 @@
         "city_basin_supplies"
       ],
       "after": []
+    },
+    "city_family_letter": {
+      "facility": "east_district",
+      "name": "工人街住宅 / 留在餐桌上的信",
+      "role": "住宅内的旧物",
+      "spoken": false,
+      "body": "桌上摆着两只杯子，一封信压在其中一只杯底。厨房柜门敞着，能带走的食物已经取空；卧室的床铺叠得很整齐。",
+      "options": [
+        "city_family_read"
+      ],
+      "after": [
+        [
+          "city_family_read",
+          "你已经收好了这封信。信里提到的诊所和民防通信站，都在工人街附近。"
+        ]
+      ]
     }
   },
   "quests": [
@@ -327,7 +392,51 @@
         {
           "when": {},
           "target": "city_radio_panel",
-          "step": "依照桌上的记录，隔离天线、接通低压机架，再播放本地录音；机架用电来自变配电所。"
+          "step": "到通信站机架旁的控制盘，先拉下室外天线隔离刀闸。"
+        },
+        {
+          "when": {
+            "all": [
+              "city_radio_isolated"
+            ],
+            "not": [
+              "east_power_restored"
+            ]
+          },
+          "target": "east_spares",
+          "step": "机架没有电。到工人街路口西南的交通维修间取保护组件，再去工人街北段的变配电所修复支路。"
+        },
+        {
+          "when": {
+            "all": [
+              "city_radio_isolated",
+              "east_spares_found"
+            ],
+            "not": [
+              "east_power_restored"
+            ]
+          },
+          "target": "east_relay",
+          "step": "保护组件已经拿到。到工人街北段的变配电所外侧检修柜，安装组件并恢复供电。"
+        },
+        {
+          "when": {
+            "all": [
+              "city_radio_isolated",
+              "east_power_restored"
+            ]
+          },
+          "target": "city_radio_panel",
+          "step": "供电已经恢复。回民防通信站机架旁的控制盘，接通低压电源。"
+        },
+        {
+          "when": {
+            "all": [
+              "city_radio_powered"
+            ]
+          },
+          "target": "city_radio_panel",
+          "step": "机架已通电。将控制盘切到本地测试，播放保存的值班录音。"
         }
       ],
       "actions": [

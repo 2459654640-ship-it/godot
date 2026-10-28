@@ -418,7 +418,7 @@ func batch_static():
 	# Render repeated modules in material batches; their physics bodies remain independent.
 	var groups:Dictionary={}
 	for child in root.find_children("*","MeshInstance3D",true,false):
-		if not child.visible or child.name in ["LockedMainGate","LockedSideDoor","CampaignInnerGate"] or child.has_meta("dynamic"):continue
+		if not child.visible or child.name in ["LockedMainGate","LockedSideDoor","CampaignInnerGate"] or child.has_meta("dynamic") or child.has_meta("interior_rect"):continue
 		var source=child.mesh
 		var material=child.material_override
 		if not material:continue

@@ -2,6 +2,8 @@ extends Control
 const Publications=preload("res://scripts/publications.gd")
 var observed_publications:Array=[]
 var collection_scroll=0
+var page_scroll:Dictionary={}
+var page_key=""
 var terminal_game
 var modal_hint:Label
 const UiSurface=preload("res://scripts/ui_surface.gd")
@@ -333,10 +335,14 @@ func character_prose(id:String,text:String):
 	var words=prose(text,20,row)
 	words.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 
-func start_modal(title:String,subtitle:String,wide:bool=false):
-	var previous_scroll=0
-	if is_instance_valid(dialog_title) and dialog_title.text==title and is_instance_valid(modal_box) and modal_box.get_parent() is ScrollContainer:
-		previous_scroll=modal_box.get_parent().scroll_vertical
+func remember_page_scroll():
+	if page_key!="" and is_instance_valid(modal_box) and modal_box.get_parent() is ScrollContainer:
+		page_scroll[page_key]=modal_box.get_parent().scroll_vertical
+
+func start_modal(title:String,subtitle:String,wide:bool=false,view_key:String=""):
+	remember_page_scroll()
+	page_key=view_key if view_key!="" else title
+	var previous_scroll=int(page_scroll.get(page_key,0))
 	radio_open=false
 	typing.clear();speech_buttons.clear()
 	if wide:dialogue_id=""
@@ -397,6 +403,7 @@ func show_reply(id:String,text:String):
 func close():
 	if comic_active:show_comic_pause();return
 	if world.story.ending and world.story.flags.has("chapter_endpoint"):show_chapter_end();return
+	remember_page_scroll()
 	finish_typing()
 	dialogue_id=""
 	radio_open=false
@@ -500,7 +507,7 @@ func show_radiation():
 	modal_box.add_child(button("返回背包",show_inventory))
 
 func show_journal(tab:String="tasks",shown_floor:String=""):
-	start_modal("伊万的手记","随身卷宗   /   任务、地图与见闻",true)
+	start_modal("伊万的手记","随身卷宗   /   任务、地图与见闻",true,"journal:"+tab+":"+shown_floor)
 	modal.position=Vector2(230,84);modal.size=Vector2(1140,832)
 	var tabs=HFlowContainer.new();tabs.add_theme_constant_override("h_separation",8);tabs.add_theme_constant_override("v_separation",6);modal_box.add_child(tabs)
 	for pair in [["tasks","01  事要办"],["map","02  地图"],["lore","03  百科"],["leads","04  留意的事"],["history","05  已读记录"],["closed","06  完成与失败"],["collection","07  收集品"]]:
@@ -544,19 +551,26 @@ func show_journal(tab:String="tasks",shown_floor:String=""):
 		show_collection()
 	elif tab=="map":
 		var requested=world.floor_id if shown_floor=="" else shown_floor
-		var floors=GridContainer.new();floors.columns=3;floors.add_theme_constant_override("h_separation",10);modal_box.add_child(floors)
-		for pair in [["life","D-6生活层"],["labor","D-6作业层"]]+world.story.Campaign.NAMES.keys().filter(func(id):return world.story.f("visited_"+id) or world.floor_id==id).map(func(id):return [id,world.story.Campaign.NAMES[id]]):floors.add_child(button(pair[1],func():show_journal("map",pair[0]),true,true))
+		modal.position=Vector2(100,50);modal.size=Vector2(1400,900)
+		var floor_choices=[["life","D-6生活层"],["labor","D-6作业层"]]+world.story.Campaign.NAMES.keys().filter(func(id):return world.story.f("visited_"+id) or world.floor_id==id).map(func(id):return [id,world.story.Campaign.NAMES[id]])
+		var map_controls=HBoxContainer.new();modal_box.add_child(map_controls)
+		var selector=OptionButton.new();selector.custom_minimum_size=Vector2(320,40);selector.add_theme_font_size_override("font_size",19);selector.size_flags_horizontal=Control.SIZE_EXPAND_FILL;map_controls.add_child(selector)
+		if requested=="east_district":map_controls.add_child(button("重置视图",func():map_large.map_zoom=1;map_large.map_pan=Vector2.ZERO;map_large.queue_redraw(),true,true))
+		for i in floor_choices.size():
+			selector.add_item(floor_choices[i][1])
+			if floor_choices[i][0]==requested:selector.select(i)
+		selector.item_selected.connect(func(index):show_journal("map",floor_choices[index][0]))
 		var focus=Journal.active(s)
 		if not focus.is_empty() and focus.place==requested:body("手记里圈过的一带："+focus.area,19,amber)
 		body("当前位置："+world.floor_name()+" · 已探索的街区会记入地图",18,amber)
-		map_large=MapView.new();map_large.custom_minimum_size=Vector2(720,320)
+		map_large=MapView.new();map_large.custom_minimum_size=Vector2(720,520)
 		map_large.world=world;map_large.expanded=true;map_large.display_floor=requested;modal_box.add_child(map_large)
 		var legend=GridContainer.new();legend.columns=3;legend.add_theme_constant_override("h_separation",18);modal_box.add_child(legend)
 		for zone in world.facility_zones(requested):
-			if requested=="east_district" and not preload("res://scripts/city_survey.gd").known_zone(s,zone):continue
+			if requested=="east_district":continue
 			if zone.code in ["00","L0"] or (requested=="life" and zone.code in ["09","10"]):continue
 			legend.add_child(label(zone.code+"  "+("伊万 / 老爹" if requested=="life" and zone.code=="01" else zone.name),15,text_color))
-		body("金色：通路与门口 · 蓝色：附近的人。地图只显示本层可探索的区域；门后还有其它生活或作业区。",16,muted)
+		modal_hint.text="滚轮缩放 · 中键拖动 · 左键标记目的地 · 右键清除 · 悬停查看设施" if requested=="east_district" else "金色：通路与门口 · 蓝色：附近的人 · Esc 返回"
 
 func quest_card(task:Dictionary,tracked:bool):
 	var card=PanelContainer.new();card.add_theme_stylebox_override("panel",style(Color("26322e") if tracked else Color("172321"),Color("a38a5d") if tracked else Color("445148"),1,4));modal_box.add_child(card);UiSurface.attach(card)

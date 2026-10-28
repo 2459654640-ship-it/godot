@@ -43,6 +43,8 @@ func run():
   check(w.floor_name() in ["D-6生活层","D-6作业层"],"fully qualified D-6 location title")
   w.hud.show_journal("map")
   var labels=w.hud.modal.find_children("*","Button",true,false).map(func(b):return b.text)
-  check("D-6生活层" in labels and "D-6作业层" in labels and "生活层" not in labels and "作业层" not in labels,"map tabs identify both D-6 floors")
+  for selector in w.hud.modal.find_children("*","OptionButton",true,false):
+   for index in selector.item_count:labels.append(selector.get_item_text(index))
+  check("D-6生活层" in labels and "D-6作业层" in labels and "生活层" not in labels and "作业层" not in labels,"map selector identifies both D-6 floors")
   w.hud.comic_active=false;w.story.flags.comic={"active":false};w.hud.close();w.queue_free();await frames()
  print("COAL_IDENTITY_V24_RESULT checks=",checks," failures=",failures);quit(0 if failures==0 else 1)

@@ -292,7 +292,7 @@
         20,
         3
       ],
-      "open": false
+      "open": true
     },
     {
       "id": "workers_house",
@@ -732,6 +732,14 @@
       "point": [
         69,
         -51
+      ]
+    },
+    {
+      "id": "city_family_letter",
+      "name": "工人街住宅 / 餐桌上的信",
+      "point": [
+        -34,
+        45.2
       ]
     }
   ],

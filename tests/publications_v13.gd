@@ -12,7 +12,7 @@ func frames(n:int=4):
 	for i in n:await physics_frame
 func run():
 	var s=Story.new();var entries=Publications.data().entries
-	check(entries.size()==18 and Publications.data().series.size()==6,"eighteen readable publications in six series")
+	check(entries.size()==19 and Publications.data().series.size()==6,"nineteen readable publications in six series")
 	var ids={}
 	for book in entries:
 		check(not ids.has(book.id) and book.body.length()>150 and book.hint!="","unique publication has authored prose and a contextual hint")

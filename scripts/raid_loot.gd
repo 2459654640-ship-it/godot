@@ -11,6 +11,8 @@ const CONTAINERS=[
  ["south_entry","南街住户门边的旧包",Vector3(-46,0,89),"domestic"],
  ["south_supply","南街公用物资箱",Vector3(46,0,89),"medical"],
  ["east_corner_tools","东侧街角修理箱",Vector3(87,0,41),"technical"],
+ ["apartment_pantry","住宅厨房的储物柜",Vector3(-35,0,48),"domestic"],
+ ["apartment_workbag","卧室床脚的旧工具包",Vector3(-26,0,43),"technical"],
  ["depot_crate","货场装卸箱",Vector3(56,0,36),"technical"],
  ["camp_food","岗哨旁的食品箱",Vector3(54,0,-9),"domestic"],
  ["camp_arms","灰狗地表哨所弹药箱",Vector3(44.5,0,-18),"arms"]]
@@ -55,8 +57,17 @@ static func add(w,id:String,title:String,p:Vector3,table:String,contents:Diction
  if w.targets.has(target):return
  if dropped:w.kit.box("SalvagePack",p+Vector3.UP*.14,Vector3(.55,.26,.4),"cloth")
  else:
-  w.kit.crate(p,Vector3(.8,.65,.6));w.kit.box("SalvageBoxLatch",p+Vector3(0,.48,.32),Vector3(.16,.12,.04),"metal")
- w.target(target,p+Vector3(0,0,.65),title,"inspect")
+  if "包" in title or "旅行箱" in title:
+   w.kit.ellipsoid("AbandonedCanvasBag",p+Vector3.UP*.2,Vector3(.42,.20,.28),"cloth")
+   for x in [-.20,.20]:w.kit.box("BagStrap",p+Vector3(x,.38,0),Vector3(.08,.035,.46),"wood")
+  elif "柜" in title or "抽屉" in title:
+   w.kit.box("SalvageCabinet",p+Vector3.UP*.36,Vector3(.88,.72,.52),"old_iron",true)
+   for y in [.18,.50]:
+    w.kit.box("CabinetDrawer",p+Vector3(0,y,.27),Vector3(.78,.25,.035),"metal")
+    w.kit.box("CabinetHandle",p+Vector3(0,y,.31),Vector3(.18,.025,.04),"brass")
+  else:
+   w.kit.crate(p,Vector3(.8,.65,.6));w.kit.box("SalvageBoxLatch",p+Vector3(0,.48,.32),Vector3(.16,.12,.04),"metal")
+ w.target(target,p+Vector3(0,0,.65),title+(" · 已搜空" if rec.searched and rec.loot.is_empty() else ""),"inspect")
 static func safe(w)->bool:
  if is_instance_valid(w.grey_camp) and not w.grey_camp.can_loot():return false
  if is_instance_valid(w.combat):
@@ -70,10 +81,11 @@ static func open(w,target:String):
  if rec.is_empty():return
  var h=w.hud;h.start_modal(rec.title,"搜索与转移 · 背包容量有限",true)
  if not rec.searched:
-  h.body("箱盖上落着灰，里面的东西需要逐件查看。",20)
+  h.body("你靠近检查外壳和封口。打开后，需要花一点时间确认哪些物资还能使用。",20)
   h.modal_box.add_child(h.button("搜索容器 · 约 2 秒",func():search(w,target)))
   return
  if rec.loot.is_empty():h.body("已经搜空。",21,h.muted)
+ else:h.modal_box.add_child(h.button("收取能放下的全部物品",func():take_all(w,target)))
  for item in rec.loot:
   var count=int(rec.loot[item]);var id_item:String=item
   var row=HBoxContainer.new();h.modal_box.add_child(row);row.add_child(h.icon_rect(h.item_icon(item),42));var title_label=h.label(Bag.name_of(w.story,item)+" ×%d"%count,20,h.text_color);title_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(title_label)
@@ -91,14 +103,27 @@ static func search(w,target:String):
   if not is_instance_valid(w) or not is_instance_valid(progress):return
   progress.value=i+1
  rec.searched=true;w.autosave();open(w,target)
-static func take(w,target:String,id:String)->bool:
+static func take(w,target:String,id:String,flush:bool=true)->bool:
  if not w.targets.has(target) or w.player.position.distance_to(w.targets[target].pos)>2.3 or not safe(w):return false
  var key=record_key(w,target.trim_prefix("raid_container_"));var rec:Dictionary=w.story.flags.get("raid_containers",{}).get(key,{})
  if rec.is_empty() or not rec.searched or int(rec.loot.get(id,0))<=0:return false
  if id not in ["military","handmade"] and not Bag.can_add(w.story,id):return false
  Bag.change(w.story,id,1);rec.loot[id]-=1
  if rec.loot[id]<=0:rec.loot.erase(id)
- w.story.changed.emit();w.autosave();return true
+ if rec.loot.is_empty():w.targets[target].label=rec.title+" · 已搜空"
+ if flush:w.story.changed.emit();w.autosave()
+ return true
+static func take_all(w,target:String):
+ var key=record_key(w,target.trim_prefix("raid_container_"));var rec:Dictionary=w.story.flags.get("raid_containers",{}).get(key,{})
+ if rec.is_empty():return
+ var received=0
+ for id in rec.loot.keys():
+  for n in int(rec.loot[id]):
+   if not take(w,target,id,false):break
+   received+=1
+ if received>0:w.story.changed.emit();w.autosave()
+ open(w,target)
+ w.hud.toast("收取 %d 份物资。"%received+("剩余物品仍留在原处。" if not rec.loot.is_empty() else "容器已经搜空。"))
 static func corpse(w,enemy):
  var id="body_"+String(enemy.get_meta("loot_key","unknown"))+"_"+str(w.story.flags.get("raid_index",0))
  var key=record_key(w,id)

@@ -6,11 +6,11 @@
     "same_moment": true,
     "choices": [
       {
-        "text": "「你着急，是因为你哥哥？」",
+        "text": "「你最近一直在担心什么？」",
         "next": "anna_supper_brother"
       },
       {
-        "text": "「为什么想给孩子上课？这里又没有学校。」",
+        "text": "「你是怎么开始教这些孩子的？」",
         "next": "anna_supper_class"
       }
     ],

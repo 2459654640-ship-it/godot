@@ -709,6 +709,7 @@ func set_camera(delta: float, instant: bool = false):
 	else:camera.position=camera.position.lerp(desired,1-exp(-delta*3.5))
 	camera.look_at(camera.position-Vector3(23,30,27),Vector3.UP)
 	var desired_size=(39.0 if floor_id=="life" else 44.0) if overview else camera_size
+	if is_instance_valid(wall_veil) and wall_veil.interior_active and not capture_mode:desired_size=minf(camera_size,15.0)
 	if floor_id=="east_district" and overview:desired_size=175.0
 	camera.size=lerpf(camera.size,desired_size,1-exp(-delta*5)) if not instant else desired_size
 

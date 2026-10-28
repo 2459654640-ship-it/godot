@@ -91,7 +91,7 @@ static func build(w):
 	Ground.build(w,plan);City.materials(k)
 	for i in plan.parcels.size():
 		var parcel:Dictionary=plan.parcels[i];var b=parcel.building;var p=Vector3(b[0],0,b[1]);var size=Vector2(b[2],b[3])
-		if parcel.id in ["clinic","radio"]:City.room(k,p,size,parcel.id)
+		if parcel.id in ["clinic","radio","south_corner"]:City.room(k,p,size,parcel.id)
 		elif parcel.get("open",false):
 			Site.ruin(k,p,size,i+21,.028)
 			City.mound(k,p+Vector3(-size.x*.3,0,-size.y*.3),Vector3(size.x*.4,1.4,size.y*.36),i+20)

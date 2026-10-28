@@ -319,3 +319,12 @@
 | [废金属](../assets/visual/item_scrap_metal.png) | 材料图标 |
 | [铜线](../assets/visual/item_copper_wire.png) | 材料图标 |
 | [修补布](../assets/visual/item_salvage_cloth.png) | 材料图标 |
+
+## 当前城市建筑与废墟材料
+
+| 素材 | 当前用途 |
+| --- | --- |
+| [旧砖墙](../assets/visual/city29_brick.png) | 厂房、住宅和坍塌砖块 |
+| [破损灰泥](../assets/visual/city29_plaster.png) | 城区建筑与住宅隔墙 |
+| [人行铺装](../assets/visual/city29_paving.png) | 人行道与建筑入口 |
+| [砖石废墟](../assets/visual/city30_rubble.png) | v30 不规则碎石堆表面，AI 生成，带缩小层级 |
