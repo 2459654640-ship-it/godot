@@ -50,9 +50,9 @@ func run():
  var tab=InputEventAction.new();tab.action="overview";tab.pressed=true;w._unhandled_input(tab);check(w.hud.modal_visible() and not w.overview,"Tab opens journal map")
  w.hud.close();w.story.give("revolver");w.story.equip_weapon("revolver");w.story.economy.goods={"medkit":2,"bandage":4};w.hud.show_inventory();await frames()
  check(w.hud.modal.find_child("InventoryGrid",true,false).columns==8,"inventory exposes actual eight-column placement grid")
- var scroll:ScrollContainer=w.hud.modal_box.get_parent();scroll.scroll_vertical=150
+ var grid_position=w.hud.modal.find_child("InventoryGrid",true,false).global_position
  preload("res://scripts/ui_inventory.gd").render(w.hud,"all","revolver");await frames(2)
- check(w.hud.modal_box.get_parent().scroll_vertical>0,"switching inventory section retains scroll position")
+ check(w.hud.modal.find_child("InventoryGrid",true,false).global_position==grid_position and w.hud.get_meta("inventory_selection","")=="revolver","switching selected item retains the fixed inventory layout and selection")
  w.hud.close()
  var seen=w.story.flags.get("city_seen",{});check(seen.size()>0 and seen.size()<30,"starting discovery only reveals local reachable sight cells")
  check(not preload("res://scripts/city_survey.gd").known(w.story,Vector2(95,-65)),"reservoir is unknown at station start")

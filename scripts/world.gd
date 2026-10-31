@@ -191,12 +191,15 @@ func _ready():
 	previous_position=player.position
 	if story.flags.get("comic",{}).get("active",false):hud.call_deferred("show_comic")
 	elif story.ending:hud.call_deferred("show_chapter_end")
+	elif story.f("raid_debrief_pending") and floor_id in ["life","commune","sech"]:call_deferred("show_raid_debrief")
 	elif DisplayServer.get_name()!="headless" and floor_id=="labor" and story.f("intro_done") and not story.f("lower_war_seen"):hud.call_deferred("show_comic","lower_ward")
 	elif DisplayServer.get_name()!="headless" and "--skip-intro" not in OS.get_cmdline_user_args() and floor_id=="life" and not story.f("intro_done"):hud.call_deferred("show_comic","intro")
 	if "--capture" in OS.get_cmdline_user_args():
 		capture_mode=true
 		capture_later()
 
+func show_raid_debrief():
+	preload("res://scripts/ui_workbench.gd").raid_debrief(hud)
 func inputs():
 	var actions={"move_left":[KEY_A,KEY_LEFT],"move_right":[KEY_D,KEY_RIGHT],"move_up":[KEY_W,KEY_UP],"move_down":[KEY_S,KEY_DOWN],"interact":[KEY_E],"inventory":[KEY_I],"journal":[KEY_J],"map":[KEY_M],"overview":[KEY_TAB],"save":[KEY_F5],"load":[KEY_F9],"reload":[KEY_R],"draw_weapon":[KEY_1],"sneak":[KEY_CTRL]}
 	for action in actions:

@@ -92,9 +92,7 @@ func _physics_process(delta):
   last_weapon=w.story.equipped_weapon();clip=mini(magazine_size(),int(w.story.flags.get("weapon_clip",0)));reload_time=0
  clock+=delta;cooldown=maxf(0,cooldown-delta);veteran_cooldown=maxf(0,veteran_cooldown-delta)
  reticle.position=w.hud.get_local_mouse_position()
- var point=w.camera.project_ray_origin(w.get_viewport().get_mouse_position());var ray=w.camera.project_ray_normal(w.get_viewport().get_mouse_position())
- var hit=Plane(Vector3.UP,.62).intersects_ray(point,ray)
- if hit!=null:aim=hit
+ aim=aim_from_screen(w.get_viewport().get_mouse_position())
  if Input.is_action_just_pressed("reload") and w.story.weapon_drawn():reload_weapon()
  w.player.aim_direction=aim-w.player.position if w.story.weapon_drawn() else Vector3.ZERO
  if active:
@@ -148,6 +146,33 @@ func reload_weapon():
  if int(w.story.economy.handmade)<=0:
   w.hud.toast("土制弹已用完。先在背包使用弹药包，或设法撤回聚落补给。"+("老兵仍能掩护你。" if is_instance_valid(veteran) and veteran_health>0 else ""),5);return
  reload_time=1.55;w.get_node("/root/Session").sound("reload")
+func aim_from_screen(screen:Vector2)->Vector3:
+ # Painted characters are upright billboards. A cursor on their chest must
+ # target that actor, not the ground several metres behind their feet.
+ var point=w.camera.project_ray_origin(screen);var ray=w.camera.project_ray_normal(screen)
+ var hit=Plane(Vector3.UP,w.player.position.y+.72).intersects_ray(point,ray)
+ var fallback:Vector3=hit if hit!=null else w.player.position-w.player.visual.global_basis.z*10
+ var candidates=enemies.duplicate()
+ if is_instance_valid(w.grey_camp):
+  for guard in w.grey_camp.guards:
+   if guard not in candidates:candidates.append(guard)
+ var closest=INF;var selected:Enemy=null
+ for enemy in candidates:
+  if not is_instance_valid(enemy) or enemy.hp<=0 or w.camera.is_position_behind(enemy.position):continue
+  var shape=enemy.get_child(0) as CollisionShape3D
+  var height:float=shape.shape.height if shape and shape.shape is CapsuleShape3D else .75
+  var a=w.camera.unproject_position(enemy.position+Vector3.UP*.15)
+  var b=w.camera.unproject_position(enemy.position+Vector3.UP*(height-.08))
+  var nearest=Geometry2D.get_closest_point_to_segment(screen,a,b)
+  var center=w.camera.unproject_position(enemy.position+Vector3.UP*height*.5)
+  var edge=w.camera.unproject_position(enemy.position+Vector3.UP*height*.5+w.camera.global_basis.x*.30)
+  var distance=screen.distance_to(nearest)
+  if distance>maxf(7,center.distance_to(edge)) or distance>=closest:continue
+  closest=distance;selected=enemy
+ if selected!=null:
+  var shape=selected.get_child(0) as CollisionShape3D
+  return selected.position+Vector3.UP*shape.position.y if shape else selected.position+Vector3.UP*.5
+ return fallback
 func shoot()->bool:
  if paused() or (not active and w.floor_id not in ["east_district","grey_shelter"]) or cooldown>0 or reload_time>0:return false
  if not w.story.weapon_drawn():
@@ -156,7 +181,7 @@ func shoot()->bool:
  if is_instance_valid(w.grey_camp):w.grey_camp.on_shot()
  clip-=1;cooldown=.82 if w.story.equipped_weapon()=="grey_carbine" else (.36 if w.story.f("weapon_serviced") else .42);sync()
  var origin=w.player.position+Vector3.UP*.72
- var direction=aim-origin;direction.y=clampf(direction.y,-.08,.08)
+ var direction=aim-origin
  if direction.length()<.1:direction=-w.player.visual.global_basis.z;direction.y=0
  direction=direction.normalized()
  var result=cast(origin,origin+direction*25)

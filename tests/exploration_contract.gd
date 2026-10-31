@@ -73,8 +73,8 @@ func run():
 	for expected in [["c_commune_route","星城"],["c_commune_politics","守备"]]:
 		var option=w.story.view("commune_leader").options.filter(func(o):return o.key==expected[0])[0]
 		var found=false
-		for b in w.hud.modal.find_children("*","Button",true,false):
-			if b.text==option.text:b.pressed.emit();found=true;break
+		var b=load("res://tests/ui_test_driver.gd").option(w.hud,option.text)
+		if is_instance_valid(b):b.pressed.emit();found=true
 		check(found and w.story.last_reply.contains(expected[1]),"real question button selects its own answer: "+expected[0])
 		var transcript=w.story.conversations.commune_leader
 		check(transcript.any(func(e):return e.speaker=="ivan" and e.text==option.text.trim_prefix("「").trim_suffix("」")),"player question is recorded beside the corresponding answer")

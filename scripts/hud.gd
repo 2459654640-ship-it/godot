@@ -336,6 +336,8 @@ func character_prose(id:String,text:String):
 	words.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 
 func remember_page_scroll():
+	if is_instance_valid(map_large):
+		set_meta("map_view_"+map_large.display_floor,{"zoom":map_large.map_zoom,"pan":map_large.map_pan})
 	if page_key!="" and is_instance_valid(modal_box) and modal_box.get_parent() is ScrollContainer:
 		page_scroll[page_key]=modal_box.get_parent().scroll_vertical
 
@@ -495,82 +497,10 @@ func show_inventory():
 	preload("res://scripts/ui_inventory.gd").render(self)
 
 func show_radiation():
-	start_modal("辐射与身体状态","状态说明",true)
-	modal.position=Vector2(270,70);modal.size=Vector2(1060,860)
-	prose(world.story.Economy.Radiation.describe(world.story),21)
-	rule()
-	var tiers=world.story.Economy.Radiation.TIERS
-	for i in tiers.size():
-		body("%d–%d · %s"%[tiers[i].min,tiers[i+1].min-1 if i+1<tiers.size() else 100,tiers[i].name],21,amber)
-		body(tiers[i].detail,18)
-	body("降低辐射后立即按新档位生效，不留下永久惩罚。已抵达聚落的医护或负责人可以安排免费处置。",17,muted)
-	modal_box.add_child(button("返回背包",show_inventory))
+	load("res://scripts/ui_workbench.gd").health(self)
 
 func show_journal(tab:String="tasks",shown_floor:String=""):
-	start_modal("伊万的手记","随身卷宗   /   任务、地图与见闻",true,"journal:"+tab+":"+shown_floor)
-	modal.position=Vector2(230,84);modal.size=Vector2(1140,832)
-	var tabs=HFlowContainer.new();tabs.add_theme_constant_override("h_separation",8);tabs.add_theme_constant_override("v_separation",6);modal_box.add_child(tabs)
-	for pair in [["tasks","01  事要办"],["map","02  地图"],["lore","03  百科"],["leads","04  留意的事"],["history","05  已读记录"],["closed","06  完成与失败"],["collection","07  收集品"]]:
-		var b=button(pair[1],func():show_journal(pair[0]),true,true)
-		if tab==pair[0]:b.add_theme_color_override("font_color",amber)
-		tabs.add_child(b)
-	rule()
-	var s=world.story
-	if tab=="tasks":
-		var current=Journal.active(s)
-		body("正在跟进",16,amber)
-		if current.is_empty():body("还没决定下一件事。留意身边的人，或翻翻旁边的线索。",21)
-		else:quest_card(current,true)
-		rule();body("其它进行中的任务 · 可切换追踪",16,amber)
-		var count=0
-		for task in Journal.tasks(s):
-			if task.done or task.failed or task.id==current.get("id",""):continue
-			quest_card(task,false);count+=1
-		if count==0:body("没有其它待办。",18,muted)
-	elif tab=="closed":
-		var count=0
-		for task in Journal.tasks(s):
-			if task.done or task.failed:quest_card(task,false);count+=1
-		if count==0:body("办妥的事会留在这里。",20,muted)
-	elif tab=="leads":
-		body("路过时想到的事",25,amber)
-		body("这些还不是答应过的差事。找个人问问，也许会有新的路。",17,muted)
-		for lead in Journal.leads(s):body("· "+lead,21)
-		if Journal.leads(s).is_empty():body("暂时没有新的念头。按自己的步子走。",20)
-		if s.has("photo") and not s.f("quest_photo") and not s.f("father"):
-			modal_box.add_child(button("把问照片的事记进待办",func():s.flags.quest_photo=true;show_journal()))
-	elif tab=="history":
-		body("已经听说的事",23,amber)
-		for entry in s.intel:body(entry,18)
-		for record in s.flags.get("comic_records",[]):
-			rule();body(record.title,21,amber);prose(record.body,19)
-			if record.choice!="":body("伊万："+record.choice,18,muted)
-	elif tab=="lore":
-		for entry in Journal.encyclopedia(s):body(entry[0],24,amber);body(entry[1],19);rule()
-	elif tab=="collection":
-		show_collection()
-	elif tab=="map":
-		var requested=world.floor_id if shown_floor=="" else shown_floor
-		modal.position=Vector2(100,50);modal.size=Vector2(1400,900)
-		var floor_choices=[["life","D-6生活层"],["labor","D-6作业层"]]+world.story.Campaign.NAMES.keys().filter(func(id):return world.story.f("visited_"+id) or world.floor_id==id).map(func(id):return [id,world.story.Campaign.NAMES[id]])
-		var map_controls=HBoxContainer.new();modal_box.add_child(map_controls)
-		var selector=OptionButton.new();selector.custom_minimum_size=Vector2(320,40);selector.add_theme_font_size_override("font_size",19);selector.size_flags_horizontal=Control.SIZE_EXPAND_FILL;map_controls.add_child(selector)
-		if requested=="east_district":map_controls.add_child(button("重置视图",func():map_large.map_zoom=1;map_large.map_pan=Vector2.ZERO;map_large.queue_redraw(),true,true))
-		for i in floor_choices.size():
-			selector.add_item(floor_choices[i][1])
-			if floor_choices[i][0]==requested:selector.select(i)
-		selector.item_selected.connect(func(index):show_journal("map",floor_choices[index][0]))
-		var focus=Journal.active(s)
-		if not focus.is_empty() and focus.place==requested:body("手记里圈过的一带："+focus.area,19,amber)
-		body("当前位置："+world.floor_name()+" · 已探索的街区会记入地图",18,amber)
-		map_large=MapView.new();map_large.custom_minimum_size=Vector2(720,520)
-		map_large.world=world;map_large.expanded=true;map_large.display_floor=requested;modal_box.add_child(map_large)
-		var legend=GridContainer.new();legend.columns=3;legend.add_theme_constant_override("h_separation",18);modal_box.add_child(legend)
-		for zone in world.facility_zones(requested):
-			if requested=="east_district":continue
-			if zone.code in ["00","L0"] or (requested=="life" and zone.code in ["09","10"]):continue
-			legend.add_child(label(zone.code+"  "+("伊万 / 老爹" if requested=="life" and zone.code=="01" else zone.name),15,text_color))
-		modal_hint.text="滚轮缩放 · 中键拖动 · 左键标记目的地 · 右键清除 · 悬停查看设施" if requested=="east_district" else "金色：通路与门口 · 蓝色：附近的人 · Esc 返回"
+	load("res://scripts/ui_workbench.gd").journal(self,tab,shown_floor)
 
 func quest_card(task:Dictionary,tracked:bool):
 	var card=PanelContainer.new();card.add_theme_stylebox_override("panel",style(Color("26322e") if tracked else Color("172321"),Color("a38a5d") if tracked else Color("445148"),1,4));modal_box.add_child(card);UiSurface.attach(card)
@@ -589,21 +519,9 @@ func quest_card(task:Dictionary,tracked:bool):
 	box.add_child(button("查看任务详情",func():show_task_detail(task.id),true,true))
 
 func show_task_detail(id:String):
-	var found=Journal.tasks(world.story).filter(func(t):return t.id==id)
-	if found.is_empty():show_journal();return
-	var task:Dictionary=found[0]
-	start_modal(task.name,task.kind+" / "+task.status,true)
-	modal_hint.text="目标随任务进度更新 · Esc 返回"
-	var place={"life":"D-6生活层","labor":"D-6作业层"}.get(task.place,world.story.Campaign.NAMES.get(task.place,"设施"))
-	body("当前目标" if not task.done and not task.failed else "任务结果",18,amber)
-	prose(task.step,25)
-	if not task.done and not task.failed:
-		body("前往："+place+" · "+task.area,18,amber)
-		modal_box.add_child(button("在地图上查看",func():show_journal("map",task.place)))
-		modal_box.add_child(button("追踪这个任务",func():Journal.track(world.story,id);show_task_detail(id)))
-	rule();body("任务背景",18,amber);prose(task.background,20)
-	body("目标随实际进度更新；未经历的后续剧情不会提前显示。",16,muted)
-	modal_box.add_child(button("返回任务列表",func():show_journal()))
+	var entries=Journal.tasks(world.story).filter(func(t):return t.id==id)
+	var tab="closed" if not entries.is_empty() and (entries[0].done or entries[0].failed) else "tasks"
+	load("res://scripts/ui_workbench.gd").journal(self,tab,"",id)
 
 func inventory_snapshot()->Dictionary:
 	var out={}
@@ -638,56 +556,10 @@ func observe_progress():
 	observed_inventory=now;observed_tasks=quests
 
 func show_collection():
-	var s=world.story
-	modal_hint.text="鼠标停留查看线索   ·   已收录的刊物可以打开阅读   ·   ESC  返回"
-	body("随身书架   %02d / %02d"%[Publications.count(s),Publications.data().entries.size()],25,amber)
-	body("找到的书刊可以随时翻阅。未收录的只留剪影；鼠标停在书影上，看看你想起了哪里。",17,muted)
-	for series in Publications.data().series:
-		rule()
-		var entries:Array=Publications.data().entries.filter(func(book):return book.series==series.id)
-		body(series.name+"   "+str(Publications.count(s,series.id))+" / "+str(entries.size()),22,amber)
-		body(series.description,16,muted)
-		var grid=GridContainer.new();grid.columns=3;grid.add_theme_constant_override("h_separation",14);grid.add_theme_constant_override("v_separation",12);modal_box.add_child(grid)
-		for book in entries:
-			var found=Publications.owned(s,book.id)
-			var panel=PanelContainer.new();panel.custom_minimum_size=Vector2(338,230)
-			panel.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-			panel.add_theme_stylebox_override("panel",style(Color("21302a") if found else Color("14201e"),Color("8e7a54") if found else Color("3d4c44"),1,3))
-			panel.tooltip_text=(book.author+" · "+book.date) if found else book.hint
-			grid.add_child(panel)
-			var box=margin_box(panel,16,13)
-			var row=HBoxContainer.new();row.add_theme_constant_override("separation",16);box.add_child(row)
-			var icon=TextureRect.new();icon.texture=Publications.icon(book);icon.custom_minimum_size=Vector2(91,125);icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;icon.mouse_filter=Control.MOUSE_FILTER_PASS
-			var shader=ShaderMaterial.new();shader.shader=load("res://assets/visual/publication_icon.gdshader");shader.set_shader_parameter("unknown",not found);icon.material=shader;row.add_child(icon)
-			if not found:
-				var question=Label.new();question.text="?";question.add_theme_font_size_override("font_size",43);question.add_theme_color_override("font_color",Color("a8af95"));question.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;question.vertical_alignment=VERTICAL_ALIGNMENT_CENTER;question.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);question.mouse_filter=Control.MOUSE_FILTER_IGNORE;icon.add_child(question)
-			var words=VBoxContainer.new();words.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(words)
-			var title=label(book.title if found else "未收录",19,text_color if found else muted);title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;title.custom_minimum_size.x=170;words.add_child(title)
-			words.add_child(label("第 %02d 册"%int(book.issue),14,muted))
-			if found:
-				var state=world.story.flags.publications[book.id]
-				words.add_child(label("已翻阅" if state.read else "尚未翻阅",14,amber))
-				box.add_child(button("翻开阅读",func():collection_scroll=modal_box.get_parent().scroll_vertical;show_publication(book.id),true,true))
-			else:box.add_child(label("鼠标停留 · 回想线索",14,muted))
-	if collection_scroll>0:modal_box.get_parent().set_deferred("scroll_vertical",collection_scroll)
+	load("res://scripts/ui_workbench.gd").journal(self,"collection")
 
 func show_publication(id:String):
-	var book=Publications.read(world.story,id)
-	if book.is_empty():return
-	world.autosave()
-	start_modal("翻开一册旧书","随身卷宗   /   刊物阅读",true)
-	modal.position=Vector2(265,84);modal.size=Vector2(1070,832)
-	modal_hint.text="滚轮翻页   ·   合上书返回收藏   ·   ESC  返回探索"
-	var header=HBoxContainer.new();header.add_theme_constant_override("separation",28);modal_box.add_child(header)
-	var icon=TextureRect.new();icon.texture=Publications.icon(book);icon.custom_minimum_size=Vector2(110,148);icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;header.add_child(icon)
-	var info=VBoxContainer.new();info.size_flags_horizontal=Control.SIZE_EXPAND_FILL;header.add_child(info)
-	var title=label(book.title,28,amber);title.add_theme_font_override("font",serif);title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;info.add_child(title)
-	info.add_child(label(book.author,18,text_color));info.add_child(label(book.date,16,muted))
-	rule()
-	var paper=PanelContainer.new();paper.add_theme_stylebox_override("panel",style(Color("c8bea0"),Color("8e8264"),1,2));modal_box.add_child(paper)
-	var inset=margin_box(paper,30,25)
-	var text=RichTextLabel.new();text.bbcode_enabled=false;text.text=book.body;text.fit_content=true;text.scroll_active=false;text.add_theme_color_override("default_color",Color("293329"));text.add_theme_font_override("normal_font",serif);text.add_theme_font_size_override("normal_font_size",23);text.add_theme_constant_override("line_separation",10);inset.add_child(text)
-	modal_box.add_child(button("合上书 · 返回刊物收藏",func():show_journal("collection"),true,true))
+	load("res://scripts/ui_workbench.gd").reader(self,id)
 
 func show_blocks():
 	start_modal("下工之后 · 方块","公社公共终端   /   消遣与练习",true)
@@ -729,42 +601,15 @@ func item_icon(id:String)->String:
 	return "res://assets/visual/item_"+world.story.Campaign.ITEM_ART.get(id,id)+".png"
 
 func icon_rect(path:String,size:float=68)->TextureRect:
-	var icon=TextureRect.new();icon.texture=load(path)
+	var icon=TextureRect.new();icon.texture=load(path) if path!="" else null
 	icon.custom_minimum_size=Vector2(size,size);icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	return icon
 
 var shop_actor="supply"
 func show_shop(message:String="",tab:String=""):
-	if tab!="":shop_tab=tab
-	start_modal("第七供应点 · 柳德米拉" if shop_actor=="supply" else "聚落军需与资源收购","生活物资交易 · 任务物品与纪念物不出售",true)
-	var s=world.story
-	var tabs=HBoxContainer.new();modal_box.add_child(tabs)
-	tabs.add_child(button("购买",func():show_shop("","buy"),true,true));tabs.add_child(button("出售",func():show_shop("","sell"),true,true))
-	body(("购买物资" if shop_tab=="buy" else "出售背包物资")+"  /  制式弹 %d · 土制弹 %d"%[s.economy.military,s.economy.handmade],22,amber)
-	if message!="":body(message,18,Color("a4bca0"))
-	var list=s.Economy.GOODS.keys().filter(func(id):return s.Economy.GOODS[id].get("purchase",true)) if shop_tab=="buy" else s.items.duplicate()
-	if shop_tab=="sell":
-		for id in s.economy.goods:
-			if int(s.economy.goods[id])>0:list.append(id)
-		if list.is_empty():body("背包里没有可展示的物品。",18,muted)
-	for id in list:
-		var good:Dictionary=s.Economy.GOODS.get(id,{})
-		var row=HBoxContainer.new();row.add_theme_constant_override("separation",14);modal_box.add_child(row)
-		row.add_child(icon_rect(item_icon(id),64))
-		var b=VBoxContainer.new();b.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(b)
-		var title:String=good.get("name",s.ITEMS.get(id,[id])[0])
-		if shop_tab=="buy":
-			b.add_child(label(title+" · %d 发"%good.price,21,amber))
-			var detail=label(good.detail,16,muted);detail.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;b.add_child(detail)
-			b.add_child(label("余货 %d · 已有 %d"%[s.economy.stock.get(id,0),s.economy.goods.get(id,0)],15,muted))
-			row.add_child(button("购买",func():shop_buy(id),s.economy.military>=good.price and s.economy.stock.get(id,0)>0,true))
-		else:
-			var price:int=s.Economy.sale_price(s,id)
-			b.add_child(label(title+" × "+str(s.economy.goods.get(id,1)),21,amber))
-			b.add_child(label("收购价 %d 发 / 件"%price if price>0 else "任务所需 / 个人物品 · 不收购",16,muted))
-			row.add_child(button("出售一件" if price>0 else "不能出售",func():confirm_sale(id),price>0,true))
-	modal_box.add_child(button("返回交谈",func():show_dialogue(shop_actor)))
+	load("res://scripts/ui_workbench.gd").shop(self,message,tab)
+
 func confirm_sale(id:String="vodka"):
 	var s=world.story;var price:int=s.Economy.sale_price(s,id)
 	start_modal("出售这件物品？","交易确认",true)
@@ -773,18 +618,8 @@ func confirm_sale(id:String="vodka"):
 	modal_box.add_child(button("先留着",func():show_shop("","sell")))
 
 func show_pause():
-	start_modal("暂停 / 现场记录","D–6   /   现场记录",true)
-	modal_box.add_child(button("继续探索",func():close()))
-	modal_box.add_child(button("保存游戏…  [F5]",func():show_saves(true)))
-	modal_box.add_child(button("读取存档…  [F9]",func():show_saves(false)))
-	modal_box.add_child(button("重新开始（保留已有存档）",func():show_restart_confirm()))
-	modal_box.add_child(button("返回主界面…",func():show_menu_confirm()))
-	if is_instance_valid(world.combat) and world.combat.active and not preload("res://scripts/raid_loot.gd").active(world):modal_box.add_child(button("重试本场战斗（恢复战前资源）",func():world.combat.retry()))
-	modal_box.add_child(button("设置 · 画面与声音",show_settings))
-	audio_controls()
-	rule()
-	body("WASD / 方向键：8 方向移动\nE：与当前选中的目标交互\nI：背包　J：手记　M / Tab：地图\n滚轮：附近有多个目标时切换，否则调整近景缩放\nEsc：关闭界面 / 菜单",20)
-	body("靠近人物或物件时会出现互动提示。图文旅程可在暂停页保存，也能打开背包使用物资。",16,muted)
+	load("res://scripts/ui_workbench.gd").pause(self)
+
 func show_restart_confirm():
 	start_modal("重新开始？","当前未保存的进度将丢失",true)
 	modal_box.add_child(button("确认重新开始",func():world.restart()))
@@ -914,16 +749,7 @@ func audio_controls():
 		slider.value_changed.connect(func(value):session.set_volume(bus_name,value);readout.text=str(roundi(value*100))+"%")
 
 func show_settings():
-	start_modal("设置","画面 / 声音",true)
-	modal_hint.text="应用后确认保留更改 · Esc 返回"
-	modal.position=Vector2.ZERO;modal.size=get_viewport_rect().size
-	modal.add_theme_stylebox_override("panel",style(Color("101c1e"),Color("101c1e"),0))
-	scrim.color=Color("101c1e")
-	var outer=modal.get_child(0)
-	for side in ["left","right"]:outer.add_theme_constant_override("margin_"+side,140)
-	for side in ["top","bottom"]:outer.add_theme_constant_override("margin_"+side,50)
-	var controls=preload("res://scripts/ui_settings.gd").new();modal_box.add_child(controls);controls.setup(world.get_node("/root/Session"))
-	modal_box.add_child(button("返回",func():show_comic_pause() if comic_active else show_pause()))
+	load("res://scripts/ui_workbench.gd").settings(self)
 
 func dialogue_actor()->String:return {"armory":"armorer","main_gate":"main_guard","d6_return_desk":"commander","front_veteran":"plant_veteran"}.get(dialogue_id,dialogue_id)
 
@@ -942,25 +768,8 @@ func shop_sell(id:String="vodka"):
 	show_shop(result)
 
 func show_saves(saving:bool,return_to_menu:bool=false,group:String="manual"):
-	saves_return_menu=return_to_menu
-	start_modal("保存游戏" if saving else "读取存档","6 个手动档位 · 自动存档单独保留 · 不同档位互不覆盖",true)
-	modal_hint.text="滚轮浏览档位    ·    Esc 返回"
-	var store=world.SaveStore
-	if not saving:
-		var tabs=HBoxContainer.new();modal_box.add_child(tabs)
-		tabs.add_child(button("手动存档",func():show_saves(false,false,"manual"),true,true))
-		tabs.add_child(button("自动与旧版存档",func():show_saves(false,false,"auto"),true,true))
-	var paths:Array=store.manual_paths() if saving or group=="manual" else store.automatic_paths()+[store.QUICK]
-	for path in paths:
-		var data=store.read(path)
-		var card=PanelContainer.new();card.add_theme_stylebox_override("panel",style(Color("192824"),Color("5e614a"),1,6));modal_box.add_child(card)
-		var content=margin_box(card,14,12);var row=HBoxContainer.new();content.add_child(row)
-		var words=VBoxContainer.new();words.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(words)
-		words.add_child(label(store.title(path),22,amber))
-		var details=label(store.description(path),16,muted if data.is_empty() else text_color);details.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;words.add_child(details)
-		var slot:String=path;var metadata:Dictionary=data
-		row.add_child(button("保存到此档位" if saving else "读取",func():confirm_slot(slot,saving,metadata),saving or not data.is_empty(),true))
-	modal_box.add_child(button("返回",func():show_comic_pause() if comic_active else show_pause()))
+	load("res://scripts/ui_workbench.gd").saves(self,saving,return_to_menu,group)
+
 func saved_slot(path:String):
 	if not world.save_game(path):return
 	if saves_return_menu:world.return_menu()

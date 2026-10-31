@@ -88,7 +88,7 @@ func run():
  if not use.is_empty():use[0].pressed.emit();await frames()
  check(w.story.economy.health==80 and w.story.economy.goods.medkit==1,"grid consumption updates health and stack once")
  w.hud.show_settings();await frames();check(w.hud.modal.find_children("*","OptionButton",true,false).size()==6,"pause settings exposes every video control")
- check(w.hud.modal.position==Vector2.ZERO and w.hud.modal.size==w.hud.get_viewport_rect().size,"in-game settings cover the whole screen")
+ check(w.hud.scrim.visible and w.hud.get_meta("fixed_screen","")=="settings" and w.hud.modal.size.x>1400,"in-game settings use the full fixed screen layout")
  w.hud.show_task_detail("d6_first_duty");await frames();check(w.hud.modal.find_children("*","Label",true,false).any(func(l):return l.text=="任务结果"),"task detail has explicit current objective / result hierarchy")
  w.queue_free();await frames()
  var menu=load("res://scenes/main_menu.tscn").instantiate();root.add_child(menu);current_scene=menu;await frames();menu.show_settings();await frames()

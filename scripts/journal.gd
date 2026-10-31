@@ -4,6 +4,10 @@ static func row(id:String,name:String,done:bool,place:String,background:String,s
 	return {"id":id,"name":name,"done":done,"place":place,"background":background,"step":step,"target":target,"area":area}
 static func tasks(s)->Array:
 	var out=[]
+	if s.flags.get("raid_last_result","")=="lost" and not s.f("raid_active") and s.context.get("floor","") in ["life","commune","sech"]:
+		var home:String=s.context.floor
+		var ready=s.has("mask") and s.has("filter") and (s.has("revolver") or s.has("grey_carbine"))
+		out.append(row("raid_recovery","为下一次外勤做准备",false,("labor" if ready and home=="life" else home),"上次地表行动已经结束。任务文件和寄存物资保留，可以补齐装备后再次出发。","到聚落寄存柜领取装备；没有备用装备时，可以借用面具、滤毒罐、左轮与基础弹药。" if not ready else "检查补给后，到聚落出站口选择地表行动。", "personal_storage" if not ready else {"life":"main_gate","commune":"commune_leave","sech":"sech_leave"}[home],"个人寄存柜" if not ready else "地表出站口"))
 	if s.f("visited_east_district"):
 		out.append(row("east_orientation","旧货运路",s.f("east_routes_known"),"east_district","出口矮墙上留有货运路的旧图，可以先辨认道路、铁路和地下联络入口。","到西南支线口矮墙前查看导向图，图旁留有公用应急箱。","east_board","东郊工业片区"))
 	if s.f("intro_done") or s.f("vitamins_taken"):

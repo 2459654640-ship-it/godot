@@ -79,21 +79,14 @@ static func open(w,target:String):
  if not safe(w):w.hud.toast("附近的敌人正在盯着这里，先离开他们的视线。");return
  var id=target.trim_prefix("raid_container_");var key=record_key(w,id);var rec:Dictionary=w.story.flags.get("raid_containers",{}).get(key,{})
  if rec.is_empty():return
- var h=w.hud;h.start_modal(rec.title,"搜索与转移 · 背包容量有限",true)
+ var h=w.hud
  if not rec.searched:
+  h.start_modal(rec.title,"搜索与转移 · 背包容量有限",true)
   h.body("你靠近检查外壳和封口。打开后，需要花一点时间确认哪些物资还能使用。",20)
   h.modal_box.add_child(h.button("搜索容器 · 约 2 秒",func():search(w,target)))
   return
- if rec.loot.is_empty():h.body("已经搜空。",21,h.muted)
- else:h.modal_box.add_child(h.button("收取能放下的全部物品",func():take_all(w,target)))
- for item in rec.loot:
-  var count=int(rec.loot[item]);var id_item:String=item
-  var row=HBoxContainer.new();h.modal_box.add_child(row);row.add_child(h.icon_rect(h.item_icon(item),42));var title_label=h.label(Bag.name_of(w.story,item)+" ×%d"%count,20,h.text_color);title_label.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(title_label)
-  row.add_child(h.button("放入背包",func():
-   if take(w,target,id_item):open(w,target)
-   else:h.toast("背包放不下，或已经携带这件装备。先整理背包。"),true,true))
- h.body("背包 %d / 48 格。任务关键物品随身保护，普通战利品在地表死亡时丢失。"%Bag.pack(w.story).used,16,h.muted)
- h.modal_box.add_child(h.button("整理背包",func():h.show_inventory()))
+ load("res://scripts/ui_workbench.gd").transfer(h,false,target)
+ return
 static func search(w,target:String):
  var key=record_key(w,target.trim_prefix("raid_container_"));var rec:Dictionary=w.story.flags.raid_containers[key]
  w.hud.start_modal(rec.title,"正在翻找…",true)
@@ -152,7 +145,7 @@ static func resolve_loss(s)->Array:
   if s.economy[id]>0:losses.append(Bag.name_of(s,id)+" ×"+str(s.economy[id]))
   s.economy[id]=0
  s.flags.weapon_magazines={};s.flags.equipment={"weapon":""};s.flags.weapon_clip=0;s.flags.weapon_drawn=false;s.flags.bag_layout={};s.flags.erase("east_retreat_encounter")
- s.flags.raid_active=false;s.flags.raid_last_result="lost";s.flags.raid_losses=losses;s.economy.health=45;s.economy.food=maxi(35,int(s.economy.food))
+ s.flags.raid_active=false;s.flags.raid_last_result="lost";s.flags.raid_debrief_pending=true;s.flags.raid_losses=losses;s.economy.health=45;s.economy.food=maxi(35,int(s.economy.food))
  return losses
 static func return_after_loss(w):
  if not active(w) or not w.combat.defeated:return

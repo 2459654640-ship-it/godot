@@ -62,9 +62,8 @@ func run():
    for i in 5:await process_frame
    w.story.flags.grow_done=true;w.hud.show_dialogue("commune_grower");w.hud.finish_typing()
    for i in 6:await process_frame
-   var transcript_scroll:ScrollContainer=w.hud.modal_box.get_parent()
-   var latest:Control=w.hud.modal_box.get_child(w.hud.modal_box.get_child_count()-1)
-   check(transcript_scroll.scroll_vertical>100 and latest.get_global_rect().intersects(transcript_scroll.get_global_rect()),"changed greeting is shown after old transcript, including instant text reveal")
+   var latest=w.story.Conversation.split_text(w.story.view("commune_grower").body,"commune_grower")[0].text
+   check(w.hud.modal.find_children("*","ScrollContainer",true,false).filter(func(c):return c.is_visible_in_tree()).is_empty() and w.hud.modal.find_children("*","RichTextLabel",true,false).any(func(c):return c.is_visible_in_tree() and c.text.contains(latest.left(25))),"changed greeting appears in fixed speech pane after instant reveal without scrolling through old history")
    w.hud.close()
    w.story.flags.grow_fixed=true;w.on_story_changed()
    check(w.get_node("FungusShade").visible and is_equal_approx(w.get_node("FungusShade").position.y,2.08) and w.get_node("FungusShade").get_meta("dynamic",false),"shade moves visibly after adjustment and is not baked into static batches")

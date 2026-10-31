@@ -59,7 +59,7 @@ func run():
  var accept_text=Story.Campaign.data().actions.watch_accept.text
  check(not w.hud.modal.find_children("*","Button",true,false).any(func(b):return b.text==accept_text),"actual dialogue omits acceptance until explanation has been heard")
  w.perform("c_watch_brief","sech_quartermaster");w.hud.finish_typing()
- check(w.hud.modal.find_children("*","Button",true,false).any(func(b):return b.text==accept_text),"actual dialogue offers explicit acceptance after Peter's explanation")
+ check(is_instance_valid(load("res://tests/ui_test_driver.gd").option(w.hud,accept_text)),"actual dialogue offers explicit acceptance after Peter's explanation has been read")
  check(not w.story.f("watch_job") and w.story.conversations.sech_quartermaster.any(func(e):return e.text.contains("分岔口")),"HUD records the actual explanation but leaves task unaccepted")
  w.queue_free()
  for i in 3:await process_frame
