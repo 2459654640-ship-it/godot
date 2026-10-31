@@ -328,3 +328,12 @@
 | [破损灰泥](../assets/visual/city29_plaster.png) | 城区建筑与住宅隔墙 |
 | [人行铺装](../assets/visual/city29_paving.png) | 人行道与建筑入口 |
 | [砖石废墟](../assets/visual/city30_rubble.png) | v30 不规则碎石堆表面，AI 生成，带缩小层级 |
+
+## 药品外勤与安置
+
+- [莉季娅与伊万在转移间核对药箱](../assets/cinematics/medical_witness32.png)
+- [伊万与莉季娅乘轨道车返回](../assets/cinematics/medical_ride32.png)
+- [返站医务室与药品签收](../assets/cinematics/medical_home32.png)
+- [《等到下一班》原创压缩音频](../assets/audio/c1_return_theme.ogg) · [MIDI 原谱](../assets/audio/scores/c1_return_theme.mid) · [来源说明](../assets/audio/licenses/medical_score_v32.txt)
+
+莉季娅沿用现有医护角色图集与程序步态，未重新生成已认可的伊万及装备人物图集。

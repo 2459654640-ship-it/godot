@@ -152,6 +152,7 @@ static func cleared(w,id:String):
 		w.story.economy.military+=18;w.hud.toast("蓄水池已清理 · 获得封存样本 ×3、巡检箱中的制式弹 ×18。",7)
 	var times:Dictionary=w.story.flags.get("east_cleared_at",{}).duplicate(true);times[id]=w.played_seconds;w.story.flags.east_cleared_at=times
 static func can_retreat(w,id:String)->bool:
+	if w.floor_id=="railfront" and id=="front_exit":return w.combat.enemies.all(func(e):return not is_instance_valid(e) or e.hp<=0 or e.position.distance_to(w.player.position)>6)
 	if w.floor_id!=FLOOR:return false
 	if not layout().entrances.any(func(e):return e.id==id):return false
 	return w.combat.enemies.all(func(e):return not is_instance_valid(e) or e.position.distance_to(w.player.position)>6)

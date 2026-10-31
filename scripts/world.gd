@@ -59,6 +59,7 @@ var debug_camera_target=Vector3.ZERO
 var capture_mode=false
 var room_name="伊万的卧室"
 var wall_veil
+var medical_chapter
 var navigation
 var guard_away_time=0.0
 const LIFE_ZONES=[
@@ -177,6 +178,7 @@ func _ready():
 	set_camera(0,true)
 	combat=preload("res://scripts/combat.gd").new();add_child(combat);combat.setup(self)
 	living=preload("res://scripts/living_world.gd").new();add_child(living);living.setup(self)
+	medical_chapter=preload("res://scripts/medical_chapter.gd").new();add_child(medical_chapter);medical_chapter.setup(self)
 	combat.restore_state(arrival_data.get("combat_state",{}))
 	story.Campaign.District.restore_combat(self)
 	if floor_id in ["east_district","grey_shelter"]:
@@ -594,6 +596,7 @@ func _physics_process(delta):
 				story.changed.emit()
 	previous_position=player.position
 	if is_instance_valid(living):living.tick(delta)
+	if is_instance_valid(medical_chapter):medical_chapter.tick(delta)
 	set_camera(delta)
 	if floor_id!="waterworks" and story.weapon_drawn() and not hud.modal_visible():
 		var cursor=get_viewport().get_mouse_position()
@@ -842,6 +845,7 @@ func perform(key: String, id: String):
 	hud.show_reply(id,reply)
 
 func on_story_changed():
+	if is_instance_valid(medical_chapter):medical_chapter.sync()
 	if floor_id=="coal":
 		var grille=get_node_or_null("MineEscapeGrille")
 		if is_instance_valid(grille) and story.f("rescue_route_ready") and not grille.get_meta("opened",false):
@@ -916,6 +920,7 @@ func clear_arrival(p:Vector3)->Vector3:
 
 func save_snapshot()->Dictionary:
 	if is_instance_valid(living):living.capture()
+	if is_instance_valid(medical_chapter):medical_chapter.capture()
 	if is_instance_valid(grey_camp):grey_camp.capture()
 	if is_instance_valid(combat) and combat.enabled:story.flags.weapon_clip=combat.clip
 	var data=story.serialize()

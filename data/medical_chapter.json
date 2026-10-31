@@ -1,0 +1,223 @@
+{
+  "actions": {
+    "c1_backup_read": {
+      "text": "查看备用有线机的接线说明。",
+      "reply": "柜门上写着：\n「先断开机内电源；保护组件更换后先测通路，最后接通呼叫回路。备用组件放在西侧廊道中段的检修柜。」\n这一回路接到南口司机值守点，能绕过北口损坏的无线信号设备。",
+      "flags": {
+        "c1_backup_read": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "c1_revised",
+          "field_c1_routes"
+        ],
+        "not": [],
+        "floor": [
+          "railfront"
+        ]
+      }
+    },
+    "c1_backup_isolate": {
+      "text": "拉开机内隔离开关，确认指示灯熄灭。",
+      "reply": "你先拉开开关，再检查接线端。电压表回到零位，旧组件已经可以安全取下。",
+      "flags": {
+        "c1_backup_isolated": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "c1_revised",
+          "c1_backup_read"
+        ],
+        "not": [],
+        "floor": [
+          "railfront"
+        ]
+      }
+    },
+    "c1_spare_take": {
+      "text": "按型号取一只密封的保护组件。",
+      "reply": "盒上标着与控制间同一组编号。你检查封口，将盒子放进内袋；柜内其余器件仍按原位收好。",
+      "flags": {
+        "c1_spare_found": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "c1_revised",
+          "c1_backup_read"
+        ],
+        "not": [],
+        "floor": [
+          "railfront"
+        ]
+      }
+    },
+    "c1_backup_restore": {
+      "text": "更换组件，测通线路后接通有线机。",
+      "reply": "接头重新拧紧，读数稳定下来。你按住呼叫键，听见耳机里有人回答：「南口司机值守。你们有多少人，需要在哪一侧上车？」\n回路已经通了，可以等药品和同行者安排妥当后，正式确认接送。",
+      "flags": {
+        "c1_backup_online": true
+      },
+      "once": true,
+      "req": {
+        "all": [
+          "c1_revised",
+          "c1_backup_isolated",
+          "c1_spare_found"
+        ],
+        "not": [],
+        "floor": [
+          "railfront"
+        ]
+      }
+    },
+    "c1_aftercare": {
+      "text": "「这里都安顿好了吗？你接下来有什么打算？」",
+      "reply": "莉季娅：「伤员有床位了。我先帮这里的值班医护把这班做完，明天请人带封信出去。家里还有人等着，我得让他们知道我平安。」\n她从夹着单据的本子里取下一页。\n「这是我一路记的交接。你也留一份。有些人没能跟我们到这里，等有机会，我还想知道他们的下落。」",
+      "once": true,
+      "req": {
+        "all": [
+          "c1_revised",
+          "field_c1_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "c1_settled": true
+      }
+    },
+    "c1_traffic_notice": {
+      "text": "对照墙上的交通令与撤回许可。",
+      "reply": "交通令上写着，军用列车优先通过，民间医疗交换暂缓。下面贴着补发的许可，批准两箱药品和随队医护撤回；签发时间比交通令晚了半天。\n值班员在空白处补了一句：「两份命令已经核对。没有接收班组愿意签字，仍请原地等候。」\n最后一行字被划掉过，你只能辨出「伤员」两个字。",
+      "once": true,
+      "flags": {
+        "c1_orders_read": true
+      },
+      "req": {
+        "all": [
+          "c1_revised"
+        ],
+        "floor": [
+          "railfront"
+        ]
+      }
+    },
+    "c1_linen_read": {
+      "text": "检查墙边留下的敷料与交接纸。",
+      "reply": "干净敷料包在防潮纸里，旁边的交接纸写着：\n「下一班如果有人来，先给手上受伤的那位换药。他一直说自己还能抬，不肯坐下。」\n没有姓名，只有担架队的班组号。你收起一卷仍封好的绷带，将纸条留在原位。",
+      "once": true,
+      "goods": {
+        "bandage": 1
+      },
+      "flags": {
+        "c1_linen_read": true
+      },
+      "req": {
+        "all": [
+          "c1_revised"
+        ],
+        "floor": [
+          "railfront"
+        ]
+      }
+    }
+  },
+  "interactions": {
+    "c1_backup": {
+      "facility": "railfront",
+      "name": "南控制间 / 备用有线机",
+      "role": "有线联络",
+      "body": "灰绿色机箱固定在控制桌旁。耳机挂在侧钩上，隔离开关、保护座与呼叫键有清楚的编号。",
+      "spoken": false,
+      "options": [
+        "c1_backup_read",
+        "c1_backup_isolate",
+        "c1_backup_restore",
+        "front_restore_signal"
+      ],
+      "after": [
+        [
+          "c1_backup_read",
+          "接线说明已看过。西侧廊道中段的检修柜里有匹配组件，操作前先隔离电源。"
+        ],
+        [
+          "c1_backup_online",
+          "有线机读数稳定，南口司机已应答。可以在这里确认回程接送。"
+        ],
+        [
+          "c1_signal_called",
+          "司机已经复述了人数和候车位置。剩下的事是让药品和同行者在南口会合。"
+        ]
+      ]
+    },
+    "c1_spares": {
+      "facility": "railfront",
+      "name": "西侧检修柜 / 密封组件",
+      "role": "维修备件",
+      "spoken": false,
+      "body": "窄柜里按编号放着瓷座、接头和密封组件。先查看控制间的接线说明，才能确认需要哪一个型号。",
+      "options": [
+        "c1_spare_take"
+      ],
+      "after": [
+        [
+          "c1_spare_found",
+          "你取走了一只匹配组件。其余器件仍留在柜内，取件日期已写在领用卡上。"
+        ]
+      ]
+    },
+    "c1_lidiya": {
+      "facility": "railfront",
+      "name": "莉季娅 / 随队医护",
+      "role": "医护转移者",
+      "body": "莉季娅在转移点等着。",
+      "options": []
+    },
+    "c1_orders": {
+      "facility": "railfront",
+      "name": "转移间墙面 / 两份命令",
+      "role": "现场记录",
+      "spoken": false,
+      "body": "两张纸钉在同一块旧木板上，签发时间和接收栏都还清楚。",
+      "options": [
+        "c1_traffic_notice"
+      ]
+    },
+    "c1_linen": {
+      "facility": "railfront",
+      "name": "候车处 / 留给下一班的敷料",
+      "role": "现场探索",
+      "spoken": false,
+      "body": "敷料放在离积水较远的架子上。纸角压在杯子下面，像是怕被来往的人碰落。",
+      "options": [
+        "c1_linen_read"
+      ]
+    }
+  },
+  "quests": [
+    {
+      "id": "c1_aftercare",
+      "name": "抵达以后",
+      "kind": "支线",
+      "facility": "commune",
+      "accepted": "c1_clinic_pending",
+      "done": "c1_settled",
+      "background": "药品已送到医务室。莉季娅暂时留下帮忙，也想给等待她的人带去平安的消息。",
+      "lead": "医务室多了一位刚回来的医护。",
+      "stages": [
+        {
+          "when": {},
+          "target": "c1_lidiya",
+          "step": "到公社西南医务室看望莉季娅，听听她安顿后的打算。"
+        }
+      ],
+      "actions": [
+        "c1_aftercare"
+      ]
+    }
+  ]
+}

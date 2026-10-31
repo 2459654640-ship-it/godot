@@ -1,0 +1,264 @@
+{
+  "c1_intro": {
+    "title": "药箱经过的地方 / 临行前",
+    "art": "commune_threshold",
+    "same_moment": true,
+    "location": "莫斯科公社 / 出站准备",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "出站口的长凳上放着你的派工单。亚历山德拉在地图上指给你看，交换队最后一次回话是在旧换乘站的西侧。"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "面具试好了再走。换乘站还在地下，但联络段有破口，别在通风口久留。南口有按你名字封好的补给。"
+      }
+    ],
+    "choices": [
+      {
+        "text": "「如果她不愿意跟我回来呢？」",
+        "next": "c1_before_consent"
+      },
+      {
+        "text": "「我先去确认人和药品。回程怎么接应？」",
+        "next": "c1_before_route"
+      }
+    ]
+  },
+  "c1_before_consent": {
+    "title": "先把人找到",
+    "art": "commune_threshold",
+    "same_moment": true,
+    "lines": [
+      {
+        "speaker": "亚历山德拉",
+        "text": "那就问她需要什么。她是医护，不是我们的俘虏。她愿不愿意到公社、哪些话能登记，都由她自己说。"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "如果那里已经不安全，就先撤回来。别为了派工单上的一行字把自己搭进去。"
+      }
+    ],
+    "next": "c1_before_route"
+  },
+  "c1_before_route": {
+    "title": "记住回程",
+    "art": "frontline_station",
+    "same_moment": false,
+    "music": "shift_below",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你跟着接送人员穿过两道风门。轨道车沿旧联络线缓慢前行，车灯照过积水、废弃的电缆架，还有早已无人擦拭的站名。"
+      },
+      {
+        "speaker": "司机",
+        "text": "我停在南口安全线外。这里的有线机还能接到我；北口的信号箱也是同一条接送线。呼叫时把人数说清楚，别只报药箱。"
+      }
+    ],
+    "next": "front_arrive_c1"
+  },
+  "front_arrive_c1": {
+    "title": "旧联络线 / 到站",
+    "art": "frontline_station",
+    "same_moment": true,
+    "music": "shift_below",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "车停下来以后，远处还传来一阵空洞的回声。站台西侧亮着一盏小灯，通往那里的门洞只开了一半；北面有东西拖过铁轨，声音又很快停了。"
+      },
+      {
+        "speaker": "司机",
+        "text": "南控制间在右边，先在那里看图。西侧转移点在左边廊道尽头。我要在外面检查车轮，你们准备走了再叫我。"
+      }
+    ],
+    "end": "map:railfront"
+  },
+  "field_c1_interlude": {
+    "title": "药箱旁的人",
+    "art": "medical_witness32",
+    "same_moment": true,
+    "music": "letters_theme",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "女人让出灯下的位置，把封签和派工单放在一起。她一直盯着编号，等你说对了，才松开压在箱盖上的手。"
+      },
+      {
+        "speaker": "莉季娅",
+        "text": "我叫莉季娅，跟几个小站合办的医护交换队来的。中央的封锁队到站时，担架刚抬上站台。他们收走通行许可，催着我们回去，这两只箱子也被扣下了。"
+      },
+      {
+        "speaker": "伊万",
+        "text": "为什么你还留在这里？"
+      }
+    ],
+    "next": "c1_witness_choice"
+  },
+  "c1_witness_choice": {
+    "title": "留下来的人",
+    "art": "medical_witness32",
+    "same_moment": true,
+    "music": "letters_theme",
+    "lines": [
+      {
+        "speaker": "莉季娅",
+        "text": "我们队里有个孩子刚退了烧，原本要随这批药转走。带队的人先把他送去了公社，封锁后却没法回来接药。我怕等一晚上，下一班人连箱子该送去哪儿都不知道，只好留下来守着。"
+      },
+      {
+        "speaker": "莉季娅",
+        "text": "你问的事，我可以把自己的经历讲清楚。家属的名字别写到外面去，他们没有参与下命令。"
+      }
+    ],
+    "choices": [
+      {
+        "text": "「记下你愿意公开的部分，家属姓名不写。我陪你到南口。」",
+        "next": "c1_witness_agree",
+        "flag": "c1_witness_named"
+      },
+      {
+        "text": "「先把完整记录封给医护核对，公开只写日期和物资。我陪你到南口。」",
+        "next": "c1_witness_agree",
+        "flag": "c1_witness_sealed"
+      },
+      {
+        "text": "「公社和中央正在打仗。你愿意去公社吗？」",
+        "next": "c1_witness_consent"
+      }
+    ]
+  },
+  "c1_witness_consent": {
+    "title": "她自己的决定",
+    "art": "medical_witness32",
+    "same_moment": true,
+    "music": "letters_theme",
+    "lines": [
+      {
+        "speaker": "莉季娅",
+        "text": "我知道。我也知道他们会问我从哪里来。你替我叫接待的人过来，我自己回答。"
+      },
+      {
+        "speaker": "莉季娅",
+        "text": "如果那边愿意收药，也愿意让我帮忙，我先跟你走。等安顿好了，再想办法给家里带信。"
+      }
+    ],
+    "next": "c1_witness_choice"
+  },
+  "c1_witness_agree": {
+    "title": "准备一起走",
+    "art": "medical_witness32",
+    "same_moment": true,
+    "music": "letters_theme",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "你将两只小药箱装进背包，替她把桌边的手电捡起来。莉季娅背好自己的包，又回头看了一眼写满名字的领用本。"
+      },
+      {
+        "speaker": "莉季娅",
+        "text": "我愿意跟你去公社。我沿西侧廊道去南口，在有灯的等候处等你。你要去叫车就先去，我走得慢，但这段路还认得。"
+      }
+    ],
+    "end": "resume:front_cache",
+    "finish_flags": [
+      "field_c1_scene_seen"
+    ]
+  },
+  "c1_after": {
+    "title": "药箱送到了",
+    "art": "medical_home32",
+    "same_moment": true,
+    "music": "c1_return_theme",
+    "location": "莫斯科公社 / 医务室",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "药箱拆开的声音很轻。医护先清点敷料，再把药品分开放到桌上。莉季娅坐在门边喝了一杯水，等问清病床在哪里，又站起来去洗手。"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "人和药都到了。我把你们走过的路线留给下一班，家属姓名不会写在公开的布告里。接待登记还有些话要问，我会在场。"
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "她愿意署名的经过，我会另存一份，发表前先交给她核对。她不愿公开的家属信息，我们只留在内部接待簿里。",
+        "when": {
+          "all": [
+            "c1_witness_named"
+          ]
+        }
+      },
+      {
+        "speaker": "亚历山德拉",
+        "text": "完整证词先封存，由医护核对。公开的版本只写日期和物资，家属信息留在内部接待簿里。要扩大使用范围，得再问过她。",
+        "when": {
+          "all": [
+            "c1_witness_sealed"
+          ]
+        }
+      },
+      {
+        "speaker": "旁白",
+        "text": "你路过医务室的时候，看见值班医护给莉季娅让出登记的位置。桌上多了两只打开的小箱子，原来空着的敷料格重新放满了一层。"
+      }
+    ],
+    "next": "c1_after_words"
+  },
+  "c1_after_words": {
+    "title": "这一班之后",
+    "art": "medical_home32",
+    "same_moment": true,
+    "music": "c1_return_theme",
+    "lines": [
+      {
+        "speaker": "莉季娅",
+        "text": "等这里忙完，我想借一张纸。家里只知道我跟医护队出了门，还不知道我现在在哪里。"
+      }
+    ],
+    "choices": [
+      {
+        "text": "「我过会儿来医务室找你，看看信能怎么带出去。」",
+        "next": "c1_after_end",
+        "flag": "c1_visit_promised"
+      },
+      {
+        "text": "「先歇一会儿吧。登记的事我会向亚历山德拉说明。」",
+        "next": "c1_after_end",
+        "flag": "c1_rest_suggested"
+      }
+    ]
+  },
+  "c1_after_end": {
+    "title": "医务室的灯",
+    "art": "medical_home32",
+    "same_moment": true,
+    "music": "c1_return_theme",
+    "body": "你离开门口，把里面的位置让给端热水的人。走廊里有人问药品到了没有，医护从里面答了一声。原先靠墙等候的人慢慢站起来，按登记次序走向门边。",
+    "end": "resume:commune_guard"
+  },
+  "c1_return_safe": {
+    "title": "同车回来的人",
+    "art": "medical_ride32",
+    "same_moment": true,
+    "music": "letters_theme",
+    "lines": [
+      {
+        "speaker": "旁白",
+        "text": "司机在南口核对人数。你先把药箱放稳，再给莉季娅让出靠里面的位置。车灯照着站台缓缓后退，她一直等到转移点的灯看不见了，才松开抓着包带的手。"
+      },
+      {
+        "speaker": "莉季娅",
+        "text": "刚才只顾着走，没觉得冷。到了那边，能不能先借点热水？"
+      }
+    ],
+    "end": "map:commune"
+  },
+  "c1_return_early": {
+    "title": "先回去准备",
+    "art": "frontline_station",
+    "same_moment": true,
+    "body": "你向司机说明，这次先退回公社。尚未落实的接送和留在站内的人都记在派工单上。司机在南口重新留下识别记号，等下次出发时再核对。",
+    "end": "map:commune"
+  }
+}

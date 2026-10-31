@@ -29,7 +29,9 @@ static func allowed(s,key:String)->bool:
   if not data().missions.has(id) or s.f("field_"+id+"_done"):return false
   if key=="front_read_routes":return not s.f("field_"+id+"_routes")
   if key=="front_take_evidence":return s.f("battle_"+id+"_west") and not s.f("field_"+id+"_evidence")
-  if key=="front_restore_signal":return s.f("field_"+id+"_evidence") and s.f("field_"+id+"_scene_seen") and s.f("battle_"+id+"_north") and not s.f("field_"+id+"_ready")
+  if key=="front_restore_signal":
+   if id=="c1" and s.f("c1_revised"):return s.f("field_c1_evidence") and s.f("field_c1_scene_seen") and (s.f("battle_c1_north") or s.f("c1_backup_online")) and not s.f("c1_signal_called")
+   return s.f("field_"+id+"_evidence") and s.f("field_"+id+"_scene_seen") and s.f("battle_"+id+"_north") and not s.f("field_"+id+"_ready")
   if key=="front_supply":return not s.f("field_"+id+"_supplied")
  return true
 static func act(s,key:String)->String:
@@ -45,7 +47,12 @@ static func act(s,key:String)->String:
   match key:
    "front_read_routes":s.flags["field_"+id+"_routes"]=true
    "front_take_evidence":s.flags["field_"+id+"_evidence"]=true;s.flags.next_sequence="field_"+id+"_interlude";return m.evidence
-   "front_restore_signal":s.flags["field_"+id+"_ready"]=true;return "接收方复述了本班识别号，南口司机确认收到。你把信号箱关好，准备带记录与沿途见到的人一起回去。"
+   "front_restore_signal":
+    if id=="c1" and s.f("c1_revised"):
+     s.flags.c1_signal_called=true
+     if s.f("c1_lidiya_waiting") or s.f("c1_legacy_transfer"):s.flags.field_c1_ready=true
+     return "司机复述了接送人数和候车位置：南口西侧等候处。药箱和莉季娅都到齐后，就能一起上车。"
+    s.flags["field_"+id+"_ready"]=true;return "接收方复述了本班识别号，南口司机确认收到。你把信号箱关好，准备带记录与沿途见到的人一起回去。"
    "front_supply":
     s.flags["field_"+id+"_supplied"]=true;s.economy.handmade+=24;s.economy.goods.bandage=int(s.economy.goods.get("bandage",0))+2
     return "领取土制子弹 ×24、绷带 ×2。本班补给已签收，领用簿已经登记。"

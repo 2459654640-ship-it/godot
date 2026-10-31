@@ -101,6 +101,7 @@ static func commune(w):
  # The existing clinic side table doubles as Anna's classroom desk; no new bed or partition.
  for dx in [-.28,.15]:k.box("AnnaExerciseBook",Vector3(-8+dx,.855,18),Vector3(.29,.035,.40),"paper")
  k.box("AnnaPencil",Vector3(-8.3,.88,18.23),Vector3(.20,.018,.018),"wood")
+ preload("res://scripts/railway_detail.gd").commune(w)
  commune_homes(w);commune_production(w);commune_defence(w)
  for x in [16,19,22]:k.box("ArchiveCabinet",Vector3(x,1,-12.3),Vector3(1.6,2,.7),"wood",true)
  for z in [-10,-8]:k.table(Vector3(19,0,z),3)

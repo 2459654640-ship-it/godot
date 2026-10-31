@@ -6,8 +6,9 @@ const Update=preload("res://scripts/chapter_update.gd")
 const Journey=preload("res://scripts/journey_update.gd")
 const Access=preload("res://scripts/d6_access.gd")
 const District=preload("res://scripts/east_district.gd")
+const Medical=preload("res://scripts/medical_chapter.gd")
 const NAMES={"grey_shelter":"灰狗货场避难所","east_district":"东郊工业片区","waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区","surface":"地表旧泵站","railfront":"旧联络线换乘站"}
-const ITEM_ART={"grey_carbine":"grey_carbine","pool_sample":"mutant_sample","moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
+const ITEM_ART={"c1_medicine":"medkit","grey_carbine":"grey_carbine","pool_sample":"mutant_sample","moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
 static func data()->Dictionary:
 	if _data.is_empty():
 		_data=JSON.parse_string(FileAccess.get_file_as_string("res://data/campaign.json"))
@@ -16,6 +17,7 @@ static func data()->Dictionary:
 		Journey.extend(_data)
 		Access.extend(_data)
 		District.extend(_data)
+		Medical.extend(_data)
 	return _data
 static func permits(s,req:Dictionary)->bool:
 	if req.has("any") and not req.any.any(func(flag):return s.f(flag)):return false
@@ -31,6 +33,7 @@ static func permits(s,req:Dictionary)->bool:
 		if int(s.economy.goods.get(good,0))<int(req.goods[good]):return false
 	return true
 static func available(s,key:String)->bool:
+	if not Medical.allowed(s,key):return false
 	if not District.allowed(s,key):return false
 	if not Access.allowed(s,key):return false
 	if not Journey.allowed(s,key):return false
@@ -61,7 +64,7 @@ static func decorate(v:Dictionary,s)->Dictionary:
 		if key=="coal_return" and not s.f("brother_found"):words="离开矿区，返回公社"
 
 		v.options.append(s.opt("c_"+key,words,s.context.get("floor","")==d.facility and available(s,key)))
-	return District.decorate(Access.decorate(Journey.decorate(Living.decorate(Update.decorate(v,s),s),s),s),s)
+	return Medical.decorate(District.decorate(Access.decorate(Journey.decorate(Living.decorate(Update.decorate(v,s),s),s),s),s),s)
 static func act(s,key:String)->String:
 	var a:Dictionary=data().actions[key]
 	if not available(s,key):return "这件事已经做过，或还没有准备好。"
@@ -102,6 +105,7 @@ static func act(s,key:String)->String:
 	if updated!="":reply=updated
 	Journey.act(s,key)
 	District.act(s,key)
+	Medical.act(s,key)
 	var receipts=[]
 	for kind in reward:
 		if int(reward[kind])>0:receipts.append(("制式子弹" if kind=="military" else "土制子弹")+" ×"+str(reward[kind]))
@@ -137,6 +141,7 @@ static func side_tasks(s)->Array:
 		if q.id in ["workers_network","commune_chapter"] and s.f("workers_draft") and not s.f("workers_signed") and s.context.get("floor","")!="coal":
 			current={"place":"commune","target":"commune_printer","step":"公开进入 D-6 的路线不可用。工人联络需先落实矿区内部接应；征询稿先保留，不要去正门递交。"}
 		current=District.task_stage(s,q,current)
+		current=Medical.task(s,current,q)
 		target=current.target
 		var area:String=data().interactions.get(target,{}).get("name",{"semyon":"谢苗诺夫的房间","medical":"作业层医务间","armory":"作业层装备库"}.get(target,target))
 		rows.append({"kind":q.get("kind","支线"),"id":q.id,"name":q.name,"done":s.f(q.done),"place":current.get("place",q.facility),"background":q.background,"step":"已交付，报酬与经过记入手记。" if s.f(q.done) else current.step,"target":target,"area":area})
@@ -154,6 +159,8 @@ static func objective(s)->String:
 	if duty!="":return duty
 	var living=Living.objective(s)
 	if living!="":return living
+	var medical=Medical.objective(s)
+	if medical!="":return medical
 	var updated=Update.objective(s)
 	if updated!="" and not s.ending:return updated
 	if s.ending:return data().endings.get(s.flags.get("campaign_ending",""),{}).get("title","这段旅程已记入手记")

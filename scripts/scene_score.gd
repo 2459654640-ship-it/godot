@@ -1,6 +1,6 @@
 extends Node
 ## Sparse location scoring. Dialogue keeps playing; authored story cues take priority.
-const TRACKS={"life":"home_lamp.ogg","labor":"shift_below.ogg","coal":"shift_below.ogg","commune":"shelter_theme.wav","sech":"shelter_theme.wav","waterworks":"shift_below.ogg","railfront":"frontline_theme.wav","surface":"dawn_theme.wav","east_district":"dawn_theme.wav","starcity":"dawn_theme.wav"}
+const TRACKS={"life":"home_lamp.ogg","labor":"shift_below.ogg","coal":"shift_below.ogg","commune":"shelter_theme.wav","sech":"shelter_theme.wav","waterworks":"shift_below.ogg","railfront":"shift_below.ogg","surface":"dawn_theme.wav","east_district":"dawn_theme.wav","starcity":"dawn_theme.wav"}
 var world
 var rest=0.0
 func setup(w):

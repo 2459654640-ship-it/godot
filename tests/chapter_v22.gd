@@ -21,7 +21,7 @@ func walk(s,sequence:String,wanted:String=""):
   var p=Comic.panel(s);check(not p.is_empty(),"resolved panel "+str(s.flags.comic.node))
   if p.is_empty():break
   check(ResourceLoader.exists("res://assets/cinematics/"+p.art+".png"),"illustration "+p.art)
-  if p.get("music","")!="":check(ResourceLoader.exists("res://assets/audio/"+p.music+".wav"),"score "+p.music)
+  if p.get("music","")!="":check((ResourceLoader.exists("res://assets/audio/"+p.music+".wav") or ResourceLoader.exists("res://assets/audio/"+p.music+".ogg")),"score "+p.music)
   var index=-1
   if p.has("choices"):
    index=0
@@ -82,8 +82,10 @@ func run():
    act(s,"front_read_routes");s.act("c_front_take_evidence");check(not s.last_action_valid,"evidence remains behind actual first encounter")
    s.flags["battle_"+id+"_west"]=true;act(s,"front_take_evidence");s=walk(s,"field_"+id+"_interlude")
    s.act("c_front_restore_signal");check(not s.last_action_valid,"north signal waits for second encounter")
-   s.flags["battle_"+id+"_north"]=true;act(s,"front_restore_signal");s=roundtrip(s)
-   act(s,"front_return");check(s.flags.next_sequence=="front_back_"+faction,"retreat remembers sponsoring faction")
+   s.flags["battle_"+id+"_north"]=true
+   if id=="c1":s.flags.c1_lidiya_waiting=true
+   act(s,"front_restore_signal");s=roundtrip(s)
+   act(s,"front_return");check(s.flags.next_sequence==("c1_return_safe" if id=="c1" else "front_back_"+faction),"retreat remembers sponsoring faction")
    s.context.floor=faction;act(s,"field_"+id+"_report");var reward=s.economy.military
    s.act("c_field_"+id+"_report");check(not s.last_action_valid and s.economy.military==reward,"single mission reward")
    s=walk(s,id+"_after");check(not s.ending,"membership fieldwork never produces premature ending")

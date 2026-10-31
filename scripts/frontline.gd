@@ -9,9 +9,10 @@ static func encounters(s)->Dictionary:
  id+"_north":{"rect":Rect2(-8,-23,17,16),"need":"field_"+id+"_evidence","skip":"unused_front_skip","name":"北口接送线","spawns":[Vector3(-5,.04,-19),Vector3(3,.04,-21),Vector3(6,.04,-12)],"enemy_kind":"soldier" if soldiers else "mutant"}}
 static func build(w):
  var k=w.kit
- k.box("FloorTransferStation",Vector3(0,-.13,0),Vector3(48,.26,48),"concrete",true)
- k.box("TransferPlatformTerrazzo",Vector3(0,.008,0),Vector3(7.6,.016,47),"terrazzo")
- k.box("ControlRoomServiceTile",Vector3(16,.009,15),Vector3(11.6,.018,13.6),"plant_tile")
+ preload("res://scripts/railway_detail.gd").prepare(k)
+ k.box("FloorTransferStation",Vector3(0,-.13,0),Vector3(48,.26,48),"rail_floor",true)
+ k.box("TransferPlatformTerrazzo",Vector3(0,.008,0),Vector3(7.6,.016,47),"rail_platform")
+ k.box("ControlRoomServiceTile",Vector3(16,.009,15),Vector3(11.6,.018,13.6),"rail_service")
  for z in [-18,-10,-2,6,14,22]:k.box("GalleryRepairPlate",Vector3(-20.8,.012,z),Vector3(2.4,.024,2.6),"factory_floor")
  # Tracks occupy their own bays; no room, furniture or carriage crosses them.
  for x in [-6.3,6.3]:
@@ -53,7 +54,7 @@ static func build(w):
  for x in [19.8,21]:k.locker(Vector3(x,0,9.1))
  k.bench(Vector3(17,0,20.7),3,true,PI)
  k.table(Vector3(-17,0,-13),3)
- for x in [-17.8,-16.6]:k.box("SealedMissionParcel",Vector3(x,.99,-13),Vector3(.9,.30,.6),"wood")
+ for x in [-17.8,-16.6]:k.box("SealedMissionParcel",Vector3(x,.99,-13),Vector3(.9,.30,.6),"wood").set_meta("dynamic",true)
  k.box("TransferSignalCabinet",Vector3(3,1,-18.2),Vector3(1.3,2,.5),"old_iron",true)
  for y in [.8,1.3]:k.cyl("TransferSignalDial",Vector3(3,y,-17.92),.12,.05,"cream").rotation.x=PI/2
  k.box("TransferSignalLamp",Vector3(3,1.7,-17.91),Vector3(.24,.12,.035),"warm_light")
@@ -70,6 +71,7 @@ static func build(w):
   for z in [-21,-18]:
    for x in [-1,0,1]:k.box("DefensiveSupplyBags",Vector3(x,.4,z),Vector3(.85,.8,.55),"cloth",true)
  details(w)
+ preload("res://scripts/railway_detail.gd").build(w)
  k.finish_walls()
 static func people(w):
  for entry in [["ambient_woman",-20,18],["ambient_elder",-16,18.4],["ambient_child",-18,18.7]]:

@@ -45,6 +45,7 @@ func resolve_check(key:String,chance:int) -> bool:
 	last_outcome={"kind":"success" if success else "failure","chance":chance,"key":key}
 	return success
 const ITEMS = {
+ "c1_medicine":["封签药箱","交接编号与派工单一致的两只小药箱，主要装着敷料和退热药。交给公社医务室签收；不能出售。","任务"],
  "grey_carbine":["灰狗旧式卡宾枪","从灰狗手中缴获的五发卡宾枪，使用土制弹。射击间隔较长，单发威力高；空仓时按 R 装填。","武器"],
  "pool_sample":["沉淀池封存样本","地表委托所需的污染样本，已单独封口。交给公社守备或谢契军需处，不能出售。","任务物品"],
  "moro_card":["莫罗的手抄歌页","下工之后第一次排练留下的歌页，页角有你参与的炭笔画。","纪念"],
@@ -407,4 +408,5 @@ func restore(data: Dictionary):
 	Campaign.Living.migrate(self,int(data.get("content_revision",0)))
 	Campaign.Journey.migrate(self,data)
 	Campaign.Access.migrate(self,data)
+	Campaign.Medical.migrate(self)
 	changed.emit()

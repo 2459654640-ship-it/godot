@@ -28,7 +28,7 @@ func run():
  w.perform("c_front_read_routes","front_routes");w.story.flags.battle_c1_west=true
  w.perform("c_front_take_evidence","front_cache");await read_to_end()
  check(w.story.f("field_c1_scene_seen") and w.story.f("c1_witness_named") and w.hud.dialogue_id=="front_cache","evidence opens an interactive interlude and returns to the correct object")
- w.story.flags.battle_c1_north=true;w.perform("c_front_restore_signal","front_signal")
+ w.story.flags.c1_lidiya_waiting=true;w.story.flags.battle_c1_north=true;w.perform("c_front_restore_signal","front_signal")
  check(w.story.f("field_c1_ready"),"signal confirms actual mission readiness")
  w.perform("c_front_return","front_exit");await read_to_end()
  check(w.floor_id=="commune" and w.story.f("field_c1_ready"),"return reader restores mission state in sponsoring settlement")
