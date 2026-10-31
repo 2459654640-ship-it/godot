@@ -1,0 +1,497 @@
+[
+  {
+    "suite": "run",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 112.24,
+    "results": [
+      "D6_TEST_RESULT checks=1891 failures=0"
+    ]
+  },
+  {
+    "suite": "visual_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 4.08,
+    "results": [
+      "VISUAL_CONTRACT_RESULT checks=1109 failures=0"
+    ]
+  },
+  {
+    "suite": "narrative_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 6.86,
+    "results": [
+      "NARRATIVE_CONTRACT_RESULT checks=1942 failures=0"
+    ]
+  },
+  {
+    "suite": "resident_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 14.23,
+    "results": [
+      "RESIDENT_CONTRACT_RESULT checks=114 failures=0"
+    ]
+  },
+  {
+    "suite": "chapter_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 5.96,
+    "results": [
+      "CHAPTER_CONTRACT_RESULT checks=141 failures=0"
+    ]
+  },
+  {
+    "suite": "floor_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 12.84,
+    "results": [
+      "FLOOR_CONTRACT_RESULT checks=40 failures=0 connected_cells=4127"
+    ]
+  },
+  {
+    "suite": "campaign_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 114.14,
+    "results": [
+      "CAMPAIGN_CONTRACT_RESULT checks=458 failures=0"
+    ]
+  },
+  {
+    "suite": "campaign_ui",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 7.99,
+    "results": [
+      "CAMPAIGN_UI_RESULT checks=17 failures=0"
+    ]
+  },
+  {
+    "suite": "refinement_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 7.95,
+    "results": [
+      "REFINEMENT_RESULT checks=39 failures=0"
+    ]
+  },
+  {
+    "suite": "presentation_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 8.6,
+    "results": [
+      "PRESENTATION_RESULT checks=38 failures=0"
+    ]
+  },
+  {
+    "suite": "exploration_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 6.99,
+    "results": [
+      "EXPLORATION_RESULT checks=187 failures=0"
+    ]
+  },
+  {
+    "suite": "v9_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 4.01,
+    "results": [
+      "V9_RESULT checks=129 failures=0"
+    ]
+  },
+  {
+    "suite": "v10_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 5.22,
+    "results": [
+      "V10_RESULT checks=121 failures=0"
+    ]
+  },
+  {
+    "suite": "v11_contract",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 5.99,
+    "results": [
+      "V11_RESULT checks=180 failures=0"
+    ]
+  },
+  {
+    "suite": "v11_combat",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 6.31,
+    "results": [
+      "V11_COMBAT_RESULT checks=22 failures=0"
+    ]
+  },
+  {
+    "suite": "occlusion_v11",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 2.9,
+    "results": [
+      "OCCLUSION_V11_RESULT checks=9 failures=0"
+    ]
+  },
+  {
+    "suite": "visual_fixes_v11_1",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 3.98,
+    "results": [
+      "VISUAL_FIXES_V11_1_RESULT checks=109 failures=0"
+    ]
+  },
+  {
+    "suite": "commune_v12",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 7.42,
+    "results": [
+      "COMMUNE_V12_RESULT checks=146 failures=0"
+    ]
+  },
+  {
+    "suite": "factory_v12",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 4.62,
+    "results": [
+      "FACTORY_V12_RESULT checks=49 failures=0"
+    ]
+  },
+  {
+    "suite": "equipment_v12",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 4.42,
+    "results": [
+      "EQUIPMENT_V12_RESULT checks=17 failures=0"
+    ]
+  },
+  {
+    "suite": "platform_v12",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 6.97,
+    "results": [
+      "PLATFORM_V12_RESULT checks=12 failures=0"
+    ]
+  },
+  {
+    "suite": "actors_v13",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 5.24,
+    "results": [
+      "ACTORS_V13_RESULT checks=61 failures=0"
+    ]
+  },
+  {
+    "suite": "publications_v13",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 7.34,
+    "results": [
+      "PUBLICATIONS_V13_RESULT checks=130 failures=0"
+    ]
+  },
+  {
+    "suite": "public_radio_v16",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 37.21,
+    "results": [
+      "PUBLIC_RADIO_V16_RESULT checks=132 failures=0"
+    ]
+  },
+  {
+    "suite": "ivan_gait_v16",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 3.4,
+    "results": [
+      "IVAN_GAIT_V16_RESULT checks=102 failures=0"
+    ]
+  },
+  {
+    "suite": "furnishings_v16",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 11.93,
+    "results": [
+      "FURNISHINGS_V16_RESULT checks=40 failures=0"
+    ]
+  },
+  {
+    "suite": "first_meetings_v17",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 8.57,
+    "results": [
+      "FIRST_MEETINGS_V17_RESULT checks=294 failures=0"
+    ]
+  },
+  {
+    "suite": "starcity_v17",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 3.68,
+    "results": [
+      "STARCITY_V19_RESULT checks=7 failures=0"
+    ]
+  },
+  {
+    "suite": "ivan_gait_v17",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 3.31,
+    "results": [
+      "IVAN_GAIT_V17_RESULT checks=7254 failures=0"
+    ]
+  },
+  {
+    "suite": "motion_v18",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 11.28,
+    "results": [
+      "MOTION_V18_RESULT checks=966 failures=0"
+    ]
+  },
+  {
+    "suite": "expedition_v19",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 26.33,
+    "results": [
+      "EXPEDITION_V19_RESULT checks=102 failures=0"
+    ]
+  },
+  {
+    "suite": "narrative_v19",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 0.5,
+    "results": [
+      "NARRATIVE_V19_RESULT checks=150 failures=0"
+    ]
+  },
+  {
+    "suite": "crowds_v19",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 4.82,
+    "results": [
+      "CROWDS_V19_RESULT checks=16 failures=0"
+    ]
+  },
+  {
+    "suite": "chapter_v22",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 1.93,
+    "results": [
+      "CHAPTER_V22_RESULT checks=562 failures=0"
+    ]
+  },
+  {
+    "suite": "chapter_world_v22",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 16.57,
+    "results": [
+      "CHAPTER_WORLD_V22_RESULT checks=25 failures=0"
+    ]
+  },
+  {
+    "suite": "chapter_flow_v22",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 8.26,
+    "results": [
+      "CHAPTER_FLOW_V22_RESULT checks=27 failures=0"
+    ]
+  },
+  {
+    "suite": "exterior_v23",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 5.47,
+    "results": [
+      "EXTERIOR_V23_RESULT checks=85 failures=0"
+    ]
+  },
+  {
+    "suite": "enemy_routes_v23",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 4.5,
+    "results": [
+      "ENEMY_ROUTES_V23_RESULT checks=37 failures=0"
+    ]
+  },
+  {
+    "suite": "living_story_v24",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 1.25,
+    "results": [
+      "LIVING_STORY_V24_RESULT checks=209 failures=0"
+    ]
+  },
+  {
+    "suite": "living_world_v24",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 28.34,
+    "results": [
+      "LIVING_WORLD_V24_RESULT checks=32 failures=0"
+    ]
+  },
+  {
+    "suite": "save_slots_v24",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 10.04,
+    "results": [
+      "SAVE_SLOTS_V24_RESULT checks=54 failures=0"
+    ]
+  },
+  {
+    "suite": "coal_identity_v24",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 5.54,
+    "results": [
+      "COAL_IDENTITY_V24_RESULT checks=51 failures=0"
+    ]
+  },
+  {
+    "suite": "journey_ui_v25",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 4.89,
+    "results": [
+      "JOURNEY_UI_V25_RESULT checks=116 failures=0"
+    ]
+  },
+  {
+    "suite": "npc_gait_v25",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 8.01,
+    "results": [
+      "NPC_GAIT_V25_RESULT checks=1731 failures=0"
+    ]
+  },
+  {
+    "suite": "radiation_v25",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 1.39,
+    "results": [
+      "RADIATION_V25_RESULT checks=59 failures=0"
+    ]
+  },
+  {
+    "suite": "combat_species_v26",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 6.58,
+    "results": [
+      "COMBAT_SPECIES_V26_RESULT checks=23 failures=0"
+    ]
+  },
+  {
+    "suite": "watch_dialogue_v26",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 3.79,
+    "results": [
+      "WATCH_DIALOGUE_V26_RESULT checks=26 failures=0"
+    ]
+  },
+  {
+    "suite": "access_interactions_v26",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 9.06,
+    "results": [
+      "ACCESS_INTERACTIONS_V26_RESULT checks=165 failures=0"
+    ]
+  },
+  {
+    "suite": "east_district_v27",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 64.53,
+    "results": [
+      "EAST_DISTRICT_V27_RESULT checks=85 failures=0"
+    ]
+  },
+  {
+    "suite": "stealth_v27",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 90.81,
+    "results": [
+      "STEALTH_V27_RESULT checks=51 failures=0"
+    ]
+  },
+  {
+    "suite": "art_direction_v28",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 21.33,
+    "results": [
+      "ART_DIRECTION_V28_RESULT 51 checks passed"
+    ]
+  },
+  {
+    "suite": "city_rebuild_v29",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 28.85,
+    "results": [
+      "CITY_V29_RESULT 87 checks / 0 failures"
+    ]
+  },
+  {
+    "suite": "experience_v30",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 22.05,
+    "results": [
+      "EXPERIENCE_V30_RESULT 77 checks / 0 failures"
+    ]
+  },
+  {
+    "suite": "interface_v31",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 27.04,
+    "results": [
+      "INTERFACE_V31_RESULT 317 checks / 0 failures"
+    ]
+  },
+  {
+    "suite": "medical_chapter_v32",
+    "exit": 0,
+    "script_errors": 0,
+    "seconds": 16.16,
+    "results": [
+      "MEDICAL_V32_RESULT 63 checks / 0 failures"
+    ]
+  }
+]
