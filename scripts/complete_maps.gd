@@ -97,7 +97,7 @@ static func star(w):
  for p in [Vector3(19,0,-18),Vector3(24,0,-18)]:
   k.table(p,3.0);Props.console(k,p+Vector3(0,.85,-.1),0,.9)
   k.lamp(p+Vector3(0,2.7,-1.1),false,1.1,6)
- Props.console(k,Vector3(22,0,1),0,2.2);Props.chair(k,Vector3(22,0,2.4),PI)
+ Props.console(k,Vector3(22,0,1),0,2.2);Props.chair(k,Vector3(22,0,2.4),0)
  Props.console(k,Vector3(0,0,-20),0,3.6)
  k.table(Vector3(-6,0,-20),2.6)
  for x in [-1.2,0,1.2]:Props.chair(k,Vector3(x,0,-18.5),0)
@@ -113,6 +113,7 @@ static func relay(w):
  var k=w.kit
  preload("res://scripts/surface_site.gd").ground(w,Rect2(-34,-29,68,58),false,false)
  preload("res://scripts/city_architecture.gd").materials(k)
+ k.wall_surface="city29_plaster";k.wall_normal="cement_normal";k.wall_color=Color("b4afa0");k.wall_finish_theme="exterior"
  var house=Rect2(-30,-24,20,18)
  # The control house is a real four-sided building with a playable ground floor.
  k.box("RelayHouseFloor",Vector3(-20,.016,-15),Vector3(19.6,.032,17.6),"institution_tile")
@@ -120,6 +121,13 @@ static func relay(w):
  k.wall("RelayHouseBack",Vector2(-30,-24),Vector2(-10,-24),true)
  for x in [-30,-10]:k.wall("RelayHouseSide",Vector2(x,-24),Vector2(x,-6),true)
  for x in [-22.4,-17.6]:k.box("RelayHouseDoorFrame",Vector3(x,1.35,-6),Vector3(.16,2.7,.28),"dark_steel")
+ # The service door has a paved landing and an attached canopy, without a raised threshold.
+ k.box("RelayEntrancePaving",Vector3(-20,.018,-4.5),Vector3(7,.026,3),"city_paving")
+ k.box("RelayEntranceCanopy",Vector3(-20,2.9,-4.85),Vector3(6.4,.13,2.5),"exterior_roof").set_meta("view_occluder",true)
+ for x in [-22.8,-17.2]:
+  k.box("CanopySupport",Vector3(x,1.4,-3.8),Vector3(.09,2.8,.09),"dark_steel",true)
+  k.pipe(Vector3(x,2.88,-4.85),Vector3(x,2.25,-5.88),.035,"dark_steel")
+ k.label("РЕЛЕЙНАЯ / СЛУЖЕБНЫЙ ВХОД",Vector3(-20,2.7,-5.83),17,Color("bdb69c"))
  for x in [-28,-24,-20,-16,-12]:
   k.box("RelayUpperSill",Vector3(x,3.05,-6),Vector3(4,.65,.25),"exterior_render")
   k.box("RelayUpperGlass",Vector3(x,3.85,-6),Vector3(2.6,.85,.05),"exterior_glass")
@@ -135,6 +143,27 @@ static func relay(w):
  Props.console(k,Vector3(-23,0,-13.5),0,2.6);k.table(Vector3(-15,0,-20),2.8)
  k.lamp(Vector3(-27,2.4,-23.7),true,2.5,10)
  k.lamp(Vector3(-12,2.4,-6.2),false,1.0,8)
+ # Cable runs descend from the control house to an actual covered trench.
+ for z in [-18.,-17.55]:
+  k.pipe(Vector3(-9.85,1.8,z),Vector3(-9.85,.10,z),.045,"dark_steel")
+  k.box("CableTrenchLid",Vector3(2.7,.055,z),Vector3(25,.09,.25),"dark_steel")
+  for x in [-8.,0.,8.]:k.box("CableTrenchJoint",Vector3(x,.105,z),Vector3(.08,.012,.26),"rust")
+ # Maintenance cargo stays beside the access drive rather than across it.
+ var van=Props.root(k,"AbandonedServiceVan",Vector3(-7,0,4),PI/2)
+ Props.bevel(k,"VanChassis",Vector3(0,.44,0),Vector3(2.0,.35,4.5),"dark_steel",van,true)
+ Props.bevel(k,"VanCab",Vector3(0,1.22,1.45),Vector3(1.95,1.22,1.35),"junction_paint",van)
+ k.box("VanWindscreen",Vector3(0,1.48,2.14),Vector3(1.55,.52,.035),"exterior_glass",false,van)
+ k.box("VanBonnet",Vector3(0,.97,2.25),Vector3(1.98,.16,.45),"junction_paint",false,van)
+ for x in [-.98,.98]:
+  for z in [-1.45,1.25]:
+   var wheel=k.cyl("VanWheel",Vector3(x,.38,z),.36,.18,"black",van);wheel.rotation.z=PI/2
+  k.box("VanBedSide",Vector3(x,.94,-.8),Vector3(.10,.58,2.7),"junction_paint",false,van)
+ k.box("VanCargoBed",Vector3(0,.65,-.8),Vector3(1.9,.10,2.7),"warm_wood",false,van)
+ k.box("VanSnow",Vector3(0,1.85,1.45),Vector3(1.9,.055,1.27),"surface_snow",false,van)
+ k.box("VanTailgate",Vector3(0,.94,-2.13),Vector3(1.95,.58,.10),"junction_paint",false,van)
+ for p in [Vector3(-8,0,-1),Vector3(-5,0,-2)]:k.crate(p,Vector3(1.2,.7,.9))
+ for z in [-2,6,17]:
+  var drift=k.ellipsoid("RelayWallDrift",Vector3(-32,.06,z),Vector3(2.4,.28,2.6),"snowbank");drift.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
  # Road is bent by collapsed housing, with clear edges and several walkable approaches.
  for pair in [[Vector3(-23,0,28),Vector3(-18,0,10)],[Vector3(-18,0,10),Vector3(-16,0,-4)],[Vector3(-18,0,10),Vector3(15,0,10)]]:preload("res://scripts/surface_site.gd").road(k,pair[0],pair[1],4.2)
  # Four braced legs, dishes, feed cabinet and guy wires make the mast legible at play scale.

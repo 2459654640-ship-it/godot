@@ -148,5 +148,9 @@ func run():
  carry=load("res://scenes/labor.tscn").instantiate();root.add_child(carry);current_scene=carry;await frames();freeze(carry)
  check(carry.public_radio.portable and carry.public_radio.enabled and carry.public_radio.station==1 and carry.public_radio.track==1,"next floor resumes the same owned portable programme")
  carry.public_radio.stop();carry.queue_free();await frames();session.clear()
+ # --fixed-fps advances timers faster than the real audio thread. Give the
+ # mixer one wall-clock turn, then drain its deferred playback releases.
+ OS.delay_msec(120)
+ await frames(5)
  print("PUBLIC_RADIO_V16_RESULT checks=",checks," failures=",failures)
  quit(0 if failures==0 else 1)

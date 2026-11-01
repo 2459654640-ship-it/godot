@@ -39,7 +39,7 @@ func setup(w):
   track=clampi(int(saved.get("track",0)),0,current_station().tracks.size()-1)
  build_receiver()
  audio=AudioStreamPlayer.new();audio.name="PublicRadioMusic";audio.bus="Radio";audio.volume_db=-80;add_child(audio)
- audio.finished.connect(advance.bind(1))
+ audio.finished.connect(programme_finished)
  var session=world.get_node("/root/Session")
  if not session.radio_transfer.is_empty():
   var saved_portable=session.radio_transfer.duplicate(true);session.radio_transfer={}
@@ -70,7 +70,7 @@ func select_track(index:int):
  if index<0 or index>=current_station().tracks.size():return
  track=index;play_track()
 func play_track(offset:float=0.0):
- audio.stop();audio.stream=load("res://assets/audio/radio/"+current_track().file)
+ release_stream();audio.stream=load("res://assets/audio/radio/"+current_track().file)
  enabled=true;paused=false;audio.stream_paused=false
  # Set initial attenuation before playback, avoiding a loud first frame.
  update_mix(1.0)
@@ -80,7 +80,14 @@ func toggle():
  if not enabled:play_track();return
  paused=not paused;audio.stream_paused=paused or suppressed;refresh_ui()
 func stop():
- enabled=false;paused=false;audio.stop();audio.stream=null;refresh_ui()
+ enabled=false;paused=false;release_stream();refresh_ui()
+func release_stream():
+ # A paused voice must be resumed before stopping, otherwise the audio server
+ # can retain its Ogg playback during an immediate scene/channel change.
+ if not is_instance_valid(audio):return
+ audio.stream_paused=false;audio.stop();audio.stream=null
+func programme_finished():
+ if enabled and is_inside_tree():advance(1)
 func advance(direction:int):
  track=posmod(track+direction,current_station().tracks.size());play_track()
 func refresh_ui():
@@ -124,7 +131,7 @@ func _exit_tree():
  var session=get_node_or_null("/root/Session")
  if is_instance_valid(session) and portable and enabled and owns_portable():
   session.radio_transfer={"station":station,"track":track,"position":audio.get_playback_position(),"paused":paused}
- if is_instance_valid(audio):audio.stop();audio.stream=null
+ release_stream()
 
 func build_receiver():
  var site:Dictionary=SITES[world.floor_id];var p:Vector3=site.p;var heading:float=site.heading

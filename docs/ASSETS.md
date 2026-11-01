@@ -337,3 +337,19 @@
 - [《等到下一班》原创压缩音频](../assets/audio/c1_return_theme.ogg) · [MIDI 原谱](../assets/audio/scores/c1_return_theme.mid) · [来源说明](../assets/audio/licenses/medical_score_v32.txt)
 
 莉季娅沿用现有医护角色图集与程序步态，未重新生成已认可的伊万及装备人物图集。
+
+
+## 当前后半部场景素材
+
+| 用途 | 当前素材 |
+| --- | --- |
+| 四种模拟仪器面板（2×2 图集） | [control_panels](../assets/visual/control_panels.png) |
+| 父子交接间 | [star_reunion](../assets/cinematics/star_reunion.png) |
+| 地表中继站 | [north_relay](../assets/cinematics/north_relay.png) |
+| 货场换乘线 | [junction_transfer](../assets/cinematics/junction_transfer.png) |
+| 书信交还 | [letters_home](../assets/cinematics/letters_home.png) |
+| 共享预警 | [warning_shared](../assets/cinematics/warning_shared.png) |
+| 分散保全 | [warning_distributed](../assets/cinematics/warning_distributed.png) |
+| 留守观测 | [warning_watch](../assets/cinematics/warning_watch.png) |
+
+新地图的人物使用既有角色图集，伊万普通、面具、持枪和面具持枪四套图集均未改变。

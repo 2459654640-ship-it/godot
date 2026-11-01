@@ -72,6 +72,9 @@ static func include_quest(s,q:Dictionary)->bool:
  if q.id.begins_with("field_") and s.f("late_"+q.id.trim_prefix("field_")+"_started"):return false
  if q.id=="north_late" and s.f("late_north_contacted"):return false
  return true
+static func result(s,id:String)->String:
+ var rows={"late_c2":"尤里已平安返站，书信交由巴拉诺娃按收件人分别转交。尚未查到下落的人继续留在查找簿上。", "late_c3":"家属支路修复，温室与家属房轮换供暖；居民参与核对温度，原通知已更正。", "late_s1":"检修车恢复制动与旁线，安东已返站并获得休息班。", "late_s2":"阿尔乔姆已回到谢契，当面说明被扣经过；争议货物另行追查。", "late_s3":"四名住户已交给谢契接应。"+("修复拖车后，粮食与乘员同班抵达。" if s.f("late_s3_all_carried") else "伤病者先抵达，粮食由留下的值守看护，下一班接运。"), "late_d1":"伤员已交医务间，运输次序与燃料延误保留在交接记录。", "late_d2":"公共取水支路已经恢复。"+("报告保留总管与住区的两组实际读数。" if s.f("late_d2_truthful") else "总表按恢复填写，未通住区的问题保留在维修附注。"), "late_d3":"两处独立测量已交回，技术联络委派已签发；星城仍需自行核验入站申请。", "late_perimeter":"已向星城说明技术来意，领取外线检修安排；这份介绍没有代替门禁核查。", "late_star_access":"外线收发校验通过，去污及装备登记完成，获得有限工作区准入。", "late_family":"核实身份、共同标定和查阅通信记录后，已与父亲谈过他的责任。今后的私人关系仍由你决定。", "late_warning":"已完成“"+String(data().endings.get("warning_"+String(s.flags.get("late_final_mode","shared")),{}).get("title","预警与撤离"))+"”。人物后续保存在已读经历中，未完支线仍可继续。", "late_mine_cover":"报班铃已试响，瓦西里确认这一班的带路人与撤离安排。私人接应没有撤销通缉，也不允许公开进入 D-6。"}
+ return rows.get(id,"已交付，报酬与经过记入手记。")
 static func task_stage(s,q:Dictionary,current:Dictionary)->Dictionary:
  var f:String=s.context.get("floor","")
  var c=current.duplicate()

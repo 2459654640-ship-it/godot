@@ -58,7 +58,7 @@ func run():
  w.hud.show_comic("anna_supper");w.hud.finish_typing()
  var entries=load("res://scripts/ui_comic.gd").paragraphs(w.hud,w.story.Comic.panel(w.story))
  for i in entries.size():
-  if entries[i].speaker=="安娜":w.story.flags.comic.line_index=i;w.hud.show_comic();w.hud.finish_typing();break
+  if entries[i].get("name",String(entries[i].speaker).trim_prefix("voice_"))=="安娜":w.story.flags.comic.line_index=i;w.hud.show_comic();w.hud.finish_typing();break
  var labels=w.hud.modal.find_children("*","Label",true,false)
  check(labels.any(func(label):return label.text=="安娜") and not labels.any(func(label):return label.text.begins_with("voice_")),"cinematic shows human speaker names, never parser identifiers")
  w.hud.comic_active=false;w.story.flags.comic={"active":false};w.hud.close()

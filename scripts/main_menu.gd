@@ -19,11 +19,11 @@ func _ready():
 	var shade=Gradient.new();shade.set_color(0,Color(.02,.04,.04,.97));shade.set_color(1,Color(.02,.04,.04,.05))
 	var gradient=GradientTexture2D.new();gradient.gradient=shade;gradient.fill_from=Vector2.ZERO;gradient.fill_to=Vector2.RIGHT
 	var veil=TextureRect.new();veil.texture=gradient;veil.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);veil.mouse_filter=Control.MOUSE_FILTER_IGNORE;add_child(veil)
-	var box=VBoxContainer.new();box.position=Vector2(100,150);box.size=Vector2(500,700);box.add_theme_constant_override("separation",18);add_child(box)
+	var box=VBoxContainer.new();box.position=Vector2(100,140);box.size=Vector2(500,700);box.add_theme_constant_override("separation",14);add_child(box)
 	words(box,"МОСКВА  /  1982",19,Color("bda371"))
 	var title=words(box,"地铁1982",84,Color("eee1c3"));title.add_theme_font_override("font",serif)
 	words(box,"灯光之外，还有人在等你。",23,Color("b3bdaf"))
-	var space=Control.new();space.custom_minimum_size.y=65;box.add_child(space)
+	var space=Control.new();space.custom_minimum_size.y=45;box.add_child(space)
 	read_save()
 	continue_button=choice(box,"继续游戏",continue_game);continue_button.disabled=save_data.is_empty()
 	status=words(box,save_summary(),16,Color("9da99e"));status.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
@@ -32,7 +32,7 @@ func _ready():
 	choice(box,"读取存档",show_saves)
 	choice(box,"操作与制作信息",show_about)
 	choice(box,"退出游戏",func():get_tree().quit())
-	var footer=words(self,"一九八二年十一月  ·  莫斯科地下",16,Color("a3ac9e"));footer.position=Vector2(100,930)
+	var footer=words(self,"一九八二年十一月  ·  莫斯科地下",16,Color("a3ac9e"));footer.position=Vector2(100,956)
 	var music=AudioStreamPlayer.new();music.stream=preload("res://assets/audio/shelter_theme.wav");music.bus="Music";music.volume_db=-12;add_child(music)
 	if DisplayServer.get_name()!="headless":music.play()
 func words(parent:Node,text:String,size:int,color:Color)->Label:

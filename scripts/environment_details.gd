@@ -28,6 +28,7 @@ static func commune(w):
 
 static func waterworks(w):
 	var k=w.kit
+	preload("res://scripts/production_props.gd").panel_face(k,k.root,Vector3(-.60,1.35,5.808),Vector2(1.22,.813),2)
 	for x in [-16,-10]:
 		# Existing motor fins stay in facility_detail; do not stack duplicate rings.
 		# Bolted base and manifold gauges reuse the pump footprint.

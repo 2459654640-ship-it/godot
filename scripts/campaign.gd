@@ -150,7 +150,7 @@ static func side_tasks(s)->Array:
 		current=Complete.task_stage(s,q,current)
 		target=current.target
 		var area:String=data().interactions.get(target,{}).get("name",{"semyon":"谢苗诺夫的房间","medical":"作业层医务间","armory":"作业层装备库"}.get(target,target))
-		rows.append({"kind":q.get("kind","支线"),"id":q.id,"name":q.name,"done":s.f(q.done),"place":current.get("place",q.facility),"background":q.background,"step":"已交付，报酬与经过记入手记。" if s.f(q.done) else current.step,"target":target,"area":area})
+		rows.append({"kind":q.get("kind","支线"),"id":q.id,"name":q.name,"done":s.f(q.done),"place":current.get("place",q.facility),"background":q.background,"step":Complete.result(s,q.id) if s.f(q.done) else current.step,"target":target,"area":area})
 	return rows
 static func finish(s,id:String):
 	s.Progression.fail(s,[],"旅程已经收束，这项委托未能完成。")

@@ -13,7 +13,7 @@ func act(s,key:String):
  s.act("c_"+key);check(s.last_action_valid,"allowed: "+key)
 func roundtrip(s):
  var t=Story.new();t.restore(JSON.parse_string(JSON.stringify(s.serialize())));t.context=s.context.duplicate(true)
- check(JSON.parse_string(JSON.stringify(t.flags))==JSON.parse_string(JSON.stringify(s.flags)),"exact chapter flags roundtrip")
+ check(s.flags.keys().all(func(key):return JSON.parse_string(JSON.stringify(t.flags.get(key)))==JSON.parse_string(JSON.stringify(s.flags[key]))),"all saved chapter flags survive compatibility migration")
  return t
 func walk(s,sequence:String,wanted:String=""):
  Comic.start(s,sequence);var guard=0
