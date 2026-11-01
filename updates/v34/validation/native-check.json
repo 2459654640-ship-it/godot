@@ -1,0 +1,9 @@
+{
+  "version": "v34",
+  "source_free_release": true,
+  "main_menu": "visually checked",
+  "click_new_game": "passed; actual prologue screenshot",
+  "rendering": "software Vulkan; Linux; Dummy audio",
+  "windows_hardware_test": false,
+  "shutdown": "terminated after visual check"
+}

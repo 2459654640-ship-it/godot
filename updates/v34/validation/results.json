@@ -1,0 +1,112 @@
+[
+  {
+    "suite": "scene_handoff_v34",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "starcity_v17",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "equipment_v12",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "field_experience_v34",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "interface_v31",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "journey_ui_v25",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "coal_identity_v24",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "narrative_v19",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "presentation_contract",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "campaign_ui",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "complete_campaign",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "complete_world",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "complete_presentation",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "city_rebuild_v29",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "experience_v30",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "art_direction_v28",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "public_radio_v16",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "factory_v12",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "commune_v12",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "narrative_contract",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "access_interactions_v26",
+    "ok": true,
+    "exit": 0
+  },
+  {
+    "suite": "occlusion_v11",
+    "ok": true,
+    "exit": 0
+  }
+]
