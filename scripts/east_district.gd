@@ -157,6 +157,7 @@ static func can_retreat(w,id:String)->bool:
 	if not layout().entrances.any(func(e):return e.id==id):return false
 	return w.combat.enemies.all(func(e):return not is_instance_valid(e) or e.position.distance_to(w.player.position)>6)
 static func safe_interaction(w,id:String)->bool:
+	if w.story.Campaign.Complete.safe_interaction(w,id):return true
 	if id in ["grey_shelter_entry","grey_shelter_exit"] or id.begins_with("raid_container_"):return preload("res://scripts/raid_loot.gd").safe(w)
 	return w.floor_id==FLOOR and id=="east_camp_cache" and is_instance_valid(w.grey_camp) and w.grey_camp.can_loot()
 static func remember_combat(w):

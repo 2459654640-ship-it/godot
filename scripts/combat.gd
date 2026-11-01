@@ -39,10 +39,11 @@ const ENCOUNTERS={
  "workshop":{"rect":Rect2(-6,-10,11,10),"need":"plant_bled","skip":"plant_fuse","name":"修配间的巢穴","spawns":[Vector3(-3,.04,-8),Vector3(3,.04,-8),Vector3(2,.04,-2)]},
  "warehouse":{"rect":Rect2(5,-14,14,14),"need":"plant_power","skip":"water_secured","name":"封存仓库","spawns":[Vector3(8,.04,-5),Vector3(15,.04,-5),Vector3(12,.04,-11),Vector3(17,.04,-2)]}}
 func setup(world):
- w=world;enabled=w.floor_id in ["waterworks","surface","railfront","east_district","grey_shelter"];encounters=preload("res://scripts/surface_site.gd").ENCOUNTERS if w.floor_id=="surface" else ENCOUNTERS
+ w=world;enabled=w.floor_id in ["waterworks","surface","railfront","east_district","grey_shelter","junction","relay"];encounters=preload("res://scripts/surface_site.gd").ENCOUNTERS if w.floor_id=="surface" else ENCOUNTERS
  if w.floor_id=="grey_shelter":encounters={}
  if w.floor_id=="east_district":encounters=w.story.Campaign.District.encounters(w.story)
  if w.floor_id=="railfront":encounters=preload("res://scripts/frontline.gd").encounters(w.story)
+ if w.floor_id in ["junction","relay"]:encounters=preload("res://scripts/chapter_director.gd").encounters(w.story,w.floor_id)
  if not enabled:return
  veteran=w.npcs.get("plant_veteran")
  if is_instance_valid(veteran):veteran.combat_controlled=true
@@ -68,7 +69,7 @@ func update_boss_hud():
  boss_bar.visible=active and not w.hud.modal_visible() and not bosses.is_empty();boss_title.visible=boss_bar.visible
  if not boss_bar.visible:return
  var b=bosses[0];boss_bar.value=b.hp
- boss_title.text="蓄水池巨兽"+(" · 撞击后正在恢复" if b.recovery>1 else (" · 正在蓄力，避开正前方" if b.windup>0 else ""))
+ boss_title.text=String(encounters.get(encounter,{}).get("boss_title","蓄水池巨兽"))+(" · 撞击后正在恢复" if b.recovery>1 else (" · 正在蓄力，避开正前方" if b.windup>0 else ""))
 func paused()->bool:return not enabled or w.hud.modal_visible() or w.departure_animating
 func enemy_path(from:Vector3,to:Vector3)->PackedVector3Array:
  # Creatures cannot use the player's small-step controller. Curbs, pool rims
@@ -134,7 +135,7 @@ func begin(id:String):
  var budget=0
  for i in encounters[id].spawns.size():budget+=Catalog.budget(kinds[i] if i<kinds.size() else encounters[id].get("enemy_kind","mutant"))
  var missing=maxi(0,budget-int(w.story.economy.handmade)-clip)
- if missing>0 and w.floor_id in ["waterworks","railfront"]:w.story.economy.handmade+=missing;w.hud.toast("从小队随身弹袋补入 %d 发土制弹。"%missing,5)
+ if missing>0 and w.floor_id in ["waterworks","railfront","junction","relay"]:w.story.economy.handmade+=missing;w.hud.toast("从小队随身弹袋补入 %d 发土制弹。"%missing,5)
  sync();checkpoint=w.save_snapshot().duplicate(true);w.autosave()
  active=true
  if w.floor_id=="railfront":w.sync_event_music("frontline_theme")

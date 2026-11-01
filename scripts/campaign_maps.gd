@@ -13,6 +13,8 @@ static func doors(id:String)->Array:
 	return out
 static func build(w):
 	var k=w.kit;var id:String=w.floor_id;var plan:Dictionary=LAYOUTS[id]
+	if id in ["junction","relay","star_interior"]:
+		Detail.materials(k);preload("res://scripts/complete_maps.gd").build(w);return
 	if id=="grey_shelter":
 		Detail.materials(k);preload("res://scripts/grey_shelter.gd").build(w);return
 	if id=="east_district":

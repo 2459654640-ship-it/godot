@@ -59,7 +59,7 @@ static func panel(s)->Dictionary:
 	if not p.is_empty() and s.flags.get("comic",{}).get("sequence","")=="solo" and (not s.has("mask") or not s.has("filter")):
 		if p.art in ["descent","sergey"]:p.art+="_unmasked"
 		if s.flags.comic.node=="solo_descent":p.body+="\n你没有完整防护。灰尘呛进喉咙，你用围巾捂住口鼻，咳得胸口发疼。必须尽快离开这段积尘的通道。"
-	return p
+	return Campaign.Complete.panel(s,p)
 static func choose(s,index:int=-1):
 	var state:Dictionary=s.flags.comic
 	var p:Dictionary=panel(s)
@@ -86,6 +86,7 @@ static func choose(s,index:int=-1):
 			s.flags.next_facility=p.end.substr(4)
 			if state.node in ["commune_reception","sech_reception","coal_descent"]:s.flags["arrival_v8_"+p.end.substr(4)]=true
 			s.ending=false
+		elif p.end=="complete:campaign":Campaign.Complete.finish(s)
 		elif p.end.begins_with("ending:"):Campaign.finish(s,p.end.substr(7))
 		else:s.flags.chapter_endpoint=p.end;s.ending=true
 	elif p.has("choices"):
@@ -99,5 +100,6 @@ static func choose(s,index:int=-1):
 		state.node=choice.next
 	else:state.node=p.next
 	if state.node in ["official_surface","official_plant"]:s.flags.story_time="07:25"
+	state.line_index=0
 	s.flags.comic=state
 	s.changed.emit()

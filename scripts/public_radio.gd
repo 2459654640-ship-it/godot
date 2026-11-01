@@ -2,6 +2,9 @@ extends Node3D
 ## A quiet, opt-in receiver. Distance follows Ivan, not the overhead camera.
 const UI=preload("res://scripts/ui_public_radio.gd")
 const SITES={
+ "junction":{"p":Vector3(-21.5,0,19),"heading":PI,"place":"换乘线检修间公共桌"},
+ "star_interior":{"p":Vector3(-25,0,16),"heading":PI/2,"place":"工作人员休息间"},
+ "relay":{"p":Vector3(-12,0,-9),"heading":-PI/2,"place":"中继站控制屋值守桌"},
  "grey_shelter":{"p":Vector3(-8.7,0,-2.0),"heading":PI/2,"place":"地下避难所公共桌旁"},
  "east_district":{"p":Vector3(17.1,.014,23.0),"heading":-PI/2,"place":"住宅街避风修配间东侧"},
  "railfront":{"p":Vector3(19.6,0,19.8),"heading":PI,"place":"南控制间等候角"},

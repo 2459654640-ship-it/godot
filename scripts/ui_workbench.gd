@@ -77,6 +77,7 @@ static func inventory(h,tab:String="all",selected:String=""):
  var main=row(content,20);main.size_flags_vertical=Control.SIZE_EXPAND_FILL
  var equipment=panel(h,main,198);equipment.get_parent().get_parent().size_flags_horizontal=0
  words(h,equipment,"外勤装备",19,GOLD);line(equipment)
+ if s.f("late_arms_deposited"):words(h,equipment,"武器暂存在星城接待处，离站时按清单领回。",15,GOLD)
  var weapon:String=s.equipped_weapon()
  for spec in [[weapon,"武器栏"],["mask" if s.has("mask") else "","面部防护"],["filter" if s.has("filter") else "","滤毒罐"]]:
   var id:String=spec[0];words(h,equipment,spec[1],13,DIM)
@@ -323,7 +324,7 @@ static func saves(h,saving:bool,return_to_menu:bool=false,group:String="manual")
  var content=shell(h,"保存游戏" if saving else "读取存档","СОХРАНЕНИЯ  /  六个独立手动档位","saves")
  if not saving:
   var tabs=row(content);action(h,tabs,"手动存档",func():saves(h,false,return_to_menu,"manual"),true,group=="manual");action(h,tabs,"自动与旧版存档",func():saves(h,false,return_to_menu,"auto"),true,group=="auto")
- var store=h.world.SaveStore;var paths:Array=store.manual_paths() if saving or group=="manual" else store.automatic_paths()+[store.QUICK]
+ var store=h.world.SaveStore;var paths:Array=store.manual_paths() if saving or group=="manual" else store.automatic_paths()+[store.FINAL,store.QUICK]
  var grid=GridContainer.new();grid.columns=2;grid.add_theme_constant_override("h_separation",16);grid.add_theme_constant_override("v_separation",16);content.add_child(grid)
  for path in paths:
   var data:Dictionary=store.read(path);var c=panel(h,grid,600);c.get_parent().get_parent().size_flags_vertical=0;c.get_parent().get_parent().custom_minimum_size.y=190

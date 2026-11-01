@@ -1,7 +1,8 @@
 extends RefCounted
 ## Versioned local saves. A failed write never replaces the previous readable copy.
+const FINAL="user://saves/final_action.json"
 const QUICK="user://d6_save.json"
-const FLOORS=["grey_shelter","east_district","life","labor","waterworks","commune","sech","coal","starcity","surface","railfront"]
+const FLOORS=["junction","relay","star_interior","grey_shelter","east_district","life","labor","waterworks","commune","sech","coal","starcity","surface","railfront"]
 const MANUAL_SLOTS=6
 static func manual_paths()->Array:
 	var out=[]
@@ -9,8 +10,9 @@ static func manual_paths()->Array:
 	return out
 static func automatic_paths()->Array:
 	return ["user://saves/auto_0.json","user://saves/auto_1.json","user://saves/auto_2.json"]
-static func paths()->Array:return manual_paths()+automatic_paths()+[QUICK]
+static func paths()->Array:return manual_paths()+automatic_paths()+[QUICK,FINAL]
 static func title(path:String)->String:
+	if path==FINAL:return "最终行动前"
 	var index=manual_paths().find(path)
 	if index>=0:return "存档位 %02d"%(index+1)
 	index=automatic_paths().find(path)
@@ -93,7 +95,7 @@ static func auto_path()->String:
 	return oldest
 static func summary(d:Dictionary)->String:
 	if d.is_empty():return "空存档位"
-	var names={"east_district":"东郊工业片区","life":"D-6 · 生活层","labor":"D-6 · 作业层","waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","coal":"煤运休养区","starcity":"星城外围","surface":"地表旧泵站","railfront":"旧联络线换乘站"}
+	var names={"junction":"北线货场换乘线","relay":"北线地表中继站","star_interior":"星城测控设施","east_district":"东郊工业片区","life":"D-6 · 生活层","labor":"D-6 · 作业层","waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","coal":"煤运休养区","starcity":"星城外围","surface":"地表旧泵站","railfront":"旧联络线换乘站"}
 	var date=Time.get_datetime_string_from_unix_time(int(d.get("saved_at",0))).replace("T"," ") if d.has("saved_at") else "旧版手记"
 	var seconds=maxi(0,int(d.get("played_seconds",0)))
 	var played="%02d:%02d:%02d"%[seconds/3600,(seconds/60)%60,seconds%60]

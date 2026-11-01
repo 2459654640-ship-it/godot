@@ -1,6 +1,9 @@
 extends RefCounted
 ## Authored footprints, open circulation and door normals in metres, independent of decoration.
 static var PLANS={
+"junction":preload("res://scripts/late_layouts.gd").PLANS.junction,
+"relay":preload("res://scripts/late_layouts.gd").PLANS.relay,
+"star_interior":preload("res://scripts/late_layouts.gd").PLANS.star_interior,
 "east_district":district_plan(),
 "grey_shelter":{"spawn":Vector3(-7.5,.04,7.7),"palette":"a19e8b","ambient":"8b998d","energy":.27,"warm":true,"rooms":[["01","入口与储藏间",Rect2(-10,0,10,10)],["02","厨房与公共桌",Rect2(-10,-9,10,9)],["03","修械间",Rect2(0,-9,10,9)],["04","住户铺位",Rect2(0,0,10,10)]],"doors":[[-5,0,"z",1.4],[0,-3,"x",1.4],[0,5,"x",1.4],[5,0,"z",1.4]],"objects":[]},
 

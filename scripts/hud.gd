@@ -109,9 +109,9 @@ func scroll_dialogue_to(scroll:ScrollContainer,control:Control):
 		scroll.scroll_vertical=roundi(control.global_position.y-content.global_position.y)
 
 func _input(event):
-	if modal_visible() and not typing.is_empty() and event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_SPACE,KEY_ENTER,KEY_KP_ENTER]:
-		finish_typing()
-		get_viewport().set_input_as_handled()
+	if modal_visible() and event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_SPACE,KEY_ENTER,KEY_KP_ENTER]:
+		if comic_active and modal.get_meta("cinematic_live",false):ComicUI.advance(self);get_viewport().set_input_as_handled()
+		elif not typing.is_empty():finish_typing();get_viewport().set_input_as_handled()
 
 func setup(w):
 	world=w
@@ -342,6 +342,7 @@ func remember_page_scroll():
 		page_scroll[page_key]=modal_box.get_parent().scroll_vertical
 
 func start_modal(title:String,subtitle:String,wide:bool=false,view_key:String=""):
+	if is_instance_valid(modal):modal.set_meta("cinematic_live",false)
 	remember_page_scroll()
 	page_key=view_key if view_key!="" else title
 	var previous_scroll=int(page_scroll.get(page_key,0))
@@ -688,6 +689,7 @@ func show_comic_pause():
 	audio_controls()
 
 func show_chapter_end():
+	if world.story.flags.get("campaign_ending","").begins_with("warning_"):preload("res://scripts/ui_ending.gd").render(self);return
 	comic_active=false
 	var s=world.story
 	var ending_id:String=s.flags.get("campaign_ending","")

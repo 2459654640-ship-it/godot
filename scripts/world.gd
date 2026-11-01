@@ -60,6 +60,7 @@ var capture_mode=false
 var room_name="伊万的卧室"
 var wall_veil
 var medical_chapter
+var chapter_director
 var navigation
 var guard_away_time=0.0
 const LIFE_ZONES=[
@@ -112,6 +113,7 @@ func _ready():
 		zones=CampaignMaps.rooms(floor_id)
 		CampaignMaps.build(self)
 	preload("res://scripts/environment_details.gd").build(self)
+	preload("res://scripts/chapter_director.gd").dress(self)
 	PublicationPlaces.build(self)
 	public_radio=PublicRadio.new();add_child(public_radio);public_radio.setup(self)
 	ArtDirection.refine(self)
@@ -143,7 +145,7 @@ func _ready():
 		# Old interior saves retain their history, but cannot resume an internal
 		# reunion/cutscene or bypass the current exterior-only chapter.
 		var sequence:String=story.flags.get("comic",{}).get("sequence","")
-		if story.flags.get("comic",{}).get("active",false) and sequence not in ["star_road","arrive_starcity","star_back_commune","star_back_sech"]:story.flags.comic={"active":false}
+		if story.flags.get("comic",{}).get("active",false) and sequence not in ["star_road","arrive_starcity","star_back_commune","star_back_sech"] and not sequence.begins_with("late_"):story.flags.comic={"active":false}
 		story.flags.erase("resume_dialogue")
 		story.flags.erase("next_sequence")
 	if floor_id=="waterworks" and story.route=="official":story.flags.plant_briefed=true
@@ -179,6 +181,7 @@ func _ready():
 	combat=preload("res://scripts/combat.gd").new();add_child(combat);combat.setup(self)
 	living=preload("res://scripts/living_world.gd").new();add_child(living);living.setup(self)
 	medical_chapter=preload("res://scripts/medical_chapter.gd").new();add_child(medical_chapter);medical_chapter.setup(self)
+	chapter_director=preload("res://scripts/chapter_director.gd").new();add_child(chapter_director);chapter_director.setup(self)
 	combat.restore_state(arrival_data.get("combat_state",{}))
 	story.Campaign.District.restore_combat(self)
 	if floor_id in ["east_district","grey_shelter"]:
@@ -597,6 +600,7 @@ func _physics_process(delta):
 	previous_position=player.position
 	if is_instance_valid(living):living.tick(delta)
 	if is_instance_valid(medical_chapter):medical_chapter.tick(delta)
+	if is_instance_valid(chapter_director):chapter_director.tick(delta)
 	set_camera(delta)
 	if floor_id!="waterworks" and story.weapon_drawn() and not hud.modal_visible():
 		var cursor=get_viewport().get_mouse_position()
@@ -792,6 +796,9 @@ func perform(key: String, id: String):
 	if is_instance_valid(combat) and combat.active and not key.begins_with("c_surface_back_") and not story.Campaign.District.can_retreat(self,id) and not story.Campaign.District.safe_interaction(self,id):return
 	if departure_animating:return
 	refresh_guard_context()
+	if key=="c_late_final_confirm" and story.Campaign.available(story,"late_final_confirm"):
+		var final_save=SaveStore.write(SaveStore.FINAL,save_snapshot(),"final")
+		if final_save!=OK:hud.toast("最终行动前存档未能保存，请检查存储空间后重试。",7);return
 	var reply=story.act(key)
 	if not story.last_action_valid:
 		hud.show_reply(id,reply)
@@ -845,6 +852,7 @@ func perform(key: String, id: String):
 	hud.show_reply(id,reply)
 
 func on_story_changed():
+	if is_instance_valid(chapter_director):chapter_director.sync()
 	if is_instance_valid(medical_chapter):medical_chapter.sync()
 	if floor_id=="coal":
 		var grille=get_node_or_null("MineEscapeGrille")
@@ -921,6 +929,7 @@ func clear_arrival(p:Vector3)->Vector3:
 func save_snapshot()->Dictionary:
 	if is_instance_valid(living):living.capture()
 	if is_instance_valid(medical_chapter):medical_chapter.capture()
+	if is_instance_valid(chapter_director):chapter_director.capture()
 	if is_instance_valid(grey_camp):grey_camp.capture()
 	if is_instance_valid(combat) and combat.enabled:story.flags.weapon_clip=combat.clip
 	var data=story.serialize()
@@ -944,7 +953,7 @@ func save_game(path:String="")->bool:
 		save_path=destination;get_node("/root/Session").sound("save");hud.toast("已保存 · "+SaveStore.title(destination));return true
 	hud.toast("保存失败，原存档仍保留："+error_string(result),7);return false
 func autosave():
-	if not initialized or story.ending:return
+	if not initialized or (story.ending and not story.f("late_campaign_complete")):return
 	var result=SaveStore.write(SaveStore.auto_path(),save_snapshot(),"auto")
 	if result!=OK:push_warning("自动记录失败："+error_string(result))
 func load_game(path:String=""):
@@ -952,7 +961,7 @@ func load_game(path:String=""):
 	var data=SaveStore.read(source)
 	if data.is_empty():hud.toast("没有可读取的手记，或该存档及备份均已损坏。",6);return
 	var p=data.get("position",[-10.5,.04,-3.4])
-	if data.get("floor","life")!=floor_id or floor_id in ["waterworks","surface","starcity","coal","railfront","east_district"]:
+	if data.get("floor","life")!=floor_id or floor_id in ["waterworks","surface","starcity","coal","railfront","east_district","junction","relay","star_interior"]:
 		get_node("/root/Session").enter(data,data.get("floor","life"),Vector3(p[0],maxf(p[1],.04),p[2]));return
 	hud.observing=false;story.restore(data)
 	player.position=clear_arrival(Vector3(p[0],maxf(p[1],.04),p[2]))
@@ -1068,7 +1077,7 @@ func build_labor_people():
 	player=Actor.new()
 	player.name="Ivan";add_child(player)
 	player.position=Vector3(-10,.04,1.8)
-	if floor_id in ["waterworks","surface","starcity","east_district"]:player.art_id="ivan_masked"
+	if floor_id in ["waterworks","surface","starcity","east_district","relay"]:player.art_id="ivan_masked"
 	player.add_to_group("player");player.setup(kit,true,"green")
 	if floor_id=="labor":Labor.people(self)
 	else:
@@ -1100,7 +1109,7 @@ func travel_campaign(destination:String):
 		hud.show_comic("d6_return_blocked")
 		return
 	if destination=="starcity":
-		if not story.f("north_inquiry_ready") and not story.f("visited_starcity"):
+		if not story.f("north_inquiry_ready") and not story.f("visited_starcity") and not story.f("late_d3_started"):
 			story.flags.erase("next_facility");hud.toast("北线尚未具备接送与担保条件。先完成本阵营的几轮出站工作。",6);return
 		if floor_id in ["commune","sech"]:story.flags.star_return_home=floor_id
 		story.ending=false
@@ -1114,6 +1123,7 @@ func travel_campaign(destination:String):
 		story.flags.d6_returned=true;story.flags.departure_official=story.route=="official" and not story.f("sided_veteran")
 		var p=Vector3(23,.04,-9) if destination=="labor" else Vector3(-3.3,.04,8)
 		get_node("/root/Session").enter(save_snapshot(),destination,p);return
+	if destination in story.Campaign.Complete.NEW_FLOORS:story.flags["arrival_v8_"+destination]=true
 	if not story.f("arrival_v8_"+destination):
 		story.flags["arrival_v8_"+destination]=true
 		hud.show_comic("arrive_"+destination);return

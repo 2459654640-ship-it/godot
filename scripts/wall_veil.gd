@@ -17,9 +17,10 @@ func setup(owner_world):
  for mesh in world.find_children("*","MeshInstance3D",true,false):
   if mesh.has_meta("interior_rect"):
    interior_roofs.append(mesh)
-   var roof_material=world.kit.new_veil_material(mesh.material_override)
-   mesh.material_override=roof_material
-   add_state(mesh,mesh.global_transform*mesh.get_aabb(),[roof_material],true)
+   if mesh.material_override is StandardMaterial3D:
+    var roof_material=world.kit.new_veil_material(mesh.material_override)
+    mesh.material_override=roof_material
+    add_state(mesh,mesh.global_transform*mesh.get_aabb(),[roof_material],true)
  focus_overlay=ColorRect.new();focus_overlay.name="InteriorFocus";focus_overlay.mouse_filter=Control.MOUSE_FILTER_IGNORE
  focus_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  var shader=Shader.new();shader.code="""shader_type canvas_item;

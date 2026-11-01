@@ -3,7 +3,7 @@ const Surface=preload("res://scripts/ui_surface.gd")
 const SaveStore=preload("res://scripts/save_store.gd")
 const SAVE="user://d6_save.json"
 var save_path=SAVE
-const SCENES=["life","labor","waterworks","commune","sech","coal","starcity","surface"]
+const SCENES=["life","labor","waterworks","commune","sech","coal","starcity","surface","junction","relay","star_interior"]
 var dialog:PanelContainer
 var status:Label
 var continue_button:Button
@@ -21,7 +21,7 @@ func _ready():
 	var veil=TextureRect.new();veil.texture=gradient;veil.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT);veil.mouse_filter=Control.MOUSE_FILTER_IGNORE;add_child(veil)
 	var box=VBoxContainer.new();box.position=Vector2(100,150);box.size=Vector2(500,700);box.add_theme_constant_override("separation",18);add_child(box)
 	words(box,"МОСКВА  /  1982",19,Color("bda371"))
-	var title=words(box,"地铁1982",64,Color("eee1c3"));title.add_theme_font_override("font",serif)
+	var title=words(box,"地铁1982",84,Color("eee1c3"));title.add_theme_font_override("font",serif)
 	words(box,"灯光之外，还有人在等你。",23,Color("b3bdaf"))
 	var space=Control.new();space.custom_minimum_size.y=65;box.add_child(space)
 	read_save()
@@ -40,11 +40,14 @@ func words(parent:Node,text:String,size:int,color:Color)->Label:
 func skin()->StyleBoxFlat:
 	var style=StyleBoxFlat.new();style.bg_color=Color("152322");style.border_color=Color("76694e");style.set_border_width_all(1);style.set_corner_radius_all(3);style.content_margin_left=22;style.content_margin_right=22;style.content_margin_top=12;style.content_margin_bottom=12;return style
 func choice(parent:Node,text:String,action:Callable)->Button:
-	var button=Button.new();button.text=text;button.custom_minimum_size.y=57;button.alignment=HORIZONTAL_ALIGNMENT_LEFT;button.add_theme_stylebox_override("normal",skin());button.add_theme_color_override("font_color",Color("e2d6b8"));parent.add_child(button);Surface.attach(button,"button")
-	var hover=skin();hover.bg_color=Color("27392f");hover.border_color=Color("c3a66d");button.add_theme_stylebox_override("hover",hover)
-	var pressed=skin();pressed.bg_color=Color("101c19");button.add_theme_stylebox_override("pressed",pressed)
-	button.add_theme_color_override("font_disabled_color",Color("657269"))
+	var button=Button.new();button.text=text;button.custom_minimum_size.y=57;button.alignment=HORIZONTAL_ALIGNMENT_LEFT;button.add_theme_font_size_override("font_size",23);parent.add_child(button)
+	var base=StyleBoxFlat.new();base.bg_color=Color(0,0,0,0);base.content_margin_left=18;base.content_margin_right=18;base.content_margin_top=10;base.content_margin_bottom=10
+	button.add_theme_stylebox_override("normal",base);button.add_theme_color_override("font_color",Color("d7dacb"))
+	var hover=base.duplicate();hover.bg_color=Color(.16,.20,.16,.60);hover.border_color=Color("d7bb79");hover.border_width_left=3;button.add_theme_stylebox_override("hover",hover);button.add_theme_stylebox_override("focus",hover)
+	var pressed=hover.duplicate();pressed.bg_color=Color(.08,.12,.10,.8);button.add_theme_stylebox_override("pressed",pressed)
+	button.add_theme_color_override("font_hover_color",Color("f2e2bd"));button.add_theme_color_override("font_disabled_color",Color("61716b"))
 	button.pressed.connect(func():get_node("/root/Session").sound("ui");action.call());return button
+
 func read_save():
 	save_data=SaveStore.read(save_path)
 	if save_path==SAVE:
@@ -52,17 +55,16 @@ func read_save():
 		if not recent.is_empty():save_data=recent.data;save_path=recent.path
 func save_summary()->String:return SaveStore.summary(save_data)
 func show_saves(group:String="manual"):
-	var box=open_dialog("读取存档")
+	var box=open_dialog("读取存档");dialog.position=Vector2(520,110);dialog.size=Vector2(1000,790)
 	var tabs=HBoxContainer.new();box.add_child(tabs)
-	choice(tabs,"手动存档",func():show_saves("manual"));choice(tabs,"自动与旧版存档",func():show_saves("auto"))
-	var scroll=ScrollContainer.new();scroll.custom_minimum_size=Vector2(0,390);scroll.size_flags_horizontal=Control.SIZE_EXPAND_FILL;scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;box.add_child(scroll)
-	var list=VBoxContainer.new();list.size_flags_horizontal=Control.SIZE_EXPAND_FILL;list.add_theme_constant_override("separation",12);scroll.add_child(list)
-	var paths:Array=SaveStore.manual_paths() if group=="manual" else SaveStore.automatic_paths()+[SaveStore.QUICK]
+	choice(tabs,"手动存档",func():show_saves("manual"));choice(tabs,"自动与旅程存档",func():show_saves("auto"))
+	var grid=GridContainer.new();grid.columns=2;grid.add_theme_constant_override("h_separation",18);grid.add_theme_constant_override("v_separation",14);box.add_child(grid)
+	var paths:Array=SaveStore.manual_paths() if group=="manual" else SaveStore.automatic_paths()+[SaveStore.FINAL,SaveStore.QUICK]
 	for path in paths:
 		var data=SaveStore.read(path);var slot:String=path
-		var b=choice(list,SaveStore.title(path)+"\n"+SaveStore.description(path),func():save_path=slot;continue_game())
-		b.add_theme_font_size_override("font_size",16);b.custom_minimum_size.y=94;b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;b.disabled=data.is_empty()
+		var b=choice(grid,SaveStore.title(path)+"\n"+SaveStore.description(path),func():save_path=slot;continue_game());b.size_flags_horizontal=Control.SIZE_EXPAND_FILL;b.custom_minimum_size=Vector2(445,144);b.add_theme_font_size_override("font_size",16);b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;b.disabled=data.is_empty();b.add_theme_stylebox_override("normal",skin())
 	choice(box,"返回",close_dialog)
+
 func continue_game():
 	save_data=SaveStore.read(save_path)
 	if save_data.is_empty():status.text="这份手记暂时无法读取。";continue_button.disabled=true;return

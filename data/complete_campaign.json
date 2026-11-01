@@ -1,0 +1,4363 @@
+{
+  "actions": {
+    "field_c2_accept": {
+      "text": "「我愿意接这趟工作。先说说情况。」",
+      "reply": "亚历山德拉：「运输员尤里没有按约回来，家属只听见有人说他叛逃了。巴拉诺娃一直替住户收信，你先问她最后一班车去了哪里。别先替我们写一个结论。」",
+      "once": true,
+      "req": {
+        "all": [
+          "commune_member",
+          "field_c1_done"
+        ],
+        "not": [
+          "late_c2_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "field_c2_accept": true,
+        "late_c2_started": true,
+        "late_active_job": "c2",
+        "late_story_enabled": true,
+        "field_c2_accepted": true
+      },
+      "give": [
+        "revolver"
+      ]
+    },
+    "late_c2_family": {
+      "text": "「那一班车上，有你认识的人吗？」",
+      "reply": "巴拉诺娃：「尤里替我们带信。那天他还问，信封上能不能只写收件人的名字，住址等到了再问。我把邮袋交给他，约好下个休息班来取回执。他没有来。我想知道他平不平安，也想请你把信交到本人手里。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c2_started"
+        ],
+        "not": [
+          "late_c2_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "late_c2_family": true,
+        "late_c2_route_known": true
+      }
+    },
+    "late_c2_depart": {
+      "text": "登记出站，沿地表前往货场换乘线。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "late_c2_started",
+          "late_c2_route_known"
+        ],
+        "not": [
+          "late_c2_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "late_c2_depart": true
+      },
+      "travel": "late_c2_road"
+    },
+    "late_c2_find": {
+      "text": "「我从公社来。你是尤里吗？」",
+      "reply": "尤里：「是我。轮轴坏了以后，我留下看车。封锁队来过，把盖着住址的那张名册收走了。信藏在工具夹层里，没让他们拿走。我的腿还能走，先离开这里吧。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c2_started"
+        ],
+        "not": [
+          "late_c2_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_c2_find": true,
+        "late_c2_found": true
+      },
+      "give": [
+        "late_mailbag"
+      ]
+    },
+    "late_c2_consent": {
+      "text": "「信交给收件人，接应人的姓名和住址不公开。你愿意让我这样转告吗？」",
+      "reply": "尤里：「愿意。还有，告诉巴拉诺娃，我答应帮她找的那个人，回执还没查到。别因为我回来了，就说每个人都有消息了。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c2_started",
+          "late_c2_found"
+        ],
+        "not": [
+          "late_c2_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_c2_consent": true,
+        "late_c2_escort": true,
+        "late_c2_private_records": true
+      }
+    },
+    "late_c2_letters": {
+      "text": "逐一核对收件人，再请巴拉诺娃私下转交。",
+      "reply": "巴拉诺娃把信封一只只排开，遇到不认识的名字就单独放在一边。\n「有两封得继续打听，我不会把它们扔了。尤里在厨房喝水，我先去看看他。谢谢你把人也带回来。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c2_started",
+          "late_c2_evacuated"
+        ],
+        "not": [
+          "late_c2_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "late_c2_letters": true
+      },
+      "take": [
+        "late_mailbag"
+      ]
+    },
+    "late_c2_report": {
+      "text": "「事情办完了。我把经过说清楚。」",
+      "reply": "亚历山德拉：「我撤下那张失踪通知，只写尤里已经平安回来。没有找到的人继续找。有人问名单为什么不全公开，我会把理由当面说明。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c2_started",
+          "late_c2_letters"
+        ],
+        "not": [
+          "late_c2_done",
+          "late_c2_awaiting_return"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "late_c2_report": true,
+        "late_c2_done": true,
+        "field_c2_done": true
+      },
+      "reward": {
+        "handmade": 24,
+        "military": 8
+      },
+      "travel": "late_c2_home"
+    },
+    "field_c3_accept": {
+      "text": "「我愿意接这趟工作。先说说情况。」",
+      "reply": "亚历山德拉：「锅炉修好了，议事厅准备宣布恢复供暖。可巴拉诺娃说客铺仍然很冷。你先去摸摸回水管，再查总表。别让住户拿着我们的通知，等一整夜热水。」",
+      "once": true,
+      "req": {
+        "all": [
+          "commune_member",
+          "late_c2_done"
+        ],
+        "not": [
+          "late_c3_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "field_c3_accept": true,
+        "late_c3_started": true,
+        "late_active_job": "c3",
+        "late_story_enabled": true,
+        "field_c3_accepted": true
+      },
+      "give": [
+        "revolver"
+      ]
+    },
+    "late_c3_cold": {
+      "text": "检查家属房的回水温度，与住户核对。",
+      "reply": "回水管几乎和墙一样冷。巴拉诺娃拿来一条补过的毯子。\n「通知说已经修好了，我就让老人们别再搬床。是我听得太急了吗？」\n你请她先到食堂靠近炉子的地方休息，再去核对管线。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c3_started"
+        ],
+        "not": [
+          "late_c3_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "late_c3_cold": true,
+        "late_c3_cold_confirmed": true
+      }
+    },
+    "late_c3_diagram": {
+      "text": "对照锅炉房的阀位和回水记录。",
+      "reply": "你沿管线找到临时改管：为保住温室的夜间供热，上一班关闭了家属区的支路。锅炉已经能运转，两处末端却不能同时达到原来的温度。记录上没有写这一点。先把卡住的调节阀修好，才有分时供暖的条件。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c3_started",
+          "late_c3_cold_confirmed"
+        ],
+        "not": [
+          "late_c3_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "late_c3_diagram": true
+      }
+    },
+    "late_c3_parts": {
+      "text": "在机修间核对规格，领取阀芯和密封垫。",
+      "reply": "机修员把配套零件留给你，提醒你先断开家属区支路。\n「这个型号还能修。别把整座锅炉停了，医务室那边正在换药。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c3_started",
+          "late_c3_diagram"
+        ],
+        "not": [
+          "late_c3_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "late_c3_parts": true
+      },
+      "give": [
+        "late_valve_parts"
+      ]
+    },
+    "late_c3_isolate": {
+      "text": "关闭家属区支路，打开泄压口。",
+      "reply": "你先关小上游阀，确认压力回落，再打开检修口。其它支路仍在供热。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c3_started",
+          "late_c3_parts"
+        ],
+        "not": [
+          "late_c3_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "late_c3_isolate": true
+      }
+    },
+    "late_c3_repair": {
+      "text": "更换阀芯，缓慢恢复回水。",
+      "reply": "管道里先传来断续的水声，随后回水温度开始上升。你检查接头，没有继续渗水。温室与家属区可以按班次轮换供热，医务室保持优先；这套安排还需要当面告知受影响的人。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c3_started",
+          "late_c3_isolate"
+        ],
+        "not": [
+          "late_c3_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "late_c3_repair": true,
+        "late_c3_heat_restored": true
+      },
+      "take": [
+        "late_valve_parts"
+      ]
+    },
+    "late_c3_meeting": {
+      "text": "参加居民议事，说明原通知遗漏的停暖情况。",
+      "reply": "你把测温记录与改管经过放在桌上。有人担心温室减热会少收作物，家属房的住户则请委员说清楚每班到底能开多久。\n议事会最终同意先试行轮换供热，将每班测温交给住户核对。旧的成功通知撤下，补贴实际受影响的房间。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c3_started",
+          "late_c3_heat_restored"
+        ],
+        "not": [
+          "late_c3_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "late_c3_meeting": true,
+        "late_c3_public_record": true
+      }
+    },
+    "late_c3_report": {
+      "text": "「事情办完了。我把经过说清楚。」",
+      "reply": "亚历山德拉：「以后交接既写已经恢复的部分，也写还没有恢复的部分。星城那个观测台的事，我愿意让你去核对。但介绍信只说明你为什么去，门是他们自己开的。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c3_started",
+          "late_c3_meeting"
+        ],
+        "not": [
+          "late_c3_done",
+          "late_c3_awaiting_return"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "late_c3_report": true,
+        "late_c3_done": true,
+        "field_c3_done": true
+      },
+      "reward": {
+        "handmade": 24,
+        "military": 8
+      },
+      "travel": "late_c3_home"
+    },
+    "field_s1_accept": {
+      "text": "「我愿意接这趟工作。先说说情况。」",
+      "reply": "长老：「北线那辆检修车刹死在换乘口，司机怕空着手回来挨骂，留在那里修了两班。彼得要的是人平安，车能修就修。到现场先卸掉制动压力，再查旁线，别把人逼着守一辆铁壳。」",
+      "once": true,
+      "req": {
+        "all": [
+          "sech_member"
+        ],
+        "not": [
+          "late_s1_done"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "field_s1_accept": true,
+        "late_s1_started": true,
+        "late_active_job": "s1",
+        "late_story_enabled": true,
+        "field_s1_accepted": true
+      },
+      "give": [
+        "revolver"
+      ]
+    },
+    "late_s1_inspect": {
+      "text": "检查检修车制动与车轮。",
+      "reply": "手制动已经松开，制动管里仍有残压。车轮后垫着木楔，司机没有冒险把车推上坡道。西侧检修柜有放气接头，先接管再泄压。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s1_started"
+        ],
+        "not": [
+          "late_s1_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_s1_inspect": true
+      }
+    },
+    "late_s1_spare": {
+      "text": "在检修柜领取放气接头与旧制动软管。",
+      "reply": "接头型号相符，软管还能用于低压试车。你将坏管留在柜边，挂上停用标记。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s1_started",
+          "late_s1_inspect"
+        ],
+        "not": [
+          "late_s1_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_s1_spare": true
+      },
+      "give": [
+        "late_brake_kit"
+      ]
+    },
+    "late_s1_brake": {
+      "text": "接好软管，放掉残压，再取走轮挡。",
+      "reply": "压力表回到零位，车轮终于能转动。你先让司机缓慢试车，确认制动重新有效，才收起轮挡。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s1_started",
+          "late_s1_spare"
+        ],
+        "not": [
+          "late_s1_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_s1_brake": true
+      },
+      "take": [
+        "late_brake_kit"
+      ]
+    },
+    "late_s1_switch": {
+      "text": "检查岔尖贴合，锁好通往南口的旁线。",
+      "reply": "你清掉轨槽里的碎石，将道岔锁到旁线。司机复述了手势，车缓慢滑到南口等待。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s1_started",
+          "late_s1_brake"
+        ],
+        "not": [
+          "late_s1_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_s1_switch": true,
+        "late_s1_ready": true
+      }
+    },
+    "late_s1_report": {
+      "text": "「事情办完了。我把经过说清楚。」",
+      "reply": "长老：「修车的人回来了，车也回来了。彼得已经替司机补上了休息班。下一趟不是空车：有个替我们跑运输的人被灰狗扣住，先让谢尔盖把情况说清楚。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s1_started",
+          "late_s1_ready",
+          "late_s1_driver_arrived"
+        ],
+        "not": [
+          "late_s1_done",
+          "late_s1_awaiting_return"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "late_s1_report": true,
+        "late_s1_done": true,
+        "field_s1_done": true
+      },
+      "reward": {
+        "handmade": 24,
+        "military": 8
+      },
+      "travel": "late_s1_home"
+    },
+    "field_s2_accept": {
+      "text": "「我愿意接这趟工作。先说说情况。」",
+      "reply": "长老：「运输员阿尔乔姆被灰狗扣在货场下的避难所。谢尔盖见过他，先问清位置。能绕过守卫就绕，必须动枪时也别忘了里面还有被扣住的人。拿回货不是这趟最要紧的事。」",
+      "once": true,
+      "req": {
+        "all": [
+          "sech_member",
+          "late_s1_done"
+        ],
+        "not": [
+          "late_s2_done"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "field_s2_accept": true,
+        "late_s2_started": true,
+        "late_active_job": "s2",
+        "late_story_enabled": true,
+        "field_s2_accepted": true
+      },
+      "give": [
+        "revolver"
+      ]
+    },
+    "late_s2_brief": {
+      "text": "「阿尔乔姆被关在哪里？灰狗有多少人？」",
+      "reply": "谢尔盖：「货场营地有持枪守卫，地下入口在棚屋旁。阿尔乔姆被留在住户铺位那间，看管的人会回厨房。你可以从货场围栏的缺口绕进去，轻步走，别在他们面前翻箱子。真打起来就先找掩体。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s2_started"
+        ],
+        "not": [
+          "late_s2_done"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "late_s2_brief": true
+      }
+    },
+    "late_s2_depart": {
+      "text": "出站前往灰狗货场营地。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "late_s2_started",
+          "late_s2_brief"
+        ],
+        "not": [
+          "late_s2_done"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "late_s2_depart": true
+      },
+      "travel": "late_s2_road"
+    },
+    "late_s2_release": {
+      "text": "「谢尔盖让我来接你。你还能走吗？」",
+      "reply": "阿尔乔姆：「能。我记得外面的路。车上有几袋粮食，灰狗说是买的，可我没有签收，也没有收钱。你先带我出去，到了谢契，我当面把话说清楚。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s2_started"
+        ],
+        "not": [
+          "late_s2_done"
+        ],
+        "floor": [
+          "grey_shelter"
+        ]
+      },
+      "flags": {
+        "late_s2_release": true,
+        "late_s2_escort": true
+      },
+      "give": [
+        "late_driver_statement"
+      ]
+    },
+    "late_s2_account": {
+      "text": "请阿尔乔姆当面说明失踪与被扣货物的经过。",
+      "reply": "阿尔乔姆将自己的工牌放在桌上，逐项说明没有收到的款项与被拿走的粮食。谢尔盖没有替他回答。彼得先让他去吃饭，将争议货物另列，暂缓派出报复队。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s2_started",
+          "late_s2_evacuated"
+        ],
+        "not": [
+          "late_s2_done"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "late_s2_account": true
+      },
+      "take": [
+        "late_driver_statement"
+      ]
+    },
+    "late_s2_report": {
+      "text": "「事情办完了。我把经过说清楚。」",
+      "reply": "长老：「被扣的人已经回来，货还可以继续追。接下来要安排一趟家属和粮食同行的车，别让出过事的人立刻再去冒险。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s2_started",
+          "late_s2_account"
+        ],
+        "not": [
+          "late_s2_done",
+          "late_s2_awaiting_return"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "late_s2_report": true,
+        "late_s2_done": true,
+        "field_s2_done": true
+      },
+      "reward": {
+        "handmade": 24,
+        "military": 8
+      },
+      "travel": "late_s2_home"
+    },
+    "field_s3_accept": {
+      "text": "「我愿意接这趟工作。先说说情况。」",
+      "reply": "长老：「这趟要接四名外来伤病者，还要带回过冬粮食。一辆车不能都装下。你可以先修另一辆拖车；实在修不了，就先送伤病者，粮食由值守看着，下一班再运。把安排说清楚，别让等车的人以为被丢下了。」",
+      "once": true,
+      "req": {
+        "all": [
+          "sech_member",
+          "late_s2_done"
+        ],
+        "not": [
+          "late_s3_done"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "field_s3_accept": true,
+        "late_s3_started": true,
+        "late_active_job": "s3",
+        "late_story_enabled": true,
+        "field_s3_accepted": true
+      },
+      "give": [
+        "revolver"
+      ]
+    },
+    "late_s3_manifest": {
+      "text": "当面核对人数、担架位置和货物重量。",
+      "reply": "司机划出了担架需要的位置。旁边停着一辆缺联接销的拖车，车轴仍完好。修好拖车就能两辆同行；否则必须先送伤病者，或先运粮食，并为另一班留下值守人员。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s3_started"
+        ],
+        "not": [
+          "late_s3_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_s3_manifest": true
+      }
+    },
+    "late_s3_coupling": {
+      "text": "在检修柜检查并领取匹配的联接销。",
+      "reply": "你量过销孔，找到带防脱孔的联接销。司机提醒你装好后还要插入保险件，空推一次。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s3_started",
+          "late_s3_manifest"
+        ],
+        "not": [
+          "late_s3_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_s3_coupling": true
+      },
+      "give": [
+        "late_coupling"
+      ]
+    },
+    "late_s3_repair": {
+      "text": "联接拖车，锁好保险并进行空车制动测试。",
+      "reply": "两辆车先后缓慢停住。联接销没有窜动，拖车可以一起走，担架与粮食不用再争同一块位置。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s3_started",
+          "late_s3_coupling"
+        ],
+        "not": [
+          "late_s3_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_s3_repair": true,
+        "late_s3_capacity": true
+      },
+      "take": [
+        "late_coupling"
+      ]
+    },
+    "late_s3_people": {
+      "text": "「这一班先接伤病者；粮食留人看守，下一班回来运。」",
+      "reply": "司机将第二班时间告诉留下的人，请一位轮值者签下接应安排。有人担心粮食会被偷走，彼得的联络员答应留在这里，不让他们独自等。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s3_started",
+          "late_s3_manifest"
+        ],
+        "not": [
+          "late_s3_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_s3_people": true,
+        "late_s3_depart_ready": true,
+        "late_s3_people_first": true
+      }
+    },
+    "late_s3_both": {
+      "text": "核对两车分载和担架固定，通知所有人上车。",
+      "reply": "伤病者上了有挡风板的前车，粮袋与工具放在拖车。你把名单交给司机，确认站台上已经没有被漏掉的人。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s3_started",
+          "late_s3_capacity"
+        ],
+        "not": [
+          "late_s3_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_s3_both": true,
+        "late_s3_depart_ready": true,
+        "late_s3_all_carried": true
+      }
+    },
+    "late_s3_report": {
+      "text": "「事情办完了。我把经过说清楚。」",
+      "reply": "长老：「接应的值守和空床已经排上。星城外围答应接收线路检修申请，彼得会给你一封说明来意的信。里面的人不了解我们，信只能让他们知道该问谁，不能代替他们的核查。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_s3_started",
+          "late_s3_evacuated"
+        ],
+        "not": [
+          "late_s3_done",
+          "late_s3_awaiting_return"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "late_s3_report": true,
+        "late_s3_done": true,
+        "field_s3_done": true
+      },
+      "reward": {
+        "handmade": 24,
+        "military": 8
+      },
+      "travel": "late_s3_home"
+    },
+    "late_d1_accept": {
+      "text": "「我愿意接这趟工作。先说说情况。」",
+      "reply": "科瓦廖夫：「伤员车和燃料车都等在北线单行段。你先查南侧道岔，能把旁线修通就分流。医护要求伤员先走，供暖班也说再不来煤就要停炉。把你能确认的情况带回来，别只照着表格签字。」",
+      "once": true,
+      "req": {
+        "all": [
+          "d6_patrol_done",
+          "d6_cargo_returned"
+        ],
+        "not": [
+          "late_d1_done"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d1_accept": true,
+        "late_d1_started": true,
+        "late_active_job": "d1",
+        "late_story_enabled": true
+      },
+      "give": [
+        "revolver"
+      ]
+    },
+    "late_d1_inspect": {
+      "text": "检查旁线岔尖、电源和手动锁闭。",
+      "reply": "岔尖被碎石卡住，电机保护座也烧坏了。旁线没有塌陷，换掉保护座并清理轨槽后可以恢复。西南检修间保存着同型号备件。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d1_started"
+        ],
+        "not": [
+          "late_d1_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_d1_inspect": true
+      }
+    },
+    "late_d1_parts": {
+      "text": "领取旁线保护座与手动锁闭销。",
+      "reply": "你核对规格，在领用簿写下用途。值班医护过来问伤员什么时候能走，你把查到的情况如实告诉她，没有先许诺时间。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d1_started",
+          "late_d1_inspect"
+        ],
+        "not": [
+          "late_d1_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_d1_parts": true
+      },
+      "give": [
+        "late_track_parts"
+      ]
+    },
+    "late_d1_repair": {
+      "text": "断开道岔电机，清理岔槽后更换保护座。",
+      "reply": "岔尖贴合，试车没有异响。你锁好旁线，将试验结果交给司机复核。两班车可以分流，燃料车晚一段进站，伤员不必再留在风口。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d1_started",
+          "late_d1_parts"
+        ],
+        "not": [
+          "late_d1_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_d1_repair": true,
+        "late_d1_bypass": true
+      },
+      "take": [
+        "late_track_parts"
+      ]
+    },
+    "late_d1_civilian": {
+      "text": "先让伤员车通过，在现场登记燃料车延误。",
+      "reply": "医护先把最怕冷的伤员扶进车厢。你将燃料车预计延误写在交接单上，请司机复述下一班安排。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d1_started",
+          "late_d1_inspect"
+        ],
+        "not": [
+          "late_d1_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_d1_civilian": true,
+        "late_d1_dispatched": true,
+        "late_d1_medical_first": true
+      }
+    },
+    "late_d1_both": {
+      "text": "确认旁线锁定，安排伤员与燃料车分流。",
+      "reply": "两位司机分别复述了进路。伤员车先通过，燃料车沿旁线等候；你直到尾灯越过道岔，才向控制间交回手动锁闭钥匙。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d1_started",
+          "late_d1_bypass"
+        ],
+        "not": [
+          "late_d1_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_d1_both": true,
+        "late_d1_dispatched": true
+      }
+    },
+    "late_d1_report": {
+      "text": "「事情办完了。我把经过说清楚。」",
+      "reply": "科瓦廖夫逐项看完延误和分流记录。\n「我会把实际到站时间写进去。伤员交医务间，供暖班的延误也要有人处理。下一个问题在我们自己的管线上：报告说恢复供水的地方，仍有人接不到水。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d1_started",
+          "late_d1_dispatched",
+          "late_d1_evacuated"
+        ],
+        "not": [
+          "late_d1_done",
+          "late_d1_awaiting_return"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d1_report": true,
+        "late_d1_done": true
+      },
+      "reward": {
+        "handmade": 24,
+        "military": 8
+      },
+      "travel": "late_d1_home"
+    },
+    "late_d2_accept": {
+      "text": "「我愿意接这趟工作。先说说情况。」",
+      "reply": "科瓦廖夫：「供水表已经填了恢复，可生活层还在排队。你去下层净水阀组测压力，再找妮娜核对支路。谁填错的先放一边，先让人有水用。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d1_done"
+        ],
+        "not": [
+          "late_d2_done"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d2_accept": true,
+        "late_d2_started": true,
+        "late_active_job": "d2",
+        "late_story_enabled": true
+      },
+      "give": [
+        "revolver"
+      ]
+    },
+    "late_d2_meter": {
+      "text": "读取净水间出口压力与住区支路流量。",
+      "reply": "总管压力正常，生活层支路的流量却接近零。报告中的数字是总管读数，不能说明每个住区已经恢复。你记下时间，再去找妮娜核对支路。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d2_started"
+        ],
+        "not": [
+          "late_d2_done"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d2_meter": true
+      }
+    },
+    "late_d2_nina": {
+      "text": "「总管有压力，住区支路却没有流量。能一起查查吗？」",
+      "reply": "妮娜：「临时旁通还没拆，上层那段冻裂管子已经隔离，当然送不过去。先把公共取水点接上，再安排换管。接头我留着了，你去下层备用柜拿，不用另买。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d2_started",
+          "late_d2_meter"
+        ],
+        "not": [
+          "late_d2_done"
+        ],
+        "floor": [
+          "life"
+        ]
+      },
+      "flags": {
+        "late_d2_nina": true
+      },
+      "give": [
+        "late_water_joint"
+      ]
+    },
+    "late_d2_repair": {
+      "text": "关闭临时旁通，连接公共取水支路并检查漏水。",
+      "reply": "水先裹着气泡流出，随后稳定下来。你让值班员接满一只水桶，再量一次流量，确认这次读数来自住户实际能用的出水口。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d2_started",
+          "late_d2_nina"
+        ],
+        "not": [
+          "late_d2_done"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d2_repair": true,
+        "late_d2_supply": true
+      },
+      "take": [
+        "late_water_joint"
+      ]
+    },
+    "late_d2_truth": {
+      "text": "「总管恢复了，住区尚未全通。我按实际情况重写报告。」",
+      "reply": "科瓦廖夫：「把两个数字都留着，别再混成一个。对外报表我来签，维修和临时取水也要写进去。」\n他停了一会儿，又说：「上面会问为什么前一份填得太早，我也得回答。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d2_started",
+          "late_d2_supply"
+        ],
+        "not": [
+          "late_d2_done"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d2_truth": true,
+        "late_d2_reported": true,
+        "late_d2_truthful": true
+      }
+    },
+    "late_d2_report": {
+      "text": "「事情办完了。我把经过说清楚。」",
+      "reply": "中尉收起修正后的报告，给测量班留出下一班外勤名额。\n「地表那段旧沉降带近来不稳，带着仪器去核对。你已经知道一个总数能漏掉什么，这回把地点和时间都记清楚。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d2_started",
+          "late_d2_reported"
+        ],
+        "not": [
+          "late_d2_done",
+          "late_d2_awaiting_return"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d2_report": true,
+        "late_d2_done": true
+      },
+      "reward": {
+        "handmade": 24,
+        "military": 8
+      },
+      "travel": "late_d2_home"
+    },
+    "late_d3_accept": {
+      "text": "「我愿意接这趟工作。先说说情况。」",
+      "reply": "科瓦廖夫：「测量仪已经校准。先在工人街背风处记一组，再去北侧废弃中继站核对另一组。灰狗活动区可以绕开，带回有时间和地点的原始读数。星城愿意接收技术询问，进不进得去由他们核验。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d2_done"
+        ],
+        "not": [
+          "late_d3_done"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d3_accept": true,
+        "late_d3_started": true,
+        "late_active_job": "d3",
+        "late_story_enabled": true
+      },
+      "give": [
+        "revolver"
+      ]
+    },
+    "late_d3_street": {
+      "text": "在工人街诊所外记录背风点读数。",
+      "reply": "你将仪器放稳，记下风向、时间与地表状态。背风处数值相对平缓，不能据此代替旧沉降带。原始纸带收进保护袋，下一处测量需要单独记时间。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d3_started"
+        ],
+        "not": [
+          "late_d3_done"
+        ],
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {
+        "late_d3_street": true
+      },
+      "give": [
+        "late_readings"
+      ]
+    },
+    "late_d3_relay": {
+      "text": "在废弃中继站外侧核对暴露区读数。",
+      "reply": "同一台仪器在裸露尘土上得到更高的读数。你检查计时与校准标记，重新测了一次；结果相近，但仍需专业人员结合风向判断。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d3_started",
+          "late_d3_street"
+        ],
+        "not": [
+          "late_d3_done"
+        ],
+        "floor": [
+          "relay"
+        ]
+      },
+      "flags": {
+        "late_d3_relay": true
+      }
+    },
+    "late_d3_report": {
+      "text": "「事情办完了。我把经过说清楚。」",
+      "reply": "科瓦廖夫：「我签技术联络委派，星城只会按他们自己的流程接待。把两处原始记录都交给他们，别只报一个最吓人的数字。若他们确认风险，民用线路也必须收到通知。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d3_started",
+          "late_d3_relay"
+        ],
+        "not": [
+          "late_d3_done",
+          "late_d3_awaiting_return"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d3_report": true,
+        "late_d3_done": true
+      },
+      "reward": {
+        "handmade": 24,
+        "military": 8
+      },
+      "travel": "late_d3_home"
+    },
+    "late_c3_depart": {
+      "text": "登记出发，前往本次任务地点。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "late_c3_started"
+        ],
+        "not": [
+          "late_c3_done"
+        ],
+        "floor": [
+          "commune"
+        ]
+      },
+      "flags": {
+        "late_c3_depart": true
+      },
+      "travel": "late_c3_road"
+    },
+    "late_s1_depart": {
+      "text": "登记出发，前往本次任务地点。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "late_s1_started"
+        ],
+        "not": [
+          "late_s1_done"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "late_s1_depart": true
+      },
+      "travel": "late_s1_road"
+    },
+    "late_s3_depart": {
+      "text": "登记出发，前往本次任务地点。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "late_s3_started"
+        ],
+        "not": [
+          "late_s3_done"
+        ],
+        "floor": [
+          "sech"
+        ]
+      },
+      "flags": {
+        "late_s3_depart": true
+      },
+      "travel": "late_s3_road"
+    },
+    "late_d1_depart": {
+      "text": "登记出发，前往本次任务地点。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "late_d1_started"
+        ],
+        "not": [
+          "late_d1_done"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d1_depart": true
+      },
+      "travel": "late_d1_road"
+    },
+    "late_d2_depart": {
+      "text": "登记出发，前往本次任务地点。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "late_d2_started"
+        ],
+        "not": [
+          "late_d2_done"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d2_depart": true
+      },
+      "travel": "late_d2_road"
+    },
+    "late_d3_depart": {
+      "text": "登记出发，前往本次任务地点。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "late_d3_started"
+        ],
+        "not": [
+          "late_d3_done"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d3_depart": true
+      },
+      "travel": "late_d3_road"
+    },
+    "late_junction_enter": {
+      "text": "沿货场检修阶梯进入换乘线。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [],
+        "not": [],
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {
+        "late_junction_enter": true
+      },
+      "travel": "late_junction_arrive"
+    },
+    "late_junction_return": {
+      "text": "从南口按本班安排返站。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [],
+        "not": [],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_junction_return": true
+      },
+      "travel": "late_return_home"
+    },
+    "late_junction_bypass": {
+      "text": "清理西侧维修廊的落物，固定通往南口的检修门。",
+      "reply": "你将落物移到墙边，固定门扇，确认廊道能够通人。中央轨道上的兽群仍在那里，走这条路可以避开它们。",
+      "once": true,
+      "req": {
+        "all": [],
+        "not": [],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_junction_bypass": true
+      }
+    },
+    "late_star_request": {
+      "text": "「我来核对线路异常，想申请外线检修交接。」",
+      "reply": "值守：「这里只接收技术交接，人员询问另行核查。先修外侧中继：断开馈线、检查连接，再用我们的校验序列回传。我们会用另一套接收机复核。做完回来仍需去污与登记，不能直接过门。」",
+      "once": true,
+      "req": {
+        "all": [
+          "north_story_ready"
+        ],
+        "not": [],
+        "floor": [
+          "starcity"
+        ]
+      },
+      "flags": {
+        "late_star_request": true,
+        "late_relay_assigned": true,
+        "late_story_enabled": true
+      },
+      "give": [
+        "late_calibrator"
+      ],
+      "travel": "late_star_brief"
+    },
+    "late_relay_depart": {
+      "text": "沿外侧检修路进入地表中继站。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [],
+        "not": [],
+        "floor": [
+          "starcity"
+        ]
+      },
+      "flags": {
+        "late_relay_depart": true
+      },
+      "travel": "late_relay_arrive"
+    },
+    "late_relay_return": {
+      "text": "沿检修路返回星城外围。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [],
+        "not": [],
+        "floor": [
+          "relay"
+        ]
+      },
+      "flags": {
+        "late_relay_return": true
+      },
+      "travel": "late_relay_back"
+    },
+    "late_relay_isolate": {
+      "text": "断开馈线电源，确认无电后检查接头。",
+      "reply": "你先断开电源，测量端子电压。损坏接头在低压段，备用件已经随校验仪配给，不需要冒险拆开高压柜。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_relay_assigned"
+        ],
+        "not": [],
+        "floor": [
+          "relay"
+        ]
+      },
+      "flags": {
+        "late_relay_isolate": true
+      }
+    },
+    "late_relay_cable": {
+      "text": "替换受潮接头，检查接地与馈线连续性。",
+      "reply": "端子重新锁紧，馈线连续性恢复。你合上防水护套，将检修时间写在柜门内侧。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_relay_isolate"
+        ],
+        "not": [],
+        "floor": [
+          "relay"
+        ]
+      },
+      "flags": {
+        "late_relay_cable": true
+      }
+    },
+    "late_relay_calibrate": {
+      "text": "接入校验仪，按值守序列完成收发测试。",
+      "reply": "耳机里依次返回三组校验音。星城值守用独立接收机核对编号，确认外线恢复。你保留仪器原始记录，不把一次成功测试当成整条网络都已可靠。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_relay_cable"
+        ],
+        "not": [],
+        "floor": [
+          "relay"
+        ]
+      },
+      "flags": {
+        "late_relay_calibrate": true,
+        "late_relay_verified": true
+      }
+    },
+    "late_relay_wind": {
+      "text": "记录暴露区的风向、时间与沉降读数。",
+      "reply": "风卷起废墟里的细尘，读数随阵风变化。你标出采样高度和时间，保存两次测量。仪器只说明这个点的情况，需要与背风点和旧记录一起比较。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_relay_assigned"
+        ],
+        "not": [],
+        "floor": [
+          "relay"
+        ]
+      },
+      "flags": {
+        "late_relay_wind": true,
+        "late_exposed_reading": true
+      },
+      "give": [
+        "late_readings"
+      ]
+    },
+    "late_star_decontam": {
+      "text": "接受外衣去污，登记携带装备并办理临时工作证。",
+      "reply": "值守先核验外线测试回执，再检查防护。武器交保管柜，逐件登记；离开工作区时按清单原样领回。临时证只允许进入接待和外线维修区，家庭身份不会代替门禁手续。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_relay_verified"
+        ],
+        "not": [],
+        "floor": [
+          "starcity"
+        ]
+      },
+      "flags": {
+        "late_star_decontam": true,
+        "late_star_admitted": true
+      },
+      "travel": "late_star_admit"
+    },
+    "late_star_enter": {
+      "text": "出示临时工作证，进入接待工作区。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "late_star_admitted"
+        ],
+        "not": [],
+        "floor": [
+          "starcity"
+        ]
+      },
+      "flags": {
+        "late_star_enter": true
+      },
+      "travel": "late_star_admit"
+    },
+    "late_star_exit": {
+      "text": "交回当班临时证，领回保管武器并返回外围。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_star_exit": true
+      },
+      "travel": "late_star_leave"
+    },
+    "late_identity": {
+      "text": "核对姓名、母亲信息和谢苗诺夫的联系记录。",
+      "reply": "萨文逐项复述母亲的姓名与 D-6 登记年份，又请你讲谢苗诺夫的工作和住处。旧人员簿中有能相互印证的记录。\n「我可以安排你们在交接间见面。技术权限仍按工作安排办理，别把两件事混在一起。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_star_admitted"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_identity": true,
+        "late_identity_checked": true
+      }
+    },
+    "late_father_meet": {
+      "text": "「我是伊万。母亲带我进了 D-6，老爹把我带大。」",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "late_identity_checked"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_father_meet": true
+      },
+      "travel": "late_father_first"
+    },
+    "late_father_photo": {
+      "text": "把母亲的照片放在桌上，给父亲看背面的字。",
+      "reply": "父亲用指尖停在照片边缘，没有拿走。\n「那天她怕你哭，拍完就抱着你出去透气了。背面这几行字，是后来写的。」\n他将照片推回你面前。「你留着。我想听你说她，但不用今天就说完。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_father_first_seen"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_father_photo": true,
+        "late_photo_seen": true
+      }
+    },
+    "late_work_brief": {
+      "text": "「先把这班工作做好。需要我做什么？」",
+      "reply": "父亲：「先隔离校准台低压电源，再按端子号检查参考回路。你不会的地方叫我，我们一起确认。不能为了赶进度，把不确定的读数填成正常。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_father_first_seen"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_work_brief": true,
+        "late_work_assigned": true
+      },
+      "give": [
+        "late_calibrator"
+      ]
+    },
+    "late_lab_isolate": {
+      "text": "按端子号隔离校准台低压电源。",
+      "reply": "你将端子号抄在纸上，确认仪表归零。父亲扶住松动的接头，让你有地方下手。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_work_assigned"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_lab_isolate": true
+      }
+    },
+    "late_lab_reference": {
+      "text": "接入参考回路，交叉核对两组读数。",
+      "reply": "校准结果稳定。父亲看着你手边的编号纸，说他认得谢苗诺夫这个习惯。你告诉他，老爹教你的远比这一件多。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_lab_isolate"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_lab_reference": true,
+        "late_lab_ready": true
+      },
+      "travel": "late_father_work"
+    },
+    "late_archive": {
+      "text": "查阅经过准许调阅的私人通信延后记录。",
+      "reply": "记录没有把全部责任推给一道口令。几封家信被列为延后转交，旁边有父亲的设备操作签认。后来路线恢复过，他仍未追查每一封是否送达。你可以当面问他，技术工作照常进行，不需要先原谅任何人。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_lab_ready"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_archive": true,
+        "late_archive_read": true
+      }
+    },
+    "late_father_truth": {
+      "text": "「我看过签认记录了。后来有机会的时候，你为什么没有再找我们？」",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "late_archive_read"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_father_truth": true
+      },
+      "travel": "late_father_truth_scene"
+    },
+    "late_notify_semyon": {
+      "text": "给谢苗诺夫留一封亲笔平安信，请可信的联络员转交。",
+      "reply": "你先写自己平安，再写已经见到父亲，没有替两个人解释关系。联络员核对了老爹的姓名与住处，使用旧有私人投递线，不把你的消息当作 D-6 通行凭证。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_father_first_seen"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_notify_semyon": true,
+        "late_semyon_notified": true
+      }
+    },
+    "late_weather_review": {
+      "text": "与列夫核对风向、独立测点和旧沉降记录。",
+      "reply": "列夫：「背风点与裸露尘土不是同一种环境，不能平均掉。外海那组英语报码也只有气象资料，有时延，我们拿来复核，不当作命令。现在能确认的是：风转后，东郊装卸路与几处通风口会更危险。我们要把来源、时间和还不知道的部分一起报出去。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_lab_ready",
+          "late_exposed_reading",
+          "late_sheltered_reading"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_weather_review": true,
+        "late_risk_confirmed": true
+      }
+    },
+    "late_network_plan": {
+      "text": "「需要哪些人接收？我们有哪些真正能执行的办法？」",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "late_risk_confirmed",
+          "late_father_truth_seen"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_network_plan": true
+      },
+      "travel": "late_four_plans"
+    },
+    "late_sheltered_probe": {
+      "text": "用已校准的仪器测诊所背风处，保存时间与来源。",
+      "reply": "你使用同一台仪器记下这处背风环境。与暴露区分别保存，不把不同地点合成一个失去出处的数。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_relay_assigned"
+        ],
+        "not": [],
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {
+        "late_sheltered_probe": true,
+        "late_sheltered_reading": true
+      },
+      "give": [
+        "late_readings"
+      ]
+    },
+    "late_plan_shared": {
+      "text": "选择方案：共享预警",
+      "reply": "把有来源的警告送到多个独立接收点，公开风险区域，保护人员名单。\n这一步只选择准备方向。确认最终行动前，你仍可自由探索、做支线或改换方案。",
+      "once": false,
+      "req": {
+        "all": [
+          "late_four_plans_seen"
+        ],
+        "not": [
+          "late_final_started"
+        ],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_plan_shared": true,
+        "late_final_mode": "shared"
+      }
+    },
+    "late_plan_central": {
+      "text": "选择方案：中央调度",
+      "reply": "接通中央运力，同时落实明确的民用警报与撤离席位。\n这一步只选择准备方向。确认最终行动前，你仍可自由探索、做支线或改换方案。",
+      "once": false,
+      "req": {
+        "all": [
+          "late_four_plans_seen"
+        ],
+        "not": [
+          "late_final_started"
+        ],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_plan_central": true,
+        "late_final_mode": "central"
+      }
+    },
+    "late_plan_distributed": {
+      "text": "选择方案：分散保全",
+      "reply": "先发紧急预警，将可搬设备和记录分交给会维护的人。\n这一步只选择准备方向。确认最终行动前，你仍可自由探索、做支线或改换方案。",
+      "once": false,
+      "req": {
+        "all": [
+          "late_four_plans_seen"
+        ],
+        "not": [
+          "late_final_started"
+        ],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_plan_distributed": true,
+        "late_final_mode": "distributed"
+      }
+    },
+    "late_plan_watch": {
+      "text": "选择方案：留守观测",
+      "reply": "修复持续供电，安排外部接收人与交班，留下完成下一轮播发。\n这一步只选择准备方向。确认最终行动前，你仍可自由探索、做支线或改换方案。",
+      "once": false,
+      "req": {
+        "all": [
+          "late_four_plans_seen"
+        ],
+        "not": [
+          "late_final_started"
+        ],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_plan_watch": true,
+        "late_final_mode": "watch"
+      }
+    },
+    "late_final_confirm": {
+      "text": "准备好了，确认开始最终行动。",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "late_four_plans_seen"
+        ],
+        "not": [
+          "late_final_started"
+        ],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_final_confirm": true,
+        "late_final_started": true
+      },
+      "travel": "late_final_depart"
+    },
+    "late_plan_review": {
+      "text": "核对当前方案与实际完成的准备。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "late_four_plans_seen"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_plan_review": true
+      }
+    },
+    "late_shared_packet": {
+      "text": "标明来源、时间和误差，封存人员名单后制作预警副本。",
+      "reply": "列夫核对每份副本的原始编号。危险区域可以公开，名单只交给负责接应的人。消息包括仍未知的部分，不把预测写成必然结果。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_final_started"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_shared_packet": true
+      },
+      "mode": "shared"
+    },
+    "late_shared_receiver": {
+      "text": "在换乘站接通独立接收机，请值守复述完整预警。",
+      "reply": "值守逐项复述时间、区域和备用路线，并签下回执。公开的是危险与改道办法，接应人员没有在广播里报姓名。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_shared_packet"
+        ],
+        "not": [],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_shared_receiver": true
+      },
+      "give": [
+        "late_acknowledgements"
+      ],
+      "mode": "shared"
+    },
+    "late_shared_evac": {
+      "text": "陪改道的住户走到中继站南侧接应点。",
+      "reply": "你确认接应的人已到，才请住户动身。没有人被要求跑过交火区，队伍沿西侧挡风墙移动。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_shared_receiver"
+        ],
+        "not": [],
+        "floor": [
+          "relay"
+        ]
+      },
+      "flags": {
+        "late_shared_evac": true,
+        "late_final_escort": true
+      },
+      "mode": "shared"
+    },
+    "late_central_agreement": {
+      "text": "把民用警报、撤离席位与发布时刻写进中央接收单。",
+      "reply": "中尉通过星城联络线复述安排：军运不得占用已经确认的民用席位，地方警报按本地读数独立发布。你将这两项留在双方都持有的副本上。临时防灾联络不会取消逃亡者原来的通缉记录。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_final_started"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_central_agreement": true
+      },
+      "give": [
+        "late_civilian_schedule"
+      ],
+      "mode": "central"
+    },
+    "late_central_train": {
+      "text": "在换乘站核对民用席位，锁定撤离列车的先行进路。",
+      "reply": "司机逐项对过担架位置和乘员名单。你把进路锁到民用车这一侧，等到尾灯越过信号才交回控制权。中央的运力在这里实际承担了撤离，留下可核查的班次。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_central_agreement"
+        ],
+        "not": [],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_central_train": true
+      },
+      "mode": "central"
+    },
+    "late_central_alarm": {
+      "text": "在中继站打开本地独立警报，并取得民用列车回执。",
+      "reply": "地方值守没有等待另一道宣传口令，按已经核验的读数发出警报。列车回执到达时，你记录下实际发布时间；承诺与执行第一次能放在同一页核对。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_central_train"
+        ],
+        "not": [],
+        "floor": [
+          "relay"
+        ]
+      },
+      "flags": {
+        "late_central_alarm": true,
+        "late_final_execution_done": true
+      },
+      "give": [
+        "late_acknowledgements"
+      ],
+      "mode": "central"
+    },
+    "late_distributed_copy": {
+      "text": "先发本轮紧急预警，再制作校准记录与维修说明的副本。",
+      "reply": "紧急预警先发出去，设备转移不耽误这一轮通知。列夫将标定方法、备件规格与故障记录一起抄出，避免只搬走会亮的机箱。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_final_started"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_distributed_copy": true
+      },
+      "give": [
+        "late_network_manual"
+      ],
+      "mode": "distributed"
+    },
+    "late_distributed_modules": {
+      "text": "隔离中继站备用回路，拆下两只可搬接收模块。",
+      "reply": "你按编号隔离备用回路，主测量仍在运行。两只模块装进防潮箱，拆除后覆盖会暂时缩小，这一项也写在预警副本上。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_distributed_copy"
+        ],
+        "not": [],
+        "floor": [
+          "relay"
+        ]
+      },
+      "flags": {
+        "late_distributed_modules": true
+      },
+      "give": [
+        "late_receiver_modules"
+      ],
+      "mode": "distributed"
+    },
+    "late_distributed_handover": {
+      "text": "在换乘站交接模块，请接收人员完成一次独立校验。",
+      "reply": "一只模块留给运输值守，另一只随受训人员转往独立接收点。你直到两边都能复述测试序列，才签下交接；维修说明与校准记录各留一套。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_distributed_modules"
+        ],
+        "not": [],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_distributed_handover": true,
+        "late_final_execution_done": true
+      },
+      "take": [
+        "late_receiver_modules"
+      ],
+      "give": [
+        "late_acknowledgements"
+      ],
+      "mode": "distributed"
+    },
+    "late_watch_power": {
+      "text": "在中继站检修备用供电，测试失电切换。",
+      "reply": "你清理接线端，检查燃料与蓄电池，再请值守切断主电源测试。备用回路接上，仪表没有重启。观测仍需要轮班的人，不能只靠一台备用机。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_final_started"
+        ],
+        "not": [],
+        "floor": [
+          "relay"
+        ]
+      },
+      "flags": {
+        "late_watch_power": true
+      },
+      "mode": "watch"
+    },
+    "late_watch_shift": {
+      "text": "在换乘站安排外部接收人与撤离交班。",
+      "reply": "值守留下按时接收与复核的班次，把不适合继续留在外线的人送上车。你说明自己将返回观测岗位，安排有谁接下一轮消息。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_watch_power"
+        ],
+        "not": [],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_watch_shift": true
+      },
+      "mode": "watch"
+    },
+    "late_watch_broadcast": {
+      "text": "回测控台完成下一轮测量，与外部值守交叉核对后播发。",
+      "reply": "父亲先报出自己的读数，你独立核对时间与标定。外部接收人复述了警告，工作不再只由封闭设施单方面宣布。你自愿留下这一班，今后的生活也需要自己安排。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_watch_shift"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_watch_broadcast": true,
+        "late_final_execution_done": true
+      },
+      "give": [
+        "late_acknowledgements"
+      ],
+      "mode": "watch"
+    },
+    "late_finish": {
+      "text": "回测控通信台，核对回执并结束本轮行动。",
+      "reply": "",
+      "once": true,
+      "req": {
+        "all": [
+          "late_final_execution_done"
+        ],
+        "not": [],
+        "floor": [
+          "star_interior"
+        ]
+      },
+      "flags": {
+        "late_finish": true
+      },
+      "travel": "late_final_result"
+    },
+    "late_final_to_junction": {
+      "text": "从外围检修路前往换乘站。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "late_star_admitted"
+        ],
+        "not": [],
+        "floor": [
+          "starcity",
+          "relay"
+        ]
+      },
+      "flags": {
+        "late_final_to_junction": true
+      },
+      "travel": "late_junction_arrive"
+    },
+    "late_junction_to_star": {
+      "text": "沿已确认的外线检修路返回星城外围。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [
+          "late_star_admitted"
+        ],
+        "not": [],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_junction_to_star": true
+      },
+      "travel": "late_relay_back"
+    },
+    "late_north_contact": {
+      "text": "「接下来的外勤，需要我先去哪里了解情况？」",
+      "reply": "联络值守打开收音机，让你听了一遍收到的呼叫。东方-7 只说需要核验外线，不能据此知道里面的名册。你的阵营负责人留下技术经历与回信方式；这份说明不授予星城准入。",
+      "once": true,
+      "req": {
+        "all": [],
+        "not": [],
+        "floor": [
+          "commune",
+          "sech",
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_north_contact": true,
+        "north_story_ready": true,
+        "north_inquiry_ready": true,
+        "star_known": true,
+        "signal_identified": true,
+        "late_north_contacted": true
+      },
+      "give": [
+        "late_faction_letter"
+      ],
+      "travel": "late_north_signal"
+    },
+    "late_star_return_home": {
+      "text": "沿原路回到地表城区，再返回所属聚落。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "all": [],
+        "not": [],
+        "floor": [
+          "starcity"
+        ]
+      },
+      "flags": {
+        "late_star_return_home": true
+      },
+      "travel": "east_return_starcity"
+    },
+    "late_take_north_foot": {
+      "text": "沿北线检修路步行到星城外围。",
+      "reply": "接送车还不能使用。你核对了路标和回程位置，沿检修路步行前往外围；不经过封闭的内部线路。",
+      "once": false,
+      "req": {
+        "all": [
+          "star_known"
+        ],
+        "not": [],
+        "floor": [
+          "east_district"
+        ]
+      },
+      "flags": {
+        "late_take_north_foot": true
+      },
+      "travel": "late_north_walk"
+    },
+    "late_c2_public": {
+      "text": "「先问收件人，再公开愿意署名的收信名单。地址与接应人不写。」",
+      "reply": "尤里：「可以。有人盼着知道亲人平安，也有人不愿让别人知道自己在这里。让他们各自说，别替整袋信作一个决定。我陪你去说明。」",
+      "once": true,
+      "req": {
+        "all": [
+          "late_c2_started",
+          "late_c2_found"
+        ],
+        "not": [
+          "late_c2_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_c2_public": true,
+        "late_c2_escort": true,
+        "late_c2_public_consent": true
+      }
+    },
+    "late_d1_fuel": {
+      "text": "先让燃料车通过，由医护照看等候的伤员并登记延误。",
+      "reply": "医护让两位伤员再加一层毯子，问司机预计还要多久。你把延误写进交接单，确认燃料卸下后能保住住区与医务间的供暖；受寒的风险不会因为这个理由就消失。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d1_started",
+          "late_d1_inspect"
+        ],
+        "not": [
+          "late_d1_done"
+        ],
+        "floor": [
+          "junction"
+        ]
+      },
+      "flags": {
+        "late_d1_fuel": true,
+        "late_d1_dispatched": true,
+        "late_d1_fuel_first": true
+      }
+    },
+    "late_d2_polish": {
+      "text": "「先按恢复写总表，把支路问题留在维修附注。」",
+      "reply": "中尉看了一眼你放在旁边的流量纸，问你是否确定。总表仍然写成恢复供水，维修附注留下了住区尚未全通的事实。两张纸以后会一起留档，不能靠把其中一张收起来，让等水的人也消失。",
+      "once": true,
+      "req": {
+        "all": [
+          "late_d2_started",
+          "late_d2_supply"
+        ],
+        "not": [
+          "late_d2_reported"
+        ],
+        "floor": [
+          "labor"
+        ]
+      },
+      "flags": {
+        "late_d2_polish": true,
+        "late_d2_reported": true,
+        "late_d2_polished": true
+      }
+    }
+  },
+  "interactions": {
+    "junction_yuri": {
+      "facility": "junction",
+      "name": "尤里 / 失联运输员",
+      "role": "运输员",
+      "body": "男人坐在工具箱边，腿上缠着旧布。听到脚步，他先问来的是哪一班。",
+      "options": [
+        "late_c2_find",
+        "late_c2_consent",
+        "late_c2_public"
+      ],
+      "spoken": true,
+      "after": []
+    },
+    "junction_car": {
+      "facility": "junction",
+      "name": "检修车与拖车",
+      "role": "运输设备",
+      "body": "车辆分别停在各自轨道上，轮挡、软管和联接处都可以检查。",
+      "options": [
+        "late_s1_inspect",
+        "late_s1_brake",
+        "late_s3_repair"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "junction_tools": {
+      "facility": "junction",
+      "name": "西南检修柜",
+      "role": "现场",
+      "body": "零件按规格分开放置，不能靠外形相似就随意更换。",
+      "options": [
+        "late_s1_spare",
+        "late_s3_coupling",
+        "late_d1_parts"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "junction_switch": {
+      "facility": "junction",
+      "name": "南口道岔 / 旁线锁闭",
+      "role": "现场",
+      "body": "这里的道岔将一股轨道分向两条线路。岔尖必须贴合，锁闭以后才能让车通过。",
+      "options": [
+        "late_s1_switch",
+        "late_d1_inspect",
+        "late_d1_repair"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "junction_manifest": {
+      "facility": "junction",
+      "name": "候车处 / 司机交接",
+      "role": "现场",
+      "body": "名单、担架尺寸与载重表摆在司机面前。先核对实际情况，再决定这一班怎么走。",
+      "options": [
+        "late_s3_manifest",
+        "late_s3_people",
+        "late_s3_both",
+        "late_d1_civilian",
+        "late_d1_both",
+        "late_d1_fuel"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "junction_family": {
+      "facility": "junction",
+      "name": "候车住户",
+      "role": "候车住户",
+      "body": "住户已经收好行李，等司机确认上车。",
+      "options": [],
+      "spoken": true,
+      "after": []
+    },
+    "junction_exit": {
+      "facility": "junction",
+      "name": "南口接送处",
+      "role": "现场",
+      "body": "离开前确认同行者已经到齐。未完成的工作可以退回准备，下次再来。",
+      "options": [
+        "late_junction_return",
+        "late_junction_to_star"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "junction_bypass": {
+      "facility": "junction",
+      "name": "西侧维修廊",
+      "role": "现场",
+      "body": "检修门被旧构件卡住，清理后能通到南口。",
+      "options": [
+        "late_junction_bypass"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "late_captive": {
+      "facility": "grey_shelter",
+      "name": "阿尔乔姆 / 被扣运输员",
+      "role": "运输员",
+      "body": "男人听到有人靠近，先看门口的守卫，再压低声音问你从哪里来。",
+      "options": [
+        "late_s2_release"
+      ],
+      "spoken": true,
+      "after": []
+    },
+    "late_street_probe": {
+      "facility": "east_district",
+      "name": "诊所外 / 背风测点",
+      "role": "现场",
+      "body": "这处低矮墙角能遮住部分吹来的尘土。读数需要记明位置和时间。",
+      "options": [
+        "late_d3_street"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "late_d6_meter": {
+      "facility": "labor",
+      "name": "净水阀组 / 住区支路",
+      "role": "现场",
+      "body": "压力表与支路流量表并排，出口通向生活层公共取水管。",
+      "options": [
+        "late_d2_meter",
+        "late_d2_repair"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "relay_power": {
+      "facility": "relay",
+      "name": "中继站 / 馈线隔离柜",
+      "role": "现场",
+      "body": "柜内标明低压检修边界，备用接头与校验仪型号相配。",
+      "options": [
+        "late_relay_isolate",
+        "late_relay_cable"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "relay_mast": {
+      "facility": "relay",
+      "name": "中继天线 / 收发校验台",
+      "role": "现场",
+      "body": "馈线通向天线，独立接收编号由星城值守复核。",
+      "options": [
+        "late_relay_calibrate"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "relay_probe": {
+      "facility": "relay",
+      "name": "裸露沉降区 / 测量点",
+      "role": "现场",
+      "body": "风吹起细尘，测量需要记录高度、风向与时间。",
+      "options": [
+        "late_relay_wind",
+        "late_d3_relay"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "relay_exit": {
+      "facility": "relay",
+      "name": "返回外围的检修路",
+      "role": "现场",
+      "body": "沿原来的检修路返回星城外围，未完成的工作会保留。",
+      "options": [
+        "late_relay_return",
+        "late_final_to_junction"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "late_star_guard": {
+      "facility": "star_interior",
+      "name": "萨文 / 接待值守",
+      "role": "星城接待",
+      "body": "值守先核对临时证，再问你要办理技术交接还是家庭询问。两份登记分开放着。",
+      "options": [
+        "late_identity",
+        "late_star_exit"
+      ],
+      "spoken": true,
+      "after": []
+    },
+    "late_father": {
+      "facility": "star_interior",
+      "name": "父亲 / 测控技术员",
+      "role": "测控技术员",
+      "body": "老人把手上的接头放回盒里，等你走到桌边。他没有催你坐下。",
+      "options": [
+        "late_father_meet",
+        "late_father_photo",
+        "late_work_brief",
+        "late_father_truth",
+        "late_notify_semyon"
+      ],
+      "spoken": true,
+      "after": []
+    },
+    "late_lab": {
+      "facility": "star_interior",
+      "name": "标定间 / 参考回路",
+      "role": "现场",
+      "body": "端子、隔离开关和参考信号各自编号，操作次序写在工作卡上。",
+      "options": [
+        "late_lab_isolate",
+        "late_lab_reference"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "late_archive": {
+      "facility": "star_interior",
+      "name": "交接档案 / 私人通信记录",
+      "role": "现场",
+      "body": "准许调阅的纸页保留原日期和签认，缺页明确标出，不能凭空补写。",
+      "options": [
+        "late_archive"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "late_lev": {
+      "facility": "star_interior",
+      "name": "列夫 / 通信与观测",
+      "role": "观测通信",
+      "body": "列夫先对过纸带时间，才抬头和你说话。",
+      "options": [
+        "late_weather_review",
+        "late_network_plan"
+      ],
+      "spoken": true,
+      "after": []
+    },
+    "late_star_exit": {
+      "facility": "star_interior",
+      "name": "接待气闸 / 武器交还",
+      "role": "现场",
+      "body": "离开前按入站清单领回武器。返回外围不解除原有身份限制。",
+      "options": [
+        "late_star_exit"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "late_planning": {
+      "facility": "star_interior",
+      "name": "联络会议 / 最终行动",
+      "role": "现场",
+      "body": "先核对事实，再决定怎样组织预警与撤离。准备阶段没有后台倒计时，确认前可以继续其它工作。",
+      "options": [
+        "late_plan_shared",
+        "late_plan_central",
+        "late_plan_distributed",
+        "late_plan_watch",
+        "late_plan_review",
+        "late_final_confirm",
+        "late_shared_packet",
+        "late_central_agreement",
+        "late_distributed_copy",
+        "late_finish"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "late_watchdesk": {
+      "facility": "star_interior",
+      "name": "测控台 / 轮值记录",
+      "role": "现场",
+      "body": "读数、时间、标定与外部回执需要彼此对应。",
+      "options": [
+        "late_watch_broadcast"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "junction_final_receiver": {
+      "facility": "junction",
+      "name": "换乘站 / 独立接收与调度",
+      "role": "现场",
+      "body": "接收人、司机与维护人员都在现场，交接要由他们实际确认。",
+      "options": [
+        "late_shared_receiver",
+        "late_central_train",
+        "late_distributed_handover",
+        "late_watch_shift"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "relay_generator": {
+      "facility": "relay",
+      "name": "中继站 / 备用供电与模块",
+      "role": "现场",
+      "body": "备用电源与便携接收回路分别编号，操作前先确认主测量不断电。",
+      "options": [
+        "late_central_alarm",
+        "late_distributed_modules",
+        "late_watch_power",
+        "late_shared_evac"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "late_perimeter_relay": {
+      "facility": "starcity",
+      "name": "外侧检修路",
+      "role": "现场",
+      "body": "路标指向旧中继站；只通往外部设施，不绕过隔离门。",
+      "options": [
+        "late_relay_depart",
+        "late_final_to_junction"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "late_route_dispatch": {
+      "facility": "commune",
+      "name": "联络值守",
+      "role": "现场",
+      "body": "这次呼叫与外围位置已经记入手记。",
+      "options": [],
+      "spoken": false,
+      "after": []
+    },
+    "late_junction_entry": {
+      "facility": "east_district",
+      "name": "货场检修阶梯 / 换乘线",
+      "role": "现场",
+      "body": "一座带扶手的检修阶梯通到地下，门边的灯还亮着。",
+      "options": [
+        "late_junction_enter"
+      ],
+      "spoken": false,
+      "after": []
+    },
+    "junction_patients": {
+      "facility": "junction",
+      "name": "候车医护与伤员",
+      "role": "医护接送",
+      "body": "医护已经把需要担架的重伤员安置进车厢。留下的两位还能自行走动，需要有人陪他们走到南口。",
+      "options": [],
+      "spoken": false,
+      "after": []
+    },
+    "late_driver": {
+      "facility": "junction",
+      "name": "安东 / 检修车司机",
+      "role": "检修车司机",
+      "body": "司机放下工具，先报了自己的名字。\n安东：「我在这里跑了十几年。车坏了我得看着，可彼得说人比车要紧，这话我记着了。」",
+      "options": [],
+      "spoken": true,
+      "after": []
+    },
+    "relay_evac_group": {
+      "facility": "relay",
+      "name": "改道住户 / 外线接应",
+      "role": "改道住户",
+      "body": "住户带着自己的行李，在控制屋前等你一起去南侧接应点。",
+      "options": [],
+      "spoken": false,
+      "after": []
+    }
+  },
+  "panels": {
+    "late_c2_road": {
+      "title": "被截住的回信 / 出发",
+      "art": "junction_transfer",
+      "same_moment": false,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你核对防护和返程入口，将这趟任务的记录单放进内袋。聚落值守记下你的去向，提醒你回程先到原来的接送处报到。"
+        }
+      ],
+      "end": "map:east_district"
+    },
+    "late_c2_home": {
+      "title": "信交到谁手里",
+      "art": "letters_home",
+      "same_moment": true,
+      "music": "c1_return_theme",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "巴拉诺娃把已经核对过的信封装进不同的布袋，留在桌上的还有两封。尤里坐在门边，热水已经喝掉一半。"
+        },
+        {
+          "speaker": "巴拉诺娃",
+          "text": "收件人找到了才交。没有找到的人，我会继续问。"
+        },
+        {
+          "speaker": "尤里",
+          "text": "我被扣住那天，一直怕你们以为我拿着粮食跑了。后来又想，等我回去，是不是所有人都会围着问消息。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "你知道的说清楚。不知道的，我们再找。"
+        }
+      ],
+      "end": "resume:commune_guard"
+    },
+    "late_c3_road": {
+      "title": "暖气恢复以后 / 出发",
+      "art": "commune_threshold",
+      "same_moment": false,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你核对防护和返程入口，将这趟任务的记录单放进内袋。聚落值守记下你的去向，提醒你回程先到原来的接送处报到。"
+        }
+      ],
+      "end": "map:commune"
+    },
+    "late_c3_home": {
+      "title": "暖气恢复以后 / 交接以后",
+      "art": "medical_home32",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "登记不再只剩一个完成标记。回来的居民有了位置，仍没有回信的人继续留在查找簿上。你把记录收好，回到有人叫你名字的走廊。"
+        }
+      ],
+      "end": "resume:commune_guard"
+    },
+    "late_s1_road": {
+      "title": "空车也要回家 / 出发",
+      "art": "junction_transfer",
+      "same_moment": false,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你核对防护和返程入口，将这趟任务的记录单放进内袋。聚落值守记下你的去向，提醒你回程先到原来的接送处报到。"
+        }
+      ],
+      "end": "map:east_district"
+    },
+    "late_s1_home": {
+      "title": "空车也要回家 / 交接以后",
+      "art": "sech_threshold",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "站台值守把这一班的车和人分别登记。厨房还留着热水，下一班的安排写在门边。你可以先歇一会儿，再去见他们。"
+        }
+      ],
+      "end": "resume:sech_elder"
+    },
+    "late_s2_road": {
+      "title": "没有旗子的车队 / 出发",
+      "art": "east_district_arrival",
+      "same_moment": false,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你核对防护和返程入口，将这趟任务的记录单放进内袋。聚落值守记下你的去向，提醒你回程先到原来的接送处报到。"
+        }
+      ],
+      "end": "map:east_district"
+    },
+    "late_s2_home": {
+      "title": "没有旗子的车队 / 交接以后",
+      "art": "sech_threshold",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "站台值守把这一班的车和人分别登记。厨房还留着热水，下一班的安排写在门边。你可以先歇一会儿，再去见他们。"
+        }
+      ],
+      "end": "resume:sech_elder"
+    },
+    "late_s3_road": {
+      "title": "末班车的空位 / 出发",
+      "art": "junction_transfer",
+      "same_moment": false,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你核对防护和返程入口，将这趟任务的记录单放进内袋。聚落值守记下你的去向，提醒你回程先到原来的接送处报到。"
+        }
+      ],
+      "end": "map:east_district"
+    },
+    "late_s3_home": {
+      "title": "末班车的空位 / 交接以后",
+      "art": "sech_threshold",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "站台值守把这一班的车和人分别登记。厨房还留着热水，下一班的安排写在门边。你可以先歇一会儿，再去见他们。"
+        }
+      ],
+      "end": "resume:sech_elder"
+    },
+    "late_d1_road": {
+      "title": "谁先通过 / 出发",
+      "art": "junction_transfer",
+      "same_moment": false,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你核对防护和返程入口，将这趟任务的记录单放进内袋。聚落值守记下你的去向，提醒你回程先到原来的接送处报到。"
+        }
+      ],
+      "end": "map:east_district"
+    },
+    "late_d1_home": {
+      "title": "谁先通过 / 交接以后",
+      "art": "d6_ward",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "记录交回以后，实际到站和仍未恢复的部分分栏留下。有人先去医务间，也有人继续等维修。中尉没有宣布一切已经解决。"
+        }
+      ],
+      "end": "resume:d6_return_desk"
+    },
+    "late_d2_road": {
+      "title": "没有送到的水 / 出发",
+      "art": "commune_threshold",
+      "same_moment": false,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你核对防护和返程入口，将这趟任务的记录单放进内袋。聚落值守记下你的去向，提醒你回程先到原来的接送处报到。"
+        }
+      ],
+      "end": "map:labor"
+    },
+    "late_d2_home": {
+      "title": "没有送到的水 / 交接以后",
+      "art": "d6_ward",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "记录交回以后，实际到站和仍未恢复的部分分栏留下。有人先去医务间，也有人继续等维修。中尉没有宣布一切已经解决。"
+        }
+      ],
+      "end": "resume:d6_return_desk"
+    },
+    "late_d3_road": {
+      "title": "读数的出处 / 出发",
+      "art": "east_district_arrival",
+      "same_moment": false,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你核对防护和返程入口，将这趟任务的记录单放进内袋。聚落值守记下你的去向，提醒你回程先到原来的接送处报到。"
+        }
+      ],
+      "end": "map:east_district"
+    },
+    "late_d3_home": {
+      "title": "读数的出处 / 交接以后",
+      "art": "d6_ward",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "记录交回以后，实际到站和仍未恢复的部分分栏留下。有人先去医务间，也有人继续等维修。中尉没有宣布一切已经解决。"
+        }
+      ],
+      "end": "resume:d6_return_desk"
+    },
+    "late_junction_arrive": {
+      "title": "北线货场 / 换乘口",
+      "art": "junction_transfer",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "货场的检修阶梯通到地下。站台两侧分开停着货车和维修车，候车的人躲在有挡风墙的地方。南口是回程接送点，西侧廊道通往检修间，中央轨道上能听见兽爪擦过枕木。"
+        }
+      ],
+      "end": "map:junction"
+    },
+    "late_star_brief": {
+      "title": "隔离线外的答复",
+      "art": "starcity",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "值守",
+          "text": "外线检修申请可以接收。你带来的原始数据会另存，家人的事也会另查。先去检修，回来我们再核对。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "你在临时登记单上写下姓名。厚门仍然关着，右侧检修路的指示灯却亮了。"
+        }
+      ],
+      "end": "resume:star_perimeter_call"
+    },
+    "late_relay_arrive": {
+      "title": "北线中继站",
+      "art": "north_relay",
+      "same_moment": true,
+      "music": "dawn_theme",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "积雪掩住了旧道路的大部分颜色，裂开的沥青还露在车辙里。天线的拉索越过倒塌的墙，落在还能使用的混凝土基座上。西侧控制屋里有一盏灯，馈线沿有盖的沟槽通向北边。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "检修牌标出了返程：沿西南侧检修路回到星城外围。这里没有聚落，补给要自己带好；主线所需的校验仪与接头已经配给。"
+        }
+      ],
+      "end": "map:relay"
+    },
+    "late_relay_back": {
+      "title": "沿检修路回来",
+      "art": "north_relay",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你将仪器装回防潮袋，沿已经记过的检修路返回。外线修复与测量各有自己的记录，完成了哪一项，就交哪一项，没有结果的部分仍空着。"
+        }
+      ],
+      "end": "map:starcity"
+    },
+    "late_star_admit": {
+      "title": "门内的第一班",
+      "art": "star_reunion",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "去污间的门先在身后关上。值守逐件登记武器，让你看过保管清单，才打开通往接待区的内门。"
+        },
+        {
+          "speaker": "萨文",
+          "text": "临时工作区、测控交接间和标定室可以去。其它门仍受控。有家庭询问先找我登记，别自己去敲宿舍。"
+        }
+      ],
+      "end": "map:star_interior"
+    },
+    "late_star_leave": {
+      "title": "领回自己的东西",
+      "art": "star_reunion",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "值守按清单归还武器，临时证记下离站时间。你的技术交接没有被撤销；再回来仍需检查，但不用重新证明已经做过的工作。"
+        }
+      ],
+      "end": "map:starcity"
+    },
+    "late_father_first": {
+      "title": "桌子两边",
+      "art": "star_reunion",
+      "same_moment": true,
+      "music": "home_lamp",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "父亲将螺丝刀放平，像是担心一抬手会碰落什么。他看了一会儿你的脸，问起母亲。"
+        },
+        {
+          "speaker": "父亲",
+          "text": "她后来一直住在 D-6 吗？"
+        },
+        {
+          "speaker": "伊万",
+          "text": "她带我进去以后，就没再出来。后来她病死了。照顾我的一直是谢苗诺夫。"
+        },
+        {
+          "speaker": "父亲",
+          "text": "我写过信。最早的两封没有送出去，后来我也没有再查到底。我知道，这不能算尽过力。"
+        }
+      ],
+      "choices": [
+        {
+          "text": "「我想问的很多。今天先把工作办完。」",
+          "next": "late_father_first_end",
+          "flag": "late_family_time"
+        },
+        {
+          "text": "「我现在不想听解释。工作上的事照常说。」",
+          "next": "late_father_first_end",
+          "flag": "late_family_distance"
+        }
+      ]
+    },
+    "late_father_first_end": {
+      "title": "留出一点时间",
+      "art": "star_reunion",
+      "same_moment": true,
+      "music": "home_lamp",
+      "finish_flags": [
+        "late_father_first_seen"
+      ],
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "父亲点头，把另一把椅子留在桌边，没有再让你坐下。你们约好这班交接以后可以再谈；没有一句话能把缺席的二十年补齐。"
+        }
+      ],
+      "end": "resume:late_father"
+    },
+    "late_father_work": {
+      "title": "编号纸",
+      "art": "star_reunion",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "父亲",
+          "text": "你先写端子号，是谁教的？"
+        },
+        {
+          "speaker": "伊万",
+          "text": "老爹。他说修到一半停电，靠记性容易接错。"
+        },
+        {
+          "speaker": "父亲",
+          "text": "他以前也常提醒我。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "我记得的是后来。他教了我很多年。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "父亲没有再接话，转身把你们都核对过的读数签进工作卡。"
+        }
+      ],
+      "end": "resume:late_lab"
+    },
+    "late_father_truth_scene": {
+      "title": "签认的名字",
+      "art": "star_reunion",
+      "same_moment": true,
+      "music": "home_lamp",
+      "lines": [
+        {
+          "speaker": "父亲",
+          "text": "最初我担心线路被追踪，入口会暴露。我按命令延后私人通信，也签过操作确认。"
+        },
+        {
+          "speaker": "父亲",
+          "text": "后来我有机会再找，却害怕知道你们已经不在了。我留在这里做事，慢慢把没有消息当成了不用再问。你说我逃避，是对的。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "母亲没有等到解释。老爹也没因为没有消息，就不再照顾我。"
+        }
+      ],
+      "choices": [
+        {
+          "text": "「我愿意以后再谈，但你欠我们的不会因此消失。」",
+          "next": "late_father_truth_end",
+          "flag": "late_family_open"
+        },
+        {
+          "text": "「我会和你共事。家里的事，先到这里。」",
+          "next": "late_father_truth_end",
+          "flag": "late_family_closed"
+        },
+        {
+          "text": "「现在我还决定不了。先把能救人的消息发出去。」",
+          "next": "late_father_truth_end",
+          "flag": "late_family_later"
+        }
+      ]
+    },
+    "late_father_truth_end": {
+      "title": "这一班还要继续",
+      "art": "star_reunion",
+      "same_moment": true,
+      "music": "home_lamp",
+      "finish_flags": [
+        "late_father_truth_seen"
+      ],
+      "lines": [
+        {
+          "speaker": "父亲",
+          "text": "我会把你问过的记录留下，也会回答。你不用替我把话说得好听。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "你收好自己的东西，留下了下一次工作的时间。无论以后怎样相处，这一班该做的事仍然在桌上。"
+        }
+      ],
+      "end": "resume:late_father"
+    },
+    "late_four_plans": {
+      "title": "消息要送到哪里",
+      "art": "star_reunion",
+      "same_moment": true,
+      "music": "shift_below",
+      "finish_flags": [
+        "late_four_plans_seen"
+      ],
+      "lines": [
+        {
+          "speaker": "列夫",
+          "text": "共享预警，需要几个能独立复核的接收人。中央调度能调用较多车辆，但民用警报和席位必须落实。分散设备可以减少一处失守的风险，覆盖却会暂时下降。留下观测也需要外面有人接，不是关起门来守一台机器。"
+        },
+        {
+          "speaker": "列夫",
+          "text": "我们有可完成的基础方案，必要设备都能配给。你可以先看准备清单，继续做未完的事；只有你确认最终行动，才开始这一轮调度。"
+        }
+      ],
+      "end": "resume:late_planning"
+    },
+    "late_final_depart": {
+      "title": "最后一轮调度之前",
+      "art": "north_relay",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你把预警副本交到值守手中，让他把目的地和接收人重新念一遍。门外有人清点担架和行李，司机已经上车。你最后看了眼留在桌上的轮值表，转身去做分给自己的那一段。"
+        }
+      ],
+      "end": "resume:late_planning"
+    },
+    "late_final_result": {
+      "title": "回执到达",
+      "art": "star_reunion",
+      "same_moment": true,
+      "music": "c1_return_theme",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "第一批回执到达时，房间里没有欢呼。列夫先核对来源与时间，再把已经收到和仍未确认的站点分开。你们用实际完成的工作，替一部分人争取了改道和撤离的机会。"
+        }
+      ],
+      "next": "late_epilogue_people"
+    },
+    "late_epilogue_people": {
+      "title": "后来的人",
+      "art": "medical_home32",
+      "same_moment": true,
+      "music": "c1_return_theme",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "战争没有因为一轮预警结束。人们仍要修管道、照顾病人、准备下一班的饭。有人记得广播，有人只记得那天有人敲门，告诉他们换一条路走。"
+        }
+      ],
+      "next": "late_epilogue_family"
+    },
+    "late_epilogue_family": {
+      "title": "写给老爹",
+      "art": "star_reunion",
+      "same_moment": true,
+      "music": "home_lamp",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你在给谢苗诺夫的信里写了这一趟经过。开头仍旧是报平安，后面才是你决定怎样生活。把你养大的人，会先想知道你有没有好好吃饭。"
+        }
+      ],
+      "end": "complete:campaign"
+    },
+    "late_north_signal": {
+      "title": "听到呼号以后",
+      "art": "frontline_station",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "东方-7 值守",
+          "text": "外线校验窗口已经开放。到外围声讯柱提交检修申请，未经核验不得越过隔离线。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "值守在地图上指出北线接送路尽头的外围设施。你第一次得到可以自己核对的去向，仍不知道父亲是否在那里。"
+        }
+      ],
+      "end": "resume:late_route_dispatch"
+    },
+    "late_junction_home_commune": {
+      "title": "南口接送以后",
+      "art": "junction_transfer",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你按原来的安排返回聚落，将已经到达的同行者交给接应值守。还没有完成的部分留在这一班的记录里，需要的时候仍可返回现场。"
+        }
+      ],
+      "end": "map:commune"
+    },
+    "late_junction_home_sech": {
+      "title": "南口接送以后",
+      "art": "junction_transfer",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你按原来的安排返回聚落，将已经到达的同行者交给接应值守。还没有完成的部分留在这一班的记录里，需要的时候仍可返回现场。"
+        }
+      ],
+      "end": "map:sech"
+    },
+    "late_junction_home_labor": {
+      "title": "南口接送以后",
+      "art": "junction_transfer",
+      "same_moment": true,
+      "music": "shift_below",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你按原来的安排返回聚落，将已经到达的同行者交给接应值守。还没有完成的部分留在这一班的记录里，需要的时候仍可返回现场。"
+        }
+      ],
+      "end": "map:labor"
+    },
+    "late_north_walk": {
+      "title": "北线尽头的门",
+      "art": "north_relay",
+      "same_moment": true,
+      "music": "dawn_theme",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你沿检修路走过几处废弃的接送站，顺着尚能辨认的线缆标记向北。最后一段路背着风，厚重的隔离门和外围等候棚出现在坡下。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "你停在声讯柱前，先检查自己的面罩，再按下呼叫键。介绍信在内袋里，里面的人仍需要亲自核对你的来意。"
+        }
+      ],
+      "end": "map:starcity"
+    }
+  },
+  "jobs": {
+    "c2": {
+      "faction": "commune",
+      "home": "commune",
+      "person": "commune_guard",
+      "name": "被截住的回信",
+      "floor": "junction",
+      "accept": "field_c2_accept",
+      "accepted": "late_c2_started",
+      "done": "late_c2_done"
+    },
+    "c3": {
+      "faction": "commune",
+      "home": "commune",
+      "person": "commune_guard",
+      "name": "暖气恢复以后",
+      "floor": "commune",
+      "accept": "field_c3_accept",
+      "accepted": "late_c3_started",
+      "done": "late_c3_done"
+    },
+    "s1": {
+      "faction": "sech",
+      "home": "sech",
+      "person": "sech_elder",
+      "name": "空车也要回家",
+      "floor": "junction",
+      "accept": "field_s1_accept",
+      "accepted": "late_s1_started",
+      "done": "late_s1_done"
+    },
+    "s2": {
+      "faction": "sech",
+      "home": "sech",
+      "person": "sech_elder",
+      "name": "没有旗子的车队",
+      "floor": "grey_shelter",
+      "accept": "field_s2_accept",
+      "accepted": "late_s2_started",
+      "done": "late_s2_done"
+    },
+    "s3": {
+      "faction": "sech",
+      "home": "sech",
+      "person": "sech_elder",
+      "name": "末班车的空位",
+      "floor": "junction",
+      "accept": "field_s3_accept",
+      "accepted": "late_s3_started",
+      "done": "late_s3_done"
+    },
+    "d1": {
+      "faction": "d6",
+      "home": "labor",
+      "person": "d6_return_desk",
+      "name": "谁先通过",
+      "floor": "junction",
+      "accept": "late_d1_accept",
+      "accepted": "late_d1_started",
+      "done": "late_d1_done"
+    },
+    "d2": {
+      "faction": "d6",
+      "home": "labor",
+      "person": "d6_return_desk",
+      "name": "没有送到的水",
+      "floor": "labor",
+      "accept": "late_d2_accept",
+      "accepted": "late_d2_started",
+      "done": "late_d2_done"
+    },
+    "d3": {
+      "faction": "d6",
+      "home": "labor",
+      "person": "d6_return_desk",
+      "name": "读数的出处",
+      "floor": "east_district",
+      "accept": "late_d3_accept",
+      "accepted": "late_d3_started",
+      "done": "late_d3_done"
+    }
+  },
+  "endings": {
+    "warning_shared": {
+      "title": "共享预警",
+      "body": "把有来源的警告送到多个独立接收点，公开风险区域，保护人员名单。",
+      "art": "warning_shared",
+      "steps": [
+        "late_shared_packet",
+        "late_shared_receiver",
+        "late_shared_evac"
+      ]
+    },
+    "warning_central": {
+      "title": "中央调度",
+      "body": "接通中央运力，同时落实明确的民用警报与撤离席位。",
+      "art": "junction_transfer",
+      "steps": [
+        "late_central_agreement",
+        "late_central_train",
+        "late_central_alarm"
+      ]
+    },
+    "warning_distributed": {
+      "title": "分散保全",
+      "body": "先发紧急预警，将可搬设备和记录分交给会维护的人。",
+      "art": "warning_distributed",
+      "steps": [
+        "late_distributed_copy",
+        "late_distributed_modules",
+        "late_distributed_handover"
+      ]
+    },
+    "warning_watch": {
+      "title": "留守观测",
+      "body": "修复持续供电，安排外部接收人与交班，留下完成下一轮播发。",
+      "art": "warning_watch",
+      "steps": [
+        "late_watch_power",
+        "late_watch_shift",
+        "late_watch_broadcast"
+      ]
+    }
+  },
+  "quests": [
+    {
+      "id": "late_c2",
+      "name": "被截住的回信",
+      "kind": "主线",
+      "facility": "commune",
+      "accepted": "late_c2_started",
+      "done": "late_c2_done",
+      "background": "找到运输员本人，护送他离开换乘线，再按本人意愿交还书信。",
+      "lead": "",
+      "stages": [
+        {
+          "when": {
+            "all": []
+          },
+          "target": "commune_baranova",
+          "place": "commune",
+          "step": "先问巴拉诺娃运输员和邮袋最后的去向。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_c2_route_known"
+            ]
+          },
+          "target": "commune_leave",
+          "place": "commune",
+          "step": "备好装备，从公社出站。沿地图去北线货场换乘口。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_c2_depart"
+            ]
+          },
+          "target": "junction_yuri",
+          "place": "junction",
+          "step": "到西北检修间找尤里；中部有兽群，也能从西侧维修廊绕行。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_c2_found"
+            ]
+          },
+          "target": "junction_yuri",
+          "place": "junction",
+          "step": "与尤里商量书信的处理，再陪他到南侧接送口。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_c2_escort"
+            ]
+          },
+          "target": "junction_yuri",
+          "place": "junction",
+          "step": "陪尤里走到南口；距离太远时他会等你。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_c2_evacuated"
+            ]
+          },
+          "target": "junction_exit",
+          "place": "junction",
+          "step": "尤里已到接送处，从南口一起返回公社。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_c2_home_arrived"
+            ]
+          },
+          "target": "commune_baranova",
+          "place": "commune",
+          "step": "把邮袋交给巴拉诺娃，按收件人分别转交。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_c2_letters"
+            ]
+          },
+          "target": "commune_guard",
+          "place": "commune",
+          "step": "把找到的人、尚未查到的消息和名单安排向守备班说明。"
+        }
+      ],
+      "actions": [
+        "field_c2_accept",
+        "late_c2_family",
+        "late_c2_depart",
+        "late_c2_find",
+        "late_c2_consent",
+        "late_c2_letters",
+        "late_c2_report",
+        "late_c2_public"
+      ]
+    },
+    {
+      "id": "late_c3",
+      "name": "暖气恢复以后",
+      "kind": "主线",
+      "facility": "commune",
+      "accepted": "late_c3_started",
+      "done": "late_c3_done",
+      "background": "供热通知与住户实际感受不符。查明管线，修复调节阀，再公开安排供热。",
+      "lead": "",
+      "stages": [
+        {
+          "when": {
+            "all": []
+          },
+          "target": "commune_radiator",
+          "place": "commune",
+          "step": "先检查家属房暖气，与巴拉诺娃核实停暖。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_c3_cold_confirmed"
+            ]
+          },
+          "target": "commune_boiler",
+          "place": "commune",
+          "step": "到锅炉房核对支路、阀位和回水记录。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_c3_diagram"
+            ]
+          },
+          "target": "commune_salvage",
+          "place": "commune",
+          "step": "到机修间领取对应阀芯与密封垫。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_c3_parts"
+            ]
+          },
+          "target": "commune_boiler",
+          "place": "commune",
+          "step": "在锅炉房隔离家属支路，泄压后维修，再恢复回水。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_c3_heat_restored"
+            ]
+          },
+          "target": "commune_hall",
+          "place": "commune",
+          "step": "到人民议事厅座席区说明停暖、维修与轮换方案。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_c3_public_record"
+            ]
+          },
+          "target": "commune_guard",
+          "place": "commune",
+          "step": "交接实际测温记录与居民议事决定。"
+        }
+      ],
+      "actions": [
+        "field_c3_accept",
+        "late_c3_cold",
+        "late_c3_diagram",
+        "late_c3_parts",
+        "late_c3_isolate",
+        "late_c3_repair",
+        "late_c3_meeting",
+        "late_c3_report",
+        "late_c3_depart"
+      ]
+    },
+    {
+      "id": "late_s1",
+      "name": "空车也要回家",
+      "kind": "主线",
+      "facility": "sech",
+      "accepted": "late_s1_started",
+      "done": "late_s1_done",
+      "background": "修好滞留检修车的制动和旁线，让司机安全返站。",
+      "lead": "",
+      "stages": [
+        {
+          "when": {
+            "all": []
+          },
+          "target": "sech_leave",
+          "place": "sech",
+          "step": "备好装备，从谢契出站，沿地表去北线货场换乘口。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s1_depart"
+            ]
+          },
+          "target": "junction_car",
+          "place": "junction",
+          "step": "先检查检修车的制动残压和轮挡。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s1_inspect"
+            ]
+          },
+          "target": "junction_tools",
+          "place": "junction",
+          "step": "到西南检修间领取放气接头。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s1_spare"
+            ]
+          },
+          "target": "junction_car",
+          "place": "junction",
+          "step": "返回检修车，更换软管、泄压并测试制动。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s1_brake"
+            ]
+          },
+          "target": "junction_switch",
+          "place": "junction",
+          "step": "到南侧道岔检查岔尖并锁定旁线。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s1_ready"
+            ]
+          },
+          "target": "junction_exit",
+          "place": "junction",
+          "step": "从南口随检修车返回谢契。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s1_home_arrived"
+            ]
+          },
+          "target": "sech_elder",
+          "place": "sech",
+          "step": "向长老与彼得交代人、车和线路状况。"
+        }
+      ],
+      "actions": [
+        "field_s1_accept",
+        "late_s1_inspect",
+        "late_s1_spare",
+        "late_s1_brake",
+        "late_s1_switch",
+        "late_s1_report",
+        "late_s1_depart"
+      ]
+    },
+    {
+      "id": "late_s2",
+      "name": "没有旗子的车队",
+      "kind": "主线",
+      "facility": "sech",
+      "accepted": "late_s2_started",
+      "done": "late_s2_done",
+      "background": "从灰狗避难所接出被扣的运输员。可以利用守卫视线潜入，也可以正面交战。",
+      "lead": "",
+      "stages": [
+        {
+          "when": {
+            "all": []
+          },
+          "target": "sech_sergey",
+          "place": "sech",
+          "step": "先请谢尔盖说明入口、守卫和运输员的位置。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s2_brief"
+            ]
+          },
+          "target": "sech_leave",
+          "place": "sech",
+          "step": "备好装备后出站，寻找灰狗货场地下入口。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s2_depart"
+            ]
+          },
+          "target": "late_captive",
+          "place": "grey_shelter",
+          "step": "在避难所住户铺位找到阿尔乔姆，确认他能够同行。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s2_escort"
+            ]
+          },
+          "target": "late_captive",
+          "place": "grey_shelter",
+          "step": "陪阿尔乔姆到地下出口，他会等你靠近后继续。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s2_evacuated"
+            ]
+          },
+          "target": "grey_shelter_exit",
+          "place": "grey_shelter",
+          "step": "阿尔乔姆已到出口；回地表后从谢契入口返站。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s2_home_arrived"
+            ]
+          },
+          "target": "sech_sergey",
+          "place": "sech",
+          "step": "让阿尔乔姆当面说明经过，再与长老交接。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s2_account"
+            ]
+          },
+          "target": "sech_elder",
+          "place": "sech",
+          "step": "交接运输员的说明和后续安排。"
+        }
+      ],
+      "actions": [
+        "field_s2_accept",
+        "late_s2_brief",
+        "late_s2_depart",
+        "late_s2_release",
+        "late_s2_account",
+        "late_s2_report"
+      ]
+    },
+    {
+      "id": "late_s3",
+      "name": "末班车的空位",
+      "kind": "主线",
+      "facility": "sech",
+      "accepted": "late_s3_started",
+      "done": "late_s3_done",
+      "background": "落实运力、乘员与接应。修复第二辆车可以避免把人和粮食分成两班。",
+      "lead": "",
+      "stages": [
+        {
+          "when": {
+            "all": []
+          },
+          "target": "sech_leave",
+          "place": "sech",
+          "step": "从谢契出站，前往北线货场换乘口。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s3_depart"
+            ]
+          },
+          "target": "junction_manifest",
+          "place": "junction",
+          "step": "先在候车处核对名单和载重。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s3_manifest"
+            ]
+          },
+          "target": "junction_tools",
+          "place": "junction",
+          "step": "可到检修间找联接销修好拖车；也可明确安排先接伤病者。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s3_coupling"
+            ]
+          },
+          "target": "junction_car",
+          "place": "junction",
+          "step": "装好联接销与保险，测试拖车制动。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s3_capacity"
+            ]
+          },
+          "target": "junction_manifest",
+          "place": "junction",
+          "step": "确认两车分载与担架固定，通知上车。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s3_depart_ready"
+            ]
+          },
+          "target": "junction_family",
+          "place": "junction",
+          "step": "陪候车的人走到南口；确认到齐后出发。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s3_evacuated"
+            ]
+          },
+          "target": "junction_exit",
+          "place": "junction",
+          "step": "人已到齐，从南口随车返回谢契。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_s3_home_arrived"
+            ]
+          },
+          "target": "sech_elder",
+          "place": "sech",
+          "step": "交接乘员、货物与下一班安排。"
+        }
+      ],
+      "actions": [
+        "field_s3_accept",
+        "late_s3_manifest",
+        "late_s3_coupling",
+        "late_s3_repair",
+        "late_s3_people",
+        "late_s3_both",
+        "late_s3_report",
+        "late_s3_depart"
+      ]
+    },
+    {
+      "id": "late_d1",
+      "name": "谁先通过",
+      "kind": "主线",
+      "facility": "labor",
+      "accepted": "late_d1_started",
+      "done": "late_d1_done",
+      "background": "解决单线运输冲突，让伤员抵站，记录燃料调度的真实代价。",
+      "lead": "",
+      "stages": [
+        {
+          "when": {
+            "all": []
+          },
+          "target": "d6_surface_gate",
+          "place": "labor",
+          "step": "准备好防护和武器，从 D-6 正门登记出站，前往货场换乘口。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d1_depart"
+            ]
+          },
+          "target": "junction_switch",
+          "place": "junction",
+          "step": "先检查南侧道岔，确认旁线能否恢复。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d1_inspect"
+            ]
+          },
+          "target": "junction_tools",
+          "place": "junction",
+          "step": "可领取备件修通旁线，或者在调度处安排伤员优先。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d1_parts"
+            ]
+          },
+          "target": "junction_switch",
+          "place": "junction",
+          "step": "更换保护座，清理轨槽并测试锁闭。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d1_bypass"
+            ]
+          },
+          "target": "junction_manifest",
+          "place": "junction",
+          "step": "向司机明确分流或伤员优先安排。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d1_dispatched"
+            ]
+          },
+          "target": "junction_exit",
+          "place": "junction",
+          "step": "从南口返站，交接伤员与延误记录。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d1_home_arrived"
+            ]
+          },
+          "target": "d6_return_desk",
+          "place": "labor",
+          "step": "向中尉交接实际运输记录。"
+        }
+      ],
+      "actions": [
+        "late_d1_accept",
+        "late_d1_inspect",
+        "late_d1_parts",
+        "late_d1_repair",
+        "late_d1_civilian",
+        "late_d1_both",
+        "late_d1_report",
+        "late_d1_depart",
+        "late_d1_fuel"
+      ]
+    },
+    {
+      "id": "late_d2",
+      "name": "没有送到的水",
+      "kind": "主线",
+      "facility": "labor",
+      "accepted": "late_d2_started",
+      "done": "late_d2_done",
+      "background": "区分总管读数与住户供水，落实公共取水，再修正报告。",
+      "lead": "",
+      "stages": [
+        {
+          "when": {
+            "all": []
+          },
+          "target": "late_d6_meter",
+          "place": "labor",
+          "step": "到净水阀组读取出口压力与支路流量。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d2_meter"
+            ]
+          },
+          "target": "nina",
+          "place": "life",
+          "step": "上生活层，和妮娜核对冻裂管段与临时旁通。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d2_nina"
+            ]
+          },
+          "target": "late_d6_meter",
+          "place": "labor",
+          "step": "返回净水阀组接通公共取水支路，并现场复测。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d2_supply"
+            ]
+          },
+          "target": "d6_return_desk",
+          "place": "labor",
+          "step": "向中尉说明真实供水情况，再正式交回修正报告。"
+        }
+      ],
+      "actions": [
+        "late_d2_accept",
+        "late_d2_meter",
+        "late_d2_nina",
+        "late_d2_repair",
+        "late_d2_truth",
+        "late_d2_report",
+        "late_d2_depart",
+        "late_d2_polish"
+      ]
+    },
+    {
+      "id": "late_d3",
+      "name": "读数的出处",
+      "kind": "主线",
+      "facility": "labor",
+      "accepted": "late_d3_started",
+      "done": "late_d3_done",
+      "background": "取得有来源的独立测量，获得赴星城外围技术联络的资格。",
+      "lead": "",
+      "stages": [
+        {
+          "when": {
+            "all": []
+          },
+          "target": "d6_surface_gate",
+          "place": "labor",
+          "step": "携仪器从 D-6 正门出站，先去工人街诊所外侧。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d3_depart"
+            ]
+          },
+          "target": "late_street_probe",
+          "place": "east_district",
+          "step": "在诊所外的背风测点记录第一组读数。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d3_street"
+            ]
+          },
+          "target": "east_north_entry",
+          "place": "east_district",
+          "step": "沿北线接送路到星城外围，再从外侧检修口进入中继站。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d3_entered"
+            ]
+          },
+          "target": "relay_probe",
+          "place": "relay",
+          "step": "在中继站暴露区核对第二组读数。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_d3_relay"
+            ]
+          },
+          "target": "d6_return_desk",
+          "place": "labor",
+          "step": "沿来路返站，交回两组读数与原始纸带。"
+        }
+      ],
+      "actions": [
+        "late_d3_accept",
+        "late_d3_street",
+        "late_d3_relay",
+        "late_d3_report",
+        "late_d3_depart"
+      ]
+    },
+    {
+      "id": "late_star_access",
+      "name": "门内的工作",
+      "kind": "主线",
+      "facility": "starcity",
+      "accepted": "late_relay_assigned",
+      "done": "late_star_admitted",
+      "background": "介绍信只能说明来意。先让星城独立核验外线维修，再办理有限准入。",
+      "lead": "",
+      "actions": [
+        "late_star_request"
+      ],
+      "stages": [
+        {
+          "when": {
+            "all": []
+          },
+          "target": "late_perimeter_relay",
+          "place": "starcity",
+          "step": "从外围检修口进入中继站，先断电检查馈线。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_relay_isolate"
+            ]
+          },
+          "target": "relay_power",
+          "place": "relay",
+          "step": "替换接头并检查接地与连续性。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_relay_cable"
+            ]
+          },
+          "target": "relay_mast",
+          "place": "relay",
+          "step": "在天线校验台用配给仪器完成收发测试。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_relay_verified"
+            ]
+          },
+          "target": "star_perimeter_call",
+          "place": "starcity",
+          "step": "返回外围，去污并登记装备；值守独立核验后办理临时证。"
+        }
+      ]
+    },
+    {
+      "id": "late_family",
+      "name": "交接间",
+      "kind": "主线",
+      "facility": "star_interior",
+      "accepted": "late_star_admitted",
+      "done": "late_father_truth_seen",
+      "background": "先核实家庭身份，再与父亲见面。重逢不要求立即原谅，也不替代公共责任。",
+      "lead": "",
+      "actions": [
+        "late_identity"
+      ],
+      "stages": [
+        {
+          "when": {
+            "all": []
+          },
+          "target": "late_star_guard",
+          "place": "star_interior",
+          "step": "在接待处核对家庭登记。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_identity_checked"
+            ]
+          },
+          "target": "late_father",
+          "place": "star_interior",
+          "step": "到交接间与父亲见面，可展示照片，也可以暂时不谈。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_father_first_seen"
+            ]
+          },
+          "target": "late_father",
+          "place": "star_interior",
+          "step": "见面后领取这一班的标定工作。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_work_assigned"
+            ]
+          },
+          "target": "late_lab",
+          "place": "star_interior",
+          "step": "隔离低压电源，核对参考回路。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_lab_ready"
+            ]
+          },
+          "target": "late_archive",
+          "place": "star_interior",
+          "step": "工作完成后，查阅获准调阅的私人通信记录。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_archive_read"
+            ]
+          },
+          "target": "late_father",
+          "place": "star_interior",
+          "step": "带着看过的具体记录，再与父亲交谈。"
+        }
+      ]
+    },
+    {
+      "id": "late_warning",
+      "name": "风变之前",
+      "kind": "主线",
+      "facility": "star_interior",
+      "accepted": "late_work_assigned",
+      "done": "late_campaign_complete",
+      "background": "取得独立读数，核实预警，在四种实际方案中作出选择并执行。准备期间可继续探索与支线。",
+      "lead": "",
+      "actions": [
+        "late_weather_review"
+      ],
+      "stages": [
+        {
+          "when": {
+            "all": []
+          },
+          "target": "late_street_probe",
+          "place": "east_district",
+          "step": "记录诊所背风点；中继站裸露区也要取得一组有时间的读数。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_sheltered_reading"
+            ]
+          },
+          "target": "relay_probe",
+          "place": "relay",
+          "step": "在中继站记录暴露区风向、时间与沉降读数。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_exposed_reading"
+            ]
+          },
+          "target": "late_lev",
+          "place": "star_interior",
+          "step": "将两处读数交列夫复核，再讨论可执行的方案。"
+        },
+        {
+          "when": {
+            "all": [
+              "late_four_plans_seen"
+            ]
+          },
+          "target": "late_planning",
+          "place": "star_interior",
+          "step": "核对四种方案，完成准备后再确认最终行动。"
+        }
+      ]
+    },
+    {
+      "id": "late_perimeter",
+      "name": "呼号之后的路",
+      "kind": "主线",
+      "facility": "starcity",
+      "accepted": "late_north_contacted",
+      "done": "late_relay_assigned",
+      "background": "阵营负责人说明了东方-7 的呼叫和外围位置。介绍信说明来意，准入仍由星城决定。",
+      "lead": "",
+      "actions": [
+        "late_north_contact"
+      ],
+      "stages": [
+        {
+          "when": {
+            "all": []
+          },
+          "target": "east_north_entry",
+          "place": "east_district",
+          "step": "从所属聚落出站，沿北线接送路到星城外围；在外侧声讯柱申请外线交接。"
+        }
+      ]
+    }
+  ],
+  "extensions": {
+    "commune_guard": [
+      "field_c2_accept",
+      "late_c2_report",
+      "field_c3_accept",
+      "late_c3_report",
+      "late_north_contact"
+    ],
+    "commune_baranova": [
+      "late_c2_family",
+      "late_c2_letters"
+    ],
+    "commune_leave": [
+      "late_c2_depart",
+      "late_c3_depart"
+    ],
+    "commune_radiator": [
+      "late_c3_cold"
+    ],
+    "commune_boiler": [
+      "late_c3_diagram",
+      "late_c3_isolate",
+      "late_c3_repair"
+    ],
+    "commune_salvage": [
+      "late_c3_parts"
+    ],
+    "commune_hall": [
+      "late_c3_meeting"
+    ],
+    "sech_elder": [
+      "field_s1_accept",
+      "late_s1_report",
+      "field_s2_accept",
+      "late_s2_report",
+      "field_s3_accept",
+      "late_s3_report",
+      "late_north_contact"
+    ],
+    "sech_sergey": [
+      "late_s2_brief",
+      "late_s2_account"
+    ],
+    "sech_leave": [
+      "late_s1_depart",
+      "late_s2_depart",
+      "late_s3_depart"
+    ],
+    "d6_return_desk": [
+      "late_d1_accept",
+      "late_d1_report",
+      "late_d2_accept",
+      "late_d2_truth",
+      "late_d2_report",
+      "late_d3_accept",
+      "late_d3_report",
+      "late_d2_polish",
+      "late_north_contact"
+    ],
+    "d6_surface_gate": [
+      "late_d1_depart",
+      "late_d3_depart"
+    ],
+    "nina": [
+      "late_d2_nina"
+    ],
+    "star_perimeter_call": [
+      "late_star_request",
+      "late_star_decontam",
+      "late_star_enter",
+      "late_star_return_home"
+    ],
+    "late_street_probe": [
+      "late_sheltered_probe"
+    ],
+    "east_north_entry": [
+      "late_take_north_foot"
+    ]
+  }
+}

@@ -45,6 +45,20 @@ func resolve_check(key:String,chance:int) -> bool:
 	last_outcome={"kind":"success" if success else "failure","chance":chance,"key":key}
 	return success
 const ITEMS = {
+ "late_mailbag":["尤里的邮袋","待交给本人收取的书信与投递存根，不公开接应住址。","任务文件"],
+ "late_valve_parts":["调节阀芯与密封垫","对应公社家属支路的维修件，由机修班配给。","任务文件"],
+ "late_brake_kit":["检修车制动套件","匹配放气接头与低压试车软管。","任务文件"],
+ "late_coupling":["拖车联接销","带防脱孔的联接销，装好后仍需保险与制动测试。","任务文件"],
+ "late_track_parts":["旁线保护座","道岔电机保护座与手动锁闭销，按旁线编号配给。","任务文件"],
+ "late_driver_statement":["运输员的本人说明","阿尔乔姆愿意当面说明被扣货物和未收到款项。","任务文件"],
+ "late_water_joint":["公共取水接头","妮娜核对过的生活层支路接头，不用于高压总管。","任务文件"],
+ "late_readings":["原始测量纸带","保留地点、时间、仪器校准标记和风向，不能用一个点代替整条线路。","任务文件"],
+ "late_calibrator":["外线校验仪","星城配给的低压校验仪与匹配接头，测试编号由独立接收机复核。","任务文件"],
+ "late_faction_letter":["技术经历与联络说明","说明伊万的外勤经历及回信方式，不是星城入内许可。","任务文件"],
+ "late_acknowledgements":["预警接收回执","接收人逐项复述并登记的来源、时间和调度结果。","任务文件"],
+ "late_civilian_schedule":["民用警报与席位副本","中央与现场共同持有的民用席位、发布时间和本地警报安排。","任务文件"],
+ "late_network_manual":["校准与维修副本","包含仪器标定、备件规格和故障记录，供受训人员接手维护。","任务文件"],
+ "late_receiver_modules":["便携接收模块","两只封好的可搬接收模块，需要交给受训人员并实际校验。","任务文件"],
  "c1_medicine":["封签药箱","交接编号与派工单一致的两只小药箱，主要装着敷料和退热药。交给公社医务室签收；不能出售。","任务"],
  "grey_carbine":["灰狗旧式卡宾枪","从灰狗手中缴获的五发卡宾枪，使用土制弹。射击间隔较长，单发威力高；空仓时按 R 装填。","武器"],
  "pool_sample":["沉淀池封存样本","地表委托所需的污染样本，已单独封口。交给公社守备或谢契军需处，不能出售。","任务物品"],
@@ -331,7 +345,7 @@ static func once_topic(key:String)->bool:
 	return Narrative.CHAT.has(key) or key in ["father","vera_heat","semyon_advice","semyon_radio","briefing","igor_talk","armory_check","gate_daily","coal_ask","resident_shift","resident_igor","vera_day","vera_nina","knock_rooms","nina_reckless"]
 
 func serialize() -> Dictionary:
-	return {"version":1,"content_revision":27,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
+	return {"version":1,"content_revision":33,"flags":flags,"items":items,"intel":intel,"route":route,"ending":ending,"economy":economy,"conversations":conversations,"last_greetings":last_greetings,"checkpoint":departure_checkpoint,"read_topics":read_topics}
 func restore(data: Dictionary):
 	flags=data.get("flags",{}).duplicate(true)
 	preload("res://scripts/publications.gd").normalize(self)
@@ -409,4 +423,5 @@ func restore(data: Dictionary):
 	Campaign.Journey.migrate(self,data)
 	Campaign.Access.migrate(self,data)
 	Campaign.Medical.migrate(self)
+	Campaign.Complete.migrate(self)
 	changed.emit()

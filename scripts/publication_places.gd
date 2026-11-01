@@ -13,8 +13,8 @@ const PLACES={
 	"pub_poems_window":Vector3(5.9,.805,-20.15),
 	"pub_route_sech":Vector3(-8.9,.805,-20.1),
 	"pub_diary_mine":Vector3(11.35,.805,-9.85),
-	"pub_prewar_science":Vector3(-21,.465,9),
-	"pub_route_weather":Vector3(12.65,.805,2.85)}
+	"pub_prewar_science":Vector3(-18.5,.805,-21.2),
+	"pub_route_weather":Vector3(-6,.805,-20)}
 
 static func build(world):
 	if world.floor_id=="starcity":return

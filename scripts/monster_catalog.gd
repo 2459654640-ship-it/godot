@@ -9,6 +9,8 @@ const KINDS={
 static func get_kind(id:String)->Dictionary:return KINDS.get(id,KINDS.mutant)
 static func wave(encounter:String,fallback:String,count:int)->Array:
  if fallback=="soldier":return []
+ if encounter=="relay_final":return ["behemoth","pouncer","spitter","mutant"].slice(0,count)
+ if encounter=="relay_feeder" or encounter.begins_with("junction_"):return ["mutant","pouncer","spitter"].slice(0,count)
  if encounter=="city_radio_nest":return ["spitter","pouncer","mutant"].slice(0,count)
  if encounter=="east_road":return ["mutant","pouncer"].slice(0,count)
  var compositions={"pump":["mutant","mutant","pouncer"],"workshop":["mutant","spitter","mutant"],"warehouse":["pouncer","mutant","spitter","mutant"],"surface_yard":["mutant","pouncer","mutant"],"surface_pool":["spitter","mutant","pouncer","mutant"]}
@@ -16,4 +18,4 @@ static func wave(encounter:String,fallback:String,count:int)->Array:
  if encounter.ends_with("_west"):return ["mutant","pouncer","mutant"].slice(0,count)
  if encounter.ends_with("_north"):return ["spitter","mutant","pouncer"].slice(0,count)
  return []
-static func budget(kind:String)->int:return 5 if kind=="pouncer" else 4
+static func budget(kind:String)->int:return 20 if kind=="behemoth" else (5 if kind=="pouncer" else 4)

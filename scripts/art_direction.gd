@@ -1,7 +1,10 @@
 extends RefCounted
 ## Exposure is authored per place. No screen-wide tint alters portraits or UI.
-const OUTDOORS=["surface","starcity","east_district"]
+const OUTDOORS=["relay","surface","starcity","east_district"]
 const PROFILES={
+	"junction":["879b9a",.25,"b1bcb5",.12],
+	"star_interior":["89a7aa",.26,"b7c9c5",.13],
+	"relay":["9baeb9",.31,"c8d0d4",.58],
 	"life":["87968d",.32,"b3b6a4",.23],
 	"labor":["88938e",.29,"a1b2ae",.22],
 	"commune":["b7aa91",.27,"c7c3ae",.12],
