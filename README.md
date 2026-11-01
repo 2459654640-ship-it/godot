@@ -1,4 +1,4 @@
-# 地铁1982 · v33 完整流程版
+# 地铁1982 · v34 场景与体验打磨版
 
 完整解压这个文件夹，运行 `Metro1982.exe`。无需安装 Godot；请保留同目录下的 `Metro1982.pck` 和整个 `content` 文件夹。Linux 运行 `Metro1982.x86_64`。
 
@@ -10,6 +10,8 @@ WASD 移动，E 互动，滚轮切换邻近目标。I 背包，J 手记，M 地�
 
 如果旧显卡的 Vulkan 驱动无法启动，可以从终端运行 `Metro1982.exe --rendering-method gl_compatibility`；画面设置可调整四档画质、分辨率和窗口模式。首次进入场景可能需要建立着色器缓存。
 
-`content/manifest.json` 和 `SHA256SUMS.txt` 提供资源大小及校验值。截图、文案校订本和版本说明在：https://github.com/2459654640-ship-it/godot/tree/metro-reference-library/updates/v33
+`content/manifest.json` 和 `SHA256SUMS.txt` 提供资源大小及校验值。截图、文案校订本和版本说明在：https://github.com/2459654640-ship-it/godot/tree/metro-reference-library/updates/v34
 
 本包已做 Linux 原生启动、工程分支和界面检查；Windows 模板已打包，尚未在 Windows 真机进行长时间兼容性与性能验收。音乐包含项目方确认获商用授权的上传录音，以及附 MIDI 的原创合成配乐；第三方许可见 licenses 和 GODOT-LICENSE.txt。
+
+本轮重做水厂机组与材质、城区锅炉房和装卸构件、星城切角测控大厅；固定界面采用纸张和仪器印刷风格。已接任务补充出发、作业与返程说明；手动拔枪只显示游戏准星，打开界面恢复鼠标。伊万认可图集未改动。

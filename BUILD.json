@@ -1,8 +1,10 @@
 {
-  "version": "v33",
-  "source_commit": "dd30051454cd5ac902c6c8e58882b2f261e690f0",
+  "version": "v34",
+  "source_commit": "0733edd34215a0276a6a7dd6d78676402947eb6c",
   "engine": "Godot 4.6.3",
   "windows_template": "official release x86_64",
-  "native_smoke": "Linux release; source-free main menu and new game prologue, GUI / software Vulkan",
-  "windows_hardware_acceptance": "pending"
+  "windows_hardware_acceptance": "pending",
+  "source_regression_unique_suites": 22,
+  "cursor_gui_aim_and_menu": "passed; source Vulkan window; GUI_CURSOR_AIM / GUI_CURSOR_MENU",
+  "native_smoke": "passed: source-free Linux official release; main menu, mouse click into new-game prologue; screenshots native-title/native-prologue"
 }
