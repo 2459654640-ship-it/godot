@@ -36,17 +36,18 @@ static func render(h,sequence:String=""):
  var pause=h.button("暂停  Esc",func():h.show_comic_pause(),true,true);pause.position=Vector2(1380,40);pause.size=Vector2(148,42);stage.add_child(pause)
  var entries=paragraphs(h,p);var index=clampi(int(s.flags.comic.get("line_index",0)),0,maxi(0,entries.size()-1));s.flags.comic.line_index=index
  var entry:Dictionary=entries[index] if not entries.is_empty() else {"speaker":"旁白","text":p.body}
- var caption=VBoxContainer.new();caption.position=Vector2(80,620);caption.size=Vector2(1440,132);caption.add_theme_constant_override("separation",12);stage.add_child(caption);h.modal_box=caption
+ var dense=p.get("choices",[]).size()>3 and index==entries.size()-1
+ var caption=VBoxContainer.new();caption.position=Vector2(80,570 if dense else 620);caption.size=Vector2(1440,132);caption.add_theme_constant_override("separation",12);stage.add_child(caption);h.modal_box=caption
  var narration=entry.speaker in ["narrator","旁白"]
  if not narration:caption.add_child(h.label(entry.get("name",String(entry.speaker).trim_prefix("voice_")),17,h.amber))
  var rich=h.prose(entry.text if narration else "「"+entry.text+"」",26,caption);rich.add_theme_color_override("default_color",Color("eee8d7"));rich.custom_minimum_size=Vector2(1440,90);rich.visible_characters=0
  h.typing.append({"label":rich,"total":rich.get_total_character_count(),"elapsed":0.0,"rate":46.0,"root":caption})
- var buttons=VBoxContainer.new();buttons.position=Vector2(80,810);buttons.size=Vector2(1440,150);buttons.add_theme_constant_override("separation",9);stage.add_child(buttons)
+ var buttons=GridContainer.new();buttons.columns=2 if dense else 1;buttons.position=Vector2(80,748 if dense else 810);buttons.size=Vector2(1440,192 if dense else 150);buttons.add_theme_constant_override("h_separation",14);buttons.add_theme_constant_override("v_separation",9);stage.add_child(buttons)
  if index<entries.size()-1:
   var b=h.button("继续  ›",func():advance(h));b.custom_minimum_size.y=46;buttons.add_child(b)
  elif p.has("choices"):
   for i in p.choices.size():
-   var choice=i;var b=h.button(str(i+1)+"  ·  "+p.choices[i].text,func():h.comic_choose(choice));b.custom_minimum_size.y=43;b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;buttons.add_child(b);h.speech_buttons.append(b)
+   var choice=i;var b=h.button(str(i+1)+"  ·  "+p.choices[i].text,func():h.comic_choose(choice));b.custom_minimum_size.y=58 if dense else 43;b.size_flags_horizontal=Control.SIZE_EXPAND_FILL;b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;buttons.add_child(b);h.speech_buttons.append(b)
  else:
   var b=h.button("穿上外套，出门" if p.get("end","")=="intro" else ("继续  ›" if not p.get("end","").begins_with("map:") else "继续前行  ›"),func():advance(h));b.custom_minimum_size.y=46;buttons.add_child(b)
  h.modal_hint=h.label("空格 / 点击画面  ·  补全文字后继续    |    "+str(index+1)+" / "+str(maxi(1,entries.size())),13,Color("8f9c92"));h.modal_hint.position=Vector2(80,964);stage.add_child(h.modal_hint)

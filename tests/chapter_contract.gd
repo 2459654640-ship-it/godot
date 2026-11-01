@@ -72,10 +72,10 @@ func run():
 			check(w.story.conversations.semyon==records,"reopening conversation retains history without duplicating greeting")
 			w.hud.show_shop();check(w.hud.modal_visible(),"shop renders")
 			w.hud.show_comic("intro");check(w.hud.comic_active,"intro UI renders")
-			w.story.flags.comic.node="intro_semyon";w.hud.show_comic();await frames(3)
+			w.story.flags.comic.node="intro_semyon";w.story.flags.comic.line_index=999;w.hud.show_comic();await frames(3)
 			var reply_count=0
 			for control in w.hud.modal.find_children("*","Button",true,false):
-				if control.text in ["×","暂停"]:continue
+				if control.text in ["×","暂停","暂停  Esc"]:continue
 				reply_count+=1
 				check(control.get_global_rect().end.y<w.hud.modal.get_global_rect().end.y-30,"comic replies stay above footer and do not require scrolling")
 			check(reply_count==2,"both comic choices visible together")

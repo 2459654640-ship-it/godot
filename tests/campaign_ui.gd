@@ -28,7 +28,8 @@ func run():
 	w.hud.comic_active=false;w.hud.show_chapter_end();await frames()
 	await press_text("进入水处理厂");w=current_scene
 	check(w.hud.comic_active and w.story.flags.comic.node=="arrive_waterworks","first facility entry introduces the location")
-	await press_text("进入设施");w=current_scene
+	while w.story.flags.get("comic",{}).get("active",false) and w.story.flags.comic.node=="arrive_waterworks":
+		w.hud.finish_typing();load("res://scripts/ui_comic.gd").advance(w.hud);await frames(8);w=current_scene
 	check(w.floor_id=="waterworks" and not w.story.ending,"v5 endpoint migrates to waterworks map")
 	await press_action("plant_diagram","c_plant_read")
 	await press_action("plant_bypass","c_plant_bleed")

@@ -36,7 +36,7 @@ static func start(s,sequence:String):
 		s.flags.unprotected_departure=true
 		s.economy.health=maxi(1,s.economy.health-8)
 		s.economy.radiation=mini(100,s.economy.radiation+12)
-	s.flags.comic={"active":true,"sequence":sequence,"node":{"intro":"history_war","official":"official_gate","solo":"solo_descent"}.get(sequence,sequence),"visited":[]}
+	s.flags.comic={"active":true,"sequence":sequence,"node":{"intro":"history_war","official":"official_gate","solo":"solo_descent"}.get(sequence,sequence),"visited":[],"line_index":0}
 static func panel(s)->Dictionary:
 	var node=s.flags.get("comic",{}).get("node","")
 	var p:Dictionary=PANELS.get(node,Campaign.data().panels.get(node,{})).duplicate(true)
@@ -100,6 +100,6 @@ static func choose(s,index:int=-1):
 		state.node=choice.next
 	else:state.node=p.next
 	if state.node in ["official_surface","official_plant"]:s.flags.story_time="07:25"
-	state.line_index=0
+	state["line_index"]=0
 	s.flags.comic=state
 	s.changed.emit()

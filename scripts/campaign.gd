@@ -9,7 +9,7 @@ const District=preload("res://scripts/east_district.gd")
 const Medical=preload("res://scripts/medical_chapter.gd")
 const Complete=preload("res://scripts/complete_campaign.gd")
 const NAMES={"junction":"北线货场换乘线","relay":"北线地表中继站","star_interior":"星城测控设施","grey_shelter":"灰狗货场避难所","east_district":"东郊工业片区","waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区","surface":"地表旧泵站","railfront":"旧联络线换乘站"}
-const ITEM_ART={"c1_medicine":"medkit","grey_carbine":"grey_carbine","pool_sample":"mutant_sample","moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
+const ITEM_ART={"late_mailbag":"satchel","late_valve_parts":"wrench","late_brake_kit":"wrench","late_coupling":"scrap_metal","late_track_parts":"scrap_metal","late_driver_statement":"report","late_water_joint":"wrench","late_readings":"report","late_calibrator":"frequency","late_faction_letter":"permit","late_acknowledgements":"report","late_civilian_schedule":"order","late_network_manual":"map","late_receiver_modules":"fuse","c1_medicine":"medkit","grey_carbine":"grey_carbine","pool_sample":"mutant_sample","moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
 static func data()->Dictionary:
 	if _data.is_empty():
 		_data=JSON.parse_string(FileAccess.get_file_as_string("res://data/campaign.json"))
@@ -131,7 +131,7 @@ static func side_tasks(s)->Array:
 		var target:String=current.target
 		if q.id=="north_late" and s.f("sech_member"):
 			current=current.duplicate();current.place="sech";current.target="sech_leave" if s.f("north_inquiry_ready") else "sech_quartermaster";target=current.target
-		if q.facility=="starcity":current={"target":"star_perimeter_call","place":"starcity","step":"暂缓：星城内区封闭，先保留已取得的记录。"};target="star_perimeter_call"
+		if q.facility=="starcity" and not q.id.begins_with("late_"):current={"target":"star_perimeter_call","place":"starcity","step":"旧委托已归档。内区准入需要新的技术核验，已有记录仍然保留。"};target="star_perimeter_call"
 		if q.id=="surface_survey":
 			current=current.duplicate()
 			var home="sech" if s.f("surface_from_sech") else "commune"

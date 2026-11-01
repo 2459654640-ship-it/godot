@@ -88,4 +88,24 @@ func run():
   action(s,"late_finish","star_interior");film(s)
   check(s.ending and s.f("late_campaign_complete") and s.flags.campaign_ending=="warning_"+mode,"complete executed ending "+mode)
   check(s.flags.get("failed_quests",{}).is_empty(),"ending does not fail unrelated optional stories")
+ # A wanted character can arrange Anna's journey only after a real private reconnaissance.
+ var fugitive=fixture("commune");fugitive.route="hatch";fugitive.flags.d6_wanted=true
+ fugitive.flags.merge({"anna_warning_seen":true,"anna_request":true,"anna_first_news":true,"brother_found":true,"east_mine_prepared":true},true)
+ fugitive.context.floor="commune"
+ check(not fugitive.Campaign.available(fugitive,"anna_rescue_depart"),"Anna cannot leave through an unscouted private route")
+ fugitive.flags.east_private_mine_entry=true
+ check(not fugitive.Campaign.available(fugitive,"anna_rescue_depart"),"first reconnaissance alone does not prepare a party's entry")
+ action(fugitive,"late_mine_cover_help","coal")
+ action(fugitive,"late_mine_bell_inspect","coal")
+ check(not fugitive.Campaign.available(fugitive,"late_mine_bell_fix"),"bell must be cleaned before reconnecting")
+ action(fugitive,"late_mine_bell_clean","coal");action(fugitive,"late_mine_bell_fix","coal")
+ check(not fugitive.Campaign.Access.public_entry(fugitive) and not fugitive.Campaign.available(fugitive,"coal_back_d6"),"private rescue cannot legalize D-6 entry")
+ action(fugitive,"anna_rescue_depart","commune")
+ check(fugitive.flags.next_sequence=="anna_private_depart","Anna uses prepared separate internal entry, never the old public-pass journey")
+ fugitive.Comic.start(fugitive,"anna_private_depart")
+ check(fugitive.Comic.panel(fugitive).title=="约好的两个入口","private journey is not replaced by the obsolete permission block")
+ film(fugitive)
+ var tech=fixture("commune");tech.flags.late_relay_assigned=true;tech.flags.late_relay_isolate=true;tech.context.floor="relay"
+ var qs=tech.Campaign.side_tasks(tech).filter(func(t):return t.id=="late_star_access")
+ check(qs.size()==1 and qs[0].target=="relay_power" and qs[0].place=="relay","new technical mission keeps its real stage rather than old closed-interior placeholder")
  print("COMPLETE_CAMPAIGN_RESULT checks=",checks," failures=",failures);quit(1 if failures else 0)

@@ -80,7 +80,7 @@ func direct(id:String,stage:String,destination:Vector3,wait_for_player:bool=fals
  if a.story_waiting and not notices.has(stage):
   notices[stage]=true;w.hud.toast("同行者会在原地等你；回来靠近后继续。手记地图可查看当前位置。",6)
  var reached=Vector2(a.position.x-point.x,a.position.z-point.z).length()<.42
- if not reached and a.path_points.is_empty() and a.reached_anchor:
+ if not reached and a.path_points.is_empty():
   a.rest_time-=_tick_delta
   if a.rest_time<=0:
    a.goal=Vector3.INF;a.travel_to(point);a.rest_time=1.0

@@ -2,8 +2,10 @@
 config_version=5
 
 [application]
-config/name="地铁1982 · D-6"
-run/main_scene="res://scenes/main_menu.tscn"
+config/name="地铁1982"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="godot/app_userdata/地铁1982 · D-6"
+run/main_scene="res://scenes/bootstrap.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/description="地铁1982 · 等距叙事探索、设施地图与图文旅程"
 

@@ -85,7 +85,7 @@ func sync():
   var p=Vector3(-19,0,-12) if w.floor_id=="railfront" else Vector3(-8,0,18.7)
   if w.floor_id=="railfront" and s.f("c1_lidiya_waiting"):p=WAYPOINTS[-1]
   w.person(ID,p,"cloth",false,"coal_medic");var actor=w.npcs[ID];w.living.configure(actor)
-  var saved:Dictionary=w.arrival_data.get("npc_positions",{}).get(ID,{})
+  var saved:Dictionary=w.arrival_data.get("npc_positions",{}).get(ID,{}) if w.arrival_data.get("floor","")==w.floor_id else {}
   if saved.is_empty() and s.flags.get("medical_actor",{}).get("floor","")==w.floor_id:saved=s.flags.medical_actor
   if saved.get("position",[]).size()==3:
    var a=saved.position;actor.position=w.clear_arrival(Vector3(a[0],0,a[2]))

@@ -58,6 +58,7 @@ static func junction(w):
 static func star(w):
  base(w,true);var k=w.kit
  # A circular ring of instrumentation defines the main hall instead of a grid of desks.
+ Props.gimbal(k,Vector3(0,0,-1))
  var ring=k.cyl("ControlHallTerrazzoDisc",Vector3(0,.047,-1),8.9,.018,"institution_tile");ring.mesh.radial_segments=64
  for i in 12:
   var angle=TAU*float(i)/12.;var p=Vector3(sin(angle)*6.4,0,-1+cos(angle)*6.4)

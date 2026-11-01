@@ -343,7 +343,11 @@ static func people(w):
 		if not w.story.f("c_done_plant_leave"):
 			w.person("plant_guide",Vector3(10,0,7.5),"green",true,"commander_masked")
 			w.person("plant_veteran",Vector3(13,0,7),"green",true,"veteran_masked")
+	if w.floor_id in ["junction","relay","starcity"] and w.story.f("sided_veteran"):
+		var p=Vector3(-7,0,8) if w.floor_id=="starcity" else LAYOUTS[w.floor_id].spawn+Vector3(1.6,0,0)
+		w.person("plant_veteran",p,"green",false,"veteran_masked" if w.floor_id in ["relay","starcity"] else "veteran")
 static func targets(w):
+	if w.floor_id in ["junction","relay","starcity"] and w.npcs.has("plant_veteran"):w.target("plant_veteran",w.npcs.plant_veteran.position,"老兵","talk")
 	for extra in ["commune_aleksei","mine_anna"]:
 		if w.npcs.has(extra):w.target(extra,w.npcs[extra].position,Campaign.data().interactions[extra].name,"talk")
 	for e in LAYOUTS[w.floor_id].objects:

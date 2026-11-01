@@ -1,0 +1,20 @@
+[
+  {
+    "id": "reunion_theme",
+    "title": "桌子两边",
+    "bpm": 60,
+    "seconds": 66.0,
+    "peak": 0.48,
+    "license": "CC0-1.0",
+    "source": "Original composition; matching MIDI and procedural piano / string rendering, no samples."
+  },
+  {
+    "id": "warning_theme",
+    "title": "有人收到消息",
+    "bpm": 72,
+    "seconds": 55.0,
+    "peak": 0.48,
+    "license": "CC0-1.0",
+    "source": "Original composition; matching MIDI and procedural piano / string rendering, no samples."
+  }
+]

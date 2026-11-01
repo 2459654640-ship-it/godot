@@ -51,7 +51,7 @@ func run():
 	check(game.position_cell==before,"pause stops falling")
 	game.queue_free();await frames()
 	var locations=0
-	for floor_id in ["life","labor","waterworks","commune","sech","coal","starcity"]:
+	for floor_id in ["life","labor","waterworks","commune","sech","coal","starcity","star_interior"]:
 		var w=load("res://scenes/"+("d6" if floor_id=="life" else floor_id)+".tscn").instantiate()
 		root.add_child(w);current_scene=w;await frames(5);w.hud.close();w.set_physics_process(false)
 		w.player.set_physics_process(false)

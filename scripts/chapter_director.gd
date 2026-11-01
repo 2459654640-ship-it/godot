@@ -23,6 +23,10 @@ static func dress(world):
   for z in [-3.4,-4.3]:
    var wheel=k.cyl("LivingBranchHandwheel",Vector3(-5.7,1.3,z),.16,.045,"red");wheel.rotation.z=PI/2
   Props.console(k,Vector3(-6.3,1,-3.8),PI,.7)
+ if world.floor_id=="coal":
+  k.box("MineShiftBellMount",Vector3(-17.72,1.75,12),Vector3(.06,.65,.52),"wood")
+  var bell=k.cyl("MineShiftBell",Vector3(-17.64,1.78,12),.19,.08,"brass");bell.rotation.z=PI/2
+  k.pipe(Vector3(-17.55,1.55,12),Vector3(-17.55,.8,11.5),.015,"dark_steel")
  if world.floor_id=="starcity":
   k.box("ExternalServiceRoutePost",Vector3(8.8,1.1,11),Vector3(.12,2.2,.12),"metal")
   k.box("ExternalServiceArrow",Vector3(8.8,1.7,11.05),Vector3(1.1,.25,.035),"paper")
@@ -57,7 +61,7 @@ func actor(id:String,p:Vector3,art:String,present:bool=true):
  if not w.npcs.has(id):
   w.person(id,w.living.snap(w.clear_arrival(p),id),"cloth",false,art);w.living.configure(w.npcs[id]);owned.append(id)
   var records:Dictionary=w.story.flags.get("late_actor_positions",{}).get(w.floor_id,{})
-  var record=w.arrival_data.get("npc_positions",{}).get(id,{})
+  var record=w.arrival_data.get("npc_positions",{}).get(id,{}) if w.arrival_data.get("floor","")==w.floor_id else {}
   if record.get("position",[]).size()==3:records=records.duplicate();records[id]=record.position
   if records.get(id,[]).size()==3:
    var a=records[id];w.npcs[id].position=w.clear_arrival(Vector3(a[0],0,a[2]))
@@ -75,6 +79,8 @@ func sync():
    if s.f("late_d2_started"):target("late_d6_meter",Vector3(-8,0,-3.6))
    if s.f("late_d1_done"):
     actor("late_wounded_one",Vector3(1,0,-9),"ambient_worker");actor("late_wounded_two",Vector3(-2,0,-9),"ambient_elder")
+  "coal":
+   if s.f("late_mine_cover_help"):target("late_mine_bell",Vector3(-16.5,0,11.8))
   "starcity":
    if s.f("late_relay_assigned") or s.f("late_d3_started") or s.f("late_star_admitted"):target("late_perimeter_relay",Vector3(8,0,11))
   "junction":
@@ -108,9 +114,14 @@ func walk(id:String,route:Array,finish:String,offset:Vector3=Vector3.ZERO)->bool
  var stages:Dictionary=w.story.flags.get("late_walk_stages",{}).duplicate(true)
  var stage=clampi(int(stages.get(id,0)),0,route.size()-1)
  var point:Vector3=route[stage]+offset
+ # Transit points are corridor waypoints, not four people competing for one exact spot.
+ if stage+1<route.size() and w.npcs[id].position.distance_to(point)<.85:
+  stages[id]=stage+1;w.story.flags.late_walk_stages=stages;return false
  if w.living.direct(id,"late_"+id+"_"+str(stage),point,true):
   if stage+1<route.size():stages[id]=stage+1;w.story.flags.late_walk_stages=stages
-  else:w.living.mark(finish);return true
+  else:
+   var done:Dictionary=w.story.flags.get("late_route_complete",{}).duplicate(true);done[id]=true;w.story.flags.late_route_complete=done
+   w.living.mark(finish);return true
  return false
 func tick(_delta):
  if w.hud.modal_visible() or w.departure_animating:return
@@ -137,8 +148,14 @@ func tick(_delta):
   for id in ["late_final_woman","late_final_worker"]:
    if not walk(id,[Vector3(-20,0,-4),Vector3(-25,0,8),Vector3(-24,0,22)],id+"_safe",Vector3(0 if id=="late_final_woman" else 1,0,0)):arrived=false
   if arrived:w.living.mark("late_final_execution_done","改道住户已到接应处，回测控台核对回执即可完成交接。")
- for pair in [["junction_family","late_family_0"],["junction_patients","late_junction_patient_0"],["relay_evac_group","late_final_woman"]]:
-  if w.targets.has(pair[0]) and w.npcs.has(pair[1]):w.targets[pair[0]].pos=w.npcs[pair[1]].position
+ for pair in [["junction_family",["late_family_0","late_family_1","late_family_2","late_family_3"]],["junction_patients",["late_junction_patient_0","late_junction_patient_1"]],["relay_evac_group",["late_final_woman","late_final_worker"]]]:
+  if not w.targets.has(pair[0]):continue
+  var lowest=100
+  for id in pair[1]:
+   if not w.npcs.has(id) or s.flags.get("late_route_complete",{}).get(id,false):continue
+   var stage=int(s.flags.get("late_walk_stages",{}).get(id,0))
+   if stage<lowest:lowest=stage;w.targets[pair[0]].pos=w.npcs[id].position
+
  for id in owned:
   if w.npcs.has(id) and w.targets.has(id):w.targets[id].pos=w.npcs[id].position
 func capture():

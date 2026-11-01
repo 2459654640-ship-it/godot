@@ -350,6 +350,7 @@ func restore(data: Dictionary):
 	flags=data.get("flags",{}).duplicate(true)
 	preload("res://scripts/publications.gd").normalize(self)
 	read_topics.assign(data.get("read_topics",[]))
+	if flags.has("comic") and flags.comic is Dictionary and flags.comic.has("line_index"):flags.comic["line_index"]=maxi(0,int(flags.comic.line_index))
 	departure_checkpoint=data.get("checkpoint",{}).duplicate(true)
 	if not flags.has("intro_done") and not flags.has("comic"):flags.intro_done=true
 	economy=Economy.restored(data.get("economy",{}))

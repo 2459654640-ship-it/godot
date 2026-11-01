@@ -14,6 +14,7 @@ static func extend(c:Dictionary):
 		if q.id=="commune_chapter":q.stages[0].step="到人民议事厅的座席区，按 E 参加居民议事；不必绕到讲台后找人。"
 		if q.id=="sech_chapter":q.stages[0].step="进入谢契议事室的会合区域，按 E 参加入伙轮值。"
 static func allowed(s,key:String)->bool:
+	if key=="anna_rescue_depart" and not public_entry(s):return s.Campaign.District.private_mine(s) and s.f("late_mine_cover_ready")
 	if key in ["return_explain","return_witness","return_audit","return_limited"]:return false
 	if key=="workers_coal":return false # Pending the separately reviewed private-contact chapter.
 	if key in ["east_depart_labor","east_enter_labor"]:return public_entry(s)

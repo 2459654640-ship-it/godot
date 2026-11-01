@@ -75,7 +75,9 @@ func run():
   s.give("mask");s.give("filter");var prefix="c" if faction=="commune" else "s"
   check(not Campaign.available(s,faction+"_star"),"early radio/chores cannot bypass long mainline "+faction)
   for num in range(1,4):
-   var id=prefix+str(num);act(s,"field_"+id+"_accept");act(s,"field_"+id+"_depart")
+   var id=prefix+str(num);act(s,"field_"+id+"_accept")
+   s.flags.erase("late_"+id+"_started");s.flags.erase("late_active_job") # An already accepted legacy save retains its old mission.
+   act(s,"field_"+id+"_depart")
    s=walk(s,id+"_intro");check(s.flags.next_facility=="railfront","sortie reaches playable map")
    s.context.floor="railfront";act(s,"front_supply");var ammo=s.economy.handmade
    s.act("c_front_supply");check(not s.last_action_valid and s.economy.handmade==ammo,"one supply parcel per sortie")

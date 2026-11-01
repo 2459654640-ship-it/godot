@@ -75,6 +75,9 @@ static func include_quest(s,q:Dictionary)->bool:
 static func task_stage(s,q:Dictionary,current:Dictionary)->Dictionary:
  var f:String=s.context.get("floor","")
  var c=current.duplicate()
+ if q.id=="anna_rescue" and not s.Campaign.Access.public_entry(s) and not s.f("anna_rescue_started"):
+  if not s.f("east_mine_prepared"):return {"target":"commune_printer","place":"commune","step":"先请娜佳确认矿区内部接应、检修入口和退路，寻亲材料不能用于正门通行。"}
+  if not s.f("late_mine_cover_ready"):return {"target":"coal_clerk","place":"coal","step":"从已侦察的检修路找瓦西里，确认安娜同行这一班的带路人与撤离；报班铃可亲手修，也可出维修料请工友修。"}
  if q.id=="late_perimeter" and f==home(s):
   c.target={"commune":"commune_leave","sech":"sech_leave","labor":"d6_surface_gate"}[f];c.place=f;c.step="从本聚落出站，沿北线接送路到星城外围，在声讯柱申请外线检修。"
  if q.id=="late_d3" and s.f("late_d3_street") and f=="starcity" and not s.f("late_d3_relay"):
@@ -128,8 +131,17 @@ static func decorate(v:Dictionary,s)->Dictionary:
  if not s.Campaign.data().interactions.has(v.id):
   for key in data().extensions.get(v.id,[]):
    if s.Campaign.available(s,key):v.options.append(s.opt("c_"+key,data().actions[key].text))
+ if v.id=="plant_veteran" and s.context.get("floor","") in ["junction","relay","starcity"]:
+  v.body="老兵正在检查背带，听到你过来，抬头示意你说。"
+  v.options=[]
+  for key in ["late_veteran_route","late_veteran_family"]:
+   if s.Campaign.available(s,key):v.options.append(s.opt("c_"+key,data().actions[key].text))
  if v.id in ["commune_guard","sech_elder","d6_return_desk"] and active_job(s)!="":
   var id=active_job(s);v.body+="\n当前工作："+data().jobs[id].name+"。\n"+objective(s)
+ if v.id=="commune_anna" and s.f("late_mine_cover_ready") and not s.f("anna_rescue_started"):
+  v.body+="\n安娜：「瓦西里把班次确认了。我跟工友走地下搬运支线，你从检修巷进，我们在休养间会合。没有人会去正门替你递材料。」"
+  for option in v.options:
+   if option.key=="c_anna_rescue_depart":option.text="按内部接应安排出发，与安娜在矿区会合。"
  if v.id=="late_planning":
   var mode:String=s.flags.get("late_final_mode","")
   v.body+="\n当前方案："+(data().endings["warning_"+mode].title if mode!="" else "尚未选择")+"。"
@@ -144,6 +156,8 @@ static func decorate(v:Dictionary,s)->Dictionary:
  v.options=v.options.filter(func(o):return not data().actions.has(String(o.key).trim_prefix("c_")) or s.Campaign.available(s,String(o.key).trim_prefix("c_")))
  return v
 static func act(s,key:String)->String:
+ if key=="anna_rescue_depart" and not s.Campaign.Access.public_entry(s):
+  s.Campaign.District.depart(s,String(s.context.get("floor",home(s))));s.flags.next_sequence="anna_private_depart"
  for id in data().jobs:
   var j:Dictionary=data().jobs[id]
   if key==j.accept:
@@ -178,6 +192,10 @@ static func act(s,key:String)->String:
  if key=="late_star_return_home":s.flags.east_arrival="starcity"
  if key=="late_weather_review":s.flags.tracked_quest="late_warning"
  if key=="late_final_confirm":s.flags.tracked_quest="late_warning"
+ if key=="late_veteran_route":
+  if s.context.get("floor","")=="relay":return "老兵：「风把废墟里的尘土卷起来了，面具别摘。你修设备，我盯着中间那条路。西侧挡风墙后能绕行，别站在空地里和它们耗。」"
+  if s.context.get("floor","")=="starcity":return "老兵：「他们只给了你工作证，我在外面等。值守自己的规矩，你把检修和家里的事分别问清楚。要走了来叫我，别一个人闷着。」"
+  return "老兵：「中间的轨道有兽群，西侧维修廊能绕。带人走的时候先看他们跟上没有，别只顾着自己的脚步。我在后面看着。」"
  if key=="late_c2_letters" and s.f("late_c2_public_consent"):return "巴拉诺娃先征询每位收件人的意见，再把愿意署名的收信名单留给委员会。地址和接应人仍不公开；没有消息的几封继续单独查找。尤里坐在门边，帮她读被水浸淡的字。"
  if key=="late_plan_review":return objective(s)+"\n必要校验仪、接头和便携模块由主线配给；无须随机搜刮或出售关键物品换取。"
  return ""

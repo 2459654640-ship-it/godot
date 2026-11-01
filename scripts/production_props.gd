@@ -59,27 +59,47 @@ static func chair(k,p:Vector3,heading:float=0):
  bevel(k,"ChairBack",Vector3(0,.83,.22),Vector3(.49,.45,.065),"warm_wood",n)
  for x in [-.18,.18]:
   for z in [-.18,.18]:k.cyl("ChairLeg",Vector3(x,.23,z),.023,.46,"dark_steel",n)
+static func panel_face(k,parent:Node3D,p:Vector3,size:Vector2,variant:int=0,tilt:float=0):
+ var face=MeshInstance3D.new();face.name="InstrumentFace";var quad_mesh=QuadMesh.new();quad_mesh.size=size;face.mesh=quad_mesh
+ var ink=ShaderMaterial.new();ink.shader=load("res://assets/visual/control_panel.gdshader");ink.set_shader_parameter("panel_atlas",load("res://assets/visual/control_panels.png"));ink.set_shader_parameter("atlas_cell",Vector2(posmod(variant,2),posmod(variant/2,2)))
+ face.material_override=ink;parent.add_child(face);face.position=p;face.rotation.x=tilt
+ return face
 static func console(k,p:Vector3,heading:float=0,width:float=1.5):
  var n=root(k,"AnalogConsole",p,heading)
- bevel(k,"ConsoleBase",Vector3(0,.42,0),Vector3(width,.84,.68),"dark_steel",n,true)
- bevel(k,"ConsolePanel",Vector3(0,.98,0),Vector3(width+.06,.30,.8),"institution_enamel",n)
- for x in [-width*.28,width*.12]:
-  bevel(k,"MeterRim",Vector3(x,1.03,.41),Vector3(.35,.21,.03),"brass",n)
-  k.box("MeterFace",Vector3(x,1.03,.432),Vector3(.31,.17,.012),"paper",false,n)
-  k.box("MeterNeedle",Vector3(x,1.03,.445),Vector3(.012,.12,.008),"black",false,n).rotation.z=.28
- for x in [-.26,0,.26]:
-  k.cyl("ConsoleToggle",Vector3(x,1.15,.15),.025,.06,"black",n)
-  k.box("ConsoleCaption",Vector3(x,1.143,.23),Vector3(.14,.008,.045),"paper",false,n)
- k.box("PanelIndicator",Vector3(width*.39,1.04,.425),Vector3(.06,.07,.02),"warm_light",false,n)
+ bevel(k,"ConsoleBase",Vector3(0,.42,0),Vector3(width,.84,.72),"dark_steel",n,true)
+ # Sloping console housing; the face looks toward the operator at +Z.
+ var left=-width*.5;var right=width*.5;var st=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
+ var a=Vector3(left,.80,-.36);var b=Vector3(right,.80,-.36);var c=Vector3(right,.80,.47);var d=Vector3(left,.80,.47)
+ var e=Vector3(left,1.62,-.36);var f=Vector3(right,1.62,-.36);var g=Vector3(right,1.02,.47);var h=Vector3(left,1.02,.47)
+ quad(st,[a,b,c,d],Vector3.DOWN);quad(st,[a,b,f,e],Vector3.FORWARD);quad(st,[d,c,g,h],Vector3.BACK)
+ quad(st,[a,d,h,e],Vector3.LEFT);quad(st,[b,f,g,c],Vector3.RIGHT);quad(st,[e,h,g,f],Vector3(0,.81,.59).normalized())
+ var shell=MeshInstance3D.new();shell.name="SlopedConsoleHousing";shell.mesh=st.commit();shell.material_override=k.mats.institution_enamel;n.add_child(shell)
+ var count=maxi(1,ceili(width/1.7));var step=width/count
+ for i in count:
+  var face_width=step-.08;var face_height=minf(.94,face_width/1.5)
+  panel_face(k,n,Vector3(-width*.5+step*(i+.5),1.335,.073),Vector2(face_width,face_height),posmod(roundi(p.x+p.z)+i,4),-.945)
+ for x in [-width*.5-.006,width*.5+.006]:
+  for z in [-.18,0,.18]:k.box("ConsoleVent",Vector3(x,.42,z),Vector3(.012,.34,.055),"black",false,n)
 static func rack(k,p:Vector3,heading:float=0):
  var n=root(k,"InstrumentRack",p,heading)
  bevel(k,"RackCabinet",Vector3(0,1.05,0),Vector3(.95,2.10,.62),"dark_steel",n,true)
- for y in [.4,.85,1.3,1.75]:
-  bevel(k,"RackUnit",Vector3(0,y,.33),Vector3(.83,.33,.045),"institution_enamel",n)
-  k.box("RackMeter",Vector3(-.22,y,.359),Vector3(.25,.19,.012),"paper",false,n)
-  for x in [.05,.23]:k.cyl("RackKnob",Vector3(x,y,.383),.045,.045,"black",n).rotation.x=PI/2
-  k.box("RackNameplate",Vector3(0,y-.105,.365),Vector3(.38,.025,.01),"paper",false,n)
- for y in [.22,1.98]:k.box("RackVent",Vector3(0,y,.335),Vector3(.66,.035,.02),"black",false,n)
+ var i=0
+ for y in [.43,1.05,1.67]:
+  bevel(k,"RackUnitRim",Vector3(0,y,.33),Vector3(.86,.57,.045),"institution_enamel",n)
+  panel_face(k,n,Vector3(0,y,.36),Vector2(.80,.533),posmod(roundi(p.x)+i,4));i+=1
+ for y in [.12,2.01]:k.box("RackVent",Vector3(0,y,.335),Vector3(.66,.035,.02),"black",false,n)
+static func gimbal(k,p:Vector3):
+ var n=root(k,"CalibrationGimbal",p)
+ bevel(k,"GimbalPlinth",Vector3(0,.16,0),Vector3(2.7,.32,2.7),"dark_steel",n,true)
+ for x in [-1.24,1.24]:
+  bevel(k,"GimbalBearingStand",Vector3(x,.94,0),Vector3(.16,1.56,.38),"institution_enamel",n)
+  var bearing=k.cyl("GimbalBearing",Vector3(x,1.6,0),.13,.28,"brass",n);bearing.rotation.z=PI/2
+ var radius=1.17
+ for rot in [Vector3.ZERO,Vector3(PI/2,0,0),Vector3(0,0,PI/2)]:
+  var ring=MeshInstance3D.new();ring.name="CalibrationRing";var mesh=TorusMesh.new();mesh.inner_radius=radius-.07;mesh.outer_radius=radius;mesh.rings=48;mesh.ring_segments=10;ring.mesh=mesh;ring.material_override=k.mats.brass;n.add_child(ring);ring.position=Vector3(0,1.6,0);ring.rotation=rot;radius-=.11
+ k.ellipsoid("ReferenceMass",Vector3(0,1.6,0),Vector3(.42,.42,.42),"institution_enamel",n)
+ var hull=k.box("GimbalCollision",p+Vector3(0,1.3,0),Vector3(2.5,2.6,2.5),"dark",true);hull.visible=false
+ return n
 static func arch(k,centre:Vector3,width:float,height:float,heading:float=0):
  for i in 16:
   var a=PI*float(i)/16.;var b=PI*float(i+1)/16.
@@ -106,7 +126,7 @@ static func carriage(k,p:Vector3,heading:float=0,medical:bool=false):
    var one=Vector3(cos(a)*1.22,2.67+sin(a)*.4,z);var two=Vector3(cos(b)*1.22,2.67+sin(b)*.4,z)
    k.pipe(n.global_transform*one,n.global_transform*two,.035,"dark_steel")
  if medical:
-  for mesh in n.find_children("*","MeshInstance3D",true,false):mesh.set_meta("dynamic",true)
   k.box("CarMedicalMarkV",Vector3(1.225,1.35,1.2),Vector3(.025,.55,.14),"paper",false,n)
   k.box("CarMedicalMarkH",Vector3(1.23,1.35,1.2),Vector3(.025,.14,.55),"paper",false,n)
+  for mesh in n.find_children("*","MeshInstance3D",true,false):mesh.set_meta("dynamic",true)
  return n

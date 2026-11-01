@@ -73,7 +73,7 @@ func run():
  s.Comic.start(s,"east_mine_approach");s.Comic.choose(s,0);s.Comic.choose(s);s.context.floor="coal";act(s,"coal_return")
  s.context.floor="east_district";act(s,"east_enter_mine")
  check(s.last_action_valid,"prepared private return remains repeatable for unfinished coal side tasks")
- check(Campaign.data().endings.size()==14,"fourteen conclusions are authored")
+ check(Campaign.data().endings.size()==18,"fourteen historical conclusions plus four completed campaign endings")
  s=Story.new();s.context.floor="sech";s.flags.star_known=true
  check(not s.view("sech_sergey").options.any(func(o):return o.key=="c_sech_father" and o.enabled),"father-specific question is knowledge gated")
  act(s,"sech_visitors");check(s.last_reply.contains("不能") and not s.last_reply.contains("父亲"),"open visitor question gets a matching answer")

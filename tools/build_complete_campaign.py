@@ -116,7 +116,7 @@ for id,j in d['jobs'].items():
  P('late_'+id+'_home',j['name']+' / 交接以后','d6_ward' if j['faction']=='d6' else ('medical_home32' if j['faction']=='commune' else 'sech_threshold'),[('旁白',{'commune':'登记不再只剩一个完成标记。回来的居民有了位置，仍没有回信的人继续留在查找簿上。你把记录收好，回到有人叫你名字的走廊。','sech':'站台值守把这一班的车和人分别登记。厨房还留着热水，下一班的安排写在门边。你可以先歇一会儿，再去见他们。','d6':'记录交回以后，实际到站和仍未恢复的部分分栏留下。有人先去医务间，也有人继续等维修。中尉没有宣布一切已经解决。'}[j['faction']])],end='resume:'+j['person'])
 A('late_junction_enter','沿货场检修阶梯进入换乘线。',once=False,floor='east_district',travel='late_junction_arrive')
 P('late_junction_arrive','北线货场 / 换乘口','junction_transfer',[('旁白','货场的检修阶梯通到地下。站台两侧分开停着货车和维修车，候车的人躲在有挡风墙的地方。南口是回程接送点，西侧廊道通往检修间，中央轨道上能听见兽爪擦过枕木。')],end='map:junction')
-A('late_junction_return','从南口按本班安排返站。',once=False,floor='junction',travel='late_return_home')
+A('late_junction_return','从南口按本班安排返站。',once=False,floor='junction',travel='late_junction_home_commune')
 A('late_junction_bypass','清理西侧维修廊的落物，固定通往南口的检修门。','你将落物移到墙边，固定门扇，确认廊道能够通人。中央轨道上的兽群仍在那里，走这条路可以避开它们。',floor='junction')
 I('junction_yuri','junction','尤里 / 失联运输员','男人坐在工具箱边，腿上缠着旧布。听到脚步，他先问来的是哪一班。',['late_c2_find','late_c2_consent'],'运输员',True)
 I('junction_car','junction','检修车与拖车','车辆分别停在各自轨道上，轮挡、软管和联接处都可以检查。',['late_s1_inspect','late_s1_brake','late_s3_repair'],'运输设备')
@@ -268,5 +268,87 @@ for id in d['jobs']:
  q['actions']=[key for key in d['actions'] if key.startswith('late_'+id+'_') or key==d['jobs'][id]['accept']]
 for key,panel in d['panels'].items():
  if key.endswith('_road'):panel['same_moment']=False
+# Private rescue is a prepared internal contact, never an enemy faction's pass.
+A('late_mine_cover_help','「安娜准备来接哥哥。请你确认这一班的接应和退路。」','瓦西里：「她得跟矿区的工友走搬运支线，你还是从旧检修巷进来，别一起去矿口报名字。我能替她安排带路的人，但报班铃的接头坏了，下一班会错过换岗。你把它修好，或者留下两份维修料让工友修，我们再定会合。」',all=['anna_warning_seen','east_mine_prepared','brother_found'],floor='coal',not_=['late_mine_cover_ready'])
+A('late_mine_bell_inspect','检查报班铃的低压接头。','你先断开低压支路，再检查铃线。受潮接头的氧化层已经松动，清理后重新压接即可。清洁和绝缘用的材料在洗护准备桌。',all=['late_mine_cover_help'],floor='coal',not_=['late_mine_cover_ready'])
+A('late_mine_bell_clean','在准备桌清理拆下的接头，补好绝缘。','你擦去氧化层，重新压紧线鼻，包好已经开裂的绝缘层。接头收进干燥的工具布里，还要带回报班铃旁接好并试响。',all=['late_mine_bell_inspect'],floor='coal',not_=['late_mine_cover_ready'])
+A('late_mine_bell_fix','装回修好的接头，接通低压支路并试响报班铃。','铃声在支巷里传开，工友按约回了一声。瓦西里过来核对班次，说明安娜由谁带路、伊万从哪里进、撤离时在哪个出口会合。安排只限煤运外围，通缉记录没有撤销。',all=['late_mine_bell_clean'],floor='coal',flags={'late_mine_cover_ready':True})
+A('late_mine_materials','交两份废金属维修料，请当班工友修好报班接头。','瓦西里把材料交给当班维修工，让你留在门边等试铃。试响通过以后，他逐项确认带路人、伊万的检修入口和撤离出口。这份私人安排没有变成 D-6 通行许可。',all=['late_mine_cover_help'],floor='coal',not_=['late_mine_cover_ready'],flags={'late_mine_cover_ready':True},goods={'scrap_metal':-2})
+d['actions']['late_mine_materials']['req']['goods']={'scrap_metal':2}
+d['extensions']['coal_clerk']=['late_mine_cover_help','late_mine_materials']
+I('late_mine_bell','coal','报班铃 / 低压接线盒','报班铃挂在支巷西墙，线缆通向旁边的低压接线盒。',['late_mine_bell_inspect','late_mine_bell_fix'],'矿区报班铃')
+d['extensions']['coal_wash']=['late_mine_bell_clean']
+P('anna_private_depart','约好的两个入口','east_mine_service',[('旁白','瓦西里确认了这一班的带路人。安娜跟矿区工友走地下搬运支线，医护和行李同路；你独自沿已侦察的检修路接近煤运外围。你们会在休养间会合，谁也不去正门报上公社的名义。'),('安娜','我把孩子们这几天的课交给别人了。哥哥愿意走，我们就按准备好的办法接他；如果条件还不够，就先补齐。到了那里，你别只顾着催车，也问问他怕什么。')],end='map:east_district',music='letters_theme')
+d['quests'].append(dict(id='late_mine_cover',name='这一班的接应',kind='支线',facility='coal',accepted='late_mine_cover_help',done='late_mine_cover_ready',background='安娜救援前确认矿区内部带路、检修入口和退路。私人接应不解除伊万的通缉。',lead='',actions=['late_mine_cover_help','late_mine_bell_inspect','late_mine_bell_clean','late_mine_bell_fix','late_mine_materials'],stages=[stage('late_mine_bell','coal','检查支巷西墙的报班铃接头；也可请瓦西里安排工友维修，需要两份废金属。'),stage('coal_wash','coal','到洗护准备桌清理拆下的接头，补好绝缘。','late_mine_bell_inspect'),stage('late_mine_bell','coal','带修好的接头回支巷西墙，装回并试响报班铃。','late_mine_bell_clean')]))
+A('late_veteran_route','「你在这边看到了什么？我们该留意哪里？」','',all=['sided_veteran'],floor=['junction','relay','starcity'],once=False)
+A('late_veteran_family','「我见到父亲了。现在还有些话，不知道该怎么说。」','老兵：「不用赶着把二十年的事说完。他是你父亲，老谢也还是把你养大的人。先想清楚自己要问什么，愿意说多少，自己定。要出去做事，叫我一声就行。」',all=['sided_veteran','late_father_first_seen'],floor=['junction','relay','starcity'],once=False)
+
+P('arrive_junction','北线货场换乘线','junction_transfer',[('旁白','你从货场检修阶梯下到换乘线。中间是两股旧轨，维修廊绕到西侧，候车室和调度间在东侧。先确认这一班要接的人，再决定从哪条路带他们离开。')],end='map:junction')
+P('arrive_relay','北线地表中继站','north_relay',[('旁白','风从坍塌的楼间穿过，地上的线缆一直通向北侧天线。西面的控制屋还亮着一盏灯，南侧检修路连着回程入口。你检查面罩，先在墙后停住，听了一会儿外面的动静。')],end='map:relay')
+P('arrive_star_interior','星城测控设施','star_reunion',[('旁白','去污间的外门合拢后，值守才打开第二道门。电机声很轻，墙上贴着已经改过多次的轮值表。接待员指给你登记桌的位置，提醒你按许可范围活动。')],end='map:star_interior')
+
+
+# Scene-specific aftermath: each return changes a person's life, not only a ledger.
+P('late_c3_home','夜班的温度','commune_threshold',[
+ ('旁白','巴拉诺娃从食堂搬回了自己的铺位。她先摸了摸床头的回水管，又把毯子折成两层，留在床尾。暖气还达不到战前的温度，好在这一次，贴在门边的通知写清了什么时候会停。'),
+ ('巴拉诺娃','明晚我替老人们记温度。你要是再听到有人说全修好了，先叫他过来住一夜。'),
+ ('伊万','温室那边也要轮换，可能还得改。'),
+ ('巴拉诺娃','那就改。早点告诉我们，别等床都搬完了才说。')],end='resume:commune_guard',music='c1_return_theme')
+P('late_s1_home','司机的休息班','sech_threshold',[
+ ('旁白','安东交出车辆钥匙时，彼得又递给他一张写着下一班时间的纸。他看了一眼，才发现名字被往后移了两行。'),
+ ('安东','我其实还能跑一趟。'),('彼得','先去吃饭，睡够了再来。今晚有人替你。'),
+ ('旁白','安东把纸折好，没有再争。他走进厨房以后，彼得才问你那段软管还能撑多久。车仍要修，人也终于可以歇一班。')],end='resume:sech_elder',music='c1_return_theme')
+P('late_s2_home','讲完以后','sech_threshold',[
+ ('旁白','阿尔乔姆吃到一半，忽然问自己还能不能继续跑运输。谢尔盖把装着运输凭据的袋子从桌边移开，给他的碗腾出地方。'),
+ ('谢尔盖','车队还需要你。先把这几天缺的觉补上，货的事明天再说。'),
+ ('阿尔乔姆','我怕你们觉得，是我把东西卖了。'),
+ ('谢尔盖','你已经把经过说清楚了。还有疑问，我们找在场的人问。你不用整夜坐在这里等着别人审。')],end='resume:sech_elder',music='letters_theme')
+P('late_s3_home','等下一班的人','sech_threshold',[
+ ('旁白','厨房先给回来的住户分了热水。有人找空床，有人核对粮袋，彼得挨个问清还有没有人落在换乘口。你把最后一张乘员单交给他，手指上还留着联接销的油。'),
+ ('长老','修过的拖车要留一份检修记录。下一趟接人的时候，别再等他们站到车边才算位置。'),
+ ('旁白','住户们开始争论哪张床更靠近暖气。声音有些吵，你听了一会儿，才觉得这一趟真的结束了。')],end='resume:sech_elder',music='c1_return_theme')
+P('late_d1_home','抵站以后','d6_ward',[
+ ('旁白','广播仍在播报前线捷报。医务间门外，两名伤员扶着墙慢慢走，值班员腾出一条通往床位的路。中尉在门口停了一会儿，先让医护把人接进去。'),
+ ('科瓦廖夫','燃料车的延误我会签认。你把现场的时间写准，不用替我的报告凑齐。'),
+ ('伊万','广播里没有说过有这么多伤员。'),
+ ('科瓦廖夫','我知道。先把他们安置好。这些名字要留在交接单上。')],end='resume:d6_return_desk',music='letters_theme')
+P('late_d2_home','第一桶水','d6_ward',[
+ ('旁白','公共取水口前已经有人排队。妮娜让第一位取水的住户把桶放稳，自己蹲下去检查接头。桶满以后，她才直起身，在墙上写下下一次检查的时间。'),
+ ('妮娜','还有两段住区没通，别把人都叫过来。先告诉他们这里可以接水，坏管子我们接着修。'),
+ ('旁白','你听见身后有人问今晚还会不会停水。这次有了能回答的人，也有了写在墙上的具体时刻。')],end='resume:d6_return_desk',music='shift_below')
+P('late_d3_home','交出去的纸带','d6_ward',[
+ ('科瓦廖夫','技术委派已经签了。读数交给星城，原始记录你自己留一份。'),
+ ('伊万','如果他们确认的情况，和我们广播里说的不一样呢？'),
+ ('科瓦廖夫','把可以核实的部分送回来。至于怎么向上面解释，那是我签字的时候就该想的事。'),
+ ('旁白','他把副本推给你，另一份收进自己的文件夹。门外又传来担架轮子的声音，你们都停下来，等医护先过去。')],end='resume:d6_return_desk',music='letters_theme')
+# The north is not a miraculous secret or an unrestricted doorway.
+d['actions']['late_c3_report']['reply']='亚历山德拉：「住户会接着记温度，锅炉班也要把每次调整写清楚。北边的星城愿意听取线路检修申请，我们可以介绍你去核对情况。但他们与外界很少往来，信只能说明来意，能否进去仍由他们核查。」'
+d['actions']['late_s3_manifest']['reply']='司机划出了担架需要的位置。旁边停着一辆缺联接销的拖车，车轴仍完好。修好拖车就能两辆同行；如果这一班修不好，就先送伤病者，粮食由值守看管，下一班再运。'
+d['actions']['late_s1_switch']['reply']='你清掉轨槽里的碎石，将道岔锁到旁线。司机复述了试车手势，确认南口的值守会接车。正式发车前，你还得陪他走到接送处核对这一班的安排。'
+d['actions']['late_d1_both']['reply']='两位司机分别复述进路。伤员车先行，燃料车在旁线等候；调度员锁住进路后收回手动钥匙。重伤员由担架队安置，你还需要接候车室里两位能自行走动的伤员到南口，确认人员齐备后随车返站。'
+d['actions']['late_central_train']['reply']='司机逐项对过担架位置和乘员名单。你把进路锁到民用车这一侧，取得调度员的发车确认；列车回执会送往中继站。中央提供了这趟运力，地方值守也留下可以核对的班次与席位，不能再拿一份总数代替。'
+d['actions']['late_notify_semyon']['reply']='你先写自己平安，再告诉老爹已经见到父亲，问他工坊和腿伤近来怎么样。联络员核对了谢苗诺夫的姓名与住处，答应沿旧运输线转交。信件没有回执以前，你还不能确定它已经到手。'
+d['interactions']['late_planning']['body']='桌上分放原始纸带、线路图和各站尚能提供的车次。列夫请你先核对测量结果，再讨论由谁接收警告、哪些人需要撤离。'
+d['panels']['late_four_plans']['lines']=[
+ {'speaker':'列夫','text':'东郊装卸路和几处通风口都在受污染尘土可能经过的方向。各站得先收到能核对来源的消息，再安排改道。我们无法通知每一个人，没收到回执的站点还要继续呼叫。'},
+ {'speaker':'列夫','text':'你可以把警告交给多个独立接收点。这样有人迟迟不发布，别处仍能收到消息。但各站运力有限，路线和名单都要分别协调；公开危险区域时，也要保护接应人的身份。'},
+ {'speaker':'列夫','text':'中央能调用更多车辆，可以承担集中撤离。代价是调度权会更集中。民用警报什么时候发、给居民留多少席位，都要现在写明，再核对他们到底有没有执行。'},
+ {'speaker':'列夫','text':'也可以先发这次紧急预警，再把备用模块和维修资料交给受训值守。以后少依赖一个设施，可设备拆走后，这里的覆盖会缩小。每个接收点都得有人会修，也得继续供应备件。'},
+ {'speaker':'列夫','text':'最后一条办法，是你留下完成下一轮观测。外面仍要有人接收、复核并安排撤离，我们也得修好备用电源。你留下这一班，不代表从此不能再有自己的生活。先想清楚愿意承担哪一部分。'}]
+# Do not put saving-system explanations into characters' dialogue.
+for id in d['jobs']:
+ if id in ['c3','d2']:continue
+ d['panels']['late_'+id+'_road']['lines']=[{'speaker':'旁白','text':{
+ 'c2':'巴拉诺娃把一只干燥的布袋交给你，叮嘱找到信以后装在里面。你向值守报过去向，沿地表检修路前往北线货场。尤里最后一班停靠的换乘口在轨道西侧，那里还有一条避开中央轨道的维修廊。',
+ 's1':'彼得递给你检修车的编号，另外夹了一张写着司机姓名的纸。你把纸收好，沿旧货运路走向换乘口。安东已经在那里多守了两班，到了以后先让他知道有人来接，再检查车辆。',
+ 's2':'谢尔盖在地图上圈出货场棚屋，提醒你地下入口在院子里。你沿旧路接近营地，远处有人在避风处抽烟，枪背在肩上。绕行和交战都能到达入口，先看清守卫的视线与掩体位置。',
+ 's3':'彼得反复确认了接应时刻，将空床和当班医护都安排妥当。到了换乘口，你还要与司机核对四名住户和粮食的载重；如果要分两班，就得明确告诉留下的人下一班由谁来。',
+ 'd1':'医护带着担架先下到货场换乘线，你随后从检修阶梯进入。两班司机等在南口，一边要赶回医务间，一边担心燃料误点。先去看道岔和旁线的实际情况，再决定怎样让车通过。',
+ 'd3':'你将校准仪装进防潮袋，出站时让值守核对封条。第一处测点在工人街诊所外的背风角，第二处在北线中继站。测量之间隔着一段废路，每一组都需要另记地点与时刻。'}[id]}]
+
+
+for key in ['late_father_first','late_father_first_end','late_father_truth_scene','late_father_truth_end','late_epilogue_family']:d['panels'][key]['music']='reunion_theme'
+for key in ['late_final_depart','late_final_result','late_epilogue_people']:d['panels'][key]['music']='warning_theme'
+
 (ROOT/'data/complete_campaign.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
 print('actions',len(d['actions']),'quests',len(d['quests']),'panels',len(d['panels']))
