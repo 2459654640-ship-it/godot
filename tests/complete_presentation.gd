@@ -15,6 +15,12 @@ func bounds():
   if b.is_visible_in_tree():check(rect.encloses(b.get_global_rect()),"cinematic button fits: "+b.text)
 func run():
  w=load("res://scenes/d6.tscn").instantiate();root.add_child(w);current_scene=w;await frames()
+ var prop=load("res://scripts/production_props.gd").bevel(w.kit,"CabinetFaceContract",Vector3(0,0,0),Vector3(1,2,.8),"metal")
+ var arrays=prop.mesh.surface_get_arrays(0);var verts:PackedVector3Array=arrays[Mesh.ARRAY_VERTEX];var norms:PackedVector3Array=arrays[Mesh.ARRAY_NORMAL];var faces_out=true
+ for i in range(0,verts.size(),3):
+  if (verts[i+1]-verts[i]).cross(verts[i+2]-verts[i]).dot(norms[i])>0.000001:faces_out=false
+ check(faces_out and verts.size()>100,"closed prop housing has outward normals and visible clockwise front faces")
+ prop.queue_free()
  w.set_physics_process(false);w.player.set_physics_process(false);w.story.flags.intro_done=true
  w.story.flags.signal_heard=true;w.hud.show_comic("companions");await frames()
  check(w.hud.speech_buttons.is_empty(),"choices are withheld while opening paragraph is unread")

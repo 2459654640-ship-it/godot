@@ -50,7 +50,9 @@ static func bevel(k,id:String,p:Vector3,size:Vector3,mat:String,parent:Node3D=nu
  return mesh
 static func triangle(st,points:Array,n:Vector3):
  var p=points.duplicate()
- if (p[1]-p[0]).cross(p[2]-p[0]).dot(n)<0:p.reverse()
+ # Godot treats clockwise triangles as front faces. Their geometric cross
+ # product points opposite the authored outward shading normal.
+ if (p[1]-p[0]).cross(p[2]-p[0]).dot(n)>0:p.reverse()
  for v in p:st.set_normal(n);st.set_uv(Vector2(v.x,v.z));st.add_vertex(v)
 static func quad(st,q:Array,n:Vector3):triangle(st,[q[0],q[1],q[2]],n);triangle(st,[q[0],q[2],q[3]],n)
 static func chair(k,p:Vector3,heading:float=0):
