@@ -205,6 +205,7 @@ func setup(w):
 	modal.add_theme_stylebox_override("panel",style(Color("101c1e"),Color("766747"),1,0))
 	modal.visible=false
 	UiSurface.attach(modal)
+	var field=load("res://scripts/field_navigation.gd").new();add_child(field);field.setup(self)
 	refresh_status()
 
 func vital_bar(parent:Control,color:Color)->ProgressBar:
@@ -342,6 +343,8 @@ func remember_page_scroll():
 		page_scroll[page_key]=modal_box.get_parent().scroll_vertical
 
 func start_modal(title:String,subtitle:String,wide:bool=false,view_key:String=""):
+	Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
+	if is_instance_valid(world.combat) and is_instance_valid(world.combat.reticle):world.combat.reticle.hide()
 	if is_instance_valid(modal):modal.set_meta("cinematic_live",false)
 	remember_page_scroll()
 	page_key=view_key if view_key!="" else title
@@ -422,6 +425,7 @@ func close():
 		terminal_game.set_process(false)
 		world.autosave()
 		terminal_game=null
+	if is_instance_valid(world.combat):world.combat.update_cursor()
 
 func modal_visible() -> bool:return modal.visible
 func set_prompt(id:String):

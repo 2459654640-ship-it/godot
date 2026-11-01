@@ -29,9 +29,9 @@ static func clip_foundation(node:MeshInstance3D,points:Array):
   for p in [Vector3(a.x,.25,a.y),Vector3(b.x,.25,b.y),Vector3(b.x,-.25,b.y),Vector3(a.x,.25,a.y),Vector3(b.x,-.25,b.y),Vector3(a.x,-.25,a.y)]:
    tool.set_normal(normal);tool.set_uv(Vector2(p.x+p.z,p.y));tool.add_vertex(p-Vector3(node.position.x,0,node.position.z))
  tool.generate_tangents();node.mesh=tool.commit()
-static func polygon_walls(k,plan:Dictionary):
- for code in POLYGONS:
-  var polygon:Array=POLYGONS[code]
+static func polygon_walls(k,plan:Dictionary,polygons:Dictionary=POLYGONS):
+ for code in polygons:
+  var polygon:Array=polygons[code]
   for i in polygon.size():
    var a:Vector2=polygon[i];var b:Vector2=polygon[(i+1)%polygon.size()]
    if is_equal_approx(a.x,b.x) or is_equal_approx(a.y,b.y):
@@ -67,7 +67,7 @@ static func diagonal_wall(k,a:Vector2,b:Vector2,style:int):
   var p:Vector3=node.transform*arrays[Mesh.ARRAY_VERTEX][index];var normal:Vector3=node.basis*arrays[Mesh.ARRAY_NORMAL][index]
   tool.set_normal(normal);tool.set_uv2(Vector2(style,0));tool.set_uv(Vector2((p.x if absf(normal.z)>.5 else p.z)/3.0,1.0-p.y/2.7));tool.add_vertex(p)
  tool.generate_tangents();tool.set_material(mat)
- var drawing=MeshInstance3D.new();drawing.name="ResearchCornerMasonry";drawing.mesh=tool.commit();k.root.add_child(drawing);node.visible=false
+ var drawing=MeshInstance3D.new();drawing.name="ResearchCornerMasonry";drawing.set_meta("design_id","ResearchCornerMasonry");drawing.mesh=tool.commit();k.root.add_child(drawing);node.visible=false
  drawing.set_meta("foreground",true);k.wall_meshes.append(drawing);k.veil_materials[drawing.get_instance_id()]=[]
 static func rotated_group(k,name:String,p:Vector3,heading:float,size:Vector3)->Node3D:
  var group=Node3D.new();group.name=name;k.root.add_child(group);group.position=p;group.rotation.y=heading

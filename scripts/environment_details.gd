@@ -5,7 +5,7 @@ static func build(w):
 	match w.floor_id:
 		"commune":commune(w)
 		"waterworks":waterworks(w)
-		"east_district":pass # City composition is owned by east_district_map.
+		"east_district":district(w)
 
 static func commune(w):
 	var k=w.kit
@@ -22,6 +22,9 @@ static func commune(w):
 	for x in [-10.5,11.5]:
 		for span in [Vector2(-2.5,-.5),Vector2(2.8,4.3)]:
 			k.box("HallStoneInlay",Vector3(x,.024,(span.x+span.y)/2),Vector3(.14,.007,span.y-span.x),"dark")
+	# Practical communal notices sit on the existing north wall, east of the door.
+	mounted_print(k,"CommuneDutyBoard",Vector3(8,1.6,-3.82),Vector2(2.8,1.4),"commune_rota_print")
+	k.lamp(Vector3(8,2.48,-3.65),true,.9,5)
 	# Repair marks make this inherited civic space feel maintained, not pristine.
 	for x in [-5,6]:
 		k.box("StageSkirtingRepair",Vector3(x,.12,-10.12),Vector3(1.3,.17,.025),"old_iron")
@@ -29,21 +32,14 @@ static func commune(w):
 static func waterworks(w):
 	var k=w.kit
 	preload("res://scripts/production_props.gd").panel_face(k,k.root,Vector3(-.60,1.35,5.808),Vector2(1.22,.813),2)
-	for x in [-16,-10]:
-		# Existing motor fins stay in facility_detail; do not stack duplicate rings.
-		# Bolted base and manifold gauges reuse the pump footprint.
-		k.box("PumpBedplate",Vector3(x+.35,.12,-10),Vector3(2.42,.18,1.55),"old_iron")
-		for dx in [-.7,1.2]:
-			for z in [-10.6,-9.4]:k.cyl("PumpAnchorBolt",Vector3(x+dx,.24,z),.045,.1,"brass")
-		k.pipe(Vector3(x,.9,-10),Vector3(x,1.9,-10),.055,"old_iron")
-		gauge(k,Vector3(x,1.96,-9.94),.19)
-		for z in [-12.8,-11.8]:
-			var flange=k.cyl("ManifoldFlange",Vector3(x,1.2,z),.28,.09,"old_iron");flange.rotation.x=PI/2
-			for angle in [0,PI/2,PI,PI*1.5]:
-				k.cyl("FlangeBolt",Vector3(x+cos(angle)*.23,1.2+sin(angle)*.23,z+.055),.025,.05,"brass").rotation.x=PI/2
-	# A clearly readable floor service zone at the pump bases, with no raised rails.
-	for x in [-16,-10]:
-		for dx in [-1.12,1.82]:k.box("PumpServiceLine",Vector3(x+dx,.028,-10),Vector3(.065,.006,2.3),"cream")
+	mounted_print(k,"FactoryOperationBoard",Vector3(1.9,1.85,4.16),Vector2(2.15,.967),"pump_operation_print")
+	# Local inspection lights identify working areas; their brackets stay on walls.
+	for p in [Vector3(-13,2.35,-13.72),Vector3(-1,2.35,-9.72),Vector3(16,2.35,4.28)]:
+		k.box("InspectionLampBack",p,Vector3(.38,.30,.07),"old_iron")
+		k.box("InspectionLampHood",p+Vector3(0,.18,.12),Vector3(.65,.09,.40),"factory_enamel_v13")
+		var lamp=OmniLight3D.new();lamp.name="InspectionTaskLight";w.add_child(lamp);lamp.position=p+Vector3(0,-.02,.36);lamp.light_color=Color("e3c7a0");lamp.light_energy=1.4;lamp.omni_range=7;lamp.shadow_enabled=true
+	for y in [1.8,2.0]:k.pipe(Vector3(-5.4,y,-9.62),Vector3(3.8,y,-9.62),.025,"old_iron")
+	for x in [-4,0,3]:k.box("WorkshopConduitClip",Vector3(x,1.9,-9.59),Vector3(.055,.30,.055),"old_iron")
 
 static func gauge(k,p:Vector3,radius:float):
 	var bezel=k.cyl("AnalogueGaugeBezel",p,radius,.08,"old_iron");bezel.rotation.x=PI/2
@@ -55,6 +51,9 @@ static func gauge(k,p:Vector3,radius:float):
 
 static func district(w):
 	var k=w.kit
+	var panel=w.get_node_or_null("RoadMapPanel")
+	if panel:
+		var ink=StandardMaterial3D.new();ink.albedo_texture=load("res://assets/visual/district_route_print.svg");ink.roughness=.95;panel.material_override=ink
 	# A complete bus shelter anchors the south-west street. Back and side are solid;
 	# the open face looks toward the path, 3m clear of its centre and route board.
 	var p=Vector3(-69,0,35)
@@ -77,3 +76,9 @@ static func district(w):
 	for z in [17,29]:
 		k.box("StreetDrainRecess",Vector3(-62.4,.028,z),Vector3(.5,.008,.85),"dark")
 		for n in 7:k.box("StreetDrainBar",Vector3(-62.4,.036,z-.35+n*.115),Vector3(.48,.012,.035),"old_iron")
+
+static func mounted_print(k,id:String,p:Vector3,size:Vector2,asset:String):
+	var frame=k.box(id+"Frame",p-Vector3(0,0,.025),Vector3(size.x+.10,size.y+.10,.065),"old_iron")
+	frame.set_meta("view_occluder",true)
+	var face=MeshInstance3D.new();face.name=id;var mesh=QuadMesh.new();mesh.size=size;face.mesh=mesh
+	var mat=StandardMaterial3D.new();mat.albedo_texture=load("res://assets/visual/"+asset+".svg");mat.roughness=.94;face.material_override=mat;k.root.add_child(face);face.position=p+Vector3(0,0,.013);face.set_meta("view_occluder",true);face.set_meta("mount_surface","north_wall")

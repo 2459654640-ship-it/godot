@@ -260,7 +260,7 @@ func finish_walls():
 			if not wall_room_profiles.is_empty() and i==0 and wall_finish_theme=="factory":
 				material.set_shader_parameter("factory_finish",true)
 				material.set_shader_parameter("factory_blue",load("res://assets/visual/factory_green_wall_v13.png"))
-				material.set_shader_parameter("factory_tile",load("res://assets/visual/factory_wall_tile_v13.png"))
+				material.set_shader_parameter("factory_tile",load("res://assets/visual/plant_ceramic_v34.png"))
 				material.set_shader_parameter("factory_archive",load("res://assets/visual/factory_plaster_v13.png"))
 				material.set_shader_parameter("normal_strength",0.0)
 			elif wall_finish_theme=="starcity" and i==0:
@@ -456,12 +456,12 @@ func batch_static():
 			transform=transform.scaled_local(source.size)
 		elif source is CylinderMesh:
 			var ratio=source.top_radius/source.bottom_radius
-			key+="_cyl_"+str(ratio)
+			key+="_cyl_"+str(ratio)+"_segments_"+str(source.radial_segments)
 			primitive=CylinderMesh.new()
 			primitive.top_radius=ratio
 			primitive.bottom_radius=1
 			primitive.height=1
-			primitive.radial_segments=12
+			primitive.radial_segments=source.radial_segments
 			transform=transform.scaled_local(Vector3(source.bottom_radius,source.height,source.bottom_radius))
 		else:continue
 		if not groups.has(key):groups[key]={"mesh":primitive,"material":material,"transforms":[],"shadow":child.cast_shadow,"overhead":overhead,"bounds":high_bounds}

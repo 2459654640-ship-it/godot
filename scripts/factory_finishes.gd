@@ -8,7 +8,9 @@ static func prepare(k,zones:Array):
   k.mats[spec[0]]=m
  for name in ["factory_damp_v13","factory_dry_v13"]:
   var floor=ShaderMaterial.new();floor.shader=load("res://assets/visual/factory_floor.gdshader")
-  floor.set_shader_parameter("albedo_map",k.mats[name].albedo_texture)
+  floor.set_shader_parameter("albedo_map",load("res://assets/visual/plant_slab_v34.png"))
+  floor.set_shader_parameter("slab_layout",true);floor.set_shader_parameter("map_scale",.25)
+  floor.set_shader_parameter("base_color",Color("a5b0a7") if name=="factory_damp_v13" else Color("c4bfb0"))
   k.mats[name]=floor
  # Reuse one family of painted iron on both old and newly added machinery.
  for name in ["blue","metal","old_iron"]:k.mats[name]=k.mats.factory_enamel_v13

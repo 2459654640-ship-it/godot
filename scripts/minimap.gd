@@ -70,14 +70,22 @@ func _draw():
 	for zone in drawing_zones:
 		var r:Rect2=zone.rect
 		var points=polygon(r.grow(-0.14))
+		var plan:Dictionary=preload("res://scripts/late_layouts.gd").PLANS.get(floor,{})
+		if plan.get("polygons",{}).has(zone.code):
+			points=PackedVector2Array()
+			for p in plan.polygons[zone.code]:points.append(project(p))
+		elif floor=="starcity" and preload("res://scripts/starcity_v17.gd").POLYGONS.has(zone.code):
+			points=PackedVector2Array()
+			for p in preload("res://scripts/starcity_v17.gd").POLYGONS[zone.code]:points.append(project(p))
 		var shadow=points.duplicate()
 		for i in shadow.size():shadow[i]+=Vector2(0,3 if expanded else 2)
 		draw_colored_polygon(shadow,Color("060c0c"))
 		draw_colored_polygon(points,Color("364239") if zone.code=="00" else Color("26302b"))
-		draw_polyline(PackedVector2Array([points[0],points[1],points[2],points[3],points[0]]),Color("65705e"),1.2,true)
+		var outline=points.duplicate();outline.append(points[0])
+		draw_polyline(outline,Color("65705e"),1.2,true)
 		if not focused.is_empty() and focused.place==floor and (focused.area==zone.name or (focus_point.is_finite() and r.has_point(focus_point))):
 			draw_colored_polygon(points,Color(.72,.56,.29,.19))
-			draw_polyline(PackedVector2Array([points[0],points[1],points[2],points[3],points[0]]),gold,2,true)
+			draw_polyline(outline,gold,2,true)
 			if expanded:draw_string(world.kit.font,project(r.get_center())+Vector2(-22,-15),"这一带",HORIZONTAL_ALIGNMENT_LEFT,-1,13,gold)
 		if zone.code=="01" and floor=="life":draw_line(project(Vector2(-11.95,-9)),project(Vector2(-11.95,-2.8)),gold,1.2,true)
 		if zone.code!="00" and not (floor=="life" and zone.code in ["09","10"]):

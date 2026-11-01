@@ -148,10 +148,25 @@ static func factory(k):
  hull(k,c+Vector3.UP*3,Vector3(sx+.8,6,sz+.8),"FactoryHallHull")
  # Attached boiler house, coal bunker, chimney and service pipes are one readable compound.
  var annex=Vector3(-84,0,-43)
- k.box("BoilerHouseShell",annex+Vector3.UP*2.5,Vector3(13,5,21),"district_brick",true)
- for z in [-50,-45,-40]:
-  k.box("BoilerHouseWindow",Vector3(-77.46,3,z),Vector3(.04,1.5,2.2),"exterior_glass")
-  for y in [2.3,3,3.7]:k.box("BoilerWindowMullion",Vector3(-77.4,y,z),Vector3(.06,.06,2.2),"old_iron")
+ hull(k,annex+Vector3.UP*2.5,Vector3(13,5,21),"BoilerHouseHull")
+ # Actual recessed window bays, a closed service door and continuous rear wall.
+ # Neither roof nor front is a two-sided theatrical facade.
+ for side in [-1,1]:
+  var x=-84+side*6.5
+  k.box("BoilerBrickPlinth",Vector3(x,.75,-43),Vector3(.48,1.5,21),"district_brick")
+  k.box("BoilerBrickHeader",Vector3(x,4.52,-43),Vector3(.54,.96,21),"district_brick")
+  for z in [-51.4,-47.2,-43.,-38.8,-34.6]:
+   k.box("BoilerRecessedGlass",Vector3(x,2.80,z),Vector3(.045,2.60,3.4),"exterior_glass")
+   for dz in [-1.95,1.95]:k.box("BoilerWindowPier",Vector3(x,2.8,z+dz),Vector3(.60,2.6,.48),"district_brick")
+   for dz in [-1.1,0,1.1]:k.box("BoilerWindowVertical",Vector3(x+side*.09,2.8,z+dz),Vector3(.12,2.6,.045),"old_iron")
+   for y in [1.55,2.4,3.2,4.05]:k.box("BoilerWindowTransom",Vector3(x+side*.10,y,z),Vector3(.14,.045,3.4),"old_iron")
+   k.box("BoilerWindowSill",Vector3(x+side*.16,1.48,z),Vector3(.76,.12,3.6),"district_concrete")
+ k.box("BoilerRearWall",Vector3(-84,2.5,-53.5),Vector3(13,5,.48),"district_brick")
+ for span in [[-87.5,6.0],[-78.5,2.0]]:k.box("BoilerFrontWing",Vector3(span[0],2.5,-32.5),Vector3(span[1],5,.48),"district_brick")
+ k.box("BoilerServiceLintel",Vector3(-82,4.05,-32.5),Vector3(5,1.9,.55),"district_brick")
+ k.box("BoilerServiceDoor",Vector3(-82,1.55,-32.50),Vector3(4.95,3.1,.12),"corrugated")
+ for x in [-84.3,-82,-79.7]:k.box("BoilerDoorBrace",Vector3(x,1.55,-32.40),Vector3(.07,2.9,.09),"old_iron")
+ k.label("КОТЕЛЬНАЯ",Vector3(-82,3.64,-32.19),22,Color("c5bda6"))
  k.box("BoilerFlatRoof",Vector3(-84,5.1,-43),Vector3(13.5,.25,21.5),"old_iron")
  k.box("BoilerRoofSnow",Vector3(-84,5.27,-43),Vector3(13.2,.08,21.2),"district_roof_snow")
  k.cyl("FactoryChimneyBase",Vector3(-88,1,-58),1.8,2,"district_brick")
@@ -168,6 +183,16 @@ static func factory(k):
  for segment in [[Vector3(-94,0,-76),Vector3(-48,0,-76)],[Vector3(-44,0,-76),Vector3(-42,0,-76)],[Vector3(-94,0,-76),Vector3(-94,0,-23)],[Vector3(-94,0,-23),Vector3(-63,0,-23)],[Vector3(-57,0,-23),Vector3(-42,0,-23)],[Vector3(-42,0,-23),Vector3(-42,0,-48)]]:Site.fence(k,segment[0],segment[1])
  for z in [-26,-28,-30]:
   for row in 2:k.pipe(Vector3(-86,.28+row*.36,z),Vector3(-80,.28+row*.36,z),.17,"rust")
+ # The yard gantry has a loading purpose and leaves the main gate axis clear.
+ for x in [-71.,-54.]:
+  k.box("LoadingGantryFooting",Vector3(x,.12,-27),Vector3(.85,.24,.85),"district_concrete")
+  k.box("LoadingGantryPost",Vector3(x,2.0,-27),Vector3(.22,4,.28),"old_iron",true)
+  k.box("LoadingGantryCap",Vector3(x,3.96,-27),Vector3(.65,.13,.65),"old_iron")
+ k.box("LoadingGantryWeb",Vector3(-62.5,4.12,-27),Vector3(17.5,.40,.09),"old_iron").set_meta("view_occluder",true)
+ for y in [3.90,4.34]:k.box("LoadingGantryFlange",Vector3(-62.5,y,-27),Vector3(17.6,.09,.38),"old_iron").set_meta("view_occluder",true)
+ for y in [2.8,3.1,3.4]:k.pipe(Vector3(-67,y,-27),Vector3(-67,y+.3,-27),.021,"old_iron")
+ k.cyl("GantryHoistMotor",Vector3(-67,3.65,-27),.20,.58,"rust").rotation.z=PI/2
+ for span in [[Vector3(-67,2.8,-27),Vector3(-67,2.60,-27)],[Vector3(-67,2.60,-27),Vector3(-66.88,2.52,-27)],[Vector3(-66.88,2.52,-27),Vector3(-66.77,2.64,-27)]]:k.pipe(span[0],span[1],.025,"old_iron")
 static func tank(k,p:Vector3,r:float):
  k.cyl("ClarifierSludge",p+Vector3.UP*.10,r-.25,.15,"dark")
  for n in 36:

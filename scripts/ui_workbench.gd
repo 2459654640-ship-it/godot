@@ -7,10 +7,26 @@ const PAPER=Color("ded8c5")
 const DIM=Color("93a49e")
 const GOLD=Color("d3b679")
 const RED=Color("c68d79")
+const INK=Color("292e32")
+const STOCK=Color("d5cfb9")
+const VERMILION=Color("843c30")
+static func on_paper(parent:Node)->bool:
+ var n=parent
+ while n:
+  if n.has_meta("paper_stock"):return bool(n.get_meta("paper_stock"))
+  n=n.get_parent()
+ return false
+static func printed_color(parent:Node,color:Color)->Color:
+ if not on_paper(parent):return color
+ if color==PAPER:return INK
+ if color==DIM:return Color("4b5651")
+ if color==GOLD:return VERMILION
+ if color==RED:return Color("8b3429")
+ return color
 const NAV=[["inventory","01  随身装备"],["tasks","02  任务手记"],["map","03  区域地图"],["collection","04  书刊收藏"],["lore","05  见闻百科"],["history","06  经历记录"]]
 
 static func words(h,parent,text:String,size:int=20,color:Color=PAPER)->Label:
- var l=h.label(text,size,color);l.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;l.size_flags_horizontal=Control.SIZE_EXPAND_FILL;parent.add_child(l);return l
+ var l=h.label(text,size,printed_color(parent,color));l.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;l.size_flags_horizontal=Control.SIZE_EXPAND_FILL;parent.add_child(l);return l
 static func gap(parent):
  var c=Control.new();c.size_flags_vertical=Control.SIZE_EXPAND_FILL;parent.add_child(c)
 static func row(parent,separation:int=14)->HBoxContainer:
@@ -18,22 +34,31 @@ static func row(parent,separation:int=14)->HBoxContainer:
 static func column(parent,width:float=0)->VBoxContainer:
  var c=VBoxContainer.new();c.add_theme_constant_override("separation",14);c.custom_minimum_size.x=width;parent.add_child(c);return c
 static func line(parent):
- var r=ColorRect.new();r.color=Color("3b4c47");r.custom_minimum_size.y=1;r.mouse_filter=Control.MOUSE_FILTER_IGNORE;parent.add_child(r)
+ var r=ColorRect.new();r.color=Color("a8a48f") if on_paper(parent) else Color("465259");r.custom_minimum_size.y=1;r.mouse_filter=Control.MOUSE_FILTER_IGNORE;parent.add_child(r)
 static func action(h,parent,title:String,callback:Callable,enabled:bool=true,selected:bool=false)->Button:
  var b=h.button(title,callback,enabled,true);b.custom_minimum_size=Vector2(minf(270,h.font.get_string_size(title,HORIZONTAL_ALIGNMENT_LEFT,-1,18).x+32),42);b.clip_text=true;b.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS;b.tooltip_text=title;parent.add_child(b)
- var base=h.style(Color("273b36") if selected else Color("182824"),GOLD if selected else Color("3a4d46"),1,0)
+ var paper=on_paper(parent)
+ var base=h.style(VERMILION if selected else (Color(0,0,0,0) if paper else Color("202c33")),VERMILION if selected else (Color("a7a38f") if paper else Color("47545a")),1,0)
+ base.shadow_size=0;base.set_corner_radius_all(0)
  base.content_margin_left=14;base.content_margin_right=14;base.content_margin_top=9;base.content_margin_bottom=9
  b.add_theme_stylebox_override("normal",base)
- if selected:b.add_theme_color_override("font_color",GOLD)
+ b.add_theme_stylebox_override("disabled",base)
+ var hover=base.duplicate();hover.bg_color=Color("baae91") if paper else Color("34444d");hover.border_color=Color("89734e");b.add_theme_stylebox_override("hover",hover);b.add_theme_stylebox_override("focus",hover)
+ var pressed=base.duplicate();pressed.bg_color=Color("a3987e") if paper else Color("15212a");b.add_theme_stylebox_override("pressed",pressed)
+ b.add_theme_color_override("font_color",Color("fff0d5") if selected else (INK if paper else PAPER))
+ b.add_theme_color_override("font_hover_color",INK if paper else Color("fff0d5"));b.add_theme_color_override("font_focus_color",INK if paper else PAPER)
+ b.add_theme_color_override("font_disabled_color",Color("777b70") if paper else Color("7c898b"))
  return b
 static func panel(h,parent,width:float=0)->VBoxContainer:
- var p=PanelContainer.new();p.custom_minimum_size.x=width;p.size_flags_horizontal=Control.SIZE_EXPAND_FILL;p.size_flags_vertical=Control.SIZE_EXPAND_FILL;p.add_theme_stylebox_override("panel",h.style(Color("14231f"),Color("344740"),1,0));parent.add_child(p)
+ var p=PanelContainer.new();p.set_meta("paper_stock",true);p.custom_minimum_size.x=width;p.size_flags_horizontal=Control.SIZE_EXPAND_FILL;p.size_flags_vertical=Control.SIZE_EXPAND_FILL;p.add_theme_stylebox_override("panel",h.style(STOCK,Color("999b8c"),1,0));parent.add_child(p)
+ load("res://scripts/ui_print.gd").attach(p,true)
  return h.margin_box(p,22,20)
 static func shell(h,title:String,code:String,active:String)->VBoxContainer:
  h.start_modal(title,"",true,"screen:"+active)
  for child in h.modal.get_children(true):h.modal.remove_child(child);child.queue_free()
- h.modal.position=Vector2(38,28);h.modal.size=Vector2(1524,944);h.modal.add_theme_stylebox_override("panel",h.style(Color("0e1917"),Color("617064"),1,0))
- h.scrim.color=Color(.018,.028,.026,.94);h.set_meta("fixed_screen",active)
+ h.modal.position=Vector2(38,28);h.modal.size=Vector2(1524,944);h.modal.add_theme_stylebox_override("panel",h.style(Color("152128"),Color("64747a"),1,0))
+ h.scrim.color=Color(.018,.025,.032,.96);h.set_meta("fixed_screen",active)
+ load("res://scripts/ui_print.gd").attach(h.modal)
  var root=h.margin_box(h.modal,28,22);root.add_theme_constant_override("separation",18)
  var header=row(root,24)
  var mark=column(header,174);words(h,mark,"МЕТРО / 1982",17,GOLD);words(h,mark,"ЛИЧНОЕ ДЕЛО",12,DIM)
@@ -48,7 +73,7 @@ static func shell(h,title:String,code:String,active:String)->VBoxContainer:
  for entry in NAV:
   var id:String=entry[0]
   action(h,nav,entry[1],func():navigate(h,id),true,id==active)
- gap(nav);words(h,nav,"第七号个人档案\n物品、经历与未完的事",13,DIM);line(nav)
+ gap(nav);words(h,nav,"ПОЛЕВЫЕ ЗАПИСИ\n外勤与个人记录",13,DIM);line(nav)
  words(h,nav,"制式弹  %d\n土制弹  %d"%[s.economy.military,s.economy.handmade],17,GOLD)
  var content=column(main);content.size_flags_horizontal=Control.SIZE_EXPAND_FILL;content.size_flags_vertical=Control.SIZE_EXPAND_FILL;h.modal_box=content
  line(root);h.modal_hint=words(h,root,"鼠标选择 · 页码切换内容 · Esc 返回游戏",13,DIM)
@@ -159,6 +184,12 @@ static func journal(h,tab:String="tasks",shown_floor:String="",selected:String="
  if tab!="leads":
   var place=place_name(h,task.place);words(h,detail,place+" · "+task.area,17,GOLD)
   line(detail);text_panel(h,detail,"事情的经过",task.background)
+  var brief=load("res://scripts/field_guide.gd").briefing(h.world.story,task)
+  if not brief.is_empty() and not task.done and not task.failed:
+   line(detail);words(h,detail,"外勤安排 / ПОРЯДОК",13,GOLD)
+   if brief.has("route"):words(h,detail,brief.route,16)
+   words(h,detail,"返程交接  ·  "+brief["return"],16,DIM)
+   words(h,detail,brief.reward,15,DIM)
   gap(detail)
   if not task.done and not task.failed:
    var buttons=row(detail)
@@ -187,7 +218,7 @@ static func map_screen(h,content,shown_floor:String):
  else:words(h,detail,"选择一项任务，可以在地图上查看下一步所在区域。",18,DIM)
  gap(detail)
  if requested=="east_district":
-  words(h,detail,"浅色  已踏查\n暗色  待探索\n金点  已发现设施\n蓝标  自定目的地",16,DIM)
+  words(h,detail,"浅底  已踏查\n灰底  待探索\n红点  已发现设施\n蓝标  自定目的地",16,DIM)
   action(h,detail,"重置地图视图",func():map.map_zoom=1;map.map_pan=Vector2.ZERO;map.queue_redraw())
  else:
   var zones=h.world.facility_zones(requested).filter(func(z):return z.code not in ["00","L0"])
@@ -418,7 +449,8 @@ static func dialogue(h,id:String,first_new:int,part:int=0,choice_page:int=0,anim
   words(h,group,"旁白" if narrator else ("伊万" if mine else entry.get("name",view.name)),14,DIM if narrator else GOLD)
   var speaker_id=h.dialogue_id
   if not animate or mine:h.dialogue_id=""
-  var text=h.prose(entry.text if narrator else "「"+entry.text+"」",21,group);h.dialogue_id=speaker_id
+  var text=h.prose(entry.text if narrator else "「"+entry.text+"」",21,group);text.add_theme_color_override("default_color",INK);h.dialogue_id=speaker_id
+  text.text=text.text.replace("#d6bd90","#7d3528").replace("#e2c47e","#705321")
   if not mine and animate:
    if h.typing.is_empty() or h.typing[-1].label!=text:
     text.visible_characters=0;h.typing.append({"label":text,"total":text.get_total_character_count(),"elapsed":0.0,"rate":48.0,"root":group})
@@ -439,7 +471,7 @@ static func dialogue(h,id:String,first_new:int,part:int=0,choice_page:int=0,anim
   for option in options.slice(choice_page*4,choice_page*4+4):
    var o:Dictionary=option;var category:String=o.get("category","调查");var colors={"任务":GOLD,"决定":RED,"闲聊":DIM,"调查":PAPER}
    words(h,choices,category+(" · "+o.check.tier+" "+str(o.check.chance)+"%" if o.has("check") else ""),13,colors.get(category,PAPER))
-   var b=action(h,choices,o.text,func():h.last_choice=o.text;h.world.perform(o.key,id));b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;b.add_theme_color_override("font_color",colors.get(category,PAPER));h.speech_buttons.append(b)
+   var b=action(h,choices,o.text,func():h.last_choice=o.text;h.world.perform(o.key,id));b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;b.add_theme_color_override("font_color",printed_color(choices,colors.get(category,PAPER)));h.speech_buttons.append(b)
   gap(choices)
   if options.size()>4:
    var pages=row(choices)

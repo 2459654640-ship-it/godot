@@ -77,12 +77,12 @@ void fragment() {
 	ROUGHNESS = 0.94;
 	if(factory_finish && finish_style>10.5) {
 		vec3 dry=texture(factory_archive,UV).rgb;
-		vec3 wet=texture(factory_tile,UV*vec2(1.6,1.0)).rgb;
+		vec3 wet=texture(factory_tile,vec2(UV.x*2.0,clamp(1.0-world_height/2.7,0.004,0.996))).rgb;
 		vec3 blue=texture(factory_blue,UV).rgb;
 		float style=floor(finish_style+.5);
-		if(style<11.5) ALBEDO=mix(blue,dry*.76,smoothstep(1.55,1.58,world_height));
+		if(style<11.5) ALBEDO=wet*vec3(.88,.94,.92);
 		else if(style<12.5) ALBEDO=mix(dry*vec3(.47,.56,.48),dry,smoothstep(1.02,1.05,world_height));
-		else ALBEDO=mix(wet,dry,smoothstep(1.65,1.68,world_height));
+		else ALBEDO=wet;
 	}
 	EMISSION = emission_color;
 	if(star_finish) {

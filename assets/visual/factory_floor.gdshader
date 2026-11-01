@@ -2,6 +2,7 @@ shader_type spatial;
 render_mode specular_disabled;
 uniform sampler2D albedo_map:source_color,filter_linear_mipmap,repeat_enable;
 uniform float map_scale=.24;
+uniform bool slab_layout=false;
 uniform vec4 base_color:source_color=vec4(1.0);
 varying vec3 world_position;
 void vertex(){world_position=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;}
@@ -20,6 +21,12 @@ vec2 offset_for(vec2 cell){
 }
 void fragment(){
 	vec2 uv=world_position.xz*map_scale;
+	if(slab_layout){
+		// Preserve the slab joints. Stochastic offsets suit natural sediment,
+		// but break the geometry of an engineered concrete floor.
+		ALBEDO=texture(albedo_map,uv).rgb*base_color.rgb;
+		ROUGHNESS=.91;
+	}else{
 	// Blend three stable, differently offset samples on a triangular grid.
 	// A regular square blend repeated the photograph's light/dark patches.
 	vec2 grid=vec2(uv.x-uv.y*.57735027,uv.y*1.15470054);
@@ -30,4 +37,5 @@ void fragment(){
 	weights=weights*weights;weights/=dot(weights,vec3(1.0));
 	ALBEDO=(surface(uv+offset_for(a))*weights.x+surface(uv+offset_for(b))*weights.y+surface(uv+offset_for(c))*weights.z)*base_color.rgb;
 	ROUGHNESS=.97;
+	}
 }

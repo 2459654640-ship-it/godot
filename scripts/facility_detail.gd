@@ -99,22 +99,6 @@ static func commune(w):
   for dx in [-.24,.24]:k.box("FoldedMedicalLinen",Vector3(x+dx,.72,17.75),Vector3(.30,.12,.28),"paper")
 static func waterworks(w):
  var k=w.kit
- for x in [-16,-10]:
-  k.box("PumpConcretePlinth",Vector3(x+.3,.16,-10),Vector3(2.8,.32,2),"concrete")
-  # Bolted motor end and cooling rings are aligned with its real horizontal shaft.
-  for dx in [.60,.77,.94,1.11,1.28]:k.cyl("MotorCoolingFin",Vector3(x+dx,1,-10),.48,.045,"old_iron").rotation.z=PI/2
-  for i in range(8):
-   var t=float(i)*TAU/8
-   k.cyl("MotorFlangeBolt",Vector3(x+1.58,1+sin(t)*.31,-10+cos(t)*.31),.035,.08,"metal").rotation.z=PI/2
-  k.pipe(Vector3(x-.35,1.3,-10),Vector3(x-.35,1.3,-12.4),.16,"old_iron")
-  k.cyl("PipeBoltedFlange",Vector3(x-.35,1.3,-11.6),.25,.07,"old_iron").rotation.x=PI/2
-  for i in range(6):
-   var t=TAU*float(i)/6;k.cyl("FlangeBolt",Vector3(x-.35+sin(t)*.2,1.3+cos(t)*.2,-11.56),.022,.08,"metal").rotation.x=PI/2
-  k.cyl("PumpGaugeBody",Vector3(x,1.65,-9.35),.19,.08,"metal").rotation.x=PI/2
-  k.cyl("PumpGaugeFace",Vector3(x,1.65,-9.30),.16,.012,"paper").rotation.x=PI/2
-  k.box("PressureNeedle",Vector3(x+.035,1.69,-9.28),Vector3(.015,.13,.012),"red").rotation.z=-.55
-  k.label("НАСОС",Vector3(x,.50,-8.96),18)
-  for dx in [-1.45,1.75]:k.box("PumpSafetyBoundary",Vector3(x+dx,.028,-10),Vector3(.07,.015,2.5),"brass")
  # Mark contaminated sludge physically before the player reaches it.
  for x in [-17,-15]:
   k.box("SludgeSediment",Vector3(x,.036,-12),Vector3(1.5,.03,1.8),"dark")

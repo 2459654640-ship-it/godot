@@ -78,12 +78,7 @@ static func waterworks(w):
 	k.mats.surface_snow=snow; k.mats.snowbank=snow
 	preload("res://scripts/outdoor_architecture.gd").materials(k)
 	preload("res://scripts/outdoor_architecture.gd").skyline(k)
-	for x in [-16,-10]:
-		k.box("PumpCollision",Vector3(x+.35,.75,-10),Vector3(2.6,1.5,1.8),"metal",true).visible=false
-		k.cyl("PumpHousing",Vector3(x,.75,-10),.9,1.5,"metal")
-		k.cyl("PumpMotor",Vector3(x+1,1,-10),.45,1.1,"rust").rotation.z=PI/2
-		k.pipe(Vector3(x,1.2,-10),Vector3(x,1.2,-13.7),.2,"rust")
-		for z in [-11.5,-9.5]:k.cyl("PipeClamp",Vector3(x,.35,z),.24,.15,"metal")
+	preload("res://scripts/industrial_machinery.gd").pumps(k)
 	for x in [-18.6,4.8,18.6]:
 		for z in [-12,-6]:k.box("FactoryRib",Vector3(x,1.6,z),Vector3(.28,3.2,.4),"metal")
 	for x in [-16,-12,-8,8,12,16]:
@@ -258,6 +253,8 @@ static func starcity(w):
 	preload("res://scripts/starcity_v17.gd").build(w)
 static func furnish(k,e:Array,id:String):
 	var p=Vector3(e[1],0,e[2]);var kind:String=e[3]
+	if kind=="valve" and id=="waterworks":
+		preload("res://scripts/industrial_machinery.gd").bypass(k,p);return
 	if kind=="tank" and id=="sech":
 		k.cyl("CarriageWaterTank",p+Vector3(-1,.8,.2),.6,1.6,"rust")
 		k.box("TankCollision",p+Vector3(-1,.8,.2),Vector3(1.2,1.6,1.2),"metal",true).visible=false

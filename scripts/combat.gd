@@ -71,6 +71,23 @@ func update_boss_hud():
  var b=bosses[0];boss_bar.value=b.hp
  boss_title.text=String(encounters.get(encounter,{}).get("boss_title","蓄水池巨兽"))+(" · 撞击后正在恢复" if b.recovery>1 else (" · 正在蓄力，避开正前方" if b.windup>0 else ""))
 func paused()->bool:return not enabled or w.hud.modal_visible() or w.departure_animating
+func cursor_allowed(focused:bool,inside:bool)->bool:
+ return enabled and is_instance_valid(w) and w.initialized and not defeated and not paused() and w.story.weapon_drawn() and focused and inside
+func update_cursor():
+ if not is_instance_valid(reticle):return
+ var headless=DisplayServer.get_name()=="headless"
+ var focused=headless or get_window().has_focus()
+ var inside=headless or get_viewport().get_visible_rect().has_point(get_viewport().get_mouse_position())
+ reticle.visible=cursor_allowed(focused,inside)
+ reticle.position=w.hud.get_local_mouse_position()
+ var mode=Input.MOUSE_MODE_HIDDEN if reticle.visible else Input.MOUSE_MODE_VISIBLE
+ if Input.mouse_mode!=mode:Input.mouse_mode=mode
+func _process(_delta):update_cursor()
+func _notification(what):
+ if what==NOTIFICATION_APPLICATION_FOCUS_OUT:
+  Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
+  if is_instance_valid(reticle):reticle.hide()
+func _exit_tree():Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
 func enemy_path(from:Vector3,to:Vector3)->PackedVector3Array:
  # Creatures cannot use the player's small-step controller. Curbs, pool rims
  # and low cargo therefore need a route around them, not one over them.
@@ -85,7 +102,8 @@ func _physics_process(delta):
   label.hide();reticle.hide()
   if not w.hud.modal_visible():w.hud.show_combat_defeat()
   return
- label.visible=not w.hud.modal_visible();reticle.visible=label.visible and (active or w.floor_id in ["east_district","grey_shelter"]) and w.story.weapon_drawn()
+ label.visible=not w.hud.modal_visible()
+ update_cursor()
  if paused():
   if is_instance_valid(veteran):veteran.combat_velocity=Vector3.ZERO
   return
@@ -141,7 +159,7 @@ func begin(id:String):
  if w.floor_id=="railfront":w.sync_event_music("frontline_theme")
  for p in encounters[id].spawns:
   var enemy=Enemy.new();w.add_child(enemy);enemy.setup(self,w.clear_arrival(p),kinds[enemies.size()] if enemies.size()<kinds.size() else encounters[id].get("enemy_kind","mutant"));enemy.set_meta("loot_key",id+"_"+str(enemies.size()));enemy.set_meta("loot_index",enemies.size());enemies.append(enemy)
- w.hud.toast(encounters[id].name+" · "+("1 拔枪 · " if not w.story.weapon_drawn() else "")+"左键射击 / R 换弹；先清理威胁，再操作设备。",7)
+ w.hud.toast(load("res://scripts/field_guide.gd").encounter(id).purpose+"\n"+("1 拔枪 · " if not w.story.weapon_drawn() else "")+"左键射击 / R 换弹 · 随时可找掩体撤开",8)
 func reload_weapon():
  if reload_time>0 or clip>=magazine_size():return
  if int(w.story.economy.handmade)<=0:
@@ -257,7 +275,7 @@ func enemy_fell(enemy):
   if w.floor_id=="east_district":w.story.Campaign.District.cleared(w,encounter)
   sync();w.autosave()
   if w.floor_id=="railfront":w.sync_event_music("")
-  w.hud.toast("周围安静下来。可以检查设备、包扎伤口，再继续前进。",5)
+  w.hud.toast("威胁解除 · "+load("res://scripts/field_guide.gd").encounter(encounter).after,9)
 func retry():
  if preload("res://scripts/raid_loot.gd").active(w):return
  if checkpoint.is_empty():return

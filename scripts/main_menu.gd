@@ -11,6 +11,7 @@ var save_data:Dictionary={}
 var serif:Font
 var sans:Font
 func _ready():
+	Input.mouse_mode=Input.MOUSE_MODE_VISIBLE
 	serif=load("res://assets/fonts/MetroSerif.otf");sans=load("res://assets/fonts/MetroSans.otf")
 	var theme=Theme.new();theme.default_font=sans;theme.default_font_size=21;self.theme=theme
 	var art=TextureRect.new();art.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

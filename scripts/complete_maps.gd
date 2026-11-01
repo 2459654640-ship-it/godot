@@ -14,10 +14,16 @@ static func base(w,star:bool=false):
  k.mats.concrete=k.mats.institution_floor;k.mats.metal=k.mats.institution_enamel
  var plan:Dictionary=preload("res://scripts/late_layouts.gd").PLANS[w.floor_id]
  Shell.build(w,plan,w.zones)
+ if star:
+  var profiles={"01":22,"02":20,"03":22,"04":23,"05":21,"06":20,"07":23,"08":21}
+  k.wall_room_profiles.clear()
+  for zone in w.zones:k.wall_room_profiles.append({"rect":zone.rect,"style":profiles[zone.code]})
  for zone in w.zones:
   var r:Rect2=zone.rect;var mat="institution_floor" if star else "junction_stone"
   if zone.code in ["01","03","05"]:mat="institution_tile"
-  k.box("FinishFloor_"+zone.code,Vector3(r.get_center().x,.026,r.get_center().y),Vector3(r.size.x-.08,.018,r.size.y-.08),mat)
+  # Research finishes are already authored per room by the shell. A second
+  # rectangular floor would fill the octagonal hall's clipped corners.
+  if not star:k.box("FinishFloor_"+zone.code,Vector3(r.get_center().x,.026,r.get_center().y),Vector3(r.size.x-.08,.018,r.size.y-.08),mat)
   var light=k.lamp(Vector3(r.position.x+.7,2.45,r.position.y+.25),zone.code in ["01","04","07"],1.6,8)
   light.shadow_enabled=true
 static func junction(w):
@@ -57,6 +63,7 @@ static func junction(w):
   k.cyl("StationStove",p+Vector3.UP*.55,.3,1.1,"dark_steel");k.pipe(p+Vector3.UP*1.1,p+Vector3.UP*3.4,.08,"dark_steel")
 static func star(w):
  base(w,true);var k=w.kit
+ research_portals(k)
  # A circular ring of instrumentation defines the main hall instead of a grid of desks.
  Props.gimbal(k,Vector3(0,0,-1))
  var ring=k.cyl("ControlHallTerrazzoDisc",Vector3(0,.047,-1),8.9,.018,"institution_tile");ring.mesh.radial_segments=64
@@ -64,15 +71,19 @@ static func star(w):
   var angle=TAU*float(i)/12.;var p=Vector3(sin(angle)*6.4,0,-1+cos(angle)*6.4)
   if i in [0,3,6,9]:continue
   Props.console(k,p,angle,1.8);Props.chair(k,p+Vector3(sin(angle)*1.2,0,cos(angle)*1.2),angle)
- for z in [-8,0,7]:
-  Props.arch(k,Vector3(0,2.75,z),22,2.0)
-  for x in [-11.,11.]:
-   Props.bevel(k,"HallStructuralColumn",Vector3(x,1.375,z),Vector3(.32,2.75,.38),"institution_enamel",null,true)
-   k.box("HallColumnFoot",Vector3(x,.1,z),Vector3(.52,.20,.58),"dark_steel")
+ var outline:Array=preload("res://scripts/late_layouts.gd").PLANS.star_interior.polygons["02"]
+ for i in outline.size():
+  var a:Vector2=outline[i];var b:Vector2=outline[(i+1)%outline.size()]
+  var inward=(Vector2(0,-1)-a).normalized()*.16
+  var p=Vector3(a.x+inward.x,1.35,a.y+inward.y)
+  Props.bevel(k,"HallWallPier",p,Vector3(.34,2.7,.34),"star_enamel",null,true)
+  k.box("HallPierBase",Vector3(p.x,.12,p.z),Vector3(.46,.24,.46),"star_alloy")
+  # A perimeter cable ring follows the structure instead of crossing heads.
+  k.pipe(Vector3(a.x,2.65,a.y),Vector3(b.x,2.65,b.y),.075,"star_alloy")
  for x in [-6.,6.]:
   for z in [-5.,4.]:
-   k.box("HallWorkLightHousing",Vector3(x,3.1,z),Vector3(2.7,.16,.30),"dark_steel")
-   k.box("HallWorkLightDiffuser",Vector3(x,3.01,z),Vector3(2.5,.035,.24),"cold_light")
+   k.box("HallWorkLightHousing",Vector3(x,3.1,z),Vector3(2.7,.16,.30),"dark_steel").set_meta("view_occluder",true)
+   k.box("HallWorkLightDiffuser",Vector3(x,3.01,z),Vector3(2.5,.035,.24),"cold_light").set_meta("view_occluder",true)
    k.pipe(Vector3(x,3.2,z),Vector3(x,4.2,z),.018,"dark_steel")
    var task=OmniLight3D.new();w.add_child(task);task.position=Vector3(x,2.8,z);task.light_color=Color("cbd4c2");task.light_energy=1.5;task.omni_range=9;task.shadow_enabled=true
  for x in [-6.,6.]:
@@ -109,6 +120,30 @@ static func star(w):
  for y in [1,1.5,2,2.5]:k.box("ChartHorizontalGrid",Vector3(0,y,-22.675),Vector3(6.5,.012,.008),"paper")
  k.label("ВРЕМЯ / НАПРАВЛЕНИЕ / ИСТОЧНИК",Vector3(0,3.15,-22.72),19)
  for p in [Vector3(-11.7,2.1,16),Vector3(11.7,2.1,-4),Vector3(13,2.1,-22.7)]:k.lamp(p,true,.9,5)
+ research_equipment(w)
+static func research_portals(k):
+ # Clear width is exactly the shell's opening; jambs belong in the masonry.
+ for d in preload("res://scripts/late_layouts.gd").PLANS.star_interior.doors:
+  var along_z=d[2]=="x";var half:float=d[3]
+  for sign in [-1,1]:
+   var p=Vector3(d[0],1.18,d[1])+ (Vector3(0,0,sign*(half+.04)) if along_z else Vector3(sign*(half+.04),0,0))
+   var jamb=k.box("ResearchPortalJamb",p,Vector3(.32,2.36,.12) if along_z else Vector3(.12,2.36,.32),"star_alloy")
+   jamb.set_meta("portal_clear_width",half*2)
+  k.box("ResearchPortalHeader",Vector3(d[0],2.43,d[1]),Vector3(.34,.18,half*2+.20) if along_z else Vector3(half*2+.20,.18,.34),"star_enamel").set_meta("view_occluder",true)
+static func research_equipment(w):
+ var k=w.kit;var research=preload("res://scripts/starcity_v17.gd")
+ # Equipment is wall-backed; maintenance and interaction aisles remain open.
+ for x in [14.5,15.7,16.9]:research.cabinet(k,Vector3(x,0,-7.45),true)
+ for x in [-25.5,-24.3]:research.cabinet(k,Vector3(x,0,-7.45))
+ research.lab_table(k,Vector3(25,0,-21.1),2.8)
+ var p=Vector3(25,.99,-21.1)
+ k.cyl("CalibrationInstrumentBase",p,.40,.22,"star_alloy")
+ k.pipe(p+Vector3(0,.10,0),p+Vector3(0,.70,0),.05,"star_alloy")
+ k.ellipsoid("OpticalCalibrationHead",p+Vector3(0,.78,0),Vector3(.30,.20,.24),"star_enamel")
+ for z in [-21.5,-20.7]:k.cyl("CalibrationTableAdjuster",Vector3(26,.88,z),.06,.10,"dark_steel")
+ # The external view is not a launch pad. It is a live, maintained underground
+ # control facility: paper charts, signal recording and bench calibration.
+ research.diagram(k,Vector3(6,1.55,-22.85),Vector2(3.5,1.7))
 static func relay(w):
  var k=w.kit
  preload("res://scripts/surface_site.gd").ground(w,Rect2(-34,-29,68,58),false,false)

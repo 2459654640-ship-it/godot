@@ -3,7 +3,8 @@ extends RefCounted
 static func build(w,plan:Dictionary,zones:Array):
 	var k=w.kit
 	var star=preload("res://scripts/starcity_v17.gd")
-	if w.floor_id=="starcity":star.prepare(k,zones)
+	var polygons:Dictionary=plan.get("polygons",star.POLYGONS if w.floor_id=="starcity" else {})
+	if w.floor_id in ["starcity","star_interior"]:star.prepare(k,zones)
 	if w.floor_id=="commune":preload("res://scripts/commune_finishes.gd").prepare(k,zones)
 	if w.floor_id=="waterworks":preload("res://scripts/factory_finishes.gd").prepare(k,zones)
 	var edges={}
@@ -15,20 +16,20 @@ static func build(w,plan:Dictionary,zones:Array):
 		if w.floor_id=="waterworks" and zones[index].code in ["05","06"]:material="tile"
 		if w.floor_id=="coal" and zones[index].code in ["02","03"]:material="tile"
 		if w.floor_id=="starcity" and zones[index].code=="03":material="tile"
-		if w.floor_id=="starcity":material=star.floor_finish(zones[index].code)
-		var tint=Color.WHITE if w.floor_id=="starcity" else Color(plan.palette)
+		if w.floor_id in ["starcity","star_interior"]:material=star.floor_finish(zones[index].code)
+		var tint=Color.WHITE if w.floor_id in ["starcity","star_interior"] else Color(plan.palette)
 		if w.floor_id=="commune":
 			var finish=preload("res://scripts/commune_finishes.gd").floor_spec(zones[index].code);material=finish[0];tint=finish[1]
 		if w.floor_id=="waterworks":material=preload("res://scripts/factory_finishes.gd").FLOOR[zones[index].code];tint=Color.WHITE
 		if w.floor_id!="sech" or zones[index].code=="00":
 			var foundation=k.box("Foundation",Vector3(r.get_center().x,-.3,r.get_center().y),Vector3(r.size.x,.5,r.size.y),"concrete")
-			if w.floor_id=="starcity" and star.POLYGONS.has(zones[index].code):star.clip_foundation(foundation,star.POLYGONS[zones[index].code])
+			if polygons.has(zones[index].code):star.clip_foundation(foundation,polygons[zones[index].code])
 		k.box("FloorCollision",Vector3(r.get_center().x,-.1,r.get_center().y),Vector3(r.size.x,.2,r.size.y),material,true).visible=false
 		var floor=k.box("Floor_"+str(index),Vector3(r.get_center().x,.009,r.get_center().y),Vector3(r.size.x-.02,.018,r.size.y-.02),material)
 		floor.material_override=floor.material_override.duplicate()
 		if floor.material_override is ShaderMaterial:floor.material_override.set_shader_parameter("base_color",tint)
 		else:floor.material_override.albedo_color=tint
-		if w.floor_id=="starcity" and star.POLYGONS.has(zones[index].code):star.clip_floor(floor,star.POLYGONS[zones[index].code])
+		if polygons.has(zones[index].code):star.clip_floor(floor,polygons[zones[index].code])
 		floor.set_meta("room_code",zones[index].code);floor.set_meta("floor_finish",material)
 		for z in [int(r.position.y),int(r.end.y)]:
 			for x in range(int(r.position.x),int(r.end.x)):edge(edges,"z",z,x,index)
@@ -37,7 +38,13 @@ static func build(w,plan:Dictionary,zones:Array):
 	var lines={}
 	for key in edges:
 		var e:Dictionary=edges[key]
-		if w.floor_id=="starcity" and e.owners.any(func(owner):return star.POLYGONS.has(zones[owner].code)):continue
+		var polygon_owners=e.owners.filter(func(owner):return polygons.has(zones[owner].code))
+		if not polygon_owners.is_empty():
+			# Keep a neighbour's exposed wall beside a cut-off corner. Only the
+			# actual polygon boundary is replaced by the polygon's own masonry.
+			if e.owners.size()==polygon_owners.size():continue
+			var midpoint=Vector2(e.fixed,e.start+.5) if e.axis=="x" else Vector2(e.start+.5,e.fixed)
+			if polygon_owners.any(func(owner):return on_boundary(midpoint,polygons[zones[owner].code])):continue
 		if e.owners.size()==2 and zones[e.owners[0]].code=="00" and zones[e.owners[1]].code=="00":continue
 		var line=e.axis+":"+str(e.fixed)
 		if not lines.has(line):lines[line]={"axis":e.axis,"fixed":e.fixed,"units":[]}
@@ -49,13 +56,17 @@ static func build(w,plan:Dictionary,zones:Array):
 			if unit==end:end+=1
 			else:wall_with_doors(k,plan,line,start,end);start=unit;end=unit+1
 		wall_with_doors(k,plan,line,start,end)
-	if w.floor_id=="starcity":star.polygon_walls(k,plan)
+	if not polygons.is_empty():star.polygon_walls(k,plan,polygons)
 	for d in plan.doors:
 		if d.size()<4:k.doorway(d[0],d[1],d[2]=="x")
 static func edge(edges:Dictionary,axis:String,fixed:int,start:int,owner:int):
 	var key=axis+":"+str(fixed)+":"+str(start)
 	if not edges.has(key):edges[key]={"axis":axis,"fixed":fixed,"start":start,"owners":[]}
 	edges[key].owners.append(owner)
+static func on_boundary(p:Vector2,polygon:Array)->bool:
+	for i in polygon.size():
+		if Geometry2D.get_closest_point_to_segment(p,polygon[i],polygon[(i+1)%polygon.size()]).distance_to(p)<.01:return true
+	return false
 static func wall_with_doors(k,plan:Dictionary,line:Dictionary,start:float,end:float):
 	for opening in plan.get("open_edges",[]):
 		if line.axis==opening[0] and line.fixed==opening[1] and start>=opening[2] and end<=opening[3]:return

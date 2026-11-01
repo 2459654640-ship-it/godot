@@ -353,3 +353,10 @@
 | 留守观测 | [warning_watch](../assets/cinematics/warning_watch.png) |
 
 新地图的人物使用既有角色图集，伊万普通、面具、持枪和面具持枪四套图集均未改变。
+
+## v34 现用材质与场景印刷图
+
+- [旧工业陶瓷墙面](../assets/visual/plant_ceramic_v34.png)：本轮 AI 生成，按墙体世界高度采样；没有叠放在门洞上的独立墙皮。
+- [混凝土板地面](../assets/visual/plant_slab_v34.png)：本轮 AI 生成，4 米周期；工程地坪保留接缝，不做破坏接缝的随机混合。
+- [街区线路简图](../assets/visual/district_route_print.svg)、[水厂操作图](../assets/visual/pump_operation_print.svg)、[公社值班表](../assets/visual/commune_rota_print.svg)：本项目绘制，分别用于路牌、控制室、公社公共厅。
+- 水厂机组、阀组、厂区锅炉房与龙门架、星城切角结构为本项目的尺寸化几何构件；源码分别见 industrial_machinery.gd、city_architecture.gd、complete_maps.gd 与 facility_shell.gd。没有引入付费建模服务或未获得的外部模型。
