@@ -1,0 +1,8 @@
+{
+  "version": "v33",
+  "source_commit": "dd30051454cd5ac902c6c8e58882b2f261e690f0",
+  "engine": "Godot 4.6.3",
+  "windows_template": "official release x86_64",
+  "native_smoke": "Linux release; source-free main menu and new game prologue, GUI / software Vulkan",
+  "windows_hardware_acceptance": "pending"
+}

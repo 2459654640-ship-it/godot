@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "engine": "4.6.3",
+  "packs": [
+    {
+      "file": "world01.pck",
+      "bytes": 81195452,
+      "sha256": "20eb95d24de09b2b26ebc18993490ebbf161648a193559111220332a3d703257"
+    },
+    {
+      "file": "world02.pck",
+      "bytes": 79779904,
+      "sha256": "a15aa9552deca1e9f7ae6f6c98531f76d85ea0251c707235bfdafd7ce724a184"
+    },
+    {
+      "file": "world03.pck",
+      "bytes": 81041248,
+      "sha256": "0c187434149e4d507ede8de0dda3c80dddfddf71e95eb6b856d98a033eec4b56"
+    },
+    {
+      "file": "world04.pck",
+      "bytes": 43772900,
+      "sha256": "a19a91501918e7e47fb59a50c6d387d0c1625a9aa023b755f6390cacb94a7d36"
+    }
+  ]
+}
