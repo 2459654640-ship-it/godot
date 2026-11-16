@@ -1,0 +1,66 @@
+{
+  "requested_model": "image2.6",
+  "actual_model": "not exposed by image_gen; unverified",
+  "generation": "three static eight-cell sheets via image_gen; GIFs encoded locally",
+  "postprocessing": "equal-cell crop and one shared GIF palette per clip; no limb compositing, mirroring, warping, morphing or frame interpolation",
+  "clips": {
+    "walk-first": {
+      "frames": 8,
+      "frame_size": [
+        384,
+        512
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120
+      ],
+      "size_bytes": 758081,
+      "sheet_sha256": "488edbd4673a739581e9c9e5a1d91b7dc4d92b3c266a3f180ad685c5ff802d86"
+    },
+    "walk-retry": {
+      "frames": 8,
+      "frame_size": [
+        384,
+        512
+      ],
+      "durations_ms": [
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120,
+        120
+      ],
+      "size_bytes": 845397,
+      "sheet_sha256": "0f8d77b5602b807a1ab4b4d3778bc11dac1856389f897749488b533d712a1aaf"
+    },
+    "gun": {
+      "frames": 8,
+      "frame_size": [
+        384,
+        512
+      ],
+      "durations_ms": [
+        220,
+        120,
+        140,
+        250,
+        80,
+        160,
+        120,
+        240
+      ],
+      "size_bytes": 832115,
+      "sheet_sha256": "9bd00392d445c96961b864caa1b0da43c3e90e169cf38f8d17e91626b1b5a332"
+    }
+  },
+  "reference_sha256": "4bf5206d9669679b7e79f1d0bedf88ecd02e1b866c7b2ed79ee34ab4542e50ef"
+}
