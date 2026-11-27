@@ -102,6 +102,7 @@ static func commune(w):
  for dx in [-.28,.15]:k.box("AnnaExerciseBook",Vector3(-8+dx,.855,18),Vector3(.29,.035,.40),"paper")
  k.box("AnnaPencil",Vector3(-8.3,.88,18.23),Vector3(.20,.018,.018),"wood")
  preload("res://scripts/railway_detail.gd").commune(w)
+ preload("res://scripts/settlement_service_rooms.gd").commune(k)
  commune_homes(w);commune_production(w);commune_defence(w)
  for x in [16,19,22]:k.box("ArchiveCabinet",Vector3(x,1,-12.3),Vector3(1.6,2,.7),"wood",true)
  for z in [-10,-8]:k.table(Vector3(19,0,z),3)
@@ -245,13 +246,13 @@ static func commune_defence(w):
 static func sech(w):
  var k=w.kit
  # Active rails are beside the platform, never underneath the settlement rooms.
- k.box("DepotBallast",Vector3(23,-.31,-2),Vector3(5,.35,49),"concrete")
- for z in range(-25,22):
+ k.box("DepotBallast",Vector3(23,-.31,-5.5),Vector3(5,.35,56),"concrete")
+ for z in range(-32,22):
   k.box("RailSleeper",Vector3(23,-.1,z),Vector3(2.5,.13,.22),"wood")
- for dx in [-.76,.76]:k.box("DepotRail",Vector3(23+dx,.02,-2),Vector3(.08,.16,49),"metal")
- k.box("PlatformSafetyRail",Vector3(19.94,.5,-2),Vector3(.12,1,44),"metal",true).visible=false
- k.pipe(Vector3(19.8,.8,-24),Vector3(19.8,.8,20),.03,"metal")
- for z in [-21,-15,-9,-3,3,9,15]:
+ for dx in [-.76,.76]:k.box("DepotRail",Vector3(23+dx,.02,-5.5),Vector3(.08,.16,56),"metal")
+ k.box("PlatformSafetyRail",Vector3(19.94,.5,-5.5),Vector3(.12,1,51),"metal",true).visible=false
+ k.pipe(Vector3(19.8,.8,-31),Vector3(19.8,.8,20),.03,"metal")
+ for z in [-28,-21,-15,-9,-3,3,9,15]:
   k.box("PlatformEdge",Vector3(19.8,.04,z),Vector3(.12,.08,5.5),"cream")
   k.lamp(Vector3(18,2.8,z),false,.8,6)
   k.pipe(Vector3(19.8,.2,z),Vector3(19.8,.8,z),.035,"metal")
@@ -313,5 +314,6 @@ static func sech(w):
  for x in [-1,7]:k.bed(Vector3(x,0,17.6),"paper")
  k.table(Vector3(2,0,18.5),3);linen(k,Vector3(1.5,.82,18.5))
  k.box("SewingMachine",Vector3(3,.95,18.5),Vector3(.6,.3,.35),"dark")
+ preload("res://scripts/settlement_service_rooms.gd").sech(k)
  k.table(Vector3(-8,0,-20),3);k.table(Vector3(-8,0,-12),3)
  for x in [-10,-6]:k.locker(Vector3(x,0,-5.6))

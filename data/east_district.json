@@ -490,8 +490,8 @@
     "east_waterworks_entry": {
       "facility": "east_district",
       "name": "东郊水处理厂铁门",
-      "body": "水厂的厂区铁门仍在原位。熟悉的阀门和仓库位于建筑内部，这次进入不会重新生成已经拿走的滤芯或奖励。",
-      "role": "东郊地表 / 探索",
+      "body": "院门到厂房之间留出了一条装卸道。厂房的铁门就在轨道吊车后面，门槛上挂着你们之前拖运滤芯时碰断的锁链。",
+      "role": "东郊水处理厂 / 装卸院",
       "spoken": false,
       "options": [
         "east_enter_waterworks"
@@ -631,7 +631,7 @@
     "east_return_waterworks": {
       "title": "水厂铁门之外",
       "art": "plant_arrival",
-      "body": "你走出水厂铁门，在避风的墙角停下。靴底带出来的黑水很快结了一层薄冰。\n确认背包扣带和面具接口后，你重新踏上旧货运路。身后的铁门又被风推了一下，发出短促的碰响。",
+      "body": "你穿过厂门，在装卸院背风的一侧站了一会儿。靴底带出来的黑水结了一层薄冰。\n吊架下还放着两截没用完的输水管。你从管架旁经过，顺着车辙走向旧货运路。",
       "end": "map:east_district",
       "finish_flags": [
         "arrival_v8_east_district"

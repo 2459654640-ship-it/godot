@@ -5,7 +5,7 @@ static var PLANS={
 "relay":preload("res://scripts/late_layouts.gd").PLANS.relay,
 "star_interior":preload("res://scripts/late_layouts.gd").PLANS.star_interior,
 "east_district":district_plan(),
-"grey_shelter":{"spawn":Vector3(-7.5,.04,7.7),"palette":"a19e8b","ambient":"8b998d","energy":.27,"warm":true,"rooms":[["01","入口与储藏间",Rect2(-10,0,10,10)],["02","厨房与公共桌",Rect2(-10,-9,10,9)],["03","修械间",Rect2(0,-9,10,9)],["04","住户铺位",Rect2(0,0,10,10)]],"doors":[[-5,0,"z",1.4],[0,-3,"x",1.4],[0,5,"x",1.4],[5,0,"z",1.4]],"objects":[]},
+"grey_shelter":{"spawn":Vector3(-7.5,.04,7.7),"palette":"a19e8b","ambient":"8b998d","energy":.27,"warm":true,"rooms":[["01","入口与储藏间",Rect2(-10,0,10,10)],["02","厨房与公共桌",Rect2(-10,-9,10,9)],["03","修械间",Rect2(0,-9,10,9)],["04","住户铺位",Rect2(0,0,10,10)],["05","外勤储料与晾晒间",Rect2(-16,4,6,6)]],"doors":[[-5,0,"z",1.4],[0,-3,"x",1.4],[0,5,"x",1.4],[5,0,"z",1.4],[-10,6.5,"x"]],"objects":[]},
 
 "railfront":{
 	"spawn":Vector3(0,.04,18),"palette":"7d8680","ambient":"9da9a8","energy":.23,"warm":false,
@@ -19,14 +19,14 @@ static var PLANS={
 	"gate":Vector3(12,1.1,0),"gate_flag":"plant_power"},
 "commune":{
 	"spawn":Vector3(25,.04,2),"palette":"c4b99f","ambient":"b0a68b","energy":.24,"warm":true,
-	"rooms":[["01","地下温室",Rect2(-29,-22,18,33)],["02","公共厅与配给室",Rect2(-11,-4,23,10)],["03","联络档案室",Rect2(12,-14,11,14)],["04","人民议事厅",Rect2(-11,-12,23,8)],["05","公社医务室",Rect2(-11,16,13,8)],["06","联络气闸",Rect2(23,0,7,4)],["07","家属房与客铺",Rect2(12,4,11,20)],["08","公社食堂",Rect2(-11,6,13,10)],["09","共用厨房",Rect2(2,6,10,10)],["10","守备值班与军需",Rect2(2,16,10,8)],["11","机修与绕线间",Rect2(-11,-22,8,8)],["12","缝补与制鞋工房",Rect2(-3,-22,7,8)],["13","锅炉房",Rect2(4,-22,8,8)],["00","生产联络廊",Rect2(-11,-14,23,2)],["00","联络前厅",Rect2(12,0,11,4)]],
-	"doors":[[-11,-6,"x"],[-11,3,"x"],[12,-7,"x"],[12,2,"x"],[23,2,"x"],[17,4,"z"],[12,9,"x"],[12,19,"x"],[-3,6,"z"],[5,6,"z"],[2,11,"x"],[-5,16,"z"],[7,16,"z"],[2,20,"x"],[.5,-4,"z",1.5],[-11,-13,"x",.8],[12,-13,"x",.8],[-9.5,-12,"z"],[-7,-14,"z"],[.5,-14,"z"],[8,-14,"z"]],
+	"rooms":[["01","地下温室",Rect2(-29,-15,18,26)],["14","菌种与育苗间",Rect2(-29,-22,18,7)],["15","清洗与分装间",Rect2(-29,11,18,7)],["16","外勤清洁间",Rect2(23,4,7,5)],["02","公共厅与配给室",Rect2(-11,-4,23,10)],["03","联络档案室",Rect2(12,-14,11,14)],["04","人民议事厅",Rect2(-11,-12,23,8)],["05","公社医务室",Rect2(-11,16,13,8)],["06","联络气闸",Rect2(23,0,7,4)],["07","家属房与客铺",Rect2(12,4,11,20)],["08","公社食堂",Rect2(-11,6,13,10)],["09","共用厨房",Rect2(2,6,10,10)],["10","守备值班与军需",Rect2(2,16,10,8)],["11","机修与绕线间",Rect2(-11,-22,8,8)],["12","缝补与制鞋工房",Rect2(-3,-22,7,8)],["13","锅炉房",Rect2(4,-22,8,8)],["00","生产联络廊",Rect2(-11,-14,23,2)],["00","联络前厅",Rect2(12,0,11,4)]],
+	"doors":[[-11,-6,"x"],[-11,3,"x"],[12,-7,"x"],[12,2,"x"],[23,2,"x"],[17,4,"z"],[12,9,"x"],[12,19,"x"],[-3,6,"z"],[5,6,"z"],[2,11,"x"],[-5,16,"z"],[7,16,"z"],[2,20,"x"],[.5,-4,"z",1.5],[-11,-13,"x",.8],[-23.5,-15,"z"],[-13.5,-15,"z"],[-24,11,"z"],[-16,11,"z"],[27,4,"z"],[12,-13,"x",.8],[-9.5,-12,"z"],[-7,-14,"z"],[.5,-14,"z"],[8,-14,"z"]],
 	"objects":[["commune_greenhouse",-12.8,-2,"garden"],["commune_well",8,2,"ledger"],["commune_records",17,-6,"desk"],["commune_leader",-5,-9.5,"npc"],["commune_anna",-4,20,"npc"],["commune_leave",25,2,"exit"],["commune_printer",20,-3,"npc"],["commune_grower",-13,7,"npc"],["commune_proof",20,-7,"press"],["commune_mushroom",-20,-6.5,"marker"],["commune_receiver",14,-10,"radio"],["commune_cook",5,11,"npc"],["commune_hall",2,-7.3,"marker"],["commune_radiator",20.9,22.8,"marker"],["commune_child",3,3,"npc"],["commune_bunks",14.8,12,"marker"],["commune_moro",6.2,-16.5,"npc"],["commune_guard",8.8,18.1,"npc"],["commune_baranova",20.6,19.5,"npc"],["commune_salvage",-6,-17,"marker"],["commune_shift_archive",-9,-16.2,"marker"],["commune_tailor",.5,-17,"marker"],["commune_boiler",9,-19,"marker"],["commune_class",-8,18.95,"marker"]]},
 "sech":{
 	"spawn":Vector3(17,.04,16),"palette":"ad9b80","ambient":"929caf","energy":.23,"warm":true,
-	"rooms":[["01","北线调度室",Rect2(-12,-21,8,7)],["02","电台维修车厢",Rect2(-12,-14,8,9)],["03","书房与晾晒间",Rect2(0,-24,9,10)],["04","储水与洗漱",Rect2(9,0,5,10)],["05","谢契议事室",Rect2(-4,-14,13,9)],["06","北线装卸站台",Rect2(14,-24,6,44)],["07","共用厨房与饭桌",Rect2(-16,-5,12,10)],["08","住户车厢与客铺",Rect2(-16,5,12,15)],["09","诊疗与缝补间",Rect2(-4,10,13,10)],["00","检修库公共厅",Rect2(-4,-5,13,15)],["00","北侧过桥",Rect2(9,-5,5,5)],["00","南侧过桥",Rect2(9,10,5,4)]],
-	"open_edges":[["x",20,-24,20]],
-	"doors":[[-8,-14,"z"],[-4,-10,"x"],[3,-14,"z"],[1,-5,"z",1.5],[-4,0,"x"],[-10,5,"z"],[-4,13,"x"],[3,10,"z"],[9,-2,"x"],[14,-2,"x"],[9,5,"x"],[14,5,"x"],[9,12,"x"],[14,12,"x"]],
+	"rooms":[["01","北线调度室",Rect2(-12,-21,8,7)],["02","电台维修车厢",Rect2(-12,-14,8,9)],["03","书房与晾晒间",Rect2(0,-24,9,10)],["04","储水与洗漱",Rect2(9,0,5,10)],["05","谢契议事室",Rect2(-4,-14,13,9)],["06","北线装卸站台",Rect2(14,-24,6,44)],["10","北端机车检修台",Rect2(14,-31,6,7)],["11","住户补缀间",Rect2(-16,20,12,6)],["07","共用厨房与饭桌",Rect2(-16,-5,12,10)],["08","住户车厢与客铺",Rect2(-16,5,12,15)],["09","诊疗与缝补间",Rect2(-4,10,13,10)],["00","检修库公共厅",Rect2(-4,-5,13,15)],["00","北侧过桥",Rect2(9,-5,5,5)],["00","南侧过桥",Rect2(9,10,5,4)]],
+	"open_edges":[["x",20,-31,20]],
+	"doors":[[-8,-14,"z"],[-4,-10,"x"],[3,-14,"z"],[1,-5,"z",1.5],[-4,0,"x"],[-10,5,"z"],[-4,13,"x"],[3,10,"z"],[9,-2,"x"],[14,-2,"x"],[9,5,"x"],[14,5,"x"],[9,12,"x"],[14,12,"x"],[17,-24,"z"],[-10,20,"z"]],
 	"objects":[["sech_manual",-8,-18,"desk"],["sech_radio",-8,-9,"radio"],["sech_sergey",5,-18,"npc"],["sech_water",11,6,"tank"],["sech_elder",6.9,-11.5,"npc"],["sech_leave",17,16,"exit"],["sech_quartermaster",5,14,"npc"],["sech_brake",17,11,"car_brake"],["sech_signal",17,-17,"signal"],["sech_bookshelf",5,-21,"marker"],["sech_cook",-10,1,"npc"],["sech_stove",-13,-2,"marker"],["sech_bunks",-10,11,"marker"],["sech_meeting",1,-9,"marker"]]},
 "coal":{
 	"spawn":Vector3(-12,.04,9),"palette":"817e72","ambient":"99a3a7","energy":.18,"warm":false,
@@ -66,6 +66,9 @@ static func district_plan()->Dictionary:
 		var code={"clinic":"10","radio":"11","south_corner":"13"}[parcel.id]
 		rooms=rooms.filter(func(r):return r[0]!=code)
 		rooms.append([code,{"clinic":"工人诊所","radio":"民防通信站","south_corner":"工人街住宅"}[parcel.id],Rect2(b[0]-b[2]/2.0,b[1]-b[3]/2.0,b[2],b[3])])
+	for place in d.get("public_places",[]):
+		var b:Array=place.bounds
+		rooms.append([place.id,place.name,Rect2(b[0],b[1],b[2]-b[0],b[3]-b[1])])
 	rooms.sort_custom(func(a,b):return a[2].get_area()<b[2].get_area())
 	var objects=[]
 	for e in d.entrances+d.sites:

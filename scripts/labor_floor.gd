@@ -5,13 +5,14 @@ const ZONES=[
 {"name":"轮班工棚","code":"L1","rect":Rect2(-24,-13,10,12)},
 {"name":"工具修配间","code":"L2","rect":Rect2(-14,-13,9,12)},
 {"name":"医务间","code":"L3","rect":Rect2(-5,-13,10,12)},
+{"name":"医务间 / 留观病房","code":"L10","rect":Rect2(-5,-19,10,6)},
 {"name":"装备库","code":"L4","rect":Rect2(5,-13,10,12)},
 {"name":"正门候车区","code":"L5","rect":Rect2(15,-13,11,12)},
 {"name":"工人歇脚棚","code":"L6","rect":Rect2(-24,4,10,10)},
 {"name":"征召集合区","code":"L7","rect":Rect2(-14,4,11,10)},
 {"name":"煤运检票口","code":"L8","rect":Rect2(-3,4,12,10)},
 {"name":"装卸与储运区","code":"L9","rect":Rect2(9,4,17,10)}]
-const DOORS=[Vector2(-19,-1),Vector2(-9.5,-1),Vector2(0,-1),Vector2(10,-1),Vector2(20,-1),Vector2(-19,4),Vector2(-12.2,4),Vector2(-8.5,4),Vector2(3,4),Vector2(17,4)]
+const DOORS=[Vector2(-19,-1),Vector2(-9.5,-1),Vector2(0,-1),Vector2(10,-1),Vector2(20,-1),Vector2(-19,4),Vector2(-12.2,4),Vector2(-8.5,4),Vector2(3,4),Vector2(17,4),Vector2(0,-13)]
 static func barrier(k,id:String,a:Vector2,b:Vector2,wood:bool=false):
 	var length=a.distance_to(b)
 	var size=Vector3(maxf(absf(a.x-b.x),.18),2.45,maxf(absf(a.y-b.y),.18))
@@ -44,12 +45,19 @@ static func build(w):
 	k.box("FloorCollision",Vector3(1,-.1,.5),Vector3(50,.2,27),"tile",true).visible=false
 	for zone in ZONES:
 		var r:Rect2=zone.rect
-		var material="concrete" if zone.code in ["L0","L3","L4","L5"] else ("metal" if zone.code in ["L2","L9"] else "wood")
+		var material="tile" if zone.code=="L10" else ("concrete" if zone.code in ["L0","L3","L4","L5"] else ("metal" if zone.code in ["L2","L9"] else "wood"))
 		var floor_mesh=k.box("Floor_"+zone.code,Vector3(r.get_center().x,.007,r.get_center().y),Vector3(r.size.x-.04,.014,r.size.y-.04),material)
 		floor_mesh.material_override=floor_mesh.material_override.duplicate()
-		floor_mesh.material_override.albedo_color=Color({"L0":"8a8b7c","L1":"a3977b","L2":"707c7a","L3":"b0b8a5","L4":"838e83","L5":"959f98","L6":"b0a17e","L7":"8c806b","L8":"706c62","L9":"7a8077"}[zone.code])
+		floor_mesh.material_override.albedo_color=Color({"L0":"8a8b7c","L1":"a3977b","L2":"707c7a","L3":"b0b8a5","L4":"838e83","L5":"959f98","L6":"b0a17e","L7":"8c806b","L8":"706c62","L9":"7a8077","L10":"a0b0a5"}[zone.code])
 		floor_mesh.material_override.uv1_scale=Vector3.ONE/(1.7 if zone.code in ["L2","L5","L9"] else 2.4)
-	barrier(k,"NorthSheet",Vector2(-24,-13),Vector2(15,-13))
+	barrier(k,"NorthSheet",Vector2(-24,-13),Vector2(-.91,-13))
+	barrier(k,"NorthSheet",Vector2(.91,-13),Vector2(15,-13))
+	k.doorway(0,-13)
+	k.box("ClinicAnnexFoundation",Vector3(0,-.3,-16),Vector3(10.5,.5,6),"concrete")
+	k.box("ClinicAnnexCollision",Vector3(0,-.1,-16),Vector3(10,.2,6),"concrete",true).visible=false
+	k.wall("ClinicAnnexRear",Vector2(-5,-19),Vector2(5,-19),true)
+	for x in [-5,5]:k.wall("ClinicAnnexSide",Vector2(x,-19),Vector2(x,-13),true)
+	preload("res://scripts/settlement_service_rooms.gd").d6(k)
 	# Actual sealed blast door: rails pass through a real aperture behind it.
 	barrier(k,"GateRearLeft",Vector2(15,-13),Vector2(18,-13))
 	barrier(k,"GateRearRight",Vector2(22,-13),Vector2(26,-13))
@@ -83,11 +91,11 @@ static func build(w):
 	k.locker(Vector3(-12.6,0,-3),1.7)
 	k.pipe(Vector3(-13.5,2.5,-11.5),Vector3(-5.5,2.5,-11.5),.1)
 	for x in [-3,2.5]:k.bed(Vector3(x,0,-10.5),"paper")
-	k.table(Vector3(0,0,-6.5),2.4)
-	k.cyl("ClinicSteriliser",Vector3(.4,.95,-6.5),.24,.35,"metal")
+	k.table(Vector3(2.7,0,-6.5),2.4)
+	k.cyl("ClinicSteriliser",Vector3(3.1,.95,-6.5),.24,.35,"metal")
 	k.locker(Vector3(3.9,0,-8),1.8)
-	k.box("MedicalCrossV",Vector3(.0,2,-12.8),Vector3(.11,.60,.05),"red")
-	k.box("MedicalCrossH",Vector3(.0,2,-12.76),Vector3(.6,.11,.05),"red")
+	k.box("MedicalCrossV",Vector3(3.2,2,-12.8),Vector3(.11,.60,.05),"red")
+	k.box("MedicalCrossH",Vector3(3.2,2,-12.76),Vector3(.6,.11,.05),"red")
 	for x in [6.3,7.3,8.3,9.3,10.3,11.3,12.3,13.3]:k.locker(Vector3(x,0,-11.8),1.9)
 	k.table(Vector3(10,0,-6.5),3.4)
 	k.box("ArmoryLedger",Vector3(10,.83,-6.5),Vector3(.45,.04,.32),"paper")

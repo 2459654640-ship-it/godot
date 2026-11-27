@@ -2,6 +2,8 @@ extends RefCounted
 const Bag=preload("res://scripts/backpack.gd")
 const FLOORS=["east_district","surface","grey_shelter"]
 const CONTAINERS=[
+ ["dispatch_bag","留置室床脚的帆布包",Vector3(-44.8,0,47.1),"medical"],
+ ["heating_parts","供热院的检修柜",Vector3(-54.15,0,52.2),"technical"],
  ["clinic_drawer","诊所治疗室的抽屉",Vector3(-75,0,34),"medical"],
  ["clinic_coat","候诊室遗留的包",Vector3(-88,0,26),"domestic"],
  ["radio_store","通信站备件柜",Vector3(-36,0,-69),"technical"],
@@ -36,6 +38,7 @@ static func setup(w):
   w.kit.box("ShelterStairLintel",Vector3(42,2.3,-12.5),Vector3(2.1,.18,.25),"district_concrete")
   for spec in CONTAINERS:add(w,spec[0],spec[1],spec[2],spec[3])
  if w.floor_id=="grey_shelter":
+  add(w,"shelter_salvage","外勤储料间的旧滤件箱",Vector3(-13.6,0,5.8),"technical")
   w.target("grey_shelter_exit",Vector3(-7.5,0,8),"沿楼梯返回地表岗哨")
   for spec in [["shelter_food","厨房配给柜",Vector3(-6,0,-5),"domestic"],["shelter_tools","修械台下的箱子",Vector3(5,0,-5),"arms"],["shelter_bunks","铺位下的背包",Vector3(6,0,5),"medical"]]:add(w,spec[0],spec[1],spec[2],spec[3])
  for key in w.story.flags.get("raid_containers",{}):

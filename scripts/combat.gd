@@ -2,6 +2,7 @@ extends Node
 ## Room-sized realtime encounters with exact, non-punitive pre-fight rollback.
 const Enemy=preload("res://scripts/combat_enemy.gd")
 var w
+const CityGround=preload("res://scripts/city_ground.gd")
 const Catalog=preload("res://scripts/monster_catalog.gd")
 var projectiles:Array=[]
 var feedback
@@ -133,6 +134,7 @@ func _physics_process(delta):
  var radiation=" · 辐射 %d"%w.story.economy.radiation if w.story.economy.radiation>0 else ""
  label.text=("武器栏空置 · I 装备武器" if w.story.equipped_weapon()=="" else ("装填中… %.1f"%reload_time if reload_time>0 else (("%s %d / %d · 土制弹 %d"%["卡宾枪" if w.story.equipped_weapon()=="grey_carbine" else "左轮",clip,magazine_size(),w.story.economy.handmade])+ (" · 1 收枪" if w.story.weapon_drawn() else " · 1 拔枪"))))+("  /  老兵 "+("倒地：靠近并按住 E 2 秒" if veteran_health<=0 else "%d"%veteran_health) if is_instance_valid(veteran) else "")+radiation
  if rescue>0:label.text+="  救援 %d%%"%int(rescue*50)
+ if w.floor_id=="east_district":district_exposure(delta)
  if w.floor_id=="waterworks" and Rect2(-19,-14,7,7).has_point(Vector2(w.player.position.x,w.player.position.z)) and not w.story.f("radiation_warned"):
   w.story.flags.radiation_warned=true;w.hud.toast("旧沉积物带有辐射，尽量绕开西北角的污泥积水。抗辐射药可在背包使用。",7)
  # Exposure only while moving near contaminated sediment; never while reading.
@@ -142,6 +144,21 @@ func _physics_process(delta):
    exposure-=5;w.story.economy.radiation=mini(100,w.story.economy.radiation+2)
    if not w.story.f("radiation_warned"):w.story.flags.radiation_warned=true;w.hud.toast("脚边是带放射性沉积物的积水。离开这片区域；抗辐射药可在背包使用。",7)
   w.story.flags.radiation_clock=exposure
+func district_exposure(delta:float):
+ var p=Vector2(w.player.position.x,w.player.position.z)
+ var concentration=CityGround.impact_factor(p)
+ if concentration<.17:return
+ if not w.story.f("district_fallout_warned"):
+  w.story.flags.district_fallout_warned=true
+  w.hud.toast("断缆广场的低处积着放射性尘土。沿西侧人行道绕过去，别走进灰坑。",7)
+ label.text+="  / 扬尘区"
+ if concentration<.48:return
+ var clock=float(w.story.flags.get("district_dust_clock",0))+delta
+ if clock>=5.0:
+  clock-=5.0
+  w.story.economy.radiation=mini(100,w.story.economy.radiation+2)
+ w.story.flags.district_dust_clock=clock
+
 func magazine_size()->int:return 5 if w.story.equipped_weapon()=="grey_carbine" else 6
 func sync():
  w.story.flags.weapon_clip=clip;w.story.flags.veteran_health=veteran_health;w.story.changed.emit()

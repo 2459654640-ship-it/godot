@@ -203,6 +203,19 @@
           "east_district"
         ]
       }
+    },
+    "city_passenger_roll_read": {
+      "text": "翻到最后一班车的记录。",
+      "reply": "值班员按车厢登记乘客。第一节上了五十七人，第二节上了六十一人。最后一页写着「南线断电，改送防空洞」，下面补了一份没能上车的名单。\n你看到一个孩子的名字被划了两遍。第一次写在父亲名下，第二次写在一位站务员名下。末尾有一行字：「孩子交给三号洞的护士了。家里若有人来问，叫他来站里找我。」",
+      "once": true,
+      "flags": {
+        "city_passenger_roll_read": true
+      },
+      "req": {
+        "floor": [
+          "east_district"
+        ]
+      }
     }
   },
   "interactions": {
@@ -352,6 +365,22 @@
         [
           "city_family_read",
           "你已经收好了这封信。信里提到的诊所和民防通信站，都在工人街附近。"
+        ]
+      ]
+    },
+    "city_passenger_roll": {
+      "facility": "east_district",
+      "name": "民防留置室 / 电车站的乘客名簿",
+      "role": "东郊工业片区",
+      "spoken": false,
+      "body": "柜台旁是候车的长凳。往里走，隔墙挡着两张担架床，墙根还留着给行李分区的粉笔记号。柜台上的名簿被棉线重新缝过。",
+      "options": [
+        "city_passenger_roll_read"
+      ],
+      "after": [
+        [
+          "city_passenger_roll_read",
+          "站务员在名簿上留了自己的名字。他想让回来找孩子的人知道该问谁。"
         ]
       ]
     }

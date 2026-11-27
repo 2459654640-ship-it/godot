@@ -11,7 +11,11 @@ static func build(w,plan:Dictionary,zones:Array):
 	for index in zones.size():
 		var r:Rect2=zones[index].rect
 		var material="wood" if w.floor_id=="sech" else ("terrazzo" if w.floor_id=="commune" else ("factory_floor" if w.floor_id=="waterworks" else "concrete"))
-		if w.floor_id=="sech" and zones[index].code=="00":material="concrete"
+		if w.floor_id=="sech":
+			match zones[index].code:
+				"00","06","10":material="concrete"
+				"04","09":material="tile"
+				"07","11":material="terrazzo"
 		if w.floor_id=="commune" and zones[index].code in ["01","05"]:material="tile"
 		if w.floor_id=="waterworks" and zones[index].code in ["05","06"]:material="tile"
 		if w.floor_id=="coal" and zones[index].code in ["02","03"]:material="tile"

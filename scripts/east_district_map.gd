@@ -4,14 +4,22 @@ const Layout=preload("res://scripts/east_district.gd")
 const Site=preload("res://scripts/surface_site.gd")
 const Architecture=preload("res://scripts/outdoor_architecture.gd")
 const Urban=preload("res://scripts/district_urban.gd")
+const Civic=preload("res://scripts/city_civic.gd")
 static func position(a:Array,y:float=0)->Vector3:return Vector3(a[0],y,a[1])
 static func road_conflict(plan:Dictionary,p:Vector3,size:Vector2)->bool:
+	var footprint=Rect2(Vector2(p.x,p.z)-size/2,size).grow(.65)
+	var perimeter=[footprint.position,Vector2(footprint.end.x,footprint.position.y),footprint.end,Vector2(footprint.position.x,footprint.end.y)]
 	for road in plan.roads:
-		var half=float(road.width)*.5+.65
+		var half=float(road.width)/2
 		for i in range(road.points.size()-1):
-			var a=Vector2(road.points[i][0],road.points[i][1]);var b=Vector2(road.points[i+1][0],road.points[i+1][1])
-			if is_equal_approx(a.x,b.x) and absf(p.x-a.x)<size.x*.5+half and p.z+size.y*.5>minf(a.y,b.y)-half and p.z-size.y*.5<maxf(a.y,b.y)+half:return true
-			if is_equal_approx(a.y,b.y) and absf(p.z-a.y)<size.y*.5+half and p.x+size.x*.5>minf(a.x,b.x)-half and p.x-size.x*.5<maxf(a.x,b.x)+half:return true
+			var a=Vector2(road.points[i][0],road.points[i][1])
+			var b=Vector2(road.points[i+1][0],road.points[i+1][1])
+			if footprint.has_point(a) or footprint.has_point(b):return true
+			for side in perimeter.size():
+				var c:Vector2=perimeter[side]
+				var d:Vector2=perimeter[(side+1)%perimeter.size()]
+				var closest=Geometry2D.get_closest_points_between_segments(a,b,c,d)
+				if closest[0].distance_squared_to(closest[1])<half*half:return true
 	return false
 static func building(k,p:Vector3,size:Vector2,floors:int,seed:int,north_door:bool=false,kind:String="residential"):
 	# Full facade modules have an actual door opening at ground level.
@@ -92,6 +100,7 @@ static func build(w):
 	for i in plan.parcels.size():
 		var parcel:Dictionary=plan.parcels[i];var b=parcel.building;var p=Vector3(b[0],0,b[1]);var size=Vector2(b[2],b[3])
 		if parcel.id in ["clinic","radio","south_corner"]:City.room(k,p,size,parcel.id)
+		elif parcel.id=="south_station":Civic.shelter(k,p,size)
 		elif parcel.get("open",false):
 			Site.ruin(k,p,size,i+21,.028)
 			City.mound(k,p+Vector3(-size.x*.3,0,-size.y*.3),Vector3(size.x*.4,1.4,size.y*.36),i+20)
@@ -108,6 +117,7 @@ static func build(w):
 			var p=Vector3(sign*143,0,-80+n*36);var size=Vector2(18,26)
 			if not road_conflict(plan,p,size):building(k,p,size,3+n%2,140+n+sign,false,"residential")
 	City.factory(k);City.basin(k);City.edge(k)
+	Civic.public_spaces(k)
 	# Freight rail is a raised dedicated reservation. Only the authored crossing is level.
 	Ground.apron(k,Vector2(24,0),Vector2(4.2,200))
 	for x in [23.24,24.76]:k.box("FreightRail",Vector3(x,.06,0),Vector3(.07,.12,200),"old_iron")
@@ -160,7 +170,7 @@ static func build(w):
 		k.bench(p,2.7,true,PI);k.cyl("StreetRefuseDrum",p+Vector3(1.8,.35,0),.3,.7,"rust")
 	# Collapsed corners and snow-filled courtyards vary the local terrain without
 	# hiding ankle-high collision across a door or a marked route.
-	for spec in [[-56,25,5,1.6,4],[-37,-47,7,2.3,6],[12,-56,11,2.8,15],[85,0,7,1.4,4],[102,51,8,2.1,8],[-86,53,9,1.2,4],[-5,94,14,2.4,5]]:
+	for spec in [[-56,25,5,1.6,4],[-37,-47,7,2.3,6],[85,0,7,1.4,4],[102,51,8,2.1,8],[-86,53,9,1.2,4],[-5,94,14,2.4,5]]:
 		City.mound(k,Vector3(spec[0],0,spec[1]),Vector3(spec[2],spec[3],spec[4]),int(spec[0]))
 	for p in [Vector3(-57,0,54),Vector3(-23,0,55),Vector3(11,0,30),Vector3(52,0,55),Vector3(-92,0,20)]:
 		k.cyl("BareBirchTrunk",p+Vector3.UP*2.1,.12,4.2,"wood")
@@ -171,19 +181,83 @@ static func build(w):
 	k.finish_walls()
 
 static func wreck(k,p:Vector3,heading:float=0):
-	var root=Node3D.new();root.name="AbandonedUtilityCar";root.position=p;root.rotation.y=heading;k.root.add_child(root)
-	k.box("CarChassis",Vector3(0,.44,0),Vector3(1.6,.5,3.7),"old_iron",false,root)
-	k.box("CarBonnet",Vector3(0,.78,1.1),Vector3(1.52,.24,1.2),"rust",false,root)
-	k.box("CarCabin",Vector3(0,1.05,-.25),Vector3(1.42,.8,1.85),"exterior_glass",false,root)
-	k.box("CarRoof",Vector3(0,1.5,-.25),Vector3(1.56,.10,2),"rust",false,root)
-	k.box("CarRoofSnow",Vector3(0,1.57,-.25),Vector3(1.42,.04,1.75),"surface_snow",false,root)
-	for x in [-.74,.74]:
-		for z in [-1.2,1.2]:
-			k.box("CarWindowPillar",Vector3(x,1.05,z*.65),Vector3(.07,.85,.08),"rust",false,root)
-			var wheel=k.cyl("FlatCarTyre",Vector3(x,.30,z),.30,.16,"dark",root);wheel.rotation.z=PI/2
-	for x in [-.55,.55]:k.box("BrokenCarLamp",Vector3(x,.70,1.87),Vector3(.3,.15,.05),"cream",false,root)
+	var root=Node3D.new()
+	root.name="AbandonedUtilityCar"
+	root.position=p
+	root.rotation.y=heading
+	k.root.add_child(root)
+	# Crooked front apron, wheel-height sills and a sloping cabin give the
+	# silhouette of a small 1970s estate car, even under its layer of frost.
+	car_form(k,root,"PressedSteelBody",[
+		Vector4(-1.88,.67,.37,.81),Vector4(-1.68,.81,.30,.91),
+		Vector4(-.62,.86,.31,.97),Vector4(.68,.83,.30,.95),
+		Vector4(1.62,.78,.30,.82),Vector4(1.91,.66,.40,.71)],"rust",.09)
+	car_form(k,root,"SetBackGlassCabin",[
+		Vector4(-1.24,.73,.89,1.01),Vector4(-1.01,.69,.91,1.39),
+		Vector4(-.72,.68,.95,1.52),Vector4(.32,.65,.96,1.50),
+		Vector4(.91,.73,.88,1.01)],"exterior_glass",.028)
+	car_form(k,root,"GutteredRoof",[
+		Vector4(-.96,.57,1.43,1.48),Vector4(-.74,.65,1.47,1.54),
+		Vector4(.32,.63,1.45,1.52),Vector4(.47,.55,1.41,1.46)],"old_iron",.04)
+	car_form(k,root,"UnevenRoofFrost",[
+		Vector4(-.84,.45,1.487,1.52),Vector4(-.65,.55,1.52,1.566),
+		Vector4(.21,.54,1.506,1.55),Vector4(.35,.44,1.483,1.515)],"district_roof_snow",.023)
+	for side in [-1,1]:
+		for z in [-1.16,1.11]:
+			var tyre=k.cyl("DeflatedCarTyre",Vector3(side*.79,.27,z),.29,.16,"dark",root)
+			tyre.rotation.z=PI/2
+			tyre.scale.x=.91
+			var hub=k.cyl("WheelPressedHub",Vector3(side*.88,.28,z),.146,.036,"old_iron",root)
+			hub.rotation.z=PI/2
+		for split in [-.89,-.31,.38]:
+			Urban.beam(k,"CarCabinPost",Vector3(side*.70,.96,split),Vector3(side*.61,1.46,split-.11),.044,.045,"old_iron",root)
+		k.box("BodySideTrim",Vector3(side*.844,.73,-.18),Vector3(.027,.043,2.88),"old_iron",false,root)
+		for dz in [-.6,.46]:
+			k.box("RecessedDoorHandle",Vector3(side*.871,.86,dz),Vector3(.031,.044,.14),"metal",false,root)
+		k.box("RearTailLamp",Vector3(side*.52,.65,-1.89),Vector3(.28,.14,.043),"red",false,root)
+	var bumper=k.box("BentFrontBumper",Vector3(0,.42,1.92),Vector3(1.5,.12,.13),"old_iron",false,root);bumper.rotation.z=-.05
+	k.box("ExposedGrilleRecess",Vector3(0,.63,1.897),Vector3(1.05,.19,.10),"dark",false,root)
+	for y in [.567,.622,.677]:k.box("GrilleRib",Vector3(0,y,1.951),Vector3(1.06,.031,.046),"old_iron",false,root)
+	for x in [-.58,.58]:k.box("CloudedHeadlamp",Vector3(x,.71,1.909),Vector3(.23,.14,.062),"cream" if x<0 else "dark",false,root)
+	var size=Vector2(1.76,3.88)
 	var across=absf(sin(heading))>.7
-	var hull=k.box("CarCollision",p+Vector3.UP*.65,Vector3(3.7,1.3,1.6) if across else Vector3(1.6,1.3,3.7),"dark",true);hull.visible=false
+	var hull=k.box("CarCollision",p+Vector3.UP*.69,Vector3(size.y,1.38,size.x) if across else Vector3(size.x,1.38,size.y),"dark",true);hull.visible=false
+
+static func car_form(k,root:Node3D,id:String,sections:Array,finish:String,bevel:float):
+	# Each definition is z, half width, bottom and top. All shells use the
+	# same chamfered eight-sided section with full front and rear panels.
+	var st=SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var rows=[]
+	for s in sections:
+		var x:float=s.y
+		var low:float=s.z
+		var high:float=s.w
+		var cut=minf((high-low)*.42,bevel)
+		var row=[]
+		for v in [Vector2(-x+cut,low),Vector2(x-cut,low),Vector2(x,low+cut),Vector2(x,high-cut),Vector2(x-cut,high),Vector2(-x+cut,high),Vector2(-x,high-cut),Vector2(-x,low+cut)]:
+			row.append(Vector3(v.x,v.y,s.x))
+		rows.append(row)
+	for i in rows.size()-1:
+		for n in 8:
+			var j=(n+1)%8
+			car_triangle(st,rows[i][n],rows[i+1][n],rows[i+1][j])
+			car_triangle(st,rows[i][n],rows[i+1][j],rows[i][j])
+	for n in range(1,7):
+		car_triangle(st,rows[0][0],rows[0][n],rows[0][n+1])
+		car_triangle(st,rows[-1][0],rows[-1][n+1],rows[-1][n])
+	var mesh=MeshInstance3D.new()
+	mesh.name=id
+	mesh.mesh=st.commit()
+	mesh.material_override=k.mats[finish]
+	root.add_child(mesh)
+
+static func car_triangle(st:SurfaceTool,a:Vector3,b:Vector3,c:Vector3):
+	var normal=(c-a).cross(b-a).normalized()
+	st.set_normal(normal)
+	for v in [a,b,c]:
+		st.set_uv(Vector2(v.x*.55+v.z*.29,v.y))
+		st.add_vertex(v)
 
 static func streetscape(k):
 	# Pavements stop before junctions and never cross a doorway or the railway.

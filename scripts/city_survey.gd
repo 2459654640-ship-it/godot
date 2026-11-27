@@ -1,6 +1,7 @@
 extends Node
 ## Persistent discoveries. Unknown cells and actors never appear on the street map.
 const CELL=12.0
+const Ground=preload("res://scripts/city_ground.gd")
 var world
 var timer=0.0
 func setup(w):world=w;survey()
@@ -56,13 +57,31 @@ static func draw_map(v):
     if v.expanded and not Rect2(-120,-100,240,200).has_point(p):continue
     if not v.expanded and p.distance_to(center)>32:continue
     var seen=known(s,p)
-    if seen or v.expanded:v.draw_line(v.project(p),v.project(q),(Color("435950") if v.expanded else Color("c6bc97")) if seen else (Color("919b8e") if v.expanded else Color("56625b")),maxf(1,road.width*v.drawing_scale*.6),true)
+    if seen or v.expanded:v.draw_line(v.project(p),v.project(q),(Color("435950") if v.expanded else Color("c6bc97")) if seen else (Color("919b8e") if v.expanded else Color("56625b")),maxf(.8,road.width*v.drawing_scale*(.37 if road.get("class","")=="walk" else .60)),true)
  for parcel in layout.parcels:
   var b=parcel.building;var p=Vector2(b[0],b[1]);var r=Rect2(p-Vector2(b[2],b[3])/2,Vector2(b[2],b[3]))
   if not v.expanded and (not known(s,p) or p.distance_to(center)>32):continue
   var polygon=v.polygon(r);v.draw_colored_polygon(polygon,(Color("849182") if v.expanded else Color("596859")) if known(s,p) else (Color("afb3a1") if v.expanded else Color("303d38")))
+ # Rails get their own cartographic line. Sidewalks and driveways stay distinct.
+ var rails:Dictionary=layout.railway
+ var rail_x:float=rails.get("x",24)
+ for z in range(-100,100,4):
+  var q=Vector2(rail_x,z)
+  if not v.expanded and (not known(s,q) or q.distance_to(center)>34):continue
+  var rail_color=Color("665845") if v.expanded else Color("9c8c6e")
+  for dx in [-.68,.68]:v.draw_line(v.project(q+Vector2(dx,0)),v.project(q+Vector2(dx,4)),rail_color,1.1,true)
+  v.draw_line(v.project(q-Vector2(1.6,0)),v.project(q+Vector2(1.6,0)),rail_color,1,true)
+ var scar=Ground.IMPACT_CENTER
+ if known(s,scar) and (v.expanded or scar.distance_to(center)<32):
+  var fill=PackedVector2Array()
+  for i in 20:
+   var angle=TAU*i/20
+   fill.append(v.project(scar+Vector2(cos(angle),sin(angle))*Ground.IMPACT_RADII))
+  v.draw_colored_polygon(fill,Color("a3674b") if v.expanded else Color("805946"))
+  fill.append(fill[0])
+  v.draw_polyline(fill,Color("663b2c") if v.expanded else Color("d2a173"),1.2,true)
  var label_rects:Array[Rect2]=[]
- for e in layout.entrances+layout.sites:
+ for e in layout.public_places+layout.entrances+layout.sites:
   var p=Vector2(e.point[0],e.point[1])
   if not known(s,p) or (not v.expanded and p.distance_to(center)>30):continue
   v.draw_circle(v.project(p),2.8 if v.expanded else 1.8,(Color("804031") if v.expanded else Color("b49c69")))
@@ -98,4 +117,4 @@ static func draw_map(v):
   v.draw_string(w.kit.font,bar+Vector2(0,-8),"20 m",HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color("435950"))
   v.draw_string(w.kit.font,Vector2(12,24),"东郊工业片区 / 外勤用图",HORIZONTAL_ALIGNMENT_LEFT,-1,16,(Color("713a2d") if v.expanded else Color("c7aa70")))
   v.draw_string(w.kit.font,Vector2(v.size.x-100,24),"北 ↑",HORIZONTAL_ALIGNMENT_LEFT,-1,15,(Color("334b45") if v.expanded else Color("d2c7a6")))
-  v.draw_string(w.kit.font,Vector2(12,v.size.y-8),"浅底：已踏查  ·  灰底：待探索  ·  红点：已发现的入口或设施",HORIZONTAL_ALIGNMENT_LEFT,-1,13,Color("505f55"))
+  v.draw_string(w.kit.font,Vector2(12,v.size.y-8),"浅底：已踏查  ·  灰底：待探索  ·  红点：设施与地标  ·  棕斑：扬尘危险区",HORIZONTAL_ALIGNMENT_LEFT,-1,13,Color("505f55"))

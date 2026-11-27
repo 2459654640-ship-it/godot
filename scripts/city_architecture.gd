@@ -3,7 +3,7 @@ const Site=preload("res://scripts/surface_site.gd")
 const Ground=preload("res://scripts/city_ground.gd")
 const Urban=preload("res://scripts/district_urban.gd")
 static func materials(k):
- for pair in [["district_brick","city29_brick","c5b6a8",.32],["district_concrete","city29_plaster","b7b8b2",.27],["district_ochre","city29_plaster","c2b08a",.28],["city_paving","city29_paving","c2c5c1",.30],["district_roof_snow","art28_snow","aab5bd",.28],["shelter_snow","art28_snow","aab5bd",.28]]:
+ for pair in [["civic_tile","civic_glazed_tile","e8e2d5",.68],["district_brick","city29_brick","c5b6a8",.32],["district_concrete","city29_plaster","b7b8b2",.27],["district_ochre","city29_plaster","c2b08a",.28],["city_paving","city29_paving","c2c5c1",.30],["district_roof_snow","art28_snow","aab5bd",.28],["shelter_snow","art28_snow","aab5bd",.28]]:
   Site.material(k,pair[0],"res://assets/visual/"+pair[1]+".png",Color(pair[2]));k.mats[pair[0]].uv1_scale=Vector3.ONE*pair[3]
  k.mats.district_roof_snow.set_meta("roof_snow",true)
  k.mats.surface_brick=k.mats.district_brick
@@ -78,8 +78,20 @@ static func room(k,p:Vector3,size:Vector2,id:String):
     k.box("RackMeter",p+Vector3(x-.25,y,-.63),Vector3(.5,.24,.02),"cream")
     k.cyl("RackDial",p+Vector3(x+.3,y,-.57),.06,.05,"black").rotation.x=PI/2
    for z in [-.8,-.5]:k.pipe(p+Vector3(x,2.2,z),p+Vector3(x,3,z),.025,"rust")
-  for x in [-1.2,1.2]:k.box("RoofAntennaMast",p+Vector3(x,5.5,-5),Vector3(.09,4,.09),"old_iron")
-  for y in [4,5.5,7]:k.pipe(p+Vector3(-2,y,-5),p+Vector3(2,y,-5),.035,"old_iron")
+  for x in [-1.2,1.2]:k.box("RoofAntennaMast",p+Vector3(x,5.5,-5),Vector3(.09,4,.09),"old_iron").set_meta("interior_rect",interior)
+  for y in [4.3,5.7,7.1]:k.box("AntennaCrossbar",p+Vector3(0,y,-5),Vector3(3.7,.055,.055),"old_iron").set_meta("interior_rect",interior)
+  # A smaller concrete signal loft nests above the brick ground floor.
+  var loft=Node3D.new();loft.name="CivilDefenceSignalLoft";loft.position=p+Vector3(0,3.80,-2.6);k.root.add_child(loft)
+  for x in [-4.3,4.3]:
+   k.box("SignalLoftSide",Vector3(x,1.16,0),Vector3(.27,2.32,7.7),"district_concrete",false,loft)
+  for z in [-3.85,3.85]:
+   k.box("SignalLoftBase",Vector3(0,.44,z),Vector3(8.6,.88,.27),"district_concrete",false,loft)
+   k.box("SignalLoftHeader",Vector3(0,2.05,z),Vector3(8.6,.54,.27),"district_concrete",false,loft)
+   for x in [-3.2,-1.1,1.1,3.2]:
+    k.box("SignalLoftWindow",Vector3(x,1.32,z),Vector3(1.52,.9,.10),"exterior_glass",false,loft)
+    k.box("SignalLoftMullion",Vector3(x+.9,1.32,z),Vector3(.32,.9,.31),"district_concrete",false,loft)
+  Urban.roof(k,loft,Vector2(8.7,7.85),2.32,"residential",30)
+  for mesh in loft.find_children("*","MeshInstance3D",true,false):mesh.set_meta("interior_rect",interior)
   k.label("ГРАЖДАНСКАЯ ОБОРОНА",p+Vector3(0,3.03,size.y/2+.25),20,Color("bcb7a4"))
  else:
   # Four former household rooms share a narrow entrance corridor.
@@ -113,7 +125,7 @@ static func room(k,p:Vector3,size:Vector2,id:String):
   k.box("ApartmentPicturePaper",p+Vector3(-3,1.8,-size.y/2+.23),Vector3(.9,.6,.015),"paper")
 
 static func factory(k):
- Ground.apron(k,Vector2(-67,-28),Vector2(48,16))
+ Ground.apron(k,Vector2(-73,-28),Vector2(33,13))
  # High pump hall with buttressed, arched industrial window bays; no residential facade.
  var c=Vector3(-62,0,-44);var sx=22.0;var sz=25.0;var h=8.1
  for side in [-1,1]:
@@ -224,30 +236,70 @@ static func basin(k):
  k.pipe(Vector3(72,.4,-54.6),Vector3(78,.4,-54.6),.18,"rust")
  k.crate(Vector3(69,0,-51.8),Vector3(1,.7,.7));k.lamp(Vector3(71,2.8,-53),true,.5,5)
 static func edge(k):
- # The playable slice is framed by destroyed urban fabric, not a municipal perimeter wall.
- # Jagged demolition piles have explicit collision; buildings continue behind them.
- # West: the rear walls of residential blocks have collapsed into a continuous
- # irregular apron. North/south: broken roads disappear under demolition debris.
- for n in 9:
-  var z=-91+n*24;var x=-119+sin(n*2.3)*2
-  mound(k,Vector3(x,0,z),Vector3(15,3.2+float(n%3)*1.2,32),70+n)
-  if n%2==0:
-   var wall=k.box("CollapsedQuarterWall",Vector3(x-1,2.7,z),Vector3(.5,5.4,14),"district_brick");wall.rotation.z=.12
- for side in [-1,1]:
-  for n in 9:
-   var x=-116+n*29;var z=side*(100+cos(n*1.8)*2)
-   mound(k,Vector3(x,0,z),Vector3(38,2.9+float(n%4)*.7,16),90+n+side*13)
-   if n%3==1:
-    var slab=k.box("DroppedConcreteFloor",Vector3(x+3,2,z),Vector3(13,.45,6),"district_concrete");slab.rotation=Vector3(.12,0,.24)
- # East: a raised freight embankment, with an actual track above the slope.
- for n in 9:mound(k,Vector3(122,0,-96+n*25),Vector3(15,3.4,36),131+n)
- for x in [124.24,125.76]:k.box("BackgroundEmbankmentRail",Vector3(x,3.48,0),Vector3(.07,.12,220),"old_iron")
- for z in range(-109,110):k.box("BackgroundEmbankmentSleeper",Vector3(125,3.4,z),Vector3(2.6,.10,.18),"wood")
- # Damaged viaduct recedes behind the north streets.
- for x in range(-100,121,22):
-  k.box("ViaductPier",Vector3(x,3.8,-113),Vector3(1.4,7.6,4),"district_concrete")
-  var deck=k.box("BrokenViaductDeck",Vector3(x+7,7.6,-113),Vector3(18,.8,8),"district_concrete");deck.rotation.z=.025*sin(x)
-  for z in [-116.7,-109.3]:k.box("ViaductParapet",Vector3(x+7,8.3,z),Vector3(18,.7,.25),"district_concrete")
- # Invisible backstop sits inside the rubble mass and prevents walking off the finite mesh.
+ # The playable streets end where their urban fabric fails. Each edge has
+ # a different reason to stop: freight grade, a fallen deck or ruined blocks.
+ freight_grade(k)
+ for entry in [[-121,-85,15,5.0,18],[-119,-47,12,3.2,12],[-121,12,14,3.8,16],[-121,40,18,4.4,24],[-117,80,14,4.2,17]]:
+  mound(k,Vector3(entry[0],0,entry[1]),Vector3(entry[2],entry[3],entry[4]),int(entry[1]))
+ for entry in [[-113,-72,11],[-118,-6,23],[-121,52,18],[-110,91,12]]:
+  var p=Vector3(entry[0],0,entry[1]);var span:float=entry[2]
+  k.box("WestRuinedPartyWall",p+Vector3.UP*1.76,Vector3(.45,3.52,span),"district_brick",true)
+  for z in [-span*.32,span*.31]:
+   k.box("WestPartyWallButtress",p+Vector3(-.55,2.21,z),Vector3(1.5,4.4,.7),"district_brick",true)
+   var breakaway=k.box("BrokenUpperPartyWall",p+Vector3(.16,4.07,z),Vector3(.42,1.25,span*.23),"district_brick")
+   breakaway.rotation.z=.12
+ # The north approach looks along the actual severed viaduct and beyond its
+ # piers, with damage concentrated at the roadway rather than along a line.
+ for x in [-110,-83,-60,-37,-13,12,40,64,92,113]:
+  k.box("ViaductPier",Vector3(x,3.35,-106),Vector3(1.65,6.7,3.9),"district_concrete")
+  k.box("ViaductPierCapital",Vector3(x,6.69,-106),Vector3(2.3,.61,7.3),"district_concrete")
+ for x in [-112,-85,-58,-32,13,36,88,112]:
+  var span=18.5 if x in [-32,36,88] else 22.5
+  var deck=k.box("BrokenViaductDeck",Vector3(x,7.32,-106),Vector3(span,.74,8.3),"district_concrete")
+  deck.rotation.z=.016*sin(x)
+  for z in [-110.02,-101.93]:
+   k.box("ViaductParapet",Vector3(x,7.94,z),Vector3(span-.28,.48,.25),"district_concrete")
+ for entry in [[-12,-99,-.31],[65,-97,.36],[-85,-99,-.25]]:
+  var p=Vector3(entry[0],0,entry[1])
+  var slab=k.box("DroppedViaductSpan",p+Vector3.UP*1.44,Vector3(12,.51,5.4),"district_concrete")
+  slab.rotation.z=entry[2]
+  hull(k,p+Vector3.UP*1.25,Vector3(10.8,2.5,4.5),"FallenDeckFootprint")
+  mound(k,p+Vector3(3,0,2.1),Vector3(10,2.0,6.4),int(p.x))
+ # Housing at the southern edge breaks into real rear courtyards. Ruined
+ # fences, waterlogged yards and closed passages replace the old rubble belt.
+ for entry in [[-105,100,16],[-74,101,23],[-33,102,17],[11,101,22],[50,98,19],[88,103,18]]:
+  var x:float=entry[0];var z:float=entry[1];var width:float=entry[2]
+  k.box("SouthRearGardenWall",Vector3(x,.89,z),Vector3(width,1.78,.46),"district_brick",true)
+  k.box("SouthRearWallCoping",Vector3(x,1.82,z),Vector3(width+.15,.09,.55),"district_concrete")
+  for dx in [-width*.42,width*.42]:
+   k.box("GardenWallPilaster",Vector3(x+dx,1.16,z),Vector3(.64,2.32,.65),"district_brick")
+   k.box("GardenWallPierCap",Vector3(x+dx,2.35,z),Vector3(.81,.10,.81),"district_concrete")
+ for entry in [[-102,96,7.3],[-12,98,6.5],[43,91,7.4],[105,94,11.5]]:
+  mound(k,Vector3(entry[0],0,entry[1]),Vector3(entry[2],1.8,5.2),int(entry[0]))
+ # Thin backstop is behind the architectural endcaps. It prevents loading an
+ # out-of-range position or walking off the finite streamed terrain slice.
  for x in [-120,120]:hull(k,Vector3(x,2,0),Vector3(.4,4,200),"CityEdgeBackstop")
  for z in [-100,100]:hull(k,Vector3(0,2,z),Vector3(240,4,.4),"CityEdgeBackstop")
+
+static func freight_grade(k):
+ var st=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
+ var rows=[]
+ for i in 27:
+  var z=-120+i*9.6
+  rows.append([Vector3(110.7+sin(i*1.51)*2.3,-.012,z),Vector3(116.3+sin(i*.81)*1.3,1.05,z),Vector3(121.2,3.28,z),Vector3(128.8,3.28,z),Vector3(136.2,.05,z)])
+ for i in rows.size()-1:
+  for j in 4:
+   for v in [rows[i][j],rows[i][j+1],rows[i+1][j+1],rows[i][j],rows[i+1][j+1],rows[i+1][j]]:
+    st.set_uv(Vector2(v.x,v.z)*.65)
+    st.add_vertex(v)
+ st.generate_normals()
+ var bank=MeshInstance3D.new();bank.name="CityEastFreightGrade";bank.mesh=st.commit();bank.material_override=k.mats.city_rubble;k.root.add_child(bank)
+ bank.create_trimesh_collision()
+ # The shoulder is catchable by the collision test only at its steep upper
+ # half. The gentle base remains useful as trackside walking space.
+ hull(k,Vector3(122.8,1.2,0),Vector3(10.4,2.4,244),"FreightGradeFoot")
+ for x in [124.24,125.76]:k.box("BackgroundEmbankmentRail",Vector3(x,3.43,0),Vector3(.07,.12,242),"old_iron")
+ for z in range(-120,121):k.box("BackgroundEmbankmentSleeper",Vector3(125,3.33,z),Vector3(2.6,.10,.18),"wood")
+ for z in [-82,-39,21,52,86]:
+  k.box("GradeRetainingHead",Vector3(116.2,.60,z),Vector3(.24,1.20,5),"district_concrete")
+  k.box("RetainingHeadCoping",Vector3(116.2,1.22,z),Vector3(.40,.09,5.12),"district_concrete")

@@ -33,6 +33,18 @@ static func build(w):
  for x in [4,4.5,5,5.5,6]:k.box("HungSpareTool",Vector3(x,1.6,-8.72),Vector3(.08,.6,.05),"metal")
  for p in [Vector3(-9.7,0,-8.7),Vector3(9.7,0,-8.7),Vector3(9.7,0,9.7),Vector3(-9.7,0,9.7)]:
   k.box("BunkerCornerPier",p+Vector3.UP*1.4,Vector3(.42,2.8,.42),"concrete",true)
+ # The patrol's wet equipment is stored at the entrance, away from the
+ # kitchen. The wall bench leaves an open approach to the salvage bins.
+ k.box("ReclaimedTilePackingFloor",Vector3(-13,.021,7),Vector3(5.7,.010,5.7),"factory_floor")
+ k.bench(Vector3(-13,0,9.42),3.1,true,PI)
+ for x in [-14.7,-13.6,-12.5]:
+  k.box("GreySupplyWallHook",Vector3(x,1.72,4.17),Vector3(.035,.10,.12),"old_iron")
+  k.box("GreyDrippingWorkCoat",Vector3(x,1.27,4.26),Vector3(.44,.71,.15),"cloth")
+ k.pipe(Vector3(-15.7,2.45,4.19),Vector3(-10.4,2.45,4.19),.10,"rust")
+ k.box("GreyDryingRack",Vector3(-15.26,.82,6.04),Vector3(.61,.15,2.22),"wood",true)
+ for z in [5.45,6.45]:
+  k.box("GreySpareFilterRoll",Vector3(-15.25,.99,z),Vector3(.43,.18,.44),"cloth")
+ k.lamp(Vector3(-12.1,2.52,4.17),true,1.7,6)
  k.finish_walls()
 static func enter(w):
  if w.floor_id!="east_district" or not w.targets.has("grey_shelter_entry") or w.player.position.distance_to(w.targets.grey_shelter_entry.pos)>2.5:return

@@ -63,7 +63,7 @@ func run():
  var w=load("res://scenes/commune.tscn").instantiate();root.add_child(w);await frames(8);w.hud.close();w.set_physics_process(false)
  var rooms={}
  for z in w.zones:rooms[z.code]=z.rect
- check(rooms["04"].get_area()<=190 and rooms["01"].get_area()>550,"assembly is halved and farm substantially enlarged")
+ check(rooms["04"].get_area()<=190 and rooms["01"].get_area()+rooms["14"].get_area()>550,"assembly is halved and farm substantially enlarged")
  for id in ["10","11","12","13"]:check(rooms.has(id),"military and production room "+id)
  check(w.find_children("*","MeshInstance3D",true,false).filter(func(m):return m.get_meta("design_id","")=="DoubleBedFrame").size()==4,"four family alcoves contain double beds")
  check(w.kit.solids.filter(func(x):return x.name=="FamilyAlcoveWall").size()==8,"alcoves have physical walls with door openings")

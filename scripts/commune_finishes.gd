@@ -1,6 +1,6 @@
 extends RefCounted
 ## Surfaces follow room use; shared walls can have a different finish on each face.
-const PROFILES={"00":1,"01":2,"02":1,"03":3,"04":1,"05":4,"06":2,"07":5,"08":4,"09":4,"10":2,"11":2,"12":5,"13":2}
+const PROFILES={"00":1,"01":2,"02":1,"03":3,"04":1,"05":4,"06":2,"07":5,"08":4,"09":4,"10":2,"11":2,"12":5,"13":2,"14":2,"15":4,"16":4}
 static func prepare(k,zones:Array):
  for spec in [["commune_terrazzo",.8],["commune_linoleum",.35],["commune_ivory_tile",.32],["commune_plaster",.45]]:
   var m=k.mats.concrete.duplicate();m.albedo_texture=load("res://assets/visual/"+spec[0]+".png")
@@ -13,9 +13,9 @@ static func prepare(k,zones:Array):
  k.wall_color=Color.WHITE
 static func floor_spec(code:String)->Array:
  match code:
-  "01":return ["concrete",Color("92988a")]
+  "01","14":return ["concrete",Color("92988a")]
   "03":return ["commune_linoleum",Color("c0b9ab")]
-  "05":return ["commune_ivory_tile",Color("c9d4cf")]
+  "05","15","16":return ["commune_ivory_tile",Color("c9d4cf")]
   "06","10","11","13":return ["factory_floor",Color("aaa99a")]
   "07","12":return ["commune_linoleum",Color("b9aa94")]
   "08":return ["commune_ivory_tile",Color("d5c7a9")]

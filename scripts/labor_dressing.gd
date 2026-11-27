@@ -5,6 +5,7 @@ static func build(w):
 	for mesh in w.find_children("Floor_L*","MeshInstance3D",true,false):
 		mesh.material_override=mesh.material_override.duplicate()
 		mesh.material_override.albedo_color=Color("8b8270") if mesh.name=="Floor_L0" else Color("a2977d")
+		if mesh.name=="Floor_L10":mesh.material_override.albedo_color=Color("a9ada2")
 		if mesh.name in ["Floor_L1","Floor_L2","Floor_L6","Floor_L7","Floor_L8","Floor_L9"]:mesh.material_override.albedo_color=Color("716b56")
 	# Standard railway continues behind the closed blast door, never walkable.
 	k.box("OutsideTrackBed",Vector3(20,-.13,-17.5),Vector3(4.6,.18,9),"concrete")
