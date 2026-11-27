@@ -1,8 +1,7 @@
 {
-  "version": "v39",
-  "source_commit": "127a9f2f536798ab596ccb8bbe7d5d5cd3dff0cd",
+  "version": "v40",
+  "source_commit": "0ffc65f7c30d92845c049ba76cf714c2821f2e18",
   "engine": "Godot 4.6.3",
   "windows_template": "official release x86_64",
-  "windows_hardware_acceptance": "pending",
-  "map_review": "headless Godot interface and vector chart preview"
+  "windows_hardware_acceptance": "pending"
 }
