@@ -1,4 +1,4 @@
-# 地铁1982 · v33 完整流程版
+# 地铁1982 · v36 街区与聚落重制候选版
 
 完整解压这个文件夹，运行 `Metro1982.exe`。无需安装 Godot；请保留同目录下的 `Metro1982.pck` 和整个 `content` 文件夹。Linux 运行 `Metro1982.x86_64`。
 
@@ -10,8 +10,8 @@ WASD 移动，E 互动，滚轮切换邻近目标。I 背包，J 手记，M 地�
 
 如果旧显卡的 Vulkan 驱动无法启动，可以从终端运行 `Metro1982.exe --rendering-method gl_compatibility`；画面设置可调整四档画质、分辨率和窗口模式。首次进入场景可能需要建立着色器缓存。
 
-`content/manifest.json` 和 `SHA256SUMS.txt` 提供资源大小及校验值。截图、文案校订本和版本说明在：https://github.com/2459654640-ship-it/godot/tree/metro-reference-library/updates/v33
+`content/manifest.json` 和 `SHA256SUMS.txt` 提供资源大小及校验值。截图、文案校订本和版本说明在：https://github.com/2459654640-ship-it/godot/tree/metro-reference-library/updates/v36
 
 本包已做 Linux 原生启动、工程分支和界面检查；Windows 模板已打包，尚未在 Windows 真机进行长时间兼容性与性能验收。音乐包含项目方确认获商用授权的上传录音，以及附 MIDI 的原创合成配乐；第三方许可见 licenses 和 GODOT-LICENSE.txt。
 
-v35 重写序章、父子重逢和终局的关键对话。安娜线新增可玩的矿区转移，拓建主提升间和备用口，加入三幅新过场。过场可以按左方向键回看上一句，选项出现后用数字键选择。
+v36 在原有三条阵营线和四类终局的基础上重做东郊的街道、公共地标、水厂装卸院入口和城市边缘。旧电车站可进入，断缆广场的低处有可绕行的放射性扬尘。公社、谢契、D-6 和灰狗避难所增设生产、医护或外勤空间。

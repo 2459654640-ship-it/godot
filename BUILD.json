@@ -1,9 +1,8 @@
 {
-  "version": "v35",
-  "source_commit": "435cf25babd92f5ed67c0c8fb51cb1d7fac451a1",
+  "version": "v36",
+  "source_commit": "3ff99215a0db72a2ff3b8091351c3e151b2786b7",
   "engine": "Godot 4.6.3",
   "windows_template": "official release x86_64",
   "windows_hardware_acceptance": "pending",
-  "source_regression_unique_suites": 61,
-  "mine_and_star_scene_render": "Linux Godot Vulkan software renderer"
+  "district_and_settlement_scene_render": "Linux Godot Vulkan software renderer"
 }
