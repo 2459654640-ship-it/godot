@@ -85,7 +85,8 @@ static func reserve(w):
  for x in [-24.84,-23,-21.16]:k.box("TransferShutterStiffener",Vector3(x,1.32,-28.57),Vector3(.07,2.45,.09),"dark_steel")
  k.label("РЕЗЕРВНЫЙ ПОДЪЁМ",Vector3(-23,2.54,-28.29),19,Color("c9c6ad"))
  indicator(k,"ReserveHoistReady",Vector3(-20.29,1.84,-28.30),"cold_light")
- for x in [-26.60,-19.40]:
+ # The bench faces the aisle. Keep its handrail against the wall behind it.
+ for x in [-27.67,-19.40]:
   k.box("TransferWallRail",Vector3(x,1.06,-26.22),Vector3(.075,.075,3.56),"dark_steel")
   for z in [-27.8,-24.6]:k.box("TransferRailPost",Vector3(x,.55,z),Vector3(.075,1.10,.075),"dark_steel",true)
  k.bench(Vector3(-26.88,0,-26.24),2.65,true,PI/2)
