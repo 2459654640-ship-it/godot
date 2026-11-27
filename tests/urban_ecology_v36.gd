@@ -61,6 +61,7 @@ func run():
 	for guard in world.grey_camp.guards:guard.set_physics_process(false)
 	var layout=District.layout()
 	check(layout.roads.any(func(road):return road.get("class","")=="walk"),"Pedestrian routes have a distinct authored surface")
+	check(world.get_node_or_null("UndergroundVoid")==null,"The dark indoor floor backing cannot clip the outdoor depression")
 	var floor_mesh=world.get_node("FloorOutdoor")
 	check(floor_mesh.mesh is ArrayMesh and floor_mesh.get_aabb().position.y<-.5,"Ground mesh contains the depression")
 	var space=world.get_world_3d().direct_space_state

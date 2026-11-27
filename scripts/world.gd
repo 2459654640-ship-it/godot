@@ -244,7 +244,7 @@ func build_environment():
 	light.directional_shadow_max_distance=65
 	light.shadow_bias=0.04
 	ArtDirection.environment(self,e,light)
-	kit.box("UndergroundVoid",Vector3(0,-1.4 if floor_id=="sech" else -.65,0),Vector3(200,0.5,200),"black")
+	if floor_id!="east_district":kit.box("UndergroundVoid",Vector3(0,-1.4 if floor_id=="sech" else -.65,0),Vector3(200,0.5,200),"black")
 
 func build_structure():
 	kit.box("Foundation",Vector3(0,-0.30,0.5),Vector3(30.5,0.5,19.5),"concrete")
