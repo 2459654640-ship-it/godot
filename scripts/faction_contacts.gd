@@ -5,7 +5,7 @@ const NAMES={"commune":"莫斯科公社","sech":"废土谢契","labor":"D-6"}
 const OFFICERS={"commune":"亚历山德拉","sech":"彼得","labor":"科瓦廖夫"}
 const DESKS={"commune":"commune_guard","sech":"sech_quartermaster","labor":"d6_return_desk"}
 const PLACES={"commune":"电车站以南 · 红漆管线气闸","sech":"铁路以东 · 旧军列检修库","labor":"南侧 D-6 联络口"}
-const APPROACHES={"commune":"在旧电车站的乘客名簿后面找近期的领水记录，也可以去看看站台南侧的红漆管线。","sech":"看看工人街交通维修间的运件登记，或者沿铁路去东侧检修库找轮值牌。"}
+const APPROACHES={"commune":"去旧电车站东南的民防留置室，在乘客名簿后面查领水记录；南边的红漆管线也能指路。","sech":"看看工人街西侧交通维修间的运件登记，或者沿铁路去东侧检修库找轮值牌。"}
 const SITE_CLUES={"commune":["city_passenger_roll"],"sech":["east_spares","east_transfer_entry"]}
 const LOCAL_COMMITMENTS=["commune_join","commune_stay","anna_home","ending_workers","sech_join","sech_stay","ending_train","ending_caravan","surface_accept","surface_depart","surface_turnin","north_inquiry","north_verify","late_north_contact"]
 
@@ -74,7 +74,7 @@ static func enter(s,id:String):
  s.flags.erase("faction_sponsor_"+id)
  s.flags.cross_contact_ready=false
  s.flags.cross_contact_trips=int(s.flags.get("cross_contact_trips",0))+1
- if first:s.flags.next_sequence="faction_arrive_"+id
+ s.flags.next_sequence=("faction_arrive_" if first else "faction_revisit_")+id
 
 static func arrive(s,id:String,from:String)->bool:
  var check_in:Dictionary=s.flags.get("faction_crossing",{})
@@ -113,7 +113,7 @@ static func extend(c:Dictionary):
   var origins=["sech" if id=="commune" else "commune","labor"]
   var clue="领水名簿后夹着一张最近的便条。送水的人留了名字，约在电车站以南、三根红漆管线旁交接，落款是莫斯科公社的联络班。你把气闸的位置抄进地图。" if id=="commune" else "运件簿上有几笔新账。收货人签在旧军列检修库一栏，盖的是谢契轮值班的印。旁边还标着铁路以东的入口和台阶。你把它抄进地图。"
   var topic="「听说旧电车站南边还有人运水。他们是哪儿的？」" if id=="commune" else "「听说旧军列那边还有人在巡轨。他们是哪儿的？」"
-  var answer="「那是莫斯科公社的人。他们和中央开过火，送水却还走旧电车站。想弄清气闸在哪，去看看站台上的乘客名簿；有人在上头补了最近的领水记录。」" if id=="commune" else "「东边是谢契。住旧军列的那群人管着几段货运线，修车和运货都靠他们自己。工人街的交通维修间留有他们的收货单，那里应该写了库门怎么走。」"
+  var answer="「那是莫斯科公社的人。他们和中央开过火，送水却还走旧电车站。车站东南有间旧民防留置室，乘客名簿还在里面。有人补记了最近一班送水，就写在那本册子上。」" if id=="commune" else "「东边是谢契。住旧军列的那群人管着几段货运线，修车和运货都靠他们自己。工人街西侧的交通维修间留有他们的收货单，上面写了库门怎么走。」"
   c.actions["faction_ask_"+id]={"text":topic,"reply":answer,"req":{"floor":origins},"flags":{"faction_heard_"+id:true}}
   c.actions["faction_read_"+id]={"text":"查看夹在旧登记簿里的新记录。","reply":clue,"req":{"floor":["east_district"]},"flags":{"faction_mapped_"+id:true}}
   c.actions["faction_sponsor_"+id]={"text":"「我找到"+NAMES[id]+"的地表联络口了。能安排我去一趟吗？」","reply":"","once":false,"req":{"floor":origins}}
@@ -122,6 +122,8 @@ static func extend(c:Dictionary):
   for site in SITE_CLUES[id]:c.interactions[site].options.append("faction_read_"+id)
   var greeting="守备员验过彼得签名的封签，又叫你顺着来路说一遍。听见三根红漆管线，她在访问簿里补上换班号，让等在后面的送水工先过去。\n「以后还走这个口，进来先报名字。有事去联络室说。」" if id=="commune" else "轮值员检查封签，把交接号码抄在自己的本子上。你顺着楼梯向下，听见检修车里有人敲打冻住的水龙头。\n轮值员：「下回还走这个口。把枪收好，进屋等彼得吧，外面风大。」"
   c.panels["faction_arrive_"+id]={"title":"联络簿上的名字","art":id+"_threshold","body":greeting,"end":"map:"+id,"same_moment":true}
+  var revisit="守门人翻到你上次那页，画上一道新记号。隔着气闸，有人招呼刚回来的送水工去喝汤。你跟着车辙走向联络室。" if id=="commune" else "轮值员听到你的名字，把访客簿翻到熟悉的一页，再把库门推开。站台上还晾着昨天洗过的毛毯，巡轨的人已经换了一班。"
+  c.panels["faction_revisit_"+id]={"title":"沿原路入站","art":id+"_threshold","body":revisit,"end":"map:"+id,"same_moment":true}
   c.interactions[DESKS[id]].options.erase("cross_contact")
   c.interactions[id+"_leave"].options.erase("commune_sech" if id=="commune" else "sech_commune")
 

@@ -87,6 +87,9 @@ func run():
  w.perform("c_east_depart_sech","sech_leave");await journey()
  check(w.floor_id=="east_district" and w.story.flags.east_home=="sech" and Contacts.can_enter(w.story,"commune") and Contacts.can_enter(w.story,"sech"),"either legitimate gate remains usable after leaving the guest station")
  check(Atlas.features(w,{}).east_sech_entry.kind=="contact","registered station is visibly usable on the read map")
+ disk.restore(w.story.serialize());disk.context.floor="east_district"
+ act(disk,"east_enter_sech")
+ check(disk.flags.next_sequence=="faction_revisit_sech","a return visit uses the guest register instead of repeating a first introduction")
  w.perform("c_east_enter_commune","east_commune_entry");await journey()
  check(w.floor_id=="commune" and w.story.Campaign.Complete.home(w.story)=="commune","the same character returns to its real quest contacts through the district")
  w.queue_free();await frames()

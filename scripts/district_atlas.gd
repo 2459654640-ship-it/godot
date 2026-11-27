@@ -152,8 +152,10 @@ static func marker(v,at:Vector2,kind:String,highlighted:bool):
   v.draw_colored_polygon(PackedVector2Array([at+dir*8,at-dir*5+side*4,at-dir*2,at-dir*5-side*4]),color);return
  if kind in ["closed","contact"]:
   var box=Rect2(at-Vector2(5,5),Vector2(10,10))
-  v.draw_rect(box,color,kind=="contact",1.7)
-  if kind=="closed":v.draw_line(at+Vector2(-3,3),at+Vector2(3,-3),color,1.4,true)
+  if kind=="contact":v.draw_rect(box,color)
+  else:
+   v.draw_rect(box,color,false,1.7)
+   v.draw_line(at+Vector2(-3,3),at+Vector2(3,-3),color,1.4,true)
   return
  v.draw_circle(at,radius,color)
  if kind=="exit":v.draw_colored_polygon(PackedVector2Array([at+Vector2(5,0),at+Vector2(-3,-4),at+Vector2(-3,4)]),STOCK)
@@ -221,6 +223,13 @@ static func draw(v):
  v.draw_rect(world_rect,FAINT,false,1.2)
  var view=plot.grow(8).intersection(world_rect.grow(23))
  var font=w.kit.font
+ if is_equal_approx(v.map_zoom,1.0) and v.map_pan.length()<2:
+  for column in 12:
+   var at:Vector2=v.project(Vector2(-110+column*20,-100))+Vector2(-4,-5)
+   v.draw_string(font,at,char(65+column),HORIZONTAL_ALIGNMENT_LEFT,-1,10,FAINT)
+  for row in 10:
+   var at:Vector2=v.project(Vector2(-120,-90+row*20))+Vector2(-19,4)
+   v.draw_string(font,at,str(row+1).pad_zeros(2),HORIZONTAL_ALIGNMENT_LEFT,-1,10,FAINT)
  for entry in [["旧货运路",Vector2(-84,10)],["住宅南街",Vector2(-45,63)],["厂区支路",Vector2(-72,-78)],["北货运线",Vector2(27,-78)],["工人街",Vector2(-10,78)]]:
   var at:Vector2=v.project(entry[1])
   if view.has_point(at):v.draw_string(font,at,entry[0],HORIZONTAL_ALIGNMENT_LEFT,-1,12,FAINT)
