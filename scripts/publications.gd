@@ -29,6 +29,9 @@ static func read(story,id:String)->Dictionary:
 	story.flags.publications[id].read=true
 	return book
 
+static func was_read(story,id:String)->bool:
+	return owned(story,id) and story.flags.publications[id].get("read",false)
+
 static func count(story,series:String="")->int:
 	var total=0
 	for book in data().entries:

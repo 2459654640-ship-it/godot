@@ -14,7 +14,13 @@ const PLACES={
 	"pub_route_sech":Vector3(-8.9,.805,-20.1),
 	"pub_diary_mine":Vector3(11.35,.805,-9.85),
 	"pub_prewar_science":Vector3(-18.5,.805,-21.2),
-	"pub_route_weather":Vector3(-6,.805,-20)}
+	"pub_route_weather":Vector3(-6,.805,-20),
+	"pub_east_tram_notice":Vector3(-54.03,.795,38.12),
+	"pub_east_clinic_carbon":Vector3(-86.39,.795,34.17),
+	"pub_east_broadcast_edit":Vector3(-34.08,.795,-63.78),
+	"pub_east_heating_book":Vector3(-51.45,.620,56.36),
+	"pub_east_freight_ledger":Vector3(81.97,.960,47.60),
+	"pub_east_crossing_carbon":Vector3(38.16,.809,-16.23)}
 
 static func build(world):
 	if world.floor_id=="starcity":return
@@ -29,13 +35,18 @@ static func build_copy(world,book:Dictionary):
 	var root=Node3D.new();root.name="Publication_"+id;world.add_child(root);root.position=p
 	root.rotation.y=.13 if int(book.cover)%2==0 else -.14
 	root.set_meta("publication_id",id)
-	var paper=world.kit.box("PublicationPages",Vector3(0,.018,0),Vector3(.26,.032,.35),"paper",false,root)
+	var edges=Vector2(.26,.35)
+	var thickness=.009 if book.get("loose_leaf",false) else .036
+	var paper=world.kit.box("PublicationPages",Vector3(0,thickness/2,0),Vector3(edges.x,thickness-.003,edges.y),"paper",false,root)
 	paper.set_meta("dynamic",true)
 	var cover=MeshInstance3D.new();cover.name="PublicationCover";cover.set_meta("dynamic",true)
-	var mesh=QuadMesh.new();mesh.size=Vector2(.275,.365);cover.mesh=mesh
+	var mesh=QuadMesh.new();mesh.size=edges+Vector2(.015,.015);cover.mesh=mesh
 	var ink=StandardMaterial3D.new();ink.albedo_texture=Publications.icon(book);ink.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR;ink.roughness=1
-	cover.material_override=ink;cover.rotation.x=-PI/2;cover.position.y=.036;root.add_child(cover)
-	world.target(id,Vector3(p.x,0,p.z),"旧书刊","collect")
+	cover.material_override=ink;cover.rotation.x=-PI/2;cover.position.y=thickness;root.add_child(cover)
+	add_target(world,book,p)
+
+static func add_target(world,book:Dictionary,p:Vector3):
+	world.target(book.id,Vector3(p.x,0,p.z),book.source.get("label","旧书刊"),"collect")
 
 static func refresh(world):
 	if world.floor_id=="starcity":return
@@ -53,9 +64,7 @@ static func refresh(world):
 			if not node:build_copy(world,book)
 			else:
 				node.show()
-				if not world.targets.has(book.id):
-					var p:Vector3=PLACES[book.id]
-					world.target(book.id,Vector3(p.x,0,p.z),"旧书刊","collect")
+				if not world.targets.has(book.id):add_target(world,book,PLACES[book.id])
 
 static func build_terminal(w):
 	# Against the dining room's west wall, facing into the room. Clear of both

@@ -5,6 +5,7 @@ static var _content:Dictionary={}
 const FLOOR="east_district"
 const Expedition=preload("res://scripts/district_expedition.gd")
 const Contacts=preload("res://scripts/faction_contacts.gd")
+const Publications=preload("res://scripts/publications.gd")
 const HOMES=["commune","sech","labor"]
 static func layout()->Dictionary:
 	if _layout.is_empty():_layout=JSON.parse_string(FileAccess.get_file_as_string("res://data/east_district_layout.json"))
@@ -74,6 +75,10 @@ static func act(s,key:String)->String:
 static func decorate(v:Dictionary,s)->Dictionary:
 	if v.id=="city_radio_panel" and s.f("city_radio_isolated") and not s.f("east_power_restored"):
 		v.body="室外天线已经隔离，但机架没有电。先沿工人街去变配电所检查检修柜；烧坏的保护组件存放在工人街西侧的交通维修间。修好供电后，再回来接通低压电源，播放本地录音。"
+	if v.id=="city_radio_panel" and s.f("city_radio_online") and Publications.was_read(s,"pub_east_broadcast_edit"):
+		v.body+="\n磁带里那句「别单独在路上等车」，正好对得上纸上用铅笔改过的那一行。"
+	if v.id=="city_clinic" and s.f("city_clinic_read") and Publications.was_read(s,"pub_east_clinic_carbon"):
+		v.body+="\n登记簿末页记的是抬进三号洞的人数。盖了紫印的转运单上，司机那一栏仍空着。"
 	if v.id=="coal_clerk" and private_mine(s):
 		v.name="瓦西里 / 煤运班副主管";v.role="矿区内部接应"
 		v.body="瓦西里将办公室的门带上，先让你坐下。\n「你的来意，联络员说过了。班组和伤病记录由我经手，先把编号核对。医护怎么安排、本人愿不愿意见家属，还要分别问清。」\n「外面的追查没有撤，别从矿口往作业层走。办完到内部出口等我，咱们仍从检修支巷出去。」"
@@ -110,6 +115,8 @@ static func task_stage(s,q:Dictionary,current:Dictionary)->Dictionary:
 	return current
 static func sync(w):
 	if w.floor_id!=FLOOR:return
+	var letter=w.get_node_or_null("ApartmentLetter")
+	if is_instance_valid(letter):letter.visible=not w.story.f("city_family_read")
 	var gate=w.get_node_or_null("BasinInspectionGate")
 	if is_instance_valid(gate) and gate.get_meta("opened",false)!=w.story.f("city_basin_open"):
 		var opened=w.story.f("city_basin_open");gate.set_meta("opened",opened)

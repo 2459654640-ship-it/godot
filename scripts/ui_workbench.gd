@@ -349,7 +349,7 @@ static func collection(h,content):
   var found=Books.owned(s,book.id);var c=panel(h,grid,386);c.get_parent().get_parent().custom_minimum_size.y=255;c.get_parent().get_parent().size_flags_vertical=0;c.get_parent().get_parent().tooltip_text=book.hint if not found else book.author
   var r=row(c);var icon=h.icon_rect("",82);icon.texture=Books.icon(book);r.add_child(icon)
   var mat=ShaderMaterial.new();mat.shader=load("res://assets/visual/publication_icon.gdshader");mat.set_shader_parameter("unknown",not found);icon.material=mat
-  var info=column(r);info.size_flags_horizontal=Control.SIZE_EXPAND_FILL;words(h,info,book.title if found else "？ 未收录",22,PAPER if found else DIM);words(h,info,"第 %02d 册"%int(book.issue),14,GOLD)
+  var info=column(r);info.size_flags_horizontal=Control.SIZE_EXPAND_FILL;words(h,info,book.title if found else "？ 未收录",22,PAPER if found else DIM);words(h,info,"第 %02d %s"%[int(book.issue),"份" if book.get("loose_leaf",false) else "册"],14,GOLD)
   if found:words(h,c,book.author,15,DIM);var id:String=book.id;action(h,c,"翻开阅读",func():reader(h,id))
   else:words(h,c,"鼠标停留，回想可能的线索。",15,DIM)
  gap(content);page(h,content,"collection_page",entries.size(),6,func():journal(h,"collection"))

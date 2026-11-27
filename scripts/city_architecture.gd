@@ -113,7 +113,7 @@ static func room(k,p:Vector3,size:Vector2,id:String):
    for z in [-5,5]:
     k.box("ApartmentRoomFloor",p+Vector3(side*4.15,.035,z),Vector3(5.45,.025,9.7),"tile" if side<0 and z>0 else "city_floorboards")
   k.table(p+Vector3(-4,0,3),2.2)
-  k.box("ApartmentLetter",p+Vector3(-4,.83,3),Vector3(.5,.03,.36),"paper")
+  k.box("ApartmentLetter",p+Vector3(-4,.808,3),Vector3(.29,.014,.33),"paper").set_meta("dynamic",true)
   k.cyl("ApartmentCup",p+Vector3(-4.6,.90,3),.07,.15,"cream")
   k.bench(p+Vector3(-5.8,0,3),1.6,true,PI/2)
   for at in [Vector3(5.5,0,5),Vector3(-5.5,0,-6),Vector3(-3.5,0,-6)]:k.bed(p+at,"cloth")
