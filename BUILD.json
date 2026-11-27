@@ -1,8 +1,8 @@
 {
-  "version": "v38",
-  "source_commit": "dd2986c573c1cf074dbf9aa86d9431a11aef74ee",
+  "version": "v39",
+  "source_commit": "127a9f2f536798ab596ccb8bbe7d5d5cd3dff0cd",
   "engine": "Godot 4.6.3",
   "windows_template": "official release x86_64",
   "windows_hardware_acceptance": "pending",
-  "district_and_settlement_scene_render": "Linux Godot Vulkan software renderer"
+  "map_review": "headless Godot interface and vector chart preview"
 }
