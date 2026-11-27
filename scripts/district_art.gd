@@ -167,7 +167,7 @@ static func housing_damage(k,p:Vector3,size:Vector2,room:Rect2):
 		k.box("HouseBrokenWindowJamb",Vector3(x,4.18+rise/2,-depth+.1),Vector3(.57,rise,.30),"works_brick",false,up)
 	for i in range(3,outline.size()-1):
 		var a=outline[i];var b=outline[i+1];var edge=(b-a).normalized()
-		var outward=Vector2(edge.y,-edge.x)*-.45
+		var outward=Vector2(edge.y,-edge.x)*.45
 		for t in [.26,.68]:
 			var p2=a.lerp(b,t)
 			var from=Vector3(p2.x,3.64,p2.y)
