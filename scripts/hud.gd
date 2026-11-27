@@ -444,12 +444,17 @@ func set_prompt(id:String):
 	var live_position:Vector3=actor.global_position if actor else t.pos
 	var verb:String={"talk":"交谈","collect":"拾取"}.get(t.kind,"调查")
 	if t.kind=="loot":verb="查看" if preload("res://scripts/raid_loot.gd").record(world,id).get("searched",false) else "搜索"
-	prompt.text="[ E ]   "+verb+" · "+t.label
+	var title:String=t.label
+	if world.floor_id=="east_district":
+		var contacts=world.story.Campaign.District.Contacts
+		var destination=contacts.GATES.find_key(id)
+		if destination!=null and not contacts.located(world.story,destination):title="旧联络口的标记"
+	prompt.text="[ E ]   "+verb+" · "+title
 	if world.InteractionRegions.contains(world.story,id,world.player.position):
 		prompt.text="[ E ]   "+world.InteractionRegions.label(world.story,id)+" · 已进入参与区域"
 	if world.interaction_candidates.size()>1:
 		prompt.text+="   [ 滚轮切换 %d/%d ]"%[world.interaction_candidates.find(id)+1,world.interaction_candidates.size()]
-	target_label.text=("◇  " if t.kind=="talk" else "⌕  ")+t.label
+	target_label.text=("◇  " if t.kind=="talk" else "⌕  ")+title
 	target_label.visible=not modal_visible()
 	var p:Vector2=world.camera.unproject_position(live_position+Vector3(0,2.2,0))
 	target_label.position=p-Vector2(target_label.get_minimum_size().x/2,20)
@@ -494,9 +499,10 @@ func tick(delta:float):
 	location_label.text=world.floor_name()+"  /  "+world.room_name
 	status_label.text=str(world.story.flags.get("story_day",16))+" XI 1982  /  "+str(world.story.flags.get("story_time","07:42"))+" · "+("旅程" if comic_active or world.story.ending else (("换班" if world.phase>=8 else "早班") if world.floor_id in ["life","labor"] else "探索"))
 	var guidance=JSON.stringify([Journal.active(world.story),world.story.economy.health,world.story.economy.food,world.story.economy.radiation,Journal.leads(world.story).size()])
-	if guidance!=last_guidance:last_guidance=guidance;refresh_status()
+	if guidance!=last_guidance:
+		last_guidance=guidance;refresh_status()
+		if is_instance_valid(map_large):map_large.queue_redraw()
 	map_small.queue_redraw()
-	if is_instance_valid(map_large):map_large.queue_redraw()
 	if toast_time>0:
 		toast_time-=delta
 		toast_label.modulate.a=minf(toast_time,1.0)

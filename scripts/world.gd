@@ -779,6 +779,9 @@ func interact(id: String):
 	if id=="common_blocks":hud.show_blocks();return
 	if id=="public_radio":public_radio.open_controls();return
 	if id=="personal_storage":preload("res://scripts/supply_storage.gd").render(hud);return
+	if floor_id=="east_district" and id in interaction_candidates and story.Campaign.District.Contacts.record_gate(story,id):
+		hud.toast("已在地图上记下联络入口。",4)
+		autosave()
 	if id.begins_with("pub_"):
 		if not targets.has(id):return
 		if Publications.acquire(story,id):
@@ -1134,6 +1137,8 @@ func travel_campaign(destination:String):
 		var p=Vector3(23,.04,-9) if destination=="labor" else Vector3(-3.3,.04,8)
 		get_node("/root/Session").enter(save_snapshot(),destination,p);return
 	if destination in story.Campaign.Complete.NEW_FLOORS:story.flags["arrival_v8_"+destination]=true
+	if destination in ["commune","sech"] and not story.Campaign.District.Contacts.arrive(story,destination,floor_id):
+		story.flags.erase("next_facility");hud.toast("还没有办理这处联络口的访问登记。",5);return
 	if not story.f("arrival_v8_"+destination):
 		story.flags["arrival_v8_"+destination]=true
 		hud.show_comic("arrive_"+destination);return

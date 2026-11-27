@@ -3,6 +3,8 @@ extends RefCounted
 const Bag=preload("res://scripts/backpack.gd")
 const Books=preload("res://scripts/publications.gd")
 const Journal=preload("res://scripts/journal.gd")
+const Atlas=preload("res://scripts/district_atlas.gd")
+const Contacts=preload("res://scripts/faction_contacts.gd")
 const PAPER=Color("ded8c5")
 const DIM=Color("93a49e")
 const GOLD=Color("d3b679")
@@ -152,7 +154,7 @@ static func inventory(h,tab:String="all",selected:String=""):
 static func journal(h,tab:String="tasks",shown_floor:String="",selected:String=""):
  var title={"tasks":"任务手记","closed":"任务手记","leads":"任务手记","map":"区域地图","collection":"书刊收藏","lore":"见闻百科","history":"经历记录"}.get(tab,"任务手记")
  var content=shell(h,title,"ЗАПИСИ  /  伊万的个人记录","tasks" if tab in ["closed","leads"] else tab)
- if tab=="map":map_screen(h,content,shown_floor);return
+ if tab=="map":map_screen(h,content,shown_floor,selected);return
  if tab=="collection":collection(h,content);return
  if tab in ["lore","history"]:records(h,content,tab);return
  var tabs=row(content)
@@ -194,38 +196,106 @@ static func journal(h,tab:String="tasks",shown_floor:String="",selected:String="
   if not task.done and not task.failed:
    var buttons=row(detail)
    var id:String=task.id;action(h,buttons,"正在追踪" if h.world.story.flags.get("tracked_quest","")==id else "追踪这个任务",func():Journal.track(h.world.story,id);journal(h,tab,"",id))
-   action(h,buttons,"在地图上查看",func():journal(h,"map",task.place))
+   action(h,buttons,"在地图上查看",func():journal(h,"map",h.world.floor_id,id))
  else:gap(detail);words(h,detail,"这还不是答应过的事。见到相关的人时，可以再问一问。",16,DIM)
 static func place_name(h,id:String)->String:return {"life":"D-6生活层","labor":"D-6作业层"}.get(id,h.world.story.Campaign.NAMES.get(id,id))
 
-static func map_screen(h,content,shown_floor:String):
- var requested=shown_floor if shown_floor!="" else h.world.floor_id
- var bar=row(content);var selector=OptionButton.new();selector.custom_minimum_size=Vector2(340,44);selector.add_theme_font_size_override("font_size",20);bar.add_child(selector)
- var floors=["life","labor"]+h.world.story.Campaign.NAMES.keys().filter(func(id):return h.world.story.f("visited_"+id) or h.world.floor_id==id)
+static func map_screen(h,content,shown_floor:String,selected:String=""):
+ var w=h.world
+ var s=w.story
+ var local:String=w.floor_id
+ var floors=[local]
+ for id in ["east_district","life","labor"]+s.Campaign.NAMES.keys():
+  if id in floors:continue
+  if id in ["life","labor"] or s.f("visited_"+id):floors.append(id)
+ var requested=shown_floor if shown_floor in floors else local
+ var bar=row(content,12)
+ var selector=OptionButton.new();selector.custom_minimum_size=Vector2(292,44);selector.add_theme_font_override("font",h.font);selector.add_theme_font_size_override("font_size",19);bar.add_child(selector)
  for i in floors.size():
   selector.add_item(place_name(h,floors[i]))
   if floors[i]==requested:selector.select(i)
- selector.item_selected.connect(func(i):journal(h,"map",floors[i]))
- words(h,bar,"当前位置："+h.world.floor_name(),16,DIM)
+ selector.item_selected.connect(func(i):journal(h,"map",floors[i],selected))
+ if "east_district" in floors and requested!="east_district":action(h,bar,"东郊街区",func():journal(h,"map","east_district",selected))
+ if requested!=local:action(h,bar,"当前位置",func():journal(h,"map",local,selected))
+ var caption=words(h,bar,"所在位置  /  "+w.floor_name(),17,DIM)
+ caption.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
  var main=row(content,18);main.size_flags_vertical=Control.SIZE_EXPAND_FILL
- var map=load("res://scripts/minimap.gd").new();map.name="FixedMapCanvas";map.custom_minimum_size=Vector2(720,580);map.size_flags_horizontal=Control.SIZE_EXPAND_FILL;map.size_flags_vertical=Control.SIZE_EXPAND_FILL;map.world=h.world;map.expanded=true;map.display_floor=requested;main.add_child(map);h.map_large=map
+ var map=load("res://scripts/minimap.gd").new();map.name="FixedMapCanvas";map.custom_minimum_size=Vector2(695,575);map.size_flags_horizontal=Control.SIZE_EXPAND_FILL;map.size_flags_vertical=Control.SIZE_EXPAND_FILL;map.world=w;map.expanded=true;map.display_floor=requested;main.add_child(map);h.map_large=map
+ map.reviewed_task=Journal.map_task(s,requested,selected)
+ map.preview_only=selected!=""
+ map.resized.connect(map.queue_redraw)
  var stored:Dictionary=h.get_meta("map_view_"+requested,{})
  map.map_zoom=float(stored.get("zoom",1));map.map_pan=stored.get("pan",Vector2.ZERO)
- var detail=panel(h,main,290);detail.get_parent().get_parent().size_flags_horizontal=0
- words(h,detail,"地图与方向",20,GOLD);line(detail)
- var task=Journal.active(h.world.story)
- if not task.is_empty() and task.place==requested:text_panel(h,detail,"当前跟进",task.name);words(h,detail,task.step,17)
- else:words(h,detail,"选择一项任务，可以在地图上查看下一步所在区域。",18,DIM)
- gap(detail)
+ var detail=panel(h,main,320);detail.get_parent().get_parent().size_flags_horizontal=0
+ detail.add_theme_constant_override("separation",9)
  if requested=="east_district":
-  words(h,detail,"浅底  已踏查\n灰底  待探索\n红点  已发现设施\n蓝标  自定目的地",16,DIM)
-  action(h,detail,"重置地图视图",func():map.map_zoom=1;map.map_pan=Vector2.ZERO;map.queue_redraw())
+  var tabs=row(detail,8)
+  var body=column(detail)
+  body.size_flags_vertical=Control.SIZE_EXPAND_FILL
+  var navigation=action(h,tabs,"路线",func():
+   h.set_meta("atlas_tab","route");map_route(h,map,body))
+  var contacts=action(h,tabs,"聚落联络",func():
+   h.set_meta("atlas_tab","contacts");map_route(h,map,body))
+  var show_tab=func():
+   navigation.set_disabled(h.get_meta("atlas_tab","route")=="route")
+   contacts.set_disabled(h.get_meta("atlas_tab","route")=="contacts")
+  navigation.pressed.connect(show_tab)
+  contacts.pressed.connect(show_tab)
+  map.point_chosen.connect(func(id):
+   if id!="":h.set_meta("atlas_tab","route")
+   show_tab.call();map_route(h,map,body))
+  if selected!="":map.map_selected="objective";h.set_meta("atlas_tab","route")
+  show_tab.call()
+  map_route(h,map,body)
  else:
-  var zones=h.world.facility_zones(requested).filter(func(z):return z.code not in ["00","L0"])
+  var task:Dictionary=map.reviewed_task
+  if not task.is_empty() and task.place==requested:
+   words(h,detail,"当前这一步",14,GOLD);words(h,detail,task.name,23);words(h,detail,task.step,17);line(detail)
+  words(h,detail,"房间与通道",20,GOLD)
+  var zones=w.facility_zones(requested).filter(func(z):return z.code not in ["00","L0"])
   var key="map_legend_"+requested;var index=clampi(int(h.get_meta(key,0)),0,maxi(0,ceili(zones.size()/7.0)-1))
-  for zone in zones.slice(index*7,index*7+7):words(h,detail,zone.code+"  "+zone.name,15,DIM)
-  page(h,detail,key,zones.size(),7,func():journal(h,"map",requested))
- h.modal_hint.text="滚轮缩放地图 · 中键拖动 · 左键标记 · 右键清除 · Esc 返回" if requested=="east_district" else "金色标记为任务所在区域 · 地图编号对应右侧设施目录 · Esc 返回"
+  for zone in zones.slice(index*7,index*7+7):words(h,detail,zone.code+"  "+zone.name,16,DIM)
+  if zones.size()>7:page(h,detail,key,zones.size(),7,func():journal(h,"map",requested,selected))
+  gap(detail);words(h,detail,"褐红描边为目标区域。绿色短线标示门口。",15,DIM)
+ h.modal_hint.text="左键选地标或在空白处标记 · 右键清除标记 · 滚轮缩放 · 中键拖图 · Esc 返回" if requested=="east_district" else "纸图顶部朝北 · 房间编号对应右侧目录 · Esc 返回"
+
+static func map_route(h,map,body):
+ for child in body.get_children():body.remove_child(child);child.queue_free()
+ var s=h.world.story
+ var points=Atlas.features(h.world,map.map_task())
+ if h.get_meta("atlas_tab","route")=="contacts":
+  for id in ["commune","sech","labor"]:
+   if not Contacts.heard(s,id):continue
+   var contact=Contacts.status(s,id)
+   var key:String=Contacts.GATES[id]
+   words(h,body,Contacts.NAMES[id],21);words(h,body,contact.state,15,GOLD)
+   if points.has(key):action(h,body,"在街区图定位",func():map.center_on(key))
+   else:words(h,body,contact.detail,15,DIM)
+   line(body)
+  gap(body);words(h,body,"联络口的访问登记与阵营归属分别记录。",14,DIM)
+  return
+ var id:String=map.map_selected if points.has(map.map_selected) else ("objective" if points.has("objective") else "")
+ if id=="":
+  words(h,body,"街区图例",22,GOLD)
+ else:
+  var entry:Dictionary=points[id]
+  words(h,body,entry.status,14,GOLD);words(h,body,entry.name,22);words(h,body,entry.note,16)
+  if entry.kind not in ["player","pin"]:
+   action(h,body,"设为目的地",func():map.pin(entry.p);h.world.autosave())
+  var interior:String=entry.get("floor","")
+  if interior!="" and s.f("visited_"+interior):action(h,body,"查看站内平面图",func():journal(h,"map",interior))
+  line(body)
+ var anchors=row(body,8)
+ if points.has("objective"):action(h,anchors,"任务",func():map.center_on("objective"))
+ if points.has("extraction"):action(h,anchors,"撤离",func():map.center_on("extraction"))
+ if points.has("player"):action(h,anchors,"自己",func():map.center_on("player"))
+ if anchors.get_child_count()==0:body.remove_child(anchors);anchors.queue_free()
+ words(h,body,"红环  当前目标    深色箭头  你\n绿箭头  撤离口    蓝叉  自定标记\n实方块  可入站    空方块  有门禁",15,DIM)
+ gap(body)
+ var zoom=row(body,8)
+ action(h,zoom,"−",func():map.zoom_at(Atlas.frame(map).get_center(),1/1.2))
+ action(h,zoom,"+",func():map.zoom_at(Atlas.frame(map).get_center(),1.2))
+ action(h,zoom,"全图",func():map.reset_view())
 
 static func shop(h,message:String="",tab:String=""):
  if tab!="":h.shop_tab=tab

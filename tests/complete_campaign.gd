@@ -82,17 +82,18 @@ func run():
   action(s,"late_sheltered_probe","east_district");action(s,"late_weather_review","star_interior");action(s,"late_network_plan","star_interior");film(s)
   check(not s.ending and "方案" in s.objective(),"reunion continues to actual final preparation")
   action(s,"late_star_exit","star_interior");film(s);check(s.has("revolver") and s.equipped_weapon()==selected,"leaving returns the original weapon and selected slot")
- var base=comm.serialize().duplicate(true)
- for mode in ["shared","central","distributed","watch"]:
-  var s=Story.new();s.restore(base)
-  action(s,"late_plan_"+mode,"star_interior");check(not s.ending and not s.f("late_final_started"),"choosing a plan does not prematurely end the game")
-  action(s,"late_final_confirm","star_interior");film(s)
-  var floors={"late_shared_packet":"star_interior","late_shared_receiver":"junction","late_shared_evac":"relay","late_central_agreement":"star_interior","late_central_train":"junction","late_central_alarm":"relay","late_distributed_copy":"star_interior","late_distributed_modules":"relay","late_distributed_handover":"junction","late_watch_power":"relay","late_watch_shift":"junction","late_watch_broadcast":"star_interior"}
-  for key in s.Campaign.Complete.data().endings["warning_"+mode].steps:action(s,key,floors[key])
-  if mode=="shared":check(not s.f("late_final_execution_done"),"shared route waits for the real escort");s.flags.late_final_execution_done=true
-  action(s,"late_finish","star_interior");film(s)
-  check(s.ending and s.f("late_campaign_complete") and s.flags.campaign_ending=="warning_"+mode,"complete executed ending "+mode)
-  check(s.flags.get("failed_quests",{}).is_empty(),"ending does not fail unrelated optional stories")
+ for origin in [comm,sech,central]:
+  var base=origin.serialize().duplicate(true)
+  for mode in ["shared","central","distributed","watch"]:
+   var s=Story.new();s.restore(base)
+   action(s,"late_plan_"+mode,"star_interior");check(not s.ending and not s.f("late_final_started"),"choosing a plan does not prematurely end the game")
+   action(s,"late_final_confirm","star_interior");film(s)
+   var floors={"late_shared_packet":"star_interior","late_shared_receiver":"junction","late_shared_evac":"relay","late_central_agreement":"star_interior","late_central_train":"junction","late_central_alarm":"relay","late_distributed_copy":"star_interior","late_distributed_modules":"relay","late_distributed_handover":"junction","late_watch_power":"relay","late_watch_shift":"junction","late_watch_broadcast":"star_interior"}
+   for key in s.Campaign.Complete.data().endings["warning_"+mode].steps:action(s,key,floors[key])
+   if mode=="shared":check(not s.f("late_final_execution_done"),"shared route waits for the real escort");s.flags.late_final_execution_done=true
+   action(s,"late_finish","star_interior");film(s)
+   check(s.ending and s.f("late_campaign_complete") and s.flags.campaign_ending=="warning_"+mode,"complete executed ending for " +s.Campaign.Complete.home(s)+" "+mode)
+   check(s.flags.get("failed_quests",{}).is_empty(),"ending does not fail unrelated optional stories")
  # A wanted character can arrange Anna's journey only after a real private reconnaissance.
  var fugitive=fixture("commune");fugitive.route="hatch";fugitive.flags.d6_wanted=true
  fugitive.flags.merge({"anna_warning_seen":true,"anna_request":true,"anna_first_news":true,"brother_found":true,"east_mine_prepared":true},true)

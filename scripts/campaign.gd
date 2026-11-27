@@ -110,7 +110,8 @@ static func act(s,key:String)->String:
 	var updated=Update.act(s,key)
 	if updated!="":reply=updated
 	Journey.act(s,key)
-	District.act(s,key)
+	var district_reply=District.act(s,key)
+	if district_reply!="":reply=district_reply
 	Medical.act(s,key)
 	var complete_reply=Complete.act(s,key)
 	if complete_reply!="":reply=complete_reply

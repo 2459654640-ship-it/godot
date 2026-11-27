@@ -2,6 +2,10 @@ extends RefCounted
 const Site=preload("res://scripts/surface_site.gd")
 const Ground=preload("res://scripts/city_ground.gd")
 const Urban=preload("res://scripts/district_urban.gd")
+const PUMP_HALL=Rect2(-73,-56.5,22,25)
+const BOILER_HOUSE=Rect2(-90.5,-53.5,13,21)
+const CLARIFIERS=[Vector2(-80,-67),Vector2(-60,-67)]
+const CLARIFIER_RADIUS=5.2
 static func materials(k):
  for pair in [["civic_tile","civic_glazed_tile","e8e2d5",.68],["district_brick","city29_brick","c5b6a8",.32],["district_concrete","city29_plaster","b7b8b2",.27],["district_ochre","city29_plaster","c2b08a",.28],["city_paving","city29_paving","c2c5c1",.30],["district_roof_snow","art28_snow","aab5bd",.28],["shelter_snow","art28_snow","aab5bd",.28]]:
   Site.material(k,pair[0],"res://assets/visual/"+pair[1]+".png",Color(pair[2]));k.mats[pair[0]].uv1_scale=Vector3.ONE*pair[3]
@@ -148,7 +152,8 @@ static func apartment_front(k,p:Vector3,size:Vector2,side:int):
 static func factory(k):
  Ground.apron(k,Vector2(-73,-28),Vector2(33,13))
  # High pump hall with buttressed, arched industrial window bays; no residential facade.
- var c=Vector3(-62,0,-44);var sx=22.0;var sz=25.0;var h=8.1
+ var center=PUMP_HALL.get_center()
+ var c=Vector3(center.x,0,center.y);var sx=PUMP_HALL.size.x;var sz=PUMP_HALL.size.y;var h=8.1
  for side in [-1,1]:
   var x=c.x+side*sx/2
   k.box("PumpHallSidePlinth",Vector3(x,.75,c.z),Vector3(.55,1.5,sz),"works_brick")
@@ -191,8 +196,8 @@ static func factory(k):
  var root=Node3D.new();root.position=c;k.root.add_child(root);Urban.roof(k,root,Vector2(sx,sz),h,"waterworks",14)
  hull(k,c+Vector3.UP*3,Vector3(sx+.8,6,sz+.8),"FactoryHallHull")
  # Attached boiler house, coal bunker, chimney and service pipes are one readable compound.
- var annex=Vector3(-84,0,-43)
- hull(k,annex+Vector3.UP*2.5,Vector3(13,5,21),"BoilerHouseHull")
+ var boiler=BOILER_HOUSE.get_center()
+ hull(k,Vector3(boiler.x,2.5,boiler.y),Vector3(BOILER_HOUSE.size.x,5,BOILER_HOUSE.size.y),"BoilerHouseHull")
  # Actual recessed window bays, a closed service door and continuous rear wall.
  # Neither roof nor front is a two-sided theatrical facade.
  for side in [-1,1]:
@@ -218,7 +223,7 @@ static func factory(k):
  for y in [3,6,9,12,15]:k.cyl("ChimneyIronBand",Vector3(-88,y,-58),1.25-(y-1)*.035,.12,"old_iron")
  hull(k,Vector3(-88,2,-58),Vector3(3,4,3))
  for pair in [[Vector3(-77,2.5,-49),Vector3(-74,2.5,-49)],[Vector3(-84,2,-54),Vector3(-84,2,-62)],[Vector3(-84,2,-62),Vector3(-60,2,-62)]]:k.pipe(pair[0],pair[1],.24,"rust")
- for x in [-80,-60]:tank(k,Vector3(x,0,-67),5.2)
+ for p in CLARIFIERS:tank(k,Vector3(p.x,0,p.y),CLARIFIER_RADIUS)
  for x in [-62,-58]:
   k.box("FactoryGateBrickPier",Vector3(x,1.6,-23),Vector3(.65,3.2,.65),"works_brick",true)
   k.box("FactoryGateStoneCap",Vector3(x,3.25,-23),Vector3(.85,.16,.85),"district_concrete")

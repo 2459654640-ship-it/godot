@@ -4,6 +4,7 @@ static var _layout:Dictionary={}
 static var _content:Dictionary={}
 const FLOOR="east_district"
 const Expedition=preload("res://scripts/district_expedition.gd")
+const Contacts=preload("res://scripts/faction_contacts.gd")
 const HOMES=["commune","sech","labor"]
 static func layout()->Dictionary:
 	if _layout.is_empty():_layout=JSON.parse_string(FileAccess.get_file_as_string("res://data/east_district_layout.json"))
@@ -26,14 +27,13 @@ static func extend(c:Dictionary):
 	c.interactions.commune_records.options.append("east_mine_prepare")
 	c.actions.surface_depart.text="备好装备，出站寻找旧泵站的地表入口。"
 	c.actions.d6_patrol_depart.text="登记外勤，沿地表旧货运路前往泵站。"
+	Contacts.extend(c)
 static func private_mine(s)->bool:
 	return s.f("east_mine_prepared") and s.f("east_private_mine_entry")
 static func can_enter_home(s,home:String)->bool:
-	if home=="labor":return s.Campaign.Access.public_entry(s)
-	if home==String(s.flags.get("east_home","")):return true
-	# Crossing to the other community preserves the existing explicit contact cost.
-	return s.f("cross_contact_ready")
+	return Contacts.can_enter(s,home)
 static func allowed(s,key:String)->bool:
+	if not Contacts.allowed(s,key):return false
 	if key=="east_open_cache":return s.context.get("camp_loot_safe",false)
 	if key.begins_with("east_depart_"):
 		var home=key.trim_prefix("east_depart_")
@@ -46,10 +46,11 @@ static func allowed(s,key:String)->bool:
 	if key=="east_mine_prepare":return not s.f("east_mine_prepared")
 	return true
 static func depart(s,home:String):
+	if not s.flags.has("faction_home") and Contacts.NAMES.has(home):s.flags.faction_home=Contacts.home(s) if Contacts.NAMES.has(Contacts.home(s)) else home
 	preload("res://scripts/raid_loot.gd").begin(s,home)
 	s.flags.east_trip_active=true;s.flags.east_home=home;s.flags.east_arrival=home
 	s.flags.next_sequence="east_depart_"+home
-static func act(s,key:String):
+static func act(s,key:String)->String:
 	if key.begins_with("east_depart_"):depart(s,key.trim_prefix("east_depart_"))
 	if key=="surface_depart":depart(s,"sech" if s.f("surface_from_sech") else "commune")
 	if key=="d6_patrol_depart":depart(s,"labor")
@@ -57,8 +58,7 @@ static func act(s,key:String):
 		depart(s,"commune" if key=="commune_star" else "sech");s.flags.star_return_home=s.flags.east_home
 	if key.begins_with("east_enter_"):
 		var destination=key.trim_prefix("east_enter_")
-		if destination in ["commune","sech"] and destination!=s.flags.get("east_home",""):
-			s.flags.cross_contact_ready=false;s.flags.cross_contact_trips=int(s.flags.get("cross_contact_trips",0))+1
+		Contacts.enter(s,destination)
 		if destination=="surface" and s.f("surface_job") and not s.f("surface_done"):s.flags.tracked_quest="surface_survey"
 	if key in ["surface_back_commune","surface_back_sech","surface_back_d6"] and s.f("east_trip_active"):
 		s.flags.east_arrival="surface";s.flags.next_sequence="east_return_surface"
@@ -70,6 +70,7 @@ static func act(s,key:String):
 	if key=="east_enter_mine":s.flags.east_arrival="coal"
 	if key=="east_mine_contact":s.flags.tracked_quest="east_mine_route"
 	if key in ["east_read_routes","east_power_inspect"]:s.flags.tracked_quest="east_power"
+	return Contacts.act(s,key)
 static func decorate(v:Dictionary,s)->Dictionary:
 	if v.id=="city_radio_panel" and s.f("city_radio_isolated") and not s.f("east_power_restored"):
 		v.body="室外天线已经隔离，但机架没有电。先沿工人街去变配电所检查检修柜；烧坏的保护组件存放在工人街西侧的交通维修间。修好供电后，再回来接通低压电源，播放本地录音。"
@@ -83,9 +84,15 @@ static func decorate(v:Dictionary,s)->Dictionary:
 	if v.id=="east_gate" and s.f("east_crossing_open"):v.body="横穿门已经退到围栏旁，旧货运路可以通过。铁轨保留在专用带内，通行处没有堆放货物。"
 	if v.id=="east_relay" and s.f("east_power_restored"):v.body="检修柜读数稳定。门机、路口指示灯与修配间已经通电，换下的旧组件留在标记过的废件盒里。"
 	if v.id=="east_camp_cache" and s.f("grey_camp_cleared"):v.body="院内的守卫已被击倒，棚屋里仍有未冷的炉子和整理过的床铺。门旁的运输箱可以打开检查。"
-	if v.id in ["east_commune_entry","east_sech_entry"] and not can_enter_home(s,"commune" if v.id=="east_commune_entry" else "sech"):
-		v.body+="\n这不是你的本次出发聚落。先通过已认识的联络人落实访问安排，再来走这条线路；找到入口不等于取得通行。"
-	if v.id=="east_d6_entry" and not s.Campaign.Access.public_entry(s):v.body+="\n你的现有身份不能公开返站。不要递交姓名；矿区内部接应是另一条路。"
+	var home=Contacts.GATES.find_key(v.id)
+	if home!=null:
+		v.body+="\n"+Contacts.status(s,home).detail
+		if Contacts.foreign(s,home):
+			for option in v.options:
+				if option.key=="c_east_enter_"+home:option.text="报上名字，沿联络线入站。"
+			if s.f("raid_active") and Contacts.can_enter(s,home):v.body+="\n在这个聚落入站也会结算本次外勤。"
+	if v.id in ["commune_leave","sech_leave"] and Contacts.foreign(s,s.context.get("floor","")):
+		v.body="你登记的是外来访客。联络线仍通往东郊，回到地表后可沿地图返回自己的聚落。"
 	if v.id==preload("res://scripts/raid_loot.gd").extraction(s).get("id"):
 		v.body+="\n从这里撤回聚落就会结束外勤，随身物资可以带回。灰狗地下营地和泵站通道还在地表行动范围内。"
 

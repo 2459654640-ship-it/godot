@@ -327,7 +327,8 @@
       }
     ],
     "location": "水厂回程 · 电车站残棚",
-    "art": "filter_return"
+    "art": "filter_return",
+    "finish_flags": ["faction_heard_commune"]
   },
   "home_water": {
     "lines": [
@@ -369,14 +370,15 @@
     "title": "先问清楚，再动身",
     "art": "sergey",
     "location": "旧维修龛 · 下一段路",
+    "finish_flags": ["faction_heard_sech"],
     "lines": [
       {
         "speaker": "旁白",
-        "text": "谢尔盖在灰里画出两条岔路。火已经小了，水壶底部还在轻轻响。"
+        "text": "谢尔盖在灰里画出岔路，先指了指通往旧检修库的那一条。火已经小了，水壶底部还在轻轻响。"
       },
       {
         "speaker": "谢尔盖",
-        "text": "这条通公社，路口有红漆标记。另一条往旧军列检修库走，那是谢契。我可以带你去谢契；你想去公社，我也会把沿路的危险告诉你。"
+        "text": "我住在谢契，就在旧军列检修库里。你愿意的话，我能带你过去，今晚有炉子烤。另一条岔路有运水的人走，他们在墙上画红箭头。"
       },
       {
         "speaker": "伊万",
@@ -389,7 +391,7 @@
     ],
     "choices": [
       {
-        "text": "「先讲讲公社。那里的人为什么和中央对着干？」",
+        "text": "「沿红箭头走，能找到什么人？」",
         "next": "solo_about_commune",
         "flag": "sergey_explained_commune",
         "hide_if": "sergey_explained_commune"
@@ -404,6 +406,7 @@
         "text": "「一个人走去公社，要留意什么？」",
         "next": "solo_about_road",
         "flag": "sergey_explained_road",
+        "requires": "sergey_explained_commune",
         "hide_if": "sergey_explained_road"
       },
       {
@@ -421,7 +424,8 @@
       {
         "text": "「把公社的路告诉我吧。我想去那里看看。」",
         "next": "solo_commune",
-        "flag": "solo_commune"
+        "flag": "solo_commune",
+        "requires": "sergey_explained_commune"
       }
     ]
   },
@@ -1126,7 +1130,7 @@
     "lines": [
       {
         "speaker": "谢尔盖",
-        "text": "他们是革命派，反对中央苏维埃继续控制各站的配给和驻军。公社里有工人、逃出来的士兵，也有带着孩子投奔过去的家庭。班组推选委员，重要的事在议事厅里谈。"
+        "text": "顺着红箭头能找到莫斯科公社。他们反对中央苏维埃管着各站的配给和驻军。公社里有工人、逃出来的士兵，也有带着孩子投奔过去的家庭。班组推选委员，重要的事在议事厅里谈。"
       },
       {
         "speaker": "伊万",

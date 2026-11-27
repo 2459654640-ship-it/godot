@@ -1,4 +1,5 @@
 extends RefCounted
+const Contacts=preload("res://scripts/faction_contacts.gd")
 ## Accepted work, one player-selected focus, and spoiler-aware leads live separately.
 static func row(id:String,name:String,done:bool,place:String,background:String,step:String,target:String="",area:String="")->Dictionary:
 	return {"id":id,"name":name,"done":done,"place":place,"background":background,"step":step,"target":target,"area":area}
@@ -11,7 +12,12 @@ static func tasks(s)->Array:
 	if s.f("visited_east_district"):
 		out.append(row("east_orientation","旧货运路",s.f("east_routes_known"),"east_district","出口矮墙上留有货运路的旧图，可以先辨认道路、铁路和地下联络入口。","到西南支线口矮墙前查看导向图，图旁留有公用应急箱。","east_board","东郊工业片区"))
 	if s.f("intro_done") or s.f("vitamins_taken"):
-		out.append(row("journey","D-6 之外",s.f("departure_committed"),"life","接受D-6的征召加入小队并前往地表，或者想办法逃离D-6。","先下层了解征召；独自走可询问妮娜或米哈伊尔。离站必须备齐面具与滤毒罐。","commander","D-6 两层"))
+		var lower=s.context.get("floor","life")=="labor"
+		var goal="commander" if lower else "lift"
+		var step="到集合区找科瓦廖夫，询问征召。离站需要面具和滤毒罐。" if lower else "从值班休息区下到作业层，了解征召。你也可以先问妮娜或米哈伊尔东侧通路的情况。"
+		if lower and s.f("kit"):goal="main_gate";step="装备已领齐，到作业层东侧正门汇合。想另找出路可先返回生活层。"
+		elif lower and s.f("accepted"):goal="armory";step="报到完成。到作业层北侧装备库领面具和滤毒罐。"
+		out.append(row("journey","D-6 之外",s.f("departure_committed"),"labor" if lower else "life","接受D-6的征召加入小队并前往地表，或者想办法逃离D-6。",step,goal,"出站准备"))
 		out.append(row("vitamins","今天的维生素 D",s.f("vitamins_taken"),"life","老爹嘱咐先领今日配给，再去报到。","生活层东端，第七供应点的柳德米拉留着今天的一份。","supply","第 7 供应点"))
 		out.append(row("report","征召报到",s.f("accepted"),"labor","你的名字在明晨出发的小队名单上。","从值班休息区的楼梯下去，在作业层集合区找科瓦廖夫。","commander","征召集合区"))
 	if s.f("accepted"):out.append(row("kit","出发准备",s.f("kit"),"labor","中尉签了登记单，面具和滤毒罐由装备库发放。","作业层北侧的装备库；领齐后到东边正门候车区。","armory","装备库"))
@@ -62,20 +68,21 @@ static func tasks(s)->Array:
 		# A remembered radio clue is not actionable in every room/map. Its
 		# destination must agree with the NPC/receiver that actually exists there.
 		var signal_place=current_floor
-		if current_floor not in ["life","labor","commune","sech","starcity"]:signal_place="sech" if s.f("surface_from_sech") or s.f("sech_member") else "commune"
+		if current_floor not in ["life","labor","commune","sech","starcity"]:signal_place={"sech":"sech","commune":"commune","labor":"life"}.get(Contacts.home(s),"life")
 		elif current_floor=="labor":signal_place="life"
-		if signal_place=="starcity" and not s.f("signal_identified"):signal_place="commune"
-		if signal_place=="life" and s.f("signal_identified"):signal_place="sech" if s.f("sech_member") else "commune"
+		if signal_place=="starcity" and not s.f("signal_identified"):signal_place={"sech":"sech","commune":"commune","labor":"life"}.get(Contacts.home(s),"life")
+		if signal_place=="life" and s.f("signal_identified"):signal_place={"sech":"sech","commune":"commune","labor":"labor"}.get(Contacts.home(s),"life")
 		var target="semyon" if signal_place=="life" else ("commune_receiver" if signal_place=="commune" else "sech_radio")
 		var step="询问见过短波值班记录的人，或在公社联络室、谢契电台继续收听。"
 		if s.f("signal_identified"):
-			target="star_perimeter_call" if signal_place=="starcity" else ("commune_leave" if signal_place=="commune" else "sech_leave")
+			target={"starcity":"star_perimeter_call","commune":"commune_leave","sech":"sech_leave","labor":"main_gate"}.get(signal_place,"semyon")
 			step="广播可能来自星城。先完成阵营的北线任务、建立接送与担保，之后才能前往外围询问。"
 		out.append(row("signal_trace","调查东方-7",s.f("signal_source_verified"),signal_place,"你实际听见了东方-7，记下了频率；还要查清电台在哪里。",step,target,"短波联络"))
 	if s.f("sech_joined") or s.f("radio_manual"):
 		out.append(row("radio","东方-7" if s.f("signal_heard") else "修复北线电台",s.f("radio_fixed"),"sech","谢契的电台坏了，居民想恢复与北线的日常联络。","西北调度台有接线图；确认接地后，再去左侧调度车厢南段的电台。" if not s.f("radio_power") else "接收机已通电，按纸上刻度慢慢调谐。","sech_manual" if not s.f("radio_manual") else "sech_radio","旧军列调度" if not s.f("radio_manual") else "电台维修室"))
 	if (s.f("star_registered") or s.f("star_inquiry_filed")) and not s.f("late_relay_assigned") and not s.f("late_star_admitted"):
-		out.append(row("father","蓝门后的人",false,"starcity","星城内区封闭，外界没有人员名册。已提交询问信，尚无核查结果。","在隔离线外等候答复，可以先返回聚落继续调查。","star_perimeter_call","星城外围"))
+		var ready=s.Campaign.Complete.completed_route(s) and s.f("north_story_ready")
+		out.append(row("father","蓝门后的人",false,"starcity","你已提交一封寻人询问信。接待员还没有提供内部名单。","到外围声讯柱说明技术来意，领取外线检修安排。" if ready else "先完成所属聚落的外勤。取得技术联络后，再到外围声讯柱申请工作进站。","star_perimeter_call","星城外围"))
 	if s.context.get("floor","")=="labor" and s.f("d6_returned") and not s.Campaign.Access.public_entry(s):
 		out.append(row("return_entry","返站受阻",false,"labor","你没有公开进入 D-6 的资格，公社材料不能改变这项限制。","到中尉或煤运检票口选择退回站外，先返回公社。","commander","征召集合区"))
 	elif s.context.get("floor","")=="labor" and s.f("d6_returned") and not s.f("return_reviewed") and not s.f("d6_cargo_returned"):
@@ -88,17 +95,27 @@ static func tasks(s)->Array:
 	return preload("res://scripts/progression.gd").annotate(s,out)
 static func active(s)->Dictionary:
 	var pending=tasks(s).filter(func(t):return not t.done and not t.failed)
+	var here:String=s.context.get("floor","life")
 	for t in pending:
-		if t.id==s.flags.get("tracked_quest","") and (t.place==s.context.get("floor","life") or (t.place in ["life","labor"] and s.context.get("floor","life") in ["life","labor"])):return t
+		if t.id==s.flags.get("tracked_quest","") and (t.place==here or (t.place in ["life","labor"] and here in ["life","labor"])):return t
 	for t in pending:
 		if t.id==s.flags.get("tracked_quest",""):
 			var leg=load("res://scripts/field_guide.gd").bridge(s,t)
 			if not leg.is_empty():return leg
 	for t in pending:
-		if t.place==s.context.get("floor","life"):return t
-	if s.context.get("floor","life") in ["life","labor"]:
+		if t.place==here and t.kind=="主线":return t
+	for t in pending:
+		if t.place==here:return t
+	if here in ["life","labor"]:
 		for t in pending:
 			if t.place in ["life","labor"]:return t
+	return {}
+static func map_task(s,floor:String,id:String="")->Dictionary:
+	if id=="":return active(s)
+	for task in tasks(s):
+		if task.id!=id or task.done or task.failed:continue
+		if task.place==floor:return task
+		if floor==s.context.get("floor",""):return load("res://scripts/field_guide.gd").bridge(s,task)
 	return {}
 static func track(s,id:String):
 	for t in tasks(s):
@@ -127,14 +144,15 @@ static func leads(s)->Array:
 		if q.facility==floor and not s.f(q.accepted) and preload("res://scripts/campaign.gd").quest_offered(s,q):
 			if q.id=="father_letters" and not s.f("father_met"):continue
 			out.append(q.lead)
+	out.append_array(Contacts.leads(s))
 	return out
 static func encyclopedia(s)->Array:
 	var rows=[["D-6 与地下生活","D-6 受中央苏维埃管辖，居民仍按身份和岗位领取物资。生活、维修、作业与守备各有区域；净水故障使征召小队必须上地表寻找零件。"],["配给与维生素 D","居民按名单领取每日维生素。地下难见阳光，配给很重要。"],["身体与食物","活动会缓慢消耗饱食；停下阅读、交谈和暂停时不消耗。饥饿不会直接扣生命，先找落脚处吃点东西。食物充足时，活动中的轻伤会逐渐恢复。"],["两种子弹","左轮使用弹袋里的土制弹。制式弹另装在钱袋里，可购买物资；土制弹不能抵账。"]]
 	if s.f("labor_read"):rows.append(["作业层","医务间和装备库在北侧，正门接轨道。生活层楼梯间在集合区西边。"])
 	if s.has("frequency"):rows.append(["东方-7","收音机里听到的呼号。知道更多之前，先留着频率。"])
 	var floor:String=s.context.get("floor","")
-	if floor=="commune" or s.f("commune_joined"):rows.append(["莫斯科公社","反对中央苏维埃特权的革命组织，依靠工人委员会、地下联络和武装守备维持独立。公社与 D-6 所属的中央苏维埃处于敌对状态，没有官方往来。公社整理的寻人材料不能用于 D-6 通行。"])
-	if floor=="sech" or s.f("sech_joined"):rows.append(["废土谢契","带有哥萨克传统的独立共同体，以旧军列检修库为落脚处；议事、阿塔曼与轮值并存，不服从中央，也未加入公社。"])
+	if Contacts.heard(s,"commune"):rows.append(["莫斯科公社","东郊运水记录里出现的革命组织。" if not Contacts.located(s,"commune") else "公社依靠工人委员会和守备维持独立，与 D-6 所属的中央苏维埃敌对。公社的联络文件只对自己的线路有效。"])
+	if Contacts.heard(s,"sech"):rows.append(["废土谢契","巡轨和运件的人有固定住处，与旧军列的检修库有关。" if not Contacts.located(s,"sech") else "带有哥萨克传统的独立聚落，住户在旧军列的检修库落脚。轮值维持运输和防卫，重大决定由住户共同议定。"])
 	if floor=="starcity" or s.f("star_known"):rows.append(["星城-2","北线上仍有人值守的地下科研设施。外界只能收到少量广播和零星回信，对内部人员与现状所知很少。内区封闭，询问信与介绍信不代表入内许可。"])
 	if s.f("father_met") or s.f("late_father_first_seen"):rows.append(["父亲的工作","父亲在星城的测控技术班维护与校准设备，研究计划由各组共同维持。早期封闭管理和断路造成了失联；通信记录中也有父亲的操作签认。他后来作过什么选择，需要结合你们实际的谈话判断。"])
 	return rows

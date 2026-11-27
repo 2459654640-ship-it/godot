@@ -27,7 +27,7 @@ func run():
  check("solo_shelter" in s.flags.comic.visited,"solo Ivan asks about shelter before meeting endpoint")
  for branch in ["solo_commune","dogs_watch"]:
   s=Story.new();walk(s,"companions",branch)
-  check(s.flags.next_facility in ["commune","sech"],"informed route choice reaches a playable settlement")
+  check(s.flags.next_facility==("commune" if branch=="solo_commune" else "sech"),"informed route choice reaches the selected settlement")
  s=Story.new();Comic.start(s,"companions")
  check(not Comic.panel(s).choices.any(func(c):return c.next=="solo_about_signal"),"Ivan cannot ask about a broadcast he never heard")
  s.flags.signal_heard=true

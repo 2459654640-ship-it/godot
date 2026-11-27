@@ -19,10 +19,8 @@ static func extend(c:Dictionary):
   c.actions["field_"+id+"_depart"].req["not"].append("late_"+id+"_started")
   c.actions["field_"+id+"_report"].req["not"].append("late_"+id+"_started")
 static func home(s)->String:
- if s.f("commune_member"):return "commune"
- if s.f("sech_member"):return "sech"
- if s.f("d6_cargo_returned") and not s.f("sided_veteran"):return "labor"
- return String(s.flags.get("east_home","commune"))
+ var base=s.Campaign.District.Contacts.home(s)
+ return base if base in ["commune","sech","labor"] else "commune"
 static func completed_route(s)->bool:
  match home(s):
   "commune":return s.f("field_c1_done") and (s.f("late_c3_done") or s.f("field_c3_done"))

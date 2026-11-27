@@ -60,9 +60,10 @@ func run():
 	s=restore(s);s.context.floor="commune";action(s,"anna_result");action(s,"anna_home")
 	check(s.f("commune_member") and not s.ending,"Anna follow-up opens a continued life in the commune")
 	# Solo routes connect through two different maps.
-	for branch in [0,1]:
-		s=comic(Story.new(),"companions",branch)
-		check(s.flags.next_facility in ["sech","commune"],"solo route enters a real facility")
+	for branch in [2,3]:
+		s=Story.new();s.flags.sergey_explained_commune=true
+		s=comic(s,"companions",branch)
+		check(s.flags.next_facility==("sech" if branch==2 else "commune"),"informed solo route reaches its selected facility")
 	s=Story.new();s.context.floor="sech"
 	s.act("c_radio_tune");check(not s.last_action_valid,"radio cannot tune without power")
 	for key in ["sech_join","radio_manual","radio_power","radio_tune","sech_books","sech_water"]:action(s,key)

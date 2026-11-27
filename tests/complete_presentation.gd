@@ -30,7 +30,7 @@ func run():
  var saved=w.story.serialize();var restored=load("res://scripts/story.gd").new();restored.restore(JSON.parse_string(JSON.stringify(saved)))
  check(restored.flags.comic.line_index==1,"save resumes exact unread paragraph")
  w.story.flags.comic.line_index=entries.size()-1;w.hud.show_comic();await frames();w.hud.finish_typing()
- check(w.hud.speech_buttons.size()==6,"all six known route questions remain accessible")
+ check(w.hud.speech_buttons.size()==4 and w.hud.speech_buttons.any(func(b):return "红箭头" in b.text),"only known directions and the first question about the red arrows are available")
  await frames();bounds()
  var long={"body":"完整的长段需要在逐句显示时保留所有文字。".repeat(60)}
  var parts=ComicUI.paragraphs(w.hud,long);var joined=""

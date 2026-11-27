@@ -1,6 +1,6 @@
 extends RefCounted
 ## One route and one purpose, shared by the journal, HUD and map. No enemy radar.
-const EXITS={"commune":"commune_leave","sech":"sech_leave","labor":"main_gate","waterworks":"plant_exit","surface":"surface_exit","junction":"junction_exit","relay":"relay_exit","star_interior":"late_star_exit","starcity":"star_perimeter_call","grey_shelter":"grey_shelter_exit","railfront":"front_exit"}
+const EXITS={"commune":"commune_leave","sech":"sech_leave","labor":"main_gate","coal":"coal_exit","waterworks":"plant_exit","surface":"surface_exit","junction":"junction_exit","relay":"relay_exit","star_interior":"late_star_exit","starcity":"star_perimeter_call","grey_shelter":"grey_shelter_exit","railfront":"front_exit"}
 const CITY_ENTRIES={"commune":"east_commune_entry","sech":"east_sech_entry","labor":"east_d6_entry","life":"east_d6_entry","surface":"east_pump_entry","waterworks":"east_waterworks_entry","coal":"east_mine_entry","starcity":"east_north_entry","relay":"east_north_entry","star_interior":"east_north_entry","junction":"late_junction_entry","railfront":"east_transfer_entry","grey_shelter":"grey_shelter_entry"}
 const AREAS={"surface_yard":Vector3(0,0,4),"surface_pool":Vector3(4,0,-10),"pump":Vector3(-12,0,-6),"workshop":Vector3(-1,0,-5),"warehouse":Vector3(12,0,-6)}
 static func bridge(s,task:Dictionary)->Dictionary:
@@ -10,13 +10,19 @@ static func bridge(s,task:Dictionary)->Dictionary:
  var out=task.duplicate();out["destination_place"]=there;out["remote_step"]=task.step
  var target="";var text=""
  if here=="east_district" and there in ["commune","sech"] and not s.Campaign.District.can_enter_home(s,there):
-  var base:String=s.flags.get("east_home","sech" if s.f("sech_member") else "commune")
-  out.place=here;out.target=CITY_ENTRIES.get(base,"east_commune_entry");out.step="本次访站尚未落实。先回出发聚落找联络人安排接触，不能直接进入另一阵营。";out["travel_leg"]=true;return out
+  var contacts=s.Campaign.District.Contacts
+  var base:String=contacts.home(s)
+  if not contacts.NAMES.has(base):return {}
+  out.place=here;out.target=CITY_ENTRIES[base]
+  out.step="访站安排 · "+(contacts.status(s,there).detail if contacts.heard(s,there) else "先回所属聚落找"+contacts.OFFICERS[base]+"，打听这条联络线。")
+  out["travel_leg"]=true;return out
  if here=="east_district" and there in ["life","labor"] and not s.Campaign.Access.public_entry(s):return {}
  if here=="east_district":
   target=CITY_ENTRIES.get(there,"")
   text={"surface":"沿旧货运路寻找旧泵站检修井，进入后再检查排水与兽群。","coal":"到城区西北、厂区东侧的封停检修口等内部接应；不要去 D-6 正门。","junction":"去铁路货场检修阶梯，下到北线换乘线。","commune":"从西南公社支线返站，再找原派工人交接。","sech":"沿货场道路回谢契支线，再找原派工人交接。","labor":"去 D-6 支线口核对外勤记录，登记返站。","starcity":"沿北线联络口前往星城外围；介绍信不能代替核验。","star_interior":"先到北线联络口，再在星城外围按工作许可入站。","relay":"先到北线联络口，再从星城外围的外线检修路进入中继站。","grey_shelter":"到货场营地棚屋后的地下入口；可避开卫兵，也可利用掩体交战。"}.get(there,"从已确认的联络口前往任务设施。")
- elif here=="life" and there not in ["life","labor"]:target="lift";text="先从生活层楼梯下到作业层，再按当前身份安排出站。"
+ elif here=="life" and there=="labor":target="lift";text="从值班休息区的楼梯下到作业层，再继续当前任务。"
+ elif here=="labor" and there=="life":target="stairs_up";text="从集合区西侧的楼梯上生活层。"
+ elif here=="life":target="lift";text="先从生活层楼梯下到作业层，再按当前身份安排出站。"
  elif here=="starcity" and there=="relay":target="late_perimeter_relay";text="从隔离门外的检修路进入中继站，无须穿越星城内区。"
  elif here=="starcity" and there=="star_interior":target="star_perimeter_call";text="在声讯柱核对检修与工作许可，完成去污及装备登记后入站。"
  elif EXITS.has(here):
@@ -44,6 +50,7 @@ static func point(w,task:Dictionary)->Vector3:
    if not w.story.f("surface_drain_open") and not w.story.f("battle_surface_yard"):return AREAS.surface_yard
    if w.story.f("surface_drain_open") and not w.story.f("battle_surface_pool"):return AREAS.surface_pool
  if w.targets.has(task.target):return w.targets[task.target].pos
+ if task.target=="d6_return_desk" and w.targets.has("commander"):return w.targets.commander.pos
  return Vector3.INF
 static func briefing(s,task:Dictionary)->Dictionary:
  if task.id not in ["surface_survey","d6_first_duty","water","city_basin","late_s2","field_c1","late_c2","late_s3","late_d1","late_star_access","late_warning"]:return {}

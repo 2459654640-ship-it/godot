@@ -95,7 +95,12 @@ func run():
   act(s,"north_inquiry");check(Campaign.available(s,faction+"_star"),"supported perimeter travel after all three main sorties "+faction)
   var opposite="sech_stay" if faction=="commune" else "commune_stay"
   s.act("c_"+opposite);check(not s.last_action_valid,"no casual dual membership")
-  act(s,"cross_contact");check(Campaign.available(s,faction+"_"+("sech" if faction=="commune" else "commune")),"specific sponsored cross-faction visit")
+  var destination="sech" if faction=="commune" else "commune"
+  check(not Campaign.available(s,"faction_sponsor_"+destination),"a completed chapter does not magically locate the other faction")
+  s.context.floor="east_district";act(s,"faction_read_"+destination)
+  s.context.floor=faction;act(s,"faction_sponsor_"+destination)
+  s.context.floor="east_district"
+  check(Campaign.available(s,"east_enter_"+destination),"specific sponsored cross-faction visit uses the city entrance")
  # No state may accidentally open archived research interior.
  check(not Campaign.data().unreleased_star_actions.is_empty(),"interior retains explicit unreleased action list")
  for key in Campaign.data().unreleased_star_actions:check(not Campaign.available(s,key),"interior closed "+key)
