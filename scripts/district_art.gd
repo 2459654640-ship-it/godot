@@ -97,10 +97,11 @@ static func complete_factory(k):
 		k.pipe(c+Vector3(dx,.58,4.8),c+Vector3(dx,11.42,4.8),.027,"frosted_steel")
 	for i in 29:
 		k.pipe(c+Vector3(-.31,.63+i*.36,4.81),c+Vector3(.31,.63+i*.36,4.81),.02,"old_iron")
-	k.box("TowerInspectionCatwalk",c+Vector3(2.31,8.45,2.64),Vector3(2.64,.17,3.12),"frosted_steel")
+	k.box("TowerInspectionCatwalk",c+Vector3(2.31,9.70,2.64),Vector3(2.64,.17,3.12),"frosted_steel")
 	for z in [1.16,4.11]:
-		k.pipe(c+Vector3(1.0,9.45,z),c+Vector3(3.64,9.45,z),.035,"old_iron")
-		for x in [1.13,2.35,3.52]:k.pipe(c+Vector3(x,8.54,z),c+Vector3(x,9.45,z),.026,"frosted_steel")
+		Urban.beam(k,"CatwalkDiagonalSupport",c+Vector3(2.29,9.02,z),c+Vector3(3.37,9.63,z),.13,.13,"old_iron",k.root)
+		k.pipe(c+Vector3(1.0,10.65,z),c+Vector3(3.64,10.65,z),.035,"old_iron")
+		for x in [1.13,2.35,3.52]:k.pipe(c+Vector3(x,9.79,z),c+Vector3(x,10.65,z),.026,"frosted_steel")
 	for z in [-50.2,-47.4,-44.7]:
 		k.box("BoilerConnectionSleeve",Vector3(-77.76,3.12,z),Vector3(1.2,.65,1.28),"works_brick")
 		k.pipe(Vector3(-78.8,3.12,z),Vector3(-75.3,3.12,z),.27,"old_iron")
@@ -150,19 +151,55 @@ static func housing_damage(k,p:Vector3,size:Vector2,room:Rect2):
 	# a second floor. The inhabitable ground floor retains its front access.
 	var up=Node3D.new();up.name="SplitWorkersHousingUpper";up.position=p;k.root.add_child(up)
 	var half=size.x*.5;var depth=size.y*.5
-	k.box("SurvivingSecondFloorPlate",Vector3(-1.55,3.63,-2.58),Vector3(size.x-3.10,.21,size.y-5.16),"washed_concrete",false,up)
+	var outline=PackedVector2Array([
+		Vector2(-half+.14,-depth+.17),Vector2(half-2.82,-depth+.17),
+		Vector2(half-2.91,-3.44),Vector2(half-4.0,-.47),
+		Vector2(half-3.07,.82),Vector2(half-3.55,3.12),
+		Vector2(half-4.20,2.42),Vector2(half-5.85,4.94),
+		Vector2(half-7.28,3.96),Vector2(half-8.65,5.78),
+		Vector2(-half+.14,6.38)
+	])
+	cracked_concrete(k,up,outline,3.72,.25)
 	k.box("ExposedHousePartyWall",Vector3(-half+.04,4.81,-1.14),Vector3(.31,2.15,size.y-2.28),"works_brick",false,up)
 	k.box("RearMasonryBelowSash",Vector3(-1.55,3.96,-depth+.10),Vector3(size.x-3.10,.53,.27),"works_brick",false,up)
 	for x in [-half+.71,-3.51,-1.65,.21,2.21]:
 		var rise=1.35+.26*sin(x*4.0)
 		k.box("HouseBrokenWindowJamb",Vector3(x,4.18+rise/2,-depth+.1),Vector3(.57,rise,.30),"works_brick",false,up)
-	for n in 9:
-		var x=-half+.51+n*1.12
-		var beam=k.box("HouseRivenFloorJoist",Vector3(x,3.78,5.6+sin(n*3.0)*.44),Vector3(.133,.19,1.35+.75*cos(n*3.7)),"wood",false,up)
-		beam.rotation.x=.08*sin(n*1.3)
-		k.box("ExposedFloorboardRibs",beam.position+Vector3(0,.105,-.18),Vector3(.76,.037,.51),"wood",false,up).rotation.y=.10*sin(n*2.2)
-	for n in 13:
-		var at=Vector3(-half+.63+n*.72,3.80,-6.2+sin(n*3.8)*1.7)
-		var fragment=k.box("HouseCollapsedRoofTile",at,Vector3(.52,.08,.29),"works_brick",false,up)
-		fragment.rotation=Vector3(.1*sin(n),n*1.93,.17*cos(n*2.4))
+	for i in range(3,outline.size()-1):
+		var a=outline[i];var b=outline[i+1];var edge=(b-a).normalized()
+		var outward=Vector2(edge.y,-edge.x)*-.45
+		for t in [.26,.68]:
+			var p2=a.lerp(b,t)
+			var from=Vector3(p2.x,3.64,p2.y)
+			var end=from+Vector3(outward.x,-.05,outward.y)*(1+.2*sin(i*2.4+t))
+			Urban.beam(k,"ExposedSlabBar",from,end,.026,.022,"rust",up)
+		var chipped=a.lerp(b,.62)
+		var chip=k.box("SpalledRoofConcrete",Vector3(chipped.x,3.80,chipped.y-.19),Vector3(.22,.14,.41),"washed_concrete",false,up)
+		chip.rotation=Vector3(.25*sin(i),i*.8,.21)
 	for mesh in up.find_children("*","MeshInstance3D",true,false):mesh.set_meta("interior_rect",room)
+
+
+static func cracked_concrete(k,root:Node3D,outline:PackedVector2Array,top:float,thickness:float):
+	var st=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var triangles=Geometry2D.triangulate_polygon(outline)
+	for index in range(0,triangles.size(),3):
+		var a=outline[triangles[index]];var b=outline[triangles[index+1]];var c=outline[triangles[index+2]]
+		if (b-a).cross(c-a)<0:
+			var swap=b
+			b=c
+			c=swap
+		st.set_normal(Vector3.UP)
+		for p in [a,b,c]:
+			st.set_uv(p*.65)
+			st.add_vertex(Vector3(p.x,top,p.y))
+	for i in outline.size():
+		var a=outline[i];var b=outline[(i+1)%outline.size()]
+		var edge=(b-a).normalized()
+		st.set_normal(Vector3(edge.y,0,-edge.x))
+		var left=Vector3(a.x,top,a.y);var right=Vector3(b.x,top,b.y)
+		for v in [right,left,left-Vector3.UP*thickness,right,left-Vector3.UP*thickness,right-Vector3.UP*thickness]:
+			st.set_uv(Vector2(v.x*.71+v.z*.48,v.y))
+			st.add_vertex(v)
+	var slab=MeshInstance3D.new();slab.name="FragmentedApartmentSlab"
+	slab.mesh=st.commit();slab.material_override=k.mats.washed_concrete
+	root.add_child(slab)

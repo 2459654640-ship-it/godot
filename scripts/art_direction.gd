@@ -34,7 +34,7 @@ static func environment(w,e:Environment,sun:DirectionalLight3D):
 			e.adjustment_enabled=true
 			e.adjustment_contrast=1.073
 			e.adjustment_saturation=.88
-			sun.rotation_degrees=Vector3(-27,-125,0)
+			sun.rotation_degrees=Vector3(-27,34,0)
 	sun.directional_shadow_max_distance=75 if w.floor_id in OUTDOORS else 45
 	sun.shadow_blur=1.3
 

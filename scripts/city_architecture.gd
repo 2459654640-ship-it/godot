@@ -150,12 +150,23 @@ static func factory(k):
   else:
    k.box("FactoryFrontPlinth",Vector3(c.x+dx,.7,z),Vector3(4.8,1.4,.55),"works_brick")
    k.box("FactoryFrontWindow",Vector3(c.x+dx,3.7,z),Vector3(3.4,4.5,.06),"exterior_glass")
+   for pane in 12:
+    var xpos=(pane-5.5)*.288
+    var rise=.93*sqrt(maxf(0,1.0-pow(xpos/1.76,2)))
+    k.box("FactoryArchedGlass",Vector3(c.x+dx+xpos,5.93+rise/2,z),Vector3(.285,rise,.067),"exterior_glass")
+   for xpos in [-1.10,0,1.10]:
+    var rise=.91*sqrt(maxf(0,1.0-pow(xpos/1.76,2)))
+    k.box("FactoryUpperWindowBar",Vector3(c.x+dx+xpos,5.93+rise/2,z+.04),Vector3(.052,rise,.12),"old_iron")
    for ix in [-1.65,-.55,.55,1.65]:k.box("FactoryFrontMullion",Vector3(c.x+dx+ix,3.7,z+.07),Vector3(.06,4.5,.12),"old_iron")
    for y in [1.5,2.6,3.7,4.8,5.9]:k.box("FactoryFrontTransom",Vector3(c.x+dx,y,z+.07),Vector3(3.4,.06,.12),"old_iron")
   for edge in [-2.4,2.4]:k.box("FactoryFrontPier",Vector3(c.x+dx+edge,3.8,z),Vector3(.65,7.6,.85),"works_brick")
   # Voussoirs form a true arch silhouette over each bay.
   for n in 12:
    var a=PI*(n+.5)/12;var arch=k.box("FactoryWindowArch",Vector3(c.x+dx+cos(a)*1.86,5.95+sin(a)*1.05,z+.15),Vector3(.50,.36,.56),"district_concrete");arch.rotation.z=a-PI/2
+ for side in [-1,1]:
+  var x=c.x-10.66 if side<0 else c.x+10.08
+  var span=.70 if side<0 else 1.87
+  k.box("PumpHallCornerPier",Vector3(x,h/2,c.z+sz/2),Vector3(span,h,.60),"works_brick")
  k.box("FactoryFrontCornice",c+Vector3(0,7.65,sz/2),Vector3(sx+.6,.75,.85),"works_brick")
  var root=Node3D.new();root.position=c;k.root.add_child(root);Urban.roof(k,root,Vector2(sx,sz),h,"waterworks",14)
  hull(k,c+Vector3.UP*3,Vector3(sx+.8,6,sz+.8),"FactoryHallHull")
