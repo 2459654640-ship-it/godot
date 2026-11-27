@@ -350,5 +350,48 @@ for id in d['jobs']:
 for key in ['late_father_first','late_father_first_end','late_father_truth_scene','late_father_truth_end','late_epilogue_family']:d['panels'][key]['music']='reunion_theme'
 for key in ['late_final_depart','late_final_result','late_epilogue_people']:d['panels'][key]['music']='warning_theme'
 
+# The early blackout and the final warning share the same record. The three
+# faction chapters leave different evidence that Lev can use at the decision.
+d['actions']['late_archive']['text']='查阅 1962 年北线交班簿的发报与签收栏。'
+d['actions']['late_archive']['reply']='你翻到母亲等过的那一班。发报栏盖着「已转」，接收栏却没有签字。夹在封底的操作单写得更清楚：北线对外发报暂停，地方站仍可接收。执行人是你父亲。\n停发令撤销后，他寄往 D-6 的两封信都退了回来。退件理由一栏写着「查无此人」。'
+d['actions']['late_weather_review']['reply']='列夫把旧装卸路的班次压在你的两张纸带上。\n列夫：「诊所背风处读数没变，天线外的地面却开始扬尘。风转过来的时候，下一班车正好要穿过装卸路。值班员手里那张路况单还是昨天的。」\n他把正在发响的耳机递给你。\n调度员：「星城，你们收到没有？请告诉我，这班车走原线还是走旁线？」'
+d['actions']['late_network_plan']['text']='「先给等车的人一个答复。我们能用哪几条线？」'
+
+P('late_father_first','她在 D-6 等过','star_reunion',[
+ ('父亲','你母亲后来还去收过北线的消息吗？'),
+ ('伊万','她有一张写着地址的纸，问了很多年。后来她病死了。是谢苗诺夫把我带大的。'),
+ ('旁白','父亲低下头，把手里的螺丝刀放在桌上。'),
+ ('父亲','那张地址纸是我写的。你那时还不认识字，拿着它在墙上来回蹭。她把纸从你手里拿下来，折好放在衣袋里。')],
+ choices=[dict(text='「等做完这班，我想看看你那时留下的记录。」',next='late_father_first_end',flag='late_family_time'),dict(text='「我先跟你做完这班。家里的事，容我想一想。」',next='late_father_first_end',flag='late_family_distance')],music='reunion_theme')
+P('late_father_first_end','把椅子留在桌边','star_reunion',[
+ ('父亲','桌角那杯水刚倒的。你休息一下，想什么时候来标定室都行。',{'all':['late_family_time']}),
+ ('父亲','好。等你想说了再来。标定室在东边，工作卡我先放过去。',{'all':['late_family_distance']}),
+ ('旁白','他说完起身离开。你听着那串不熟悉的脚步声走远，才坐到椅子上。')],end='resume:late_father',finish_flags=['late_father_first_seen'],music='reunion_theme')
+P('late_father_truth_scene','接收栏空着','star_reunion',[
+ ('伊万','交班簿写着「已转」。母亲也听过这两个字。她以为你收到了消息，才每天去问有没有回信。'),
+ ('父亲','那时候外面有人在测台站的位置，我同意停发。交班时我照惯例盖了章，以为下一班会去补。我没有告诉下面几个站，叫他们别等。'),
+ ('伊万','后来可以发报了。你的信退回来，你还可以再查。'),
+ ('父亲','我查过一次。到第二张退件，我把两封信塞进抽屉，拿手里的工作当借口。后来有 D-6 的工人来修设备，我都没问过他们认不认识你母亲。'),
+ ('旁白','外间的耳机响了。司机还在问这班能不能走原线。父亲起身，把手边的签收簿推给你。',{'all':['late_risk_confirmed']}),
+ ('旁白','外间有人用指节敲了一下门，问校准后的纸带可不可以送来。父亲把签收簿推到你手边，起身去取纸带。',{'not':['late_risk_confirmed']})],
+ choices=[dict(text='「把退回来的两封信给我。等这班做完，我想再听你说。」',next='late_father_truth_end',flag='late_family_open'),dict(text='「簿子我拿去。今天我想和你只谈这班工作。」',next='late_father_truth_end',flag='late_family_closed'),dict(text='「信先留着。我要去问司机，他有没有收到改道指令。」',next='late_father_truth_end',flag='late_family_later',when={'all':['late_risk_confirmed']}),dict(text='「信先留着。我去和列夫一起核对那两张纸带。」',next='late_father_truth_end',flag='late_family_later',when={'not':['late_risk_confirmed']})],music='reunion_theme')
+P('late_father_truth_end','还有人在耳机那边','star_reunion',[
+ ('父亲','信在下面的抽屉。我会把原件给你。',{'all':['late_family_open']}),
+ ('父亲','听你的。我到外面把接收机接上。',{'all':['late_family_closed']}),
+ ('父亲','我去拿旁线图。你先问他车上有谁。',{'all':['late_family_later','late_risk_confirmed']}),
+ ('父亲','好。列夫在东边通信间，你们早点对完，我等你们的消息。',{'all':['late_family_later'],'not':['late_risk_confirmed']})],end='resume:late_father',finish_flags=['late_father_truth_seen'],music='reunion_theme')
+
+d['panels']['late_four_plans']['lines']=[
+ {'speaker':'调度员','text':'车还没出南口。两副担架，三家住户。我能再等一会儿，别给我一张连路名都没有的通知。'},
+ {'speaker':'伊万','text':'先停在挡风墙里。把你现在的位置和车上人数再报一遍。我会叫接应的人确认旁线。'},
+ {'speaker':'列夫','text':'你在公社核过供暖。锅炉有温度，家属房的水管还凉着。无线电也是一样，仪表说发出去了，得有人在另一头回答。','when':{'all':['late_c3_heat_restored']}},
+ {'speaker':'列夫','text':'谢契那班把伤员和粮食分开安排，司机才有办法报出确切的载重。请彼得也照这个办法留人接收，别只给一个总数。','when':{'all':['late_s3_done']}},
+ {'speaker':'科瓦廖夫（通话）','text':'我认得你留的两条读数。车可以拨给居民用，军运晚发一班。要多少个位子，你们把名单交给调度员核实。','when':{'all':['late_d3_done']}},
+ {'speaker':'列夫','text':'几个地方各自收报，谁也不能替另一站签收。中央能多派车，但我们得先把居民的席位写进调度。'},
+ {'speaker':'列夫','text':'先发警报，再把备用机分给受过训练的人，也来得及。若你决定留守，得把备用电源和下一班的抄报员都安排好。我们先定这一次怎么送人。'}]
+P('late_final_depart','等一句收到','star_reunion',[
+ ('列夫','司机已经停在南口。沿你选的办法开通接收，再给他确认能走的线路。我们会等他在耳机里复述一遍。'),
+ ('伊万','没有回话的地方先留空。我回来跟你一起再叫。')],end='resume:late_planning',music='warning_theme')
+
 (ROOT/'data/complete_campaign.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
 print('actions',len(d['actions']),'quests',len(d['quests']),'panels',len(d['panels']))

@@ -109,9 +109,11 @@ func scroll_dialogue_to(scroll:ScrollContainer,control:Control):
 		scroll.scroll_vertical=roundi(control.global_position.y-content.global_position.y)
 
 func _input(event):
-	if modal_visible() and event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_SPACE,KEY_ENTER,KEY_KP_ENTER]:
-		if comic_active and modal.get_meta("cinematic_live",false):ComicUI.advance(self);get_viewport().set_input_as_handled()
-		elif not typing.is_empty():finish_typing();get_viewport().set_input_as_handled()
+	if not modal_visible() or not event is InputEventKey or not event.pressed or event.echo:return
+	if comic_active and modal.get_meta("cinematic_live",false):
+		if ComicUI.keyboard(self,event.keycode):get_viewport().set_input_as_handled()
+	elif not typing.is_empty() and event.keycode in [KEY_SPACE,KEY_ENTER,KEY_KP_ENTER]:
+		finish_typing();get_viewport().set_input_as_handled()
 
 func setup(w):
 	world=w

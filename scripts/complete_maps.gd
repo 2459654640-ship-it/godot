@@ -94,7 +94,7 @@ static func star(w):
   for n in [0,1,2]:k.box("HallChartPoint",Vector3(x-1.5+n*1.3,1.3+n*.3,-10.63),Vector3(.05,.05,.02),"warm_light")
  # Separate reception, work, archive, communications and staff areas.
  k.table(Vector3(-7,0,12.5),3.0);Props.chair(k,Vector3(-7,0,11.3),PI)
- k.table(Vector3(3,0,15),4.0)
+ preload("res://scripts/starcity_v17.gd").lab_table(k,Vector3(3,0,15),4.0)
  for x in [1.5,3,4.5]:Props.chair(k,Vector3(x,0,16.2))
  for x in [-25.5,-24.3,-23.1]:k.locker(Vector3(x,0,19.5))
  for p in [Vector3(-25,0,11),Vector3(-21,0,11)]:k.bed(p,"cloth")
@@ -121,6 +121,29 @@ static func star(w):
  k.label("ВРЕМЯ / НАПРАВЛЕНИЕ / ИСТОЧНИК",Vector3(0,3.15,-22.72),19)
  for p in [Vector3(-11.7,2.1,16),Vector3(11.7,2.1,-4),Vector3(13,2.1,-22.7)]:k.lamp(p,true,.9,5)
  research_equipment(w)
+ dispatch_room(w)
+
+static func dispatch_room(w):
+ var k=w.kit;var research=preload("res://scripts/starcity_v17.gd")
+ # The chart lies on the existing briefing table, facing its operator aisle.
+ k.box("DispatchTracingBoard",Vector3(3,.861,15),Vector3(2.85,.045,.82),"dark_steel")
+ k.box("DispatchTracingPaper",Vector3(3,.887,15),Vector3(2.66,.006,.72),"paper")
+ for x in [2.0,2.5,3.0,3.5,4.0]:
+  k.box("TracingChartRuling",Vector3(x,.892,15),Vector3(.008,.004,.65),"star_enamel")
+ for z in [14.79,15.0,15.21]:
+  k.box("TracingRoute",Vector3(3,.896,z),Vector3(2.45,.006,.022),"red" if z==15.0 else "dark_steel")
+ for point in [Vector3(2.1,.908,14.79),Vector3(3.05,.908,15),Vector3(3.88,.908,15.21)]:
+  k.cyl("DispatchRoutePin",point,.042,.024,"brass")
+ k.box("DispatchDocumentTray",Vector3(4.69,.876,14.99),Vector3(.46,.073,.57),"star_alloy")
+ for y in [.916,.928,.940]:k.box("DispatchReceipt",Vector3(4.69,y,14.99),Vector3(.37,.008,.44),"paper")
+ # Separate analogue relay and tape desks frame the observatory console.
+ for x in [-9.8,-8.55,8.55,9.8]:research.cabinet(k,Vector3(x,0,-22.48),true)
+ for x in [-3.6,4.6]:
+  var lamp=k.lamp(Vector3(x,2.52,-22.23),false,1.28,7)
+  lamp.light_color=Color("a5cbc2");lamp.shadow_enabled=true
+ for x in [-7,7]:
+  k.box("ObservationWallCableTray",Vector3(x,2.50,-22.66),Vector3(4.91,.10,.21),"dark_steel").set_meta("view_occluder",true)
+  for z in [-.06,.06]:k.pipe(Vector3(x-2.4,2.60,-22.66+z),Vector3(x+2.4,2.60,-22.66+z),.026,"star_alloy")
 static func research_portals(k):
  # Clear width is exactly the shell's opening; jambs belong in the masonry.
  for d in preload("res://scripts/late_layouts.gd").PLANS.star_interior.doors:

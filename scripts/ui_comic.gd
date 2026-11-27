@@ -35,6 +35,9 @@ static func render(h,sequence:String=""):
  h.dialog_title=h.label(p.title,29,h.text_color);h.dialog_title.add_theme_font_override("font",h.serif);h.dialog_title.position=Vector2(72,62);stage.add_child(h.dialog_title)
  var pause=h.button("暂停  Esc",func():h.show_comic_pause(),true,true);pause.position=Vector2(1380,40);pause.size=Vector2(148,42);stage.add_child(pause)
  var entries=paragraphs(h,p);var index=clampi(int(s.flags.comic.get("line_index",0)),0,maxi(0,entries.size()-1));s.flags.comic.line_index=index
+ if index>0:
+  var previous=h.button("‹  上一句",func():back(h),true,true)
+  previous.position=Vector2(1215,40);previous.size=Vector2(148,42);stage.add_child(previous)
  var entry:Dictionary=entries[index] if not entries.is_empty() else {"speaker":"旁白","text":p.body}
  var dense=p.get("choices",[]).size()>3 and index==entries.size()-1
  var caption=VBoxContainer.new();caption.position=Vector2(80,570 if dense else 620);caption.size=Vector2(1440,132);caption.add_theme_constant_override("separation",12);stage.add_child(caption);h.modal_box=caption
@@ -50,7 +53,27 @@ static func render(h,sequence:String=""):
    var choice=i;var b=h.button(str(i+1)+"  ·  "+p.choices[i].text,func():h.comic_choose(choice));b.custom_minimum_size.y=58 if dense else 43;b.size_flags_horizontal=Control.SIZE_EXPAND_FILL;b.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;buttons.add_child(b);h.speech_buttons.append(b)
  else:
   var b=h.button("穿上外套，出门" if p.get("end","")=="intro" else ("继续  ›" if not p.get("end","").begins_with("map:") else "继续前行  ›"),func():advance(h));b.custom_minimum_size.y=46;buttons.add_child(b)
- h.modal_hint=h.label("空格 / 点击画面  ·  补全文字后继续    |    "+str(index+1)+" / "+str(maxi(1,entries.size())),13,Color("8f9c92"));h.modal_hint.position=Vector2(80,964);stage.add_child(h.modal_hint)
+ var controls="1–%d 选择"%p.choices.size() if index==entries.size()-1 and p.has("choices") else "空格 / 点击画面 继续"
+ h.modal_hint=h.label(controls+"    |    "+str(index+1)+" / "+str(maxi(1,entries.size())),13,Color("aab5a9"));h.modal_hint.position=Vector2(80,964);stage.add_child(h.modal_hint)
+static func back(h):
+ var state:Dictionary=h.world.story.flags.comic
+ var index=int(state.get("line_index",0))
+ if index<1:return
+ state.line_index=index-1;render(h);h.finish_typing()
+
+static func keyboard(h,key:int)->bool:
+ if key==KEY_LEFT:
+  back(h);return true
+ if key in [KEY_SPACE,KEY_ENTER,KEY_KP_ENTER]:
+  advance(h);return true
+ if key<KEY_1 or key>KEY_9:return false
+ var s=h.world.story;var panel=s.Comic.panel(s)
+ if not panel.has("choices") or int(s.flags.comic.get("line_index",0))!=paragraphs(h,panel).size()-1:return false
+ var index=key-KEY_1
+ if index>=panel.choices.size():return false
+ if not h.typing.is_empty():h.finish_typing()
+ else:h.comic_choose(index)
+ return true
 static func advance(h):
  if not h.comic_active or not h.modal.get_meta("cinematic_live",false):return
  for item in h.typing:

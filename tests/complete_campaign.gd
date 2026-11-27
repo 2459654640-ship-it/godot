@@ -30,6 +30,11 @@ func returned(s,id:String):
 func _initialize():call_deferred("run")
 func run():
  var c=Story.new().Campaign.data()
+ var chronology=fixture("commune")
+ chronology.Comic.start(chronology,"late_father_truth_scene")
+ check(not "改道指令" in str(chronology.Comic.panel(chronology).choices),"father scene never offers the unlearned train emergency")
+ chronology.flags.late_risk_confirmed=true
+ check("改道指令" in str(chronology.Comic.panel(chronology).choices),"train emergency changes what Ivan can ask")
  for q in Story.new().Campaign.Complete.data().quests:
   for st in q.stages:check(c.interactions.has(st.target) or st.target in ["nina","d6_surface_gate","grey_shelter_exit"],"quest target resolves "+st.target)
  for p in Story.new().Campaign.Complete.data().panels.values():check(ResourceLoader.exists("res://assets/cinematics/"+p.art+".png"),"film art exists "+p.art)

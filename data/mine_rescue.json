@@ -1,0 +1,538 @@
+{
+  "actions": {
+    "rescue_review": {
+      "text": "「阿列克谢，你想怎么走？」",
+      "req": {
+        "floor": [
+          "coal"
+        ],
+        "all": [
+          "anna_rescue_started"
+        ],
+        "not": [
+          "anna_outcome_done"
+        ]
+      },
+      "flags": {},
+      "reply": "",
+      "travel": "rescue35_brief",
+      "once": false
+    },
+    "rescue35_call": {
+      "text": "请值班员确认提升笼与乘梯次序",
+      "reply": "",
+      "req": {
+        "floor": [
+          "coal"
+        ],
+        "all": [
+          "anna_rescue_started",
+          "rescue35_assembled"
+        ],
+        "not": [
+          "anna_outcome_done",
+          "rescue35_stalled"
+        ]
+      },
+      "flags": {},
+      "once": true,
+      "travel": "rescue35_lift_stops"
+    },
+    "rescue35_divert": {
+      "text": "让值班员通知接车改到备用转运口",
+      "reply": "",
+      "req": {
+        "floor": [
+          "coal"
+        ],
+        "all": [
+          "anna_rescue_started",
+          "rescue35_stalled",
+          "rescue_medic_ready",
+          "rescue_transport_ready",
+          "rescue_route_ready"
+        ],
+        "not": [
+          "anna_outcome_done",
+          "rescue35_reserve"
+        ]
+      },
+      "flags": {},
+      "once": true,
+      "travel": "rescue35_divert_scene"
+    },
+    "rescue35_manual": {
+      "text": "询问旧作业斜道的通行风险",
+      "reply": "",
+      "req": {
+        "floor": [
+          "coal"
+        ],
+        "all": [
+          "anna_rescue_started",
+          "rescue35_stalled"
+        ],
+        "not": [
+          "anna_outcome_done",
+          "rescue35_reserve"
+        ],
+        "not_all": [
+          "rescue_medic_ready",
+          "rescue_transport_ready",
+          "rescue_route_ready"
+        ]
+      },
+      "flags": {},
+      "once": false,
+      "travel": "rescue35_risk"
+    },
+    "rescue35_handoff": {
+      "text": "和安娜一起核对人数、登车返站",
+      "reply": "",
+      "req": {
+        "floor": [
+          "coal"
+        ],
+        "all": [
+          "anna_rescue_started",
+          "rescue35_reserve_arrived"
+        ],
+        "not": [
+          "anna_outcome_done"
+        ]
+      },
+      "flags": {},
+      "once": true,
+      "travel": "rescue35_return"
+    }
+  },
+  "interactions": {
+    "rescue35_lift": {
+      "facility": "coal",
+      "name": "主提升间 · 操纵台",
+      "role": "煤运转移",
+      "body": "升降笼的格栅还锁着。值班员抬手让你先退到黄线外。等安娜和阿列克谢都到了，再核对乘梯次序。",
+      "spoken": false,
+      "options": [
+        "rescue35_call",
+        "rescue35_divert",
+        "rescue35_manual"
+      ]
+    },
+    "rescue35_handoff": {
+      "facility": "coal",
+      "name": "备用转运口 · 交接区",
+      "role": "交换队接应",
+      "body": "两道灯照在转运门前。值班员拿着接车单，等同行者都到齐了再点名。",
+      "spoken": false,
+      "options": [
+        "rescue35_handoff"
+      ]
+    }
+  },
+  "panels": {
+    "rescue35_brief": {
+      "title": "留一把钥匙",
+      "art": "mine_brother_v35",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "阿列克谢在靴子里塞好厚袜子。他把一枚钥匙压在桌角，下面垫着半张工休单。"
+        },
+        {
+          "speaker": "阿列克谢",
+          "text": "这是工具柜的钥匙。跟我一班的彼得还在井下，等他回来就能拿干衣服。你替我夹在这儿。"
+        },
+        {
+          "speaker": "安娜",
+          "text": "好。你想在路上歇，就说一声。我给医护留了位置，孩子们跟着我。"
+        },
+        {
+          "speaker": "阿列克谢",
+          "text": "先走到主提升间。到时候如果我慢了，你别折回来搀我。停在我看得见的地方。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "choices": [
+        {
+          "text": "「好。过了拐角，我会等你叫我。」",
+          "next": "rescue35_start"
+        },
+        {
+          "text": "「我想先检查备用转运口，再回来接你们。」",
+          "next": "rescue35_delay"
+        }
+      ],
+      "music": "letters_theme"
+    },
+    "rescue35_delay": {
+      "title": "等这一班",
+      "art": "mine_brother_v35",
+      "lines": [
+        {
+          "speaker": "安娜",
+          "text": "你去。我给哥哥把另一只鞋穿好，我们在这儿等。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "end": "resume:mine_anna"
+    },
+    "rescue35_start": {
+      "title": "走到主提升间",
+      "art": "mine_brother_v35",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你把钥匙别在工休单下面。阿列克谢扶着床站起来，伸脚试了试地面，自己迈出了门。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "end": "resume:mine_anna",
+      "finish_flags": [
+        "rescue35_walk"
+      ]
+    },
+    "rescue35_lift_stops": {
+      "title": "铃没有响第二次",
+      "art": "mine_lift_v35",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "值班员点完这一班的人数，合上操纵台的闸。钢缆绷了一下，笼子只升起一掌宽。"
+        },
+        {
+          "speaker": "提升值班员",
+          "text": "退到黄线后面。制动器挂住了，今天上不去。"
+        },
+        {
+          "speaker": "阿列克谢",
+          "text": "你们早班写的还是正常。"
+        },
+        {
+          "speaker": "提升值班员",
+          "text": "我接班时在单子上划了两道。管调度的说，停机也要等接班的人来签字。你看，在桌上。",
+          "when": {
+            "not": [
+              "rescue_air_known"
+            ]
+          }
+        },
+        {
+          "speaker": "提升值班员",
+          "text": "你带来的原单在这儿。上面那一班写过停机，交班簿里却还记着正常。等病人出去，我给你签证。",
+          "when": {
+            "all": [
+              "rescue_air_known"
+            ]
+          }
+        },
+        {
+          "speaker": "安娜",
+          "text": "哥，到长椅这边。让孩子们也坐下。伊万，等你弄清楚另一条路，我们再走。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "end": "resume:rescue35_lift",
+      "finish_flags": [
+        "rescue35_stalled"
+      ]
+    },
+    "rescue35_divert_scene": {
+      "title": "改在北边上车",
+      "art": "mine_lift_v35",
+      "lines": [
+        {
+          "speaker": "提升值班员",
+          "text": "备用口确认过了，车也改过去了。我先把早班记录收起来，等你们接完人，再来找我。"
+        },
+        {
+          "speaker": "安娜",
+          "text": "哥，那边比刚才多走一段。走不动了就靠一下墙，我等你。"
+        },
+        {
+          "speaker": "阿列克谢",
+          "text": "我能走到。把灯留给后面的人。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "end": "resume:mine_anna",
+      "finish_flags": [
+        "rescue35_reserve"
+      ]
+    },
+    "rescue35_risk": {
+      "title": "斜道上的支护",
+      "art": "mine_lift_v35",
+      "lines": [
+        {
+          "speaker": "提升值班员",
+          "text": "还有一条作业斜道。车停在坡口。上边的木支护移了位，我没敢让早班从那里过。"
+        },
+        {
+          "speaker": "安娜",
+          "text": "把话说清楚。要是横梁掉下来，孩子会走在担架后面，退不出去。现在停在这里，医护还能照看他们。"
+        },
+        {
+          "speaker": "阿列克谢",
+          "text": "你们问过我了。我能等。别只为把我送出去，叫后面的人走那一段。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "choices": [
+        {
+          "text": "「先在这里等。我去把备用路线准备好。」",
+          "next": "rescue35_hold"
+        },
+        {
+          "text": "「通知接应。我们走旧斜道，先送出伤员。」",
+          "next": "rescue35_loss",
+          "flag": "rescue_risk_confirmed",
+          "when": {
+            "not_all": [
+              "rescue_medic_ready",
+              "rescue_transport_ready",
+              "rescue_route_ready"
+            ]
+          }
+        }
+      ]
+    },
+    "rescue35_hold": {
+      "title": "退回黄线",
+      "art": "mine_lift_v35",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "值班员把刚取下的钥匙重新挂回钩上。安娜用脚往旁边挪了挪长凳，给新来的担架让出一点地方。"
+        },
+        {
+          "speaker": "安娜",
+          "text": "去吧。我跟他们在这儿。别拿我的着急替我们作决定。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "end": "resume:rescue35_lift"
+    },
+    "rescue35_return": {
+      "title": "最后一声点名",
+      "art": "mine_rescue",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "备用升降门开了一半，足够一副担架先过去。接车的人站在门外，挨个念着名字。阿列克谢听见自己的名字，先让开路，等后面的孩子经过。"
+        },
+        {
+          "speaker": "安娜",
+          "text": "你还站在那里做什么？上来啊。"
+        },
+        {
+          "speaker": "阿列克谢",
+          "text": "我在想，钥匙应该搁在他干衣服下面。挂在外头，换过一班就找不到了。"
+        },
+        {
+          "speaker": "安娜",
+          "text": "你把工具柜的样子画给我。回去写信时，我照着画。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "next": "rescue35_home_alive",
+      "finish_flags": [
+        "anna_alive",
+        "anna_outcome_done",
+        "anna_reunited"
+      ],
+      "music": "dawn_theme"
+    },
+    "rescue35_home_alive": {
+      "title": "桌上空出两页",
+      "art": "anna_class",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "公社的医护把两把椅子推到暖气边。阿列克谢坐下，手仍扶在自己膝上。安娜解了两次背包带，直到他接过去，才发现手在抖。"
+        },
+        {
+          "speaker": "阿列克谢",
+          "text": "桌上哪本是给孩子的？"
+        },
+        {
+          "speaker": "安娜",
+          "text": "那本小的。你先别翻后面，我还没找到能讲清楚树叶的图。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "阿列克谢打开本子，从头慢慢读。安娜挨着他坐下，用手指在一页空白处描了一个工具柜。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "end": "map:commune",
+      "music": "dawn_theme"
+    },
+    "rescue35_loss": {
+      "title": "斜道上",
+      "art": "mine_rescue",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "第一副担架已经抬过最窄的地方。你在坡口接住阿列克谢。后面有孩子问，什么时候轮到他。"
+        },
+        {
+          "speaker": "安娜",
+          "text": "等一下。牵住我的袖口。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "你听见木头绷断的声音。灯一晃，坡上的人都向墙边挤。安娜从斜着倒下的护梁下推出最后一个孩子，随后第二道支护也倒了。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "孩子还攥着一小截脱线的袖口。你把他交给医护，取了矿工递来的撬杠，和他们一起折回去。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "next": "rescue35_search",
+      "music": "anna_elegy"
+    },
+    "rescue35_search": {
+      "title": "回程的人数",
+      "art": "mine_aftermath",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "矿工撤出一块塌下来的木板，隔了很久，才把她抬到灯下。医护合上了药包。安娜没有坐上回程的车。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "阿列克谢还在上车的踏板边等。他认出她的鞋，扶住车门，问你愿不愿意坐在他旁边。"
+        },
+        {
+          "speaker": "阿列克谢",
+          "text": "等到了公社，你得和我说一遍。中间的事也要说。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "你把她的背包放在你们之间。一路上他没有再问，只在车转弯时扶住了它。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "next": "rescue35_home_loss",
+      "finish_flags": [
+        "anna_dead",
+        "anna_outcome_done"
+      ],
+      "music": "anna_elegy"
+    },
+    "rescue35_home_loss": {
+      "title": "明天的课",
+      "art": "anna_empty_class",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你们回到公社时，米沙在课桌旁等。阿列克谢放下背包，从底下拿出一本被水洇透的练习册。米沙认出了封面。"
+        },
+        {
+          "speaker": "米沙",
+          "text": "这本是我明天要交给她的。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "阿列克谢把那本练习册往干一点的地方移了移。你坐到米沙面前，告诉他安娜没有回来。过了一会儿，他问，能不能先帮他把封面擦干。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "end": "map:commune",
+      "music": "anna_elegy"
+    },
+    "rescue35_account": {
+      "title": "阿列克谢等着听",
+      "art": "anna_empty_class",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你把提升机交班簿上的时刻、值班员说的话和斜道上的事逐一讲完。讲到决定走斜道时，阿列克谢把晾到一半的纸翻过来，等你接着说。"
+        },
+        {
+          "speaker": "阿列克谢",
+          "text": "她带出来的那个孩子在哪儿？"
+        },
+        {
+          "speaker": "伊万",
+          "text": "在医务室。昨天我去过，他愿意吃东西了。"
+        },
+        {
+          "speaker": "阿列克谢",
+          "text": "等我能走，你带我去看看他。这份记录你留一份。写我妹妹的名字以前，让我先看一遍。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "choices": [
+        {
+          "text": "把事故经过交给公社讨论。家属先审阅，姓名由他们决定。",
+          "next": "rescue35_account_shared",
+          "flag": "anna_record_public"
+        },
+        {
+          "text": "把记录先交给阿列克谢，由他决定什么时候谈。",
+          "next": "rescue35_account_kept",
+          "flag": "anna_record_family"
+        }
+      ],
+      "music": "anna_elegy"
+    },
+    "rescue35_account_shared": {
+      "title": "轮到家属发言",
+      "art": "anna_empty_class",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "阿列克谢改了一处时间，留下安娜的名字。报告交到公社议事厅，矿工来核对曾经停过几回机，转运班请人把旧作业斜道封上。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "到了问家属意见的时候，阿列克谢没有起身。他请娜佳先念完原始巡检的两行字，随后自己把手举了起来。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "end": "resume:commune_class",
+      "finish_flags": [
+        "anna_aftermath_done"
+      ],
+      "music": "anna_elegy"
+    },
+    "rescue35_account_kept": {
+      "title": "床头的纸袋",
+      "art": "anna_empty_class",
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "阿列克谢把记录折好，和没寄出的信放在一起。他另外写了一张短条，让你带给转运班，请他们先封住斜道。"
+        },
+        {
+          "speaker": "阿列克谢",
+          "text": "我想先见见那孩子。他愿意的话，让他讲讲上课的事。别先问井下。"
+        }
+      ],
+      "location": "D-6 / 煤运休养区",
+      "same_moment": true,
+      "end": "resume:commune_class",
+      "finish_flags": [
+        "anna_aftermath_done"
+      ],
+      "music": "anna_elegy"
+    }
+  }
+}

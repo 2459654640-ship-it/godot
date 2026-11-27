@@ -29,6 +29,8 @@ func sync():
   reconcile("commune_aleksei",w.story.f("anna_outcome_done"),Vector3(-2.9,0,20),"coal_brother")
  if w.floor_id=="coal":
   reconcile("coal_brother",w.CampaignMaps.coal_patient_available(w.story),Vector3(10,0,-6),"coal_brother")
+  reconcile("mine_anna",w.story.Campaign.Rescue.available(w.story),Vector3(7,0,-5.3),"anna")
+  w.story.Campaign.Rescue.sync(w)
  if w.floor_id=="railfront" and w.story.f("veteran_defense_started"):
   for i in evac_ids.size():
    var id:String=evac_ids[i]
@@ -91,6 +93,7 @@ func tick(_delta:float):
  _tick_delta=maxf(_delta,1.0/60.0)
  if w.hud.modal_visible() or w.departure_animating:return
  var s=w.story
+ if w.floor_id=="coal":s.Campaign.Rescue.tick(w)
  if w.floor_id=="commune":
   if w.npcs.has("commune_anna"):
    if s.f("anna_walk_started") and not s.f("anna_conversation_ready"):
@@ -141,7 +144,7 @@ func veteran_guard_point()->Vector3:
 
 func reset_for_load():
  routes.clear();route_points.clear();notices.clear()
- for id in ["commune_anna","commune_moro","commune_aleksei"]:
+ for id in ["commune_anna","commune_moro","commune_aleksei","mine_anna","coal_brother"]:
   if not w.npcs.has(id):continue
   var a=w.npcs[id];configure(a);a.purposeful=false;a.story_waiting=false;a.path_points.clear();a.goal=Vector3.INF;a.reached_anchor=false
  sync()

@@ -98,6 +98,7 @@ func _draw():
 	for p in world.facility_doors(floor):
 		var center=project(p)
 		draw_line(center-Vector2(3,1.5),center+Vector2(3,1.5),gold,2,true)
+	if expanded and same and floor=="coal" and focused.get("id","")=="anna_rescue":draw_mine_journey()
 	# A meeting is an area objective, not an invisible dot at the lectern.
 	if not focused.is_empty() and world.InteractionRegions.active(world.story,focused.target):
 		var spec:Dictionary=world.InteractionRegions.REGIONS[focused.target]
@@ -136,3 +137,13 @@ func _draw():
 		draw_string(world.kit.font,n+Vector2(-5,-7),"N",HORIZONTAL_ALIGNMENT_LEFT,-1,13,ink)
 		draw_line(Vector2(16,size.y-20),Vector2(16+drawing_scale*2,size.y-20),gold,2)
 		draw_string(world.kit.font,Vector2(16,size.y-28),"2 m",HORIZONTAL_ALIGNMENT_LEFT,-1,12,ink)
+
+func draw_mine_journey():
+	var destination=world.story.Campaign.Rescue.map_destination(world.story)
+	if not destination.is_finite():return
+	var path:PackedVector3Array=world.navigation.path(world.player.position,destination)
+	if path.is_empty():return
+	var points=PackedVector2Array()
+	for p in path:points.append(project(Vector2(p.x,p.z)))
+	if points.size()>1:draw_polyline(points,Color("c4a36c"),1.6,true)
+	draw_string(world.kit.font,Vector2(16,49),"金线 · 本次同行路线",HORIZONTAL_ALIGNMENT_LEFT,-1,13,gold)

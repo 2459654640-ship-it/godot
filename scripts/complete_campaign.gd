@@ -207,8 +207,13 @@ static func panel(s,p:Dictionary)->Dictionary:
  if node=="late_north_signal":p.end="resume:"+{"commune":"commune_guard","sech":"sech_elder","labor":"d6_return_desk"}[home(s)]
  if node=="late_final_result":
   var mode:String=s.flags.get("late_final_mode","shared")
-  var result={"shared":"多个独立接收点发回了复述。警告保留了读数来源与时间，人员名单没有随公开信息传播。几处运输线据此改道；还有没有回执的地方，值守继续呼叫，没有把沉默写成平安。","central":"中央列车的实际班次与民用席位逐项对上。地方警报已经先行发出，备用路线留在各站，不必等待下一份宣传口径。你支持了集中调度，也保留了能检验承诺的记录；这份责任不会因为行动结束就消失。","distributed":"紧急预警先于设备转移发出。两处受训值守接到了模块、标定方法与维修副本，原设施覆盖缩小的区域也明确告知。以后不再只依赖一扇门内的机器，但维护、备件与信任仍要一班班继续。","watch":"外部接收人复述了新一轮测量。你选择留在这一班的观测岗位，备用供电经过实际测试，撤离人员已经交到接应者手中。父亲和你能否重新成为家人，仍由今后的相处决定，工作不再要求把个人生活永远搁置。"}
-  p.body=result[mode];p.art=data().endings["warning_"+mode].art
+  var result={
+   "shared":[["换乘调度员","收到。南口的车改走西边旁线。诊所也接到了，你等一下，我还在叫第二处路口。"],["伊万","我等你。电台开着。"]],
+   "central":[["换乘调度员","居民这班先发。两副担架已经固定好，军运车还在旁线。民用警报开了，时间我写在回执上。"],["伊万","好。请司机到站再报一次人数。"]],
+   "distributed":[["换乘值守","两台备用机分别对过标定。一台留这儿，另一台昨晚装上车。西端的覆盖会先少一段，我把转接号码贴在门边。"],["伊万","把你们下次试机的时刻也写上。我会来听。"]],
+   "watch":[["父亲","风向又转了一点。看你那台表，别照我的填。"],["伊万","我这边读数在降。时间是零七点三十六。南口能听见吗？"],["换乘值守","听见了。车已经过去，我们记下这轮读数。"]]}
+  write_scene(p,result.get(mode,result.shared))
+  p.art=data().endings["warning_"+mode].art
  if node=="late_epilogue_people":
   var rows:Array[String]=[]
   if s.f("anna_dead"):rows.append("安娜的哥哥按医护安排继续休养。课堂由接替她的人上课，孩子们仍保留她写的进度本。你没有把她的离去算成一次交换来的胜利；有些位置会一直空着，也有人继续照顾坐在旁边的人。")
@@ -222,10 +227,24 @@ static func panel(s,p:Dictionary)->Dictionary:
   if s.f("sided_veteran"):rows.append("老兵没有因此重新穿回中央的制服。他会问你谁还没有收到消息，再帮下一班人检查枪和背带。")
   p.body="\n\n".join(rows) if not rows.is_empty() else "聚落里的人继续轮班、做饭和修理设备。有人按预警换了一条路，回到住处后又把消息告诉邻居。战争仍在，已经被人亲自核实过的消息却有了新的去处。"
  if node=="late_epilogue_family":
-  var relation="你们约好以后再谈，有些话仍需时间。" if s.f("late_family_later") else ("你保留了与父亲共事的关系，也明确了私人相处的距离。" if s.f("late_family_closed") else "你愿意再见父亲，原谅并没有抹去他必须承担的责任。")
-  p.body="你在给谢苗诺夫的信里先报平安，再写这一趟经过。"+relation+"\n\n养大你的人不会从这些年里被替换掉。你仍记得那间工坊、编号纸，以及老爹在出门前反复让你检查的面具。下一班要去哪里，现在由你自己决定。"
- if node in ["late_final_result","late_epilogue_people","late_epilogue_family"]:p.erase("lines")
+  var rows=[["旁白","你把台上已经复述过的站点抄进交班簿，把还在等的那一栏留白。换班的人把耳机接过去，你找了张不再用的表单，在背面给老爹写信。"],
+   ["伊万（信）","老爹，我吃过饭了。标定台接到一半时停过电，好在我先把端子号写下来了。你要在跟前，肯定会问我怎么现在才写。"]]
+  if s.f("late_family_closed"):rows.append(["伊万（信）","我见到了父亲。我们这几天一起做事，家里的话我还没准备好说。等我回去，先跟你说。"])
+  elif s.f("late_family_open"):rows.append(["伊万（信）","父亲把两封退回来的信给了我。等我带回去，你陪我看看，好吗？我想知道母亲当时住的那条巷子是什么样。"])
+  else:rows.append(["伊万（信）","父亲还在这儿。他手里有两封信，我还没去看。今天先给你写这封。"])
+  rows.append(["旁白","你特意在信封上写了工坊的门和上一班的名字，请送信人当面交给谢苗诺夫。隔壁又有人开始报站号，你听了一会儿，把自己的地址也补在背面。"])
+  write_scene(p,rows)
+ if node=="late_epilogue_people":p.erase("lines")
  return p
+
+static func write_scene(panel:Dictionary,entries:Array):
+ panel.lines=[]
+ var paragraphs:Array[String]=[]
+ for entry in entries:
+  panel.lines.append({"speaker":entry[0],"text":entry[1]})
+  paragraphs.append(entry[1] if entry[0]=="旁白" else entry[0]+"：「"+entry[1]+"」")
+ panel.body="\n".join(paragraphs)
+
 static func finish(s):
  var id="warning_"+String(s.flags.get("late_final_mode","shared"))
  s.flags.late_campaign_complete=true;s.flags.campaign_ending=id;s.flags.chapter_endpoint="ending:"+id;s.ending=true

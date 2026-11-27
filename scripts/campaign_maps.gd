@@ -25,7 +25,7 @@ static func build(w):
 	if id in ["surface","starcity"]:
 		preload("res://scripts/surface_site.gd").build(w) if id=="surface" else preload("res://scripts/star_perimeter.gd").build(w)
 		k.finish_walls();return
-	var surfaces={"waterworks":["cement","cement_normal","a3b6bb"],"commune":["wall","wall_normal","d8c39b"],"sech":["corrugated","steel_normal","8a9990"],"coal":["oxide","oxide_normal","a19883"],"starcity":["steel","steel_normal","a2c0cb"]}
+	var surfaces={"waterworks":["cement","cement_normal","a3b6bb"],"commune":["wall","wall_normal","d8c39b"],"sech":["corrugated","steel_normal","8a9990"],"coal":["mine_brick_v35","cement_normal","ae9f8b"],"starcity":["steel","steel_normal","a2c0cb"]}
 	k.wall_surface=surfaces[id][0];k.wall_normal=surfaces[id][1];k.wall_color=Color(surfaces[id][2])
 	k.mats.blue=k.mats.metal.duplicate();k.mats.blue.albedo_color=Color("66858c")
 	k.mats.plaster.albedo_color=Color({"waterworks":"a3b4ad","commune":"c1b38f","sech":"8f9992","coal":"8a8c84","starcity":"a1b5bb"}[id])
@@ -34,6 +34,7 @@ static func build(w):
 		if id!="starcity":furnish(k,entry,id)
 	for room in rooms(id):
 		if room.code=="00":continue
+		if id=="coal" and room.code in ["13","14"]:continue
 		var r:Rect2=room.rect
 		var warm:bool=plan.warm or (id=="coal" and room.code in ["02","03"])
 		var power=2.4 if (warm and room.code in ["01","02"]) else 2.1
@@ -207,18 +208,22 @@ static func bookcase(k,p:Vector3,length:float):
 			k.box("BookSpineWear",p+Vector3(front*.238,y+height*.6,-length/2+.16+index*.13),Vector3(.008,.015,.075),"paper")
 static func coal(w):
 	var k=w.kit
+	preload("res://scripts/mine_architecture.gd").build(w)
 	var frame=Vector3(-23,1.15,-18)
+	k.wall("OldAirGateWestClosure",Vector2(-28,-18),Vector2(-24.4,-18),true)
+	k.wall("OldAirGateEastClosure",Vector2(-21.6,-18),Vector2(-18,-18),true)
 	for x in [-24.5,-21.5]:k.box("MineEscapeJamb",Vector3(x,1.2,-18),Vector3(.16,2.4,.2),"metal")
 	var grate=k.box("MineEscapeGrille",frame,Vector3(2.8,2.3,.10),"rust",true);grate.set_meta("dynamic",true)
 	if w.story.f("rescue_route_ready"):grate.position.x+=2.8
 	k.lamp(Vector3(-23,2.25,-19),true,1.1,5)
 
 	Settlement.rug(k,Vector3(-12,0,11.9),Vector2(2,2),"olive")
-	for x in [-26.1,-24.9]:k.box("CoalHaulRail",Vector3(x,.025,-7.5),Vector3(.08,.05,27),"metal")
+	for x in [-26.12,-24.88]:k.box("CoalHaulRail",Vector3(x,.038,-7.5),Vector3(.075,.064,27),"metal")
+	for z in range(-20,7):k.box("CoalHaulSleeper",Vector3(-25.5,.022,z),Vector3(1.92,.04,.16),"wood")
 	for z in range(-21,8,2):
 		for x in [-27.6,-18.4]:k.box("MineSupport",Vector3(x,1.3,z),Vector3(.22,2.6,.25),"wood",true)
 		k.box("MineCrossTimber",Vector3(-23,2.65,z),Vector3(9.5,.25,.3),"wood")
-	for z in [-17,-9,-3]:
+	for z in [-15.9,-10.5,-3]:
 		k.box("CoalMineCart",Vector3(-25.5,.6,z),Vector3(1.4,.9,2),"rust",true)
 		for n in range(7):k.ellipsoid("CoalLoad",Vector3(-26+float(n%3)*.45,1.1,-.6+z+float(n/3)*.4),Vector3(.28,.22,.3),"dark")
 	for z in [-20,-12,-4,4]:k.lamp(Vector3(-27.5,2.3,z),true,.85,6)
