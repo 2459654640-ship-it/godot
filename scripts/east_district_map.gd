@@ -5,6 +5,7 @@ const Site=preload("res://scripts/surface_site.gd")
 const Architecture=preload("res://scripts/outdoor_architecture.gd")
 const Urban=preload("res://scripts/district_urban.gd")
 const Civic=preload("res://scripts/city_civic.gd")
+const Art=preload("res://scripts/district_art.gd")
 static func position(a:Array,y:float=0)->Vector3:return Vector3(a[0],y,a[1])
 static func road_conflict(plan:Dictionary,p:Vector3,size:Vector2)->bool:
 	var footprint=Rect2(Vector2(p.x,p.z)-size/2,size).grow(.65)
@@ -26,7 +27,8 @@ static func building(k,p:Vector3,size:Vector2,floors:int,seed:int,north_door:boo
 	var root=Node3D.new();root.name="DistrictBuilding%d"%seed;root.position=p;k.root.add_child(root)
 	if north_door:root.rotation.y=PI
 	var height=floors*2.8;var finish="district_ochre" if seed%3==1 else ("district_brick" if seed%3==2 else "district_concrete")
-	if kind in ["waterworks","depot","pump"]:finish="district_brick"
+	if kind in ["waterworks","depot","pump","terrace"]:finish="works_brick"
+	if kind=="panel":finish="washed_concrete"
 	root.set_meta("architecture_kind",kind)
 	root.set_meta("footprint",Rect2(p.x-size.x/2,p.z-size.y/2,size.x,size.y));root.set_meta("storeys",floors)
 	k.box("BuildingFoundation",Vector3(0,.04,0),Vector3(size.x+.25,.22,size.y+.25),"district_concrete",false,root)
@@ -35,7 +37,7 @@ static func building(k,p:Vector3,size:Vector2,floors:int,seed:int,north_door:boo
 		k.box("BuildingFloor",Vector3(0,y+.16,0),Vector3(size.x,.16,size.y),"district_concrete",false,root)
 		for face in 4:
 			var x_face=face>=2;var sign=-1 if face%2==0 else 1
-			var width=size.y if x_face else size.x;var bays=maxi(2,floori(width/2.1));var pitch=width/bays
+			var width=size.y if x_face else size.x;var bays=Urban.bays(width,kind);var pitch=width/bays
 			for n in bays:
 				var along=-width/2+pitch*(n+.5)
 				var c=Vector3(sign*size.x/2,0,along) if x_face else Vector3(along,0,sign*size.y/2)
@@ -96,34 +98,33 @@ static func portal(k,p:Vector3,label:String,heading:float=0):
 static func build(w):
 	var k=w.kit;var plan=Layout.layout()
 	var City=preload("res://scripts/city_architecture.gd");var Ground=preload("res://scripts/city_ground.gd")
-	Ground.build(w,plan);City.materials(k)
+	Ground.build(w,plan);City.materials(k);Art.materials(k)
 	for i in plan.parcels.size():
 		var parcel:Dictionary=plan.parcels[i];var b=parcel.building;var p=Vector3(b[0],0,b[1]);var size=Vector2(b[2],b[3])
-		if parcel.id in ["clinic","radio","south_corner"]:City.room(k,p,size,parcel.id)
+		if parcel.id in ["clinic","radio","south_corner"]:
+			City.room(k,p,size,parcel.id)
+			if parcel.id=="south_corner":Art.housing_damage(k,p,size,Rect2(Vector2(p.x,p.z)-size/2,size))
 		elif parcel.id=="south_station":Civic.shelter(k,p,size)
 		elif parcel.get("open",false):
 			Site.ruin(k,p,size,i+21,.028)
 			City.mound(k,p+Vector3(-size.x*.3,0,-size.y*.3),Vector3(size.x*.4,1.4,size.y*.36),i+20)
 			k.box("RuinRemainingUpperFloor",p+Vector3(-size.x*.25,3.1,0),Vector3(size.x*.48,.22,size.y),"district_concrete")
 			k.box("RuinUpperWall",p+Vector3(-size.x/2,4.3,0),Vector3(.35,2.4,size.y),"district_brick")
-		else:building(k,p,size,int(b[4]),i+1,parcel.id=="depot",parcel.id if parcel.id in ["depot","pump","relay"] else "residential")
+		else:building(k,p,size,int(b[4]),i+1,parcel.id=="depot",parcel.id if parcel.id in ["depot","pump","relay"] else parcel.get("form","residential"))
 	# Foreground windows, floor breaks and different heights continue beyond the slice.
 	for n in 8:
 		for sign in [-1,1]:
 			var p=Vector3(-113+n*31,0,sign*(124+float(n%2)*7));var size=Vector2(21,17)
-			if not road_conflict(plan,p,size):building(k,p,size,2+n%3,100+n+10*sign,false,"residential")
+			if not road_conflict(plan,p,size):building(k,p,size,2+n%3,100+n+10*sign,false,"panel" if n%2 else "terrace")
 	for n in 5:
 		for sign in [-1,1]:
 			var p=Vector3(sign*143,0,-80+n*36);var size=Vector2(18,26)
-			if not road_conflict(plan,p,size):building(k,p,size,3+n%2,140+n+sign,false,"residential")
+			if not road_conflict(plan,p,size):building(k,p,size,3+n%2,140+n+sign,false,"terrace" if n%2 else "panel")
 	City.factory(k);City.basin(k);City.edge(k)
+	Art.complete_factory(k);Art.freight_yard(k)
 	Civic.public_spaces(k)
-	# Freight rail is a raised dedicated reservation. Only the authored crossing is level.
-	Ground.apron(k,Vector2(24,0),Vector2(4.2,200))
-	for x in [23.24,24.76]:k.box("FreightRail",Vector3(x,.06,0),Vector3(.07,.12,200),"old_iron")
-	for z in range(-99,100):
-		if absf(z-8)<4.6:continue
-		k.box("FreightSleeper",Vector3(24,.035,z),Vector3(2.6,.07,.18),"wood")
+	# Track section descends to meet the only authorized crossing at street level.
+	Art.mainline(k,plan)
 	for span in [[-100,3.5],[12.5,100]]:Site.fence(k,Vector3(24,0,span[0]),Vector3(24,0,span[1]))
 	w.campaign_gate_flag="east_crossing_open";w.campaign_gate=k.box("CampaignInnerGate",Vector3(24,1.15,8),Vector3(.20,2.3,9),"corrugated",true)
 	w.campaign_gate.set_meta("dynamic",true);w.campaign_gate.set_meta("closed_position",w.campaign_gate.position);w.campaign_gate.set_meta("opening_offset",Vector3(0,0,10))
@@ -166,7 +167,7 @@ static func build(w):
 		k.cyl("StreetLampStem",Vector3(x,3.1,14),.075,6.2,"old_iron")
 		k.pipe(Vector3(x,6.1,14),Vector3(x,6.1,12.3),.05,"old_iron")
 		k.box("StreetLampHead",Vector3(x,6.05,12.3),Vector3(.4,.13,.65),"metal")
-	for p in [Vector3(-56,0,27),Vector3(-25,0,25),Vector3(-88,0,54),Vector3(43,0,29),Vector3(83,0,51)]:
+	for p in [Vector3(-56,0,27),Vector3(-25,0,25),Vector3(-88,0,54),Vector3(43,0,29)]:
 		k.bench(p,2.7,true,PI);k.cyl("StreetRefuseDrum",p+Vector3(1.8,.35,0),.3,.7,"rust")
 	# Collapsed corners and snow-filled courtyards vary the local terrain without
 	# hiding ankle-high collision across a door or a marked route.

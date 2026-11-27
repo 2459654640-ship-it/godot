@@ -79,8 +79,8 @@ static func tram_stop(k,p:Vector3):
 	# The passenger platform stands outside the vehicle lane. Asphalt tram rails
 	# end in crushed ballast before the central freight junction.
 	for z in [7.28,8.72]:
-		k.box("AbandonedTramRail",Vector3(-69,.025,z),Vector3(46,.05,.052),"old_iron")
-		k.box("TramRailFlangeway",Vector3(-69,.015,z+.075),Vector3(46,.03,.067),"dark")
+		k.box("AbandonedTramRail",Vector3(-73.5,.025,z),Vector3(55,.05,.052),"old_iron")
+		k.box("TramRailFlangeway",Vector3(-73.5,.015,z+.075),Vector3(55,.03,.067),"dark")
 	Ground.apron(k,Vector2(p.x,p.z),Vector2(25,3.3))
 	k.box("TramShelterBack",p+Vector3(-1,1.12,1.32),Vector3(8.6,2.24,.24),"civic_tile",true)
 	k.box("TramShelterSteelRoof",p+Vector3(-1,2.55,.3),Vector3(9.3,.13,2.45),"old_iron")
@@ -95,22 +95,66 @@ static func tram_stop(k,p:Vector3):
 		k.box("PlatformClockPost",p+Vector3(dx,1.19,1.1),Vector3(.09,2.38,.09),"old_iron",true)
 		k.box("OriginalSchedule",p+Vector3(dx,2.14,1.1),Vector3(.54,.55,.09),"civic_tile")
 		for y in [1.99,2.09,2.19]:k.box("ScheduleLine",p+Vector3(dx,y,1.045),Vector3(.36,.018,.013),"cream")
-	# An empty car is parked on the inset rail, in a damaged block well west
-	# of the public platform. The contour and bogies match the actual gauge.
-	var car=Vector3(-88,0,8)
-	k.box("TramChassis",car+Vector3.UP*.52,Vector3(8.5,.35,2.48),"old_iron")
-	City.hull(k,car+Vector3.UP*1.29,Vector3(8.48,2.2,2.40),"AbandonedTramHull")
-	k.box("TramLowerBelt",car+Vector3.UP*.94,Vector3(8.35,.57,2.46),"red")
-	for dx in [-4,4]:k.box("TramEndNose",car+Vector3(dx,1.55,0),Vector3(.40,1.50,2.35),"old_iron")
-	for sign in [-1,1]:
-		for dx in [-3.3,-1.7,-.1,1.5,3.10]:
-			k.box("TramWindow",car+Vector3(dx,1.86,sign*1.205),Vector3(1.25,.82,.065),"exterior_glass")
-			k.box("TramWindowMullion",car+Vector3(dx+.70,1.79,sign*1.21),Vector3(.20,1.06,.11),"cream")
-		for dx in [-2.9,-1.9,1.9,2.9]:k.cyl("TramRailWheel",car+Vector3(dx,.29,sign*.72),.27,.14,"dark").rotation.x=PI/2
-	k.box("TramRoundedRoofBase",car+Vector3.UP*2.43,Vector3(8.48,.20,2.44),"old_iron")
-	k.box("TramRoundedRoofSnow",car+Vector3.UP*2.56,Vector3(7.82,.07,1.96),"district_roof_snow")
-	k.pipe(car+Vector3(-1.6,2.52,0),car+Vector3(.5,3.25,0),.035,"old_iron")
-	k.pipe(car+Vector3(.5,3.25,0),car+Vector3(2.1,2.72,.36),.035,"old_iron")
+	tram_car(k,Vector3(-88,0,8))
+
+static func tram_car(k,c:Vector3):
+	# A late-run single carriage, with the passenger side facing the platform.
+	# Its real wheel gauge and dead catenary are aligned to the inset street rail.
+	var root=Node3D.new();root.name="AbandonedCityTram";root.position=c;k.root.add_child(root)
+	k.box("TramSteelUnderframe",Vector3(0,.48,0),Vector3(12.65,.32,2.40),"old_iron",false,root)
+	City.hull(k,c+Vector3.UP*1.28,Vector3(12.66,2.24,2.45),"AbandonedTramHull")
+	for x in [-4.3,-2.7,2.7,4.3]:
+		k.box("TramAxle",Vector3(x,.35,0),Vector3(.21,.18,1.72),"old_iron",false,root)
+		for side in [-1,1]:
+			var wheel=k.cyl("TramRailWheel",Vector3(x,.34,side*.72),.31,.19,"dark",root)
+			wheel.rotation.x=PI/2
+			k.cyl("TramAxleBox",Vector3(x,.34,side*.855),.146,.066,"old_iron",root).rotation.x=PI/2
+	for side in [-1,1]:
+		var z=side*1.24
+		k.box("TramPressedBelt",Vector3(0,.95,z),Vector3(12.6,.59,.13),"red",false,root)
+		k.box("TramCreamPaintLine",Vector3(0,1.268,z+side*.069),Vector3(12.52,.12,.017),"cream",false,root)
+		k.box("TramRoofHeader",Vector3(0,2.27,z),Vector3(12.6,.34,.15),"frosted_steel",false,root)
+		for i in 10:
+			var x=(i-4.5)*1.25
+			k.box("CarriageWindowPier",Vector3(x-.624,1.77,z),Vector3(.12,.92,.15),"frosted_steel",false,root)
+			if side>0 and i in [1,5,8]:
+				k.box("TramDoorPocket",Vector3(x,1.42,z+.082),Vector3(1.13,1.59,.035),"dark",false,root)
+				for dx in [-.278,.278]:
+					k.box("FoldingTramDoor",Vector3(x+dx,1.42,z+.106),Vector3(.537,1.54,.043),"frosted_steel",false,root)
+					k.box("TramDoorVisionGlass",Vector3(x+dx,1.72,z+.13),Vector3(.319,.62,.015),"exterior_glass",false,root)
+					k.box("TramDoorHandle",Vector3(x+dx*.32,1.35,z+.158),Vector3(.033,.23,.032),"old_iron",false,root)
+				k.box("ScoredTramStep",Vector3(x,.53,z+.09),Vector3(1.13,.063,.23),"old_iron",false,root)
+			else:
+				k.box("RecessedTramGlass",Vector3(x,1.75,z-side*.030),Vector3(1.10,.75,.063),"exterior_glass",false,root)
+				k.box("SpringTramSash",Vector3(x,1.94,z+side*.06),Vector3(1.11,.042,.033),"old_iron",false,root)
+		k.box("TramPressedGutter",Vector3(0,2.43,side*1.27),Vector3(12.7,.07,.09),"old_iron",false,root)
+	for side in [-1,1]:
+		var x=side*6.32
+		k.box("TramNoseLower",Vector3(x,1.06,0),Vector3(.16,1.09,2.40),"red",false,root)
+		k.box("TramNoseHeader",Vector3(x,2.245,0),Vector3(.16,.34,2.40),"frosted_steel",false,root)
+		k.box("TramWindshield",Vector3(x+side*.045,1.78,0),Vector3(.08,.74,2.12),"exterior_glass",false,root)
+		for z in [-1.14,0,1.14]:k.box("TramFrontWindowPost",Vector3(x+side*.087,1.80,z),Vector3(.11,.78,.108),"frosted_steel",false,root)
+		for z in [-.72,.72]:k.box("TramDulledHeadlamp",Vector3(x+side*.101,.99,z),Vector3(.043,.14,.23),"cream" if side>0 else "red",false,root)
+		k.box("BentTramBumper",Vector3(x+side*.15,.61,0),Vector3(.20,.16,2.43),"old_iron",false,root).rotation.z=.02*side
+	for n in 12:
+		var z0=(n/12.0-.5)*2.60;var z1=((n+1)/12.0-.5)*2.60
+		var y0=2.39+.29*cos(z0/1.30*PI/2);var y1=2.39+.29*cos(z1/1.30*PI/2)
+		var pitch=Vector2(z1-z0,y1-y0).length()
+		var sheet=k.box("CamberedTramRoof",Vector3(0,(y0+y1)/2,(z0+z1)/2),Vector3(12.71,.12,pitch+.008),"frosted_steel",false,root)
+		sheet.rotation.x=-atan2(y1-y0,z1-z0)
+		if n in [0,1,10,11]:continue
+		var snow=k.box("CamberedRoofWindLoad",sheet.position+Vector3(-.15,.088,0),Vector3(10.32+.35*sin(n),.055,pitch+.006),"district_roof_snow",false,root)
+		snow.rotation.x=sheet.rotation.x
+	for n in [-1.4,1.8]:
+		k.box("PantographBase",Vector3(n,2.74,0),Vector3(.82,.12,.74),"old_iron",false,root)
+	k.pipe(c+Vector3(-1.43,2.76,0),c+Vector3(.40,3.64,0),.036,"old_iron")
+	k.pipe(c+Vector3(.40,3.64,0),c+Vector3(1.86,2.77,0),.032,"old_iron")
+	k.pipe(c+Vector3(.4,3.64,-.34),c+Vector3(.4,3.64,.32),.023,"old_iron")
+	for x in [-94,-57]:
+		k.cyl("DeadTramCatenaryMast",Vector3(x,2.55,5.15),.091,5.10,"old_iron")
+		k.pipe(Vector3(x,5.09,5.15),Vector3(x,5.09,8.0),.042,"frosted_steel")
+	for span in [[-94.,5.06,-82.5,4.60],[-82.5,4.60,-75.,4.82],[-75.,4.82,-57.,5.06]]:
+		k.pipe(Vector3(span[0],span[1],8),Vector3(span[2],span[3],8),.018,"old_iron")
 
 static func heating_court(k):
 	Ground.apron(k,Vector2(-48.5,55.15),Vector2(14.2,5.4))

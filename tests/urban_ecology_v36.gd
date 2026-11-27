@@ -67,6 +67,12 @@ func run():
 	var space=world.get_world_3d().direct_space_state
 	var below=space.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(7,1,-63),Vector3(7,-1,-63),1))
 	check(not below.is_empty() and absf(below.position.y-Ground.height_at(Vector2(7,-63)))<.02,"Ground collision matches the visible depression")
+	var ballast=space.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(23.18,1,-18),Vector3(23.18,-.6,-18),1))
+	var crossing=space.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(23.18,1,8),Vector3(23.18,-.6,8),1))
+	check(not ballast.is_empty() and ballast.position.y>.46,"The mainline has real raised ballast away from the crossing")
+	check(not crossing.is_empty() and crossing.position.y<.07,"The crossing meets the street at walking height")
+	check(world.find_child("WaterworksValveTower",true,false)!=null,"Valve tower is a real scene structure beside the pump hall")
+	check(world.find_child("SplitWorkersHousingUpper",true,false)!=null,"The apartment footprint has a damaged upper structure")
 	world.player.position=Vector3(7,.04,-63)
 	await frames(65)
 	check(world.player.is_on_floor() and world.player.position.y<-.49,"Player can stand in the real depression")

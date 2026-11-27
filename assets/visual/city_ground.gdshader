@@ -16,10 +16,17 @@ void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;}
 void fragment(){
  vec2 p=wp.xz;float d=10000.0;float second=10000.0;float centre=10000.0;float along=0.0;float road_surface=0.0;
  for(int i=0;i<48;i++){if(i>=road_count){break;}float c=line_distance(p,segments[i]);float edge=c-widths[i]*0.5;if(edge<d){second=d;d=edge;centre=c;road_surface=road_surfaces[i];along=dot(p-segments[i].xy,normalize(segments[i].zw-segments[i].xy));}else{second=min(second,edge);}}
- float grain=noise2(p*2.3);float patch=noise2(p*.12);float snow_edge=smoothstep(-.38,.18,d+(grain-.5)*.16);
+ float grain=noise2(p*2.3);float patch=noise2(p*.12);float wind=noise2(p*vec2(.30,.15)+vec2(2.1,14.6));
+ float snow_edge=smoothstep(-.49,.26,d+(grain-.5)*.25+(wind-.5)*.77);
  vec3 snow=texture(snow_map,p*.26).rgb;float l=dot(snow,vec3(.299,.587,.114));snow=mix(vec3(.37,.41,.42),vec3(.73,.77,.77),smoothstep(.12,.85,l))*(.84+.16*patch);
- vec3 asphalt=texture(asphalt_map,p*.37).rgb*.70;asphalt=mix(asphalt,snow*.58,smoothstep(.67,.94,patch)*.28);
- vec3 pavement=texture(paving_map,p*.30).rgb*.71;float walk=(1.0-smoothstep(.25+1.45*road_surface,.42+1.45*road_surface,d))*smoothstep(.15,.55,road_surface);vec3 verge=mix(snow,pavement,walk*.9);
+ vec3 asphalt=texture(asphalt_map,p*.235).rgb*.81;
+ float tires=1.0-smoothstep(.11,.42,abs(centre-1.26+(wind-.5)*.27));
+ float salt=smoothstep(.32,.75,patch*.53+wind*.47)*(1.0-tires*.75);
+ asphalt*=1.0-tires*.16*step(.5,road_surface);
+ asphalt=mix(asphalt,snow*.72,salt*.38);
+ float frost_sheen=smoothstep(.60,.88,wind)*smoothstep(.35,.61,patch);
+ asphalt=mix(asphalt,asphalt*vec3(.89,.97,1.13),frost_sheen*.51);
+ vec3 pavement=texture(paving_map,p*.30).rgb*(.66+.18*wind);float walk=(1.0-smoothstep(.25+1.45*road_surface,.42+1.45*road_surface,d))*smoothstep(.15,.55,road_surface);vec3 verge=mix(snow,pavement,walk*mix(.50,.99,smoothstep(.34,.72,wind)));
  float ash=smoothstep(.43,.72,noise2(p*.09+vec2(13.7,4.2)))*smoothstep(.6,2.6,d);
  verge=mix(verge,mix(asphalt*.9,snow*.72,.35),ash*.62);
  float stripe=(1.0-smoothstep(.035,.07,centre))*step(.1,mod(along,3.0))*step(mod(along,3.0),1.15)*smoothstep(-1.0,.2,second)*step(.48,grain);
@@ -31,5 +38,7 @@ void fragment(){
  float scar=(1.0-smoothstep(.17,1.03,scar_distance+(noise2(p*.82)-.5)*.25));
  scar*=.8+.20*noise2(p*1.8);
  vec3 earth=mix(snow*.58,texture(asphalt_map,p*.65).rgb*.96,.49);
- ALBEDO=mix(mix(asphalt,verge,snow_edge),earth,scar*.93);ROUGHNESS=.94;SPECULAR=.12;
+ ALBEDO=mix(mix(asphalt,verge,snow_edge),earth,scar*.89);
+ ROUGHNESS=mix(.93,.64,frost_sheen*(1.0-snow_edge));
+ SPECULAR=mix(.12,.27,frost_sheen*(1.0-snow_edge));
 }

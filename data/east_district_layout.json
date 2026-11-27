@@ -427,7 +427,8 @@
         17,
         3
       ],
-      "open": false
+      "open": false,
+      "form": "terrace"
     },
     {
       "id": "east_workers",
@@ -438,7 +439,8 @@
         16,
         3
       ],
-      "open": false
+      "open": false,
+      "form": "panel"
     },
     {
       "id": "freight_tenement",
@@ -449,7 +451,8 @@
         15,
         3
       ],
-      "open": false
+      "open": false,
+      "form": "terrace"
     },
     {
       "id": "freight_ruin",
@@ -493,7 +496,8 @@
         17,
         3
       ],
-      "open": false
+      "open": false,
+      "form": "panel"
     },
     {
       "id": "south_b",
@@ -504,7 +508,8 @@
         17,
         4
       ],
-      "open": false
+      "open": false,
+      "form": "terrace"
     },
     {
       "id": "south_c",
@@ -515,7 +520,8 @@
         17,
         3
       ],
-      "open": false
+      "open": false,
+      "form": "panel"
     },
     {
       "id": "south_d",
@@ -526,7 +532,8 @@
         17,
         3
       ],
-      "open": false
+      "open": false,
+      "form": "terrace"
     },
     {
       "id": "south_e",
@@ -537,7 +544,8 @@
         17,
         3
       ],
-      "open": false
+      "open": false,
+      "form": "panel"
     },
     {
       "id": "south_f",
@@ -548,7 +556,8 @@
         17,
         3
       ],
-      "open": false
+      "open": false,
+      "form": "terrace"
     },
     {
       "id": "east_corner",
@@ -559,7 +568,8 @@
         24,
         3
       ],
-      "open": false
+      "open": false,
+      "form": "panel"
     },
     {
       "id": "east_north",
@@ -570,7 +580,8 @@
         18,
         2
       ],
-      "open": false
+      "open": false,
+      "form": "terrace"
     },
     {
       "id": "west_north",
@@ -581,7 +592,8 @@
         34,
         3
       ],
-      "open": false
+      "open": false,
+      "form": "terrace"
     },
     {
       "id": "west_south",
@@ -592,7 +604,8 @@
         31,
         3
       ],
-      "open": false
+      "open": false,
+      "form": "panel"
     },
     {
       "id": "north_housing",
@@ -603,7 +616,8 @@
         12,
         2
       ],
-      "open": false
+      "open": false,
+      "form": "terrace"
     },
     {
       "id": "north_ruin",

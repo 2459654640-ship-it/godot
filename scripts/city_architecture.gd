@@ -55,10 +55,11 @@ static func room(k,p:Vector3,size:Vector2,id:String):
   beam.set_meta("interior_rect",Rect2(p.x-size.x*.5,p.z-size.y*.5,size.x,size.y))
  # Partially collapsed roof: the room still reads from the street, and fades on entry.
  var interior=Rect2(p.x-size.x*.5,p.z-size.y*.5,size.x,size.y)
- var roof=k.box("CityInteriorRoof",p+Vector3(0,3.65,0),Vector3(size.x,.18,size.y),"corrugated")
+ var roof=k.box("CityInteriorRoof",p+Vector3(0,3.48 if id=="south_corner" else 3.65,0),Vector3(size.x,.18,size.y),"district_concrete" if id=="south_corner" else "corrugated")
  roof.set_meta("interior_rect",interior)
- var snow=k.box("CityInteriorRoofSnow",p+Vector3(0,3.79,0),Vector3(size.x-.2,.06,size.y-.2),"district_roof_snow")
- snow.set_meta("interior_rect",interior)
+ if id!="south_corner":
+  var snow=k.box("CityInteriorRoofSnow",p+Vector3(0,3.79,0),Vector3(size.x-.2,.06,size.y-.2),"district_roof_snow")
+  snow.set_meta("interior_rect",interior)
  if id=="clinic":
   # Waiting room and treatment room; a 2.2m opening connects the two.
   for z in [-5.3,4.8]:k.box("ClinicPartition",p+Vector3(1.2,1.3,z),Vector3(.16,2.6,5.8 if z<0 else 6.8),"plaster",true)
@@ -130,32 +131,32 @@ static func factory(k):
  var c=Vector3(-62,0,-44);var sx=22.0;var sz=25.0;var h=8.1
  for side in [-1,1]:
   var x=c.x+side*sx/2
-  k.box("PumpHallSidePlinth",Vector3(x,.75,c.z),Vector3(.55,1.5,sz),"district_brick")
-  k.box("PumpHallSideCornice",Vector3(x,7.3,c.z),Vector3(.65,1.6,sz),"district_brick")
+  k.box("PumpHallSidePlinth",Vector3(x,.75,c.z),Vector3(.55,1.5,sz),"works_brick")
+  k.box("PumpHallSideCornice",Vector3(x,7.3,c.z),Vector3(.65,1.6,sz),"works_brick")
   for n in 6:
    var z=c.z-sz/2+(n+.5)*sz/6
-   k.box("FactoryButtress",Vector3(x,3.85,z-sz/12),Vector3(.95,7.7,.62),"district_brick")
+   k.box("FactoryButtress",Vector3(x,3.85,z-sz/12),Vector3(.95,7.7,.62),"works_brick")
    k.box("FactoryDeepWindow",Vector3(x,4,z),Vector3(.045,4.7,3.25),"exterior_glass")
    for dz in [-1.6,0,1.6]:k.box("FactoryWindowVertical",Vector3(x+side*.07,3.9,z+dz),Vector3(.12,4.9,.06),"old_iron")
    for y in [1.65,2.8,4,5.2,6.3]:k.box("FactoryWindowHorizontal",Vector3(x+side*.08,y,z),Vector3(.13,.06,3.25),"old_iron")
  # Whole back wall. Front central opening is a real service door under an arch.
- k.box("FactoryRearWall",c+Vector3(0,h/2,-sz/2),Vector3(sx,h,.55),"district_brick")
+ k.box("FactoryRearWall",c+Vector3(0,h/2,-sz/2),Vector3(sx,h,.55),"works_brick")
  for dx in [-8,-3,2,7]:
   var z=c.z+sz/2
   if dx==2:
    k.box("FactoryServiceDoor",Vector3(c.x+dx,1.65,z),Vector3(3.7,3.3,.16),"corrugated")
    k.box("FactoryDoorCrossbar",Vector3(c.x+dx,1.6,z+.13),Vector3(3.4,.10,.06),"metal")
-   k.box("FactoryEntryLintel",Vector3(c.x+dx,4.9,z),Vector3(4.7,3,.55),"district_brick")
+   k.box("FactoryEntryLintel",Vector3(c.x+dx,4.9,z),Vector3(4.7,3,.55),"works_brick")
   else:
-   k.box("FactoryFrontPlinth",Vector3(c.x+dx,.7,z),Vector3(4.8,1.4,.55),"district_brick")
+   k.box("FactoryFrontPlinth",Vector3(c.x+dx,.7,z),Vector3(4.8,1.4,.55),"works_brick")
    k.box("FactoryFrontWindow",Vector3(c.x+dx,3.7,z),Vector3(3.4,4.5,.06),"exterior_glass")
    for ix in [-1.65,-.55,.55,1.65]:k.box("FactoryFrontMullion",Vector3(c.x+dx+ix,3.7,z+.07),Vector3(.06,4.5,.12),"old_iron")
    for y in [1.5,2.6,3.7,4.8,5.9]:k.box("FactoryFrontTransom",Vector3(c.x+dx,y,z+.07),Vector3(3.4,.06,.12),"old_iron")
-  for edge in [-2.4,2.4]:k.box("FactoryFrontPier",Vector3(c.x+dx+edge,3.8,z),Vector3(.65,7.6,.85),"district_brick")
+  for edge in [-2.4,2.4]:k.box("FactoryFrontPier",Vector3(c.x+dx+edge,3.8,z),Vector3(.65,7.6,.85),"works_brick")
   # Voussoirs form a true arch silhouette over each bay.
   for n in 12:
    var a=PI*(n+.5)/12;var arch=k.box("FactoryWindowArch",Vector3(c.x+dx+cos(a)*1.86,5.95+sin(a)*1.05,z+.15),Vector3(.50,.36,.56),"district_concrete");arch.rotation.z=a-PI/2
- k.box("FactoryFrontCornice",c+Vector3(0,7.65,sz/2),Vector3(sx+.6,.75,.85),"district_brick")
+ k.box("FactoryFrontCornice",c+Vector3(0,7.65,sz/2),Vector3(sx+.6,.75,.85),"works_brick")
  var root=Node3D.new();root.position=c;k.root.add_child(root);Urban.roof(k,root,Vector2(sx,sz),h,"waterworks",14)
  hull(k,c+Vector3.UP*3,Vector3(sx+.8,6,sz+.8),"FactoryHallHull")
  # Attached boiler house, coal bunker, chimney and service pipes are one readable compound.
@@ -165,30 +166,30 @@ static func factory(k):
  # Neither roof nor front is a two-sided theatrical facade.
  for side in [-1,1]:
   var x=-84+side*6.5
-  k.box("BoilerBrickPlinth",Vector3(x,.75,-43),Vector3(.48,1.5,21),"district_brick")
-  k.box("BoilerBrickHeader",Vector3(x,4.52,-43),Vector3(.54,.96,21),"district_brick")
+  k.box("BoilerBrickPlinth",Vector3(x,.75,-43),Vector3(.48,1.5,21),"works_brick")
+  k.box("BoilerBrickHeader",Vector3(x,4.52,-43),Vector3(.54,.96,21),"works_brick")
   for z in [-51.4,-47.2,-43.,-38.8,-34.6]:
    k.box("BoilerRecessedGlass",Vector3(x,2.80,z),Vector3(.045,2.60,3.4),"exterior_glass")
-   for dz in [-1.95,1.95]:k.box("BoilerWindowPier",Vector3(x,2.8,z+dz),Vector3(.60,2.6,.48),"district_brick")
+   for dz in [-1.95,1.95]:k.box("BoilerWindowPier",Vector3(x,2.8,z+dz),Vector3(.60,2.6,.48),"works_brick")
    for dz in [-1.1,0,1.1]:k.box("BoilerWindowVertical",Vector3(x+side*.09,2.8,z+dz),Vector3(.12,2.6,.045),"old_iron")
    for y in [1.55,2.4,3.2,4.05]:k.box("BoilerWindowTransom",Vector3(x+side*.10,y,z),Vector3(.14,.045,3.4),"old_iron")
    k.box("BoilerWindowSill",Vector3(x+side*.16,1.48,z),Vector3(.76,.12,3.6),"district_concrete")
- k.box("BoilerRearWall",Vector3(-84,2.5,-53.5),Vector3(13,5,.48),"district_brick")
- for span in [[-87.5,6.0],[-78.5,2.0]]:k.box("BoilerFrontWing",Vector3(span[0],2.5,-32.5),Vector3(span[1],5,.48),"district_brick")
- k.box("BoilerServiceLintel",Vector3(-82,4.05,-32.5),Vector3(5,1.9,.55),"district_brick")
+ k.box("BoilerRearWall",Vector3(-84,2.5,-53.5),Vector3(13,5,.48),"works_brick")
+ for span in [[-87.5,6.0],[-78.5,2.0]]:k.box("BoilerFrontWing",Vector3(span[0],2.5,-32.5),Vector3(span[1],5,.48),"works_brick")
+ k.box("BoilerServiceLintel",Vector3(-82,4.05,-32.5),Vector3(5,1.9,.55),"works_brick")
  k.box("BoilerServiceDoor",Vector3(-82,1.55,-32.50),Vector3(4.95,3.1,.12),"corrugated")
  for x in [-84.3,-82,-79.7]:k.box("BoilerDoorBrace",Vector3(x,1.55,-32.40),Vector3(.07,2.9,.09),"old_iron")
  k.label("КОТЕЛЬНАЯ",Vector3(-82,3.64,-32.19),22,Color("c5bda6"))
  k.box("BoilerFlatRoof",Vector3(-84,5.1,-43),Vector3(13.5,.25,21.5),"old_iron")
  k.box("BoilerRoofSnow",Vector3(-84,5.27,-43),Vector3(13.2,.08,21.2),"district_roof_snow")
- k.cyl("FactoryChimneyBase",Vector3(-88,1,-58),1.8,2,"district_brick")
- k.cyl("FactoryChimneyStack",Vector3(-88,9,-58),1.2,16,"district_brick",null,.65)
+ k.cyl("FactoryChimneyBase",Vector3(-88,1,-58),1.8,2,"works_brick")
+ k.cyl("FactoryChimneyStack",Vector3(-88,9,-58),1.2,16,"works_brick",null,.65)
  for y in [3,6,9,12,15]:k.cyl("ChimneyIronBand",Vector3(-88,y,-58),1.25-(y-1)*.035,.12,"old_iron")
  hull(k,Vector3(-88,2,-58),Vector3(3,4,3))
  for pair in [[Vector3(-77,2.5,-49),Vector3(-74,2.5,-49)],[Vector3(-84,2,-54),Vector3(-84,2,-62)],[Vector3(-84,2,-62),Vector3(-60,2,-62)]]:k.pipe(pair[0],pair[1],.24,"rust")
  for x in [-80,-60]:tank(k,Vector3(x,0,-67),5.2)
  for x in [-62,-58]:
-  k.box("FactoryGateBrickPier",Vector3(x,1.6,-23),Vector3(.65,3.2,.65),"district_brick",true)
+  k.box("FactoryGateBrickPier",Vector3(x,1.6,-23),Vector3(.65,3.2,.65),"works_brick",true)
   k.box("FactoryGateStoneCap",Vector3(x,3.25,-23),Vector3(.85,.16,.85),"district_concrete")
  k.box("FactoryGateHeader",Vector3(-60,3.22,-23),Vector3(4.6,.32,.48),"old_iron")
  k.label("ВОДОКАНАЛ · 1936",Vector3(-60,3.24,-22.72),20,Color("d1c6ab"))

@@ -14,6 +14,10 @@ static func beam(k,id:String,a:Vector3,b:Vector3,width:float,depth:float,materia
 	mesh.quaternion=Quaternion(Vector3.UP,(b-a).normalized())
 	return mesh
 
+static func bays(width:float,kind:String)->int:
+	var pitch:float={"panel":2.74,"terrace":1.92}.get(kind,2.1)
+	return maxi(2,floori(width/pitch))
+
 static func roof(k,root:Node3D,size:Vector2,height:float,kind:String,seed:int):
 	if kind=="depot" or kind=="pump":
 		# Riveted barrel roof: every segment has thickness, longitudinal seams and
@@ -47,6 +51,26 @@ static func roof(k,root:Node3D,size:Vector2,height:float,kind:String,seed:int):
 			for i in 12:
 				var h=1.15*(i+.5)/12
 				for x in [-size.x/2,size.x/2]:k.box("SawtoothGable",Vector3(x,height+h/2,z+pitch*(i+.5)/12),Vector3(.20,h,pitch/12+.01),"district_brick",false,root)
+	elif kind=="terrace":
+		var depth=size.y/2+.19
+		var rise=minf(2.24,size.y*.14)
+		var slope=atan2(rise,depth)
+		var span=Vector2(depth,rise).length()
+		for sign in [-1,1]:
+			var sheet=k.box("PitchedTinRoof",Vector3(0,height+rise/2,sign*depth/2),Vector3(size.x+.37,.18,span+.08),"old_iron",false,root)
+			sheet.rotation.x=sign*slope
+			for offset in [-.28,.20]:
+				var z=sign*depth*(.46+offset)
+				var at=Vector3(sign*.16,height+rise*(1-absf(z)/depth)+.125,z)
+				var snow=k.box("BrokenPitchedRoofSnow",at,Vector3(size.x*(.71 if offset<0 else .91),.061,span*.45),"district_roof_snow",false,root)
+				snow.rotation.x=sheet.rotation.x
+			k.box("CastRoofGutter",Vector3(0,height+.04,sign*depth),Vector3(size.x+.4,.13,.15),"old_iron",false,root)
+		k.box("PitchedTinRidge",Vector3(0,height+rise+.10,0),Vector3(size.x+.4,.13,.21),"old_iron",false,root)
+		for x in [-size.x/2,size.x/2]:
+			for n in 18:
+				var z=(n+0.5)/18.0*size.y-size.y/2
+				var h=rise*(1-absf(z)/depth)
+				k.box("BrickGable",Vector3(x,height+h/2,z),Vector3(.24,h,size.y/18.0+.003),"works_brick",false,root)
 	else:
 		# Residential roofs retain a damaged corner, with framed skylights and
 		# parapet coping rather than identical flat lids on every facility.
@@ -65,7 +89,7 @@ static func roof(k,root:Node3D,size:Vector2,height:float,kind:String,seed:int):
 static func facade(k,root:Node3D,size:Vector2,floors:int,kind:String):
 	var height=floors*2.8
 	# The central door is approached on level ground. The canopy sits above it.
-	var bays=maxi(2,floori(size.x/2.1));var door_x=-size.x/2+(size.x/bays)*(floori(bays/2.0)+.5)
+	var slots=bays(size.x,kind);var door_x=-size.x/2+(size.x/slots)*(floori(slots/2.0)+.5)
 	var z=size.y/2
 	k.box("EntranceCanopy",Vector3(door_x,2.32,z+.65),Vector3(2.1,.12,1.4),"old_iron",false,root)
 	k.box("EntranceCanopySnow",Vector3(door_x,2.41,z+.65),Vector3(1.95,.05,1.25),"district_roof_snow",false,root)
@@ -77,6 +101,19 @@ static func facade(k,root:Node3D,size:Vector2,floors:int,kind:String):
 		for x in [-size.x*.29,size.x*.29]:
 			k.box("IndustrialVentRecess",Vector3(x,2.48,z+.18),Vector3(1.1,.36,.08),"dark",false,root)
 			for y in [2.36,2.45,2.54,2.63]:k.box("IndustrialVentLouver",Vector3(x,y,z+.25),Vector3(1.08,.035,.08),"old_iron",false,root)
+	elif kind=="panel":
+		for face in [-1,1]:
+			var wall_z=face*(z+.157)
+			for level in floors:
+				var y=level*2.8+2.70
+				k.box("PanelBlockRibbonLintel",Vector3(0,y,wall_z),Vector3(size.x-.1,.12,.11),"district_concrete",false,root)
+			for x in [-size.x*.33,0,size.x*.33]:
+				if absf(x-door_x)<.84 and face>0:continue
+				k.box("PrecastExposedPanelSeam",Vector3(x,height/2,wall_z),Vector3(.047,height-.13,.017),"dark",false,root)
+		for x in [-size.x/2+.32,size.x/2-.32]:
+			for level in range(1,floors):
+				var y=level*2.8+.42
+				k.box("PanelEndVent",Vector3(x,y,z+.18),Vector3(.31,.29,.036),"frosted_steel",false,root)
 	else:
 		for x in [-size.x/2+.22,size.x/2-.22]:
 			for y in range(int(height/.35)):
