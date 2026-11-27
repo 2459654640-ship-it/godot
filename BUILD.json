@@ -1,6 +1,6 @@
 {
-  "version": "v36",
-  "source_commit": "1a713f31ad2fc9ea8e050ce40b4b435d143b3231",
+  "version": "v37",
+  "source_commit": "72ac0b76e7e4799d6711dc01e66b9b7cea178f09",
   "engine": "Godot 4.6.3",
   "windows_template": "official release x86_64",
   "windows_hardware_acceptance": "pending",
