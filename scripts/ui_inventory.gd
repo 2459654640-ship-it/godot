@@ -9,7 +9,7 @@ static func entries(s)->Array:
  for id in s.economy.goods:
   if int(s.economy.goods[id])<=0 or not s.Economy.GOODS.has(id):continue
   var d=s.Economy.GOODS[id]
-  out.append({"id":id,"name":d.name,"detail":d.detail,"kind":"消耗品" if d.effect!="" else "物资","category":"materials" if id in MATERIALS else ("equipment" if id=="portable_radio" else "supplies"),"count":int(s.economy.goods[id]),"good":true})
+  out.append({"id":id,"name":d.name,"detail":d.detail,"kind":"消耗品" if d.effect!="" else "物资","category":d.get("category","materials" if id in MATERIALS else ("equipment" if id=="portable_radio" else "supplies")),"count":int(s.economy.goods[id]),"good":true})
  out.sort_custom(func(a,b):return a.category<b.category if a.category!=b.category else a.id<b.id)
  return out
 static func render(h,tab:String="all",selected:String=""):

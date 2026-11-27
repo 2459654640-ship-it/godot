@@ -90,6 +90,17 @@ static func draw_map(v):
    var area=Rect2(label_at-Vector2(0,14),Vector2(mini(caption.length(),14)*13,18))
    if not label_rects.any(func(r):return r.intersects(area)):
     v.draw_string(w.kit.font,label_at,caption,HORIZONTAL_ALIGNMENT_LEFT,180,13,(Color("334b45") if v.expanded else Color("e1d7ba")));label_rects.append(area)
+ var exit_info:Dictionary=preload("res://scripts/raid_loot.gd").extraction(s)
+ if not exit_info.is_empty():
+  for entrance in layout.entrances:
+   if entrance.id!=exit_info.id:continue
+   var q=Vector2(entrance.point[0],entrance.point[1])
+   if not v.expanded and q.distance_to(center)>30:continue
+   var at=v.project(q)
+   var mark=Color("356456") if v.expanded else Color("b8d8af")
+   v.draw_arc(at,11,0,TAU,28,mark,2.4,true)
+   v.draw_colored_polygon(PackedVector2Array([at+Vector2(-3,-4),at+Vector2(5,0),at+Vector2(-3,4)]),mark)
+   if v.expanded:v.draw_string(w.kit.font,at+Vector2(13,-13),"撤离 · "+exit_info.name,HORIZONTAL_ALIGNMENT_LEFT,-1,16,mark)
  var quest=w.hud.Journal.active(s)
  if not quest.is_empty() and quest.place=="east_district":
   var q3:Vector3=load("res://scripts/field_guide.gd").point(w,quest)
@@ -117,4 +128,4 @@ static func draw_map(v):
   v.draw_string(w.kit.font,bar+Vector2(0,-8),"20 m",HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color("435950"))
   v.draw_string(w.kit.font,Vector2(12,24),"东郊工业片区 / 外勤用图",HORIZONTAL_ALIGNMENT_LEFT,-1,16,(Color("713a2d") if v.expanded else Color("c7aa70")))
   v.draw_string(w.kit.font,Vector2(v.size.x-100,24),"北 ↑",HORIZONTAL_ALIGNMENT_LEFT,-1,15,(Color("334b45") if v.expanded else Color("d2c7a6")))
-  v.draw_string(w.kit.font,Vector2(12,v.size.y-8),"浅底：已踏查  ·  灰底：待探索  ·  红点：设施与地标  ·  棕斑：扬尘危险区",HORIZONTAL_ALIGNMENT_LEFT,-1,13,Color("505f55"))
+  v.draw_string(w.kit.font,Vector2(12,v.size.y-8),"浅底：已踏查  ·  灰底：待探索  ·  红点：地标  ·  棕斑：扬尘  ·  绿箭头：撤离口",HORIZONTAL_ALIGNMENT_LEFT,-1,13,Color("505f55"))

@@ -11,6 +11,12 @@ var played_seconds=0.0
 var arrival_data:Dictionary={}
 var combat
 var grey_camp
+const Raid=preload("res://scripts/raid_loot.gd")
+var loot_search:Dictionary={}
+var loot_contours:Dictionary={}
+var loot_ink:Array=[]
+var loot_progress:ProgressBar
+var raid_extracted=false
 const ArtDirection=preload("res://scripts/art_direction.gd")
 const Kit = preload("res://scripts/kit.gd")
 const Actor = preload("res://scripts/actor.gd")
@@ -133,7 +139,7 @@ func _ready():
 	else:CampaignMaps.targets(self)
 	if floor_id not in ["life","labor"]:CampaignMaps.residents(self)
 	preload("res://scripts/supply_storage.gd").setup(self)
-	preload("res://scripts/raid_loot.gd").setup(self)
+	Raid.setup(self)
 	navigation.setup(self)
 	setup_daily_routines()
 	preload("res://scripts/npc_workplace.gd").configure(self)
@@ -188,6 +194,7 @@ func _ready():
 		grey_camp=preload("res://scripts/greyhound_camp.gd").new();add_child(grey_camp);grey_camp.setup(self)
 		if floor_id=="east_district":
 			var survey=preload("res://scripts/city_survey.gd").new();add_child(survey);survey.setup(self)
+	Raid.setup_hud(self)
 	initialized=true
 	call_deferred("autosave")
 	wall_veil=preload("res://scripts/wall_veil.gd").new()
@@ -607,6 +614,7 @@ func _physics_process(delta):
 		var aim_point=Plane(Vector3.UP,.62).intersects_ray(camera.project_ray_origin(cursor),camera.project_ray_normal(cursor))
 		if aim_point!=null:player.aim_direction=aim_point-player.position
 	find_nearest()
+	Raid.tick(self,delta)
 	player.blocked=hud.modal_visible() or waiting_shift or departure_animating or (is_instance_valid(combat) and combat.defeated)
 	for zone in zones:
 		if zone.rect.has_point(Vector2(player.position.x,player.position.z)):
@@ -637,7 +645,8 @@ func find_nearest():
 			distances[id]=1.69
 			continue
 		var reachable=true
-		if d<1.75:
+		if t.kind=="loot":reachable=d<1.7 and Raid.can_reach(self,id,1.7)
+		elif d<1.75:
 			var q=PhysicsRayQueryParameters3D.create(player.position+Vector3(0,1.2,0),t.pos+Vector3(0,1.2,0),1)
 			var hit=get_world_3d().direct_space_state.intersect_ray(q)
 			reachable=hit.is_empty() or hit.position.distance_to(t.pos+Vector3(0,1.2,0))<0.48
@@ -651,6 +660,7 @@ func find_nearest():
 	if cue=="gate" and story.f("gate"):cue=""
 	if cue=="side" and (story.f("side_crossed") or story.f("side_pass")):cue=""
 	kit.highlight({"armory":"armorer","main_gate":"main_guard","front_veteran":"plant_veteran"}.get(cue,cue),npcs)
+	Raid.update_contours(self,cue)
 	if not waiting_shift:hud.set_prompt(nearest)
 
 func cycle_interaction(direction:int)->bool:
@@ -763,7 +773,7 @@ func interact(id: String):
 		hud.toast(warning,3);return
 	if id=="grey_shelter_entry":preload("res://scripts/grey_shelter.gd").enter(self);return
 	if id=="grey_shelter_exit":preload("res://scripts/grey_shelter.gd").leave(self);return
-	if id.begins_with("raid_container_"):preload("res://scripts/raid_loot.gd").open(self,id);return
+	if id.begins_with(Raid.PREFIX):Raid.open(self,id);return
 	if id.begins_with("surface_loot_"):preload("res://scripts/surface_site.gd").collect(self,id);return
 	if id.begins_with("east_loot_"):story.Campaign.District.collect(self,id);return
 	if id=="common_blocks":hud.show_blocks();return

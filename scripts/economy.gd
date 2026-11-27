@@ -1,7 +1,8 @@
 extends RefCounted
 const Radiation=preload("res://scripts/radiation.gd")
 ## Standard ammunition is money; handmade ammunition is a separate reserve.
-const GOODS={
+const Salvage=preload("res://scripts/salvage_catalog.gd")
+const BASE_GOODS={
 "scrap_metal":{"name":"可用废金属","price":2,"stock":0,"icon":"scrap_metal","detail":"去掉尖锐边角的金属边条和小零件，可制作捆扎用品，或卖给聚落商人。","effect":"","amount":0,"purchase":false},
 "copper_wire":{"name":"回收铜线","price":3,"stock":0,"icon":"copper_wire","detail":"清理过接头的旧铜线。电气维修人员需要这类材料，也可在聚落出售。","effect":"","amount":0,"purchase":false},
 "salvage_cloth":{"name":"修补布","price":1,"stock":0,"icon":"salvage_cloth","detail":"结实但尚未处理的布料。通电的修配间可烧水处理后制作绷带，或配合金属件制作捆扎用品。","effect":"","amount":0,"purchase":false},
@@ -15,9 +16,11 @@ const GOODS={
 "antirad":{"name":"抗辐射药","price":10,"stock":2,"icon":"antirad","detail":"减少 20 点辐射，立即按降低后的档位解除或减轻负面状态。各档效果可在背包的辐射状态页查看；面具不能阻挡全部外照射。","effect":"radiation","amount":20},
 "battery":{"name":"干电池","price":7,"stock":3,"icon":"battery","detail":"防潮包内的电池，留给照明和小型设备使用。","effect":"","amount":0},
 "cord":{"name":"细绳与布胶带","price":3,"stock":4,"icon":"cord","detail":"捆扎行李、固定松动物件的常用耗材。","effect":"","amount":0}}
+static var GOODS=BASE_GOODS.merged(Salvage.goods())
 const AMMO={"military":{"name":"制式子弹","damage":1.4,"tradable":true},"handmade":{"name":"土制子弹","damage":1.0,"tradable":false}}
 const VODKA_PRICE=18
-const RESALE={"scrap_metal":2,"copper_wire":3,"salvage_cloth":1,"bread":2,"bandage":2,"medkit":6,"antirad":5,"battery":3,"cord":1,"vodka":18,"mutant_bone":3,"mutant_sample":6}
+const BASE_RESALE={"scrap_metal":2,"copper_wire":3,"salvage_cloth":1,"bread":2,"bandage":2,"medkit":6,"antirad":5,"battery":3,"cord":1,"vodka":18,"mutant_bone":3,"mutant_sample":6}
+static var RESALE=BASE_RESALE.merged(Salvage.resale())
 static func sale_price(s,id:String)->int:
 	if id=="vodka":return 18 if s.has(id) else 0
 	return int(RESALE.get(id,0)) if int(s.economy.goods.get(id,0))>0 else 0
@@ -27,7 +30,7 @@ static func sell(s,id:String)->String:
 	if id=="vodka":return sell_vodka(s)
 	s.economy.goods[id]-=1
 	if s.economy.goods[id]<=0:s.economy.goods.erase(id)
-	s.economy.stock[id]=int(s.economy.stock.get(id,0))+1
+	if GOODS[id].get("purchase",true):s.economy.stock[id]=int(s.economy.stock.get(id,0))+1
 	s.economy.military+=price
 	s.economy.ledger.append({"kind":"sell","id":id,"rounds":price})
 	s.changed.emit()

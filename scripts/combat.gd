@@ -55,7 +55,7 @@ func setup(world):
   w.hud.toast("老兵递来左轮、18 发土制弹与药品。左轮已放入武器栏：按 1 拔枪 / 收枪，I 可更换装备。",10)
  last_weapon=w.story.equipped_weapon()
  clip=int(w.story.flags.get("weapon_clip",6));veteran_health=int(w.story.flags.get("veteran_health",100))
- label=Label.new();label.position=Vector2(420,855);label.size=Vector2(800,35);label.add_theme_font_size_override("font_size",19);label.add_theme_color_override("font_color",Color("dec99d"));w.hud.add_child(label)
+ label=Label.new();label.position=Vector2(420,782);label.size=Vector2(800,35);label.add_theme_font_size_override("font_size",19);label.add_theme_color_override("font_color",Color("dec99d"));w.hud.add_child(label)
  var backing=StyleBoxFlat.new();backing.bg_color=Color(.025,.045,.04,.94);backing.border_color=Color("776b4f");backing.set_border_width_all(1);backing.set_corner_radius_all(3);backing.content_margin_left=10;backing.content_margin_right=10;backing.content_margin_top=5;backing.content_margin_bottom=5;label.add_theme_stylebox_override("normal",backing)
  feedback=preload("res://scripts/combat_feedback.gd").new();w.hud.add_child(feedback);feedback.setup(self)
  reticle=Control.new();reticle.mouse_filter=Control.MOUSE_FILTER_IGNORE;w.hud.add_child(reticle)
@@ -103,7 +103,7 @@ func _physics_process(delta):
   label.hide();reticle.hide()
   if not w.hud.modal_visible():w.hud.show_combat_defeat()
   return
- label.visible=not w.hud.modal_visible()
+ label.visible=not w.hud.modal_visible() and (active or w.story.weapon_drawn() or reload_time>0)
  update_cursor()
  if paused():
   if is_instance_valid(veteran):veteran.combat_velocity=Vector3.ZERO
@@ -115,10 +115,8 @@ func _physics_process(delta):
  aim=aim_from_screen(w.get_viewport().get_mouse_position())
  if Input.is_action_just_pressed("reload") and w.story.weapon_drawn():reload_weapon()
  w.player.aim_direction=aim-w.player.position if w.story.weapon_drawn() else Vector3.ZERO
- if active:
-  if Input.is_action_pressed("shoot") and cooldown<=0 and reload_time<=0:shoot()
- else:
-  if w.floor_id in ["east_district","grey_shelter"] and Input.is_action_pressed("shoot") and cooldown<=0 and reload_time<=0:shoot()
+ if (active or w.floor_id in ["east_district","grey_shelter"]) and Input.is_action_pressed("shoot") and cooldown<=0 and reload_time<=0:shoot()
+ if not active or (w.floor_id=="east_district" and encounter=="grey_camp"):
   for id in encounters:
    var e:Dictionary=encounters[id]
    if (w.floor_id!="waterworks" or not w.story.f("water_secured")) and not w.story.f("battle_"+id) and not w.story.f(e.skip) and w.story.f(e.need) and e.rect.has_point(Vector2(w.player.position.x,w.player.position.z)):begin(id);break
@@ -163,20 +161,41 @@ func magazine_size()->int:return 5 if w.story.equipped_weapon()=="grey_carbine" 
 func sync():
  w.story.flags.weapon_clip=clip;w.story.flags.veteran_health=veteran_health;w.story.changed.emit()
 func begin(id:String):
- if active or w.story.f("battle_"+id):return
+ if not encounters.has(id) or (active and encounter!="grey_camp") or w.story.f("battle_"+id):return
+ var spec:Dictionary=encounters[id]
+ var fallback:String=spec.get("enemy_kind","mutant")
+ var kinds:Array=spec.get("kinds",Catalog.wave(id,fallback,spec.spawns.size()))
  encounter=id
- # Visible field ammunition left by the squad prevents resource softlocks.
- var kinds=Catalog.wave(id,encounters[id].get("enemy_kind","mutant"),encounters[id].spawns.size())
- var budget=0
- for i in encounters[id].spawns.size():budget+=Catalog.budget(kinds[i] if i<kinds.size() else encounters[id].get("enemy_kind","mutant"))
- var missing=maxi(0,budget-int(w.story.economy.handmade)-clip)
- if missing>0 and w.floor_id in ["waterworks","railfront","junction","relay"]:w.story.economy.handmade+=missing;w.hud.toast("从小队随身弹袋补入 %d 发土制弹。"%missing,5)
- sync();checkpoint=w.save_snapshot().duplicate(true);w.autosave()
+ # Story combat has its original emergency ammunition floor. Optional
+ # expeditions depend on carried ammunition and what the player finds.
+ if w.floor_id in ["waterworks","railfront","junction","relay"]:
+  var budget=0
+  for i in spec.spawns.size():budget+=Catalog.budget(kinds[i] if i<kinds.size() else fallback)
+  var missing=maxi(0,budget-int(w.story.economy.handmade)-clip)
+  if missing>0:
+   w.story.economy.handmade+=missing
+   w.hud.toast("从小队随身弹袋补入 %d 发土制弹。"%missing,5)
+ sync()
+ if not preload("res://scripts/raid_loot.gd").active(w):
+  checkpoint=w.save_snapshot().duplicate(true)
+  w.autosave()
  active=true
  if w.floor_id=="railfront":w.sync_event_music("frontline_theme")
- for p in encounters[id].spawns:
-  var enemy=Enemy.new();w.add_child(enemy);enemy.setup(self,w.clear_arrival(p),kinds[enemies.size()] if enemies.size()<kinds.size() else encounters[id].get("enemy_kind","mutant"));enemy.set_meta("loot_key",id+"_"+str(enemies.size()));enemy.set_meta("loot_index",enemies.size());enemies.append(enemy)
- w.hud.toast(load("res://scripts/field_guide.gd").encounter(id).purpose+"\n"+("1 拔枪 · " if not w.story.weapon_drawn() else "")+"左键射击 / R 换弹 · 随时可找掩体撤开",8)
+ var spawn_points:Array=Array(spec.spawns)
+ var reserves:Array=spec.get("reserve",[]).duplicate()
+ for i in spawn_points.size():
+  if reserves.is_empty() or spawn_points[i].distance_to(w.player.position)>2.8:continue
+  for p in reserves:
+   if p.distance_to(w.player.position)<3.1:continue
+   spawn_points[i]=p;reserves.erase(p)
+   break
+ for i in spawn_points.size():
+  var enemy=Enemy.new();w.add_child(enemy)
+  enemy.setup(self,w.clear_arrival(spawn_points[i]),kinds[i] if i<kinds.size() else fallback)
+  enemy.set_meta("loot_key",id+"_"+str(i));enemy.set_meta("loot_index",i);enemies.append(enemy)
+ var line:String=spec.get("purpose",load("res://scripts/field_guide.gd").encounter(id).purpose)
+ w.hud.toast(line+"\n"+("1 拔枪 · " if not w.story.weapon_drawn() else "")+"左键射击 / R 换弹 · 随时可找掩体撤开",8)
+ if preload("res://scripts/raid_loot.gd").active(w):w.autosave()
 func reload_weapon():
  if reload_time>0 or clip>=magazine_size():return
  if int(w.story.economy.handmade)<=0:
@@ -285,14 +304,26 @@ func enemy_fell(enemy):
  if w.floor_id=="surface":preload("res://scripts/surface_site.gd").drop(w,enemy)
  if w.floor_id in ["east_district","grey_shelter"]:w.story.Campaign.District.drop(w,enemy)
  enemies.erase(enemy)
- if enemies.is_empty():
+ # A patrol can arrive during a creature fight. Complete the local objective
+ # when its last creature falls, even if a rifle squad remains on the street.
+ if encounter!="" and encounter!="grey_camp" and enemies.all(func(e):return not is_instance_valid(e) or e.hp<=0 or e.enemy_kind=="greyhound"):
+  var finished=encounter
+  w.story.flags["battle_"+finished]=true
+  if w.floor_id=="east_district":w.story.Campaign.District.cleared(w,finished)
   for projectile in projectiles.duplicate():
    if is_instance_valid(projectile):projectile.queue_free()
-  active=false;w.story.flags["battle_"+encounter]=true
-  if w.floor_id=="east_district":w.story.Campaign.District.cleared(w,encounter)
-  sync();w.autosave()
+  active=not enemies.is_empty()
+  if active:encounter="grey_camp"
   if w.floor_id=="railfront":w.sync_event_music("")
-  w.hud.toast("威胁解除 · "+load("res://scripts/field_guide.gd").encounter(encounter).after,9)
+  var follow="可以搜索附近容器并处理带回的物资。" if finished.begins_with("raid_") else load("res://scripts/field_guide.gd").encounter(finished).after
+  w.hud.toast("威胁解除 · "+follow,7)
+  sync();w.autosave()
+ else:patrol_disengaged()
+
+func patrol_disengaged():
+ if encounter!="grey_camp" or not enemies.is_empty():return
+ active=false
+ encounter=""
 func retry():
  if preload("res://scripts/raid_loot.gd").active(w):return
  if checkpoint.is_empty():return
@@ -334,7 +365,7 @@ func serialize_state()->Dictionary:
 func restore_state(state:Dictionary):
  if not enabled or not state.get("active",false):return
  var id:String=state.get("encounter","")
- if not encounters.has(id):return
+ if not encounters.has(id) and not (id=="grey_camp" and w.floor_id in ["east_district","grey_shelter"]):return
  for e in enemies:
   if is_instance_valid(e):e.queue_free()
  for shot in projectiles.duplicate():

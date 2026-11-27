@@ -365,52 +365,113 @@ static func saves(h,saving:bool,return_to_menu:bool=false,group:String="manual")
  h.modal_hint.text="档位互不覆盖 · 覆盖已有进度前会再次确认 · Esc 返回游戏"
 
 static func transfer(h,storage:bool,target:String=""):
- var w=h.world;var s=w.story;var stash=load("res://scripts/supply_storage.gd");var raid=load("res://scripts/raid_loot.gd")
- var record:Dictionary={}
- if storage:
-  if not stash.accessible(w):h.toast("请先走到寄存柜旁。");return
- else:
-  if not w.targets.has(target) or w.player.position.distance_to(w.targets[target].pos)>2.3 or not raid.safe(w):h.toast("需要在安全位置靠近容器。");return
-  record=s.flags.raid_containers.get(raid.record_key(w,target.trim_prefix("raid_container_")),{})
-  if record.is_empty() or not record.searched:return
- var content=shell(h,stash.NAMES[w.floor_id] if storage else record.title,"ПЕРЕДАЧА  /  物资转移","transfer")
+ if not storage:
+  field_transfer(h,target)
+  return
+ var w=h.world;var s=w.story;var stash=load("res://scripts/supply_storage.gd")
+ if not stash.accessible(w):h.toast("请先走到寄存柜旁。");return
+ var content=shell(h,stash.NAMES[w.floor_id],"ПЕРЕДАЧА  /  物资转移","transfer")
  var main=row(content,22);main.size_flags_vertical=Control.SIZE_EXPAND_FILL
- for side in [0,1]:
-  var left=side==0;var c=panel(h,main)
-  words(h,c,"随身物资" if left else ("聚落寄存" if storage else "容器内的物品"),24,GOLD)
-  var source:Dictionary=s.economy.goods.duplicate() if left else (s.economy.stashes.get(w.floor_id,{}) if storage else record.loot)
-  if left:
-   for id in Bag.ORDINARY_ITEMS:
-    if s.has(id):source[id]=1
-   if storage:
-    for id in ["military","handmade"]:
-     if s.economy[id]>0:source[id]=s.economy[id]
+ for left in [true,false]:
+  var c=panel(h,main)
+  words(h,c,"随身物资" if left else "聚落寄存",24,GOLD)
+  var source:Dictionary=s.economy.stashes.get(w.floor_id,{})
+  if left:source=load("res://scripts/raid_loot.gd").carried(s)
   var ids=source.keys().filter(func(id):return int(source[id])>0)
-  var key=("stash" if storage else target)+str(side)+"_page";var index=clampi(int(h.get_meta(key,0)),0,maxi(0,ceili(ids.size()/7.0)-1))
-  if ids.is_empty():words(h,c,"没有可转移的物品。" if storage else ("背包暂时没有物资。" if left else "已经搜空。"),19,DIM)
+  var key="stash"+str(0 if left else 1)+"_page"
+  var index=clampi(int(h.get_meta(key,0)),0,maxi(0,ceili(ids.size()/7.0)-1))
+  if ids.is_empty():words(h,c,"没有可转移的物品。",19,DIM)
   for id in ids.slice(index*7,index*7+7):
-   var item:String=id;var amount:int=source[id];var r=row(c,10);r.add_child(h.icon_rect(h.item_icon(id),38));words(h,r,Bag.name_of(s,id)+" ×%d"%amount,17)
-   if storage:
-    var deposit:bool=left
-    for amount_value in ([1,amount] if amount>1 else [1]):
-     var quantity:int=amount_value
-     action(h,r,"全部" if quantity>1 else ("存入" if left else "取回"),func():
-      if stash.accessible(w) and stash.move(s,w.floor_id,item,quantity,deposit):w.autosave()
-      else:h.toast("背包放不下或无法转移这件装备。")
-      transfer(h,true),true)
-   elif not left:action(h,r,"收取",func():
-    if not raid.take(w,target,item):h.toast("背包放不下，剩余物品留在原处。")
-    transfer(h,false,target))
-  gap(c);page(h,c,key,ids.size(),7,func():transfer(h,storage,target))
-  if not left and not storage:action(h,c,"收取能放下的全部物品",func():raid.take_all(w,target))
- words(h,content,"背包 %d / 48 格 · 任务文件随身保护"%Bag.pack(s).used,17,GOLD)
- if storage and s.flags.get("raid_last_result","")=="lost" and (not s.has("mask") or not s.has("filter") or (not s.has("revolver") and not s.has("grey_carbine"))):
+   var item:String=id;var amount:int=source[id];var r=row(c,10)
+   r.add_child(h.icon_rect(h.item_icon(id),38));words(h,r,Bag.name_of(s,id)+" ×%d"%amount,17)
+   for amount_value in ([1,amount] if amount>1 else [1]):
+    var quantity:int=amount_value
+    action(h,r,"全部" if quantity>1 else ("存入" if left else "取回"),func():
+     if stash.accessible(w) and stash.move(s,w.floor_id,item,quantity,left):w.autosave()
+     else:h.toast("背包放不下或无法转移这件装备。")
+     transfer(h,true))
+  gap(c);page(h,c,key,ids.size(),7,func():transfer(h,true))
+ var footer=row(content)
+ words(h,footer,"背包 %d / 48 格 · 任务文件随身保护"%Bag.pack(s).used,17,GOLD)
+ if s.flags.has("raid_return"):action(h,footer,"查看最近撤离清单",func():extraction_report(h))
+ if s.flags.get("raid_last_result","")=="lost" and (not s.has("mask") or not s.has("filter") or (not s.has("revolver") and not s.has("grey_carbine"))):
   action(h,content,"借用基础外勤装备 · 撤回后偿还 8 发制式弹",func():
    if not s.has("revolver") and not s.has("grey_carbine"):s.give("revolver");s.equip_weapon("revolver")
    if not s.has("mask"):s.give("mask")
    if not s.has("filter"):s.give("filter")
    s.economy.handmade=maxi(8,int(s.economy.handmade));s.flags.raid_loan=maxi(8,int(s.flags.get("raid_loan",0)));w.autosave();transfer(h,true))
- h.modal_hint.text="左右分栏转移物品 · 寄存物资留在当前聚落" if storage else "背包放不下的物品继续留在容器中 · Esc 返回"
+ h.modal_hint.text="左右分栏转移物品 · 寄存物资留在当前聚落"
+
+static func dimensions(s,id:String)->String:
+ if id in ["military","handmade"]:return "装入弹药储备"
+ if id in ["mask","filter"]:return "外勤装备栏"
+ var size=Bag.size_of(id)
+ var resale:int=s.Economy.RESALE.get(id,0)
+ return "%d × %d 格"%[size.x,size.y]+("   ·   收购 %d 发 / 件"%resale if resale>0 else "")
+
+static func field_transfer(h,target:String,selected:String=""):
+ var w=h.world;var s=w.story;var raid=load("res://scripts/raid_loot.gd")
+ if not raid.can_reach(w,target) or not raid.safe(w):h.toast("需要在安全位置靠近容器。");return
+ var rec:Dictionary=raid.record(w,target)
+ if rec.is_empty() or not rec.searched:return
+ var content=shell(h,rec.title,"ПОЛЕВАЯ ОПИСЬ  /  地表搜刮","field_transfer")
+ var panes=row(content,18);panes.size_flags_vertical=Control.SIZE_EXPAND_FILL
+ var bag=panel(h,panes,512);bag.get_parent().get_parent().size_flags_horizontal=0
+ var pack=Bag.pack(s,{},true)
+ var selection=pack.pieces.filter(func(p):return p.key==h.get_meta("bag_selected_key","") and p.id==selected)
+ words(h,bag,"随身背包  ·  %d / 48 格"%pack.used,22,GOLD)
+ var grid=load("res://scripts/inventory_grid.gd").new();grid.cell=58;bag.add_child(grid)
+ grid.setup(h,selected,"all",func(id):field_transfer(h,target,id))
+ if not selection.is_empty():
+  var piece:Dictionary=selection[0];var id:String=piece.id
+  words(h,bag,Bag.name_of(s,id)+"   "+dimensions(s,id),16)
+  var actions=row(bag,8)
+  action(h,actions,"旋转",func():
+   if Bag.move_piece(s,piece.key,piece.at,true):w.autosave()
+   else:h.toast("旋转后放不下，请先腾出相邻格。")
+   field_transfer(h,target,id),piece.size.x!=piece.size.y)
+  action(h,actions,"放回容器 ×1",func():
+   if not raid.store(w,target,id):h.toast("这件物品无法留在容器里。")
+   field_transfer(h,target,id))
+ else:words(h,bag,"拖动整理背包，选中物品可旋转或放回。",16,DIM)
+ if not pack.overflow.is_empty():words(h,bag,"还有 %d 组物资在栏外，请在背包中整理。"%pack.overflow.size(),15,RED)
+ gap(bag);words(h,bag,"制式弹 %d  ·  土制弹 %d"%[s.economy.military,s.economy.handmade],17,DIM)
+ var found=panel(h,panes);words(h,found,"搜到的物资",23,GOLD);line(found)
+ var ids=rec.loot.keys()
+ var key=target+"_field_page";var index=clampi(int(h.get_meta(key,0)),0,maxi(0,ceili(ids.size()/5.0)-1))
+ if ids.is_empty():words(h,found,"容器已搜空。",20,DIM)
+ for id in ids.slice(index*5,index*5+5):
+  var item:String=id;var amount:int=rec.loot[item]
+  var r=row(found,10);r.add_child(h.icon_rect(h.item_icon(item),46))
+  var detail=column(r);detail.size_flags_horizontal=Control.SIZE_EXPAND_FILL;detail.add_theme_constant_override("separation",3)
+  words(h,detail,Bag.name_of(s,item)+"  ×%d"%amount,18)
+  words(h,detail,dimensions(s,item),13,DIM)
+  action(h,r,"收取",func():
+   if not raid.take(w,target,item):h.toast("背包没有适合这件物品的连续空格。")
+   field_transfer(h,target,selected))
+  if amount>1:action(h,r,"这一叠",func():raid.take_all(w,target,item))
+ gap(found)
+ if ids.size()>5:page(h,found,key,ids.size(),5,func():field_transfer(h,target,selected))
+ if not ids.is_empty():action(h,found,"收取能放下的全部物品",func():raid.take_all(w,target))
+ h.modal_hint.text="相同物品可叠放 · 收取前先看尺寸与用途 · Esc 返回街道"
+
+static func extraction_report(h):
+ var s=h.world.story
+ var result:Dictionary=s.flags.raid_return
+ var content=shell(h,"安全撤离","ЭВАКУАЦИЯ  /  第 %d 次地表外勤"%result.number,"extract_report")
+ var card=panel(h,content)
+ words(h,card,"带回 %d 件新物资  ·  估价 %d 发制式弹"%[result.units,result.value],25,GOLD)
+ words(h,card,"本次搜索 %d 个容器。估价以聚落收购为准。"%result.searched,17,DIM)
+ if result.repaid>0:words(h,card,"归还外勤装备借款 %d 发制式弹。"%result.repaid,17,DIM)
+ var ids=result.items.keys();var key="extract_items_page"
+ var index=clampi(int(h.get_meta(key,0)),0,maxi(0,ceili(ids.size()/7.0)-1))
+ for id in ids.slice(index*7,index*7+7):
+  var r=row(card,10);r.add_child(h.icon_rect(h.item_icon(id),37))
+  words(h,r,Bag.name_of(s,id)+"  ×%d"%result.items[id]+"    "+dimensions(s,id),17)
+ if ids.is_empty():words(h,card,"这趟带回的主要是出发时的装备。",18,DIM)
+ gap(card)
+ if ids.size()>7:page(h,card,key,ids.size(),7,func():extraction_report(h))
+ action(h,content,"返回寄存柜",func():transfer(h,true))
 
 static func raid_debrief(h):
  var s=h.world.story;s.flags.raid_debrief_pending=false;s.flags.tracked_quest="raid_recovery"

@@ -3,6 +3,7 @@ extends RefCounted
 static var _layout:Dictionary={}
 static var _content:Dictionary={}
 const FLOOR="east_district"
+const Expedition=preload("res://scripts/district_expedition.gd")
 const HOMES=["commune","sech","labor"]
 static func layout()->Dictionary:
 	if _layout.is_empty():_layout=JSON.parse_string(FileAccess.get_file_as_string("res://data/east_district_layout.json"))
@@ -85,6 +86,9 @@ static func decorate(v:Dictionary,s)->Dictionary:
 	if v.id in ["east_commune_entry","east_sech_entry"] and not can_enter_home(s,"commune" if v.id=="east_commune_entry" else "sech"):
 		v.body+="\n这不是你的本次出发聚落。先通过已认识的联络人落实访问安排，再来走这条线路；找到入口不等于取得通行。"
 	if v.id=="east_d6_entry" and not s.Campaign.Access.public_entry(s):v.body+="\n你的现有身份不能公开返站。不要递交姓名；矿区内部接应是另一条路。"
+	if v.id==preload("res://scripts/raid_loot.gd").extraction(s).get("id"):
+		v.body+="\n从这里撤回聚落就会结束外勤，随身物资可以带回。灰狗地下营地和泵站通道还在地表行动范围内。"
+
 	return v
 static func task_stage(s,q:Dictionary,current:Dictionary)->Dictionary:
 	var floor:String=s.context.get("floor","")
@@ -133,6 +137,7 @@ static func encounters(s)->Dictionary:
 			var j=rng.randi_range(0,i);var p:Vector3=sites[id].spawns[i];sites[id].spawns[i]=sites[id].spawns[j];sites[id].spawns[j]=p
 		if id=="east_road":sites[id].spawns.resize(2)
 		if id=="city_radio_nest":sites[id].spawns.resize(3)
+	sites.merge(Expedition.wildlife(s))
 	return sites
 static func prepare(w):
 	if w.floor_id!=FLOOR:return
@@ -155,7 +160,7 @@ static func can_retreat(w,id:String)->bool:
 	if w.floor_id=="railfront" and id=="front_exit":return w.combat.enemies.all(func(e):return not is_instance_valid(e) or e.hp<=0 or e.position.distance_to(w.player.position)>6)
 	if w.floor_id!=FLOOR:return false
 	if not layout().entrances.any(func(e):return e.id==id):return false
-	return w.combat.enemies.all(func(e):return not is_instance_valid(e) or e.position.distance_to(w.player.position)>6)
+	return preload("res://scripts/raid_loot.gd").safe(w)
 static func safe_interaction(w,id:String)->bool:
 	if w.story.Campaign.Complete.safe_interaction(w,id):return true
 	if id in ["grey_shelter_entry","grey_shelter_exit"] or id.begins_with("raid_container_"):return preload("res://scripts/raid_loot.gd").safe(w)
@@ -175,18 +180,17 @@ static func restore_combat(w):
 	w.story.flags.erase("east_retreat_encounter")
 	if packet.is_empty():return
 	w.combat.restore_state(packet)
-	if w.combat.checkpoint.is_empty():
+	if w.combat.checkpoint.is_empty() and not preload("res://scripts/raid_loot.gd").active(w):
 		var checkpoint:Dictionary=w.save_snapshot().duplicate(true);checkpoint.combat_state={};w.combat.checkpoint=checkpoint
 static func drop(w,enemy):
 	if enemy.enemy_kind=="greyhound":preload("res://scripts/raid_loot.gd").corpse(w,enemy);return
-	var batch=int(w.story.flags.get("east_spawn_batches",{}).get(w.combat.encounter,0))
+	var batch=int(w.story.flags.get("raid_index",0)) if w.combat.encounter.begins_with("raid_") else int(w.story.flags.get("east_spawn_batches",{}).get(w.combat.encounter,0))
 	var source:String=enemy.get_meta("loot_key","")
 	if source=="":return
 	var key:String=source+"_b"+str(batch)
 	var records:Dictionary=w.story.flags.get("east_loot",{}).duplicate(true)
 	if key=="" or records.has(key):return
 	var p:Vector3=enemy.position;var good="mutant_sample" if enemy.enemy_kind=="spitter" else "mutant_bone"
-	if enemy.enemy_kind=="greyhound":good="bandage" if int(enemy.get_meta("loot_index",0))%2==0 else "ammo_pouch"
 	records[key]={"position":[p.x,.04,p.z],"good":good,"taken":false};w.story.flags.east_loot=records;build_drop(w,key,records[key])
 static func build_drop(w,key:String,entry:Dictionary):
 	if entry.taken:return

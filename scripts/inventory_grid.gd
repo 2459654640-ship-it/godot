@@ -5,8 +5,9 @@ var selected=""
 var cell=75.0
 var columns=Bag.WIDTH
 var tab="all"
-func setup(hud,selected_id:String,current_tab:String):
- h=hud;selected=selected_id;tab=current_tab;name="InventoryGrid";custom_minimum_size=Vector2(cell*Bag.WIDTH,cell*Bag.HEIGHT)
+var select_piece:Callable
+func setup(hud,selected_id:String,current_tab:String,on_select:Callable=Callable()):
+ h=hud;select_piece=on_select;selected=selected_id;tab=current_tab;name="InventoryGrid";custom_minimum_size=Vector2(cell*Bag.WIDTH,cell*Bag.HEIGHT)
  var packed=Bag.pack(h.world.story,{},true)
  var categories=load("res://scripts/ui_inventory.gd").entries(h.world.story)
  for piece in packed.pieces:
@@ -21,7 +22,7 @@ func setup(hud,selected_id:String,current_tab:String):
   b.add_child(title);title.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE);title.offset_left=3;title.offset_right=-3;title.offset_top=-22;title.offset_bottom=-3
   if piece.count>1:
    var count=Label.new();count.text=str(piece.count);count.add_theme_font_size_override("font_size",14);count.add_theme_color_override("font_color",h.amber);count.mouse_filter=Control.MOUSE_FILTER_IGNORE;b.add_child(count);count.position=Vector2(b.size.x-21,4)
-  var id:String=piece.id;b.pressed.connect(func():h.set_meta("bag_selected_key",piece.key);load("res://scripts/ui_inventory.gd").render(h,tab,id));add_child(b)
+  var id:String=piece.id;b.pressed.connect(func():h.set_meta("bag_selected_key",piece.key);show_selection(id));add_child(b)
 func _draw():
  for x in Bag.WIDTH:
   for y in Bag.HEIGHT:
@@ -34,4 +35,9 @@ func _can_drop_data(at,data):
   else:Bag.occupy(used,p.at,p.size)
  return sz!=Vector2i.ZERO and Bag.fits(Vector2i(at/cell),sz,used)
 func _drop_data(at,data):
- if Bag.move_piece(h.world.story,data.bag_piece,Vector2i(at/cell)):h.world.autosave();load("res://scripts/ui_inventory.gd").render(h,tab,selected)
+ if Bag.move_piece(h.world.story,data.bag_piece,Vector2i(at/cell)):
+  h.world.autosave()
+  show_selection(selected)
+func show_selection(id:String):
+ if select_piece.is_valid():select_piece.call(id)
+ else:load("res://scripts/ui_inventory.gd").render(h,tab,id)

@@ -1,0 +1,1191 @@
+{
+  "containers": {
+    "east_district": [
+      {
+        "id": "clinic_cabinet",
+        "name": "诊所的搪瓷药柜",
+        "point": [
+          -86.6,
+          24.4
+        ],
+        "face": 0,
+        "kind": "med",
+        "pool": "medical",
+        "stockroom": true
+      },
+      {
+        "id": "clinic_apron",
+        "name": "值班长凳后的护理包",
+        "point": [
+          -86.4,
+          38.65
+        ],
+        "face": 0,
+        "kind": "bag",
+        "pool": "medical"
+      },
+      {
+        "id": "clinic_coldcase",
+        "name": "处理床旁的药品箱",
+        "point": [
+          -74.8,
+          38.6
+        ],
+        "face": -90,
+        "kind": "case",
+        "pool": "medical"
+      },
+      {
+        "id": "hospital_yard",
+        "name": "工人诊所窗下的帆布包",
+        "point": [
+          -89.5,
+          43.02
+        ],
+        "face": 0,
+        "kind": "bag",
+        "pool": "personal"
+      },
+      {
+        "id": "dispatch_ticket",
+        "name": "候车厅留置台下的票务柜",
+        "point": [
+          -53.6,
+          46.9
+        ],
+        "face": 180,
+        "kind": "cabinet",
+        "pool": "personal"
+      },
+      {
+        "id": "dispatch_firstaid",
+        "name": "留置室里配发的急救箱",
+        "point": [
+          -43.9,
+          35.6
+        ],
+        "face": -90,
+        "kind": "med",
+        "pool": "medical",
+        "stockroom": true
+      },
+      {
+        "id": "tram_satchel",
+        "name": "旧电车门边的乘务包",
+        "point": [
+          -88.4,
+          9.7
+        ],
+        "face": 0,
+        "kind": "bag",
+        "pool": "personal"
+      },
+      {
+        "id": "tram_tools",
+        "name": "电车站台西端的工具箱",
+        "point": [
+          -73.55,
+          17.8
+        ],
+        "face": 90,
+        "kind": "tool",
+        "pool": "technical"
+      },
+      {
+        "id": "forecourt_roll",
+        "name": "支线口外长凳后的雨布包",
+        "point": [
+          -56.9,
+          29.2
+        ],
+        "face": 0,
+        "kind": "bag",
+        "pool": "domestic"
+      },
+      {
+        "id": "repair_spares",
+        "name": "街道维修间西墙的备件箱",
+        "point": [
+          -46.8,
+          21.75
+        ],
+        "face": 90,
+        "kind": "tool",
+        "pool": "technical"
+      },
+      {
+        "id": "repair_satchel",
+        "name": "修配间后窗落下的包",
+        "point": [
+          16.63,
+          30.05
+        ],
+        "face": 180,
+        "kind": "bag",
+        "pool": "personal"
+      },
+      {
+        "id": "utility_shelf",
+        "name": "修配间西侧的工具柜",
+        "point": [
+          11.4,
+          26.6
+        ],
+        "face": 90,
+        "kind": "locker",
+        "pool": "mechanical"
+      },
+      {
+        "id": "tenement_drawer",
+        "name": "货运路老楼后门的抽屉",
+        "point": [
+          -77.8,
+          -15.85
+        ],
+        "face": 180,
+        "kind": "cabinet",
+        "pool": "domestic"
+      },
+      {
+        "id": "tenement_coat",
+        "name": "背巷雪下的外套卷",
+        "point": [
+          -91.95,
+          -9.55
+        ],
+        "face": -90,
+        "kind": "bag",
+        "pool": "personal"
+      },
+      {
+        "id": "freight_rubble_case",
+        "name": "货运路废屋的旅行箱",
+        "point": [
+          -55.1,
+          -5.75
+        ],
+        "face": 0,
+        "kind": "case",
+        "pool": "personal",
+        "stockroom": true
+      },
+      {
+        "id": "freight_rubble_med",
+        "name": "废屋的消防箱旁药包",
+        "point": [
+          -45.05,
+          -14.65
+        ],
+        "face": 180,
+        "kind": "bag",
+        "pool": "medical"
+      },
+      {
+        "id": "pump_service_bin",
+        "name": "泵站外侧的阀件箱",
+        "point": [
+          -36.1,
+          -17.35
+        ],
+        "face": 0,
+        "kind": "crate",
+        "pool": "mechanical"
+      },
+      {
+        "id": "pump_gate_tools",
+        "name": "泵站东墙外的工具箱",
+        "point": [
+          -23.55,
+          -19.6
+        ],
+        "face": 90,
+        "kind": "tool",
+        "pool": "technical"
+      },
+      {
+        "id": "works_boiler_case",
+        "name": "锅炉房外装卸架下的零件箱",
+        "point": [
+          -87.85,
+          -27.85
+        ],
+        "face": 0,
+        "kind": "crate",
+        "pool": "mechanical"
+      },
+      {
+        "id": "works_gantry_locker",
+        "name": "水厂装卸院的检修柜",
+        "point": [
+          -75.6,
+          -28.9
+        ],
+        "face": 90,
+        "kind": "locker",
+        "pool": "technical"
+      },
+      {
+        "id": "works_tank_crate",
+        "name": "沉淀罐巡视路边的防水箱",
+        "point": [
+          -89.4,
+          -71.4
+        ],
+        "face": 0,
+        "kind": "case",
+        "pool": "mechanical",
+        "stockroom": true
+      },
+      {
+        "id": "works_tank_tools",
+        "name": "两座澄清罐之间的油料箱",
+        "point": [
+          -69.1,
+          -68.85
+        ],
+        "face": 0,
+        "kind": "crate",
+        "pool": "mechanical"
+      },
+      {
+        "id": "works_shiftbag",
+        "name": "旧水厂围栏外的交班包",
+        "point": [
+          -57.3,
+          -21.5
+        ],
+        "face": 0,
+        "kind": "bag",
+        "pool": "domestic"
+      },
+      {
+        "id": "substation_fuses",
+        "name": "变配电所外侧的熔断器柜",
+        "point": [
+          9.3,
+          -24.86
+        ],
+        "face": 0,
+        "kind": "cabinet",
+        "pool": "electronics"
+      },
+      {
+        "id": "substation_aux",
+        "name": "变配电所外接线组的仪表箱",
+        "point": [
+          19.16,
+          -34.4
+        ],
+        "face": 90,
+        "kind": "tool",
+        "pool": "electronics",
+        "stockroom": true
+      },
+      {
+        "id": "radio_drawer",
+        "name": "民防站机架后的小备件箱",
+        "point": [
+          -22.75,
+          -68.9
+        ],
+        "face": -90,
+        "kind": "crate",
+        "pool": "electronics"
+      },
+      {
+        "id": "radio_dispatch",
+        "name": "民防站值守员的文书包",
+        "point": [
+          -35.8,
+          -58.85
+        ],
+        "face": 180,
+        "kind": "bag",
+        "pool": "archive"
+      },
+      {
+        "id": "radio_inspector",
+        "name": "民防站南窗外的检测仪箱",
+        "point": [
+          -40.55,
+          -61.7
+        ],
+        "face": -90,
+        "kind": "case",
+        "pool": "electronics"
+      },
+      {
+        "id": "impact_service",
+        "name": "断缆广场外沿的线路工具箱",
+        "point": [
+          16.15,
+          -67.9
+        ],
+        "face": 0,
+        "kind": "tool",
+        "pool": "electronics"
+      },
+      {
+        "id": "mine_haul",
+        "name": "封停矿区口的送件包",
+        "point": [
+          -46.4,
+          -51.75
+        ],
+        "face": 180,
+        "kind": "bag",
+        "pool": "technical"
+      },
+      {
+        "id": "north_stair",
+        "name": "北街坍塌楼梯旁的油布箱",
+        "point": [
+          -30.6,
+          -91.7
+        ],
+        "face": 0,
+        "kind": "case",
+        "pool": "personal"
+      },
+      {
+        "id": "north_nest",
+        "name": "北街废屋深处的民防箱",
+        "point": [
+          -21.8,
+          -94.5
+        ],
+        "face": 0,
+        "kind": "locker",
+        "pool": "archive",
+        "stockroom": true
+      },
+      {
+        "id": "north_block_food",
+        "name": "北排住宅后院的应急口粮箱",
+        "point": [
+          -75.55,
+          -85.9
+        ],
+        "face": 0,
+        "kind": "crate",
+        "pool": "provisions"
+      },
+      {
+        "id": "home_letters",
+        "name": "工人住宅书桌边的文书包",
+        "point": [
+          -25.1,
+          34.55
+        ],
+        "face": 0,
+        "kind": "bag",
+        "pool": "archive"
+      },
+      {
+        "id": "home_bedroll",
+        "name": "工人住宅卧室里的铺盖包",
+        "point": [
+          -33.2,
+          37.6
+        ],
+        "face": 0,
+        "kind": "bag",
+        "pool": "personal"
+      },
+      {
+        "id": "home_crockery",
+        "name": "工人住宅后窗下的旧木箱",
+        "point": [
+          -27.34,
+          47.85
+        ],
+        "face": 90,
+        "kind": "foot",
+        "pool": "domestic"
+      },
+      {
+        "id": "heating_tote",
+        "name": "供热院阀台西头的扳手箱",
+        "point": [
+          -56.4,
+          53.45
+        ],
+        "face": 0,
+        "kind": "tool",
+        "pool": "mechanical"
+      },
+      {
+        "id": "south_a_food",
+        "name": "南街锅炉房墙外的配给箱",
+        "point": [
+          -89.25,
+          89.8
+        ],
+        "face": 0,
+        "kind": "crate",
+        "pool": "provisions"
+      },
+      {
+        "id": "south_b_drawer",
+        "name": "南街住宅的后门抽屉",
+        "point": [
+          -51.5,
+          88.8
+        ],
+        "face": 0,
+        "kind": "cabinet",
+        "pool": "domestic"
+      },
+      {
+        "id": "south_d_case",
+        "name": "南街南侧后巷的提箱",
+        "point": [
+          4.1,
+          92.3
+        ],
+        "face": 0,
+        "kind": "case",
+        "pool": "personal"
+      },
+      {
+        "id": "south_e_bag",
+        "name": "货场工人家属楼墙外的包",
+        "point": [
+          37.6,
+          89.8
+        ],
+        "face": 0,
+        "kind": "bag",
+        "pool": "domestic"
+      },
+      {
+        "id": "south_f_oil",
+        "name": "工厂职工楼西门外的机油箱",
+        "point": [
+          70.5,
+          80.5
+        ],
+        "face": -90,
+        "kind": "crate",
+        "pool": "mechanical"
+      },
+      {
+        "id": "rail_depot_switch",
+        "name": "检修库西侧站务箱",
+        "point": [
+          54.95,
+          44.5
+        ],
+        "face": 90,
+        "kind": "cabinet",
+        "pool": "technical"
+      },
+      {
+        "id": "rail_gantry_crate",
+        "name": "吊车装卸坪的封蜡木箱",
+        "point": [
+          82.3,
+          43.05
+        ],
+        "face": 0,
+        "kind": "crate",
+        "pool": "mechanical",
+        "stockroom": true
+      },
+      {
+        "id": "rail_cargo_tin",
+        "name": "货运街东北角的金属文件箱",
+        "point": [
+          98.06,
+          30.22
+        ],
+        "face": 90,
+        "kind": "case",
+        "pool": "archive"
+      },
+      {
+        "id": "east_stores_spare",
+        "name": "东仓库西墙的机修柜",
+        "point": [
+          104.2,
+          -41.55
+        ],
+        "face": -90,
+        "kind": "locker",
+        "pool": "mechanical"
+      },
+      {
+        "id": "east_service_case",
+        "name": "东辅路尽头的线路箱",
+        "point": [
+          109.6,
+          -14.65
+        ],
+        "face": 0,
+        "kind": "tool",
+        "pool": "electronics",
+        "stockroom": true
+      },
+      {
+        "id": "east_residential_sack",
+        "name": "东住宅街树坑旁的帆布包",
+        "point": [
+          48.1,
+          54.8
+        ],
+        "face": 180,
+        "kind": "bag",
+        "pool": "domestic"
+      },
+      {
+        "id": "north_pickup_case",
+        "name": "北线接送站外的旧器材箱",
+        "point": [
+          71.9,
+          -40.4
+        ],
+        "face": 0,
+        "kind": "case",
+        "pool": "electronics"
+      },
+      {
+        "id": "reservoir_crate",
+        "name": "蓄水池南侧围栏外的工具箱",
+        "point": [
+          89.1,
+          -43.8
+        ],
+        "face": 0,
+        "kind": "tool",
+        "pool": "mechanical"
+      },
+      {
+        "id": "reservoir_lab",
+        "name": "蓄水池东北角的巡检器材柜",
+        "point": [
+          104.6,
+          -72.0
+        ],
+        "face": 180,
+        "kind": "med",
+        "pool": "electronics",
+        "stockroom": true
+      },
+      {
+        "id": "basin_north_aid",
+        "name": "蓄水池北墙外的巡检急救箱",
+        "point": [
+          81.6,
+          -79.0
+        ],
+        "face": 0,
+        "kind": "med",
+        "pool": "medical"
+      },
+      {
+        "id": "grey_sentry_kit",
+        "name": "灰狗岗哨的随身弹箱",
+        "point": [
+          37.2,
+          -5.6
+        ],
+        "face": 0,
+        "kind": "case",
+        "pool": "arms"
+      },
+      {
+        "id": "grey_courier_bin",
+        "name": "哨所后墙内的征用物资箱",
+        "point": [
+          47.0,
+          -23.4
+        ],
+        "face": 0,
+        "kind": "crate",
+        "pool": "arms",
+        "stockroom": true
+      },
+      {
+        "id": "grey_fence_aid",
+        "name": "灰狗帐篷后的急救盒",
+        "point": [
+          53.88,
+          -12.78
+        ],
+        "face": 90,
+        "kind": "med",
+        "pool": "medical"
+      }
+    ],
+    "surface": [
+      {
+        "id": "pump_hut_kit",
+        "name": "旧泵站的机修急救盒",
+        "point": [
+          -18.6,
+          8.5
+        ],
+        "face": 0,
+        "kind": "med",
+        "pool": "medical"
+      },
+      {
+        "id": "pump_yard_tins",
+        "name": "背风棚的口粮箱",
+        "point": [
+          -7.6,
+          15.0
+        ],
+        "face": 180,
+        "kind": "crate",
+        "pool": "provisions"
+      },
+      {
+        "id": "pump_reel_parts",
+        "name": "回车场西侧的接线箱",
+        "point": [
+          6.6,
+          8.9
+        ],
+        "face": 0,
+        "kind": "tool",
+        "pool": "electronics"
+      },
+      {
+        "id": "pump_cinder_case",
+        "name": "开裂路肩的工具提箱",
+        "point": [
+          12.2,
+          5.6
+        ],
+        "face": 90,
+        "kind": "case",
+        "pool": "technical"
+      },
+      {
+        "id": "pump_blade_crate",
+        "name": "旧泵房外的滤件箱",
+        "point": [
+          -20.15,
+          -13.2
+        ],
+        "face": 0,
+        "kind": "crate",
+        "pool": "mechanical"
+      },
+      {
+        "id": "pump_pipebag",
+        "name": "斜管与墙缝间的旧包",
+        "point": [
+          -9.55,
+          -6.3
+        ],
+        "face": 90,
+        "kind": "bag",
+        "pool": "personal"
+      },
+      {
+        "id": "pump_deep_parts",
+        "name": "沉淀池内侧的巡检箱",
+        "point": [
+          4.65,
+          -14.25
+        ],
+        "face": 0,
+        "kind": "locker",
+        "pool": "mechanical",
+        "stockroom": true
+      },
+      {
+        "id": "pump_south_filter",
+        "name": "背风装卸台的帆布工具包",
+        "point": [
+          -13.64,
+          12.77
+        ],
+        "face": 180,
+        "kind": "bag",
+        "pool": "technical"
+      }
+    ],
+    "grey_shelter": [
+      {
+        "id": "shelter_stocking",
+        "name": "外勤室背墙下的衣物包",
+        "point": [
+          -14.6,
+          8.4
+        ],
+        "face": 0,
+        "kind": "bag",
+        "pool": "personal"
+      },
+      {
+        "id": "shelter_medicine",
+        "name": "铺位背后的钢制药柜",
+        "point": [
+          8.9,
+          8.9
+        ],
+        "face": 180,
+        "kind": "med",
+        "pool": "medical"
+      },
+      {
+        "id": "shelter_intake",
+        "name": "入口墙角的征用口粮箱",
+        "point": [
+          -8.9,
+          4.2
+        ],
+        "face": 90,
+        "kind": "foot",
+        "pool": "provisions"
+      },
+      {
+        "id": "shelter_cabinet",
+        "name": "修械工位北墙的器材柜",
+        "point": [
+          2.05,
+          -7.6
+        ],
+        "face": 0,
+        "kind": "locker",
+        "pool": "arms",
+        "stockroom": true
+      }
+    ]
+  },
+  "wildlife": [
+    {
+      "id": "west_clinic",
+      "name": "诊所后巷的食腐兽",
+      "rect": [
+        -96,
+        44,
+        17,
+        13
+      ],
+      "spawns": [
+        [
+          -93,
+          50
+        ],
+        [
+          -87,
+          48
+        ],
+        [
+          -93,
+          55
+        ],
+        [
+          -82,
+          53
+        ]
+      ],
+      "kinds": [
+        "mutant",
+        "mutant",
+        "pouncer"
+      ],
+      "purpose": "诊所后巷的兽群从墙边钻了出来。可以从院外街道绕行。"
+    },
+    {
+      "id": "plant_sludge",
+      "name": "水厂澄清罐边的囊喉兽",
+      "rect": [
+        -94,
+        -74,
+        9,
+        17
+      ],
+      "spawns": [
+        [
+          -91.6,
+          -68.1
+        ],
+        [
+          -88,
+          -73
+        ],
+        [
+          -92,
+          -61
+        ],
+        [
+          -87.2,
+          -63
+        ]
+      ],
+      "kinds": [
+        "spitter",
+        "mutant",
+        "spitter"
+      ],
+      "purpose": "澄清罐的沉渣里藏着囊喉兽。进巡视路搜器材前，先留一条回装卸院的路线。"
+    },
+    {
+      "id": "north_ruin",
+      "name": "北街废屋的伏扑兽",
+      "rect": [
+        -39,
+        -99,
+        23,
+        13
+      ],
+      "spawns": [
+        [
+          -36,
+          -88.1
+        ],
+        [
+          -28,
+          -87.9
+        ],
+        [
+          -20.3,
+          -94.9
+        ],
+        [
+          -17.4,
+          -90.4
+        ]
+      ],
+      "kinds": [
+        "pouncer",
+        "mutant",
+        "pouncer"
+      ],
+      "purpose": "北街废屋里有伏扑兽。断墙能遮住身体，别站在缺口正前方。"
+    },
+    {
+      "id": "south_courts",
+      "name": "南街后院的觅食群",
+      "rect": [
+        -37,
+        86,
+        21,
+        12
+      ],
+      "spawns": [
+        [
+          -32.3,
+          91.6
+        ],
+        [
+          -26.7,
+          92.1
+        ],
+        [
+          -18.8,
+          88.9
+        ],
+        [
+          -21,
+          95.5
+        ]
+      ],
+      "kinds": [
+        "mutant",
+        "pouncer",
+        "mutant"
+      ],
+      "purpose": "南街后院的食腐兽正在翻找食物。南街主路仍可绕过院子。"
+    },
+    {
+      "id": "east_service",
+      "name": "东辅路的混合兽群",
+      "rect": [
+        101,
+        -19,
+        16,
+        24
+      ],
+      "spawns": [
+        [
+          110,
+          -15.1
+        ],
+        [
+          114,
+          -9.1
+        ],
+        [
+          108.5,
+          -1.6
+        ],
+        [
+          112.4,
+          3.2
+        ]
+      ],
+      "kinds": [
+        "pouncer",
+        "spitter",
+        "mutant"
+      ],
+      "purpose": "东辅路上有一群混合兽。想开线路箱的话，先留意废车和路口的掩护。"
+    },
+    {
+      "id": "basin_wall",
+      "name": "蓄水池北墙外的囊喉兽",
+      "rect": [
+        75,
+        -91,
+        29,
+        13
+      ],
+      "spawns": [
+        [
+          78.4,
+          -85.1
+        ],
+        [
+          87.5,
+          -85.2
+        ],
+        [
+          101.5,
+          -83.1
+        ],
+        [
+          93.6,
+          -89.4
+        ]
+      ],
+      "kinds": [
+        "spitter",
+        "mutant",
+        "pouncer"
+      ],
+      "purpose": "巡检道外侧有囊喉兽。西面的接送路可以避开这段。"
+    },
+    {
+      "id": "rail_drain",
+      "name": "货场外排水沟的伏扑兽",
+      "rect": [
+        33,
+        55,
+        24,
+        14
+      ],
+      "spawns": [
+        [
+          38.2,
+          57.4
+        ],
+        [
+          46.2,
+          64.6
+        ],
+        [
+          50.7,
+          61.5
+        ],
+        [
+          53.5,
+          66.5
+        ]
+      ],
+      "kinds": [
+        "mutant",
+        "pouncer"
+      ],
+      "purpose": "铁道以东的路肩上有伏扑兽。留意它起跳前伏低的动作。"
+    }
+  ],
+  "patrols": [
+    {
+      "id": "west_pair",
+      "label": "灰狗搜掠小队",
+      "strengths": [
+        "scout",
+        "rifle"
+      ],
+      "routes": [
+        [
+          [
+            -93,
+            -12
+          ],
+          [
+            -93,
+            2
+          ],
+          [
+            -89,
+            3
+          ],
+          [
+            -91,
+            -11
+          ]
+        ],
+        [
+          [
+            -68,
+            66
+          ],
+          [
+            -61,
+            67
+          ],
+          [
+            -57,
+            62
+          ],
+          [
+            -63,
+            59
+          ]
+        ],
+        [
+          [
+            -50.2,
+            -39
+          ],
+          [
+            -47,
+            -36
+          ],
+          [
+            -46,
+            -28
+          ],
+          [
+            -51,
+            -28
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "north_pair",
+      "label": "灰狗拾荒队",
+      "strengths": [
+        "rifle",
+        "scout"
+      ],
+      "routes": [
+        [
+          [
+            -34,
+            -81
+          ],
+          [
+            -25,
+            -81
+          ],
+          [
+            -23,
+            -76
+          ],
+          [
+            -34,
+            -76
+          ]
+        ],
+        [
+          [
+            -9,
+            -48
+          ],
+          [
+            -4,
+            -49
+          ],
+          [
+            9,
+            -47
+          ],
+          [
+            14,
+            -48
+          ]
+        ],
+        [
+          [
+            -82,
+            -87
+          ],
+          [
+            -68,
+            -87
+          ],
+          [
+            -63,
+            -83
+          ],
+          [
+            -72,
+            -83
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "east_patrol",
+      "label": "灰狗重装游荡者",
+      "strengths": [
+        "heavy"
+      ],
+      "routes": [
+        [
+          [
+            48,
+            55
+          ],
+          [
+            57,
+            53
+          ],
+          [
+            62,
+            57
+          ],
+          [
+            54,
+            59
+          ]
+        ],
+        [
+          [
+            97,
+            1.8
+          ],
+          [
+            103,
+            1
+          ],
+          [
+            105,
+            13
+          ],
+          [
+            100,
+            16
+          ]
+        ],
+        [
+          [
+            78,
+            -83
+          ],
+          [
+            93,
+            -85
+          ],
+          [
+            102,
+            -80
+          ],
+          [
+            94,
+            -78
+          ]
+        ]
+      ]
+    }
+  ]
+}

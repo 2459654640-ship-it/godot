@@ -36,7 +36,7 @@ func run():
   var b=parcel.building
   check(not map_builder.road_conflict(plan,Vector3(b[0],0,b[1]),Vector2(b[2],b[3])),"authored building clears every road: "+parcel.id)
  check(w.navigation.points.size()>25000 and w.navigation.points.size()<48000,"city district graph covers rebuilt layout at bounded density")
- check(w.grey_camp.guards.size()==5,"camp sentries and separate street scavengers both exist")
+ check(w.grey_camp.groups.camp.guards.size()==3 and w.grey_camp.guards.size()==10,"camp sentries and seeded street scavengers both exist")
  for target_id in ["city_clinic","city_medicine","city_radio_log","city_radio_panel","raid_container_clinic_drawer","east_mine_entry"]:
   var target:Vector3=w.targets[target_id].pos;var path=w.navigation.path(w.player.position,target)
   check(not path.is_empty() and path[-1].distance_to(target)<1.7,"walkable approach to "+target_id)

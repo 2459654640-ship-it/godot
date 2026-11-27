@@ -198,12 +198,16 @@ func setup(w):
 	toast_label.add_theme_color_override("font_outline_color",Color("0b1516"))
 	scrim=ColorRect.new()
 	add_child(scrim)
+	scrim.z_index=10
 	scrim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	scrim.color=Color(0.02,0.05,0.055,0.58)
 	scrim.visible=false
 	scrim.mouse_filter=Control.MOUSE_FILTER_STOP
 	modal=PanelContainer.new()
 	add_child(modal)
+	modal.z_index=11
+	toast_label.z_index=12
+	toast_label.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	modal.add_theme_stylebox_override("panel",style(Color("101c1e"),Color("766747"),1,0))
 	modal.visible=false
 	UiSurface.attach(modal)
@@ -438,7 +442,9 @@ func set_prompt(id:String):
 	var t=world.targets[id]
 	var actor=world.target_actor(id)
 	var live_position:Vector3=actor.global_position if actor else t.pos
-	prompt.text="[ E ]   "+("交谈 · " if t.kind=="talk" else ("拾取 · " if t.kind=="collect" else "调查 · "))+t.label
+	var verb:String={"talk":"交谈","collect":"拾取"}.get(t.kind,"调查")
+	if t.kind=="loot":verb="查看" if preload("res://scripts/raid_loot.gd").record(world,id).get("searched",false) else "搜索"
+	prompt.text="[ E ]   "+verb+" · "+t.label
 	if world.InteractionRegions.contains(world.story,id,world.player.position):
 		prompt.text="[ E ]   "+world.InteractionRegions.label(world.story,id)+" · 已进入参与区域"
 	if world.interaction_candidates.size()>1:
@@ -484,7 +490,7 @@ func tick(delta:float):
 		if radiation_tier>=0:toast("辐射状态："+world.story.Economy.Radiation.state(world.story).name+"。"+world.story.Economy.Radiation.state(world.story).detail,8)
 		radiation_tier=tier
 	prompt.visible=not modal_visible()
-	if not modal_visible() and world.nearest!="" and not world.waiting_shift:set_prompt(world.nearest)
+	if not modal_visible() and world.nearest!="" and not world.waiting_shift and world.loot_search.is_empty():set_prompt(world.nearest)
 	location_label.text=world.floor_name()+"  /  "+world.room_name
 	status_label.text=str(world.story.flags.get("story_day",16))+" XI 1982  /  "+str(world.story.flags.get("story_time","07:42"))+" · "+("旅程" if comic_active or world.story.ending else (("换班" if world.phase>=8 else "早班") if world.floor_id in ["life","labor"] else "探索"))
 	var guidance=JSON.stringify([Journal.active(world.story),world.story.economy.health,world.story.economy.food,world.story.economy.radiation,Journal.leads(world.story).size()])

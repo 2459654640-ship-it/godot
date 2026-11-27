@@ -31,7 +31,7 @@ func run():
  w=load("res://scenes/east_district.tscn").instantiate();root.add_child(w);current_scene=w;await frames();freeze()
  w.story.give("mask");w.story.give("filter");w.story.give("revolver");w.story.equip_weapon("revolver");w.story.flags.weapon_drawn=true
  var camp=w.grey_camp;var g=camp.guards[0]
- check(camp.guards.size()==5 and not w.combat.active,"camp has three sentries and two roaming scavengers without starting automatic combat")
+ check(camp.groups.camp.guards.size()==3 and camp.guards.size()==10 and not w.combat.active,"sentries and seven roaming scavengers start without forced combat")
  check(g.enemy_kind=="greyhound" and g.sprite.texture.resource_path.ends_with("greyhound_guard.png") and g.sprite.shaded,"bandits use their own lit, equipped human art")
  check(g.sprite.hframes==5 and g.sprite.vframes==4 and is_equal_approx(g.sprite.pixel_size*324,1.76),"new animation has matching adult height, three gait poses and separate aim")
  place_player(Vector3(43.5,.04,-19))
@@ -62,9 +62,9 @@ func run():
  w.player.sneaking=true;check(not g.hears_player(),"quiet footsteps at the same distance do not create suspicion")
  g.position=Vector3(33,.04,-16);g.facing=Vector3.BACK;place_player(Vector3(33,.04,-10))
  check(not g.sees_player(),"actual stacked crates block line of sight")
- var health=w.story.economy.health;g.windup=.01;g.cooldown=0;camp.alarm=true;g._physics_process(.02)
+ var health=w.story.economy.health;g.windup=.01;g.cooldown=0;camp.raise_alarm("camp",w.player.position,"测试");g._physics_process(.02)
  check(w.story.economy.health==health and g.windup<=0,"stepping behind cover prevents an aimed shot from dealing damage")
- camp.alarm=false;g.windup=0;g.suspicion=0;g.position=Vector3(34,.04,-8);g.facing=Vector3.BACK;place_player(Vector3(34,.04,-4),true)
+ camp.stand_down("camp");g.windup=0;g.suspicion=0;g.position=Vector3(34,.04,-8);g.facing=Vector3.BACK;place_player(Vector3(34,.04,-4),true)
  g._physics_process(.2);check(g.suspicion>0 and g.suspicion<.95 and not camp.alarm,"brief sighting raises visible suspicion instead of instantly revealing the player")
  place_player(Vector3(34,.04,-12));var prior=g.suspicion;g._physics_process(.2)
  check(g.suspicion<prior,"suspicion falls after breaking the view cone")
@@ -78,32 +78,35 @@ func run():
  place_player(Vector3(20,.04,40));w.player.use_override=true;w.player.motion_override=Vector2.RIGHT;Input.action_press("sneak");w.player._physics_process(.2)
  check(w.player.sneaking and Vector2(w.player.velocity.x,w.player.velocity.z).length()<1.4,"Ctrl physically slows the player and retains the existing animation controller")
  Input.action_release("sneak");w.player.motion_override=Vector2.ZERO;w.player.use_override=false
- # Unprovoked firing is possible; ammunition is taken after the retry checkpoint.
- place_player(Vector3(32,.04,-21),true);camp.checkpoint={};var rounds=w.combat.clip;var supplies=w.story.economy.handmade
+ # A shot alerts nearby guards. Surface combat has no lossless retry checkpoint.
+ place_player(Vector3(32,.04,-21),true);var rounds=w.combat.clip
  w.combat.aim=Vector3(28,.8,-21);w.combat.cooldown=0;check(w.combat.shoot(),"manual weapons can be fired before any automatic encounter")
  check(camp.alarm and w.combat.active and w.combat.encounter=="grey_camp" and w.combat.clip==rounds-1,"nearby gunfire alerts the actual camp and consumes one round")
- check(w.combat.checkpoint.get("flags",{}).get("weapon_clip",0)==rounds,"checkpoint precedes the player's first provocative shot")
- for guard in camp.guards:guard.suspicion=.9;guard.last_known=Vector3(32,.04,-21)
- place_player(Vector3(-64,.04,46));camp.lost_time=10.1;camp._physics_process(.1)
- check(not camp.alarm and not w.combat.active and camp.guards.all(func(e):return e.suspicion==0),"breaking sight and retreating lets the player disengage and restores patrol behavior")
+ check(w.combat.checkpoint.is_empty(),"roaming fights never create a reusable pre-fight checkpoint")
+ for group in camp.groups.values():
+  if group.alarm:
+   group.lost=10.1
+   for guard in group.guards:guard.suspicion=.9;guard.last_known=Vector3(32,.04,-21)
+ place_player(Vector3(-64,.04,46));camp._physics_process(.1)
+ check(not camp.alarm and not w.combat.active and camp.groups.camp.guards.all(func(e):return e.suspicion==0),"breaking sight and retreating lets the player disengage and restores patrol behavior")
  # Save/load must not revive the first dead guard or lose the others' controllers.
- place_player(Vector3(32,.04,-21));camp.raise_alarm("测试");camp.guards[0].damage(1000,true);camp.guards[1].hp=39;camp.guards[2].route_index=2
- var snapshot=w.save_snapshot();check(Store.valid(snapshot),"live bandit combat and its pre-fight checkpoint use the supported save schema")
+ place_player(Vector3(32,.04,-21));camp.raise_alarm("camp",w.player.position,"测试");camp.guards[0].damage(1000,true);camp.guards[1].hp=39;camp.guards[2].route_index=2
+ var snapshot=w.save_snapshot();check(Store.valid(snapshot),"live bandit combat uses the supported save schema")
  get_root().get_node("Session").enter(snapshot,"east_district",w.player.position);await frames(10);w=current_scene;freeze();camp=w.grey_camp
  check(camp.guards[0].hp<=0 and camp.guards[1].hp==39 and camp.guards[2].route_index==2,"loading preserves the dead guard slot, injured guard and patrol progress")
  check(camp.alarm and w.combat.active and w.combat.enemies.all(func(e):return e.has_method("sees_player")),"restored combat replaces every guard with a perception controller")
  var goods=w.story.flags.raid_containers.values();check(goods.any(func(e):return e.loot.has("grey_carbine") and e.loot.has("mask")),"human guards leave searchable weapons and protective equipment")
  w.story.flags.east_home="commune";w.story.flags.east_trip_active=true;place_player(w.targets.east_commune_entry.pos)
  w.perform("c_east_enter_commune","east_commune_entry");await journey()
- check(w.floor_id=="commune" and not w.story.flags.get("east_retreat_encounter",{}).get("checkpoint",{}).is_empty(),"an actual indoor retreat retains the original pre-fight checkpoint")
+ check(w.floor_id=="commune" and not w.story.f("raid_active") and w.story.flags.get("east_retreat_encounter",{}).is_empty(),"actual settlement extraction closes the expedition and its combat record")
  w.perform("c_east_depart_commune","commune_leave");await journey();camp=w.grey_camp
- check(w.floor_id=="east_district" and camp.alarm and camp.guards[0].hp<=0 and camp.guards[1].hp==39,"returning outdoors resumes the same partially resolved human encounter")
+ check(w.floor_id=="east_district" and not camp.alarm and camp.guards[0].hp<=0 and camp.guards[1].hp==39,"the next expedition clears alerts while the inhabited camp retains casualties")
  var count_before=w.combat.enemies.size();w.combat.retry();check(w.combat.enemies.size()==count_before and w.story.f("raid_active"),"raid combat cannot invoke the old lossless checkpoint retry")
- camp.stand_down()
- w.combat.begin("east_road");camp.raise_alarm("测试混合遭遇")
+ camp.stand_down("camp")
+ w.combat.begin("east_road");camp.raise_alarm("camp",w.player.position,"测试混合遭遇")
  for enemy in w.combat.enemies.duplicate():
   if enemy.enemy_kind!="greyhound":enemy.damage(1000)
- place_player(Vector3(-64,.04,46));camp.lost_time=10.1;camp._physics_process(.1)
+ place_player(Vector3(-64,.04,46));camp.groups.camp.lost=10.1;camp._physics_process(.1)
  check(not w.combat.active and w.story.f("battle_east_road") and not w.story.f("grey_camp_cleared"),"disengaging living bandits after killing nearby creatures correctly closes a mixed encounter")
  for guard in camp.guards.duplicate():guard.damage(1000,true)
  check(w.story.f("grey_camp_cleared") and w.story.f("battle_grey_camp") and not w.combat.active,"direct combat also resolves the inhabited camp")
