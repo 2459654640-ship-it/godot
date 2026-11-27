@@ -17,7 +17,7 @@ static func build(w):
  for x in [-7,7]:
   k.pipe(Vector3(x,2.6,-8),Vector3(x,2.6,8),.12,"rust")
   for z in [-6,0,6]:k.box("ShelterPipeBracket",Vector3(x,2.6,z),Vector3(.4,.15,.15),"old_iron")
- for p in [Vector3(-4,2.5,-3),Vector3(5,2.5,-4),Vector3(5,2.5,5),Vector3(-4,2.5,5)]:k.lamp(p,true,1.4,8)
+ for p in [Vector3(-4,2.5,-8.79),Vector3(5,2.5,-8.79),Vector3(8.2,2.5,.21),Vector3(-2,2.5,.21)]:k.lamp(p,true,1.4,8)
  k.box("ShelterExitDoor",Vector3(-7.5,1.1,9),Vector3(1.8,2.2,.16),"corrugated",true)
  k.label("ВЫХОД",Vector3(-7.5,2.35,8.85),19,Color("d4c4a3"))
  # Washing corner and ration shelves occupy the entry side, leaving the exit path open.

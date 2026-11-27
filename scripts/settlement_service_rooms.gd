@@ -21,8 +21,8 @@ static func commune(k):
 	k.box("ProduceDrainGrille",Vector3(-12.96,.026,14.28),Vector3(.24,.019,2.63),"old_iron")
 	for z in range(13,16):
 		for i in 6:k.box("DrainBar",Vector3(-12.96,.039,z+i*.15),Vector3(.18,.009,.025),"metal")
-	k.lamp(Vector3(-25.2,2.5,17.7),true,1.4,6)
-	k.lamp(Vector3(-11.85,2.5,14.3),false,1.1,5)
+	k.lamp(Vector3(-21.6,2.5,11.22),true,1.4,6)
+	k.lamp(Vector3(-12.1,2.5,11.22),false,1.1,5)
 	# The airlock side room keeps used filters and coats out of the family rooms.
 	for x in [24.2,25.4,26.6,27.8]:k.locker(Vector3(x,0,8.3),1.72)
 	k.bench(Vector3(28.7,0,6),1.85,true,PI/2)
@@ -43,7 +43,7 @@ static func sech(k):
 		for y in [.43,1.06,1.69]:
 			k.box("LinenShelf",Vector3(x,y,24.85),Vector3(1.18,.09,.7),"wood",true)
 			k.box("SpareBlanket",Vector3(x,y+.14,24.85),Vector3(.96,.17,.51),"cloth")
-	var lamp=k.lamp(Vector3(-10,2.5,25.76),true,1.75,6);lamp.light_color=Color("efbd83")
+	var lamp=k.lamp(Vector3(-7.5,2.5,20.22),true,1.75,6);lamp.light_color=Color("efbd83")
 	# A rail-side jib and a hand-cart make the short end bay usable for work.
 	k.box("RailJibPostFoot",Vector3(19.2,.13,-28.2),Vector3(.63,.26,.63),"concrete",true)
 	k.box("RailJibPost",Vector3(19.2,1.55,-28.2),Vector3(.25,3.1,.26),"old_iron",true)
