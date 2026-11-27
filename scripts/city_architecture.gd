@@ -47,7 +47,9 @@ static func room(k,p:Vector3,size:Vector2,id:String):
  for sign in [-1,1]:
   k.box("CityInteriorSide",p+Vector3(sign*size.x/2,1.75,0),Vector3(.36,3.5,size.y),mat,true)
   # Front wings frame a generous central entrance; nothing crosses the threshold.
-  k.box("CityInteriorFrontWing",p+Vector3(sign*(size.x/4+.65),1.3,size.y/2),Vector3(size.x/2-1.3,2.6,.36),mat,true)
+  if id=="south_corner":
+   apartment_front(k,p,size,sign)
+  else:k.box("CityInteriorFrontWing",p+Vector3(sign*(size.x/4+.65),1.3,size.y/2),Vector3(size.x/2-1.3,2.6,.36),mat,true)
  k.box("CityInteriorDoorLintel",p+Vector3(0,2.95,size.y/2),Vector3(size.x,.65,.4),mat)
  for x in [-1.3,1.3]:k.box("CityDoorFrame",p+Vector3(x,1.35,size.y/2+.2),Vector3(.12,2.7,.12),"old_iron")
  for z in [-size.y*.3,0,size.y*.3]:
@@ -55,9 +57,9 @@ static func room(k,p:Vector3,size:Vector2,id:String):
   beam.set_meta("interior_rect",Rect2(p.x-size.x*.5,p.z-size.y*.5,size.x,size.y))
  # Partially collapsed roof: the room still reads from the street, and fades on entry.
  var interior=Rect2(p.x-size.x*.5,p.z-size.y*.5,size.x,size.y)
- var roof=k.box("CityInteriorRoof",p+Vector3(0,3.48 if id=="south_corner" else 3.65,0),Vector3(size.x,.18,size.y),"district_concrete" if id=="south_corner" else "corrugated")
- roof.set_meta("interior_rect",interior)
  if id!="south_corner":
+  var roof=k.box("CityInteriorRoof",p+Vector3(0,3.65,0),Vector3(size.x,.18,size.y),"corrugated")
+  roof.set_meta("interior_rect",interior)
   var snow=k.box("CityInteriorRoofSnow",p+Vector3(0,3.79,0),Vector3(size.x-.2,.06,size.y-.2),"district_roof_snow")
   snow.set_meta("interior_rect",interior)
  if id=="clinic":
@@ -124,6 +126,24 @@ static func room(k,p:Vector3,size:Vector2,id:String):
   k.box("ApartmentStoveDoor",p+Vector3(-5,.55,8.83),Vector3(.55,.45,.04),"rust")
   k.box("ApartmentWallPicture",p+Vector3(-3,1.8,-size.y/2+.2),Vector3(1.1,.8,.04),"wood")
   k.box("ApartmentPicturePaper",p+Vector3(-3,1.8,-size.y/2+.23),Vector3(.9,.6,.015),"paper")
+
+static func apartment_front(k,p:Vector3,size:Vector2,side:int):
+ # A boarded window can be read from the sidewalk. The old flush roof is
+ # absent here; one wing is open to snow below the fractured upper slab.
+ var width=size.x/2-1.3
+ var x=p.x+side*(size.x/4+.65)
+ var z=p.z+size.y/2
+ k.box("ApartmentMasonrySill",Vector3(x,.51,z),Vector3(width,1.02,.36),"district_brick",true)
+ k.box("ApartmentMasonryLintel",Vector3(x,2.43,z),Vector3(width,.34,.36),"district_brick")
+ for side2 in [-1,1]:
+  var jamb=(width-1.43)/2
+  k.box("ApartmentOuterWindowPier",Vector3(x+side2*(.715+jamb/2),1.65,z),Vector3(jamb,1.26,.36),"district_brick",true)
+  k.box("ApartmentPaintedWindowFrame",Vector3(x+side2*.712,1.64,z+.02),Vector3(.084,1.30,.18),"frosted_steel")
+ k.box("ApartmentStoneSillCap",Vector3(x,1.05,z+.105),Vector3(1.61,.11,.42),"washed_concrete")
+ k.box("ApartmentPlywoodBacking",Vector3(x,1.60,z-.10),Vector3(1.40,1.04,.1),"wood")
+ for y in [1.39,1.89]:
+  var plank=k.box("EvacuatedHomeBoarding",Vector3(x,y,z+.018),Vector3(1.45,.16,.065),"old_iron")
+  plank.rotation.z=.062*side
 
 static func factory(k):
  Ground.apron(k,Vector2(-73,-28),Vector2(33,13))
