@@ -363,5 +363,5 @@
 
 ## v35 煤运转移与星城终局
 
-- [休养床边](../assets/cinematics/mine_brother_v35.png)和[提升间停摆](../assets/cinematics/mine_lift_v35.png)用于安娜线的新过场。
+- [休养床边](../assets/cinematics/mine_brother_v35.png)、[提升间停摆](../assets/cinematics/mine_lift_v35.png)和[返站后](../assets/cinematics/mine_home_v35.png)用于安娜线的新过场。
 - [煤运砖墙](../assets/visual/mine_brick_v35.png)用于矿区实际墙体。新提升设备、护栏、低地台、接车口和星城调度台为工程内的组合几何。

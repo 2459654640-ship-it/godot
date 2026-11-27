@@ -106,7 +106,7 @@ static func sync(w):
   if is_instance_valid(light):light.visible=pair[1]
  if available(w.story):
   for entry in [["rescue35_lift",LIFT],["rescue35_handoff",RESERVE]]:
-   if not w.targets.has(entry[0]):w.target(entry[0],entry[1],data().interactions[entry[0]].name)
+   if not w.targets.has(entry[0]):w.target(entry[0],entry[1],data().interactions[entry[0]].name,"talk")
  else:
   w.targets.erase("rescue35_lift");w.targets.erase("rescue35_handoff")
 

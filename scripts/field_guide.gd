@@ -5,6 +5,8 @@ const CITY_ENTRIES={"commune":"east_commune_entry","sech":"east_sech_entry","lab
 const AREAS={"surface_yard":Vector3(0,0,4),"surface_pool":Vector3(4,0,-10),"pump":Vector3(-12,0,-6),"workshop":Vector3(-1,0,-5),"warehouse":Vector3(12,0,-6)}
 static func bridge(s,task:Dictionary)->Dictionary:
  var here:String=s.context.get("floor","");var there:String=task.place
+ # A stale radio hint cannot prescribe abandoning a local pump-station survey.
+ if here=="surface" and task.id=="signal_trace":return {}
  var out=task.duplicate();out["destination_place"]=there;out["remote_step"]=task.step
  var target="";var text=""
  if here=="east_district" and there in ["commune","sech"] and not s.Campaign.District.can_enter_home(s,there):
@@ -28,17 +30,19 @@ static func stage(s,q:Dictionary,current:Dictionary)->Dictionary:
  if q.id in ["surface_survey","d6_first_duty"] and here=="surface":
   out.place=here
   if s.f("surface_sample_sealed"):out.target="surface_exit";out.step="样本已封好。回西南检修梯，再沿地表返回"+(" D-6 支线，向中尉交付。" if q.id=="d6_first_duty" else ("谢契支线，向军需处交付。" if s.flags.get("east_home","")=="sech" or s.f("surface_from_sech") else "公社支线，向守备班交付。"))
+  elif s.f("surface_drain_open"):
+   out.target="surface_sample"
+   out.step="下池已清理。到沉积层采样口按 E，封存委托样本；随后回西南检修梯。" if s.f("battle_surface_pool") else "进入北侧下池，清理采样口附近的兽群。喷吐可借挡板躲避，仍可从西南检修梯撤回。"
   elif not s.f("surface_notes"):out.target="surface_board";out.step="先看西南控制箱旁的排水图，确认下池入口；检修梯旁可领首次补给。"
   elif not s.f("battle_surface_yard"):out.target="surface_valve";out.step="去院落运货路，清理堵在泄水阀前的兽群。按 1 拔枪，借混凝土挡板侧移避开扑击。"
-  elif not s.f("surface_drain_open"):out.target="surface_valve";out.step="院落通路已清理。到西侧泄水阀按 E，按图排低水位。"
-  elif not s.f("battle_surface_pool"):out.target="surface_sample";out.step="进入北侧下池，清理采样口附近的兽群；喷吐可借挡板躲避，仍可从西南检修梯撤回。"
-  else:out.target="surface_sample";out.step="下池已清理。到沉积层采样口按 E，封存委托样本；随后回西南检修梯。"
+  else:out.target="surface_valve";out.step="院落通路已清理。到西侧泄水阀按 E，按图排低水位。"
  return out
 static func point(w,task:Dictionary)->Vector3:
  if task.is_empty() or task.place!=w.floor_id:return Vector3.INF
  if task.id in ["surface_survey","d6_first_duty"] and w.floor_id=="surface" and w.story.f("surface_notes"):
-  if not w.story.f("battle_surface_yard"):return AREAS.surface_yard
-  if w.story.f("surface_drain_open") and not w.story.f("battle_surface_pool"):return AREAS.surface_pool
+  if not w.story.f("surface_sample_sealed"):
+   if not w.story.f("surface_drain_open") and not w.story.f("battle_surface_yard"):return AREAS.surface_yard
+   if w.story.f("surface_drain_open") and not w.story.f("battle_surface_pool"):return AREAS.surface_pool
  if w.targets.has(task.target):return w.targets[task.target].pos
  return Vector3.INF
 static func briefing(s,task:Dictionary)->Dictionary:

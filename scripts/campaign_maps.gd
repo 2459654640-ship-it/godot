@@ -327,6 +327,12 @@ static func coal_patient_available(s)->bool:
 static func people(w):
 	if w.floor_id=="commune" and w.story.f("anna_outcome_done"):
 		w.person("commune_aleksei",Vector3(-2.9,0,20),"cloth",true,"coal_brother");w.npcs.commune_aleksei.stationary=true
+	if w.floor_id=="coal":
+		w.person("mine_hoist_operator",Vector3(-31.35,0,-3.95),"cloth",false,"ambient_worker")
+		w.npcs.mine_hoist_operator.stationary=true
+		if w.story.f("anna_rescue_started") and not w.story.f("anna_outcome_done"):
+			w.person("mine_transfer_attendant",Vector3(-20.05,0,-25.03),"cloth",false,"ambient_woman")
+			w.npcs.mine_transfer_attendant.stationary=true
 	if w.floor_id=="coal" and w.story.f("anna_rescue_started") and not w.story.f("anna_outcome_done"):
 		w.person("mine_anna",Vector3(7,0,-5.3),"cloth",true,"anna");w.npcs.mine_anna.stationary=true
 	if w.floor_id=="railfront":preload("res://scripts/frontline.gd").people(w);return

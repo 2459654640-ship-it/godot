@@ -617,7 +617,7 @@ func _physics_process(delta):
 	hud.tick(delta)
 
 func target_actor(id:String):
-	return npcs.get({"armory":"armorer","main_gate":"main_guard","d6_return_desk":"commander","front_veteran":"plant_veteran"}.get(id,id))
+	return npcs.get({"armory":"armorer","main_gate":"main_guard","d6_return_desk":"commander","front_veteran":"plant_veteran","rescue35_lift":"mine_hoist_operator","rescue35_handoff":"mine_transfer_attendant"}.get(id,id))
 
 func find_nearest():
 	story.context.east_side=player.position.x>24.5 if floor_id=="east_district" else false

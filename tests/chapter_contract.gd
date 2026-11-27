@@ -73,12 +73,9 @@ func run():
 			w.hud.show_shop();check(w.hud.modal_visible(),"shop renders")
 			w.hud.show_comic("intro");check(w.hud.comic_active,"intro UI renders")
 			w.story.flags.comic.node="intro_semyon";w.story.flags.comic.line_index=999;w.hud.show_comic();await frames(3)
-			var reply_count=0
-			for control in w.hud.modal.find_children("*","Button",true,false):
-				if control.text in ["×","暂停","暂停  Esc"]:continue
-				reply_count+=1
+			for control in w.hud.speech_buttons:
 				check(control.get_global_rect().end.y<w.hud.modal.get_global_rect().end.y-30,"comic replies stay above footer and do not require scrolling")
-			check(reply_count==2,"both comic choices visible together")
+			check(w.hud.speech_buttons.size()==2,"both comic choices visible together")
 			check(w.hud.modal.position==Vector2.ZERO and w.hud.modal.size==w.hud.get_viewport_rect().size,"comic covers the entire viewport")
 			var node=w.story.flags.comic.node
 			w.hud.show_comic_pause();w.hud.show_inventory();w.hud.close()
