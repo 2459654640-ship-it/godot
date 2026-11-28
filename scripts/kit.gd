@@ -502,6 +502,10 @@ func new_veil_material(base:StandardMaterial3D)->ShaderMaterial:
 	material.set_shader_parameter("normal_strength",0.0)
 	material.set_shader_parameter("base_color",base.albedo_color)
 	material.set_shader_parameter("snow_finish",bool(base.get_meta("roof_snow",false)))
+	if base.get_meta("winter_roof",false):
+		material.set_shader_parameter("winter_roof",true)
+		material.set_shader_parameter("roof_snow_map",preload("res://assets/visual/art28_snow.png"))
+	if base.get_meta("winter_masonry",false):material.set_shader_parameter("winter_masonry",true)
 	material.set_shader_parameter("has_texture",base.albedo_texture!=null)
 	if base.albedo_texture:material.set_shader_parameter("albedo_map",base.albedo_texture)
 	material.set_shader_parameter("triplanar",base.uv1_triplanar)

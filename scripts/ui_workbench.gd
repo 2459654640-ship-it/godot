@@ -480,50 +480,7 @@ static func dimensions(s,id:String)->String:
  return "%d × %d 格"%[size.x,size.y]+("   ·   收购 %d 发 / 件"%resale if resale>0 else "")
 
 static func field_transfer(h,target:String,selected:String=""):
- var w=h.world;var s=w.story;var raid=load("res://scripts/raid_loot.gd")
- if not raid.can_reach(w,target) or not raid.safe(w):h.toast("需要在安全位置靠近容器。");return
- var rec:Dictionary=raid.record(w,target)
- if rec.is_empty() or not rec.searched:return
- var content=shell(h,rec.title,"ПОЛЕВАЯ ОПИСЬ  /  地表搜刮","field_transfer")
- var panes=row(content,18);panes.size_flags_vertical=Control.SIZE_EXPAND_FILL
- var bag=panel(h,panes,512);bag.get_parent().get_parent().size_flags_horizontal=0
- var pack=Bag.pack(s,{},true)
- var selection=pack.pieces.filter(func(p):return p.key==h.get_meta("bag_selected_key","") and p.id==selected)
- words(h,bag,"随身背包  ·  %d / 48 格"%pack.used,22,GOLD)
- var grid=load("res://scripts/inventory_grid.gd").new();grid.cell=58;bag.add_child(grid)
- grid.setup(h,selected,"all",func(id):field_transfer(h,target,id))
- if not selection.is_empty():
-  var piece:Dictionary=selection[0];var id:String=piece.id
-  words(h,bag,Bag.name_of(s,id)+"   "+dimensions(s,id),16)
-  var actions=row(bag,8)
-  action(h,actions,"旋转",func():
-   if Bag.move_piece(s,piece.key,piece.at,true):w.autosave()
-   else:h.toast("旋转后放不下，请先腾出相邻格。")
-   field_transfer(h,target,id),piece.size.x!=piece.size.y)
-  action(h,actions,"放回容器 ×1",func():
-   if not raid.store(w,target,id):h.toast("这件物品无法留在容器里。")
-   field_transfer(h,target,id))
- else:words(h,bag,"拖动整理背包，选中物品可旋转或放回。",16,DIM)
- if not pack.overflow.is_empty():words(h,bag,"还有 %d 组物资在栏外，请在背包中整理。"%pack.overflow.size(),15,RED)
- gap(bag);words(h,bag,"制式弹 %d  ·  土制弹 %d"%[s.economy.military,s.economy.handmade],17,DIM)
- var found=panel(h,panes);words(h,found,"搜到的物资",23,GOLD);line(found)
- var ids=rec.loot.keys()
- var key=target+"_field_page";var index=clampi(int(h.get_meta(key,0)),0,maxi(0,ceili(ids.size()/5.0)-1))
- if ids.is_empty():words(h,found,"容器已搜空。",20,DIM)
- for id in ids.slice(index*5,index*5+5):
-  var item:String=id;var amount:int=rec.loot[item]
-  var r=row(found,10);r.add_child(h.icon_rect(h.item_icon(item),46))
-  var detail=column(r);detail.size_flags_horizontal=Control.SIZE_EXPAND_FILL;detail.add_theme_constant_override("separation",3)
-  words(h,detail,Bag.name_of(s,item)+"  ×%d"%amount,18)
-  words(h,detail,dimensions(s,item),13,DIM)
-  action(h,r,"收取",func():
-   if not raid.take(w,target,item):h.toast("背包没有适合这件物品的连续空格。")
-   field_transfer(h,target,selected))
-  if amount>1:action(h,r,"这一叠",func():raid.take_all(w,target,item))
- gap(found)
- if ids.size()>5:page(h,found,key,ids.size(),5,func():field_transfer(h,target,selected))
- if not ids.is_empty():action(h,found,"收取能放下的全部物品",func():raid.take_all(w,target))
- h.modal_hint.text="相同物品可叠放 · 收取前先看尺寸与用途 · Esc 返回街道"
+ load("res://scripts/ui_field_loot.gd").show(h,target,selected)
 
 static func extraction_report(h):
  var s=h.world.story

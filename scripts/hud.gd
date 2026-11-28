@@ -57,6 +57,8 @@ var last_guidance=""
 var shop_tab="buy"
 var radio_open=false
 var saves_return_menu=false
+var field_view=false
+var field_panels:Array[Control]=[]
 
 func _process(delta:float):
 	advance_typing(delta)
@@ -117,6 +119,7 @@ func _input(event):
 
 func setup(w):
 	world=w
+	field_view=w.floor_id=="east_district"
 	font=load("res://assets/fonts/MetroSans.otf");serif=load("res://assets/fonts/MetroSerif.otf");mono=load("res://assets/fonts/MetroMono.ttf")
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter=Control.MOUSE_FILTER_IGNORE
@@ -125,29 +128,35 @@ func setup(w):
 	theme.default_font_size=20
 	self.theme=theme
 	# Exploration HUD: location and objective share one quiet left column.
-	var top=panel(Vector2(28,26),Vector2(420,58))
+	var top=panel(Vector2(28,26),Vector2(420,128 if field_view else 58),not field_view)
+	if field_view:top.add_theme_stylebox_override("panel",style(Color(.045,.062,.061,.86),Color("748178"),0))
 	var topbox=margin_box(top,16,10)
+	if field_view:topbox.add_theme_constant_override("separation",3)
 	location_label=label("",18,text_color)
 	location_label.text_overrun_behavior=TextServer.OVERRUN_TRIM_ELLIPSIS
 	topbox.add_child(location_label)
 	status_label=label("",14,muted)
 	add_child(status_label);status_label.position=Vector2(1256,26);status_label.size=Vector2(310,28)
 	status_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
+	status_label.visible=not field_view
 	# Current goal is short; the detailed quest network belongs in the journal.
-	var goal=panel(Vector2(28,100),Vector2(290,196))
-	var gb=margin_box(goal,18,15)
+	var gb=topbox if field_view else margin_box(panel(Vector2(28,100),Vector2(290,196)),18,15)
 	objective_kind=label("正在跟进",13,muted);gb.add_child(objective_kind)
+	objective_kind.visible=not field_view
 	objective_title=label("",23,amber);objective_title.add_theme_font_override("font",serif);objective_title.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;gb.add_child(objective_title)
 	objective=label("",17,Color("bac7c0"))
 	objective.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	if field_view:objective.max_lines_visible=2
 	gb.add_child(objective)
-	gb.add_child(label("J  打开手记查看详情",13,muted))
+	if not field_view:gb.add_child(label("J  打开手记查看详情",13,muted))
 	var key_panel=panel(Vector2(28,818),Vector2(290,62))
+	key_panel.visible=not field_view
 	var kb=margin_box(key_panel,12,6)
 	kb.add_child(label("W A S D    移动       E   互动",16,text_color))
 	kb.add_child(label("Tab 地图 · 滚轮切换附近目标",13,muted))
 	# Minimap has geometry, not a screenshot of the reference.
 	var mp=panel(Vector2(1310,68),Vector2(258,202))
+	mp.visible=not field_view
 	var mb=margin_box(mp,6,5)
 	var mt=label(world.floor_name(),14,muted)
 	mt.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
@@ -157,25 +166,41 @@ func setup(w):
 	map_small.world=world
 	mb.add_child(map_small)
 	# Bottom command bar with a warmer identity block and a small route indicator.
-	var bar=panel(Vector2(28,900),Vector2(1540,76))
-	var row=HBoxContainer.new();row.add_theme_constant_override("separation",16)
+	var bar=panel(Vector2(28,900),Vector2(1540,76),not field_view)
+	if field_view:bar.add_theme_stylebox_override("panel",StyleBoxEmpty.new())
+	var row=HBoxContainer.new();row.add_theme_constant_override("separation",9 if field_view else 16)
 	var mar=MarginContainer.new()
-	for side in ["left","right"]:mar.add_theme_constant_override("margin_"+side,22)
+	for side in ["left","right"]:mar.add_theme_constant_override("margin_"+side,0 if field_view else 22)
 	for side in ["top","bottom"]:mar.add_theme_constant_override("margin_"+side,9)
 	bar.add_child(mar);mar.add_child(row)
 	var identity=VBoxContainer.new();identity.custom_minimum_size.x=145;row.add_child(identity)
+	identity.visible=not field_view
 	identity.add_child(label("ИВАН / 伊万",21,amber))
 	identity.add_child(label("1982 / ЛИЧНОЕ ДЕЛО",12,muted))
-	var vitals=VBoxContainer.new();vitals.custom_minimum_size.x=240;vitals.add_theme_constant_override("separation",5);row.add_child(vitals)
+	var vitals:VBoxContainer
+	if field_view:
+		var case=PanelContainer.new()
+		case.add_theme_stylebox_override("panel",style(Color(.045,.062,.061,.87),Color("748178"),0))
+		row.add_child(case)
+		vitals=margin_box(case,13,9)
+		field_panels=[top,bar]
+	else:
+		vitals=VBoxContainer.new()
+		row.add_child(vitals)
+	vitals.custom_minimum_size.x=240
+	vitals.add_theme_constant_override("separation",5)
 	vitals_label=label("",14,text_color);vitals.add_child(vitals_label)
 	health_bar=vital_bar(vitals,Color("9aa98d"));health_bar.tooltip_text="生命 · 伤药用于恢复伤势"
 	food_bar=vital_bar(vitals,Color("c3a36a"));food_bar.tooltip_text="饱食 · 活动中缓慢消耗；饥饿不会直接扣生命"
 	inventory_count=label("",16,text_color);row.add_child(inventory_count)
+	inventory_count.visible=not field_view
 	quick_items=HBoxContainer.new();quick_items.visible=false;row.add_child(quick_items)
 	row.add_spacer(false)
 	row.add_child(button("I  背包",func():show_inventory(),true,true))
 	row.add_child(button("J  手记",func():show_journal(),true,true))
 	leads_button=button("留意的事",func():show_journal("leads"),true,true);row.add_child(leads_button)
+	leads_button.visible=not field_view
+	if field_view:row.add_child(button("M  地图",func():show_map(),true,true))
 	route_label=label("",13,muted);route_label.visible=false;row.add_child(route_label)
 	row.add_child(button("Esc  暂停",func():show_pause(),true,true))
 	prompt=label("",22,amber)
@@ -210,6 +235,9 @@ func setup(w):
 	toast_label.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	modal.add_theme_stylebox_override("panel",style(Color("101c1e"),Color("766747"),1,0))
 	modal.visible=false
+	if field_view:
+		modal.visibility_changed.connect(func():
+			for area in field_panels:area.visible=not modal.visible)
 	UiSurface.attach(modal)
 	var field=load("res://scripts/field_navigation.gd").new();add_child(field);field.setup(self)
 	refresh_status()
@@ -231,14 +259,14 @@ func style(bg: Color,border: Color,width: int=1,rad: int=0) -> StyleBoxFlat:
 	s.shadow_size=8
 	s.shadow_offset=Vector2(0,3)
 	return s
-func panel(pos:Vector2,sz:Vector2) -> PanelContainer:
+func panel(pos:Vector2,sz:Vector2,textured:bool=true) -> PanelContainer:
 	var p=PanelContainer.new()
 	add_child(p)
 	p.position=pos
 	p.size=sz
 	p.add_theme_stylebox_override("panel",style(Color(0.035,0.045,0.043,0.94),Color("655e49")))
 	p.mouse_filter=Control.MOUSE_FILTER_PASS
-	UiSurface.attach(p)
+	if textured:UiSurface.attach(p)
 	return p
 func margin_box(parent:Control,h:int=24,v:int=20) -> VBoxContainer:
 	var m=MarginContainer.new()
@@ -468,7 +496,9 @@ func refresh_status():
 	observe_progress()
 	if health_bar:
 		health_bar.value=world.story.economy.health;food_bar.value=world.story.economy.food
-		vitals_label.text="生命 %d   /   饱食 %d"%[world.story.economy.health,world.story.economy.food]
+		food_bar.visible=not field_view or food_bar.value<=45
+		vitals_label.text="生命 %d"%world.story.economy.health
+		if food_bar.visible:vitals_label.text+="   /   饱食 %d"%world.story.economy.food
 		if world.story.economy.radiation>0:vitals_label.text+="  / 辐射 %d"%world.story.economy.radiation
 		vitals_label.tooltip_text=world.story.Economy.Radiation.describe(world.story)
 		leads_button.text="留意的事 · "+str(Journal.leads(world.story).size())
@@ -502,7 +532,7 @@ func tick(delta:float):
 	if guidance!=last_guidance:
 		last_guidance=guidance;refresh_status()
 		if is_instance_valid(map_large):map_large.queue_redraw()
-	map_small.queue_redraw()
+	if map_small.is_visible_in_tree():map_small.queue_redraw()
 	if toast_time>0:
 		toast_time-=delta
 		toast_label.modulate.a=minf(toast_time,1.0)

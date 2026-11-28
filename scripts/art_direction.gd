@@ -14,7 +14,7 @@ const PROFILES={
 	"railfront":["899b9c",.30,"a0b3b9",.18],
 	"surface":["a4b7c1",.35,"d1d7d5",.32],
 	"starcity":["a4b7c1",.35,"d1d7d5",.32],
-	"east_district":["97aebd",.32,"e4d1ab",.79]
+	"east_district":["a7b4bf",.40,"e3ded3",.92]
 }
 static func environment(w,e:Environment,sun:DirectionalLight3D):
 	var p:Array=PROFILES.get(w.floor_id,PROFILES.life)
@@ -25,18 +25,37 @@ static func environment(w,e:Environment,sun:DirectionalLight3D):
 		e.background_color=Color("a4b2b8")
 		e.fog_enabled=true;e.fog_density=.0018;e.fog_light_color=Color("a4b2b8")
 		e.fog_light_energy=.65
-		if w.floor_id=="east_district":
-			e.fog_density=.00162
-			e.fog_light_color=Color("a9bbc2")
-			e.fog_height=1.05
-			e.fog_height_density=.029
-			e.fog_sun_scatter=.20
-			e.adjustment_enabled=true
-			e.adjustment_contrast=1.073
-			e.adjustment_saturation=.88
-			sun.rotation_degrees=Vector3(-27,34,0)
+		if w.floor_id=="east_district":east_district_light(e,sun)
 	sun.directional_shadow_max_distance=75 if w.floor_id in OUTDOORS else 45
 	sun.shadow_blur=1.3
+
+static func east_district_light(e:Environment,sun:DirectionalLight3D):
+	# The road reflects a diffuse winter sky. Local amber comes from lit
+	# fixtures, so it still indicates an occupied or powered place.
+	var overcast=ProceduralSkyMaterial.new()
+	overcast.sky_top_color=Color("667b8c")
+	overcast.sky_horizon_color=Color("b8c3c9")
+	overcast.ground_horizon_color=Color("81949f")
+	overcast.ground_bottom_color=Color("4f5558")
+	overcast.sun_angle_max=0.0
+	var reflected_sky=Sky.new()
+	reflected_sky.radiance_size=Sky.RADIANCE_SIZE_128
+	reflected_sky.sky_material=overcast
+	e.sky=reflected_sky
+	e.reflected_light_source=Environment.REFLECTION_SOURCE_SKY
+	e.background_color=Color("96a4ac")
+	e.fog_density=.00115
+	e.fog_light_color=Color("95a6b3")
+	e.fog_light_energy=.64
+	e.fog_height=.75
+	e.fog_height_density=.010
+	e.fog_sun_scatter=.075
+	e.tonemap_exposure=1.01
+	e.adjustment_enabled=true
+	e.adjustment_contrast=1.109
+	e.adjustment_saturation=.87
+	sun.rotation_degrees=Vector3(-33,25,0)
+	sun.directional_shadow_mode=DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS
 
 static func refine(w):
 	# Material identity matters at play scale: calm floors, contrast on fixtures.

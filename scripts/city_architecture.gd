@@ -46,14 +46,23 @@ static func mound(k,p:Vector3,size:Vector3,seed:int,solid:bool=true):
  for sign in [-1,1]:k.ellipsoid("RubbleWindDrift",p+Vector3(sign*size.x*.3,.05,size.z*.32),Vector3(size.x*.23,.16,size.z*.15),"snowbank")
 static func room(k,p:Vector3,size:Vector2,id:String):
  Ground.apron(k,Vector2(p.x,p.z),size)
- var mat="district_concrete" if id=="clinic" else "district_brick"
+ var mat="clinic_plaster" if id=="clinic" else "district_brick"
  k.box("CityInteriorBack",p+Vector3(0,1.75,-size.y/2),Vector3(size.x,3.5,.36),mat,true)
  for sign in [-1,1]:
-  k.box("CityInteriorSide",p+Vector3(sign*size.x/2,1.75,0),Vector3(.36,3.5,size.y),mat,true)
+  var side=p+Vector3(sign*size.x/2,0,0)
+  var wall=k.box("CityInteriorSide",side+Vector3.UP*1.75,Vector3(.36,3.5,size.y),mat,true)
+  if id=="clinic":
+   wall.visible=false
+   clinic_window_wall(k,side,size.y,sign*PI/2,5)
   # Front wings frame a generous central entrance; nothing crosses the threshold.
   if id=="south_corner":
    apartment_front(k,p,size,sign)
-  else:k.box("CityInteriorFrontWing",p+Vector3(sign*(size.x/4+.65),1.3,size.y/2),Vector3(size.x/2-1.3,2.6,.36),mat,true)
+  else:
+   var front=p+Vector3(sign*(size.x/4+.65),0,size.y/2)
+   var wing=k.box("CityInteriorFrontWing",front+Vector3.UP*1.3,Vector3(size.x/2-1.3,2.6,.36),mat,true)
+   if id=="clinic":
+    wing.visible=false
+    clinic_window_wall(k,front,size.x/2-1.3,0,2)
  k.box("CityInteriorDoorLintel",p+Vector3(0,2.95,size.y/2),Vector3(size.x,.65,.4),mat)
  for x in [-1.3,1.3]:k.box("CityDoorFrame",p+Vector3(x,1.35,size.y/2+.2),Vector3(.12,2.7,.12),"old_iron")
  for z in [-size.y*.3,0,size.y*.3]:
@@ -61,14 +70,24 @@ static func room(k,p:Vector3,size:Vector2,id:String):
   beam.set_meta("interior_rect",Rect2(p.x-size.x*.5,p.z-size.y*.5,size.x,size.y))
  # Partially collapsed roof: the room still reads from the street, and fades on entry.
  var interior=Rect2(p.x-size.x*.5,p.z-size.y*.5,size.x,size.y)
- if id!="south_corner":
+ if id=="radio":
   var roof=k.box("CityInteriorRoof",p+Vector3(0,3.65,0),Vector3(size.x,.18,size.y),"corrugated")
   roof.set_meta("interior_rect",interior)
   var snow=k.box("CityInteriorRoofSnow",p+Vector3(0,3.79,0),Vector3(size.x-.2,.06,size.y-.2),"district_roof_snow")
   snow.set_meta("interior_rect",interior)
  if id=="clinic":
   # Waiting room and treatment room; a 2.2m opening connects the two.
-  for z in [-5.3,4.8]:k.box("ClinicPartition",p+Vector3(1.2,1.3,z),Vector3(.16,2.6,5.8 if z<0 else 6.8),"plaster",true)
+  k.box("ClinicWashableFloor",p+Vector3(5.03,.039,0),Vector3(7.58,.014,17.62),"tile")
+  for z in [-5.3,4.8]:
+   var span=5.8 if z<0 else 6.8
+   k.box("ClinicPartition",p+Vector3(1.2,1.3,z),Vector3(.16,2.6,span),"plaster",true)
+   k.box("ClinicGlazedDado",p+Vector3(1.291,.54,z),Vector3(.035,1.0,span-.13),"civic_tile")
+  k.box("ClinicWaitingRoomDado",p+Vector3(-8.793,.50,0),Vector3(.055,.93,17.49),"civic_tile")
+  k.box("ClinicWaitingRoomDadoCap",p+Vector3(-8.749,.97,0),Vector3(.060,.047,17.48),"washed_concrete")
+  for end in [-7.52,7.39]:
+   k.pipe(p+Vector3(-8.64,.245,end),p+Vector3(-8.64,.245,end*.19),.047,"tram_bare_steel")
+   for i in 6:
+    k.box("ClinicRadiatorFin",p+Vector3(-8.61,.467,end*.69+i*.13),Vector3(.18,.58,.095),"tram_ivory")
   k.table(p+Vector3(-3,0,2),2.2)
   k.box("ClinicEvacuationLedger",p+Vector3(-3,.825,2),Vector3(.55,.035,.4),"paper")
   for z in [-3,1,5]:k.bench(p+Vector3(-7,0,z),2.2,true,PI/2)
@@ -76,7 +95,7 @@ static func room(k,p:Vector3,size:Vector2,id:String):
   k.locker(p+Vector3(6,0,-5.8))
   k.box("ClinicMedicineCross",p+Vector3(6,1.6,-5.35),Vector3(.5,.12,.02),"red")
   k.box("ClinicMedicineCrossVertical",p+Vector3(6,1.6,-5.33),Vector3(.12,.5,.02),"red")
-  var label=k.label("МЕДПУНКТ",p+Vector3(0,3.03,size.y/2+.25),27,Color("bcb7a4"));label.rotation.y=0
+  clinic_entrance(k,p,size,interior)
  elif id=="radio":
   k.table(p+Vector3(-5,0,1),2.6);k.box("CivilDefenceLog",p+Vector3(-5,.83,1),Vector3(.6,.035,.45),"paper")
   for x in [3,5,7]:
@@ -130,6 +149,72 @@ static func room(k,p:Vector3,size:Vector2,id:String):
   k.box("ApartmentStoveDoor",p+Vector3(-5,.55,8.83),Vector3(.55,.45,.04),"rust")
   k.box("ApartmentWallPicture",p+Vector3(-3,1.8,-size.y/2+.2),Vector3(1.1,.8,.04),"wood")
   k.box("ApartmentPicturePaper",p+Vector3(-3,1.8,-size.y/2+.23),Vector3(.9,.6,.015),"paper")
+
+static func clinic_window_wall(k,p:Vector3,width:float,yaw:float,bays:int):
+ var face=Node3D.new()
+ face.name="ClinicMasonryBays";face.position=p;face.rotation.y=yaw;k.root.add_child(face)
+ k.box("ClinicMasonryPlinth",Vector3(0,.29,0),Vector3(width,.58,.38),"district_brick",false,face)
+ k.box("ClinicPlasterSpandrel",Vector3(0,.80,0),Vector3(width,.44,.32),"clinic_plaster",false,face)
+ k.box("ClinicWindowHeader",Vector3(0,2.45,0),Vector3(width,.30,.32),"clinic_plaster",false,face)
+ if bays>2:k.box("ClinicEavesCourse",Vector3(0,3.05,0),Vector3(width,.90,.34),"clinic_plaster",false,face)
+ var pitch=width/bays
+ var opening=1.49
+ for i in bays:
+  var x=-width/2+pitch*(i+.5)
+  var jamb=(pitch-opening)/2
+  for sign in [-1,1]:
+   k.box("ClinicSplayedMasonryJamb",Vector3(x+sign*(opening/2+jamb/2),1.66,0),Vector3(jamb,1.28,.32),"clinic_plaster",false,face)
+   k.box("ClinicWindowJamb",Vector3(x+sign*.72,1.66,.073),Vector3(.08,1.30,.112),"tram_ivory",false,face)
+  k.box("ClinicInsetWindow",Vector3(x,1.67,-.086),Vector3(1.47,1.26,.045),"tram_glass",false,face)
+  k.box("StoneDripSill",Vector3(x,1.035,.15),Vector3(1.69,.107,.38),"washed_concrete",false,face)
+  k.box("ClinicWindowMeetingRail",Vector3(x,1.9,.04),Vector3(1.43,.065,.055),"tram_ivory",false,face)
+  k.box("ClinicCentreGlazingBar",Vector3(x,1.66,.045),Vector3(.058,1.27,.060),"tram_ivory",false,face)
+  if i%3==0:
+   for dy in [-.21,.18]:
+    var plank=k.box("ClinicEmergencyWindowBoard",Vector3(x,1.60+dy,.165),Vector3(1.48,.18,.055),"wood",false,face)
+    plank.rotation.z=.082 if dy<0 else -.055
+  k.box("ClinicSpalledSillBrick",Vector3(x+.29,.96,.169),Vector3(.54,.12,.027),"district_brick",false,face)
+
+static func clinic_entrance(k,p:Vector3,size:Vector2,interior:Rect2):
+ var z=size.y/2
+ for sign in [-1,1]:
+  k.box("ClinicStoneDoorReveal",p+Vector3(sign*1.37,1.27,z+.10),Vector3(.19,2.54,.45),"washed_concrete")
+  k.box("ClinicOpenDoorLeaf",p+Vector3(sign*1.17,1.08,z-.53),Vector3(.097,2.16,1.07),"tram_enamel")
+  k.box("ClinicDoorKickPlate",p+Vector3(sign*1.115,.26,z-.52),Vector3(.018,.25,.96),"tram_bare_steel")
+  Urban.beam(k,"ClinicCanopyBrace",p+Vector3(sign*1.60,2.28,z+.21),p+Vector3(sign*1.60,2.68,z+1.44),.071,.071,"old_iron",k.root)
+ var canopy=k.box("ClinicSlopingCanopy",p+Vector3(0,2.78,z+.84),Vector3(3.74,.145,1.51),"east_roof_membrane")
+ canopy.rotation.x=.074
+ canopy.set_meta("interior_rect",interior)
+ k.box("ClinicFrontCornice",p+Vector3(0,3.38,z+.041),Vector3(size.x+.10,.32,.43),"clinic_plaster")
+ k.box("ClinicCanopyFascia",p+Vector3(0,2.713,z+1.56),Vector3(3.79,.17,.091),"tram_enamel").set_meta("interior_rect",interior)
+ for x in [-1.59,1.57]:
+  var seam=Urban.beam(k,"ClinicCanopyEdge",p+Vector3(x,2.743,z+1.54),p+Vector3(x,2.833,z+.25),.048,.055,"old_iron",k.root)
+  seam.set_meta("interior_rect",interior)
+ k.box("ClinicPorcelainNameplate",p+Vector3(0,3.10,z+.234),Vector3(2.1,.40,.057),"tram_ivory")
+ var label=k.label("МЕДПУНКТ",p+Vector3(0,3.10,z+.274),25,Color("303932"))
+ label.shaded=true
+ k.box("ClinicCrossPlaque",p+Vector3(1.89,1.97,z+.205),Vector3(.47,.45,.053),"tram_ivory")
+ k.box("ClinicCrossPlaqueStem",p+Vector3(1.89,1.97,z+.237),Vector3(.09,.30,.012),"red")
+ for side in [-1,1]:
+  k.box("ClinicCrossPlaqueArm",p+Vector3(1.89+side*.0975,1.97,z+.237),Vector3(.105,.09,.012),"red")
+ for x in [-size.x/2+.32,size.x/2-.32]:
+  k.pipe(p+Vector3(x,.43,z+.28),p+Vector3(x,3.52,z+.28),.070,"tram_bare_steel")
+  k.pipe(p+Vector3(x,.43,z+.28),p+Vector3(x,.24,z+.68),.070,"tram_bare_steel")
+  for y in [.78,2.27]:k.box("ClinicRainpipeCollar",p+Vector3(x,y,z+.269),Vector3(.19,.056,.15),"old_iron")
+ var roof_root=Node3D.new()
+ roof_root.name="ClinicMembraneRoof";roof_root.position=p;k.root.add_child(roof_root)
+ k.box("ClinicRoofDeck",Vector3(0,3.60,0),Vector3(size.x+.14,.16,size.y+.14),"east_roof_membrane",false,roof_root)
+ for n in range(-3,4):
+  k.box("ClinicRoofLapSeam",Vector3(n*2.29,3.684,0),Vector3(.057,.012,size.y-.22),"tram_bare_steel",false,roof_root)
+ for side in [-1,1]:
+  k.box("ClinicParapet",Vector3(0,3.77,side*z),Vector3(size.x,.23,.23),"clinic_plaster",false,roof_root)
+  k.box("ClinicParapetCap",Vector3(0,3.916,side*z),Vector3(size.x+.18,.067,.33),"tram_bare_steel",false,roof_root)
+  k.box("ClinicSideParapet",Vector3(side*size.x/2,3.77,0),Vector3(.23,.23,size.y),"clinic_plaster",false,roof_root)
+ for pos in [Vector3(-5.2,4.01,-3.2),Vector3(4.7,4.01,4.3)]:
+  k.box("ClinicRoofFlue",pos,Vector3(.65,.65,.66),"district_brick",false,roof_root)
+  k.box("ClinicRoofFlueCowl",pos+Vector3.UP*.36,Vector3(.77,.10,.78),"old_iron",false,roof_root)
+ for mesh in roof_root.find_children("*","MeshInstance3D",true,false):
+  mesh.set_meta("interior_rect",interior)
 
 static func apartment_front(k,p:Vector3,size:Vector2,side:int):
  # A boarded window can be read from the sidewalk. The old flush roof is

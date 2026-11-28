@@ -21,6 +21,57 @@ static func materials(k):
 		m.roughness=.93 if spec[0]!="frosted_steel" else .66
 		m.metallic=.14 if spec[0]=="frosted_steel" else 0
 		k.mats[spec[0]]=m
+	var plaster=weathered(k,"east_clinic_plaster",Vector3(.62,.62,.62),.91)
+	k.mats.clinic_plaster=plaster
+	k.mats.east_roof_membrane=weathered(k,"east_roof_membrane",Vector3(.51,.51,.51),.86)
+	k.mats.east_roof_membrane.set_meta("winter_roof",true)
+	var enamel=weathered(k,"east_tram_enamel",Vector3(.36,.92,.36),.67)
+	enamel.albedo_color=Color("bdc6ac")
+	k.mats.tram_enamel=enamel
+	var ivory=plaster.duplicate()
+	ivory.albedo_color=Color("ede0bb")
+	ivory.roughness=.72
+	k.mats.tram_ivory=ivory
+	var steel=k.mats.frosted_steel.duplicate()
+	steel.albedo_texture=k.mats.east_roof_membrane.albedo_texture
+	steel.albedo_color=Color("939991")
+	steel.metallic=.31
+	steel.roughness=.52
+	k.mats.tram_bare_steel=steel
+	var roof=k.mats.east_roof_membrane.duplicate()
+	roof.albedo_color=Color("bdc3b9")
+	roof.roughness=.67
+	roof.set_meta("winter_roof",true)
+	k.mats.tram_roof=roof
+	var sedan=enamel.duplicate()
+	sedan.albedo_color=Color("dc9a75")
+	sedan.roughness=.78
+	k.mats.weathered_car_paint=sedan
+	var glass=k.mats.exterior_glass.duplicate()
+	glass.albedo_color=Color("344541")
+	glass.roughness=.29
+	glass.metallic=.19
+	k.mats.tram_glass=glass
+	var cloudy=glass.duplicate()
+	cloudy.albedo_color=Color("505a58")
+	cloudy.roughness=.68
+	k.mats.city_window_clouded=cloudy
+	k.mats.exterior_glass.albedo_color=Color("303b40")
+	for wall in ["district_brick","works_brick","clinic_plaster","district_concrete","washed_concrete","district_ochre"]:
+		k.mats[wall].set_meta("winter_masonry",true)
+	k.mats.district_roof_snow.albedo_color=Color("b3bec5")
+
+static func weathered(k,texture:String,scale:Vector3,roughness:float)->StandardMaterial3D:
+	var paint:StandardMaterial3D=k.mats.district_concrete.duplicate()
+	paint.albedo_color=Color.WHITE
+	paint.albedo_texture=load("res://assets/visual/"+texture+".png")
+	paint.normal_texture=load("res://assets/visual/"+texture+"_normal.png")
+	paint.normal_enabled=true
+	paint.normal_scale=.38
+	paint.roughness=roughness
+	paint.uv1_scale=scale
+	paint.texture_filter=BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	return paint
 
 static func mainline(k,layout):
 	var x:float=layout.railway.x

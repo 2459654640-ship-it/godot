@@ -43,13 +43,10 @@ static func roof(k,root:Node3D,size:Vector2,height:float,kind:String,seed:int):
 		for n in 3:
 			var z=-size.y/2+n*pitch
 			var slope=atan2(1.15,pitch-.25)
-			var sheet=k.box("SawtoothRoofSlope",Vector3(0,height+.60,z+pitch/2),Vector3(size.x+.35,.12,sqrt(pow(pitch-.25,2)+1.15*1.15)),"corrugated",false,root);sheet.rotation.x=-slope
-			for drift in [
-				[Vector2(-size.x*.26,-pitch*.06),Vector2(size.x*.37,pitch*.70),n*3+1],
-				[Vector2(size.x*.17,pitch*.11),Vector2(size.x*.39,pitch*.54),n*3+2],
-				[Vector2(size.x*.31,-pitch*.23),Vector2(size.x*.22,pitch*.22),n*3+3]
-			]:
-				roof_load(k,sheet,drift[0],drift[1],drift[2])
+			var sheet=k.box("SawtoothRoofSlope",Vector3(0,height+.60,z+pitch/2),Vector3(size.x+.35,.12,sqrt(pow(pitch-.25,2)+1.15*1.15)),"east_roof_membrane",false,root);sheet.rotation.x=-slope
+			for seam in range(-3,4):
+				var rib=k.box("SawtoothRoofSheetLock",sheet.position+Vector3(seam*size.x/7.4,.078,0),Vector3(.042,.035,pitch-.19),"tram_bare_steel",false,root)
+				rib.rotation.x=sheet.rotation.x
 			k.box("ClerestoryGlass",Vector3(0,height+.62,z+pitch-.12),Vector3(size.x,1.10,.06),"exterior_glass",false,root)
 			for x in range(-int(size.x/2),int(size.x/2)+1,2):k.box("ClerestoryMullion",Vector3(x,height+.62,z+pitch-.07),Vector3(.065,1.15,.08),"old_iron",false,root)
 			# Triangular end cheeks use narrow masonry slices, no open roof sides.
@@ -81,8 +78,7 @@ static func roof(k,root:Node3D,size:Vector2,height:float,kind:String,seed:int):
 		# parapet coping rather than identical flat lids on every facility.
 		for n in 3:
 			var z=-size.y/2+size.y/3*(n+.5);var span=size.x-.04
-			k.box("ResidentialRoof",Vector3(0,height+.05,z),Vector3(span,.14,size.y/3+.01),"corrugated",false,root)
-			k.box("RoofSnow",Vector3(0,height+.15,z),Vector3(span-.15,.06,size.y/3-.10),"district_roof_snow",false,root)
+			k.box("ResidentialRoof",Vector3(0,height+.05,z),Vector3(span,.14,size.y/3+.01),"east_roof_membrane",false,root)
 			k.box("RoofJoist",Vector3(0,height-.05,z),Vector3(size.x,.16,.12),"old_iron",false,root)
 		for z in [-size.y/2,size.y/2]:
 			k.box("RoofParapet",Vector3(0,height+.22,z),Vector3(size.x,.34,.25),"district_concrete",false,root)
@@ -90,24 +86,6 @@ static func roof(k,root:Node3D,size:Vector2,height:float,kind:String,seed:int):
 		for x in [-size.x/2,size.x/2]:k.box("RoofParapet",Vector3(x,height+.22,0),Vector3(.25,.34,size.y),"district_concrete",false,root)
 		k.box("RoofAccessLantern",Vector3(size.x*.20,height+.44,-size.y*.2),Vector3(1.5,.6,1.2),"exterior_glass",false,root)
 		k.box("RoofAccessCap",Vector3(size.x*.20,height+.78,-size.y*.2),Vector3(1.7,.12,1.4),"old_iron",false,root)
-
-static func roof_load(k,sheet:Node3D,center:Vector2,size:Vector2,seed:int):
-	# Patch geometry is in roof coordinates, so every downwind edge follows
-	# the slope and stays clear of the clerestory.
-	var ring=[]
-	for n in 16:
-		var a=TAU*n/16
-		var irregularity=.91+.09*sin(n*2.4+seed)
-		ring.append(center+Vector2(cos(a)*size.x,sin(a)*size.y)*irregularity*.5)
-	var st=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES);st.set_normal(Vector3.UP)
-	for n in ring.size():
-		for v in [center,ring[n],ring[(n+1)%ring.size()]]:
-			st.set_uv(v*.31)
-			st.add_vertex(Vector3(v.x,.092,v.y))
-	var snow=MeshInstance3D.new();snow.name="LeewardRoofLoad"
-	snow.mesh=st.commit();snow.material_override=k.mats.district_roof_snow
-	sheet.get_parent().add_child(snow)
-	snow.transform=sheet.transform
 
 static func facade(k,root:Node3D,size:Vector2,floors:int,kind:String):
 	var height=floors*2.8

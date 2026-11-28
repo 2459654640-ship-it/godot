@@ -5,6 +5,7 @@ const Bag=preload("res://scripts/backpack.gd")
 const Catalog=preload("res://scripts/salvage_catalog.gd")
 const Expedition=preload("res://scripts/district_expedition.gd")
 const Store=preload("res://scripts/save_store.gd")
+const FieldLoot=preload("res://scripts/ui_field_loot.gd")
 var w
 var checks=0
 var failures=0
@@ -82,6 +83,20 @@ func run():
  check(Raid.record(w,id).searched and w.hud.modal_visible() and w.hud.get_meta("fixed_screen","")=="field_transfer","Completing the timer opens the actual loot transfer screen")
  await frames()
  check(w.hud.modal.find_child("InventoryGrid",true,false)!=null,"The destination grid is visible during the transfer")
+ var transfer_grid=w.hud.modal.find_child("InventoryGrid",true,false)
+ check(transfer_grid.field_style and w.hud.modal.find_children("*","ScrollContainer",true,false).is_empty(),"Field transfer uses a fixed container and the complete pack grid")
+ var before_shelf=w.story.flags.get("bag_layout",{}).duplicate(true)
+ var incoming=FieldLoot.preview(w.story,Bag.pack(w.story),"oilcloth_roll")
+ check(incoming.get("size")==Vector2i(3,2) or incoming.get("size")==Vector2i(2,3),"A bulky find visibly previews six contiguous cells")
+ check(w.story.flags.get("bag_layout",{})==before_shelf and Bag.count(w.story,"oilcloth_roll")==0,"Preview keeps both inventory and saved placement intact")
+ Bag.change(w.story,"oilcloth_roll",1)
+ var added=Bag.pack(w.story).pieces.filter(func(piece):return piece.id=="oilcloth_roll")
+ check(not added.is_empty() and added[0].at==incoming.get("at") and added[0].size==incoming.get("size"),"Transfer preview matches the real item placement")
+ Bag.change(w.story,"oilcloth_roll",-1)
+ Bag.change(w.story,"sterile_gauze",1)
+ var merged=FieldLoot.preview(w.story,Bag.pack(w.story),"sterile_gauze")
+ check(merged.get("key")=="sterile_gauze:0" and not merged.has("at"),"Stackable medicine highlights the existing stack")
+ Bag.change(w.story,"sterile_gauze",-1)
  var goods:Dictionary=Raid.record(w,id).loot.duplicate()
  var find:String=goods.keys()[0]
  check(Raid.take(w,id,find) and Bag.count(w.story,find)==1,"One searched item transfers once")

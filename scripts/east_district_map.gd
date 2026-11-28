@@ -27,6 +27,7 @@ static func building(k,p:Vector3,size:Vector2,floors:int,seed:int,north_door:boo
 	var root=Node3D.new();root.name="DistrictBuilding%d"%seed;root.position=p;k.root.add_child(root)
 	if north_door:root.rotation.y=PI
 	var height=floors*2.8;var finish="district_ochre" if seed%3==1 else ("district_brick" if seed%3==2 else "district_concrete")
+	var street_front=p.x<-49.0 and p.x>-124.0 and p.z>-23.0 and p.z<43.0
 	if kind in ["waterworks","depot","pump","terrace"]:finish="works_brick"
 	if kind=="panel":finish="washed_concrete"
 	root.set_meta("architecture_kind",kind)
@@ -57,13 +58,24 @@ static func building(k,p:Vector3,size:Vector2,floors:int,seed:int,north_door:boo
 					k.box("DoorHandle",c+Vector3(.32,1.08,.17),Vector3(.045,.17,.06),"brass",false,root)
 				else:
 					var out=Vector3(sign,0,0) if x_face else Vector3(0,0,sign)
-					if posmod(n+seed+level+face,3)!=0:k.box("RecessedWindow",c+Vector3.UP*(y+1.52)-out*.06,Vector3(.025,1.15,window_width) if x_face else Vector3(window_width,1.15,.025),"exterior_glass",false,root)
+					var damage=posmod(n+seed+level+face,4)
+					if damage!=0:
+						var glass="city_window_clouded" if damage==2 else "exterior_glass"
+						k.box("RecessedWindow",c+Vector3.UP*(y+1.52)-out*.06,Vector3(.025,1.15,window_width) if x_face else Vector3(window_width,1.15,.025),glass,false,root)
 					for edge in [-1,1]:
 						var jamb=c+Vector3.UP*(y+1.52)+out*.03
 						if x_face:jamb.z+=edge*window_width/2
 						else:jamb.x+=edge*window_width/2
 						k.box("WindowFrame",jamb,Vector3(.08,1.25,.06) if x_face else Vector3(.06,1.25,.08),"wood",false,root)
 					k.box("WindowSill",c+Vector3.UP*(y+.88)+out*.04,Vector3(.42,.10,window_width+.2) if x_face else Vector3(window_width+.2,.10,.42),"district_concrete",false,root)
+					if street_front and face in [1,3]:
+						var head=Vector3(.31,.155,window_width+.27) if x_face else Vector3(window_width+.27,.155,.31)
+						k.box("ProjectingMasonryLintel",c+Vector3.UP*(y+2.208)+out*.066,head,"washed_concrete",false,root)
+						var transom=Vector3(.082,.038,window_width) if x_face else Vector3(window_width,.038,.082)
+						k.box("WindowMeetingRail",c+Vector3.UP*(y+1.70)+out*.024,transom,"tram_bare_steel",false,root)
+						if damage==3:
+							var center_bar=Vector3(.060,1.08,.053) if x_face else Vector3(.053,1.08,.060)
+							k.box("WeatheredCenterGlazingBar",c+Vector3.UP*(y+1.52)+out*.026,center_bar,"tram_ivory",false,root)
 		k.box("FloorCourse",Vector3(0,y+2.78,0),Vector3(size.x+.12,.13,size.y+.12),"district_concrete",false,root)
 	Urban.roof(k,root,size,height,kind,seed)
 	Urban.facade(k,root,size,floors,kind)
@@ -87,14 +99,22 @@ static func portal(k,p:Vector3,label:String,heading:float=0):
 	# Portal footprint stops behind the interaction/arrival space.
 	var root=Node3D.new();root.name="DistrictPortal";root.position=p;k.root.add_child(root);root.rotation.y=heading
 	for x in [-1.1,1.1]:k.box("PortalCheek",Vector3(x,1,-.8),Vector3(.30,2,1.7),"district_concrete",false,root)
-	k.box("PortalCanopy",Vector3(0,2.1,-.8),Vector3(2.6,.18,2.0),"old_iron",false,root)
-	k.box("PortalRoofSnow",Vector3(0,2.23,-.8),Vector3(2.4,.07,1.8),"surface_snow",false,root)
-	k.box("PortalClosedDoor",Vector3(0,.95,-1.30),Vector3(1.85,1.9,.16),"corrugated",false,root)
-	k.box("DoorPushBar",Vector3(0,1.05,-1.17),Vector3(.9,.07,.06),"metal",false,root)
-	# Small lettering is painted on an existing lintel, not a floating black plaque.
-	var words=k.label(label,p+Vector3(0,2.03,-.05),15,Color("bfb998"));words.rotation.y=heading
+	k.box("PortalCanopy",Vector3(0,2.15,-.65),Vector3(2.71,.16,2.21),"east_roof_membrane",false,root)
+	k.box("PortalEnamelFascia",Vector3(0,2.137,.476),Vector3(2.67,.19,.075),"tram_enamel",false,root)
+	k.box("PortalClosedDoor",Vector3(0,.95,-1.30),Vector3(1.86,1.90,.16),"tram_enamel",false,root)
+	for x in [-.901,.901]:k.box("EntrancePressedDoorFrame",Vector3(x,1,-1.21),Vector3(.083,2,.074),"tram_bare_steel",false,root)
+	k.box("DoorLowerKickplate",Vector3(0,.20,-1.207),Vector3(1.78,.263,.04),"tram_bare_steel",false,root)
+	k.box("DoorPushBar",Vector3(0,1.05,-1.153),Vector3(.9,.071,.075),"metal",false,root)
+	for x in [-1.105,1.105]:
+		k.box("EntranceBrickPlinth",Vector3(x,.28,-.79),Vector3(.34,.56,1.77),"district_brick",false,root)
+		k.box("BatteredCanopyPost",Vector3(x,1.75,.092),Vector3(.18,.72,.14),"washed_concrete",false,root)
+	var words=k.label(label,Vector3(0,2.139,.518),19,Color("dfd8b9"),root)
+	words.shaded=true
 	var body=k.box("PortalBackHull",p+Vector3(0,0,-1.5).rotated(Vector3.UP,heading)+Vector3.UP,Vector3(2.5,2,.30),"dark",true);body.visible=false
-	k.lamp(p+Vector3(-.7,2,-.3),true,1.5,5)
+	var fixture=p+Vector3(-.65,1.94,-.48).rotated(Vector3.UP,heading)
+	var lamp=k.lamp(fixture,true,2.1 if label=="ЛИНИЯ · ЗАПАД" else 1.45,5.2)
+	lamp.light_color=Color("ffd398")
+	lamp.omni_attenuation=1.42
 static func build(w):
 	var k=w.kit;var plan=Layout.layout()
 	var City=preload("res://scripts/city_architecture.gd");var Ground=preload("res://scripts/city_ground.gd")
@@ -192,7 +212,7 @@ static func wreck(k,p:Vector3,heading:float=0):
 	car_form(k,root,"PressedSteelBody",[
 		Vector4(-1.88,.67,.37,.81),Vector4(-1.68,.81,.30,.91),
 		Vector4(-.62,.86,.31,.97),Vector4(.68,.83,.30,.95),
-		Vector4(1.62,.78,.30,.82),Vector4(1.91,.66,.40,.71)],"rust",.09)
+		Vector4(1.62,.78,.30,.82),Vector4(1.91,.66,.40,.71)],"weathered_car_paint",.09)
 	car_form(k,root,"SetBackGlassCabin",[
 		Vector4(-1.24,.73,.89,1.01),Vector4(-1.01,.69,.91,1.39),
 		Vector4(-.72,.68,.95,1.52),Vector4(.32,.65,.96,1.50),

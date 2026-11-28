@@ -11,11 +11,10 @@ static func build(w,plan):
  var k=w.kit
  Site.ground(w,GROUND_BOUNDS,false,false)
  var ink=ShaderMaterial.new();ink.shader=load("res://assets/visual/city_ground.gdshader")
- var road_finish="res://assets/visual/winter_road_v37.png"
- if not ResourceLoader.exists(road_finish):road_finish="res://assets/visual/city29_asphalt.png"
- ink.set_shader_parameter("asphalt_map",load(road_finish))
+ ink.set_shader_parameter("asphalt_map",preload("res://assets/visual/east_asphalt.png"))
  ink.set_shader_parameter("snow_map",preload("res://assets/visual/art28_snow.png"))
  ink.set_shader_parameter("paving_map",preload("res://assets/visual/city29_paving.png"))
+ ink.set_shader_parameter("weather_field",preload("res://assets/visual/east_weather_field.png"))
  var lines=PackedVector4Array();var widths=PackedFloat32Array();var surfaces=PackedFloat32Array()
  for road in plan.roads:
   for i in road.points.size()-1:

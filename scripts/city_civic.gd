@@ -3,6 +3,7 @@ extends RefCounted
 const Ground=preload("res://scripts/city_ground.gd")
 const Urban=preload("res://scripts/district_urban.gd")
 const City=preload("res://scripts/city_architecture.gd")
+const Transit=preload("res://scripts/city_transit.gd")
 
 static func shelter(k,p:Vector3,size:Vector2):
 	var room=Rect2(Vector2(p.x,p.z)-size/2,size)
@@ -79,82 +80,52 @@ static func tram_stop(k,p:Vector3):
 	# The passenger platform stands outside the vehicle lane. Asphalt tram rails
 	# end in crushed ballast before the central freight junction.
 	for z in [7.28,8.72]:
-		k.box("AbandonedTramRail",Vector3(-73.5,.025,z),Vector3(55,.05,.052),"old_iron")
-		k.box("TramRailFlangeway",Vector3(-73.5,.015,z+.075),Vector3(55,.03,.067),"dark")
+		k.box("AbandonedTramRail",Vector3(-73.5,.025,z),Vector3(55,.05,.077),"tram_bare_steel")
+		k.box("TramRailFlangeway",Vector3(-73.5,.016,z+.083),Vector3(55,.025,.064),"dark")
+	# The stop uses raised slabs and a recessed drain, with an interruption
+	# where the sidewalk meets the road and safe crossings.
+	for span in [[-100.0,-72.8],[-66.0,-49.0]]:
+		var run:float=span[1]-span[0]
+		for z in [2.70,13.45]:
+			var center=Vector3((span[0]+span[1])/2,.010,z)
+			k.box("TramStreetPaving",center,Vector3(run,.034,2.30),"city_paving")
+			var rim=3.83 if z<8 else 12.32
+			k.box("WornStopKerb",Vector3(center.x,.026,rim),Vector3(run,.077,.14),"washed_concrete")
+			for seam in range(1,ceili(run/1.8)):
+				k.box("PavingCompressionJoint",Vector3(span[0]+seam*1.8,.028,z),Vector3(.028,.006,2.26),"old_iron")
 	Ground.apron(k,Vector2(p.x,p.z),Vector2(25,3.3))
 	k.box("TramShelterBack",p+Vector3(-1,1.12,1.32),Vector3(8.6,2.24,.24),"civic_tile",true)
-	k.box("TramShelterSteelRoof",p+Vector3(-1,2.55,.3),Vector3(9.3,.13,2.45),"old_iron")
-	k.box("TramCanopySnow",p+Vector3(-1,2.64,.3),Vector3(9.0,.05,2.26),"district_roof_snow")
+	k.box("TramShelterSteelRoof",p+Vector3(-1,2.55,.3),Vector3(9.3,.13,2.45),"east_roof_membrane")
+	k.box("TramShelterFascia",p+Vector3(-1,2.57,-.93),Vector3(9.27,.15,.10),"tram_enamel")
+	for x in [-5.32,-3.25,-1.1,1.1,3.31]:
+		k.box("GlazedTilePanelUpright",p+Vector3(x,1.20,1.177),Vector3(.043,2.02,.033),"tram_bare_steel")
+		k.pipe(p+Vector3(x,2.46,-.85),p+Vector3(x,2.46,1.42),.030,"old_iron")
+	k.box("PlatformDullRim",p+Vector3(-1,2.53,-.94),Vector3(9.25,.064,.101),"tram_bare_steel")
 	for x in [-5.38,3.37]:
 		k.box("TramShelterPillar",p+Vector3(x,1.27,-.70),Vector3(.19,2.54,.19),"old_iron",true)
 	k.bench(p+Vector3(-1,0,.72),5.2,true,PI)
 	k.box("OriginalRouteEnamel",p+Vector3(-5.25,1.65,1.17),Vector3(.63,.8,.05),"cream")
 	var route=k.label("17",p+Vector3(-5.25,1.74,1.13),28,Color("314342"));route.rotation.y=PI
+	k.box("StopSideEnamelPlate",p+Vector3(-4.65,1.70,1.465),Vector3(.81,.47,.045),"tram_ivory")
+	var back_number=k.label("17",p+Vector3(-4.65,1.71,1.493),32,Color("374943"));back_number.shaded=true
 	k.box("TramPlatformEdge",p+Vector3(0,.041,-1.29),Vector3(24.8,.013,.12),"cream")
 	for dx in [-10.3,10.9]:
 		k.box("PlatformClockPost",p+Vector3(dx,1.19,1.1),Vector3(.09,2.38,.09),"old_iron",true)
 		k.box("OriginalSchedule",p+Vector3(dx,2.14,1.1),Vector3(.54,.55,.09),"civic_tile")
 		for y in [1.99,2.09,2.19]:k.box("ScheduleLine",p+Vector3(dx,y,1.045),Vector3(.36,.018,.013),"cream")
-	tram_car(k,Vector3(-88,0,8))
+	for x in [-92.1,-81.3,-70.5,-57.7]:
+		k.box("CastStreetDrain",Vector3(x,.021,11.92),Vector3(.487,.034,.36),"dark")
+		for i in 6:
+			k.box("StreetDrainBar",Vector3(x+(.070*i-.175),.039,11.92),Vector3(.022,.014,.329),"tram_bare_steel")
+	Transit.build(k,Vector3(-88,0,8))
+	tram_wires(k)
 
-static func tram_car(k,c:Vector3):
-	# A late-run single carriage, with the passenger side facing the platform.
-	# Its real wheel gauge and dead catenary are aligned to the inset street rail.
-	var root=Node3D.new();root.name="AbandonedCityTram";root.position=c;k.root.add_child(root)
-	k.box("TramSteelUnderframe",Vector3(0,.48,0),Vector3(12.65,.32,2.40),"old_iron",false,root)
-	City.hull(k,c+Vector3.UP*1.28,Vector3(12.66,2.24,2.45),"AbandonedTramHull")
-	for x in [-4.3,-2.7,2.7,4.3]:
-		k.box("TramAxle",Vector3(x,.35,0),Vector3(.21,.18,1.72),"old_iron",false,root)
-		for side in [-1,1]:
-			var wheel=k.cyl("TramRailWheel",Vector3(x,.34,side*.72),.31,.19,"dark",root)
-			wheel.rotation.x=PI/2
-			k.cyl("TramAxleBox",Vector3(x,.34,side*.855),.146,.066,"old_iron",root).rotation.x=PI/2
-	for side in [-1,1]:
-		var z=side*1.24
-		k.box("TramPressedBelt",Vector3(0,.95,z),Vector3(12.6,.59,.13),"red",false,root)
-		k.box("TramCreamPaintLine",Vector3(0,1.268,z+side*.069),Vector3(12.52,.12,.017),"cream",false,root)
-		k.box("TramRoofHeader",Vector3(0,2.27,z),Vector3(12.6,.34,.15),"frosted_steel",false,root)
-		for i in 10:
-			var x=(i-4.5)*1.25
-			k.box("CarriageWindowPier",Vector3(x-.624,1.77,z),Vector3(.12,.92,.15),"frosted_steel",false,root)
-			if side>0 and i in [1,5,8]:
-				k.box("TramDoorPocket",Vector3(x,1.42,z+.082),Vector3(1.13,1.59,.035),"dark",false,root)
-				for dx in [-.278,.278]:
-					k.box("FoldingTramDoor",Vector3(x+dx,1.42,z+.106),Vector3(.537,1.54,.043),"frosted_steel",false,root)
-					k.box("TramDoorVisionGlass",Vector3(x+dx,1.72,z+.13),Vector3(.319,.62,.015),"exterior_glass",false,root)
-					k.box("TramDoorHandle",Vector3(x+dx*.32,1.35,z+.158),Vector3(.033,.23,.032),"old_iron",false,root)
-				k.box("ScoredTramStep",Vector3(x,.53,z+.09),Vector3(1.13,.063,.23),"old_iron",false,root)
-			else:
-				k.box("RecessedTramGlass",Vector3(x,1.75,z-side*.030),Vector3(1.10,.75,.063),"exterior_glass",false,root)
-				k.box("SpringTramSash",Vector3(x,1.94,z+side*.06),Vector3(1.11,.042,.033),"old_iron",false,root)
-		k.box("TramPressedGutter",Vector3(0,2.43,side*1.27),Vector3(12.7,.07,.09),"old_iron",false,root)
-	for side in [-1,1]:
-		var x=side*6.32
-		k.box("TramNoseLower",Vector3(x,1.06,0),Vector3(.16,1.09,2.40),"red",false,root)
-		k.box("TramNoseHeader",Vector3(x,2.245,0),Vector3(.16,.34,2.40),"frosted_steel",false,root)
-		k.box("TramWindshield",Vector3(x+side*.045,1.78,0),Vector3(.08,.74,2.12),"exterior_glass",false,root)
-		for z in [-1.14,0,1.14]:k.box("TramFrontWindowPost",Vector3(x+side*.087,1.80,z),Vector3(.11,.78,.108),"frosted_steel",false,root)
-		for z in [-.72,.72]:k.box("TramDulledHeadlamp",Vector3(x+side*.101,.99,z),Vector3(.043,.14,.23),"cream" if side>0 else "red",false,root)
-		k.box("BentTramBumper",Vector3(x+side*.15,.61,0),Vector3(.20,.16,2.43),"old_iron",false,root).rotation.z=.02*side
-	for n in 12:
-		var z0=(n/12.0-.5)*2.60;var z1=((n+1)/12.0-.5)*2.60
-		var y0=2.39+.29*cos(z0/1.30*PI/2);var y1=2.39+.29*cos(z1/1.30*PI/2)
-		var pitch=Vector2(z1-z0,y1-y0).length()
-		var sheet=k.box("CamberedTramRoof",Vector3(0,(y0+y1)/2,(z0+z1)/2),Vector3(12.71,.12,pitch+.008),"frosted_steel",false,root)
-		sheet.rotation.x=-atan2(y1-y0,z1-z0)
-		if n in [0,1,10,11]:continue
-		var snow=k.box("CamberedRoofWindLoad",sheet.position+Vector3(-.15,.088,0),Vector3(10.32+.35*sin(n),.055,pitch+.006),"district_roof_snow",false,root)
-		snow.rotation.x=sheet.rotation.x
-	for n in [-1.4,1.8]:
-		k.box("PantographBase",Vector3(n,2.74,0),Vector3(.82,.12,.74),"old_iron",false,root)
-	k.pipe(c+Vector3(-1.43,2.76,0),c+Vector3(.40,3.64,0),.036,"old_iron")
-	k.pipe(c+Vector3(.40,3.64,0),c+Vector3(1.86,2.77,0),.032,"old_iron")
-	k.pipe(c+Vector3(.4,3.64,-.34),c+Vector3(.4,3.64,.32),.023,"old_iron")
+static func tram_wires(k):
 	for x in [-94,-57]:
 		k.cyl("DeadTramCatenaryMast",Vector3(x,2.55,5.15),.091,5.10,"old_iron")
 		k.pipe(Vector3(x,5.09,5.15),Vector3(x,5.09,8.0),.042,"frosted_steel")
 	for span in [[-94.,5.06,-82.5,4.60],[-82.5,4.60,-75.,4.82],[-75.,4.82,-57.,5.06]]:
-		k.pipe(Vector3(span[0],span[1],8),Vector3(span[2],span[3],8),.018,"old_iron")
+		k.pipe(Vector3(span[0],span[1],8),Vector3(span[2],span[3],8),.024,"old_iron")
 
 static func heating_court(k):
 	Ground.apron(k,Vector2(-48.5,55.15),Vector2(14.2,5.4))

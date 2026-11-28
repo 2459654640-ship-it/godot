@@ -14,6 +14,9 @@ uniform bool commune_finish = false;
 uniform bool factory_finish = false;
 uniform bool star_finish = false;
 uniform bool snow_finish = false;
+uniform bool winter_roof = false;
+uniform bool winter_masonry = false;
+uniform sampler2D roof_snow_map : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 uniform sampler2D star_enamel : source_color, filter_linear_mipmap, repeat_enable;
 uniform sampler2D star_tile : source_color, filter_linear_mipmap, repeat_enable;
 uniform sampler2D factory_blue : source_color, filter_linear_mipmap, repeat_enable;
@@ -26,6 +29,16 @@ varying float finish_style;
 varying float world_height;
 varying vec3 world_position;
 varying vec3 world_normal;
+
+float weather_hash(vec2 p) {
+	return fract(sin(dot(p,vec2(112.3,271.1)))*43758.5453);
+}
+float weather_noise(vec2 p) {
+	vec2 i=floor(p), t=fract(p);
+	t=t*t*(3.0-2.0*t);
+	return mix(mix(weather_hash(i),weather_hash(i+vec2(1,0)),t.x),
+		mix(weather_hash(i+vec2(0,1)),weather_hash(i+vec2(1)),t.x),t.y);
+}
 
 void vertex() {
 	finish_style=UV2.x;
@@ -75,6 +88,22 @@ void fragment() {
 		if(abs(world_height-dado)<.018 && style!=4.0)ALBEDO*=.65;
 	}
 	ROUGHNESS = 0.94;
+	if (winter_masonry) {
+		vec2 wall_axis=vec2(world_position.x+world_position.z, world_height);
+		float streaks=weather_noise(wall_axis*vec2(2.1,.31));
+		float splash=(1.0-smoothstep(.05,.94,world_height))*(.44+.56*streaks);
+		ALBEDO*=.89+.15*weather_noise(world_position.xz*.19)-splash*.25;
+	}
+	if (winter_roof) {
+		vec2 roof=world_position.xz;
+		float drift=weather_noise(roof*vec2(.212,.337))*.50
+			+weather_noise(roof*vec2(.64,.99))*.32+weather_noise(roof*vec2(1.64,2.71))*.18;
+		float snow=smoothstep(.455,.735,drift)*smoothstep(.38,.77,world_normal.y);
+		float frost=dot(texture(roof_snow_map,roof*.35).rgb,vec3(.299,.587,.114));
+		vec3 layers=mix(vec3(.251,.276,.296),vec3(.563,.604,.630),frost);
+		ALBEDO=mix(ALBEDO*(.83+.22*weather_noise(roof*.24)),layers,snow*.96);
+		ROUGHNESS=mix(.78,.94,snow);
+	}
 	if(factory_finish && finish_style>10.5) {
 		vec3 dry=texture(factory_archive,UV).rgb;
 		vec3 wet=texture(factory_tile,vec2(UV.x*2.0,clamp(1.0-world_height/2.7,0.004,0.996))).rgb;
