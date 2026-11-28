@@ -9,18 +9,18 @@
     },
     {
       "file": "world02.pck",
-      "bytes": 79348036,
-      "sha256": "3d44a465f6a51beef783f7ac4d6ddff473b553de7ae616e31bfa741f9a788150"
+      "bytes": 80352524,
+      "sha256": "86a4f37970eff7df000c4942b049b555885f5882cf135a990f8b0d9494934150"
     },
     {
       "file": "world03.pck",
-      "bytes": 81795736,
-      "sha256": "884e29f3e85a482c199fa9ddf7042e598e779c83e9854a2522581026b5c59091"
+      "bytes": 81541976,
+      "sha256": "e12cbf332ec8bdd887e87fe9fd52c5c02db9a31fbc8e77e635668c23473481cb"
     },
     {
       "file": "world04.pck",
-      "bytes": 63205420,
-      "sha256": "ea8269c44af45f16585ca5a42e60cd8f6ddbcde37871f5dba0c5dfee408254f8"
+      "bytes": 65075436,
+      "sha256": "a3487bd7c85dc7339868e570d2ffdb0a1f371ec14ba3dbc766686b984b0f06b7"
     }
   ]
 }
