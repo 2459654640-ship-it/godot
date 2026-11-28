@@ -141,9 +141,11 @@ static func leads(s)->Array:
 	elif floor=="sech" and not s.f("sech_joined"):out.append("长老还在调度台附近，那台没亮灯的电台似乎让他很挂心。")
 	elif floor=="starcity" and not s.f("star_inquiry_filed"):out.append("隔离线外的通话柱还有电，也许可以在那里留下一封询问信。内区暂不接待访客。")
 	for q in preload("res://scripts/campaign.gd").data().get("quests",[]):
+		var lead:String=q.get("lead","")
+		if lead=="":continue
 		if q.facility==floor and not s.f(q.accepted) and preload("res://scripts/campaign.gd").quest_offered(s,q):
 			if q.id=="father_letters" and not s.f("father_met"):continue
-			out.append(q.lead)
+			out.append(lead)
 	out.append_array(Contacts.leads(s))
 	return out
 static func encyclopedia(s)->Array:

@@ -60,7 +60,7 @@ static func panel(s)->Dictionary:
 	if not p.is_empty() and s.flags.get("comic",{}).get("sequence","")=="solo" and (not s.has("mask") or not s.has("filter")):
 		if p.art in ["descent","sergey"]:p.art+="_unmasked"
 		if s.flags.comic.node=="solo_descent":p.body+="\n你没有完整防护。灰尘呛进喉咙，你用围巾捂住口鼻，咳得胸口发疼。必须尽快离开这段积尘的通道。"
-	return Campaign.Complete.panel(s,p)
+	return Campaign.StoryArcs.panel(s,Campaign.Complete.panel(s,p))
 static func choose(s,index:int=-1):
 	var state:Dictionary=s.flags.comic
 	var p:Dictionary=panel(s)

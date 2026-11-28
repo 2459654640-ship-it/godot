@@ -4,9 +4,11 @@ var w
 var owned:Array[String]=[]
 const Props=preload("res://scripts/production_props.gd")
 const Complete=preload("res://scripts/complete_campaign.gd")
+const ArcWorld=preload("res://scripts/story_arcs_world.gd")
 static func dress(world):
  var k=world.kit
  Props.prepare(k)
+ ArcWorld.dress(world)
  if world.floor_id=="east_district":
   # The old freight yard's own service stair; clear of the road and existing shed entrance.
   k.box("FreightStairApron",Vector3(53,.05,25),Vector3(3.6,.10,3.6),"institution_floor")
@@ -48,7 +50,7 @@ func setup(world):
  if w.floor_id==Complete.home(w.story) and active=="s2" and w.story.f("late_s2_evacuated"):w.story.flags.late_s2_home_arrived=true
  sync()
 func target(id:String,p:Vector3):
- if not w.targets.has(id):w.target(id,p,Complete.data().interactions[id].name,"inspect")
+ if not w.targets.has(id):w.target(id,p,w.story.Campaign.data().interactions[id].name,"inspect")
 func actor(id:String,p:Vector3,art:String,present:bool=true):
  if not present:
   if not w.npcs.has(id):return
@@ -65,11 +67,13 @@ func actor(id:String,p:Vector3,art:String,present:bool=true):
   if record.get("position",[]).size()==3:records=records.duplicate();records[id]=record.position
   if records.get(id,[]).size()==3:
    var a=records[id];w.npcs[id].position=w.clear_arrival(Vector3(a[0],0,a[2]))
- if Complete.data().interactions.has(id):
-  if not w.targets.has(id):w.target(id,w.npcs[id].position,Complete.data().interactions[id].name,"talk")
+ var interactions:Dictionary=w.story.Campaign.data().interactions
+ if interactions.has(id):
+  if not w.targets.has(id):w.target(id,w.npcs[id].position,interactions[id].name,"talk")
   w.targets[id].kind="talk";w.targets[id].pos=w.npcs[id].position
 func sync():
  var s=w.story
+ ArcWorld.sync(self)
  if s.f("late_father_truth_seen") and s.flags.get("tracked_quest","")=="late_family":s.flags.tracked_quest="late_warning"
  match w.floor_id:
   "east_district":
@@ -126,6 +130,7 @@ func walk(id:String,route:Array,finish:String,offset:Vector3=Vector3.ZERO)->bool
 func tick(_delta):
  if w.hud.modal_visible() or w.departure_animating:return
  var s=w.story
+ ArcWorld.tick(self)
  if w.floor_id=="junction":
   if s.f("late_c2_escort"):walk("junction_yuri",[Vector3(-18,0,-4),Vector3(-18,0,13),Vector3(-10,0,13),Vector3(0,0,20)],"late_c2_evacuated")
   if s.f("late_s1_ready"):walk("late_driver",[Vector3(0,0,18),Vector3(0,0,21)],"late_s1_driver_arrived")

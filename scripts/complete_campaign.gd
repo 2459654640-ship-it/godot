@@ -100,6 +100,8 @@ static func task_stage(s,q:Dictionary,current:Dictionary)->Dictionary:
   if f=="starcity" and not s.f("late_relay_verified"):c.target="late_perimeter_relay";c.place=f;c.step="从外侧检修路进入中继站，检查并校验馈线。"
   elif f=="relay" and s.f("late_relay_verified"):c.target="relay_exit";c.place=f;c.step="维修回执已核验。返回外围接受去污和装备登记。"
  if q.id=="late_warning":
+  if s.Campaign.StoryArcs.dispatch_pending(s):
+   return {"target":"late_planning","place":"star_interior","step":"在星城配线台发出第一轮预警。装卸棚和工人街诊所都在等能够照着执行的路线。"}
   if s.f("late_exposed_reading") and not s.f("late_sheltered_reading"):c={"target":"late_street_probe","place":"east_district","step":"去工人街诊所外的背风测点，用同一台仪器测量；主线设备已配给。"}
   elif s.f("late_risk_confirmed") and not s.f("late_father_truth_seen"):c={"target":"late_father","place":"star_interior","step":"先读私人通信记录，再和父亲谈明责任；公共方案不以原谅他为前提。"}
   elif s.f("late_final_started"):
@@ -116,6 +118,7 @@ static func task_stage(s,q:Dictionary,current:Dictionary)->Dictionary:
  return c
 static func objective(s)->String:
  if s.f("late_campaign_complete"):return "本轮预警与撤离已完成，可以继续自由探索；手记保留人物后续与未完成支线。"
+ if s.Campaign.StoryArcs.dispatch_pending(s):return "外线中断 · 在星城配线台发出第一轮紧急预警"
  var desired="late_perimeter"
  if active_job(s)!="":desired="late_"+active_job(s)
  elif s.f("late_star_admitted"):desired="late_warning" if s.f("late_father_truth_seen") else "late_family"

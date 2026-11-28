@@ -9,6 +9,7 @@ const District=preload("res://scripts/east_district.gd")
 const Medical=preload("res://scripts/medical_chapter.gd")
 const Complete=preload("res://scripts/complete_campaign.gd")
 const Rescue=preload("res://scripts/mine_rescue.gd")
+const StoryArcs=preload("res://scripts/story_arcs.gd")
 const NAMES={"junction":"北线货场换乘线","relay":"北线地表中继站","star_interior":"星城测控设施","grey_shelter":"灰狗货场避难所","east_district":"东郊工业片区","waterworks":"东郊水处理厂","commune":"莫斯科公社","sech":"废土谢契","starcity":"星城-2","coal":"D-6 煤运休养区","surface":"地表旧泵站","railfront":"旧联络线换乘站"}
 const ITEM_ART={"late_mailbag":"satchel","late_valve_parts":"wrench","late_brake_kit":"wrench","late_coupling":"scrap_metal","late_track_parts":"scrap_metal","late_driver_statement":"report","late_water_joint":"wrench","late_readings":"report","late_calibrator":"frequency","late_faction_letter":"permit","late_acknowledgements":"report","late_civilian_schedule":"order","late_network_manual":"map","late_receiver_modules":"fuse","c1_medicine":"medkit","grey_carbine":"grey_carbine","pool_sample":"mutant_sample","moro_card":"report","memory_card":"report","revolver":"revolver","water_core":"filter","relay_part":"fuse","anna_note":"report","transit_pass":"permit","archive":"map"}
 static func data()->Dictionary:
@@ -22,6 +23,7 @@ static func data()->Dictionary:
 		Medical.extend(_data)
 		Complete.extend(_data)
 		Rescue.extend(_data)
+		StoryArcs.extend(_data)
 	return _data
 static func permits(s,req:Dictionary)->bool:
 	if req.has("any") and not req.any.any(func(flag):return s.f(flag)):return false
@@ -38,6 +40,7 @@ static func permits(s,req:Dictionary)->bool:
 	return true
 static func available(s,key:String)->bool:
 	if not Rescue.allowed(s,key):return false
+	if not StoryArcs.allowed(s,key):return false
 	if not Complete.allowed(s,key):return false
 	if not Medical.allowed(s,key):return false
 	if not District.allowed(s,key):return false
@@ -60,7 +63,7 @@ static func quest_offered(s,q:Dictionary)->bool:
 		if data().actions[key].get("flags",{}).get(q.accepted,false) and available(s,key):return true
 	return false
 static func decorate(v:Dictionary,s)->Dictionary:
-	if not data().interactions.has(v.id):return Complete.decorate(Journey.decorate(v,s),s)
+	if not data().interactions.has(v.id):return StoryArcs.decorate(Complete.decorate(Journey.decorate(v,s),s),s)
 	var d:Dictionary=data().interactions[v.id]
 	v.name=d.name;v.role=d.role;v.body=d.body;v.options=[]
 	for variant in d.get("after",[]):
@@ -70,7 +73,8 @@ static func decorate(v:Dictionary,s)->Dictionary:
 		if key=="coal_return" and not s.f("brother_found"):words="离开矿区，返回公社"
 
 		v.options.append(s.opt("c_"+key,words,s.context.get("floor","")==d.facility and available(s,key)))
-	return Rescue.decorate(Complete.decorate(Medical.decorate(District.decorate(Access.decorate(Journey.decorate(Living.decorate(Update.decorate(v,s),s),s),s),s),s),s),s)
+	v=Rescue.decorate(Complete.decorate(Medical.decorate(District.decorate(Access.decorate(Journey.decorate(Living.decorate(Update.decorate(v,s),s),s),s),s),s),s),s)
+	return StoryArcs.decorate(v,s)
 static func act(s,key:String)->String:
 	var a:Dictionary=data().actions[key]
 	if not available(s,key):return "这件事已经做过，或还没有准备好。"
@@ -116,6 +120,7 @@ static func act(s,key:String)->String:
 	var complete_reply=Complete.act(s,key)
 	if complete_reply!="":reply=complete_reply
 	Rescue.act(s,key)
+	StoryArcs.act(s,key)
 	var receipts=[]
 	for kind in reward:
 		if int(reward[kind])>0:receipts.append(("制式子弹" if kind=="military" else "土制子弹")+" ×"+str(reward[kind]))
@@ -157,7 +162,8 @@ static func side_tasks(s)->Array:
 		current=load("res://scripts/field_guide.gd").stage(s,q,current)
 		target=current.target
 		var area:String=data().interactions.get(target,{}).get("name",{"semyon":"谢苗诺夫的房间","medical":"作业层医务间","armory":"作业层装备库"}.get(target,target))
-		var result=Rescue.result(s) if q.id=="anna_rescue" else Complete.result(s,q.id)
+		var result=StoryArcs.result(s,q.id)
+		if result=="":result=Rescue.result(s) if q.id=="anna_rescue" else Complete.result(s,q.id)
 		rows.append({"kind":q.get("kind","支线"),"id":q.id,"name":q.name,"done":s.f(q.done),"place":current.get("place",q.facility),"background":q.background,"step":result if s.f(q.done) else current.step,"target":target,"area":area})
 	return rows
 static func finish(s,id:String):

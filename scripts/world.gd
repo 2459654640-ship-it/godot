@@ -917,7 +917,7 @@ func animate_d6_door(mesh:MeshInstance3D,opened:bool):
 
 func clear_arrival(p:Vector3)->Vector3:
 	# New decorative fixtures must not imprison an earlier saved position.
-	if floor_id not in ["commune","waterworks","surface","starcity","coal","railfront","east_district","grey_shelter"]:return p
+	if floor_id not in ["labor","commune","sech","waterworks","surface","starcity","coal","railfront","east_district","grey_shelter"]:return p
 	# Legacy mine saves could place Ivan exactly on the registrar's spawn.
 	if npcs.values().any(func(a):return Vector2(a.position.x-p.x,a.position.z-p.z).length()<.65):
 		var best=Vector3.INF;var distance=INF

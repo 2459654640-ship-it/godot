@@ -1,0 +1,1787 @@
+{
+  "actions": {
+    "arc_d6_offer": {
+      "text": "「我去问问那位等探视的家属。她等的是谁？」",
+      "reply": "医务员：「她叫季娜伊达，儿子斯捷潘是北线车上卸下来的伤员。她从早班等到现在，通行处退了她三次。我能告诉她十一号床有个人，可军籍表上写着失踪。你先听她把经过说完，她就在北门外的长凳边。」",
+      "once": true,
+      "req": {
+        "floor": [
+          "labor"
+        ],
+        "all": [
+          "late_d1_done"
+        ]
+      },
+      "flags": {
+        "arc_d6_accepted": true
+      }
+    },
+    "arc_d6_hear": {
+      "text": "在季娜伊达旁边坐下，听她说完。",
+      "reply": "",
+      "once": true,
+      "req": {
+        "floor": [
+          "labor"
+        ],
+        "all": [
+          "arc_d6_accepted"
+        ]
+      },
+      "flags": {},
+      "travel": "arc_d6_bench"
+    },
+    "arc_d6_patient": {
+      "text": "「你母亲在外面。我可以替你带话，你想让她知道什么？」",
+      "reply": "",
+      "once": true,
+      "req": {
+        "floor": [
+          "labor"
+        ],
+        "all": [
+          "arc_d6_heard"
+        ]
+      },
+      "flags": {},
+      "travel": "arc_d6_bed"
+    },
+    "arc_d6_public": {
+      "text": "签下实名核验，按医务规定开放一次正式探视。",
+      "reply": "医务员：「你可以担保他人在这里。那天的命令另有调查，我只签我亲眼见到的。探视一登记，军务处就会知道他醒了，明早多半就来问话。把你那份签字收好，有人问起就拿出来。」",
+      "once": true,
+      "req": {
+        "floor": [
+          "labor"
+        ],
+        "all": [
+          "arc_d6_patient_heard"
+        ],
+        "not": [
+          "arc_d6_clearance"
+        ]
+      },
+      "flags": {
+        "arc_d6_clearance": true,
+        "arc_d6_signed": true
+      },
+      "category": "决定"
+    },
+    "arc_d6_private": {
+      "text": "按医护交接登记探视号码，暂缓递交具名军籍更正。",
+      "reply": "医务员：「我把门开给病人的家属，病例按床号交给下一班。军籍还是那张旧表，她领不到照护口粮，也不能用这次探视作证。我私下让人教她怎么申诉。你去叫她过来，我会在里面守着。」",
+      "once": true,
+      "req": {
+        "floor": [
+          "labor"
+        ],
+        "all": [
+          "arc_d6_patient_heard"
+        ],
+        "not": [
+          "arc_d6_clearance"
+        ]
+      },
+      "flags": {
+        "arc_d6_clearance": true,
+        "arc_d6_bed_number": true
+      },
+      "category": "决定"
+    },
+    "arc_d6_walk": {
+      "text": "「可以探视了。跟我去医务间北端，路上慢点。」",
+      "reply": "季娜伊达把装着温水的瓶子从袋里拿出来，紧紧抱在胸前。\n季娜伊达：「刚才没来得及告诉你，你说要帮我找他，我当时连你的名字都没听进去。你等我一下。我腿坐麻了。」",
+      "once": true,
+      "req": {
+        "floor": [
+          "labor"
+        ],
+        "all": [
+          "arc_d6_clearance"
+        ]
+      },
+      "flags": {
+        "arc_d6_walk": true
+      }
+    },
+    "arc_d6_visit": {
+      "text": "让季娜伊达先拿起话筒，自己留在门边。",
+      "reply": "",
+      "once": true,
+      "req": {
+        "floor": [
+          "labor"
+        ],
+        "all": [
+          "arc_d6_at_glass"
+        ]
+      },
+      "flags": {},
+      "travel": "arc_d6_glass"
+    },
+    "arc_d6_followup": {
+      "text": "询问次日问询和家属照护的安排。",
+      "reply": "医务员：「探视记在我的交班本里。斯捷潘说，等到能下地，就让他母亲来教他怎么把这条腿挪到床外。昨天他还不肯说要回家。」\n她把两卷干净绷带装进纸包，推到你面前。\n医务员：「出站记得换干的。上一班送来的人，我不想再收一回。」",
+      "once": true,
+      "req": {
+        "floor": [
+          "labor"
+        ],
+        "all": [
+          "arc_d6_done"
+        ]
+      },
+      "flags": {},
+      "goods": {
+        "bandage": 2
+      }
+    },
+    "arc_sech_offer": {
+      "text": "「您好。这盏灯是用来给列车发信号的吗？」",
+      "reply": "",
+      "once": true,
+      "req": {
+        "floor": [
+          "sech"
+        ],
+        "all": [
+          "sech_member",
+          "late_s1_done"
+        ]
+      },
+      "flags": {
+        "arc_sech_accepted": true
+      },
+      "travel": "arc_sech_signal"
+    },
+    "arc_sech_read": {
+      "text": "翻开阿格拉娅留下的旧信号卡。",
+      "reply": "纸上头一行写着正常接车用的一次长亮。下面另有铅笔字：遇到走散的家属，用短闪问两次。接信的一边也短闪两次，告诉对方留在旧站灯下。连续长亮会让对面以为这段线清空了。",
+      "once": true,
+      "req": {
+        "floor": [
+          "sech"
+        ],
+        "all": [
+          "arc_sech_signals_learned"
+        ]
+      },
+      "flags": {
+        "arc_sech_checked_card": true
+      }
+    },
+    "arc_sech_flash": {
+      "text": "短闪两次，请对面的人留在旧站灯下。",
+      "reply": "你掀起遮片，数两拍，再掀第二下。远处也亮了两次，紧接着传来一道风门擦过地面的声音。\n阿格拉娅：「对上了。人会从北端机车检修台上来。绕到站台那边接她，铁轨下面有一个坑，看不见底。」",
+      "once": true,
+      "req": {
+        "floor": [
+          "sech"
+        ],
+        "all": [
+          "arc_sech_checked_card"
+        ],
+        "not": [
+          "arc_sech_incoming"
+        ]
+      },
+      "flags": {
+        "arc_sech_incoming": true
+      }
+    },
+    "arc_sech_hold": {
+      "text": "用长亮询问对面。",
+      "reply": "阿格拉娅伸手压住还没抬起的灯盖。\n阿格拉娅：「长亮是叫司机进站的。等人的信号另写在卡的最下面。先看清楚，对面有人会照着走。」",
+      "once": true,
+      "req": {
+        "floor": [
+          "sech"
+        ],
+        "all": [
+          "arc_sech_checked_card"
+        ],
+        "not": [
+          "arc_sech_incoming"
+        ]
+      },
+      "flags": {},
+      "category": "调查"
+    },
+    "arc_sech_receive": {
+      "text": "「我是伊万。站台这边能走，您先把灯提起来。」",
+      "reply": "",
+      "once": true,
+      "req": {
+        "floor": [
+          "sech"
+        ],
+        "all": [
+          "arc_sech_incoming"
+        ]
+      },
+      "flags": {},
+      "travel": "arc_sech_platform"
+    },
+    "arc_sech_negotiate": {
+      "text": "请瓦莉娅和阿格拉娅进议事室，把旧站的事当面讲清楚。",
+      "reply": "",
+      "once": true,
+      "req": {
+        "floor": [
+          "sech"
+        ],
+        "all": [
+          "arc_sech_at_bridge"
+        ]
+      },
+      "flags": {},
+      "travel": "arc_sech_room"
+    },
+    "arc_sech_followup": {
+      "text": "过一会儿再来，问瓦莉娅的打算。",
+      "reply": "瓦莉娅把一只灯芯修过的备用灯放回你旁边。她还记得你在北端第一次接她时站的位置。\n瓦莉娅：「有空我教你怎么刮灯芯。以后你从别处回来，先告诉我你在哪儿，我尽量给你回个话。」\n她把自己随身的两节备用电池递出来。你收下一节，另一节让她留着。",
+      "once": true,
+      "req": {
+        "floor": [
+          "sech"
+        ],
+        "all": [
+          "arc_sech_done"
+        ]
+      },
+      "flags": {},
+      "goods": {
+        "battery": 1
+      },
+      "reward": {
+        "handmade": 6
+      }
+    },
+    "arc_commune_offer": {
+      "text": "「联络口那包衣服，是外勤队带回来的吗？」",
+      "reply": "亚历山德拉：「靠门那只铁架台上有一包，从北线担架上拿下来的。死者是中央的维修工，带着工牌。他的姐姐柳芭住在公社。我正找人陪她去辨认东西，对面有位卫生员愿意等我们的回话。」",
+      "once": true,
+      "req": {
+        "floor": [
+          "commune"
+        ],
+        "all": [
+          "commune_member",
+          "field_c1_done"
+        ]
+      },
+      "flags": {
+        "arc_commune_accepted": true
+      }
+    },
+    "arc_commune_check": {
+      "text": "读工牌和守备员留下的交接签。",
+      "reply": "铁牌上刻着瓦季姆·索科洛夫，D-6 排水维修组。签条记着发现的地点：北线装卸支路，九号排水阀下方。封套内还有一把缠红布的扳手，柄上有两道圆形压痕。你只翻外面的识别签，没有拆开衣服。",
+      "once": true,
+      "req": {
+        "floor": [
+          "commune"
+        ],
+        "all": [
+          "arc_commune_accepted"
+        ]
+      },
+      "flags": {
+        "arc_commune_tag_checked": true
+      }
+    },
+    "arc_commune_listen": {
+      "text": "「柳芭，我刚看过工牌。您想亲手认一下他的东西吗？」",
+      "reply": "",
+      "once": true,
+      "req": {
+        "floor": [
+          "commune"
+        ],
+        "all": [
+          "arc_commune_tag_checked"
+        ]
+      },
+      "flags": {},
+      "travel": "arc_commune_sister"
+    },
+    "arc_commune_broker": {
+      "text": "把柳芭的要求转达给亚历山德拉，商定七分钟停火。",
+      "reply": "",
+      "once": true,
+      "req": {
+        "floor": [
+          "commune"
+        ],
+        "all": [
+          "arc_commune_heard"
+        ]
+      },
+      "flags": {},
+      "travel": "arc_commune_broker"
+    },
+    "arc_commune_transfer": {
+      "text": "请两班值守复述约定，发出交接信号。",
+      "reply": "",
+      "once": true,
+      "req": {
+        "floor": [
+          "commune"
+        ],
+        "all": [
+          "arc_commune_terms",
+          "arc_commune_at_table"
+        ]
+      },
+      "flags": {},
+      "travel": "arc_commune_transfer",
+      "category": "决定"
+    },
+    "arc_commune_followup": {
+      "text": "去看看柳芭，问她要不要再送一封回信。",
+      "reply": "柳芭：「信要等下次。现在他们肯把签收单带回来，我已经知道我妈亲手接过扳手了。我过两天想问她，瓦季姆到底什么时候学会修泵的。那阵我忙着和他吵架，都没看过他是怎么干活的。」\n她请你把包好的药带给下次出站那班。军需把同批剩下的一份登记给你。",
+      "once": true,
+      "req": {
+        "floor": [
+          "commune"
+        ],
+        "all": [
+          "arc_commune_done"
+        ]
+      },
+      "flags": {},
+      "goods": {
+        "medkit": 1
+      }
+    },
+    "arc_star_resume": {
+      "text": "回到配线台，发出第一轮紧急预警。",
+      "reply": "",
+      "once": false,
+      "req": {
+        "floor": [
+          "star_interior"
+        ],
+        "all": [
+          "arc_first_dispatch_pending",
+          "late_final_started"
+        ],
+        "not": [
+          "arc_first_dispatch_done",
+          "late_campaign_complete"
+        ]
+      },
+      "flags": {},
+      "travel": "late_final_depart",
+      "category": "任务"
+    },
+    "arc_star_roster": {
+      "text": "向接收员核对工人街诊所和装卸班的点名。",
+      "reply": "接收员：「南口列车、工人街诊所、北线装卸班各有一份名单。刚才有人拿发车的人数把三张纸都填了，我重新叫了每一处值守。你回星城时告诉列夫，地方上的人正在复核失联的那一栏。」",
+      "once": true,
+      "req": {
+        "floor": [
+          "junction"
+        ],
+        "all": [
+          "arc_first_dispatch_done"
+        ]
+      },
+      "flags": {
+        "arc_star_roster_seen": true
+      }
+    }
+  },
+  "interactions": {
+    "arc_d6_mother": {
+      "facility": "labor",
+      "name": "季娜伊达",
+      "role": "伤员家属",
+      "body": "她把水瓶的螺纹拧紧了一遍，听见有人经过就抬头。",
+      "spoken": true,
+      "options": [
+        "arc_d6_hear",
+        "arc_d6_walk"
+      ],
+      "after": [
+        [
+          "arc_d6_heard",
+          "季娜伊达把退回的探视条压在膝上，一直等着医务间的人出来。"
+        ],
+        [
+          "arc_d6_walk",
+          "季娜伊达带着给斯捷潘的温水，要沿病房外的直廊走到北端。"
+        ],
+        [
+          "arc_d6_done",
+          "季娜伊达扶着窗台，慢慢把已经凉了的水瓶放回袋里。她准备明早再来。"
+        ]
+      ]
+    },
+    "arc_d6_son": {
+      "facility": "labor",
+      "name": "斯捷潘",
+      "role": "北线伤员",
+      "body": "年轻人在病区门里的椅子上坐着。右脚的鞋带松了，他弯到一半，就伏回了椅背。",
+      "spoken": true,
+      "options": [
+        "arc_d6_patient"
+      ],
+      "after": [
+        [
+          "arc_d6_signed",
+          "斯捷潘把工牌放回衣袋。他知道军务处会来，问医务员自己几时才能站着回答。"
+        ],
+        [
+          "arc_d6_bed_number",
+          "斯捷潘听见外面又在叫床号，挪了挪身子，把靠窗的椅子让空。"
+        ]
+      ]
+    },
+    "arc_d6_glass": {
+      "facility": "labor",
+      "name": "十一号探视窗",
+      "role": "伤员病区 / 家属探视",
+      "body": "双层玻璃两侧各装了一只话筒。台面留着前一位家属忘拿的棉手套。",
+      "spoken": false,
+      "options": [
+        "arc_d6_visit"
+      ],
+      "after": [
+        [
+          "arc_d6_done",
+          "窗内贴出了明天的探视班次。季娜伊达把水瓶放在隔墙旁，正等医务员来收。"
+        ]
+      ]
+    },
+    "arc_sech_aglaya": {
+      "facility": "sech",
+      "name": "阿格拉娅",
+      "role": "北端守灯人",
+      "body": "她拆下信号灯的玻璃罩，用袖口擦掉边缘的煤灰。灯罩侧面有一道指节长的裂纹。",
+      "spoken": true,
+      "options": [
+        "arc_sech_offer"
+      ],
+      "after": [
+        [
+          "arc_sech_incoming",
+          "阿格拉娅把灯留下，站在能同时看见北口和过桥的位置。"
+        ],
+        [
+          "arc_sech_done",
+          "阿格拉娅开始带人走北端的等候路。她每次交班，都问下一班谁来听灯。"
+        ]
+      ]
+    },
+    "arc_sech_lantern": {
+      "facility": "sech",
+      "name": "北端手提信号灯",
+      "role": "北线站台 / 旧信号卡",
+      "body": "蓝壳信号灯挂在工作台边，铁遮片还很灵活。皮带下面夹着一张废车票。",
+      "spoken": false,
+      "options": [
+        "arc_sech_read",
+        "arc_sech_flash",
+        "arc_sech_hold"
+      ],
+      "after": [
+        [
+          "arc_sech_incoming",
+          "信号已经对上。北口有两下很轻的金属响声，来的人在旧灯处等候。"
+        ]
+      ]
+    },
+    "arc_sech_varya": {
+      "facility": "sech",
+      "name": "瓦莉娅",
+      "role": "旧站守夜人",
+      "body": "陌生女人站在机车检修台边。手里的灯已经灭了，她还用掌心护着灯罩。",
+      "spoken": true,
+      "options": [
+        "arc_sech_receive",
+        "arc_sech_followup"
+      ],
+      "after": [
+        [
+          "arc_sech_walk",
+          "瓦莉娅沿北侧站台往过桥走。她时不时停下，等身边有脚步跟上。"
+        ],
+        [
+          "arc_sech_done",
+          "瓦莉娅把备用灯的塞子拧紧。台上的热水还有半杯，她喝完才准备走。"
+        ]
+      ]
+    },
+    "arc_commune_bundle": {
+      "facility": "commune",
+      "name": "北线遗物交接台",
+      "role": "联络气闸 / 通行检查处",
+      "body": "一个帆布包放在两侧都够得着的台面上，绑绳下压了一张纸。",
+      "spoken": false,
+      "options": [
+        "arc_commune_check",
+        "arc_commune_transfer"
+      ],
+      "after": [
+        [
+          "arc_commune_terms",
+          "联络员正在等两边的停止通行信号。桌上的包还没移到中央那一边。"
+        ],
+        [
+          "arc_commune_done",
+          "交接台上只剩帆布磨出来的浅印。值守把七分钟内的连络时间抄在簿上。"
+        ]
+      ]
+    },
+    "arc_commune_liuba": {
+      "facility": "commune",
+      "name": "柳芭",
+      "role": "公社机修班 / 家属",
+      "body": "她望着气闸门下的光缝，常把攥皱的工作手套放平，又攥起来。",
+      "spoken": true,
+      "options": [
+        "arc_commune_listen",
+        "arc_commune_followup"
+      ],
+      "after": [
+        [
+          "arc_commune_heard",
+          "柳芭认出了扳手。她想让母亲亲手接到它，正等负责联络的人定停火。"
+        ],
+        [
+          "arc_commune_done",
+          "柳芭把自己的那联收据塞进工作证里，终于把没喝完的水端起来。"
+        ]
+      ]
+    }
+  },
+  "extensions": {
+    "medical": [
+      "arc_d6_offer",
+      "arc_d6_public",
+      "arc_d6_private",
+      "arc_d6_followup"
+    ],
+    "sech_elder": [
+      "arc_sech_negotiate"
+    ],
+    "commune_guard": [
+      "arc_commune_offer",
+      "arc_commune_broker"
+    ],
+    "late_planning": [
+      "arc_star_resume"
+    ],
+    "junction_final_receiver": [
+      "arc_star_roster"
+    ]
+  },
+  "panels": {
+    "arc_d6_bench": {
+      "title": "第三次退回的探视条",
+      "art": "d6_ward",
+      "location": "Д–6 / МЕДПУНКТ",
+      "music": "shift_below",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "长凳在病房外，一半照得见灯，一半藏在隔墙的阴影里。季娜伊达坐在光照得到的地方，腿上放着三张折过的纸。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "您好，我叫伊万。医务员说您在等斯捷潘，我来问问有什么能帮上忙的。"
+        },
+        {
+          "speaker": "季娜伊达",
+          "text": "他出发的时候拿错了手套。一大一小。我到气闸边追过他，岗哨不让我再走。他说了声「回来再拿」，就上车了。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "您亲眼看见他回来了？"
+        },
+        {
+          "speaker": "季娜伊达",
+          "text": "昨天从接车那儿经过，我看见担架上的人系了蓝鞋带。他六岁就学会打这个结。我想跟到医务间，他们让我先去兵籍处，等我跑回去，门已经锁了。"
+        }
+      ],
+      "choices": [
+        {
+          "text": "「这些条子上，谁写的失踪？」",
+          "next": "arc_d6_bench_close",
+          "flag": "arc_d6_asked_stamp"
+        },
+        {
+          "text": "「您一直在这儿等？我替您进去问他。」",
+          "next": "arc_d6_bench_close"
+        }
+      ]
+    },
+    "arc_d6_bench_close": {
+      "title": "一大一小的手套",
+      "art": "d6_ward",
+      "location": "Д–6 / МЕДПУНКТ",
+      "music": "shift_below",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "季娜伊达",
+          "text": "打印的。那人叫我去找开出站名单的，开名单的人跟车走了。我每天去两趟，回来就拿到一张盖着同样日期的纸。",
+          "when": {
+            "all": [
+              "arc_d6_asked_stamp"
+            ]
+          }
+        },
+        {
+          "speaker": "季娜伊达",
+          "text": "早班的人给我搬了凳子。前几天我嫌他值夜睡过头，叫他挨冻。现在想想，那时候还可以去敲他那间屋的门。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "她从袋里拿出那双手套。一只是孩子的，腕口用针线缝窄了。另一只的拇指已经补过三回。"
+        },
+        {
+          "speaker": "季娜伊达",
+          "text": "你先问他愿不愿意见我。小时候做错了事，他总要等我把水烧上才肯出来。你别从门上急着喊他。"
+        }
+      ],
+      "finish_flags": [
+        "arc_d6_heard"
+      ],
+      "end": "resume:arc_d6_mother"
+    },
+    "arc_d6_bed": {
+      "title": "失联的二十分钟",
+      "art": "d6_ward",
+      "location": "Д–6 / МЕДПУНКТ",
+      "music": "shift_below",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "斯捷潘",
+          "text": "我看见她了。卸车的时候，医务员让我别抬头。我想装作睡着，她就会先回去。她怎么还在这儿？"
+        },
+        {
+          "speaker": "伊万",
+          "text": "她两只手套都带来了。你想见她吗？"
+        },
+        {
+          "speaker": "旁白",
+          "text": "他低头看自己脚上的蓝鞋带。鞋面刚擦过，裤脚里还沾着从车厢带来的煤灰。"
+        },
+        {
+          "speaker": "斯捷潘",
+          "text": "我从岗上下来过，没走远。那时轨边有个搬煤的，腿卡住了，我去拉他。等我们爬上来，第二班已经换了位置。后来下令的人不认识我，以为我是从公社那边跑过来的。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "所以卸车的人只知道床号。"
+        },
+        {
+          "speaker": "斯捷潘",
+          "text": "他们会问我当时怎么想的。我也想了，可那人还在下面喊。我现在想见我妈，想让她知道我会走路。能不能让她自己选要不要听那些事？"
+        },
+        {
+          "speaker": "旁白",
+          "text": "医务员在隔壁轻敲两下墙，提醒换药的时间到了。她让你去值班台谈探视手续。"
+        }
+      ],
+      "finish_flags": [
+        "arc_d6_patient_heard"
+      ],
+      "end": "resume:arc_d6_son"
+    },
+    "arc_d6_glass": {
+      "title": "十一号探视窗",
+      "art": "window_eleven",
+      "location": "Д–6 / МЕДПУНКТ",
+      "music": "shift_below",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "季娜伊达从左边换到右边。她试了两次才把话筒拿稳。玻璃里面，斯捷潘一直看着她的那杯水。"
+        },
+        {
+          "speaker": "季娜伊达",
+          "text": "你等我把话说完。你六岁的时候抽过一次筋，半夜我背你到楼下。那时候你在我背上说不要紧，我听见你咬着我的衣领。现在这儿有大夫，你能不能跟我说一句实话？还疼吗？"
+        },
+        {
+          "speaker": "斯捷潘",
+          "text": "疼。走两步就疼。可我早上走了四步。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "她把手掌压在窗沿上。他从里面把手伸到同一个地方。窗缝里透出来的灯落在两人指尖之间。"
+        },
+        {
+          "speaker": "斯捷潘",
+          "text": "我明天要见问话的人。妈，你别替我说我没离岗。你就告诉他们，你来过，见过我。",
+          "when": {
+            "all": [
+              "arc_d6_signed"
+            ]
+          }
+        },
+        {
+          "speaker": "季娜伊达",
+          "text": "我把今天的时间记好。他们问你的经过，就让你自己讲。",
+          "when": {
+            "all": [
+              "arc_d6_signed"
+            ]
+          }
+        },
+        {
+          "speaker": "斯捷潘",
+          "text": "你回去把今晚要交的工服先晾了。明早要是门口还不收我的名字，你就问他们病床十一号。",
+          "when": {
+            "all": [
+              "arc_d6_bed_number"
+            ]
+          }
+        },
+        {
+          "speaker": "季娜伊达",
+          "text": "我会来。我的班我跟人换了。你先再走两步给我看，好不好？我明天来，看你走第五步。",
+          "when": {
+            "all": [
+              "arc_d6_bed_number"
+            ]
+          }
+        },
+        {
+          "speaker": "旁白",
+          "text": "身后的喇叭响起战报，说各行各业照常工作。医务员把探视窗旁那只喇叭的音量拧小，转身去看下一床。"
+        }
+      ],
+      "finish_flags": [
+        "arc_d6_done"
+      ],
+      "end": "resume:arc_d6_glass"
+    },
+    "arc_sech_signal": {
+      "title": "白灯下等着的人",
+      "art": "signal_return",
+      "location": "СЕЧЬ / СЕВЕРНАЯ ПЛАТФОРМА",
+      "music": "shelter_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "阿格拉娅等一束灯光被北端的弯道吞下去，才把灯搁回手边。地上那张垫工具的布上，有一个绣得很小的姓。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "我是帮彼得跑过外勤的伊万。您怎么称呼？"
+        },
+        {
+          "speaker": "阿格拉娅",
+          "text": "叫我阿格拉娅就行。我在这儿守灯。你刚过来的时候，有没有看见那头也亮过一下？"
+        },
+        {
+          "speaker": "阿格拉娅",
+          "text": "有时候是散在旧站的人问这里有没有开门。我总能看到两下，今天第三次了。以前我教过那边的孩子怎么用这盏灯。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "您从哪天开始教他们的？"
+        },
+        {
+          "speaker": "阿格拉娅",
+          "text": "最难过的那年，旧站给我们送过土豆。后来我们只剩下一条通风管，还要防抢粮的。我给站门上的人转达关门令，用的就是这盏灯。第二天我去数外面还有几盏亮着，数到第三盏，守门人叫我回去看炉子。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "今天打信号的人知道您在这儿吗？"
+        },
+        {
+          "speaker": "阿格拉娅",
+          "text": "也许知道。起码她知道怎么找人。我不能指望你把旧账都认下来。帮我把人带到北过桥。要是她看见我不肯往前，你先问她想去哪里。旧信号卡夹在灯带下面。"
+        }
+      ],
+      "finish_flags": [
+        "arc_sech_signals_learned"
+      ],
+      "end": "resume:arc_sech_aglaya"
+    },
+    "arc_sech_platform": {
+      "title": "北站台的回话",
+      "art": "signal_return",
+      "location": "СЕЧЬ / СЕВЕРНАЯ ПЛАТФОРМА",
+      "music": "shelter_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "北口的风沿车厢滚进来。女人把衣角压紧，等你把来路说完，才跨上站台。"
+        },
+        {
+          "speaker": "瓦莉娅",
+          "text": "裹灯的布是我母亲缝的。等灯的人换过好几个，我一直用她教我的办法。那边剩下的人都去投亲了，我想来看看，这里还有谁认得我们。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "阿格拉娅在等您。她让我先问您的去处。"
+        },
+        {
+          "speaker": "瓦莉娅",
+          "text": "我知道她。小时候她让我在门里等我妈，后来我妈在外头，她在里头。她也有孩子，给过我汤。那年发生的事我没法只记一半。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "北过桥不挨着议事室的门。先到那里，我和您一起走。"
+        },
+        {
+          "speaker": "瓦莉娅",
+          "text": "我自己能走。绕过旧车的时候喊我一声，左边我看不大清。"
+        }
+      ],
+      "finish_flags": [
+        "arc_sech_walk"
+      ],
+      "end": "resume:arc_sech_varya"
+    },
+    "arc_sech_room": {
+      "title": "议事室还空着一张椅子",
+      "art": "signal_return",
+      "location": "СЕЧЬ / СЕВЕРНАЯ ПЛАТФОРМА",
+      "music": "shelter_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "阿格拉娅把靠门的椅子往里移了半尺。瓦莉娅摘下帽子，坐了下去。长老给每人倒了水，自己站着。"
+        },
+        {
+          "speaker": "长老",
+          "text": "当时是我让关门的。那根风管烧了两天，里头有人喘不上气。我让人给站外送煤，送煤的人只走到道岔就回来了。这件事后来没人再来找我。"
+        },
+        {
+          "speaker": "瓦莉娅",
+          "text": "我母亲开过诊所的灶，能从泥汤里捡出还有用的煤。你要是当时派了人出去，她会帮着点。她名字叫韦拉·索洛维约娃。我想把名字留在可以找得到的地方。"
+        },
+        {
+          "speaker": "阿格拉娅",
+          "text": "我可以去旧站和你指认是哪一段。别一个人回去。北灯也得再留个人，谁在外面照号就应一声。"
+        },
+        {
+          "speaker": "长老",
+          "text": "我给你三天客铺。往后住多久，你自己决定。北线缺巡夜的人，轮值的人要答应遇到站外求助就报班。要这样定，今天就先把这条写进去。"
+        }
+      ],
+      "choices": [
+        {
+          "text": "请瓦莉娅自己签下北灯轮值。把结果贴给所有守夜人看。",
+          "next": "arc_sech_room_close",
+          "flag": "arc_sech_roster"
+        },
+        {
+          "text": "先让瓦莉娅按客籍歇脚。她母亲的名字由她亲手写下，留在家属抄本。",
+          "next": "arc_sech_room_close",
+          "flag": "arc_sech_guest"
+        }
+      ]
+    },
+    "arc_sech_room_close": {
+      "title": "轮到下一班开灯",
+      "art": "signal_return",
+      "location": "СЕЧЬ / СЕВЕРНАЯ ПЛАТФОРМА",
+      "music": "shelter_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "瓦莉娅",
+          "text": "我先做三天。夜里可以替岗，天亮我得回旧站收东西。那一栏别替我写常住。",
+          "when": {
+            "all": [
+              "arc_sech_roster"
+            ]
+          }
+        },
+        {
+          "speaker": "长老",
+          "text": "好。有再敲门的人，登记住哪儿，派两个人陪走。你跟阿格拉娅不用单独接。",
+          "when": {
+            "all": [
+              "arc_sech_roster"
+            ]
+          }
+        },
+        {
+          "speaker": "瓦莉娅",
+          "text": "我得把那间房最后的东西拿走。等回来我去北灯坐一会儿。大家可以来问我妈的事，别替我拿她的名字去开会。",
+          "when": {
+            "all": [
+              "arc_sech_guest"
+            ]
+          }
+        },
+        {
+          "speaker": "长老",
+          "text": "你的客铺在炉子边，留三天，你走的时候告诉达里娅。北灯我照样安排人，外头的求助也记。",
+          "when": {
+            "all": [
+              "arc_sech_guest"
+            ]
+          }
+        },
+        {
+          "speaker": "旁白",
+          "text": "阿格拉娅把自己的灯推过来，瓦莉娅没接。她从布套里取出那盏已经熄掉的灯，问这儿有没有合用的灯芯。阿格拉娅报了个抽屉号，起身陪她去找。"
+        }
+      ],
+      "finish_flags": [
+        "arc_sech_done"
+      ],
+      "end": "resume:sech_elder"
+    },
+    "arc_commune_sister": {
+      "title": "红布上的两道压痕",
+      "art": "truce_table",
+      "location": "КОММУНА / ПЕРЕГОВОРНЫЙ ШЛЮЗ",
+      "music": "letters_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "柳芭摸过扳手柄上的两道压痕，其中一个凹口露出的金属还是亮的。她张开嘴，等了几息才出声。"
+        },
+        {
+          "speaker": "柳芭",
+          "text": "我弟小时候我拿这把扳手打过他。我们俩蹲着修炉门，他非要把铰链掉个头，手一松，炉门压了我的脚。我爸听见动静跑进来，问我们谁要先看大夫。那道新的痕我不认识。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "守备队的记录说是在排水阀下找到他。我不知道他最后一班做了什么。他身上带的是维修工牌。"
+        },
+        {
+          "speaker": "柳芭",
+          "text": "中央开战后，我就没回去见过我妈。我上次写信，信封叫他们退了，说我已经搬走。她没搬过地方。我想把他的扳手送过去，给她看一眼。还得告诉她这次是真的。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "您想由谁说？守备那边要先谈停火。"
+        },
+        {
+          "speaker": "柳芭",
+          "text": "我写一张纸，写我认出来了。我妈不认识你，也不认识公社的人，她认得我的字。你问问对面送担架的，愿不愿替我读。"
+        }
+      ],
+      "finish_flags": [
+        "arc_commune_heard"
+      ],
+      "end": "resume:arc_commune_liuba"
+    },
+    "arc_commune_broker": {
+      "title": "借一班的停火",
+      "art": "commune_threshold",
+      "location": "КОММУНА / ПЕРЕГОВОРНЫЙ ШЛЮЗ",
+      "music": "letters_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "亚历山德拉",
+          "text": "我可以让咱们这段先停七分钟。你一定得等对面那人复述回话。要是有人在更远的地方开枪，谁都别往轨道走。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "这一次用卫生员。她送进去的东西由她交给母亲，柳芭自己写姓名和住处。给值守的签收联不写住处。"
+        },
+        {
+          "speaker": "亚历山德拉",
+          "text": "委员会要贴一张公告，说中央把维修工送来打仗。我昨天自己收了两具。一个人见过他拿枪，另一个说只看见他带着工具。两份证词都在我柜里。我现在可以把找到的位置公布出去，射手我查不清。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "柳芭想让她母亲认一下扳手，知道消息是真的。她也愿意作证，说清东西是怎么认出来的。"
+        },
+        {
+          "speaker": "柳芭",
+          "text": "等一下，住处别让人抄走。能留下我弟的名字最好。要是现在留不了，至少把我写的这张纸送过去。"
+        },
+        {
+          "speaker": "亚历山德拉",
+          "text": "谁要看我可以给他看证词。家里人留的那张单子，我让对面带走。你们过去等吧，听见我敲两次栏杆再开联络线。"
+        }
+      ],
+      "choices": [
+        {
+          "text": "公开登记瓦季姆的姓名与发现地点，保留死因待核。家属地址只交给卫生员。",
+          "next": "arc_commune_order",
+          "flag": "arc_commune_named"
+        },
+        {
+          "text": "公开登记只写工牌编号。让家属拿到带姓名的原件，照约定交接遗物。",
+          "next": "arc_commune_order",
+          "flag": "arc_commune_sealed"
+        }
+      ]
+    },
+    "arc_commune_order": {
+      "title": "两联交接单",
+      "art": "commune_threshold",
+      "location": "КОММУНА / ПЕРЕГОВОРНЫЙ ШЛЮЗ",
+      "music": "letters_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "亚历山德拉把有住址的一联折好，请柳芭自己把它夹在信纸后。守备班上前卸掉近口的一盏警示灯，露出原来只供医疗交接用的信号位。"
+        },
+        {
+          "speaker": "亚历山德拉",
+          "text": "等我照应回来还能接另一班。去气闸旁的交接台，你站桌边，不要走出警戒线。你要是得先出站，值守会重新确认时刻。"
+        }
+      ],
+      "finish_flags": [
+        "arc_commune_terms"
+      ],
+      "end": "resume:commune_guard"
+    },
+    "arc_commune_transfer": {
+      "title": "停火的七分钟",
+      "art": "truce_table",
+      "location": "КОММУНА / ПЕРЕГОВОРНЫЙ ШЛЮЗ",
+      "music": "letters_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "你等到第二下栏杆声才按住通话键。另一头的人迟了几息，报出一样的七分钟和同一个闸号。她没有报军衔。"
+        },
+        {
+          "speaker": "对侧卫生员",
+          "text": "我叫洛丽塔。我先把枪留在我们这一头了，你们看得见我的手。谁来递东西？"
+        },
+        {
+          "speaker": "柳芭",
+          "text": "我。包挺轻的，我放桌上。请等一等，我信里说了一句我没来得及跟他讲的话。要是她看不清，您就当面读给她听。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "远处响了一枪。亚历山德拉抬起两根手指，门边的人没有反击。卫生员没有伸手。柳芭把帆布包摆正，抚平桌上的信纸。"
+        },
+        {
+          "speaker": "亚历山德拉",
+          "text": "我们这段没开枪。你们听见枪在多远？"
+        },
+        {
+          "speaker": "对侧卫生员",
+          "text": "旧道岔那边。再给我半分钟，我看见柳芭的手了。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "洛丽塔来取包。她把登记用的笔递给柳芭，转头向两边的人示意自己要退回去了。签字的地方很窄，柳芭写到最后一个字母时，笔尖一点点出了格。"
+        },
+        {
+          "speaker": "柳芭",
+          "text": "我记着他认字的时候，比我写得慢。后来我给他的最后一封信写得很快。就写了两行，应当多写几行的。"
+        },
+        {
+          "speaker": "亚历山德拉",
+          "text": "你回屋等。我会守着这边，等她亲手交到再回来报。"
+        }
+      ],
+      "next": "arc_commune_receipt"
+    },
+    "arc_commune_receipt": {
+      "title": "签收联",
+      "art": "truce_table",
+      "location": "КОММУНА / ПЕРЕГОВОРНЫЙ ШЛЮЗ",
+      "music": "letters_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "换班以后，洛丽塔用同一条联络线带来回话。她读得很慢，说每一句之前都会在对面的纸上停一停。"
+        },
+        {
+          "speaker": "对侧卫生员",
+          "text": "您母亲认出了扳手，她说那把扳手该给您。她想先留着一个晚上，明天我再问她。她还说，天冷了你得穿她原来给的厚袜子。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "柳芭一只手扶在台上，没有马上回答，最后请卫生员把后一句再说一遍。"
+        },
+        {
+          "speaker": "亚历山德拉",
+          "text": "瓦季姆的姓名和找到的位置已经抄进公用簿。有人来问，我会说我们还在核对，也会记下他知道什么。",
+          "when": {
+            "all": [
+              "arc_commune_named"
+            ]
+          }
+        },
+        {
+          "speaker": "亚历山德拉",
+          "text": "原件留给你们家。我们只用工牌号让两边找得到这次交接。要是有人要问瓦季姆的名字和住处，我会先来问你。",
+          "when": {
+            "all": [
+              "arc_commune_sealed"
+            ]
+          }
+        },
+        {
+          "speaker": "对侧卫生员",
+          "text": "我下了班去工人街诊所帮忙。有急事可以先从这条线叫我，值守会告诉你往哪里转。我把诊所晚上接线的班次也报给你们。"
+        }
+      ],
+      "finish_flags": [
+        "arc_commune_done"
+      ],
+      "end": "resume:arc_commune_bundle"
+    },
+    "arc_star_train": {
+      "title": "先下砖墙",
+      "art": "star_dead_line",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "伊万",
+          "text": "装卸班，放下手里的东西。旧路有扬尘，棚外沿砖墙走，尽头的检修井能下去。到了墙里面再点名。"
+        },
+        {
+          "speaker": "装卸班长",
+          "text": "知道了。收了工再往回走会撞上风，是吧？我现在喊他们。里边那个在换鞋，等我去叫。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "你听见电话被放在硬地上。有人叫安德烈去关照明，又有人说先跑。回声忽然变小。等班长回来，他对着地上的电话报了七人已经下到砖墙后。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "工人街诊所，听到请回话。不要上旧路，从配药间的楼梯下地窖。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "没人回答。父亲看见接线孔里的灯灭了，低下头，摸到你刚才拨过的那根线，把它从台边扶正。"
+        }
+      ],
+      "next": "arc_star_order"
+    },
+    "arc_star_clinic": {
+      "title": "病房下地窖",
+      "art": "star_dead_line",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "伊万",
+          "text": "诊所，别往东门送担架，外面有尘。让病人进配药间，再下地窖。关紧临街那扇门。"
+        },
+        {
+          "speaker": "拉丽萨",
+          "text": "东门正好有两个等搬的。维克托，手先扶我，另一只手扶着面罩边。好，你跟我一起往回数。星城，你还听得见吗？"
+        },
+        {
+          "speaker": "伊万",
+          "text": "听得见。先找个人替你开地下门，我等你们开始下楼。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "电话里传出衣料擦过墙壁的声音。有人在底下报出最后一级台阶。拉丽萨回来说六个病人都在里面。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "北线装卸棚，尽快撤到旧检修井。请班长回应。我再说一遍，沿砖墙往下走。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "一片电流声盖过了第一个字。你松开按钮，等了很久，没听见有人问你刚才说了什么。"
+        }
+      ],
+      "next": "arc_star_order"
+    },
+    "arc_star_commune": {
+      "title": "那次停火留下的班次",
+      "art": "star_dead_line",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "伊万",
+          "text": "叫洛丽塔。我知道她接哪一班。走公社隔离门那条卫生线。请她亲眼看着诊所的人下地窖，再给我们回话。"
+        },
+        {
+          "speaker": "洛丽塔（卫生线）",
+          "text": "我就在诊所拐角。拉丽萨能听见我。你给我说清楚楼梯在哪，我从坏窗旁边进去。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "走配药间楼梯。告诉她关临街的门，别再出去抬担架。她的回话由你带回来。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "你把外线转向装卸棚。班长听清了砖墙和检修井两个地方，没问你是哪边的人，就叫人离开了棚。"
+        },
+        {
+          "speaker": "洛丽塔（卫生线）",
+          "text": "拉丽萨和六个病人下来了。你们那边有人记吗？我会把关门的时刻告诉你。"
+        }
+      ],
+      "next": "arc_star_order"
+    },
+    "arc_star_sech": {
+      "title": "北灯先亮起来",
+      "art": "star_dead_line",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "伊万",
+          "text": "列夫，从谢契轮值叫阿格拉娅。让她去过桥上头的防护窗，打两下短灯，让装卸工留在挡风的地方等。装卸班用过这个信号。"
+        },
+        {
+          "speaker": "阿格拉娅（轮值线）",
+          "text": "瓦莉娅在我旁边。我们先叫人靠拢，再沿廊给他们指检修井。等人到齐，瓦莉娅自己回来报数。",
+          "when": {
+            "all": [
+              "arc_sech_roster"
+            ]
+          }
+        },
+        {
+          "speaker": "阿格拉娅（轮值线）",
+          "text": "我和另一个轮值去。小桌边有人听电话，你叫他等我回来报数。我们能从廊里过去，中间不用踩轨。",
+          "when": {
+            "all": [
+              "arc_sech_guest"
+            ]
+          }
+        },
+        {
+          "speaker": "拉丽萨（外线）",
+          "text": "我听见了。去配药间地窖，六个病人。门关上就回来报。有人说抬不动，我就停一停。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "北灯的值守把另一头的口信传回来。装卸班七个人谁也没少。阿格拉娅在电话里喘气，喊那个靠窗站着的人别贴着玻璃。"
+        }
+      ],
+      "next": "arc_star_order"
+    },
+    "arc_star_d6": {
+      "title": "医务接车班",
+      "art": "star_dead_line",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "伊万",
+          "text": "南口，请把电话给 D-6 接车的医务员。我们一起卸过北线的伤员，她认识装卸班的人。请她从砖墙那侧下检修井，把人叫出来。"
+        },
+        {
+          "speaker": "医务员（南口）",
+          "text": "我是医务的。听见了。救护车从那儿回来过，驾驶员跟我走。我把胸牌留在接车台，外面的岗哨看见了就知道我去哪儿。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "先在砖墙里面点名。人到了七个再打回电话。"
+        },
+        {
+          "speaker": "拉丽萨（外线）",
+          "text": "诊所这里能听清。还有两个在门口，我现在拦下来。所有人去配药间下地窖。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "医务员从另一条线回报，说装卸班的人齐了。她问了一句斯捷潘是不是还在病房，然后自己说等换班再回去看他。有人正叫她去固定担架。"
+        }
+      ],
+      "next": "arc_star_order"
+    },
+    "arc_star_order": {
+      "title": "继续叫没有回话的人",
+      "art": "star_dead_line",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "warning_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "中央值班员（专线）",
+          "text": "哪边报过数就先填「已通知」。报表要进早班。"
+        },
+        {
+          "speaker": "父亲",
+          "text": "第一轮拨过的地方我已经写了。等失联的人回了话，再填接收那一栏。要是问谁留的空白，写我的名字。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "备用台传来另一条消息：东侧第二巡测点的人还没回来。列夫把车站、诊所和装卸班分开记。等下一轮，要有人能在本地把危险的位置说清楚。"
+        },
+        {
+          "speaker": "列夫",
+          "text": "司机继续在南口等进路。先照刚才选的方案去做。再有人催你交表，把还没找到的人也留在上面。"
+        }
+      ],
+      "finish_flags": [
+        "arc_first_dispatch_done"
+      ],
+      "end": "resume:late_planning"
+    },
+    "arc_star_clinic_count": {
+      "title": "诊所地窖里的点名",
+      "art": "star_under_clinic",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "letters_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "换乘站把早班通话的原始时刻送来了。接收员戴着一只耳机，把第一份抄件翻过来，从头念。"
+        },
+        {
+          "speaker": "拉丽萨（录音）",
+          "text": "我们有五个人下来了。维克托住最里面，搬他的时候我先让担架过去，自己留下取氧气瓶。门打不开，我等到他们从里头拉才进去。那时候他已经说不出话。",
+          "when": {
+            "all": [
+              "arc_dispatch_train"
+            ]
+          }
+        },
+        {
+          "speaker": "拉丽萨（录音）",
+          "text": "医生后来确认他没活下来。我说不准早一点能不能救过来。病历上写着他原来的肺伤、停过多久氧气，还有我们做过的急救。他姐姐要问，我去当面答。",
+          "when": {
+            "all": [
+              "arc_dispatch_train"
+            ]
+          }
+        },
+        {
+          "speaker": "拉丽萨（录音）",
+          "text": "六个人点过了。维克托坐在台阶上，楼下没电，我给他听气瓶还在出气。他说一会儿想叫他姐姐下来，顺便给我们捎点吃的。新上来的风我听得见，门已经关紧。",
+          "when": {
+            "not": [
+              "arc_dispatch_train"
+            ]
+          }
+        },
+        {
+          "speaker": "伊万",
+          "text": "把诊所实际收到警告的时刻填进去。那盘录音留给拉丽萨，她要用的时候可以来拿。"
+        }
+      ],
+      "next": "arc_star_yard_count"
+    },
+    "arc_star_yard_count": {
+      "title": "装卸棚的第七个人",
+      "art": "star_yard_rollcall",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "warning_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "装卸班长（回话）",
+          "text": "棚梁倒下来的时候，我们正在门口。把安德烈抬出来以后，医务的人叫我们先离开。他没能到南口。工牌在我这儿，我会带去给他女儿。",
+          "when": {
+            "all": [
+              "arc_dispatch_clinic"
+            ]
+          }
+        },
+        {
+          "speaker": "伊万",
+          "text": "他现在在哪儿？",
+          "when": {
+            "all": [
+              "arc_dispatch_clinic"
+            ]
+          }
+        },
+        {
+          "speaker": "装卸班长（回话）",
+          "text": "医务员把他留在西边砖墙后，风停了再转运。他刚才还说自己回去要换双干鞋，女儿在等他。我没听见接线台叫我们。也许早一分钟出门，七个人都能下来。",
+          "when": {
+            "all": [
+              "arc_dispatch_clinic"
+            ]
+          }
+        },
+        {
+          "speaker": "装卸班长（回话）",
+          "text": "我们在砖墙后边，七个都在。安德烈刚把最后一把扣件从裤腿里倒出来。他以为自己下来太急，把东西忘在棚里了。谁刚才让我们离开棚的？我想让他知道屋顶塌了，我们亲眼看见的。",
+          "when": {
+            "not": [
+              "arc_dispatch_clinic"
+            ]
+          }
+        },
+        {
+          "speaker": "列夫",
+          "text": "第二巡测点还没回。土路堵了，去看的两个人已经折回。下一个班次再叫，把缺的呼号也抄下来。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "你把没有回话的地点圈了一次。有人催着关掉本轮通话。你等换班的人戴上耳机，亲手把原记录交给他。"
+        }
+      ],
+      "next": "late_epilogue_people"
+    },
+    "arc_star_memory": {
+      "title": "二十年前的回执",
+      "art": "star_reunion",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "reunion_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "父亲",
+          "text": "还有两轮电话要回。我把这本旧表送到列夫那儿。他问我可不可以只抄命令，我说签字的人也要抄。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "有人来问，你准备怎么说？"
+        },
+        {
+          "speaker": "父亲",
+          "text": "我去说我做过什么。你母亲哪天去收发室、在那里站了多久，我不知道。你想说的时候，你决定怎么说。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "他抬手去扶纸的角，手又放下来。你向列夫借了一个新信封，写上老爹那间工坊的门牌。墙里面还能听到泵在换班。"
+        }
+      ],
+      "next": "late_epilogue_family"
+    },
+    "arc_after_shared": {
+      "title": "同一张纸到了三处",
+      "art": "warning_shared",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "warning_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "三处接收站把下一次扬尘的街段分别贴了出去。第二天，北线原来的公用告示位换上了军运公告，先前的风险纸被人揭了。"
+        },
+        {
+          "speaker": "换乘接收员",
+          "text": "我们这儿还有抄件。有人按新通知往装卸路走，我叫他们到诊所门口看。诊所那份写着是谁送的，时间也对得上。"
+        },
+        {
+          "speaker": "列夫",
+          "text": "把三份发布时刻一起留下。有人说过我们叫了两个地方，剩下的跟不上。请他们把没接到的地方也报过来。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "晚班有个人在站门口等了一阵。她没有来道谢，只问下一轮她能不能替北面的住户多抄一份。值守把笔借给她，说写完让他看一下地名。"
+        }
+      ],
+      "next": "late_epilogue_people"
+    },
+    "arc_after_central": {
+      "title": "车抵达以后",
+      "art": "junction_transfer",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "warning_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "中央的车把担架和南口的住户运到旧库。下一班广播只报了列车经过的时刻，省掉了暂缓通行的那条路。外头还有人在按原路往集合点走。"
+        },
+        {
+          "speaker": "科瓦廖夫（通话）",
+          "text": "这车确实到了，乘员我让人逐个查了。地方警报可以照签过的单子发。军运那边的人回来找我，我会把另一份给他看。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "旧库还有多少位置？别在广播里报住户姓什么，告诉还在等的人要在哪扇门停。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "你听见科瓦廖夫叫人把名单里的地址先折起来。过了一会儿，门口岗哨回话说可以接下一副担架。车后面还有一列军运，要等旁线腾出来。"
+        }
+      ],
+      "next": "late_epilogue_people"
+    },
+    "arc_after_distributed": {
+      "title": "第一班自己校表的人",
+      "art": "warning_distributed",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "warning_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "北端的备用机发完第一个时段就跳了闸。留守的人对着手抄的接线图找了半个钟头，叫了两次技术班。原来的大台已经拆过，有一段街区得等另一站转播。"
+        },
+        {
+          "speaker": "换乘值守",
+          "text": "你教我留着第一张读数，别把它改成对的。我们和工人街差了三个刻度，机器送来的时候就这样。我想请他们一起再量一趟。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "去的时候记得把两张表带齐。谁的表偏了，回来把那个数圈出来，下一班才知道该校哪一台。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "换乘值守把纸塞进上衣，对着另一点念了一遍换班时刻。星城听见了，没有插话。"
+        }
+      ],
+      "next": "late_epilogue_people"
+    },
+    "arc_after_watch": {
+      "title": "交出耳机的时刻",
+      "art": "warning_watch",
+      "location": "ЗВЁЗДНЫЙ / СВЯЗЬ",
+      "music": "warning_theme",
+      "same_moment": true,
+      "lines": [
+        {
+          "speaker": "旁白",
+          "text": "第四次测量结束以后，天线还在转。接应车来过一趟，带走了两名连续站了整夜的技术员。父亲看了一眼离站名单，没有把你的名字划下。"
+        },
+        {
+          "speaker": "父亲",
+          "text": "下一班有人能换你了。你要跟车，我就叫他们再等几分钟。"
+        },
+        {
+          "speaker": "伊万",
+          "text": "等到下次校表我再决定。你先回去睡一会儿。早上那一处没回的话，我已经抄给负责外线的人了。"
+        },
+        {
+          "speaker": "旁白",
+          "text": "父亲走到半路回来，把自己那件外套搁在空椅上。这回你试了试。袖子长一截，可以把手藏进去。"
+        }
+      ],
+      "next": "late_epilogue_people"
+    }
+  },
+  "results": {
+    "arc_d6": {
+      "arc_d6_signed": "母子在十一号窗见面。你和医务员签字确认斯捷潘活着，军务处将就失联经过问询。季娜伊达会带着探视记录再来。",
+      "arc_d6_bed_number": "母子按床号见面。军籍尚为失踪，医务员为季娜伊达留下次日探视和申诉办法。"
+    },
+    "arc_sech": {
+      "arc_sech_roster": "瓦莉娅签下三班北灯轮值。谢契会登记并回应站外的求助，也承诺不让任何一个守灯人独自去接。",
+      "arc_sech_guest": "瓦莉娅先住进临时客铺，母亲的姓名由她亲手记入家属抄本。谢契会另外给北灯排班。"
+    },
+    "arc_commune": {
+      "arc_commune_named": "瓦季姆的遗物送到母亲手中。公社公开记录了他的姓名与发现地点，死因待核，家属地址未公开。两边留下卫生值守的接线班次。",
+      "arc_commune_sealed": "瓦季姆的遗物送到母亲手中。公开簿只登记工牌编号，具名原件归家属。两边留下卫生值守的接线班次。"
+    }
+  },
+  "quests": [
+    {
+      "id": "arc_d6",
+      "kind": "支线",
+      "facility": "labor",
+      "name": "十一号探视窗",
+      "background": "北线的伤员已经送回 D-6。军务处尚未公布身份，季娜伊达却认出了被送进医务间的人。她在问儿子能不能见她。",
+      "lead": "作业层医务间的长凳上有位不肯走的家属。医务员可能知道她在等谁。",
+      "accepted": "arc_d6_accepted",
+      "done": "arc_d6_done",
+      "actions": [
+        "arc_d6_offer",
+        "arc_d6_hear",
+        "arc_d6_patient",
+        "arc_d6_public",
+        "arc_d6_private",
+        "arc_d6_walk",
+        "arc_d6_visit",
+        "arc_d6_followup"
+      ],
+      "stages": [
+        {
+          "target": "arc_d6_mother",
+          "place": "labor",
+          "step": "到医务间北门外的长凳，先听季娜伊达说她在哪见过儿子。",
+          "when": {}
+        },
+        {
+          "target": "arc_d6_son",
+          "place": "labor",
+          "step": "去北门内的留观病房找斯捷潘，问他是否愿意见母亲。",
+          "when": {
+            "all": [
+              "arc_d6_heard"
+            ]
+          }
+        },
+        {
+          "target": "medical",
+          "place": "labor",
+          "step": "回医务值班台，决定怎样开放探视。正式实名更正会让军务处立即知道他的情况，床号探视保留隐私但不会更正军籍。",
+          "when": {
+            "all": [
+              "arc_d6_patient_heard"
+            ]
+          }
+        },
+        {
+          "target": "arc_d6_mother",
+          "place": "labor",
+          "step": "回北门外找季娜伊达，告诉她可以去探视了。",
+          "when": {
+            "all": [
+              "arc_d6_clearance"
+            ]
+          }
+        },
+        {
+          "target": "arc_d6_mother",
+          "place": "labor",
+          "step": "沿医务间北门去右侧探视窗，陪季娜伊达走过去。离她太远时，她会在原地等你。",
+          "when": {
+            "all": [
+              "arc_d6_walk"
+            ]
+          }
+        },
+        {
+          "target": "arc_d6_glass",
+          "place": "labor",
+          "step": "季娜伊达已经到窗边。按 E 让她和斯捷潘说上话。",
+          "when": {
+            "all": [
+              "arc_d6_at_glass"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "arc_sech",
+      "kind": "支线",
+      "facility": "sech",
+      "name": "道岔那边的灯",
+      "background": "安东回来之后，北端仍有人发出旧时代的灯号。守灯人阿格拉娅认得这个信号，也记得曾经在门外等过的人。",
+      "lead": "北线站台的阿格拉娅一连几晚没交灯。也许她在等什么人。",
+      "accepted": "arc_sech_accepted",
+      "done": "arc_sech_done",
+      "actions": [
+        "arc_sech_offer",
+        "arc_sech_read",
+        "arc_sech_flash",
+        "arc_sech_hold",
+        "arc_sech_receive",
+        "arc_sech_negotiate",
+        "arc_sech_followup"
+      ],
+      "stages": [
+        {
+          "target": "arc_sech_lantern",
+          "place": "sech",
+          "step": "去北线装卸站台北段的手提灯处，读阿格拉娅留下的信号卡。",
+          "when": {}
+        },
+        {
+          "target": "arc_sech_lantern",
+          "place": "sech",
+          "step": "用旧卡上的等候灯号回应对面的人。",
+          "when": {
+            "all": [
+              "arc_sech_checked_card"
+            ]
+          }
+        },
+        {
+          "target": "arc_sech_varya",
+          "place": "sech",
+          "step": "沿装卸站台往北，到机车检修台接刚回来的瓦莉娅。",
+          "when": {
+            "all": [
+              "arc_sech_incoming"
+            ]
+          }
+        },
+        {
+          "target": "arc_sech_varya",
+          "place": "sech",
+          "step": "陪瓦莉娅沿站台回北侧过桥。她看不清左边，离得太远会停下来等你。",
+          "when": {
+            "all": [
+              "arc_sech_walk"
+            ]
+          }
+        },
+        {
+          "target": "sech_elder",
+          "place": "sech",
+          "step": "从北过桥进谢契议事室，和长老谈瓦莉娅的去留以及北灯的排班。",
+          "when": {
+            "all": [
+              "arc_sech_at_bridge"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "arc_commune",
+      "kind": "支线",
+      "facility": "commune",
+      "name": "停火的七分钟",
+      "background": "北线找到一名 D-6 排水维修工。柳芭想把弟弟的遗物送给仍在中央一侧的母亲。两边都在打仗，要有人愿意站到联络闸门两侧。",
+      "lead": "亚历山德拉的小队带回了一个帆布包，至今没有人来签收。",
+      "accepted": "arc_commune_accepted",
+      "done": "arc_commune_done",
+      "actions": [
+        "arc_commune_offer",
+        "arc_commune_check",
+        "arc_commune_listen",
+        "arc_commune_broker",
+        "arc_commune_transfer",
+        "arc_commune_followup"
+      ],
+      "stages": [
+        {
+          "target": "arc_commune_bundle",
+          "place": "commune",
+          "step": "到东侧联络气闸的交接台，就地查看工牌和发现记录。",
+          "when": {}
+        },
+        {
+          "target": "arc_commune_liuba",
+          "place": "commune",
+          "step": "柳芭在联络前厅等消息。去请她辨认弟弟的物件。",
+          "when": {
+            "all": [
+              "arc_commune_tag_checked"
+            ]
+          }
+        },
+        {
+          "target": "commune_guard",
+          "place": "commune",
+          "step": "到公社南侧守备值班室找亚历山德拉。商议短暂停火和公开记录的范围。",
+          "when": {
+            "all": [
+              "arc_commune_heard"
+            ]
+          }
+        },
+        {
+          "target": "arc_commune_liuba",
+          "place": "commune",
+          "step": "柳芭要到东侧气闸交信。陪她走到桌边，离得太远时她会等你。",
+          "when": {
+            "all": [
+              "arc_commune_terms"
+            ]
+          }
+        },
+        {
+          "target": "arc_commune_bundle",
+          "place": "commune",
+          "step": "柳芭已到交接台。让两边复述约定的停火时刻，再请她递信和遗物。",
+          "when": {
+            "all": [
+              "arc_commune_at_table"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
